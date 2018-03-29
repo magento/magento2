@@ -8,11 +8,15 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use \Magento\Setup\Model\Installer;
+use Magento\Framework\Setup\SchemaListener;
+use Magento\Setup\Model\DeclarationInstaller;
+use Magento\Setup\Model\Installer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
+use Magento\Framework\Setup\Patch\PatchApplier;
+use Magento\Framework\Setup\Patch\PatchApplierFactory;
 use Magento\Setup\Validator\DbValidator;
 
 /**
@@ -137,21 +141,43 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
     private $phpReadinessCheck;
 
     /**
+     * @var \Magento\Framework\Setup\DeclarationInstaller|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $declarationInstallerMock;
+
+    /**
+     * @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $schemaListenerMock;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
      */
     private static $dbConfig = [
-        ConfigOptionsListConstants::KEY_HOST => '127.0.0.1',
-        ConfigOptionsListConstants::KEY_NAME => 'magento',
-        ConfigOptionsListConstants::KEY_USER => 'magento',
-        ConfigOptionsListConstants::KEY_PASSWORD => '',
+        'default' => [
+            ConfigOptionsListConstants::KEY_HOST => '127.0.0.1',
+            ConfigOptionsListConstants::KEY_NAME => 'magento',
+            ConfigOptionsListConstants::KEY_USER => 'magento',
+            ConfigOptionsListConstants::KEY_PASSWORD => '',
+        ]
     ];
 
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private $contextMock;
+
+    /**
+     * @var PatchApplier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $patchApplierMock;
+
+    /**
+     * @var PatchApplierFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $patchApplierFactoryMock;
 
     protected function setUp()
     {
@@ -188,6 +214,11 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar =
             $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
         $this->phpReadinessCheck = $this->createMock(\Magento\Setup\Model\PhpReadinessCheck::class);
+        $this->declarationInstallerMock = $this->createMock(DeclarationInstaller::class);
+        $this->schemaListenerMock = $this->createMock(SchemaListener::class);
+        $this->patchApplierFactoryMock = $this->createMock(PatchApplierFactory::class);
+        $this->patchApplierMock = $this->createMock(PatchApplier::class);
+        $this->patchApplierFactoryMock->expects($this->any())->method('create')->willReturn($this->patchApplierMock);
         $this->object = $this->createObject();
     }
 
@@ -231,7 +262,8 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
             $this->dataSetupFactory,
             $this->sampleDataState,
             $this->componentRegistrar,
-            $this->phpReadinessCheck
+            $this->phpReadinessCheck,
+            $this->declarationInstallerMock
         );
     }
 
@@ -250,13 +282,19 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
                 [
                     [ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT, null, true],
                     [ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, null, true],
+                    ['modules/Magento_User', null, '1']
                 ]
             );
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
+
+        $this->declarationInstallerMock->expects($this->once())->method('installSchema');
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
         $setup = $this->createMock(\Magento\Setup\Module\Setup::class);
         $table = $this->createMock(\Magento\Framework\DB\Ddl\Table::class);
-        $connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->setMethods(['getSchemaListener', 'newTable'])
+            ->getMockForAbstractClass();
+        $connection->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
         $setup->expects($this->any())->method('getConnection')->willReturn($connection);
         $table->expects($this->any())->method('addColumn')->willReturn($table);
         $table->expects($this->any())->method('setComment')->willReturn($table);
@@ -266,6 +304,7 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())->method('getResources')->willReturn($resource);
         $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $dataSetup = $this->createMock(\Magento\Setup\Module\DataSetup::class);
+        $dataSetup->expects($this->any())->method('getConnection')->willReturn($connection);
         $cacheManager = $this->createMock(\Magento\Framework\App\Cache\Manager::class);
         $cacheManager->expects($this->any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
         $cacheManager->expects($this->once())->method('setEnabled')->willReturn(['foo', 'bar']);
@@ -284,12 +323,30 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValueMap([
                 [\Magento\Framework\App\Cache\Manager::class, [], $cacheManager],
                 [\Magento\Framework\App\State::class, [], $appState],
+                [
+                    PatchApplierFactory::class,
+                    ['objectManager' => $this->objectManager],
+                    $this->patchApplierFactoryMock
+                ],
             ]));
+        $this->patchApplierMock->expects($this->exactly(2))->method('applySchemaPatch')->willReturnMap(
+            [
+                ['Bar_Two'],
+                ['Foo_One'],
+            ]
+        );
+        $this->patchApplierMock->expects($this->exactly(2))->method('applyDataPatch')->willReturnMap(
+            [
+                ['Bar_Two'],
+                ['Foo_One'],
+            ]
+        );
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
                 [\Magento\Framework\App\State::class, $appState],
-                [\Magento\Framework\App\Cache\Manager::class, $cacheManager]
+                [\Magento\Framework\App\Cache\Manager::class, $cacheManager],
+                [\Magento\Setup\Model\DeclarationInstaller::class, $this->declarationInstallerMock]
             ]));
         $this->adminFactory->expects($this->once())->method('create')->willReturn(
             $this->createMock(\Magento\Setup\Model\AdminAccount::class)
@@ -396,6 +453,10 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
 
     public function testUninstall()
     {
+        $this->config->expects($this->once())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS)
+            ->willReturn([]);
         $this->configReader->expects($this->once())->method('getFiles')->willReturn(['ConfigOne.php', 'ConfigTwo.php']);
         $configDir = $this->getMockForAbstractClass(
             \Magento\Framework\Filesystem\Directory\WriteInterface::class
@@ -464,7 +525,7 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
     {
         $this->config->expects($this->once())
             ->method('get')
-            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT)
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS)
             ->willReturn(self::$dbConfig);
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');

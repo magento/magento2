@@ -707,35 +707,6 @@ return [
         'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
     ],
     ['Magento\CatalogSearch\Model\Layer', 'Magento\Catalog\Model\Layer'],
-    ['Magento\Solr\Block\Catalog\Layer\View', 'Magento\LayeredNavigation\Block\Navigation'],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Attribute',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Category',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Decimal',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Price',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalogsearch\Layer\Filter\Attribute',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    ['Magento\Solr\Block\Catalogsearch\Layer', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'],
-    ['Magento\Solr\Model\Catalog\Layer', 'Magento\Catalog\Model\Layer\Category'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Attribute', 'Magento\Catalog\Model\Layer\Filter\Attribute'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Category', 'Magento\Catalog\Model\Layer\Filter\Category'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Decimal', 'Magento\Catalog\Model\Layer\Filter\Decimal'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Price', 'Magento\Catalog\Model\Layer\Filter\Price'],
-    ['Magento\Solr\Model\Search\Layer\Filter\Attribute', 'Magento\Catalog\Model\Layer\Filter\Attribute'],
-    ['Magento\Solr\Model\Search\Layer', 'Magento\Catalog\Model\Layer'],
     [
         'Magento\Catalog\Model\Product\Type\Configurable',
         'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
@@ -4241,4 +4212,27 @@ return [
     ['Magento\Framework\Acl\CacheInterface'],
     ['Magento\Framework\Acl\Test\Unit\CacheTest'],
     ['Magento\Eav\Model\Entity\Attribute\Backend\Serialized'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit\ResetButton'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit\SaveAndContinueButton'],
+    ['Magento\Fmework\MessageQueue\Config\Reader\Xml\Converter\DeprecatedFormat'],
+    [
+        'Magento\Framework\MessageQueue\Config\Converter',
+        'Magento\Framework\MessageQueue\Config\Reader\Xml\CompositeConverter'
+    ],
+    ['Magento\Framework\MessageQueue\Config\Reader', 'Magento\Framework\MessageQueue\Config\Reader\Xml'],
+    ['Magento\Framework\MessageQueue\PublisherFactory'],
+    ['Magento\Framework\MessageQueue\PublisherProxy'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton'],
+    ['Magento\Search\Block\SearchData', 'Magento\AdvancedSearch\Block\SearchData'],
+    ['Magento\Search\Block\Recommendations', 'Magento\AdvancedSearch\Block\Recommendations'],
+    ['Magento\Search\Block\SearchDataInterface', 'Magento\AdvancedSearch\Block\SearchDataInterface'],
+    ['Magento\Search\Block\Suggestions', 'Magento\AdvancedSearch\Block\Suggestions'],
+    ['Magento\Search\Model\SearchDataProvider', 'Magento\AdvancedSearch\Model\SearchDataProvider'],
+    ['Magento\Search\Model\SearchDataProviderInterface', 'Magento\AdvancedSearch\Model\SearchDataProviderInterface'],
+    [
+        'Magento\Elasticsearch\Test\Unit\Model\SearchAdapter\ConnectionManagerTest',
+        'Magento\Elasticsearch\Test\Unit\SearchAdapter\ConnectionManagerTest'
+    ],
+    ['Zend_Feed', 'Zend\Feed']
 ];

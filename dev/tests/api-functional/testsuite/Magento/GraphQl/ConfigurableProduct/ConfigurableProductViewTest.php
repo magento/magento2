@@ -32,11 +32,11 @@ class ConfigurableProductViewTest extends GraphQlAbstract
             created_at
             name
             sku
-            status
             type_id
             updated_at
-            visibility
-            weight
+            ... on PhysicalProductInterface {
+                weight
+            }
             price {
               minimalPrice {
                 amount {
@@ -89,8 +89,9 @@ class ConfigurableProductViewTest extends GraphQlAbstract
                     name
                     sku
                     attribute_set_id
-                    visibility
-                    weight
+                    ... on PhysicalProductInterface {
+                        weight
+                    }
                     created_at
                     updated_at
                     price {
@@ -169,7 +170,6 @@ class ConfigurableProductViewTest extends GraphQlAbstract
             }
         }
     }
-    
 }
 QUERY;
 
@@ -203,10 +203,8 @@ QUERY;
             ['response_field' => 'id', 'expected_value' => $product->getId()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
-            ['response_field' => 'status', 'expected_value' => $product->getStatus()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
             ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
-            ['response_field' => 'visibility', 'expected_value' => $product->getVisibility()],
             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
             [
                 'response_field' => 'price',

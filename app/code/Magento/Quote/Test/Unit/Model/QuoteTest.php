@@ -950,7 +950,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testValidateMiniumumAmount()
+    public function testValidateMinimumAmount()
     {
         $storeId = 1;
         $this->quote->setStoreId($storeId);
@@ -976,7 +976,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->quote->validateMinimumAmount());
     }
 
-    public function testValidateMiniumumAmountNegative()
+    public function testValidateMinimumAmountNegative()
     {
         $storeId = 1;
         $this->quote->setStoreId($storeId);

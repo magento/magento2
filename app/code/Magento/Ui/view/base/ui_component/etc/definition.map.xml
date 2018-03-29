@@ -359,6 +359,12 @@
                     <item name="allowedExtensions" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/allowedExtensions
                     </item>
+                    <item name="openDialogTitle" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/openDialogTitle
+                    </item>
+                    <item name="initialMediaGalleryOpenSubpath" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/initialMediaGalleryOpenSubpath
+                    </item>
                     <item name="customEntry" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/customEntry
                     </item>
@@ -404,6 +410,22 @@
     <component name="hidden" include="abstractSettings"/>
     <component name="filterInput" include="abstractSettings"/>
     <component name="filterDate" include="abstractSettings"/>
+    <!--add here list of required settings-->
+    <component name="urlInput" include="abstractSettings">
+        <schema name="current">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <!--selected related data-->
+                    <item name="urlTypes" type="urlTypes" xsi:type="converter">settings/urlTypes</item>
+                    <item name="isDisplayAdditionalSettings" type="boolean" xsi:type="xpath">settings/isDisplayAdditionalSettings</item>
+                    <item name="settingLabel" type="string" translate="true" xsi:type="xpath">settings/settingLabel</item>
+                    <item name="typeSelectorTemplate" type="string" translate="true" xsi:type="xpath">settings/typeSelectorTemplate</item>
+                    <item name="settingTemplate" type="string" translate="true" xsi:type="xpath">settings/settingTemplate</item>
+                    <item name="settingValue" type="boolean" xsi:type="xpath">settings/settingValue</item>
+                </item>
+            </argument>
+        </schema>
+    </component>
     <component name="fileUploader" include="abstractSettings">
         <schema name="current">
             <argument name="data" xsi:type="array">
@@ -415,6 +437,16 @@
                     <item name="previewTmpl" type="string" xsi:type="xpath">settings/previewTmpl</item>
                     <item name="dropZone" type="string" xsi:type="xpath">settings/dropZone</item>
                     <item name="uploaderConfig" type="item" xsi:type="converter">settings/uploaderConfig</item>
+                </item>
+            </argument>
+        </schema>
+    </component>
+    <component name="imageUploader" include="fileUploader">
+        <schema name="current">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="openDialogTitle" type="string" translate="true" xsi:type="xpath">settings/openDialogTitle</item>
+                    <item name="initialMediaGalleryOpenSubpath" type="string" xsi:type="xpath">settings/initialMediaGalleryOpenSubpath</item>
                 </item>
             </argument>
         </schema>

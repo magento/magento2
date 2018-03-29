@@ -958,7 +958,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * font         string; font style, optional: bold, italic, regular
      * font_file    string; path to font file (optional for use your custom font)
      * font_size    int; font size (default 7)
-     * align        string; text align (also see feed parametr), optional left, right
+     * align        string; text align (also see feed parameter), optional left, right
      * height       int;line spacing (default 10)
      *
      * @param  \Zend_Pdf_Page $page

@@ -123,7 +123,7 @@ class Pro
     /**
      * Config instance setter
      *
-     * @param \Magento\Paypal\Model\Config $instace
+     * @param \Magento\Paypal\Model\Config $instance
      * @param int|null $storeId
      * @return $this
      */

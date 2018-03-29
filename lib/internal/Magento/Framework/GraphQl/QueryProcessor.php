@@ -14,6 +14,19 @@ use Magento\Framework\GraphQl\Type\Schema;
 class QueryProcessor
 {
     /**
+     * @var ExceptionFormatter
+     */
+    private $exceptionFormatter;
+
+    /**
+     * @param ExceptionFormatter $exceptionFormatter
+     */
+    public function __construct(ExceptionFormatter $exceptionFormatter)
+    {
+        $this->exceptionFormatter = $exceptionFormatter;
+    }
+
+    /**
      * Process a GraphQl query according to defined schema
      *
      * @param Schema $schema
@@ -32,13 +45,16 @@ class QueryProcessor
         $variableValues = null,
         $operationName = null
     ) {
-        return \GraphQL\GraphQL::execute(
+        return \GraphQL\GraphQL::executeQuery(
             $schema,
             $source,
             $rootValue,
             $contextValue,
             $variableValues,
             $operationName
+        )->toArray(
+            $this->exceptionFormatter->shouldShowDetail() ?
+                \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE | \GraphQL\Error\Debug::INCLUDE_TRACE : false
         );
     }
 }

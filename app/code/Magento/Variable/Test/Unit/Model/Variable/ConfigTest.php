@@ -49,7 +49,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $customVarsCollecitonFactoryMock;
+    private $customVarsCollectionFactoryMock;
 
     /**
      * @var Collection|\PHPUnit_Framework_MockObject_MockObject
@@ -79,7 +79,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getData'])
             ->getMock();
 
-        $this->customVarsCollecitonFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+        $this->customVarsCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -89,7 +89,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getData'])
             ->getMock();
 
-        $this->customVarsCollecitonFactoryMock->expects($this->any())
+        $this->customVarsCollectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->customVarsCollectionMock);
 
@@ -97,7 +97,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $args = [
             'assetRepo' => $this->assetRepoMock,
             'url' => $this->urlMock,
-            'collectionFactory' => $this->customVarsCollecitonFactoryMock,
+            'collectionFactory' => $this->customVarsCollectionFactoryMock,
             'storesVariables' => $this->storeVariablesMock,
         ];
         $this->model = (new ObjectManager($this))->getObject(Config::class, $args);

@@ -416,6 +416,7 @@
                 <item name="additionalClasses" xsi:type="object">Magento\Ui\Config\Converter\AdditionalClasses</item>
                 <item name="options" xsi:type="object">Magento\Ui\Config\Converter\Options</item>
                 <item name="actions" xsi:type="object">Magento\Ui\Config\Converter\Actions\Proxy</item>
+                <item name="urlTypes" xsi:type="object">Magento\Ui\Config\Converter\Actions\Proxy</item>
             </argument>
             <argument name="discriminator" xsi:type="string">type</argument>
         </arguments>
@@ -427,13 +428,6 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Catalog\Ui\DataProvider\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
-        <arguments>
-            <argument name="modifiers" xsi:type="array">
-                <item name="wysiwygDefaultSettings" xsi:type="object">Magento\Ui\DataProvider\Modifier\Wysiwyg\DefaultWysiwygSettings</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Ui\Model\UiComponentTypeResolver">
         <arguments>
             <argument name="uiComponentTypeMap" xsi:type="array">

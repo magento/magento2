@@ -93,6 +93,7 @@ class GraphQl implements FrontControllerInterface
      */
     public function dispatch(RequestInterface $request)
     {
+        $statusCode = 200;
         try {
             /** @var Http $request */
             $this->requestProcessor->processHeaders($request);
@@ -106,12 +107,14 @@ class GraphQl implements FrontControllerInterface
                 isset($data['variables']) ? $data['variables'] : []
             );
         } catch (\Exception $error) {
-            $result['extensions']['exception'] = $this->graphQlError->create($error);
+            $result['errors'] = isset($result) && isset($result['errors']) ? $result['errors'] : [];
+            $result['errors'][] = $this->graphQlError->create($error);
+            $statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
         }
         $this->response->setBody($this->jsonSerializer->serialize($result))->setHeader(
             'Content-Type',
             'application/json'
-        );
+        )->setHttpResponseCode($statusCode);
         return $this->response;
     }
 }

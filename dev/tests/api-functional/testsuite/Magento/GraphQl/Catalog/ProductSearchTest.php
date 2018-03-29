@@ -54,10 +54,10 @@ class ProductSearchTest extends GraphQlAbstract
             }
          }
          name
-         weight
-         status
+         ... on PhysicalProductInterface {
+            weight
+         }
          type_id
-         visibility
          attribute_set_id
        }    
         total_count
@@ -108,8 +108,7 @@ QUERY;
           {
            sku:{like:"%simple%"}
            name:{like:"%configurable%"}
-          }
-           visibility:{in:["2", "3","4"]}
+          }           
            weight:{eq:"1"} 
         }
         pageSize:6
@@ -132,10 +131,10 @@ QUERY;
             }
            }
            name
-           weight
-           status
-           type_id
-           visibility
+           ... on PhysicalProductInterface {
+            weight
+           }
+           type_id           
            attribute_set_id
          }    
         total_count
@@ -183,8 +182,7 @@ QUERY;
           {
            sku:{like:"%simple%"}
            name:{like:"%configurable%"}
-          }
-           visibility:{in:["2", "3","4"]}
+          }           
            weight:{eq:"1"} 
         }
         pageSize:2
@@ -207,10 +205,10 @@ QUERY;
             }
            }
            name
-           weight
-           status
-           type_id
-           visibility
+           ... on PhysicalProductInterface {
+            weight
+           }
+           type_id           
            attribute_set_id
          }    
         total_count
@@ -223,8 +221,8 @@ QUERY;
 }
 QUERY;
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: The value' . ' ' .
-            'specified in the currentPage attribute is greater than the number of pages available (1).');
+        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 1 specified is greater ' .
+            'than the number of pages available.');
         $this->graphQlQuery($query);
     }
 
@@ -251,7 +249,6 @@ QUERY;
            sku:{like:"%simple%"}
            name:{like:"%configurable%"}
           }
-           visibility:{in:["2", "3","4"]}
            weight:{eq:"1"} 
         }
         pageSize:1
@@ -274,10 +271,10 @@ QUERY;
             }
            }
            name
-           weight
-           status
-           type_id
-           visibility
+           ... on PhysicalProductInterface {
+            weight
+           }
+           type_id           
            attribute_set_id
          }    
         total_count
@@ -344,10 +341,10 @@ QUERY;
             }
            }
            name
-           weight
-           status
-           type_id
-           visibility
+           ... on PhysicalProductInterface {
+            weight
+           }
+           type_id           
            attribute_set_id
          }    
         total_count
@@ -419,10 +416,10 @@ QUERY;
             }
         }
         name
-        status
         type_id
-           weight
-           visibility
+        ... on PhysicalProductInterface {
+            weight
+           }
            attribute_set_id
          }    
         total_count
@@ -431,7 +428,6 @@ QUERY;
           page_size
           current_page
         }
-        
     }
 }
 QUERY;
@@ -450,12 +446,12 @@ QUERY;
     }
 
     /**
-     * Sorting by visibility and price in the DESC order from the filtered items with default pageSize
+     * Sorting by price in the DESC order from the filtered items with default pageSize
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testQuerySortByVisibilityAndPriceDESCWithDefaultPageSize()
+    public function testQuerySortByPriceDESCWithDefaultPageSize()
     {
         $query
             = <<<QUERY
@@ -468,12 +464,11 @@ QUERY;
             {
               sku:{like:"%simple%"}
               name:{like:"%Configurable%"}
-              visibility:{in:["2", "3","4"]}
             }
         }
          sort:
          {
-          visibility:DESC
+          
           price:DESC
          }
      ) 
@@ -490,10 +485,10 @@ QUERY;
             }
         }
         name
-        weight
-        status
+        ... on PhysicalProductInterface {
+            weight
+        }
         type_id
-        visibility
         attribute_set_id       
       }           
         total_count
@@ -540,7 +535,7 @@ products(
     {
         special_price:{lt:"15"}
         price:{lt:"50"}
-        visibility:{eq:"2"}
+        weight:{gt:"4"}
         or:
         {
             sku:{like:"simple%"}
@@ -567,10 +562,10 @@ products(
             }
        }
        name
-       weight
-       status
+       ... on PhysicalProductInterface {
+        weight
+       }
        type_id
-       visibility
        attribute_set_id
      }    
     total_count
@@ -623,10 +618,10 @@ QUERY;
             }
         }
         name
-        status
         type_id
+        ... on PhysicalProductInterface {
            weight
-           visibility
+         }
            attribute_set_id
          }
         total_count
@@ -635,14 +630,46 @@ QUERY;
           page_size
           current_page
         }
-
     }
 }
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: The value' . ' ' .
-            'specified in the currentPage attribute is greater than the number of pages available (1).');
+        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 1 specified is greater ' .
+            'than the number of pages available.');
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testQueryWithNoSearchOrFilterArgumentException()
+    {
+        $query
+            = <<<QUERY
+{
+  products(pageSize:1)
+  {
+       items{
+           id
+           attribute_set_id    
+           created_at
+           name
+           sku
+           type_id        
+           updated_at
+           ... on PhysicalProductInterface {
+               weight
+           }
+           category_ids                
+       }
+   }
+}
+QUERY;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: \'search\' or \'filter\' input argument is ' .
+            'required.');
         $this->graphQlQuery($query);
     }
 
@@ -671,9 +698,7 @@ QUERY;
                          ]
                      ]
                  ],
-                 'status' =>$filteredProducts[$itemIndex]->getStatus(),
                  'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
-                 'visibility' =>$filteredProducts[$itemIndex]->getVisibility(),
                  'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
             );

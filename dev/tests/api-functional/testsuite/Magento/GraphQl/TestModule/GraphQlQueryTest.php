@@ -27,9 +27,9 @@ class GraphQlQueryTest extends GraphQlAbstract
 }
 QUERY;
 
-        $reponse = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('testItem', $reponse);
-        $testItem = $reponse['testItem'];
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayHasKey('testItem', $response);
+        $testItem = $response['testItem'];
         $this->assertArrayHasKey('item_id', $testItem);
         $this->assertArrayHasKey('name', $testItem);
         $this->assertEquals(1, $testItem['item_id']);
@@ -51,9 +51,9 @@ QUERY;
 }
 QUERY;
 
-        $reponse = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('testItem', $reponse);
-        $testItem = $reponse['testItem'];
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayHasKey('testItem', $response);
+        $testItem = $response['testItem'];
         $this->assertArrayHasKey('integer_list', $testItem);
         $this->assertEquals([3, 4, 5], $testItem['integer_list']);
     }

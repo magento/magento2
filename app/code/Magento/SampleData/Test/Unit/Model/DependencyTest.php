@@ -14,6 +14,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Phrase;
 use Magento\SampleData\Model\Dependency;
+use Magento\Framework\Filesystem\DriverPool;
 
 class DependencyTest extends \PHPUnit\Framework\TestCase
 {
@@ -59,7 +60,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $moduleDirectories
             );
 
-        $directoryReadFactory = $this->getMockBuilder(Filesystem\Directory\ReadInterfaceFactory::class)
+        $directoryReadFactory = $this->getMockBuilder(Filesystem\Directory\ReadFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -88,7 +89,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 'composerJsonGenerator' => function (DependencyTest $test) {
                     return [
                         [
-                            ['path' => 'app/code/LocalModule'],
+                            'app/code/LocalModule',
+                            DriverPool::FILE,
                             $test->stubComposerJsonReader(
                                 [
                                     'name' => 'local/module',
@@ -99,11 +101,13 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                             )
                         ],
                         [
-                            ['path' => 'app/code/LocalModuleWithoutComposerJson'],
+                            'app/code/LocalModuleWithoutComposerJson',
+                            DriverPool::FILE,
                             $test->stubFileNotFoundReader()
                         ],
                         [
-                            ['path' => 'vendor/company/module'],
+                            'vendor/company/module',
+                            DriverPool::FILE,
                             $test->stubComposerJsonReader(
                                 [
                                     'name' => 'company/module',
@@ -114,7 +118,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                             )
                         ],
                         [
-                            ['path' => 'vendor/company2/module/src/..'],
+                            'vendor/company2/module/src/..',
+                            DriverPool::FILE,
                             $test->stubComposerJsonReader(
                                 [
                                     'name' => 'company2/module',
@@ -125,19 +130,23 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                             )
                         ],
                         [
-                            ['path' => 'vendor/company2/module/src'],
+                            'vendor/company2/module/src',
+                            DriverPool::FILE,
                             $test->stubFileNotFoundReader()
                         ],
                         [
-                            ['path' => 'vendor/company/module/..'],
+                            'vendor/company/module/..',
+                            DriverPool::FILE,
                             $test->stubFileNotFoundReader()
                         ],
                         [
-                            ['path' => 'app/code/LocalModuleWithoutComposerJson/..'],
+                            'app/code/LocalModuleWithoutComposerJson/..',
+                            DriverPool::FILE,
                             $test->stubFileNotFoundReader()
                         ],
                         [
-                            ['path' => 'app/code/LocalModule/..'],
+                            'app/code/LocalModule/..',
+                            DriverPool::FILE,
                             $test->stubFileNotFoundReader()
                         ],
                     ];

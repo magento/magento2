@@ -77,8 +77,8 @@ class Config
         $onclickParts = [
             'search' => ['html_id'],
             'subject' => 'MagentovariablePlugin.loadChooser(\'' .
-            $this->getVariablesWysiwygActionUrl() .
-            '\', \'{{html_id}}\');',
+                $this->getVariablesWysiwygActionUrl() .
+                '\', \'{{html_id}}\');',
         ];
         $variableWysiwyg = [
             [
@@ -89,12 +89,12 @@ class Config
                     'url' => $this->getVariablesWysiwygActionUrl(),
                     'onclick' => $onclickParts,
                     'class' => 'add-variable plugin',
+                    'placeholders' => $this->getVariablesWysiwygData()
                 ],
             ],
         ];
-        $configPlugins = $config->getData('plugins');
+        $configPlugins = (array) $config->getData('plugins');
         $variableConfig['plugins'] = array_merge($configPlugins, $variableWysiwyg);
-        $variableConfig['variable_placeholders'] = $this->getVariablesWysiwygData();
         return $variableConfig;
     }
 
