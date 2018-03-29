@@ -52,7 +52,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
-            if ($product->getTypeId() !== Configurable::TYPE_CODE) {
+        if ($product->getTypeId() !== Configurable::TYPE_CODE) {
             return;
         }
         /** @var Save $controller */
