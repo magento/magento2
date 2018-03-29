@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Api;
+namespace Magento\InventoryCatalog\Model;
 
 /**
  * Get product types id by product skus.
  *
  * @api
  */
-interface GetProductTypeBySkuInterface
+interface GetProductTypesBySkusInterface
 {
     /**
      * Returns product types id by product skus.

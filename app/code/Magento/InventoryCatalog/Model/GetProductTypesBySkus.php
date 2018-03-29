@@ -9,12 +9,11 @@ namespace Magento\InventoryCatalog\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product;
-use Magento\InventoryCatalog\Api\GetProductTypeBySkuInterface;
 
 /**
  * @inheritdoc
  */
-class GetProductTypeBySku implements GetProductTypeBySkuInterface
+class GetProductTypesBySkus implements GetProductTypesBySkusInterface
 {
     /**
      * @var Product

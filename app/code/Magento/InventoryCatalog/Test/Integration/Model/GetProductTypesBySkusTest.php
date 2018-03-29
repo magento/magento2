@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Test\Integration\Model;
 
-use Magento\InventoryCatalog\Model\GetProductTypeBySku;
+use Magento\InventoryCatalog\Model\GetProductTypesBySkus;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests getting Product type by product SKU.
  */
-class GetProductTypeBySkuTest extends \PHPUnit\Framework\TestCase
+class GetProductTypesBySkusTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var GetProductTypeBySku
+     * @var GetProductTypesBySkus
      */
     private $model;
 
@@ -26,7 +26,7 @@ class GetProductTypeBySkuTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->model = Bootstrap::getObjectManager()->create(
-            GetProductTypeBySku::class
+            GetProductTypesBySkus::class
         );
     }
 
