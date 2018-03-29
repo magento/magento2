@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\WebapiAsync\Code\Generator\Config\RemoteServiceReader;
 
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
