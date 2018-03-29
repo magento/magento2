@@ -49,7 +49,7 @@ class ReindexAfterStockSourceLinksDeletePlugin
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(
+    public function afterExecute(
         StockSourceLinksDeleteInterface $subject,
         $result,
         array $links

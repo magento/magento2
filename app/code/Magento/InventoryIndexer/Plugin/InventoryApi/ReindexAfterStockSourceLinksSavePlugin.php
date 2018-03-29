@@ -48,7 +48,7 @@ class ReindexAfterStockSourceLinksSavePlugin
      * @param StockSourceLinkInterface[] $links
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(
+    public function afterExecute(
         StockSourceLinksSaveInterface $subject,
         $result,
         array $links
