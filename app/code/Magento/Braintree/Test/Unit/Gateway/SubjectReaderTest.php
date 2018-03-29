@@ -3,11 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Braintree\Test\Unit\Gateway\Helper;
+namespace Magento\Braintree\Test\Unit\Gateway;
 
 use Braintree\Transaction;
-use InvalidArgumentException;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 
 /**
  * Class SubjectReaderTest
@@ -25,8 +24,8 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Braintree\Gateway\Helper\SubjectReader::readCustomerId
-     * @expectedException InvalidArgumentException
+     * @covers \Magento\Braintree\Gateway\SubjectReader::readCustomerId
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The "customerId" field does not exists
      */
     public function testReadCustomerIdWithException()
@@ -35,7 +34,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Braintree\Gateway\Helper\SubjectReader::readCustomerId
+     * @covers \Magento\Braintree\Gateway\SubjectReader::readCustomerId
      */
     public function testReadCustomerId()
     {
@@ -44,8 +43,8 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Braintree\Gateway\Helper\SubjectReader::readPublicHash
-     * @expectedException InvalidArgumentException
+     * @covers \Magento\Braintree\Gateway\SubjectReader::readPublicHash
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The "public_hash" field does not exists
      */
     public function testReadPublicHashWithException()
@@ -54,7 +53,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Braintree\Gateway\Helper\SubjectReader::readPublicHash
+     * @covers \Magento\Braintree\Gateway\SubjectReader::readPublicHash
      */
     public function testReadPublicHash()
     {
@@ -63,7 +62,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Braintree\Gateway\Helper\SubjectReader::readPayPal
+     * @covers \Magento\Braintree\Gateway\SubjectReader::readPayPal
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Transaction has't paypal attribute
      */
@@ -76,7 +75,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Braintree\Gateway\Helper\SubjectReader::readPayPal
+     * @covers \Magento\Braintree\Gateway\SubjectReader::readPayPal
      */
     public function testReadPayPal()
     {
