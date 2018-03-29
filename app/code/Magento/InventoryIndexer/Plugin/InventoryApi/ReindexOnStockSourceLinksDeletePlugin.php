@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Plugin\InventoryApi;
 
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
@@ -15,7 +16,7 @@ use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 /**
  * Invalidate InventoryIndexer
  */
-class ReindexAroundStockSourceLinksDeletePlugin
+class ReindexOnStockSourceLinksDeletePlugin
 {
     /**
      * @var IndexerRegistry
@@ -44,7 +45,7 @@ class ReindexAroundStockSourceLinksDeletePlugin
      *
      * @param StockSourceLinksDeleteInterface $subject
      * @param callable $proceed
-     * @param array $links
+     * @param StockSourceLinkInterface[] $links
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -53,12 +54,15 @@ class ReindexAroundStockSourceLinksDeletePlugin
         callable $proceed,
         array $links
     ) {
-        if ($this->defaultStockProvider->getId() !== reset($links)) {
-            $proceed($links);
-            $indexer = $this->indexerRegistry->get(InventoryIndexer::INDEXER_ID);
-            if ($indexer->isValid()) {
-                $indexer->invalidate();
+        foreach ($links as $link) {
+            if ($this->defaultStockProvider->getId() !== $link->getStockId()) {
+                $proceed($links);
+                $indexer = $this->indexerRegistry->get(InventoryIndexer::INDEXER_ID);
+                if ($indexer->isValid()) {
+                    $indexer->invalidate();
+                }
+                break;
             }
-        };
+        }
     }
 }
