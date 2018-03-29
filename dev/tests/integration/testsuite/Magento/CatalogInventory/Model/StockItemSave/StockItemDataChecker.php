@@ -12,6 +12,7 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\Framework\EntityManager\HydratorInterface;
+use PHPUnit\Framework\Assert;
 
 class StockItemDataChecker
 {
@@ -97,10 +98,10 @@ class StockItemDataChecker
             StockItemInterface::IS_IN_STOCK => 0,
             StockItemInterface::QTY => 0,
         ]);
-        \PHPUnit\Framework\Assert::assertNotNull($product->getQuantityAndStockStatus());
+        Assert::assertNotNull($product->getQuantityAndStockStatus());
         $this->assertArrayContains($expectedQuantityAndStockStatusData, $product->getQuantityAndStockStatus());
 
-        \PHPUnit\Framework\Assert::assertNotNull($product->getData('quantity_and_stock_status'));
+        Assert::assertNotNull($product->getData('quantity_and_stock_status'));
         $this->assertArrayContains($expectedQuantityAndStockStatusData, $product->getData('quantity_and_stock_status'));
     }
 
@@ -112,7 +113,7 @@ class StockItemDataChecker
     private function assertArrayContains(array $expected, array $actual)
     {
         foreach ($expected as $key => $value) {
-            \PHPUnit\Framework\Assert::assertArrayHasKey(
+            Assert::assertArrayHasKey(
                 $key,
                 $actual,
                 "Expected value for key '{$key}' is missed"
@@ -120,7 +121,7 @@ class StockItemDataChecker
             if (is_array($value)) {
                 $this->assertArrayContains($value, $actual[$key]);
             } else {
-                \PHPUnit\Framework\Assert::assertEquals(
+                Assert::assertEquals(
                     $value,
                     $actual[$key],
                     "Expected value for key '{$key}' doesn't match"

@@ -84,10 +84,6 @@
             <column name="product_id"/>
             <column name="stock_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="CATALOGINVENTORY_STOCK_ITEM_PRODUCT_ID_WEBSITE_ID">
-            <column name="product_id"/>
-            <column name="website_id"/>
-        </constraint>
         <index name="CATALOGINVENTORY_STOCK_ITEM_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
