@@ -10,7 +10,7 @@ namespace Magento\BundleGraphQl\Model\Resolver;
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\GraphQl\Config\Data\Field;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\BundleGraphQl\Model\Resolver\Options\Collection;
 use Magento\Framework\GraphQl\Resolver\Value;

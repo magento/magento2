@@ -11,7 +11,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Product\Type as Downloadable;
 use Magento\Framework\Data\Collection;
-use Magento\Framework\GraphQl\Config\Data\Field;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
 use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;

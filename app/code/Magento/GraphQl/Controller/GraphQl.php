@@ -21,6 +21,8 @@ use Magento\Framework\GraphQl\HttpRequestProcessor;
 
 /**
  * Front controller for web API GraphQL area.
+ *
+ * @api
  */
 class GraphQl implements FrontControllerInterface
 {

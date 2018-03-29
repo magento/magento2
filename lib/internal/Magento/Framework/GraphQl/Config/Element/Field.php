@@ -5,10 +5,12 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config\Data;
+namespace Magento\Framework\GraphQl\Config\Element;
 
 /**
- * Structured data object of a GraphQL field. Fields are used to describe possible values for a type/interface.
+ * Class representing 'field' GraphQL config element.
+ *
+ * Fields are used to describe possible values for a type/interface.
  */
 class Field implements OutputFieldInterface
 {

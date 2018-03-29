@@ -5,54 +5,55 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config;
+namespace Magento\Framework\GraphQl;
 
 use Magento\Framework\Config\DataInterface;
-use Magento\Framework\GraphQl\Config\Data\Mapper\StructureMapperInterface;
-use Magento\Framework\GraphQl\Config\Data\StructureInterface;
+use Magento\Framework\GraphQl\Config\ConfigElementFactoryInterface;
+use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 
 /**
  * Provides access to typing information for a configured GraphQL schema.
  */
 class Config implements ConfigInterface
 {
-
     /**
      * @var DataInterface
      */
-    private $data;
+    private $configData;
 
     /**
-     * @var StructureMapperInterface[]
+     * @var ConfigElementFactoryInterface
      */
-    private $mappers;
+    private $configElementFactory;
 
     /**
      * @param DataInterface $data
-     * @param StructureMapperInterface[] $mappers
+     * @param ConfigElementFactoryInterface $configElementFactory
      */
     public function __construct(
         DataInterface $data,
-        array $mappers
+        ConfigElementFactoryInterface $configElementFactory
     ) {
-        $this->data = $data;
-        $this->mappers = $mappers;
+        $this->configData = $data;
+        $this->configElementFactory = $configElementFactory;
     }
 
     /**
      * Get a data object with data pertaining to a GraphQL type's structural makeup.
      *
-     * @param string $key
-     * @return StructureInterface
+     * @param string $configElementName
+     * @return ConfigElementInterface
      * @throws \LogicException
      */
-    public function getTypeStructure(string $key) : StructureInterface
+    public function getConfigElement(string $configElementName) : ConfigElementInterface
     {
-        $data = $this->data->get($key);
+        $data = $this->configData->get($configElementName);
         if (!isset($data['type'])) {
-            throw new \LogicException(sprintf('Type %s not declared in GraphQL schema', $key));
+            throw new \LogicException(
+                sprintf('Config element "%s" is not declared in GraphQL schema', $configElementName)
+            );
         }
-        return $this->mappers[$data['type']]->map($data);
+        return $this->configElementFactory->createFromConfigData($data);
     }
 
     /**
@@ -63,7 +64,7 @@ class Config implements ConfigInterface
     public function getDeclaredTypeNames() : array
     {
         $types = [];
-        foreach ($this->data->get(null) as $item) {
+        foreach ($this->configData->get(null) as $item) {
             if (isset($item['type']) && $item['type'] == 'graphql_type') {
                 $types[] = $item['name'];
             }

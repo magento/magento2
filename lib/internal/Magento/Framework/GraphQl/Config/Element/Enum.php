@@ -5,14 +5,14 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config\Data;
+namespace Magento\Framework\GraphQl\Config\Element;
 
-use Magento\Framework\GraphQl\Config\Data\Enum\Value;
+use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 
 /**
- * Structured data object for configured GraphQL enum types.
+ * Class representing 'enum' GraphQL config element.
  */
-class Enum implements StructureInterface
+class Enum implements ConfigElementInterface
 {
     /**
      * @var string
@@ -31,7 +31,7 @@ class Enum implements StructureInterface
 
     /**
      * @param string $name
-     * @param Value[] $values
+     * @param EnumValue[] $values
      * @param string $description
      */
     public function __construct(
@@ -57,7 +57,7 @@ class Enum implements StructureInterface
     /**
      * Get an array of all possible values for the Enum.
      *
-     * @return Value[]
+     * @return EnumValue[]
      */
     public function getValues() : array
     {

@@ -7,18 +7,18 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Resolver;
 
-use Magento\Framework\GraphQl\Config\Data\Field;
 use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Config\Element\Field;
 
 /**
- * Fetches data and formats it in the expected GraphQL Structure described in schema configuration.
+ * Resolver fetches the data and formats it according to the GraphQL schema.
  */
 interface ResolverInterface
 {
     /**
-     * Fetch data from persistence models and format it to requested response type structure.
+     * Fetches the data from persistence models and format it according to the GraphQL schema.
      *
-     * @param Field $field
+     * @param \Magento\Framework\GraphQl\Config\Element\Field $field
      * @param array|null $value
      * @param array|null $args
      * @param $context

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Type\Output;
 
-use Magento\Framework\GraphQl\Config\ConfigInterface;
+use Magento\Framework\GraphQl\ConfigInterface;
 use Magento\Framework\GraphQl\Type\Definition\OutputType;
 use Magento\Framework\GraphQl\TypeFactory;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -63,7 +63,7 @@ class OutputMapper
     public function getOutputType($typeName)
     {
         if (!isset($this->outputTypes[$typeName])) {
-            $configElement = $this->config->getTypeStructure($typeName);
+            $configElement = $this->config->getConfigElement($typeName);
             $this->outputTypes[$typeName] = $this->outputFactory->create($configElement);
             if (!($this->outputTypes[$typeName] instanceof OutputType)) {
                 throw new GraphQlInputException(

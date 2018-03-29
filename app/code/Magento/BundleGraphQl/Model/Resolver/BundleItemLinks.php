@@ -9,7 +9,7 @@ namespace Magento\BundleGraphQl\Model\Resolver;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\BundleGraphQl\Model\Resolver\Links\Collection;
-use Magento\Framework\GraphQl\Config\Data\Field;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Resolver\Value;
 use Magento\Framework\GraphQl\Resolver\ValueFactory;

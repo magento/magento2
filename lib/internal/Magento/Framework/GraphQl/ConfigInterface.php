@@ -5,9 +5,9 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config;
+namespace Magento\Framework\GraphQl;
 
-use Magento\Framework\GraphQl\Config\Data\StructureInterface;
+use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 
 /**
  * Access all GraphQL type information declared in the schema's configuration.
@@ -17,12 +17,12 @@ use Magento\Framework\GraphQl\Config\Data\StructureInterface;
 interface ConfigInterface
 {
     /**
-     * Access a type's structure object containing it's information and configuration, identified by its name.
+     * Get config element as an object by its name.
      *
-     * @param string $key
-     * @return StructureInterface
+     * @param string $configElementName
+     * @return ConfigElementInterface
      */
-    public function getTypeStructure(string $key) : StructureInterface;
+    public function getConfigElement(string $configElementName) : ConfigElementInterface;
 
     /**
      * Return all type names from a GraphQL schema's configuration.

@@ -5,10 +5,10 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config\Data;
+namespace Magento\Framework\GraphQl\Config\Element;
 
 /**
- * Structured data object for arguments of a GraphQL type.
+ * Class representing 'argument' GraphQL config element.
  *
  * Arguments of a type in GraphQL are used to gather client input to affect how a query will return data.
  */

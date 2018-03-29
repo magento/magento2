@@ -7,8 +7,8 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Type\Enum;
 
+use Magento\Framework\GraphQl\Config\Element\Enum as EnumElement;
 use Magento\Framework\GraphQl\Type\Definition\EnumType;
-use Magento\Framework\GraphQl\Config\Data\Enum as EnumStructure;
 
 /**
  * Object representation of a GraphQL enum field
@@ -16,15 +16,15 @@ use Magento\Framework\GraphQl\Config\Data\Enum as EnumStructure;
 class Enum extends EnumType
 {
     /**
-     * @param EnumStructure $structure
+     * @param EnumElement $configElement
      */
-    public function __construct(EnumStructure $structure)
+    public function __construct(EnumElement $configElement)
     {
         $config = [
-            'name' => $structure->getName(),
-            'description' => $structure->getDescription(),
+            'name' => $configElement->getName(),
+            'description' => $configElement->getDescription(),
         ];
-        foreach ($structure->getValues() as $value) {
+        foreach ($configElement->getValues() as $value) {
             $config['values'][$value->getValue()] = [
                 'value' => $value->getValue(),
                 'description' => $value->getDescription()

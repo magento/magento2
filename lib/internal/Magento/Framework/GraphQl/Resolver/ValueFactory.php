@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Framework\GraphQl\Resolver;
+
 use Magento\Framework\ObjectManagerInterface;
 
 /**

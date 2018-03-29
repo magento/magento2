@@ -5,12 +5,14 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config\Data;
+namespace Magento\Framework\GraphQl\Config\Element;
+
+use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 
 /**
  * Defines contract for fields data as GraphQL objects.
  */
-interface FieldInterface extends StructureInterface
+interface FieldInterface extends ConfigElementInterface
 {
     /**
      * Get the type's configured name.

@@ -493,7 +493,6 @@ QUERY;
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()]
          ];
-        var_dump($response['products']['items'][0]);
         $this->assertResponseFields($response['products']['items'][0], $assertionMap);
     }
 

@@ -7,20 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter;
 
-use Magento\Framework\GraphQl\Type\Definition\OutputType;
-use Magento\Framework\GraphQl\Config\Data\TypeInterface;
+use Magento\Framework\GraphQl\Config\Data\WrappedTypeProcessor;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Config\Element\TypeInterface;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
+use Magento\Framework\GraphQl\Type\Definition\OutputType;
+use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
 use Magento\Framework\GraphQl\Type\Input\InputMapper;
 use Magento\Framework\GraphQl\Type\Output\ElementMapper\FormatterInterface;
 use Magento\Framework\GraphQl\Type\Output\OutputMapper;
 use Magento\Framework\GraphQl\TypeFactory;
-use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
-use Magento\Framework\GraphQl\Config\Data\WrappedTypeProcessor;
 
 /**
- * Formats all fields configured for given type structure, if any.
+ * Convert fields of the given 'type' config element to the objects compatible with GraphQL schema generator.
  */
 class Fields implements FormatterInterface
 {
@@ -81,13 +81,13 @@ class Fields implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function format(TypeInterface $typeStructure, OutputType $outputType): array
+    public function format(TypeInterface $configElement, OutputType $outputType): array
     {
         $typeConfig = [
-            'fields' => function () use ($typeStructure, $outputType) {
+            'fields' => function () use ($configElement, $outputType) {
                 $fieldsConfig = [];
-                foreach ($typeStructure->getFields() as $field) {
-                    $fieldsConfig[$field->getName()] = $this->getFieldConfig($typeStructure, $outputType, $field);
+                foreach ($configElement->getFields() as $field) {
+                    $fieldsConfig[$field->getName()] = $this->getFieldConfig($configElement, $outputType, $field);
                 }
                 return $fieldsConfig;
             }
@@ -95,24 +95,23 @@ class Fields implements FormatterInterface
         return $typeConfig;
     }
 
-
     /**
-     * Generate field type object.
+     * Get field's type object compatible with GraphQL schema generator.
      *
-     * @param TypeInterface $typeStructure
+     * @param TypeInterface $typeConfigElement
      * @param OutputType $outputType
      * @param Field $field
      * @return OutputType
      */
-    private function getFieldType(TypeInterface $typeStructure, OutputType $outputType, Field $field)
+    private function getFieldType(TypeInterface $typeConfigElement, OutputType $outputType, Field $field)
     {
         if ($this->scalarTypes->isScalarType($field->getTypeName())) {
             $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
         } else {
-            if ($typeStructure->getName() == $field->getTypeName()) {
+            if ($typeConfigElement->getName() == $field->getTypeName()) {
                 $type = $outputType;
             } else {
-                if ($typeStructure->getName() == $field->getTypeName()) {
+                if ($typeConfigElement->getName() == $field->getTypeName()) {
                     $type = $outputType;
                 } else {
                     $type = $this->outputMapper->getOutputType($field->getTypeName());
@@ -127,14 +126,14 @@ class Fields implements FormatterInterface
     /**
      * Generate field config.
      *
-     * @param TypeInterface $typeStructure
+     * @param TypeInterface $typeConfigElement
      * @param OutputType $outputType
      * @param Field $field
      * @return array
      */
-    private function getFieldConfig(TypeInterface $typeStructure, OutputType $outputType, Field $field): array
+    private function getFieldConfig(TypeInterface $typeConfigElement, OutputType $outputType, Field $field): array
     {
-        $type = $this->getFieldType($typeStructure, $outputType, $field);
+        $type = $this->getFieldType($typeConfigElement, $outputType, $field);
         $fieldConfig = [
             'name' => $field->getName(),
             'type' => $type,

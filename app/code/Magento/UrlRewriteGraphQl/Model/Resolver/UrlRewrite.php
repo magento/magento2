@@ -8,12 +8,12 @@ declare(strict_types = 1);
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
 use GraphQL\Type\Definition\ResolveInfo;
-use Magento\Framework\GraphQl\Config\Data\Field;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Resolver\Value;
-use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\GraphQl\Resolver\ValueFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
 
 /**
  * UrlRewrite field resolver, used for GraphQL request processing.

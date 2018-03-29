@@ -58,7 +58,7 @@ class AttributeReader implements ReaderInterface
      */
     public function read($scope = null) : array
     {
-        $targetStructures = $this->mapper->getMappedTypes(\Magento\Catalog\Model\Product::ENTITY);
+        $typeNames = $this->mapper->getMappedTypes(\Magento\Catalog\Model\Product::ENTITY);
         $config =[];
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         foreach ($this->collection->getAttributes() as $attribute) {
@@ -68,8 +68,8 @@ class AttributeReader implements ReaderInterface
                 \Magento\Catalog\Model\Product::ENTITY
             ) ?: 'String';
             $locatedType = $locatedType === TypeProcessor::NORMALIZED_ANY_TYPE ? 'String' : ucfirst($locatedType);
-            foreach ($targetStructures as $structure) {
-                $config[$structure]['fields'][$attributeCode] = [
+            foreach ($typeNames as $typeName) {
+                $config[$typeName]['fields'][$attributeCode] = [
                     'name' => $attributeCode,
                     'type' => $locatedType,
                     'arguments' => []

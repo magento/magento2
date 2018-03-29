@@ -7,22 +7,22 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Type\Output;
 
+use Magento\Framework\GraphQl\Config\Element\Type as TypeElement;
 use Magento\Framework\GraphQl\Type\Definition\ObjectType;
-use Magento\Framework\GraphQl\Config\Data\Type as TypeStructure;
 
 /**
- * Represents a concrete output type for a GraphQL response.
+ * 'output' type compatible with GraphQL schema generator.
  */
 class OutputTypeObject extends ObjectType
 {
     /**
      * @param ElementMapper $elementMapper
-     * @param TypeStructure $structure
+     * @param TypeElement $configElement
      */
     public function __construct(
         ElementMapper $elementMapper,
-        TypeStructure $structure
+        TypeElement $configElement
     ) {
-        parent::__construct($elementMapper->buildSchemaArray($structure, $this));
+        parent::__construct($elementMapper->buildSchemaArray($configElement, $this));
     }
 }

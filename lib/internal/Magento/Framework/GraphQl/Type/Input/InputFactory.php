@@ -7,9 +7,9 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Type\Input;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\GraphQl\Config\Data\StructureInterface;
+use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 use Magento\Framework\GraphQl\Type\Definition\InputType;
+use Magento\Framework\ObjectManagerInterface;
 
 class InputFactory
 {
@@ -41,20 +41,20 @@ class InputFactory
     }
 
     /**
-     * @param StructureInterface $structure
+     * @param ConfigElementInterface $configElement
      * @return InputType
      */
-    public function create(StructureInterface $structure) : InputType
+    public function create(ConfigElementInterface $configElement) : InputType
     {
-        if (!isset($this->typeRegistry[$structure->getName()])) {
-            $this->typeRegistry[$structure->getName()] =
+        if (!isset($this->typeRegistry[$configElement->getName()])) {
+            $this->typeRegistry[$configElement->getName()] =
                 $this->objectManager->create(
-                    $this->prototypes[get_class($structure)],
+                    $this->prototypes[get_class($configElement)],
                     [
-                        'structure' => $structure
+                        'configElement' => $configElement
                     ]
                 );
         }
-        return $this->typeRegistry[$structure->getName()];
+        return $this->typeRegistry[$configElement->getName()];
     }
 }

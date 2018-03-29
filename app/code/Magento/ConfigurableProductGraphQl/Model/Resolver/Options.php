@@ -11,7 +11,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as Type;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\GraphQl\Config\Data\Field;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Resolver\Value;
 use Magento\Framework\GraphQl\Resolver\ValueFactory;

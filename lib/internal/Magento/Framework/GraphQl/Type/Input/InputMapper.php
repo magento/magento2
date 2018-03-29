@@ -7,16 +7,12 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Type\Input;
 
-use Magento\Framework\GraphQl\Config\ConfigInterface;
-use Magento\Framework\GraphQl\Config\Data\Argument;
-use Magento\Framework\GraphQl\Type\Definition\InputType;
-use Magento\Framework\GraphQl\TypeFactory;
-use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
 use Magento\Framework\GraphQl\Config\Data\WrappedTypeProcessor;
+use Magento\Framework\GraphQl\Config\Element\Argument;
+use Magento\Framework\GraphQl\ConfigInterface;
+use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
+use Magento\Framework\GraphQl\TypeFactory;
 
-/**
- * Class OutputMapper
- */
 class InputMapper
 {
     /**
@@ -66,7 +62,7 @@ class InputMapper
     }
 
     /**
-     * Determine an arguments type and structure for schema generation.
+     * Prepare argument's metadata for GraphQL schema generation.
      *
      * @param Argument $argument
      * @return array
@@ -77,7 +73,7 @@ class InputMapper
         if ($this->scalarTypes->isScalarType($typeName)) {
             $instance = $this->wrappedTypeProcessor->processScalarWrappedType($argument);
         } else {
-            $configElement = $this->config->getTypeStructure($typeName);
+            $configElement = $this->config->getConfigElement($typeName);
             $instance = $this->inputFactory->create($configElement);
             $instance = $this->wrappedTypeProcessor->processWrappedType($argument, $instance);
         }

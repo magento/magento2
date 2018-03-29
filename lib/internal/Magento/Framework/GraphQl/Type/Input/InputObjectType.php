@@ -7,14 +7,11 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Type\Input;
 
-use Magento\Framework\GraphQl\Type\Definition\InputType;
-use Magento\Framework\GraphQl\Config\Data\Field;
-use Magento\Framework\GraphQl\Config\Data\Type as TypeStructure;
-use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
-use Magento\Framework\GraphQl\TypeFactory;
-use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
 use Magento\Framework\GraphQl\Config\Data\WrappedTypeProcessor;
-use Magento\Framework\GraphQl\Config\ConfigInterface;
+use Magento\Framework\GraphQl\Config\Element\Type as TypeConfigElement;
+use Magento\Framework\GraphQl\ConfigInterface;
+use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
+use Magento\Framework\GraphQl\TypeFactory;
 
 /**
  * Class InputObjectType
@@ -47,7 +44,7 @@ class InputObjectType extends \Magento\Framework\GraphQl\Type\Definition\InputOb
     public $graphQlConfig;
 
     /**
-     * @param TypeStructure $structure
+     * @param TypeConfigElement $configElement
      * @param TypeFactory $typeFactory
      * @param ScalarTypes $scalarTypes
      * @param WrappedTypeProcessor $wrappedTypeProcessor
@@ -55,7 +52,7 @@ class InputObjectType extends \Magento\Framework\GraphQl\Type\Definition\InputOb
      * @param ConfigInterface $graphQlConfig
      */
     public function __construct(
-        TypeStructure $structure,
+        TypeConfigElement $configElement,
         TypeFactory $typeFactory,
         ScalarTypes $scalarTypes,
         WrappedTypeProcessor $wrappedTypeProcessor,
@@ -68,18 +65,18 @@ class InputObjectType extends \Magento\Framework\GraphQl\Type\Definition\InputOb
         $this->inputFactory = $inputFactory;
         $this->graphQlConfig = $graphQlConfig;
         $config = [
-            'name' => $structure->getName(),
-            'description' => $structure->getDescription()
+            'name' => $configElement->getName(),
+            'description' => $configElement->getDescription()
         ];
-        foreach ($structure->getFields() as $field) {
+        foreach ($configElement->getFields() as $field) {
             if ($this->scalarTypes->isScalarType($field->getTypeName())) {
                 $type = $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
             } else {
-                if ($field->getTypeName() == $structure->getName()) {
+                if ($field->getTypeName() == $configElement->getName()) {
                     $type = $this;
                 } else {
-                    $configElement = $this->graphQlConfig->getTypeStructure($field->getTypeName());
-                    $type = $this->inputFactory->create($configElement);
+                    $fieldConfigElement = $this->graphQlConfig->getConfigElement($field->getTypeName());
+                    $type = $this->inputFactory->create($fieldConfigElement);
                 }
                 $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
             }

@@ -7,12 +7,12 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Type\Output;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\GraphQl\Config\Data\StructureInterface;
+use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 use Magento\Framework\GraphQl\Type\Definition\OutputType;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Creates various output types based on structure's metadata.
+ * Factory for 'output type' objects compatible with GraphQL schema generator.
  */
 class OutputFactory
 {
@@ -46,20 +46,20 @@ class OutputFactory
     /**
      * Create output type.
      *
-     * @param StructureInterface $structure
+     * @param ConfigElementInterface $configElement
      * @return OutputType
      */
-    public function create(StructureInterface $structure) : OutputType
+    public function create(ConfigElementInterface $configElement) : OutputType
     {
-        if (!isset($this->typeRegistry[$structure->getName()])) {
-            $this->typeRegistry[$structure->getName()] =
+        if (!isset($this->typeRegistry[$configElement->getName()])) {
+            $this->typeRegistry[$configElement->getName()] =
                 $this->objectManager->create(
-                    $this->prototypes[get_class($structure)],
+                    $this->prototypes[get_class($configElement)],
                     [
-                        'structure' => $structure
+                        'configElement' => $configElement
                     ]
                 );
         }
-        return $this->typeRegistry[$structure->getName()];
+        return $this->typeRegistry[$configElement->getName()];
     }
 }

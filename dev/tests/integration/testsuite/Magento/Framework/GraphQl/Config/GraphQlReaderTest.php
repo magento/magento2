@@ -3,6 +3,7 @@
 namespace Magento\Framework\GraphQl\Config;
 
 use Magento\Framework\App\Cache;
+use Magento\Framework\GraphQl\Config;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Controller\GraphQl;
@@ -60,7 +61,7 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
             ['reader' => $reader]
         );
         $this->configModel = $this->objectManager->create(
-            \Magento\Framework\GraphQl\Config\Config::class,
+            \Magento\Framework\GraphQl\Config::class,
             ['data' => $data]
         );
         $outputMapper = $this->objectManager->create(

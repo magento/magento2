@@ -5,15 +5,10 @@
  */
 namespace Magento\Framework\GraphQl;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Cache;
 use Magento\Framework\Config\FileResolverInterface;
-use Magento\Framework\GraphQl\Config\Config;
-use Magento\Framework\GraphQl\Config\Data\Argument;
-use Magento\Framework\GraphQl\Config\Data\Enum;
-use Magento\Framework\GraphQl\Config\Data\Field;
-use Magento\Framework\GraphQl\Config\Data\StructureInterface;
-use Magento\Framework\GraphQl\Config\Data\Type;
+use Magento\Framework\GraphQl\Config\Element\Argument;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\ObjectManagerInterface;
 
 class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
@@ -53,7 +48,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $data = $objectManager->create(\Magento\Framework\GraphQl\Config\Data ::class,
             ['reader' => $reader]
             );
-         $this->model = $objectManager->create(\Magento\Framework\GraphQl\Config\Config::class, ['data' =>$data]);
+         $this->model = $objectManager->create(\Magento\Framework\GraphQl\Config::class, ['data' =>$data]);
     }
 
     /**
@@ -63,8 +58,8 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
     {
         $query = 'Query';
 
-        /** @var StructureInterface $outputType */
-        $output = $this->model->getTypeStructure($query);
+        /** @var \Magento\Framework\GraphQl\Config\ConfigElementInterface $outputType */
+        $output = $this->model->getConfigElement($query);
         $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($output->getName(), $query);
 
@@ -88,9 +83,9 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
     public function testGraphQlEnumTypeConfigStructure()
     {
         $queryEnum = 'PriceAdjustmentDescriptionEnum';
-        /** @var Enum $outputEnum */
-        $outputEnum = $this->model->getTypeStructure($queryEnum);
-        /** @var Enum\Value $outputEnumValues */
+        /** @var \Magento\Framework\GraphQl\Config\Element\Enum $outputEnum */
+        $outputEnum = $this->model->getConfigElement($queryEnum);
+        /** @var \Magento\Framework\GraphQl\Config\Element\EnumValue $outputEnumValues */
         $outputEnumValues = $outputEnum->getValues();
         $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($outputEnum->getName(), $queryEnum);
@@ -103,8 +98,8 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
     public function testGraphQlInterfaceStructure()
     {
         $inputInterfaceType = 'ProductLinks';
-        /** @var Type $outputInterface */
-        $outputInterface = $this->model->getTypeStructure($inputInterfaceType);
+        /** @var \Magento\Framework\GraphQl\Config\Element\Type $outputInterface */
+        $outputInterface = $this->model->getConfigElement($inputInterfaceType);
         $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($outputInterface->getName(), $inputInterfaceType);
 

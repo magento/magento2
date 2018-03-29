@@ -5,12 +5,14 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config\Data\Enum;
+namespace Magento\Framework\GraphQl\Config\Element;
+
+use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 
 /**
  * Describes a value for an enum type.
  */
-class Value
+class EnumValue implements ConfigElementInterface
 {
     /**
      * @var string

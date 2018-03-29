@@ -24,6 +24,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
 
     /**
      * StoreProcessor constructor.
+     *
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(StoreManagerInterface $storeManager)

@@ -5,12 +5,12 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config\Data;
+namespace Magento\Framework\GraphQl\Config;
 
 /**
- * Defines contracts for structured data objects that, combined, represent a configured GraphQL schema.
+ * GraphQL config element.
  */
-interface StructureInterface
+interface ConfigElementInterface
 {
     /**
      * @return string

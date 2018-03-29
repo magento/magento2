@@ -7,22 +7,22 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Type\Output;
 
+use Magento\Framework\GraphQl\Config\Element\InterfaceType as InterfaceElement;
 use Magento\Framework\GraphQl\Type\Definition\InterfaceType;
-use Magento\Framework\GraphQl\Config\Data\InterfaceType as InterfaceTypeStructure;
 
 /**
- * Represents an interface type for GraphQL output
+ * 'interface' type compatible with GraphQL schema generator.
  */
 class OutputInterfaceObject extends InterfaceType
 {
     /**
      * @param ElementMapper $elementMapper
-     * @param InterfaceTypeStructure $structure
+     * @param InterfaceElement $configElement
      */
     public function __construct(
         ElementMapper $elementMapper,
-        InterfaceTypeStructure $structure
+        InterfaceElement $configElement
     ) {
-        parent::__construct($elementMapper->buildSchemaArray($structure, $this));
+        parent::__construct($elementMapper->buildSchemaArray($configElement, $this));
     }
 }

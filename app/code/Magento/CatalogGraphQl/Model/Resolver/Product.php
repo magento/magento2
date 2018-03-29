@@ -9,7 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
-use Magento\Framework\GraphQl\Config\Data\Field;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\FieldTranslator;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;

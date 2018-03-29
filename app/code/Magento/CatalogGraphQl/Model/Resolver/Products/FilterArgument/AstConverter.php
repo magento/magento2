@@ -8,14 +8,14 @@ declare(strict_types = 1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument;
 
 use Magento\Framework\GraphQl\Argument\AstConverterInterface;
-use Magento\Framework\GraphQl\Config\ConfigInterface;
-use Magento\Framework\GraphQl\Config\Data\Type;
-use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceTypeFactory;
 use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceType;
+use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceTypeFactory;
 use Magento\Framework\GraphQl\Argument\Filter\ClauseFactory;
-use Magento\Framework\GraphQl\Argument\Filter\ConnectiveFactory;
 use Magento\Framework\GraphQl\Argument\Filter\Connective;
-use Magento\Framework\GraphQl\Config\Data\InterfaceType;
+use Magento\Framework\GraphQl\Argument\Filter\ConnectiveFactory;
+use Magento\Framework\GraphQl\Config\Element\InterfaceType;
+use Magento\Framework\GraphQl\Config\Element\Type;
+use Magento\Framework\GraphQl\ConfigInterface;
 
 /**
  * Converts the input value for "find" to a @see Connective format
@@ -109,17 +109,17 @@ class AstConverter implements AstConverterInterface
      */
     private function getCatalogProductFields() : array
     {
-        $productTypeSchema = $this->config->getTypeStructure('SimpleProduct');
+        $productTypeSchema = $this->config->getConfigElement('SimpleProduct');
         if (!$productTypeSchema instanceof Type) {
             throw new \LogicException(__("SimpleProduct type not defined in schema."));
         }
 
         $fields = [];
         foreach ($productTypeSchema->getInterfaces() as $interface) {
-            /** @var InterfaceType $interfaceStructure */
-            $interfaceStructure = $this->config->getTypeStructure($interface['interface']);
+            /** @var InterfaceType $configElement */
+            $configElement = $this->config->getConfigElement($interface['interface']);
 
-            foreach ($interfaceStructure->getFields() as $field) {
+            foreach ($configElement->getFields() as $field) {
                 $fields[$field->getName()] = 'String';
             }
         }

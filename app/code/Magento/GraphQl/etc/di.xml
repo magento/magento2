@@ -20,16 +20,21 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\GraphQl\Config\ConfigInterface" type="Magento\Framework\GraphQl\Config\Config"/>
-    <type name="Magento\Framework\GraphQl\Config\Config">
+    <preference for="Magento\Framework\GraphQl\ConfigInterface" type="Magento\Framework\GraphQl\Config"/>
+    <preference for="Magento\Framework\GraphQl\Config\ConfigElementFactoryInterface" type="Magento\Framework\GraphQl\Config\ConfigElementFactory"/>
+    <type name="Magento\Framework\GraphQl\Config\ConfigElementFactory">
+        <arguments>
+            <argument name="factoryMapByConfigElementType" xsi:type="array">
+                <item name="graphql_interface" xsi:type="object">Magento\Framework\GraphQl\Config\Element\InterfaceFactory</item>
+                <item name="graphql_type" xsi:type="object">Magento\Framework\GraphQl\Config\Element\TypeFactory</item>
+                <item name="graphql_input" xsi:type="object">Magento\Framework\GraphQl\Config\Element\TypeFactory</item>
+                <item name="graphql_enum" xsi:type="object">Magento\Framework\GraphQl\Config\Element\EnumFactory</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Config">
         <arguments>
             <argument name="data" xsi:type="object">Magento\Framework\GraphQl\Config\Data</argument>
-            <argument name="mappers" xsi:type="array">
-                <item name="graphql_interface" xsi:type="object">Magento\Framework\GraphQl\Config\Data\Mapper\TypeInterfaceMapper</item>
-                <item name="graphql_type" xsi:type="object">Magento\Framework\GraphQl\Config\Data\Mapper\TypeMapper</item>
-                <item name="graphql_input" xsi:type="object">Magento\Framework\GraphQl\Config\Data\Mapper\TypeMapper</item>
-                <item name="graphql_enum" xsi:type="object">Magento\Framework\GraphQl\Config\Data\Mapper\EnumMapper</item>
-            </argument>
         </arguments>
     </type>
     <virtualType name="Magento\Framework\GraphQl\Config\Data" type="Magento\Framework\Config\Data">
@@ -53,18 +58,18 @@
     <type name="Magento\Framework\GraphQl\Type\Output\OutputFactory">
         <arguments>
             <argument name="prototypes" xsi:type="array">
-                <item name="Magento\Framework\GraphQl\Config\Data\Type" xsi:type="string">Magento\Framework\GraphQl\Type\Output\OutputTypeObject</item>
-                <item name="Magento\Framework\GraphQl\Config\Data\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Type\Output\OutputInterfaceObject</item>
-                <item name="Magento\Framework\GraphQl\Config\Data\Enum" xsi:type="string">Magento\Framework\GraphQl\Type\Enum\Enum</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Type" xsi:type="string">Magento\Framework\GraphQl\Type\Output\OutputTypeObject</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Type\Output\OutputInterfaceObject</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Type\Enum\Enum</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\GraphQl\Type\Input\InputFactory">
         <arguments>
             <argument name="prototypes" xsi:type="array">
-                <item name="Magento\Framework\GraphQl\Config\Data\Type" xsi:type="string">Magento\Framework\GraphQl\Type\Input\InputObjectType</item>
-                <item name="Magento\Framework\GraphQl\Config\Data\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Type\Input\InputObjectType</item>
-                <item name="Magento\Framework\GraphQl\Config\Data\Enum" xsi:type="string">Magento\Framework\GraphQl\Type\Enum\Enum</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Type" xsi:type="string">Magento\Framework\GraphQl\Type\Input\InputObjectType</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Type\Input\InputObjectType</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Type\Enum\Enum</item>
             </argument>
         </arguments>
     </type>
