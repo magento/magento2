@@ -12,6 +12,7 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchCriteria\Helper\Filter as FilterHelper;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\Search\Api\SearchInterface;
 
 /**
@@ -40,6 +41,11 @@ class Search
     private $searchResultFactory;
 
     /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param SearchInterface $search
      * @param FilterHelper $filterHelper
      * @param Filter $filterQuery
@@ -49,12 +55,14 @@ class Search
         SearchInterface $search,
         FilterHelper $filterHelper,
         Filter $filterQuery,
-        SearchResultFactory $searchResultFactory
+        SearchResultFactory $searchResultFactory,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool
     ) {
         $this->search = $search;
         $this->filterHelper = $filterHelper;
         $this->filterQuery = $filterQuery;
         $this->searchResultFactory = $searchResultFactory;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -65,6 +73,9 @@ class Search
      */
     public function getResult(SearchCriteriaInterface $searchCriteria, ResolveInfo $info) : SearchResult
     {
+        $idField = $this->metadataPool->getMetadata(
+            \Magento\Catalog\Api\Data\ProductInterface::class
+        )->getIdentifierField();
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
         // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround
@@ -79,7 +90,7 @@ class Search
             $searchIds[] = $item->getId();
         }
 
-        $filter = $this->filterHelper->generate('entity_id', 'in', $searchIds);
+        $filter = $this->filterHelper->generate($idField, 'in', $searchIds);
         $searchCriteria = $this->filterHelper->remove($searchCriteria, 'search_term');
         $searchCriteria = $this->filterHelper->add($searchCriteria, $filter);
         $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
@@ -91,14 +102,14 @@ class Search
         $products = [];
         if (!isset($searchCriteria->getSortOrders()[0])) {
             foreach ($paginatedProducts as $product) {
-                if (in_array($product['id'], $searchIds)) {
-                    $ids[$product['id']] = $product;
+                if (in_array($product[$idField], $searchIds)) {
+                    $ids[$product[$idField]] = $product;
                 }
             }
             $products = array_filter($ids);
         } else {
             foreach ($paginatedProducts as $product) {
-                if (in_array($product['id'], $searchIds)) {
+                if (in_array($product[$idField], $searchIds)) {
                     $products[] = $product;
                 }
             }
