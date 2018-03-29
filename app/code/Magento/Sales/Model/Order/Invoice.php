@@ -96,9 +96,9 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     protected $_invoiceConfig;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
      */
-    protected $_orderFactory;
+    protected $orderRepository;
 
     /**
      * @var \Magento\Framework\Math\CalculatorFactory
@@ -126,7 +126,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param Invoice\Config $invoiceConfig
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Framework\Math\CalculatorFactory $calculatorFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory $invoiceItemCollectionFactory
      * @param Invoice\CommentFactory $invoiceCommentFactory
@@ -142,7 +142,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\Invoice\Config $invoiceConfig,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Framework\Math\CalculatorFactory $calculatorFactory,
         \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory $invoiceItemCollectionFactory,
         \Magento\Sales\Model\Order\Invoice\CommentFactory $invoiceCommentFactory,
@@ -152,7 +152,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         array $data = []
     ) {
         $this->_invoiceConfig = $invoiceConfig;
-        $this->_orderFactory = $orderFactory;
+        $this->orderRepository = $orderRepository;
         $this->_calculatorFactory = $calculatorFactory;
         $this->_invoiceItemCollectionFactory = $invoiceItemCollectionFactory;
         $this->_invoiceCommentFactory = $invoiceCommentFactory;
@@ -236,7 +236,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     public function getOrder()
     {
         if (!$this->_order instanceof \Magento\Sales\Model\Order) {
-            $this->_order = $this->_orderFactory->create()->load($this->getOrderId());
+            $this->_order = $this->orderRepository->get($this->getOrderId());
         }
         return $this->_order->setHistoryEntityName($this->entityType);
     }

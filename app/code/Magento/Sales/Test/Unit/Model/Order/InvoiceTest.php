@@ -9,8 +9,9 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
-use Magento\Sales\Model\ResourceModel\OrderFactory;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -19,7 +20,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * @package Magento\Sales\Model\Order
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InvoiceTest extends \PHPUnit\Framework\TestCase
+class InvoiceTest extends TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Invoice
@@ -38,9 +39,9 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
     protected $entityType = 'invoice';
 
     /**
-     * @var OrderFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepository|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderFactory;
+    private $orderRepository;
 
     /**
      * @var Order|MockObject
@@ -74,6 +75,11 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
+        $this->orderRepository = $this->getMockBuilder(OrderRepository::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+
         $this->order->method('setHistoryEntityName')
             ->with($this->entityType)
             ->willReturnSelf();
@@ -84,8 +90,6 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ['canVoid', '__wakeup', 'canCapture', 'capture', 'pay', 'cancelInvoice']
         )->getMock();
 
-        $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
-
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $contextMock->expects($this->any())
@@ -94,7 +98,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
 
         $arguments = [
             'context' => $contextMock,
-            'orderFactory' => $this->orderFactory,
+            'orderRepository' => $this->orderRepository,
             'calculatorFactory' => $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
             'invoiceItemCollectionFactory' =>
                 $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class),
@@ -156,17 +160,13 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
     {
         $orderId = 100000041;
         $this->modelWithoutOrder->setOrderId($orderId);
-        $this->order->expects($this->once())
-            ->method('load')
-            ->with($orderId)
-            ->willReturnSelf();
+        $this->orderRepository->expects($this->once())
+            ->method('get')
+            ->willReturn($this->order);
         $this->order->expects($this->once())
             ->method('setHistoryEntityName')
             ->with($this->entityType)
             ->willReturnSelf();
-        $this->orderFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->order);
 
         $this->assertEquals($this->order, $this->modelWithoutOrder->getOrder());
     }
