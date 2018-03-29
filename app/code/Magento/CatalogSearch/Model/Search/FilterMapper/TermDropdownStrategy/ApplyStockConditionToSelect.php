@@ -42,7 +42,7 @@ class ApplyStockConditionToSelect
     ) {
         $select->joinInner(
             [$stockAlias => $this->resourceConnection->getTableName('cataloginventory_stock_status')],
-            sprintf('%2$s.product_id = %1$s.source_id', $alias, $stockAlias),
+            sprintf('%2$s.product_id = %1$s.source_id AND %2$s.stock_status = 1', $alias, $stockAlias),
             []
         );
     }
