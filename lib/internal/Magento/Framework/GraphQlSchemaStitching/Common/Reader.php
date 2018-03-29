@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\GraphQlSchemaStiching\Common;
+namespace Magento\Framework\GraphQlSchemaStitching\Common;
 
 use Magento\Framework\Config\ReaderInterface;
 

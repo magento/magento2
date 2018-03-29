@@ -49,11 +49,11 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
         ];
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
         $graphQlReader = $this->objectManager->create(
-            \Magento\Framework\GraphQlSchemaStiching\GraphQlReader::class,
+            \Magento\Framework\GraphQlSchemaStitching\GraphQlReader::class,
             ['fileResolver' => $fileResolverMock]
         );
         $reader = $this->objectManager->create(
-            \Magento\Framework\GraphQlSchemaStiching\Reader::class,
+            \Magento\Framework\GraphQlSchemaStitching\Reader::class,
             ['readers' => ['graphql_reader' => $graphQlReader]]
         );
         $data = $this->objectManager->create(

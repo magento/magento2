@@ -5,7 +5,7 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQlSchemaStiching\GraphQlReader;
+namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader;
 
 /**
  * Composite configured class used to determine which reader should be used for a specific type

@@ -5,7 +5,7 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQlSchemaStiching\GraphQlReader;
+namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader;
 
 /**
  * Reads and returns metadata as array for a specific type if it finds an adequate implementation for that type
