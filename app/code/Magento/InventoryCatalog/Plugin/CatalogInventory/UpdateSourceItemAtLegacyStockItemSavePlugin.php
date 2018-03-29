@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
-use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
@@ -42,29 +42,29 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     private $getProductTypeBySku;
 
     /**
-     * @var Product
+     * @var GetSkusByProductIdsInterface
      */
-    private $productResource;
+    private $getSkusByProductIds;
 
     /**
      * @param UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem
      * @param ResourceConnection $resourceConnection
      * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
-     * @param Product $productResource
+     * @param GetSkusByProductIdsInterface $getSkusByProductIds
      */
     public function __construct(
         UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem,
         ResourceConnection $resourceConnection,
         IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypeBySku,
-        Product $productResource
+        GetSkusByProductIdsInterface $getSkusByProductIds
     ) {
         $this->updateSourceItemBasedOnLegacyStockItem = $updateSourceItemBasedOnLegacyStockItem;
         $this->resourceConnection = $resourceConnection;
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->getProductTypeBySku = $getProductTypeBySku;
-        $this->productResource = $productResource;
+        $this->getSkusByProductIds = $getSkusByProductIds;
     }
 
     /**
@@ -109,27 +109,12 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
         if ($typeId === null) {
             $sku = $legacyStockItem->getSku();
             if ($sku === null) {
-                $sku = $this->getProductSkuById((int)$legacyStockItem->getProductId());
+                $productId = $legacyStockItem->getProductId();
+                $sku = $this->getSkusByProductIds->execute([$productId])[$productId];
             }
             $typeId = $this->getProductTypeBySku->execute([$sku])[$sku];
         }
 
         return $typeId;
-    }
-
-    /**
-     * Get product sku by id
-     *
-     * @param int $productId
-     * @return string|null
-     */
-    private function getProductSkuById(int $productId)
-    {
-        $rows = $this->productResource->getProductsSku([$productId]);
-        if (empty($rows)) {
-            return null;
-        }
-
-        return $rows[0]['sku'];
     }
 }
