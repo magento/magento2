@@ -361,8 +361,8 @@ interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGrap
     sort_order: Int @doc(description: "The order in which the option is displayed")
 }
 
-interface CustomizableProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") {
-    options: [CustomizableOptionInterface] @doc(description: "") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Options") @doc(description: "CustomizableProductInterface contains information about customizable product options.")
+interface CustomizableProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "CustomizableProductInterface contains information about customizable product options.") {
+    options: [CustomizableOptionInterface] @doc(description: "An array of options for a customizable product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Options")
 }
 
 type CustomizableRadioOption implements CustomizableOptionInterface @doc(description: "CustomizableRadioOption contains information about a set of radio buttons that are defined as part of a customizable option") {
