@@ -18,7 +18,9 @@ class SchemaRequestProcessorTest extends AbstractController
      */
     public function testSchemaRequest($path)
     {
+        ob_start();
         $this->dispatch($path);
+        ob_end_clean();
         $schema = $this->getResponse()->getBody();
 
         // Check that an HTTP 200 response status is visible in the schema.
