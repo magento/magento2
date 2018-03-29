@@ -1402,7 +1402,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             [
                 'products_to_check_duplicated_url_keys.csv',
                 [
-                    RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 2
+                    RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 1
                 ]
             ],
             [
