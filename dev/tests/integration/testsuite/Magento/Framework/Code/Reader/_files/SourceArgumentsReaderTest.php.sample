@@ -20,6 +20,7 @@ class AnotherSimpleClass
         ClassName $itemSix,
         Test $itemSeven,
         ?\Exception $optionalException,
+        $defaultString = '$default),value;',
         ?ClassName $optionalWithDefaultValue = null,
         array $itemEight = [],
         $itemNine = 'test'
