@@ -11,7 +11,6 @@ use Magento\Catalog\Model\ResourceModel\Category\Attribute\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Type\Entity\MapperInterface;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
 
@@ -20,11 +19,6 @@ use Magento\EavGraphQl\Model\Resolver\Query\Type;
  */
 class CategoryAttributeReader implements ReaderInterface
 {
-    /**
-     * @var MapperInterface
-     */
-    private $mapper;
-
     /**
      * In database data type is differ to graphql type, but eventually type for this attributes
      * will be casted without problems
@@ -50,16 +44,13 @@ class CategoryAttributeReader implements ReaderInterface
     private $collectionFactory;
 
     /**
-     * @param MapperInterface $mapper
      * @param Type $typeLocator
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        MapperInterface $mapper,
         Type $typeLocator,
         CollectionFactory $collectionFactory
     ) {
-        $this->mapper = $mapper;
         $this->typeLocator = $typeLocator;
         $this->collectionFactory = $collectionFactory;
     }

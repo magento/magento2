@@ -13,10 +13,10 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\AttributesJoiner;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CustomAttributesFlatternizer;
-use Magento\Framework\GraphQl\Config\Data\Field;
-use Magento\Framework\GraphQl\Resolver\ResolverInterface;
-use Magento\Framework\GraphQl\Resolver\Value;
-use Magento\Framework\GraphQl\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**

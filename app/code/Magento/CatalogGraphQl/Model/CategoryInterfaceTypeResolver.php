@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 /**
  * {@inheritdoc}
  */
-class CategoryInterfaceTypeResolver implements TypeResolverInterface
+class CategoryInterfaceTypeResolver implements \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface
 {
     /**
      * {@inheritdoc}
