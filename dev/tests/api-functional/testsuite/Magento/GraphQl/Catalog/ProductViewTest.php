@@ -294,10 +294,9 @@ QUERY;
         items{
             attribute_set_id
             category_ids
-            category_links
+            categories
             {
-                category_id
-                position
+                id
             }
             country_of_manufacture
             created_at

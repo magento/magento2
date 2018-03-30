@@ -162,9 +162,8 @@ class ConfigurableProductViewTest extends GraphQlAbstract
                 }
               }
             }
-            category_links {
-              position
-              category_id
+            categories {
+              id
             }
             media_gallery_entries {
               disabled
@@ -309,8 +308,8 @@ QUERY;
                 'variant product doesn\'t contain category_ids key'
             );
             $this->assertTrue(
-                isset($variantArray['product']['category_links']),
-                'variant product doesn\'t contain category_links key'
+                isset($variantArray['product']['categories']),
+                'variant product doesn\'t contain categories key'
             );
             $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
             /** @var \Magento\Catalog\Model\Product $childProduct */
@@ -318,14 +317,13 @@ QUERY;
 
             /** @var  \Magento\Catalog\Api\Data\ProductLinkInterface[] */
             $links = $childProduct->getExtensionAttributes()->getCategoryLinks();
-            $this->assertCount(1, $links, "Precondition failed, incorrect number of category_links.");
-            $position =$links[0]->getPosition();
-            $categoryId = $links[0]->getCategoryId();
+            $this->assertCount(1, $links, "Precondition failed, incorrect number of categories.");
+            $id =$links[0]->getCategoryId();
 
             $actualValue
-                = $actualResponse['variants'][$variantKey]['product']['category_links'][0];
-            $this->assertEquals($actualValue, ['position' => $position, 'category_id' => $categoryId]);
-            unset($variantArray['product']['category_links']);
+                = $actualResponse['variants'][$variantKey]['product']['categories'][0];
+            $this->assertEquals($actualValue, ['id' => $id]);
+            unset($variantArray['product']['categories']);
 
             $categoryIdsAttribute = $childProduct->getCustomAttribute('category_ids');
             $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");

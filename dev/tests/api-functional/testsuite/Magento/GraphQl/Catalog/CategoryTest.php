@@ -84,34 +84,35 @@ QUERY;
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
         $responseDataObject = new DataObject($response);
+        var_dump($responseDataObject->getData('categories/category_tree/0/children/7/children'));
         //Some sort of smoke testing
         self::assertEquals(
             'Ololo',
-            $responseDataObject->getData('categories/category_tree/0/children/7/children/1/description')
+            $responseDataObject->getData('categories/category_tree/children/7/children/1/description')
         );
         self::assertEquals(
             'default-category',
-            $responseDataObject->getData('categories/category_tree/0/url_key')
+            $responseDataObject->getData('categories/category_tree/url_key')
         );
         self::assertEquals(
             [],
-            $responseDataObject->getData('categories/category_tree/0/children/0/available_sort_by')
+            $responseDataObject->getData('categories/category_tree/children/0/available_sort_by')
         );
         self::assertEquals(
             'name',
-            $responseDataObject->getData('categories/category_tree/0/children/0/default_sort_by')
+            $responseDataObject->getData('categories/category_tree/children/0/default_sort_by')
         );
         self::assertCount(
             8,
-            $responseDataObject->getData('categories/category_tree/0/children')
+            $responseDataObject->getData('categories/category_tree/children')
         );
         self::assertCount(
             2,
-            $responseDataObject->getData('categories/category_tree/0/children/7/children')
+            $responseDataObject->getData('categories/category_tree/children/7/children')
         );
         self::assertEquals(
             5,
-            $responseDataObject->getData('categories/category_tree/0/children/7/children/1/children/0/id')
+            $responseDataObject->getData('categories/category_tree/children/7/children/1/children/0/id')
         );
     }
 }
