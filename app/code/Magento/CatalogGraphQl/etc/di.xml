@@ -23,6 +23,7 @@
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="productDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\AttributeReader</item>
+                <item name="categoryDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader</item>
             </argument>
         </arguments>
     </virtualType>

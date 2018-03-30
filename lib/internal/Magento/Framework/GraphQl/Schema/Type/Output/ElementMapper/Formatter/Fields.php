@@ -101,7 +101,7 @@ class Fields implements FormatterInterface
      * @param TypeInterface $typeConfigElement
      * @param OutputType $outputType
      * @param Field $field
-     * @return OutputType
+     * @return TypeInterface
      */
     private function getFieldType(TypeInterface $typeConfigElement, OutputType $outputType, Field $field)
     {
@@ -111,14 +111,10 @@ class Fields implements FormatterInterface
             if ($typeConfigElement->getName() == $field->getTypeName()) {
                 $type = $outputType;
             } else {
-                if ($typeConfigElement->getName() == $field->getTypeName()) {
-                    $type = $outputType;
-                } else {
-                    $type = $this->outputMapper->getOutputType($field->getTypeName());
-                }
-
-                $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
+                $type = $this->outputMapper->getOutputType($field->getTypeName());
             }
+
+            $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
         }
         return $type;
     }
@@ -162,7 +158,7 @@ class Fields implements FormatterInterface
      * @param array $config
      * @return array
      */
-    private function formatArguments(Field $field, array $config)
+    private function formatArguments(Field $field, array $config) : array
     {
         foreach ($field->getArguments() as $argument) {
             $inputType = $this->inputMapper->getRepresentation($argument);

@@ -9,6 +9,7 @@ namespace Magento\GraphQl\Catalog;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -40,12 +41,6 @@ class ProductViewTest extends GraphQlAbstract
     {
         items {
             attribute_set_id
-            category_ids
-            category_links
-            {
-                category_id
-                position
-            }
             country_of_manufacture
             created_at
             custom_design
@@ -56,6 +51,13 @@ class ProductViewTest extends GraphQlAbstract
             description
             gift_message_available
             id
+            categories {
+               name
+               is_active
+               url_path
+               available_sort_by
+               level
+            }
             image
             image_label
             meta_description
@@ -249,7 +251,7 @@ QUERY;
 
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
-
+        $responseObject = new DataObject($response);
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
@@ -264,9 +266,16 @@ QUERY;
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
-        $this->assertCategoryIds($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
         $this->assertTierPrices($product, $response['products']['items'][0]);
+        self::assertEquals(
+            'Movable Position 2',
+            $responseObject->getData('products/items/0/categories/1/name')
+        );
+        self::assertEquals(
+            'Filter category',
+            $responseObject->getData('products/items/0/categories/2/name')
+        );
     }
 //
 //    /**
@@ -565,6 +574,90 @@ QUERY;
 //    }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_list.php
+     */
+    public function testProductPrices()
+    {
+        $firstProductSku = 'simple-249';
+        $secondProductSku = 'simple-156';
+        $query = <<<QUERY
+       {
+           products(filter: {min_price: {gt: "100.0"}, max_price: {gt: "150.0", lt: "250.0"}})
+           {
+               items {
+                   attribute_set_id
+                   created_at
+                   id
+                   name
+                   price {
+                      minimalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      maximalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      regularPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                    }
+                   sku
+                   type_id
+                   updated_at
+                   ... on PhysicalProductInterface {
+                        weight
+                   }
+               }
+           }
+       }
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $firstProduct = $productRepository->get($firstProductSku, false, null, true);
+        $secondProduct = $productRepository->get($secondProductSku, false, null, true);
+        self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
+        self::assertCount(2, $response['products']['items']);
+        $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
+        $this->assertBaseFields($secondProduct, $response['products']['items'][1]);
+    }
+
+    /**
      * @param ProductInterface $product
      * @param array $actualResponse
      */
@@ -601,18 +694,6 @@ QUERY;
                 'video_url' => $videoContent->getVideoUrl(),
             ]
         );
-    }
-
-    /**
-     * @param ProductInterface $product
-     * @param array $actualResponse
-     */
-    private function assertCategoryIds($product, $actualResponse)
-    {
-        $categoryIdsAttribute = $product->getCustomAttribute('category_ids');
-        $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
-        $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-        $this->assertEquals($categoryIdsAttributeValue, $actualResponse['category_ids']);
     }
 
     /**
@@ -869,11 +950,11 @@ QUERY;
                 ? $assertionData['expected_value']
                 : $assertionData;
             $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            $this->assertNotNull(
+            self::assertNotNull(
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"
             );
-            $this->assertEquals(
+            self::assertEquals(
                 $expectedValue,
                 $actualResponse[$responseField],
                 "Value of '{$responseField}' field in response does not match expected value: "

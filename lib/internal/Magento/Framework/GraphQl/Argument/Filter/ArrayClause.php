@@ -5,16 +5,16 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Query\Resolver\Argument\Filter;
+namespace Magento\Framework\GraphQl\Argument\Filter;
 
-use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\Clause\ReferenceType;
+use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceType;
 
 /**
  * Class clause refers to a closure in find argument.
  *
  * Example: {sku: {eq: "product"}}
  */
-class Clause
+class ArrayClause implements ClauseInterface
 {
     /**
      * @var ReferenceType
@@ -89,7 +89,7 @@ class Clause
      *
      * @return string
      */
-    public function getClauseValue()
+    public function getClauseValue() : string
     {
         return $this->clauseValue;
     }

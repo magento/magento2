@@ -73,7 +73,7 @@ class Price implements ResolverInterface
 
         /** @var Product $product */
         $product = $value['model'];
-
+        $product->unsetData('minimal_price');
         $priceInfo = $this->priceInfoFactory->create($product);
         /** @var \Magento\Catalog\Pricing\Price\FinalPriceInterface $finalPrice */
         $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
