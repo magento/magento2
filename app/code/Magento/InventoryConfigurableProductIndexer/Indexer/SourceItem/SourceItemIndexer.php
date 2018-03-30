@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryIndexer\Indexer\SourceItem;
+namespace Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
@@ -14,24 +14,18 @@ use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
-use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 
-/**
- * Source Item indexer
- *
- * @api
- */
 class SourceItemIndexer
 {
     /**
-     * @var GetSkuListInStock
+     * @var ResourceConnection
      */
-    private $getSkuListInStock;
+    private $resourceConnection;
 
     /**
-     * @var IndexStructureInterface
+     * @var IndexNameBuilder
      */
-    private $indexStructure;
+    private $indexNameBuilder;
 
     /**
      * @var IndexHandlerInterface
@@ -44,14 +38,14 @@ class SourceItemIndexer
     private $indexDataBySkuListProvider;
 
     /**
-     * @var IndexNameBuilder
+     * @var IndexStructureInterface
      */
-    private $indexNameBuilder;
+    private $indexStructure;
 
     /**
-     * @var StockIndexer
+     * @var SiblingSkuListInStockProvider
      */
-    private $stockIndexer;
+    private $siblingSkuListInStockProvider;
 
     /**
      * @var DefaultStockProviderInterface
@@ -59,65 +53,45 @@ class SourceItemIndexer
     private $defaultStockProvider;
 
     /**
-     * $indexStructure is reserved name for construct variable (in index internal mechanism)
-     *
-     * @param GetSkuListInStock $getSkuListInStockToUpdate
-     * @param IndexStructureInterface $indexStructureHandler
-     * @param IndexHandlerInterface $indexHandler
-     * @param IndexDataBySkuListProvider $indexDataBySkuListProvider
+     * @param ResourceConnection $resourceConnection
      * @param IndexNameBuilder $indexNameBuilder
-     * @param StockIndexer $stockIndexer
+     * @param IndexHandlerInterface $indexHandler
+     * @param IndexStructureInterface $indexStructure
+     * @param IndexDataBySkuListProvider $indexDataBySkuListProvider
+     * @param SiblingSkuListInStockProvider $siblingSkuListInStockProvider
      * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
-        GetSkuListInStock $getSkuListInStockToUpdate,
-        IndexStructureInterface $indexStructureHandler,
-        IndexHandlerInterface $indexHandler,
-        IndexDataBySkuListProvider $indexDataBySkuListProvider,
+        ResourceConnection $resourceConnection,
         IndexNameBuilder $indexNameBuilder,
-        StockIndexer $stockIndexer,
+        IndexHandlerInterface $indexHandler,
+        IndexStructureInterface $indexStructure,
+        IndexDataBySkuListProvider $indexDataBySkuListProvider,
+        SiblingSkuListInStockProvider $siblingSkuListInStockProvider,
         DefaultStockProviderInterface $defaultStockProvider
     ) {
-        $this->getSkuListInStock = $getSkuListInStockToUpdate;
-        $this->indexStructure = $indexStructureHandler;
+        $this->resourceConnection = $resourceConnection;
+        $this->indexNameBuilder = $indexNameBuilder;
         $this->indexHandler = $indexHandler;
         $this->indexDataBySkuListProvider = $indexDataBySkuListProvider;
-        $this->indexNameBuilder = $indexNameBuilder;
-        $this->stockIndexer = $stockIndexer;
+        $this->indexStructure = $indexStructure;
+        $this->siblingSkuListInStockProvider = $siblingSkuListInStockProvider;
         $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
-     * @return void
-     */
-    public function executeFull()
-    {
-        $this->stockIndexer->executeFull();
-    }
-
-    /**
-     * @param int $sourceItemId
-     * @return void
-     */
-    public function executeRow(int $sourceItemId)
-    {
-        $this->executeList([$sourceItemId]);
-    }
-
-    /**
      * @param array $sourceItemIds
-     * @return void
      */
     public function executeList(array $sourceItemIds)
     {
-        $skuListInStockList = $this->getSkuListInStock->execute($sourceItemIds);
+        $skuListInStockList = $this->siblingSkuListInStockProvider->execute($sourceItemIds);
 
         foreach ($skuListInStockList as $skuListInStock) {
             $stockId = $skuListInStock->getStockId();
+
             if ($this->defaultStockProvider->getId() === $stockId) {
                 continue;
             }
-
             $skuList = $skuListInStock->getSkuList();
 
             $mainIndexName = $this->indexNameBuilder
@@ -130,13 +104,14 @@ class SourceItemIndexer
                 $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
             }
 
+            $indexData = $this->indexDataBySkuListProvider->execute($stockId, $skuList);
+
             $this->indexHandler->cleanIndex(
                 $mainIndexName,
-                new \ArrayIterator($skuList),
+                $indexData,
                 ResourceConnection::DEFAULT_CONNECTION
             );
 
-            $indexData = $this->indexDataBySkuListProvider->execute($stockId, $skuList);
             $this->indexHandler->saveIndex(
                 $mainIndexName,
                 $indexData,
