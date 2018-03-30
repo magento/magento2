@@ -59,30 +59,19 @@ class GroupedItems implements ResolverInterface
         /** @var \Magento\Catalog\Model\Product $productModel */
         $productModel = $value['model'];
         $links = $productModel->getProductLinks();
-        $linkedSkus = [];
         foreach ($links as $link) {
             if ($link->getLinkType() !== Grouped::TYPE_NAME) {
                 continue;
             }
 
-            $linkedSkus[] = $link->getLinkedProductSku();
-            $data[$link->getLinkedProductSku()] = [
+            $data[] = [
                 'position' => (int)$link->getPosition(),
-                'qty' => $link->getExtensionAttributes()->getQty()
+                'qty' => $link->getExtensionAttributes()->getQty(),
+                'sku' => $link->getLinkedProductSku()
             ];
         }
 
-        $this->productResolver->addProductSkus($linkedSkus);
-
-        $result = function () use ($value, $linkedSkus, $data) {
-            foreach ($linkedSkus as $linkedSku) {
-                $fetchedData = $this->productResolver->getProductBySku($linkedSku);
-                /** @var \Magento\Catalog\Model\Product $linkedProduct */
-                $linkedProduct = $fetchedData['model'];
-                $data[$linkedProduct->getSku()]['product'] = ['model' => $linkedProduct];
-                $data[$linkedProduct->getSku()]['sku'] = $linkedProduct->getSku();
-            }
-
+        $result = function () use ($data) {
             return $data;
         };
 

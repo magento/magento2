@@ -22,10 +22,12 @@ class Enum extends EnumType
     {
         $config = [
             'name' => $structure->getName(),
+            'description' => $structure->getDescription(),
         ];
         foreach ($structure->getValues() as $value) {
             $config['values'][$value->getValue()] = [
-                'value' => $value->getValue()
+                'value' => $value->getValue(),
+                'description' => $value->getDescription()
             ];
         }
         parent::__construct($config);

@@ -8,11 +8,11 @@ declare(strict_types = 1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
 use GraphQL\Type\Definition\ResolveInfo;
-use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
+use Magento\Framework\GraphQl\Query\FieldTranslator;
 
 /**
  * Retrieve filtered product data based off given search criteria in a format that GraphQL can interpret.
@@ -30,23 +30,23 @@ class Filter
     private $productDataProvider;
 
     /**
-     * @var Collection
+     * @var FieldTranslator
      */
-    private $collection;
+    private $fieldTranslator;
 
     /**
      * @param SearchResultFactory $searchResultFactory
      * @param Product $productDataProvider
-     * @param Collection $collection
+     * @param FieldTranslator $fieldTranslator
      */
     public function __construct(
         SearchResultFactory $searchResultFactory,
         Product $productDataProvider,
-        Collection $collection
+        FieldTranslator $fieldTranslator
     ) {
         $this->searchResultFactory = $searchResultFactory;
         $this->productDataProvider = $productDataProvider;
-        $this->collection = $collection;
+        $this->fieldTranslator = $fieldTranslator;
     }
 
     /**
@@ -58,9 +58,8 @@ class Filter
      */
     public function getResult(SearchCriteriaInterface $searchCriteria, ResolveInfo $info) : SearchResult
     {
-//        $fields = $this->getProductFields($info);
-//        $matchedFields = $this->collection->getRequestAttributes($fields);
-        $products = $this->productDataProvider->getList($searchCriteria, []);
+        $fields = $this->getProductFields($info);
+        $products = $this->productDataProvider->getList($searchCriteria, $fields);
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($products->getItems() as $product) {
@@ -90,8 +89,16 @@ class Filter
                 }
 
                 foreach ($selection->selectionSet->selections as $itemSelection) {
-                    if ($selection->selection)
-                    $fieldNames[] = $itemSelection->name->value;
+                    if ($itemSelection->kind === 'InlineFragment') {
+                        foreach ($itemSelection->selectionSet->selections as $inlineSelection) {
+                            if ($inlineSelection->kind === 'InlineFragment') {
+                                continue;
+                            }
+                            $fieldNames[] = $this->fieldTranslator->translate($inlineSelection->name->value);
+                        }
+                        continue;
+                    }
+                    $fieldNames[] = $this->fieldTranslator->translate($itemSelection->name->value);
                 }
             }
         }

@@ -52,7 +52,7 @@ class Argument implements FieldInterface
     /**
      * @var string|null
      */
-    private $default;
+    private $defaultValue;
 
     /**
      * @param string $name
@@ -61,8 +61,9 @@ class Argument implements FieldInterface
      * @param string $description
      * @param bool $required
      * @param bool $isList
+     * @param string $itemType
      * @param bool $itemsRequired
-     * @param string $default
+     * @param string $defaultValue
      */
     public function __construct(
         string $name,
@@ -71,17 +72,18 @@ class Argument implements FieldInterface
         string $description,
         bool $required,
         bool $isList,
+        string $itemType = '',
         bool $itemsRequired = false,
-        string $default = null
+        string $defaultValue = null
     ) {
         $this->name = $name;
-        $this->type = $type;
+        $this->type = $isList ? $itemType : $type;
         $this->baseType = $baseType;
         $this->description = $description;
         $this->required = $required;
         $this->isList = $isList;
         $this->itemsRequired = $itemsRequired;
-        $this->default = $default;
+        $this->defaultValue = $defaultValue;
     }
 
     /**
@@ -155,12 +157,12 @@ class Argument implements FieldInterface
     }
 
     /**
-     * Return default if argument is a scalar and has a configured default. Otherwise return an empty string.
+     * Return defaultValue if argument is a scalar and has a configured defaultValue. Otherwise return an empty string.
      *
      * @return string|null
      */
-    public function getDefault() : ?string
+    public function getDefaultValue() : ?string
     {
-        return $this->default;
+        return $this->defaultValue;
     }
 }

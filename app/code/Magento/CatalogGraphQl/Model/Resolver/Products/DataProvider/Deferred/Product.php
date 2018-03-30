@@ -95,7 +95,7 @@ class Product
      */
     public function addEavAttributes(array $attributeCodes) : void
     {
-        $this->attributeCodes = array_replace($this->attributeCodes, $attributeCodes);
+        $this->attributeCodes = array_unique(array_merge($this->attributeCodes, $attributeCodes));
     }
 
     /**

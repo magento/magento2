@@ -89,15 +89,18 @@ class Product
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process($collection);
 
-//        foreach ($attributes as $attributeCode) {
-//            $collection->addAttributeToSelect($attributeCode);
-//        }
-        $collection->addAttributeToSelect('*');
+        foreach ($attributes as $attributeCode) {
+            $collection->addAttributeToSelect($attributeCode);
+        }
+        $collection->addMinimalPrice()->addFinalPrice();
+        $collection->addAttributeToSelect('special_price');
+        $collection->addAttributeToSelect('special_price_from');
+        $collection->addAttributeToSelect('special_price_to');
+        $collection->addAttributeToSelect('tax_class_id');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
 
         $this->collectionProcessor->process($searchCriteria, $collection);
-        $count = $collection->getSelectCountSql()->query();
         $collection->addWebsiteNamesToResult();
         $collection->addTaxPercents();
         $collection->addWebsiteNamesToResult();
@@ -105,7 +108,6 @@ class Product
         $collection->load();
 
         // Methods that perform extra fetches
-        $collection->addPriceData();
         $collection->addCategoryIds();
         $collection->addMediaGalleryData();
         $collection->addOptionsToResult();

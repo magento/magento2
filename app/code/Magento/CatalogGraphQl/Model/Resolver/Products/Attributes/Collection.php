@@ -76,22 +76,5 @@ class Collection
         }
 
         return $matchedAttributes;
-
-        foreach ($info->fieldNodes as $node) {
-            if ($node->name->value !== 'products') {
-                continue;
-            }
-            foreach ($node->selectionSet->selections as $selection) {
-                if ($selection->name->value !== 'items') {
-                    continue;
-                }
-
-                foreach ($selection->selectionSet->selections as $itemSelections) {
-                    if (in_array($itemSelections->name->value, $attributeCodes)) {
-                        $collection->addAttributeToSelect($selection->name->value);
-                    }
-                }
-            }
-        }
     }
 }

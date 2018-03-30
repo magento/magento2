@@ -6,7 +6,10 @@
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Api\CategoryLinkManagementInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Model\Product;
@@ -31,7 +34,7 @@ class ProductSearchTest extends GraphQlAbstract
             or:
             {
               sku:{like:"simple%"}
-              name:{like:"Simple%"}              
+              name:{like:"Simple%"}
              }
         }
          pageSize:4
@@ -39,8 +42,8 @@ class ProductSearchTest extends GraphQlAbstract
          sort:
          {
           name:DESC
-         } 
-    ) 
+         }
+    )
     {
       items
        {
@@ -59,13 +62,13 @@ class ProductSearchTest extends GraphQlAbstract
          }
          type_id
          attribute_set_id
-       }    
+       }
         total_count
         page_info
         {
           page_size
           current_page
-        }        
+        }
     }
 }
 QUERY;
@@ -108,16 +111,16 @@ QUERY;
           {
            sku:{like:"%simple%"}
            name:{like:"%configurable%"}
-          }           
-           weight:{eq:"1"} 
+          }
+           weight:{eq:"1"}
         }
         pageSize:6
         currentPage:1
         sort:
        {
         price:DESC
-       } 
-    )    
+       }
+    )
     {
         items
          {
@@ -134,9 +137,9 @@ QUERY;
            ... on PhysicalProductInterface {
             weight
            }
-           type_id           
+           type_id
            attribute_set_id
-         }    
+         }
         total_count
         page_info
         {
@@ -182,16 +185,16 @@ QUERY;
           {
            sku:{like:"%simple%"}
            name:{like:"%configurable%"}
-          }           
-           weight:{eq:"1"} 
+          }
+           weight:{eq:"1"}
         }
         pageSize:2
         currentPage:2
         sort:
        {
         price:DESC
-       } 
-    )    
+       }
+    )
     {
         items
          {
@@ -208,9 +211,9 @@ QUERY;
            ... on PhysicalProductInterface {
             weight
            }
-           type_id           
+           type_id
            attribute_set_id
-         }    
+         }
         total_count
         page_info
         {
@@ -249,15 +252,15 @@ QUERY;
            sku:{like:"%simple%"}
            name:{like:"%configurable%"}
           }
-           weight:{eq:"1"} 
+           weight:{eq:"1"}
         }
         pageSize:1
         currentPage:2
         sort:
        {
         price:DESC
-       } 
-    )    
+       }
+    )
     {
         items
          {
@@ -274,9 +277,9 @@ QUERY;
            ... on PhysicalProductInterface {
             weight
            }
-           type_id           
+           type_id
            attribute_set_id
-         }    
+         }
         total_count
         page_info
         {
@@ -318,16 +321,16 @@ QUERY;
             or:
             {
               sku:{like:"simple%"}
-              name:{like:"simple%"}              
-             }    
+              name:{like:"simple%"}
+             }
         }
          pageSize:4
          currentPage:1
          sort:
          {
           price:ASC
-         } 
-    ) 
+         }
+    )
     {
         items
          {
@@ -344,9 +347,9 @@ QUERY;
            ... on PhysicalProductInterface {
             weight
            }
-           type_id           
+           type_id
            attribute_set_id
-         }    
+         }
         total_count
         page_info
         {
@@ -401,8 +404,8 @@ QUERY;
          sort:
          {
           name:ASC
-         } 
-    ) 
+         }
+    )
     {
       items
       {
@@ -421,7 +424,7 @@ QUERY;
             weight
            }
            attribute_set_id
-         }    
+         }
         total_count
         page_info
         {
@@ -443,6 +446,55 @@ QUERY;
         $this->assertProductItems($filteredProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
         $this->assertEquals(2, $response['products']['page_info']['current_page']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
+     */
+    public function testFilteringForProductInMultipleCategories()
+    {
+        $productSku = 'simple333';
+        $query
+            = <<<QUERY
+{
+   products(filter:{sku:{eq:"{$productSku}"}})
+ {
+   items{
+     id
+     sku
+     name
+     attribute_set_id
+     category_ids
+   }
+ }
+}
+
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get('simple333');
+        $categoryIds  = $product->getCategoryIds();
+        foreach ($categoryIds as $index => $value) {
+            $categoryIds[$index] = (int)$value;
+        }
+        $this->assertNotEmpty($response['products']['items'][0]['category_ids'], "Category_ids must not be empty");
+        $this->assertNotNull($response['products']['items'][0]['category_ids'], "categoy_ids must not be null");
+        $this->assertEquals($categoryIds, $response['products']['items'][0]['category_ids']);
+        /** @var MetadataPool $metaData */
+        $metaData = ObjectManager::getInstance()->get(MetadataPool::class);
+        $linkField = $metaData->getMetadata(ProductInterface::class)->getLinkField();
+        $assertionMap = [
+
+            ['response_field' => 'id', 'expected_value' => $product->getData($linkField)],
+            ['response_field' => 'sku', 'expected_value' => $product->getSku()],
+            ['response_field' => 'name', 'expected_value' => $product->getName()],
+            ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()]
+         ];
+        var_dump($response['products']['items'][0]);
+        $this->assertResponseFields($response['products']['items'][0], $assertionMap);
     }
 
     /**
@@ -468,10 +520,10 @@ QUERY;
         }
          sort:
          {
-          
+
           price:DESC
          }
-     ) 
+     )
     {
       items
       {
@@ -489,14 +541,14 @@ QUERY;
             weight
         }
         type_id
-        attribute_set_id       
-      }           
+        attribute_set_id
+      }
         total_count
         page_info
         {
           page_size
           current_page
-        }        
+        }
     }
 }
 QUERY;
@@ -520,6 +572,52 @@ QUERY;
     }
 
     /**
+    * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
+    */
+    public function testProductQueryUsingFromAndToFilterInput(){
+        $query
+            = <<<QUERY
+{
+  products(filter: { price:{from:"5" to:"20"} }) {
+    total_count
+    items{
+     	  attribute_set_id
+     	  sku
+      	  name
+      price{
+        minimalPrice{
+          amount{
+            value
+            currency
+          }
+        }
+         maximalPrice{
+          amount{
+            value
+            currency
+          }
+        }
+      }
+      type_id
+      ...on PhysicalProductInterface{
+        weight
+      }
+     }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product1 = $productRepository->get('simple1');
+        $product2 = $productRepository->get('simple2');
+        $filteredProducts = [$product1, $product2];
+        $this->assertProductItemsWithMaximalAndMinimalPriceCheck($filteredProducts, $response);
+    }
+
+    /**
      * No items are returned if the conditions are not met
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
@@ -540,15 +638,15 @@ products(
         {
             sku:{like:"simple%"}
             name:{like:"%simple%"}
-        }           
+        }
     }
     pageSize:2
     currentPage:1
     sort:
    {
     sku:ASC
-   } 
-)    
+   }
+)
 {
     items
      {
@@ -567,7 +665,7 @@ products(
        }
        type_id
        attribute_set_id
-     }    
+     }
     total_count
     page_info
     {
@@ -652,16 +750,16 @@ QUERY;
   {
        items{
            id
-           attribute_set_id    
+           attribute_set_id
            created_at
            name
            sku
-           type_id        
+           type_id
            updated_at
            ... on PhysicalProductInterface {
                weight
            }
-           category_ids                
+           category_ids
        }
    }
 }
@@ -694,6 +792,38 @@ QUERY;
                      'minimalPrice' => [
                          'amount' => [
                              'value' => $filteredProducts[$itemIndex]->getFinalPrice(),
+                             'currency' => 'USD'
+                         ]
+                     ]
+                 ],
+                 'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                 'weight' => $filteredProducts[$itemIndex]->getWeight()
+                ]
+            );
+        }
+    }
+
+    private function assertProductItemsWithMaximalAndMinimalPriceCheck(array $filteredProducts, array $actualResponse)
+    {
+        $productItemsInResponse = array_map(null, $actualResponse['products']['items'], $filteredProducts);
+
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                ['attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
+                 'sku' => $filteredProducts[$itemIndex]->getSku(),
+                 'name' => $filteredProducts[$itemIndex]->getName(),
+                 'price' => [
+                     'minimalPrice' => [
+                         'amount' => [
+                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                             'currency' => 'USD'
+                         ]
+                     ],
+                     'maximalPrice' => [
+                         'amount' => [
+                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
                              'currency' => 'USD'
                          ]
                      ]

@@ -18,8 +18,8 @@ interface HttpHeaderProcessorInterface
      * This method should be called even if a header entry is not present on a request
      * to enforce required headers like "application/json"
      *
-     * @param bool|string $headerValue
+     * @param string $headerValue
      * @return void
      */
-    public function processHeaderValue($headerValue) : void;
+    public function processHeaderValue(string $headerValue) : void;
 }

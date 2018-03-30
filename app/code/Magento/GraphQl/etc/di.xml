@@ -10,6 +10,7 @@
     <preference for="Magento\GraphQl\Model\ResolverContextInterface" type="Magento\GraphQl\Model\ResolverContext" />
     <preference for="Magento\Framework\GraphQl\Type\Entity\MapperInterface" type="Magento\Framework\GraphQl\Type\Entity\DefaultMapper"/>
     <preference for="Magento\Framework\GraphQl\Type\Enum\DataMapperInterface" type="Magento\Framework\GraphQl\Type\Enum\DefaultDataMapper"/>
+    <preference for="Magento\Framework\GraphQlSchemaStiching\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlSchemaStiching\GraphQlReader\TypeReaderComposite"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -33,8 +34,8 @@
     </type>
     <virtualType name="Magento\Framework\GraphQl\Config\Data" type="Magento\Framework\Config\Data">
         <arguments>
-            <argument name="reader" xsi:type="object">Magento\Framework\GraphQl\Config\Reader</argument>
-            <argument name="cacheId" xsi:type="string">Magento_Framework_GraphQl_Config_Data</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\Reader</argument>
+            <argument name="cacheId" xsi:type="string">Magento_Framework_GraphQlSchemaStiching_Config_Data</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Framework\GraphQl\Config\SchemaLocator" type="Magento\Framework\Config\SchemaLocator">
@@ -42,23 +43,10 @@
             <argument name="realPath" xsi:type="string">urn:magento:module:Magento_GraphQl:etc/graphql.xsd</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Framework\GraphQl\Config\Reader" type="Magento\Framework\GraphQl\Config\Common\Reader">
+    <virtualType name="Magento\Framework\GraphQlSchemaStiching\Reader" type="Magento\Framework\GraphQlSchemaStiching\Common\Reader">
         <arguments>
             <argument name="readers" xsi:type="array">
-                <item name="xmlReader" xsi:type="object">Magento\Framework\GraphQl\Config\XmlReader</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\Framework\GraphQl\Config\XmlReader" type="Magento\Framework\Config\Reader\Filesystem">
-        <arguments>
-            <argument name="converter" xsi:type="object">Magento\Framework\GraphQl\Config\Converter</argument>
-            <argument name="schemaLocator" xsi:type="object">Magento\Framework\GraphQl\Config\SchemaLocator</argument>
-            <argument name="fileName" xsi:type="string">graphql.xml</argument>
-            <argument name="idAttributes" xsi:type="array">
-                <item name="/config/type" xsi:type="string">name</item>
-                <item name="/config/type/field" xsi:type="string">name</item>
-                <item name="/config/type/item" xsi:type="string">name</item>
-                <item name="/config/type/implements" xsi:type="string">interface</item>
+                <item name="graphql_reader" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\GraphQlReader</item>
             </argument>
         </arguments>
     </virtualType>
@@ -94,27 +82,13 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\GraphQl\Config\Converter">
+    <type name="Magento\Framework\GraphQlSchemaStiching\GraphQlReader\TypeReaderComposite">
         <arguments>
-            <argument name="normalizer" xsi:type="object">Magento\Framework\GraphQl\Config\Converter\NormalizerComposite</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\GraphQl\Config\Converter\NormalizerComposite">
-        <arguments>
-            <argument name="normalizers" xsi:type="array">
-                <item name="output" xsi:type="object">Magento\Framework\GraphQl\Config\Converter\Normalizer\Output</item>
-                <item name="input" xsi:type="object">Magento\Framework\GraphQl\Config\Converter\Normalizer\Input</item>
-                <item name="enum" xsi:type="object">Magento\Framework\GraphQl\Config\Converter\Normalizer\Enum</item>
-            </argument>
-        </arguments>
-    </type>
-    <preference for="Magento\Framework\GraphQl\Config\Converter\Type\FormatterInterface" type="Magento\Framework\GraphQl\Config\Converter\Type\FormatterComposite"/>
-    <type name="Magento\Framework\GraphQl\Config\Converter\Type\FormatterComposite">
-        <arguments>
-            <argument name="formatters" xsi:type="array">
-                <item name="description" xsi:type="object">Magento\Framework\GraphQl\Config\Converter\Type\Formatter\Description</item>
-                <item name="fields" xsi:type="object">Magento\Framework\GraphQl\Config\Converter\Type\Formatter\Fields</item>
-                <item name="interfaces" xsi:type="object">Magento\Framework\GraphQl\Config\Converter\Type\Formatter\Interfaces</item>
+            <argument name="typeReaders" xsi:type="array">
+                <item name="enum_type" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\GraphQlReader\Reader\EnumType</item>
+                <item name="object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\GraphQlReader\Reader\ObjectType</item>
+                <item name="input_object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\GraphQlReader\Reader\InputObjectType</item>
+                <item name="interface_type" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\GraphQlReader\Reader\InterfaceType</item>
             </argument>
         </arguments>
     </type>
