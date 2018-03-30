@@ -50,7 +50,8 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         'custom_design_from',
         'updated_in',
         'tax_class_id',
-        'description'
+        'description',
+        'is_salable', // stock indexation is not performed during import
     ];
 
     protected function setUp()
@@ -286,7 +287,6 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
             'row_id',
             'entity_id',
             'tier_price',
-            'is_salable',
             'media_gallery'
         ];
         $skippedAttributes = array_merge($replacedAttributes, $skippedAttributes);

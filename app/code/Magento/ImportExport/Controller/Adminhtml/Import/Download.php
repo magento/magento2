@@ -48,6 +48,7 @@ class Download extends ImportController
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
+     * @param \Magento\ImportExport\Model\Import\SampleFileProvider $sampleFileProvider
      * @param ComponentRegistrar $componentRegistrar
      * @param \Magento\ImportExport\Model\Import\SampleFileProvider|null $sampleFileProvider
      */
