@@ -12,6 +12,6 @@
         <element name="message" type="text" selector="aside.confirm div.modal-content"/>
         <element name="title" type="text" selector="aside.confirm .modal-header .modal-title"/>
         <element name="ok" type="button" selector="aside.confirm .modal-footer .action-primary"/>
-        <element name="cancel" type="button" selector="aside.confirm .modal-footer .action-dismiss"/>
+        <element name="cancel" type="button" selector="aside.confirm .modal-footer .action-secondary"/>
     </section>
 </sections>

@@ -7,6 +7,7 @@ declare(strict_types = 1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
+use Magento\Authorization\Model\UserContextInterface;
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -56,7 +57,7 @@ class Customer implements ResolverInterface
         ResolveInfo $info
     ) : ?Value {
         /** @var ContextInterface $context */
-        if ((!$context->getUserId()) || $context->getUserType() == 4) {
+        if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
             throw new GraphQlAuthorizationException(
                 __(
                     'Current customer does not have access to the resource "%1"',

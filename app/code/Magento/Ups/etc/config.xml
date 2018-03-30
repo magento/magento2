@@ -35,6 +35,7 @@
                 <handling_type>F</handling_type>
                 <handling_action>O</handling_action>
                 <negotiated_active>0</negotiated_active>
+                <include_taxes>0</include_taxes>
                 <mode_xml>1</mode_xml>
                 <type>UPS</type>
                 <is_account_live>0</is_account_live>

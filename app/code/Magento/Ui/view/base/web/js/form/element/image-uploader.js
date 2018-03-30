@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* global Base64 */
 define([
     'jquery',
     'underscore',
@@ -10,7 +11,8 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/file-uploader',
-    'mage/adminhtml/browser'
+    'mage/adminhtml/browser',
+    'mage/adminhtml/tools'
 ], function ($, _, utils, uiAlert, validator, Element, browser) {
     'use strict';
 
@@ -55,7 +57,7 @@ define([
         },
 
         /**
-         * Open the media browser dialog using the
+         * Open the media browser dialog
          *
          * @param {ImageUploader} imageUploader - UI Class
          * @param {Event} e
@@ -65,7 +67,11 @@ define([
                 openDialogUrl = this.mediaGallery.openDialogUrl +
                 'target_element_id/' + $buttonEl.attr('id') +
                 '/store/' + this.mediaGallery.storeId +
-                '/type/image/use_storage_root/1?isAjax=true';
+                '/type/image/?isAjax=true';
+
+            if (this.mediaGallery.initialOpenSubpath) {
+                openDialogUrl += '&current_tree_path=' + Base64.mageEncode(this.mediaGallery.initialOpenSubpath);
+            }
 
             browser.openDialog(openDialogUrl, null, null, this.mediaGallery.openDialogTitle);
         },
