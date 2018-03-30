@@ -9,7 +9,7 @@ namespace Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter;
 
 use Magento\Framework\GraphQl\Config\Element\Type;
 use Magento\Framework\GraphQl\Config\Element\TypeInterface;
-use Magento\Framework\GraphQl\Schema\Type\OutputType;
+use Magento\Framework\GraphQl\Schema\Type\OutputTypeInterface;
 use Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\FormatterInterface;
 use Magento\Framework\GraphQl\Schema\Type\Output\OutputMapper;
 
@@ -34,7 +34,7 @@ class Interfaces implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function format(TypeInterface $configElement, OutputType $outputType) : array
+    public function format(TypeInterface $configElement, OutputTypeInterface $outputType) : array
     {
         $config = [];
         if ($configElement instanceof Type && !empty($configElement->getInterfaces())) {

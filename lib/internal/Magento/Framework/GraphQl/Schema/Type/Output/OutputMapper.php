@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQl\Schema\Type\Output;
 
 use Magento\Framework\GraphQl\ConfigInterface;
-use Magento\Framework\GraphQl\Schema\Type\OutputType;
+use Magento\Framework\GraphQl\Schema\Type\OutputTypeInterface;
 use Magento\Framework\GraphQl\Schema\TypeFactory;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Phrase;
@@ -24,7 +24,7 @@ class OutputMapper
     private $outputFactory;
 
     /**
-     * @var OutputType[]
+     * @var OutputTypeInterface[]
      */
     private $outputTypes;
 
@@ -57,7 +57,7 @@ class OutputMapper
      * Get GraphQL output type object by type name.
      *
      * @param string $typeName
-     * @return OutputType
+     * @return OutputTypeInterface
      * @throws GraphQlInputException
      */
     public function getOutputType($typeName)
@@ -65,7 +65,7 @@ class OutputMapper
         if (!isset($this->outputTypes[$typeName])) {
             $configElement = $this->config->getConfigElement($typeName);
             $this->outputTypes[$typeName] = $this->outputFactory->create($configElement);
-            if (!($this->outputTypes[$typeName] instanceof OutputType)) {
+            if (!($this->outputTypes[$typeName] instanceof OutputTypeInterface)) {
                 throw new GraphQlInputException(
                     new Phrase("Type '{$typeName}' was requested but is not declared in the GraphQL schema.")
                 );

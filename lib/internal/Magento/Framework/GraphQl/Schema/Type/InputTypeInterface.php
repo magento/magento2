@@ -12,7 +12,7 @@ use Magento\Framework\GraphQl\Schema\TypeInterface;
 /**
  * Interface for GraphQl InputType only used for input
  */
-interface InputType extends \GraphQL\Type\Definition\InputType, TypeInterface
+interface InputTypeInterface extends \GraphQL\Type\Definition\InputType, TypeInterface
 {
 
 }
