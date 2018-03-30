@@ -101,16 +101,12 @@ class ProcessRegisterProductsSalePlugin
             return [];
         }
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
-        $excludedItems = $this->getExcludedItems($items, $productSkus);
-        if (!empty($excludedItems)) {
-            $proceed($excludedItems, $websiteId);
-        }
+        list($items, $productSkus) = $this->excludeUnsupportedTypes($items, $productSkus);
         if (null === $websiteId) {
             //TODO: Do we need to throw exception?
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
-        $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
         $this->checkItemsQuantity($items, $productSkus, $stockId);
         $reservations = [];
         foreach ($productSkus as $productId => $sku) {
@@ -150,29 +146,24 @@ class ProcessRegisterProductsSalePlugin
     }
 
     /**
-     * Build list of items connected to products with unsupported types.
-     *
-     * Remove items connected to products with unsupported product types and put them into separate array,
-     * in order to process them with standard behavior.
+     * Exclude all unsupported product types from new behavior process.
      *
      * @param array $items
      * @param array $productSkus
      * @return array
      */
-    private function getExcludedItems(array &$items, array &$productSkus): array
+    private function excludeUnsupportedTypes(array $items, array $productSkus): array
     {
-        $excludedItems = [];
         $incomingProductTypes = $this->getProductTypesBySkus->execute($productSkus);
         $allowedProductTypes = $this->allowedProductTypesForSourceItems->execute();
         foreach ($incomingProductTypes as $sku => $type) {
             if (!in_array($type, $allowedProductTypes, true)) {
                 $excludedProductId = array_search($sku, $productSkus, true);
-                $excludedItems[$excludedProductId] = $items[$excludedProductId];
                 //Exclude unsupported product types from new behavior process.
                 unset($productSkus[$excludedProductId], $items[$excludedProductId]);
             }
         }
 
-        return $excludedItems;
+        return [$items, $productSkus];
     }
 }
