@@ -98,6 +98,11 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         $serviceManager->setService(\Magento\Framework\App\Filesystem\DirectoryList::class, $directoryList);
         $serviceManager->setService(\Magento\Framework\Filesystem::class, $this->createFilesystem($directoryList));
 
+        /**
+         * Initialize ObjectManager
+         */
+        $serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class)->get();
+
         if (!($application->getRequest() instanceof Request)) {
             $eventManager = $application->getEventManager();
             $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$this, 'authPreDispatch'], 100);
@@ -129,6 +134,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
             if ($serviceManager->get(\Magento\Framework\App\DeploymentConfig::class)->isAvailable()) {
                 /** @var \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider */
                 $objectManagerProvider = $serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class);
+                $objectManagerProvider->reset();
                 /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
                 $objectManager = $objectManagerProvider->get();
                 /** @var \Magento\Framework\App\State $adminAppState */
