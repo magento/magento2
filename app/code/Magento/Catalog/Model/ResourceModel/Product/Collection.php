@@ -18,6 +18,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
 
 /**
  * Product collection
@@ -273,6 +274,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $backend;
 
     /**
+     * @var TableResolver
+     */
+    private $tableResolver;
+
+    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -297,6 +303,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
+     * @param TableResolver|null $tableResolver
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -322,7 +329,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         GroupManagementInterface $groupManagement,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        TableResolver $tableResolver = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -352,6 +360,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $storeManager,
             $connection
         );
+        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
     }
 
     /**
@@ -1192,7 +1201,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             )->distinct(
                 false
             )->join(
-                ['count_table' => $this->getTable('catalog_category_product_index')],
+                ['count_table' => $this->tableResolver->getMainTable($this->getStoreId())],
                 'count_table.product_id = e.entity_id',
                 [
                     'count_table.category_id',
@@ -1966,7 +1975,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getSelect()->setPart(\Magento\Framework\DB\Select::FROM, $fromPart);
         } else {
             $this->getSelect()->join(
-                ['cat_index' => $this->getTable('catalog_category_product_index')],
+                ['cat_index' => $this->tableResolver->getMainTable($this->getStoreId())],
                 $joinCond,
                 ['cat_index_position' => 'position']
             );
