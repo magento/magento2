@@ -59,5 +59,6 @@ foreach ($orders as $orderData) {
         ->addItem($orderItem)
         ->setBillingAddress($billingAddress)
         ->setBillingAddress($shippingAddress)
+        ->setPayment($payment)
         ->save();
 }
