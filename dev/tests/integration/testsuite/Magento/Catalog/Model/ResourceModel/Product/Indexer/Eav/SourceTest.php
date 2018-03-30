@@ -96,6 +96,19 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         $result = $connection->fetchAll($select);
         $this->assertCount(0, $result);
+
+        /** @var \Magento\Catalog\Model\Product $product1 **/
+        $product1 = $productRepository->getById(10);
+        $product1->setStatus(Status::STATUS_ENABLED)->setWebsiteIds([]);
+        $productRepository->save($product1);
+
+        /** @var \Magento\Catalog\Model\Product $product2 **/
+        $product2 = $productRepository->getById(20);
+        $product2->setStatus(Status::STATUS_ENABLED);
+        $productRepository->save($product2);
+
+        $result = $connection->fetchAll($select);
+        $this->assertCount(1, $result);
     }
 
     /**
