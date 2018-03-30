@@ -1592,6 +1592,17 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
 
     /**
+     * Check whether attribute with code is already added to collection
+     *
+     * @param string $attributeCode
+     * @return bool
+     */
+    public function isAttributeAdded($attributeCode) : bool
+    {
+        return isset($this->_selectAttributes[$attributeCode]);
+    }
+
+    /**
      * Returns already loaded element ids
      *
      * @return array

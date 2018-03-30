@@ -89,7 +89,7 @@ class Clause
      *
      * @return string
      */
-    public function getClauseValue() : string
+    public function getClauseValue()
     {
         return $this->clauseValue;
     }
