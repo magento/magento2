@@ -3,20 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\GraphQl;
+namespace Magento\GraphQl;
 
 use Magento\Framework\GraphQl\Schema\Type\InputObjectType;
 use Magento\Framework\GraphQl\Schema\Type\ObjectType;
-use Magento\Framework\GraphQl\Schema\Type\StringType;
-use Magento\Framework\GraphQl\SchemaFactory;
 use Magento\Framework\ObjectManagerInterface;
 use \GraphQL\Type\Definition\Type;
 
 class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
 {
-
-    /** @var  SchemaFactory */
+    /** @var SchemaFactory */
     private $schemaFactory;
+
     /** @var  ObjectManagerInterface */
     private $objectManager;
 

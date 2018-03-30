@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Query\Resolver;
 
@@ -57,7 +56,7 @@ interface ContextInterface extends ExtensibleDataInterface
      *
      * @return \Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface|null
      */
-    public function getExtensionAttributes() : ?\Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface;
+    public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.

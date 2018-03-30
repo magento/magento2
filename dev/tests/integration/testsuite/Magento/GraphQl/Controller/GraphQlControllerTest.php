@@ -20,19 +20,12 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  string */
-    private $mageMode;
-
     const CONTENT_TYPE = 'application/json';
-
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
-
-    /** @var \Magento\Framework\App\Request\Http $request */
-    private $request;
 
     /**
      * @var GraphQl $graphql
