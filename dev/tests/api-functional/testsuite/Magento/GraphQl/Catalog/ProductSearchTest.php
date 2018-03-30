@@ -618,6 +618,67 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      */
+    public function testProductBasicFullTextSearchQuery(){
+        $textToSearch = 'Simple';
+        $query
+            =<<<QUERY
+{
+    products(
+      search: "{$textToSearch}"
+    )
+    {
+        total_count
+        items {
+          name
+          sku
+          price {
+            minimalPrice {
+              amount {
+                value
+                currency
+              }
+            }
+          }
+        }
+        page_info {
+          page_size
+          current_page
+        }
+      }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod1 = $productRepository->get('simple2');
+        $prod2 = $productRepository->get('simple1');
+        $filteredProducts = [$prod1, $prod2];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                 'sku' => $filteredProducts[$itemIndex]->getSku(),
+                 'name' => $filteredProducts[$itemIndex]->getName(),
+                 'price' => [
+                     'minimalPrice' => [
+                         'amount' => [
+                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                             'currency' => 'USD'
+                         ]
+                     ]
+                  ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
+     */
     public function testProductsThatMatchWithPricesFromList(){
         $query
             =<<<QUERY
@@ -671,9 +732,7 @@ QUERY;
         $prod1 = $productRepository->get('simple2');
         $prod2 = $productRepository->get('simple1');
         $filteredProducts = [$prod1, $prod2];
-       // $this->assertProductItems($filteredProducts, $response);
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
-
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);
             $this->assertResponseFields(
