@@ -72,6 +72,8 @@ class TierPrice extends AbstractDb
      */
     public function reindexEntity(array $entityIds = [])
     {
+        $this->getConnection()->delete($this->getMainTable(), ['entity_id IN (?)' => $entityIds]);
+
         //separate by variations for increase performance
         $tierPriceVariations = [
             [true, true], //all websites; all customer groups
