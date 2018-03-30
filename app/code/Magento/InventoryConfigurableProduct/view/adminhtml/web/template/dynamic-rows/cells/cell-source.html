@@ -10,7 +10,7 @@
     <div>
         <span visible="false" text="item.source_code"></span>
         <span text="item.source"></span>:
-        <span text="item.quantity"></span>
+        <span text="item.quantity_per_source"></span>
     </div>
     <!-- /ko -->
     <div if="$data.isFullList()">
@@ -31,7 +31,7 @@
         <div class="data-tooltip-title">Sources</div>
         <div class="data-tooltip-content">
             <!-- ko foreach: { data: value, as: 'item' } -->
-            <div><span text="item.source"></span>: <span text="item.quantity"></span></div>
+            <div><span text="item.source"></span>: <span text="item.quantity_per_source"></span></div>
             <!-- /ko -->
         </div>
     </div>
