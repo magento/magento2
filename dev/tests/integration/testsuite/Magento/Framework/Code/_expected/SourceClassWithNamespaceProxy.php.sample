@@ -93,7 +93,7 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
-    public function publicChildMethod(\Zend\Code\Generator\ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = array())
+    public function publicChildMethod(\Zend\Code\Generator\ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
     {
         return $this->_getSubject()->publicChildMethod($classGenerator, $param1, $param2, $param3, $array);
     }
@@ -117,7 +117,7 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
-    public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = array())
+    public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
     {
         return $this->_getSubject()->publicParentMethod($docBlockGenerator, $param1, $param2, $param3, $array);
     }
