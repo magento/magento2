@@ -48,6 +48,17 @@
              text: setCaption()
         ">
         </div>
+        <!-- ko if: typeof showXWhenOptionSelected !== 'undefined' && showXWhenOptionSelected && hasData()  -->
+            <button
+                    class="action-close"
+                    type="button"
+                    data-action="remove-selected-item"
+                    tabindex="-1"
+                    data-bind="click: clear"
+            >
+                <span class="action-close-text" translate="'Close'"></span>
+            </button>
+        <!-- /ko -->
     </div>
     <!-- /ko -->
     <!-- ko if: chipsEnabled -->
