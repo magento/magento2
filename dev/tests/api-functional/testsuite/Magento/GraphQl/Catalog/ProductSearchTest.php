@@ -237,7 +237,7 @@ QUERY;
      */
     public function testSearchWithFilterPageSizeLessThanCurrentPage()
     {
-       // $this->markTestSkipped('This is test is skipped due to MAGETWO-85680');
+
         $query
             = <<<QUERY
 {
@@ -617,6 +617,87 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
+     */
+    public function testProductsThatMatchWithPricesFromList(){
+        $query
+            =<<<QUERY
+            {
+    products(
+        filter:
+        {
+            price:{in:["10","20"]}
+            
+        }
+         pageSize:4
+         currentPage:1
+         sort:
+         {
+          name:DESC
+         }
+    )
+    {
+      items
+       {
+         attribute_set_id
+         sku
+         price {
+            regularPrice {
+                amount {
+                    value
+                    currency
+                }
+            }
+         }
+         name
+         ... on PhysicalProductInterface {
+            weight
+         }
+         type_id
+       }
+        total_count
+        page_info
+        {
+          page_size
+          current_page
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod1 = $productRepository->get('simple2');
+        $prod2 = $productRepository->get('simple1');
+        $filteredProducts = [$prod1, $prod2];
+       // $this->assertProductItems($filteredProducts, $response);
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                ['attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
+                 'sku' => $filteredProducts[$itemIndex]->getSku(),
+                 'name' => $filteredProducts[$itemIndex]->getName(),
+                 'price' => [
+                     'regularPrice' => [
+                         'amount' => [
+                             'value' => $filteredProducts[$itemIndex]->getPrice(),
+                             'currency' => 'USD'
+                         ]
+                     ]
+                 ],
+                 'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                 'weight' => $filteredProducts[$itemIndex]->getWeight()
+                ]
+            );
+        }
+    }
+
+    /**
      * No items are returned if the conditions are not met
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
@@ -801,6 +882,8 @@ QUERY;
             );
         }
     }
+
+
 
     private function assertProductItemsWithMaximalAndMinimalPriceCheck(array $filteredProducts, array $actualResponse)
     {
