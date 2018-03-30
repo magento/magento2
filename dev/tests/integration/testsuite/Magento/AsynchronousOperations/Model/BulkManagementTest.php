@@ -6,6 +6,7 @@
 namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
+use Magento\AsynchronousOperations\Api\Data\DetailedOperationStatusInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
@@ -135,7 +136,7 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
     {
         /** @var MetadataPool $metadataPool */
         $metadataPool = $this->objectManager->get(MetadataPool::class);
-        $operationMetadata = $metadataPool->getMetadata(OperationInterface::class);
+        $operationMetadata = $metadataPool->getMetadata(DetailedOperationStatusInterface::class);
         /** @var ResourceConnection $resourceConnection */
         $resourceConnection = $this->objectManager->get(ResourceConnection::class);
         $connection = $resourceConnection->getConnectionByName($operationMetadata->getEntityConnectionName());
