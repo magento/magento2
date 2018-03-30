@@ -9,4 +9,11 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters">
         <plugin name="add_swatch_data_to_filters" type="Magento\SwatchesGraphQl\Plugin\Filters\DataProviderPlugin"/>
     </type>
+    <type name="Magento\CatalogGraphQl\Model\LayerFilterItemTypeResolverComposite">
+        <arguments>
+            <argument name="typeResolvers" xsi:type="array">
+                <item name="swatch_layer_filter_item" xsi:type="object">Magento\SwatchesGraphQl\Model\Resolver\SwatchLayerFilterItemResolver</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

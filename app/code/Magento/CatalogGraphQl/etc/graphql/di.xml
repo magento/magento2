@@ -20,6 +20,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogGraphQl\Model\LayerFilterItemTypeResolverComposite">
+        <arguments>
+            <argument name="typeResolvers" xsi:type="array">
+                <item name="layer_filter_item" xsi:type="object">Magento\CatalogGraphQl\Model\LayerFilterItemTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\GraphQl\Type\Entity\DefaultMapper">
         <arguments>
             <argument name="map" xsi:type="array">

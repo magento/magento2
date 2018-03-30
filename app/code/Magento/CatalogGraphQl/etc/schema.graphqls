@@ -504,11 +504,15 @@ type LayerFilter {
     name: String @doc(description: "Layered navigation filter name")
     request_var: String @doc(description: "Request variable name for filter query")
     filter_items_count: Int @doc(description: "Count of filter items in filter group")
-    filter_items: [LayerFilterItem] @doc(description: "Array of filter items")
+    filter_items: [LayerFilterItemInterface] @doc(description: "Array of filter items")
 }
 
-type LayerFilterItem {
+interface LayerFilterItemInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\LayerFilterItemTypeResolverComposite") {
     label: String @doc(description: "Filter label")
     value_string: String @doc(description: "Value for filter request variable to be used in query")
     items_count: Int @doc(description: "Count of items by filter")
+}
+
+type LayerFilterItem implements LayerFilterItemInterface {
+
 }
