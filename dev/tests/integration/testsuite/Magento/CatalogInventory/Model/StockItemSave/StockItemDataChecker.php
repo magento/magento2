@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\EntityManager\HydratorInterface;
 use PHPUnit\Framework\Assert;
 
@@ -42,29 +43,38 @@ class StockItemDataChecker
     private $productFactory;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param HydratorInterface $hydrator
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
      * @param ProductRepositoryInterface $productRepository
      * @param ProductInterfaceFactory $productFactory
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         HydratorInterface $hydrator,
         StockItemRepositoryInterface $stockItemRepository,
         StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
         ProductRepositoryInterface $productRepository,
-        ProductInterfaceFactory $productFactory
+        ProductInterfaceFactory $productFactory,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->hydrator = $hydrator;
         $this->stockItemRepository = $stockItemRepository;
         $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * @param string $sku
+     * @param $sku
      * @param array $expectedData
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function checkStockItemData($sku, array $expectedData)
     {
