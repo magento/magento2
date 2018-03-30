@@ -11,8 +11,6 @@
  */
 namespace Magento\Framework\Url;
 
-use Zend\Uri\UriFactory;
-
 class Validator extends \Zend_Validate_Abstract
 {
     /**#@+
@@ -22,12 +20,19 @@ class Validator extends \Zend_Validate_Abstract
     /**#@-*/
 
     /**
+     * @var \Zend\Validator\Uri
+     */
+    private $validator;
+
+    /**
      * Object constructor
      */
-    public function __construct()
+    public function __construct(\Zend\Validator\Uri $validator)
     {
         // set translated message template
         $this->setMessage((string)new \Magento\Framework\Phrase("Invalid URL '%value%'."), self::INVALID_URL);
+        $this->validator = $validator;
+        $this->validator->setAllowRelative(false);
     }
 
     /**
@@ -47,14 +52,12 @@ class Validator extends \Zend_Validate_Abstract
     {
         $this->_setValue($value);
 
-        try {
-            $uri = UriFactory::factory($value);
-            if ($uri->isValid()) {
-                return true;
-            }
-        } catch (Exception $e) {/** left empty */}
+        $valid = $this->validator->isValid($value);
 
-        $this->_error(self::INVALID_URL);
-        return false;
+        if (!$valid) {
+            $this->_error(self::INVALID_URL);
+        }
+
+        return $valid;
     }
 }
