@@ -73,7 +73,6 @@ class Product
         foreach ($attributes as $attributeCode) {
             $collection->addAttributeToSelect($attributeCode);
         }
-        $collection->addMinimalPrice()->addFinalPrice();
         $collection->addAttributeToSelect('special_price');
         $collection->addAttributeToSelect('special_price_from');
         $collection->addAttributeToSelect('special_price_to');
