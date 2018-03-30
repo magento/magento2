@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurableProductIndexer\Plugin\InventoryIndexer;
 
 use Magento\Framework\Exception\StateException;
-use Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem\SourceItemIndexer as ConfigurableProductsSourceItemIndexer;
+use Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem\SourceItemIndexer
+    as ConfigurableProductsSourceItemIndexer;
 use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
 
 class SourceItemIndexerPlugin

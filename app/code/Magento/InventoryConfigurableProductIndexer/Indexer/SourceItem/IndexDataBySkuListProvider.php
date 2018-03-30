@@ -9,8 +9,8 @@ namespace Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem;
 
 use ArrayIterator;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfigurableProductIndexer\Indexer\SelectBuilder;
+use Magento\InventoryIndexer\Indexer\IndexStructure;
 
 /**
  * Returns all data for the index by source item list condition
@@ -49,7 +49,7 @@ class IndexDataBySkuListProvider
         $select = $this->selectBuilder->execute($stockId);
 
         if (count($skuList)) {
-            $select->where('stock.' . SourceItemInterface::SKU . ' IN (?)', $skuList);
+            $select->where('stock.' . IndexStructure::SKU . ' IN (?)', $skuList);
         }
 
         $connection = $this->resourceConnection->getConnection();

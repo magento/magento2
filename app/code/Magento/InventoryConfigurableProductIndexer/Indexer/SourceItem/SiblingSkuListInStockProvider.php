@@ -74,7 +74,7 @@ class SiblingSkuListInStockProvider
                 ['source_item' => $sourceItemTable],
                 [
                     SourceItemInterface::SKU =>
-                        sprintf("GROUP_CONCAT(DISTINCT %s SEPARATOR ',')", 'sibling_product_entity.' . SourceItemInterface::SKU)
+                        "GROUP_CONCAT(DISTINCT sibling_product_entity." . SourceItemInterface::SKU . " SEPARATOR ',')"
                 ]
             )->joinInner(
                 ['stock_source_link' => $sourceStockLinkTable],
