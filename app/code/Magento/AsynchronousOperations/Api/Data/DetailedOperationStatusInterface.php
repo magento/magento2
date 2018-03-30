@@ -28,4 +28,3 @@ interface DetailedOperationStatusInterface extends OperationInterface
      */
     public function setResultSerializedData($resultSerializedData);
 }
-
