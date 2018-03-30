@@ -101,8 +101,7 @@ class Product
 
         $this->collectionProcessor->process($searchCriteria, $collection);
         $collection->addWebsiteNamesToResult();
-        $collection->addTaxPercents();
-        $collection->addWebsiteNamesToResult();
+        $sql = $collection->getSelect()->assemble();
         $collection->load();
 
         // Methods that perform extra fetches

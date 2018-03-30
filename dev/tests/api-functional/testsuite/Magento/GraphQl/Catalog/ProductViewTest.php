@@ -649,7 +649,15 @@ QUERY;
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $firstProduct = $productRepository->get($firstProductSku, false, null, true);
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        $firstProduct->setId(
+            $firstProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
         $secondProduct = $productRepository->get($secondProductSku, false, null, true);
+        $secondProduct->setId(
+            $secondProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
         self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
         self::assertCount(2, $response['products']['items']);
         $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
@@ -825,7 +833,7 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-        // ['product_object_field_name', 'expected_value']
+
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],

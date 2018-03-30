@@ -78,8 +78,7 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product1 = $productRepository->get('simple1');
         $product2 = $productRepository->get('simple2');
-        $product3 = $productRepository->get('simple3');
-        $filteredProducts = [$product3, $product2, $product1];
+        $filteredProducts = [$product2, $product1];
 
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('products', $response);
@@ -627,7 +626,7 @@ QUERY;
         filter:
         {
             price:{in:["10","20"]}
-            
+
         }
          pageSize:4
          currentPage:1
