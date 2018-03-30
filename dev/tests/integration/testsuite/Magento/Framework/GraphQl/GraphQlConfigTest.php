@@ -63,7 +63,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $query = 'Query';
         /** @var \Magento\Framework\GraphQl\Config\Element\Type $output */
         $output = $this->model->getConfigElement($query);
-        $expectedOutputArray = require __DIR__ . '/_files/query_array_output_1.php';
+        $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($output->getName(), $query);
         /** @var \Magento\Framework\GraphQl\Config\Element\Field $queryFields */
         $queryFields = $output->getFields();
@@ -113,7 +113,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $outputEnum = $this->model->getConfigElement($queryEnum);
         /** @var EnumValue $outputEnumValues */
         $outputEnumValues = $outputEnum->getValues();
-        $expectedOutputArray = require __DIR__ . '/_files/query_array_output_1.php';
+        $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($outputEnum->getName(), $queryEnum);
         $this->assertEquals($outputEnum->getDescription(), 'Description for enumType PriceAdjustmentDescriptionEnum');
 
@@ -141,7 +141,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $typeThatImplements = 'ProductLinks';
         /** @var \Magento\Framework\GraphQl\Config\Element\Type $outputInterface */
         $outputInterface = $this->model->getConfigElement($typeThatImplements);
-        $expectedOutputArray = require __DIR__ . '/_files/query_array_output_1.php';
+        $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($outputInterface->getName(), $typeThatImplements);
         $outputInterfaceValues = $outputInterface->getInterfaces();
         /** @var \Magento\Framework\GraphQl\Config\Element\Field $outputInterfaceFields */
@@ -181,7 +181,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $interfaceType ='ProductLinksInterface';
         /** @var InterfaceType $outputConfigElement */
         $outputConfigElement = $this->model->getConfigElement($interfaceType);
-        $expectedOutput = require __DIR__ . '/_files/query_array_output_1.php';
+        $expectedOutput = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($outputConfigElement->getName(), $expectedOutput['ProductLinksInterface']['name']);
         $this->assertEquals($outputConfigElement->getTypeResolver(), $expectedOutput['ProductLinksInterface']['typeResolver']);
         $this->assertEquals($outputConfigElement->getDescription(), $expectedOutput['ProductLinksInterface']['description']);

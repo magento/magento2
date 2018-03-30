@@ -237,7 +237,7 @@ QUERY;
      */
     public function testSearchWithFilterPageSizeLessThanCurrentPage()
     {
-        $this->markTestSkipped('This is test is skipped due to MAGETWO-85680');
+       // $this->markTestSkipped('This is test is skipped due to MAGETWO-85680');
         $query
             = <<<QUERY
 {
