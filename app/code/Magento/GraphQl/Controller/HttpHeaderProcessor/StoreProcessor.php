@@ -7,10 +7,10 @@ declare(strict_types = 1);
 
 namespace Magento\GraphQl\Controller\HttpHeaderProcessor;
 
-use Magento\Framework\GraphQl\HttpHeaderProcessorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Process the "Store" header entry

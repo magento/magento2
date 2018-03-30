@@ -8,12 +8,10 @@ declare(strict_types = 1);
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Variant;
 
 use GraphQL\Type\Definition\ResolveInfo;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Resolver\ResolverInterface;
-use Magento\Framework\GraphQl\Resolver\Value;
-use Magento\Framework\GraphQl\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
  * Format a product's option information to conform to GraphQL schema representation

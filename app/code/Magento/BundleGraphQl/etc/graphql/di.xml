@@ -13,7 +13,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\GraphQl\Type\Enum\DefaultDataMapper">
+    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
         <arguments>
             <argument name="map" xsi:type="array">
                 <item name="ShipBundleItemsEnum" xsi:type="array">
@@ -31,7 +31,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\GraphQl\Type\Entity\DefaultMapper">
+    <type name="Magento\Framework\GraphQl\Schema\Type\Entity\DefaultMapper">
         <arguments>
             <argument name="map" xsi:type="array">
                 <item name="catalog_product" xsi:type="array">

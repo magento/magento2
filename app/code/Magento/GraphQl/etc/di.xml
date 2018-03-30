@@ -6,10 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\GraphQl\SchemaGeneratorInterface" type="Magento\Framework\GraphQl\SchemaGenerator" />
-    <preference for="Magento\Framework\GraphQl\ResolverContextInterface" type="Magento\GraphQl\Model\ResolverContext" />
-    <preference for="Magento\Framework\GraphQl\Type\Entity\MapperInterface" type="Magento\Framework\GraphQl\Type\Entity\DefaultMapper"/>
-    <preference for="Magento\Framework\GraphQl\Type\Enum\DataMapperInterface" type="Magento\Framework\GraphQl\Type\Enum\DefaultDataMapper"/>
+    <preference for="Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface" type="Magento\Framework\GraphQl\Schema\SchemaGenerator" />
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\ContextInterface" type="Magento\GraphQl\Model\Query\Resolver\Context" />
+    <preference for="Magento\Framework\GraphQl\Schema\Type\Entity\MapperInterface" type="Magento\Framework\GraphQl\Schema\Type\Entity\DefaultMapper"/>
+    <preference for="Magento\Framework\GraphQl\Schema\Type\Enum\DataMapperInterface" type="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper"/>
     <preference for="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
@@ -55,35 +55,35 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\GraphQl\Type\Output\OutputFactory">
+    <type name="Magento\Framework\GraphQl\Schema\Type\Output\OutputFactory">
         <arguments>
             <argument name="prototypes" xsi:type="array">
-                <item name="Magento\Framework\GraphQl\Config\Element\Type" xsi:type="string">Magento\Framework\GraphQl\Type\Output\OutputTypeObject</item>
-                <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Type\Output\OutputInterfaceObject</item>
-                <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Type\Enum\Enum</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Type" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputTypeObject</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputInterfaceObject</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Enum\Enum</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\GraphQl\Type\Input\InputFactory">
+    <type name="Magento\Framework\GraphQl\Schema\Type\Input\InputFactory">
         <arguments>
             <argument name="prototypes" xsi:type="array">
-                <item name="Magento\Framework\GraphQl\Config\Element\Type" xsi:type="string">Magento\Framework\GraphQl\Type\Input\InputObjectType</item>
-                <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Type\Input\InputObjectType</item>
-                <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Type\Enum\Enum</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Type" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Input\InputObjectType</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Input\InputObjectType</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Enum\Enum</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\GraphQl\Type\Output\ElementMapper">
+    <type name="Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper">
         <arguments>
-            <argument name="formatter" xsi:type="object">Magento\Framework\GraphQl\Type\Output\ElementMapper\FormatterComposite</argument>
+            <argument name="formatter" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\FormatterComposite</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\GraphQl\Type\Output\ElementMapper\FormatterComposite">
+    <type name="Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\FormatterComposite">
         <arguments>
             <argument name="formatters" xsi:type="array">
-                <item name="fields" xsi:type="object">Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter\Fields</item>
-                <item name="interfaces" xsi:type="object">Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter\Interfaces</item>
-                <item name="resolveType" xsi:type="object">Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter\ResolveType</item>
+                <item name="fields" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter\Fields</item>
+                <item name="interfaces" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter\Interfaces</item>
+                <item name="resolveType" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter\ResolveType</item>
             </argument>
         </arguments>
     </type>

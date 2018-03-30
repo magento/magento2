@@ -7,8 +7,8 @@ declare(strict_types = 1);
 
 namespace Magento\GraphQl\Controller\HttpHeaderProcessor;
 
-use Magento\Framework\GraphQl\HttpHeaderProcessorInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
 
 /**
  * Processes the "Content-Type" header entry

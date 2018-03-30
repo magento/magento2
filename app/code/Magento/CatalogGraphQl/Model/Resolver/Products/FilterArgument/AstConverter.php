@@ -7,12 +7,12 @@ declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument;
 
-use Magento\Framework\GraphQl\Argument\AstConverterInterface;
-use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceType;
-use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceTypeFactory;
-use Magento\Framework\GraphQl\Argument\Filter\ClauseFactory;
-use Magento\Framework\GraphQl\Argument\Filter\Connective;
-use Magento\Framework\GraphQl\Argument\Filter\ConnectiveFactory;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\AstConverterInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\Clause\ReferenceType;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\Clause\ReferenceTypeFactory;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\ClauseFactory;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\Connective;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\ConnectiveFactory;
 use Magento\Framework\GraphQl\Config\Element\InterfaceType;
 use Magento\Framework\GraphQl\Config\Element\Type;
 use Magento\Framework\GraphQl\ConfigInterface;

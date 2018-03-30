@@ -8,9 +8,9 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Config\Data;
 
 use Magento\Framework\GraphQl\Config\Element\FieldInterface;
-use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
-use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
-use Magento\Framework\GraphQl\TypeFactory;
+use Magento\Framework\GraphQl\Schema\Type\ScalarTypes;
+use Magento\Framework\GraphQl\Schema\TypeInterface;
+use Magento\Framework\GraphQl\Schema\TypeFactory;
 
 /**
  * Processor for wrapped types for both custom and scalar types

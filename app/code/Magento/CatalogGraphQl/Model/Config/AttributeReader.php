@@ -8,7 +8,7 @@ namespace Magento\CatalogGraphQl\Model\Config;
 
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Type\Entity\MapperInterface;
+use Magento\Framework\GraphQl\Schema\Type\Entity\MapperInterface;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection;

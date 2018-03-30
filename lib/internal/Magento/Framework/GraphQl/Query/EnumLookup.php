@@ -9,7 +9,7 @@ namespace Magento\Framework\GraphQl\Query;
 
 use Magento\Framework\GraphQl\Config\Element\Enum;
 use Magento\Framework\GraphQl\ConfigInterface;
-use Magento\Framework\GraphQl\Type\Enum\DataMapperInterface;
+use Magento\Framework\GraphQl\Schema\Type\Enum\DataMapperInterface;
 use Magento\Framework\Phrase;
 
 /**
