@@ -133,6 +133,8 @@ class Option
 
         $stockItem->unsIsChildItem();
 
+        $option->setStockStateResult($result);
+
         return $result;
     }
 }
