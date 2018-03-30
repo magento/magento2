@@ -4212,6 +4212,8 @@ return [
     ['Magento\Framework\Acl\CacheInterface'],
     ['Magento\Framework\Acl\Test\Unit\CacheTest'],
     ['Magento\Eav\Model\Entity\Attribute\Backend\Serialized'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit\ResetButton'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit\SaveAndContinueButton'],
     ['Magento\Fmework\MessageQueue\Config\Reader\Xml\Converter\DeprecatedFormat'],
     [
         'Magento\Framework\MessageQueue\Config\Converter',
@@ -4220,6 +4222,8 @@ return [
     ['Magento\Framework\MessageQueue\Config\Reader', 'Magento\Framework\MessageQueue\Config\Reader\Xml'],
     ['Magento\Framework\MessageQueue\PublisherFactory'],
     ['Magento\Framework\MessageQueue\PublisherProxy'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton'],
     ['Magento\Search\Block\SearchData', 'Magento\AdvancedSearch\Block\SearchData'],
     ['Magento\Search\Block\Recommendations', 'Magento\AdvancedSearch\Block\Recommendations'],
     ['Magento\Search\Block\SearchDataInterface', 'Magento\AdvancedSearch\Block\SearchDataInterface'],
@@ -4230,5 +4234,5 @@ return [
         'Magento\Elasticsearch\Test\Unit\Model\SearchAdapter\ConnectionManagerTest',
         'Magento\Elasticsearch\Test\Unit\SearchAdapter\ConnectionManagerTest'
     ],
-    ['Zend_Feed', 'Zend\Feed'],
+    ['Zend_Feed', 'Zend\Feed']
 ];

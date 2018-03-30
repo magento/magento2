@@ -44,8 +44,8 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
         $valueExpr = $connection->getCheckSql(
             "{$optionTable2}.value_id IS NULL",
-            "{$optionTable1}.value",
-            "{$optionTable2}.value"
+            "{$optionTable1}.option_id",
+            "{$optionTable2}.option_id"
         );
 
         $collection->getSelect()->joinLeft(

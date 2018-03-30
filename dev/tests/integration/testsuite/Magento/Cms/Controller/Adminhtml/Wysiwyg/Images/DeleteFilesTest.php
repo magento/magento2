@@ -85,7 +85,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithWrongFileName()
     {
-        $fileName = '/../../../../etc/env.php';
+        $fileName = '/../../../etc/env.php';
         $this->model->getRequest()->setMethod('POST')
             ->setPostValue('files', [$this->imagesHelper->idEncode($fileName)]);
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
