@@ -38,6 +38,7 @@ class IndexTableRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
 
     public function testEstimateRowSize()
     {
+        $this->markTestSkipped('Unskip after MAGETWO-89738');
         $expectedValue = 2400000;
 
         $this->websiteManagementMock->expects($this->once())->method('getCount')->willReturn(100);

@@ -7,7 +7,7 @@ namespace Magento\Braintree\Gateway\Response;
 
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Payment\Gateway\Response\HandlerInterface;
@@ -44,7 +44,7 @@ class VaultDetailsHandler implements HandlerInterface
     protected $config;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
@@ -69,8 +69,7 @@ class VaultDetailsHandler implements HandlerInterface
         $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->config = $config;
         $this->subjectReader = $subjectReader;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()
-            ->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
