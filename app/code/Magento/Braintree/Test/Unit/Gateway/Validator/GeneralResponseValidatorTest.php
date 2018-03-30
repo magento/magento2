@@ -10,7 +10,7 @@ use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 
 class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
 {
