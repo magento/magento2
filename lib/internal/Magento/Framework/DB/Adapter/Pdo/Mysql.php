@@ -2092,8 +2092,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $result = $this->createConnection()->query($sql);
         } else {
             $result = $this->query($sql);
-            $this->resetDdlCache($table->getName(), $table->getSchema());
         }
+        $this->resetDdlCache($table->getName(), $table->getSchema());
 
         return $result;
     }
@@ -2520,8 +2520,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $this->createConnection()->query($query);
         } else {
             $this->query($query);
-            $this->resetDdlCache($tableName, $schemaName);
         }
+        $this->resetDdlCache($tableName, $schemaName);
         return true;
     }
 
@@ -2596,8 +2596,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $newTable = $this->_getTableName($newTableName, $schemaName);
 
         $query = sprintf('ALTER TABLE %s RENAME TO %s', $oldTable, $newTable);
-        $this->query($query);
 
+        if ($this->getTransactionLevel() > 0) {
+            $this->createConnection()->query($query);
+        } else {
+            $this->query($query);
+        }
         $this->resetDdlCache($oldTableName, $schemaName);
 
         return true;
