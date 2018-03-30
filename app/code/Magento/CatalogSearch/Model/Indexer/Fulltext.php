@@ -138,10 +138,10 @@ class Fulltext implements
     }
 
     /**
-     * Execute full indexation. Publish message by store dimension into the queue
+     * Execute full indexation
      *
      * @return void
-     * @throws \InvalidArgumentException Throw exception if cannot put message into the queue
+     * @throws \InvalidArgumentException
      */
     public function executeFull()
     {
