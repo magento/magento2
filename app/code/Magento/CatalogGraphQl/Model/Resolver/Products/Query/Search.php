@@ -91,14 +91,16 @@ class Search
         $products = [];
         if (!isset($searchCriteria->getSortOrders()[0])) {
             foreach ($paginatedProducts as $product) {
-                if (in_array($product['id'], $searchIds)) {
-                    $ids[$product['id']] = $product;
+                $productId = isset($product['entity_id']) ? $product['entity_id'] : $product['id'];
+                if (in_array($productId, $searchIds)) {
+                    $ids[$productId] = $product;
                 }
             }
             $products = array_filter($ids);
         } else {
             foreach ($paginatedProducts as $product) {
-                if (in_array($product['id'], $searchIds)) {
+                $productId = isset($product['entity_id']) ? $product['entity_id'] : $product['id'];
+                if (in_array($productId, $searchIds)) {
                     $products[] = $product;
                 }
             }
