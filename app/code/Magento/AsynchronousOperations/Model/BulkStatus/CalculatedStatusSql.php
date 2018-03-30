@@ -6,7 +6,6 @@
 
 namespace Magento\AsynchronousOperations\Model\BulkStatus;
 
-use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 
 class CalculatedStatusSql

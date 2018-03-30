@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * CatalogInventory Stock Status per website Resource Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
