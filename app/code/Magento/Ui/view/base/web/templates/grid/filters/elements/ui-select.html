@@ -43,7 +43,10 @@
     ">
         <div class="admin__action-multiselect-text"
              data-role="selected-option"
-             data-bind="text: setCaption()">
+             data-bind="
+             css: {warning: warn().length},
+             text: setCaption()
+        ">
         </div>
     </div>
     <!-- /ko -->

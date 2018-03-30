@@ -21,7 +21,8 @@ define([
          */
         setCaption: function () {
             var length,
-                isARemovedOption;
+                isARemovedOption,
+                caption;
 
             if (!_.isArray(this.value()) && this.value()) {
                 length = 1;
@@ -35,12 +36,18 @@ define([
             isARemovedOption = length && !this.getSelected().length;
 
             if (isARemovedOption) {
-                this.placeholder(
-                    this.missingValuePlaceholder.replace('%s', $t('Category')).replace('%s', this.value())
-                );
+                caption = this.missingValuePlaceholder.replace('%s', $t('Category')).replace('%s', this.value());
+
+                this.placeholder(caption);
+
+                // set warning state
+                this.warn(caption);
 
                 return this.placeholder();
             }
+
+            // reset warning state
+            this.warn('');
 
             return this._super();
         }
