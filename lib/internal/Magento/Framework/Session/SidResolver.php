@@ -46,10 +46,10 @@ class SidResolver implements SidResolverInterface
     /**
      * Use session in URL flag
      *
-     * @var bool
+     * @var bool|null
      * @see \Magento\Framework\UrlInterface
      */
-    protected $_useSessionInUrl = true;
+    protected $_useSessionInUrl;
 
     /**
      * @var string
@@ -96,11 +96,7 @@ class SidResolver implements SidResolverInterface
         }
 
         $sidKey = null;
-
-        $useSidOnFrontend = $this->scopeConfig->getValue(
-            self::XML_PATH_USE_FRONTEND_SID,
-            $this->_scopeType
-        );
+        $useSidOnFrontend = $this->getUseSessionInUrl();
         if ($useSidOnFrontend && $this->request->getQuery(
             $this->getSessionIdQueryParam($session),
             false
@@ -162,13 +158,22 @@ class SidResolver implements SidResolverInterface
     }
 
     /**
-     * Retrieve use session in URL flag
+     * Retrieve use session in URL flag.
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseSessionInUrl()
     {
+        if ($this->_useSessionInUrl === null) {
+            //Using config value by default, can be overridden by using the
+            //setter.
+            $this->_useSessionInUrl = (bool)$this->scopeConfig->getValue(
+                self::XML_PATH_USE_FRONTEND_SID,
+                $this->_scopeType
+            );
+        }
+
         return $this->_useSessionInUrl;
     }
 }

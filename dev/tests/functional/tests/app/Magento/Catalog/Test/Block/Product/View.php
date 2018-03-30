@@ -43,6 +43,13 @@ class View extends AbstractConfigureBlock
     protected $addToCart = '.tocart';
 
     /**
+     * Locator for "Update Cart" button.
+     *
+     * @var string
+     */
+    protected $updateCart = '#product-updatecart-button';
+
+    /**
      * Quantity input id.
      *
      * @var string
@@ -243,10 +250,23 @@ class View extends AbstractConfigureBlock
     /**
      * Get block price.
      *
+     * @param FixtureInterface|null $product
+     *
      * @return Price
      */
-    public function getPriceBlock()
+    public function getPriceBlock(FixtureInterface $product = null)
     {
+        $typeId = null;
+
+        if ($product) {
+            $dataConfig = $product->getDataConfig();
+            $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+        }
+
+        if ($this->hasRender($typeId)) {
+            return $this->callRender($typeId, 'getPriceBlock');
+        }
+
         return $this->blockFactory->create(
             \Magento\Catalog\Test\Block\Product\Price::class,
             ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
@@ -302,13 +322,23 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Click link.
+     * Click "Add to Cart" button.
      *
      * @return void
      */
     public function clickAddToCart()
     {
-        $this->_rootElement->find($this->addToCart, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->addToCart)->click();
+    }
+
+    /**
+     * Click "Update Cart" button.
+     *
+     * @return void
+     */
+    public function clickUpdateCart()
+    {
+        $this->_rootElement->find($this->updateCart)->click();
     }
 
     /**

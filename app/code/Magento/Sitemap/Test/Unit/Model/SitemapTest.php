@@ -253,6 +253,8 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             $expectedWrites,
             null
         );
+        $this->storeManagerMock->expects($this->once())->method('setCurrentStore')->with(1);
+
         $model->generateXml();
 
         $this->assertCount(count($expectedFile), $actualData, 'Number of generated files is incorrect');
@@ -360,6 +362,8 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             $expectedWrites,
             $robotsInfo
         );
+        $this->storeManagerMock->expects($this->once())->method('setCurrentStore')->with(1);
+
         $model->generateXml();
     }
 

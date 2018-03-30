@@ -6,6 +6,7 @@
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Framework\App\Area;
@@ -121,6 +122,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     private $dateTimeFactory;
 
     /**
+     * @var AccountConfirmation|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $accountConfirmation;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Session\SessionManagerInterface
      */
     private $sessionManager;
@@ -200,6 +206,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->dateTimeFactory = $this->createMock(DateTimeFactory::class);
+        $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->accountManagement = $this->objectManagerHelper->getObject(
@@ -229,6 +236,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'objectFactory' => $this->objectFactory,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
                 'dateTimeFactory' => $this->dateTimeFactory,
+                'accountConfirmation' => $this->accountConfirmation,
                 'sessionManager' => $this->sessionManager,
                 'saveHandler' => $this->saveHandler,
                 'visitorCollectionFactory' => $this->visitorCollectionFactory,
@@ -1627,14 +1635,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string|null $skipConfirmationIfEmail
      * @param int $isConfirmationRequired
      * @param string|null $confirmation
      * @param string $expected
      * @dataProvider dataProviderGetConfirmationStatus
      */
     public function testGetConfirmationStatus(
-        $skipConfirmationIfEmail,
         $isConfirmationRequired,
         $confirmation,
         $expected
@@ -1652,21 +1658,16 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $customerMock->expects($this->any())
             ->method('getConfirmation')
             ->willReturn($confirmation);
-        $customerMock->expects($this->any())
+        $customerMock->expects($this->once())
             ->method('getEmail')
             ->willReturn($customerEmail);
-        $customerMock->expects($this->any())
+        $customerMock->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
 
-        $this->registry->expects($this->once())
-            ->method('registry')
-            ->with('skip_confirmation_if_email')
-            ->willReturn($skipConfirmationIfEmail);
-
-        $this->scopeConfig->expects($this->any())
-            ->method('getValue')
-            ->with(AccountManagement::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_WEBSITES, $websiteId)
+        $this->accountConfirmation->expects($this->once())
+            ->method('isConfirmationRequired')
+            ->with($websiteId, $customerId, $customerEmail)
             ->willReturn($isConfirmationRequired);
 
         $this->customerRepository->expects($this->once())
@@ -1683,11 +1684,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     public function dataProviderGetConfirmationStatus()
     {
         return [
-            [null, 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
-            ['test1@example.com', 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
-            ['test2@example.com', 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
-            ['test2@example.com', 1, null, AccountManagement::ACCOUNT_CONFIRMED],
-            ['test2@example.com', 1, 'test', AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED],
+            [0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            [0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            [0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            [1, null, AccountManagement::ACCOUNT_CONFIRMED],
+            [1, 'test', AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED],
         ];
     }
 
@@ -1880,5 +1881,103 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn($dateTimeMock);
 
         return $dateTime;
+    }
+
+    public function testCreateAccountUnexpectedValueException()
+    {
+        $websiteId = 1;
+        $storeId = null;
+        $defaultStoreId = 1;
+        $customerId = 1;
+        $customerEmail = 'email@email.com';
+        $newLinkToken = '2jh43j5h2345jh23lh452h345hfuzasd96ofu';
+        $exception = new \UnexpectedValueException('Template file was not found');
+
+        $datetime = $this->prepareDateTimeFactory();
+
+        $address = $this->createMock(\Magento\Customer\Api\Data\AddressInterface::class);
+        $address->expects($this->once())
+            ->method('setCustomerId')
+            ->with($customerId);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $store->expects($this->once())
+            ->method('getId')
+            ->willReturn($defaultStoreId);
+        $website = $this->createMock(\Magento\Store\Model\Website::class);
+        $website->expects($this->atLeastOnce())
+            ->method('getStoreIds')
+            ->willReturn([1, 2, 3]);
+        $website->expects($this->once())
+            ->method('getDefaultStore')
+            ->willReturn($store);
+        $customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $customer->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customer->expects($this->atLeastOnce())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customer->expects($this->atLeastOnce())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $customer->expects($this->atLeastOnce())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $customer->expects($this->once())
+            ->method('setStoreId')
+            ->with($defaultStoreId);
+        $customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+        $customer->expects($this->once())
+            ->method('setAddresses')
+            ->with(null);
+        $this->customerRepository->expects($this->once())
+            ->method('get')
+            ->with($customerEmail)
+            ->willReturn($customer);
+        $this->share->expects($this->once())
+            ->method('isWebsiteScope')
+            ->willReturn(true);
+        $this->storeManager->expects($this->atLeastOnce())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
+        $this->customerRepository->expects($this->atLeastOnce())
+            ->method('save')
+            ->willReturn($customer);
+        $this->addressRepository->expects($this->atLeastOnce())
+            ->method('save')
+            ->with($address);
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customer);
+        $this->random->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($newLinkToken);
+        $customerSecure = $this->createPartialMock(
+            \Magento\Customer\Model\Data\CustomerSecure::class,
+            ['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash']
+        );
+        $customerSecure->expects($this->any())
+            ->method('setRpToken')
+            ->with($newLinkToken);
+        $customerSecure->expects($this->any())
+            ->method('setRpTokenCreatedAt')
+            ->with($datetime)
+            ->willReturnSelf();
+        $customerSecure->expects($this->any())
+            ->method('getPasswordHash')
+            ->willReturn(null);
+        $this->customerRegistry->expects($this->atLeastOnce())
+            ->method('retrieveSecureData')
+            ->willReturn($customerSecure);
+        $this->emailNotificationMock->expects($this->once())
+            ->method('newAccount')
+            ->willThrowException($exception);
+        $this->logger->expects($this->once())->method('error')->with($exception);
+
+        $this->accountManagement->createAccount($customer);
     }
 }
