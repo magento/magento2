@@ -15,7 +15,7 @@ input ProductSortInput {
 
 interface SwatchLayerFilterItemInterface @typeResolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\SwatchLayerFilterItemResolver")
 {
-    swatch_data: SwatchData @doc(description: "")
+    swatch_data: SwatchData @doc(description: "Data required to render swatch filter item")
 }
 
 type SwatchLayerFilterItem implements LayerFilterItemInterface, SwatchLayerFilterItemInterface
@@ -24,6 +24,6 @@ type SwatchLayerFilterItem implements LayerFilterItemInterface, SwatchLayerFilte
 }
 
 type SwatchData {
-    type: String @doc(description: "")
-    value: String @doc(description: "")
+    type: String @doc(description: "Type of swatch filter item: 1 - text, 2 - image")
+    value: String @doc(description: "Value for swatch item (text or image link)")
 }
