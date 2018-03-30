@@ -238,4 +238,12 @@ class RenderLayered extends Template
 
         return $imagePath;
     }
+
+    /**
+     * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
+     */
+    public function getFilters()
+    {
+        return $this->filter;
+    }
 }
