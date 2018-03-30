@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceType;
  *
  * Example: {sku: {eq: "product"}}
  */
-class Clause
+class ArrayClause implements ClauseInterface
 {
     /**
      * @var ReferenceType
@@ -89,7 +89,7 @@ class Clause
      *
      * @return string
      */
-    public function getClauseValue()
+    public function getClauseValue() : string
     {
         return $this->clauseValue;
     }

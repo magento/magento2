@@ -44,8 +44,14 @@ class DataFactory
         array $arguments = []
     ) : Field {
         $arraySign = '/^.*(\[\])$/';
-        $isList = preg_match($arraySign, $fieldData['type']);
-        $fieldData['type'] = str_replace('[]', '', $fieldData['type']);
+        $isList = false;
+
+        if (preg_match($arraySign, $fieldData['type'])) {
+            $isList = true;
+            $fieldData['type'] = str_replace('[]', '', $fieldData['type']);
+            $fieldData['itemType'] = str_replace('[]', '', $fieldData['type']);
+        }
+
         return $this->objectManager->create(
             Field::class,
             [
