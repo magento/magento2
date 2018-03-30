@@ -83,10 +83,7 @@ class IndexNameBuilder
      */
     public function addDimension(string $name, string $value): self
     {
-        $this->data[self::$dimensions][] = $this->dimensionFactory->create([
-            'name' => $name,
-            'value' => $value,
-        ]);
+        $this->data[self::$dimensions][] = $this->dimensionFactory->create($name, $value);
         return $this;
     }
 

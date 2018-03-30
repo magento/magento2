@@ -6,12 +6,10 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
-use Magento\CatalogSearch\Model\Indexer\Scope\State;
+use Magento\CatalogSearch\Model\Indexer\Scope\StateFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Search\Request\Config as SearchRequestConfig;
-use Magento\Framework\Search\Request\DimensionFactory;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Indexer\Dimension\DimensionProviderInterface;
+use Magento\Store\Model\StoreDimensionProvider;
 
 /**
  * Provide functionality for Fulltext Search indexing.
@@ -19,7 +17,10 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  * @since 100.0.2
  */
-class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
+class Fulltext implements
+    \Magento\Framework\Indexer\ActionInterface,
+    \Magento\Framework\Mview\ActionInterface,
+    \Magento\Framework\Indexer\Dimension\DimensionalIndexerInterface
 {
     /**
      * Indexer ID in configuration
@@ -37,16 +38,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     private $indexerHandlerFactory;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var \Magento\Framework\Search\Request\DimensionFactory
-     */
-    private $dimensionFactory;
-
-    /**
      * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
      */
     private $fullAction;
@@ -55,11 +46,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * @var FulltextResource
      */
     private $fulltextResource;
-
-    /**
-     * @var \Magento\Framework\Search\Request\Config
-     */
-    private $searchRequestConfig;
 
     /**
      * @var IndexSwitcherInterface
@@ -72,89 +58,96 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     private $indexScopeState;
 
     /**
+     * @var DimensionProviderInterface
+     */
+    private $dimensionProvider;
+
+    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
-     * @param StoreManagerInterface $storeManager
-     * @param DimensionFactory $dimensionFactory
      * @param FulltextResource $fulltextResource
-     * @param SearchRequestConfig $searchRequestConfig
      * @param array $data
      * @param IndexSwitcherInterface $indexSwitcher
-     * @param Scope\State $indexScopeState
+     * @param StateFactory $indexScopeStateFactory
+     * @param DimensionProviderInterface $dimensionProvider
      */
     public function __construct(
         FullFactory $fullActionFactory,
         IndexerHandlerFactory $indexerHandlerFactory,
-        StoreManagerInterface $storeManager,
-        DimensionFactory $dimensionFactory,
         FulltextResource $fulltextResource,
-        SearchRequestConfig $searchRequestConfig,
-        array $data,
-        IndexSwitcherInterface $indexSwitcher = null,
-        State $indexScopeState = null
+        IndexSwitcherInterface $indexSwitcher,
+        StateFactory $indexScopeStateFactory,
+        DimensionProviderInterface $dimensionProvider,
+        array $data
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
-        $this->storeManager = $storeManager;
-        $this->dimensionFactory = $dimensionFactory;
         $this->fulltextResource = $fulltextResource;
-        $this->searchRequestConfig = $searchRequestConfig;
         $this->data = $data;
-        if (null === $indexSwitcher) {
-            $indexSwitcher = ObjectManager::getInstance()->get(IndexSwitcherInterface::class);
-        }
-        if (null === $indexScopeState) {
-            $indexScopeState = ObjectManager::getInstance()->get(State::class);
-        }
         $this->indexSwitcher = $indexSwitcher;
-        $this->indexScopeState = $indexScopeState;
+        $this->indexScopeState = $indexScopeStateFactory->create();
+        $this->dimensionProvider = $dimensionProvider;
     }
 
     /**
      * Execute materialization on ids entities
      *
-     * @param int[] $ids
+     * @param int[] $entityIds
      * @return void
+     * @throws \InvalidArgumentException
      */
-    public function execute($ids)
+    public function execute($entityIds)
     {
-        $storeIds = array_keys($this->storeManager->getStores());
-        /** @var IndexerHandler $saveHandler */
-        $saveHandler = $this->indexerHandlerFactory->create([
-            'data' => $this->data
-        ]);
-        foreach ($storeIds as $storeId) {
-            $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
-            $productIds = array_unique(array_merge($ids, $this->fulltextResource->getRelationsByChild($ids)));
-            $saveHandler->deleteIndex([$dimension], new \ArrayObject($productIds));
-            $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId, $ids));
+        foreach ($this->dimensionProvider->getIterator() as $dimension) {
+            $this->executeByDimension($dimension, new \ArrayIterator($entityIds));
         }
     }
 
     /**
-     * Execute full indexation
-     *
-     * @return void
+     * {@inheritdoc}
+     * @throws \InvalidArgumentException
      */
-    public function executeFull()
+    public function executeByDimension(array $dimensions, \Traversable $entityIds = null)
     {
-        $storeIds = array_keys($this->storeManager->getStores());
-        /** @var IndexerHandler $saveHandler */
+        if (count($dimensions) > 1 || !isset($dimensions[StoreDimensionProvider::DIMENSION_NAME])) {
+            throw new \InvalidArgumentException('Indexer "' . self::INDEXER_ID . '" support only Store dimension');
+        }
+        $storeId = $dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
         $saveHandler = $this->indexerHandlerFactory->create([
             'data' => $this->data
         ]);
-        foreach ($storeIds as $storeId) {
-            $dimensions = [$this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId])];
-            $this->indexScopeState->useTemporaryIndex();
 
+        if (null === $entityIds) {
+            $this->indexScopeState->useTemporaryIndex();
             $saveHandler->cleanIndex($dimensions);
             $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId));
 
             $this->indexSwitcher->switchIndex($dimensions);
             $this->indexScopeState->useRegularIndex();
+
+            $this->fulltextResource->resetSearchResultsByStore($storeId);
+        } else {
+            // internal implementation works only with array
+            $entityIds = iterator_to_array($entityIds);
+            $productIds = array_unique(
+                array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
+            );
+            $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
+            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $entityIds));
         }
-        $this->fulltextResource->resetSearchResults();
-        $this->searchRequestConfig->reset();
+    }
+
+    /**
+     * Execute full indexation. Publish message by store dimension into the queue
+     *
+     * @return void
+     * @throws \InvalidArgumentException Throw exception if cannot put message into the queue
+     */
+    public function executeFull()
+    {
+        foreach ($this->dimensionProvider->getIterator() as $dimension) {
+            $this->executeByDimension($dimension);
+        }
     }
 
     /**
