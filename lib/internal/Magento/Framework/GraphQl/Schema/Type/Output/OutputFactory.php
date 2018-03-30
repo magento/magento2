@@ -8,7 +8,7 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Schema\Type\Output;
 
 use Magento\Framework\GraphQl\Config\ConfigElementInterface;
-use Magento\Framework\GraphQl\Schema\Type\OutputType;
+use Magento\Framework\GraphQl\Schema\Type\OutputTypeInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -47,9 +47,9 @@ class OutputFactory
      * Create output type.
      *
      * @param ConfigElementInterface $configElement
-     * @return OutputType
+     * @return OutputTypeInterface
      */
-    public function create(ConfigElementInterface $configElement) : OutputType
+    public function create(ConfigElementInterface $configElement) : OutputTypeInterface
     {
         if (!isset($this->typeRegistry[$configElement->getName()])) {
             $this->typeRegistry[$configElement->getName()] =

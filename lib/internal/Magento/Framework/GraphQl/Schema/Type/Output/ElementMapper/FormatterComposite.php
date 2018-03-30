@@ -8,7 +8,7 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper;
 
 use Magento\Framework\GraphQl\Config\Element\TypeInterface;
-use Magento\Framework\GraphQl\Schema\Type\OutputType;
+use Magento\Framework\GraphQl\Schema\Type\OutputTypeInterface;
 
 /**
  * {@inheritdoc}
@@ -31,7 +31,7 @@ class FormatterComposite implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function format(TypeInterface $configElement, OutputType $outputType) : array
+    public function format(TypeInterface $configElement, OutputTypeInterface $outputType) : array
     {
         $config = [
             'name' => $configElement->getName(),

@@ -10,7 +10,7 @@ namespace Magento\Framework\GraphQl\Schema\Type;
 /**
  * Wrapper for GraphQl FloatType
  */
-class FloatType extends \GraphQL\Type\Definition\FloatType implements InputType, OutputType
+class FloatType extends \GraphQL\Type\Definition\FloatType implements InputTypeInterface, OutputTypeInterface
 {
     /**
      * @var string

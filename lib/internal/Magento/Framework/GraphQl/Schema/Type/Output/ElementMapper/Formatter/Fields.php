@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\Input\InputMapper;
 use Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\FormatterInterface;
 use Magento\Framework\GraphQl\Schema\Type\Output\OutputMapper;
-use Magento\Framework\GraphQl\Schema\Type\OutputType;
+use Magento\Framework\GraphQl\Schema\Type\OutputTypeInterface;
 use Magento\Framework\GraphQl\Schema\Type\ScalarTypes;
 use Magento\Framework\GraphQl\Schema\TypeFactory;
 use Magento\Framework\ObjectManagerInterface;
@@ -81,7 +81,7 @@ class Fields implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function format(TypeInterface $configElement, OutputType $outputType): array
+    public function format(TypeInterface $configElement, OutputTypeInterface $outputType): array
     {
         $typeConfig = [
             'fields' => function () use ($configElement, $outputType) {
@@ -99,11 +99,11 @@ class Fields implements FormatterInterface
      * Get field's type object compatible with GraphQL schema generator.
      *
      * @param TypeInterface $typeConfigElement
-     * @param OutputType $outputType
+     * @param OutputTypeInterface $outputType
      * @param Field $field
      * @return TypeInterface
      */
-    private function getFieldType(TypeInterface $typeConfigElement, OutputType $outputType, Field $field)
+    private function getFieldType(TypeInterface $typeConfigElement, OutputTypeInterface $outputType, Field $field)
     {
         if ($this->scalarTypes->isScalarType($field->getTypeName())) {
             $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
@@ -123,11 +123,15 @@ class Fields implements FormatterInterface
      * Generate field config.
      *
      * @param TypeInterface $typeConfigElement
-     * @param OutputType $outputType
+     * @param OutputTypeInterface $outputType
      * @param Field $field
      * @return array
      */
-    private function getFieldConfig(TypeInterface $typeConfigElement, OutputType $outputType, Field $field): array
+    private function getFieldConfig(
+        TypeInterface $typeConfigElement,
+        OutputTypeInterface $outputType,
+        Field $field
+    ): array
     {
         $type = $this->getFieldType($typeConfigElement, $outputType, $field);
         $fieldConfig = [
