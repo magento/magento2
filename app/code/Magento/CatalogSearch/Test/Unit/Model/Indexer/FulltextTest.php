@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 
-use \Magento\Framework\MultiDimensionalIndexer\Dimension;
+use \Magento\Framework\Indexer\Dimension;
 use Magento\Framework\Indexer\Dimension\DimensionProviderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 

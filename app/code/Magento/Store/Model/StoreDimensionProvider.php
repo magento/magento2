@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model;
 
-use Magento\Framework\MultiDimensionalIndexer\DimensionFactory;
+use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Indexer\Dimension\DimensionProviderInterface;
 
 /**

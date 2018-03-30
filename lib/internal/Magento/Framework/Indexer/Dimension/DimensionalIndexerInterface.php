@@ -17,7 +17,7 @@ interface DimensionalIndexerInterface
      * Execute indexer by specified dimension.
      * Accept array of dimensions DTO that represent indexer dimension
      *
-     * @param \Magento\Framework\MultiDimensionalIndexer\Dimension[] $dimension
+     * @param \Magento\Framework\Indexer\Dimension[] $dimension
      * @param \Traversable|null $entityIds
      * @return void
      */

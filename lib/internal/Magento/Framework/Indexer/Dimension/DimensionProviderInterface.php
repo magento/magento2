@@ -14,8 +14,8 @@ namespace Magento\Framework\Indexer\Dimension;
 interface DimensionProviderInterface extends \IteratorAggregate
 {
     /**
-     * Get Dimension Iterator. Returns yielded value of \Magento\Framework\MultiDimensionalIndexer\Dimension
-     * @return \Traversable|\Magento\Framework\MultiDimensionalIndexer\Dimension[]
+     * Get Dimension Iterator. Returns yielded value of \Magento\Framework\Indexer\Dimension
+     * @return \Traversable|\Magento\Framework\Indexer\Dimension[]
      */
     public function getIterator(): \Traversable;
 }
