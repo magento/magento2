@@ -81,7 +81,7 @@ class CategoryTree implements ResolverInterface
             $rootCategoryId = $this->assertFiltersAreValidAndGetCategoryRootIds($args);
             $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
             return [
-                'category_tree' => $categoriesTree
+                'category_tree' => reset($categoriesTree)
             ];
         });
     }
