@@ -7,8 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\InventoryCatalog\Model\ResourceModel\GetProductTypesBySkus as GetProductTypesBySkusResourceModel;
 
 /**
  * @inheritdoc
@@ -16,17 +15,17 @@ use Magento\Catalog\Model\ResourceModel\Product;
 class GetProductTypesBySkus implements GetProductTypesBySkusInterface
 {
     /**
-     * @var Product
+     * @var GetProductTypesBySkusResourceModel
      */
-    private $productResource;
+    private $getProductTypesBySkusResource;
 
     /**
-     * @param Product $productResource
+     * @param GetProductTypesBySkusResourceModel $getProductTypesBySkusResource
      */
     public function __construct(
-        Product $productResource
+        GetProductTypesBySkusResourceModel $getProductTypesBySkusResource
     ) {
-        $this->productResource = $productResource;
+        $this->getProductTypesBySkusResource = $getProductTypesBySkusResource;
     }
 
     /**
@@ -34,20 +33,15 @@ class GetProductTypesBySkus implements GetProductTypesBySkusInterface
      */
     public function execute(array $skus)
     {
-        if (empty($skus)) {
-            return [];
+        $typesBySkus = $this->getProductTypesBySkusResource->execute($skus);
+        $notFoundedSkus = array_diff($skus, array_keys($typesBySkus));
+
+        if (!empty($notFoundedSkus)) {
+            throw new \Magento\Framework\Exception\InputException(
+                __('Following products with requested skus were not found: %1', implode($notFoundedSkus, ', '))
+            );
         }
 
-        $connection = $this->productResource->getConnection();
-        $select = $connection->select()
-            ->from(
-                $this->productResource->getTable('catalog_product_entity'),
-                [ProductInterface::SKU, ProductInterface::TYPE_ID]
-            )->where(
-                ProductInterface::SKU . ' IN (?)',
-                $skus
-            );
-
-        return $connection->fetchPairs($select);
+        return $typesBySkus;
     }
 }

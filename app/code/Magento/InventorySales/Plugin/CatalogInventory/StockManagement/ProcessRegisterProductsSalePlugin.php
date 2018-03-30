@@ -10,7 +10,7 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryCatalog\Model\GetProductTypesBySkus;
+use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemsInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
@@ -54,7 +54,7 @@ class ProcessRegisterProductsSalePlugin
     private $allowedProductTypesForSourceItems;
 
     /**
-     * @var GetProductTypesBySkus
+     * @var GetProductTypesBySkusInterface
      */
     private $getProductTypesBySkus;
 
@@ -65,7 +65,7 @@ class ProcessRegisterProductsSalePlugin
      * @param AppendReservationsInterface $appendReservations
      * @param IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
      * @param GetAllowedProductTypesForSourceItemsInterface $allowedProductTypesForSourceItems
-     * @param GetProductTypesBySkus $getProductTypesBySkus
+     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
@@ -74,7 +74,7 @@ class ProcessRegisterProductsSalePlugin
         AppendReservationsInterface $appendReservations,
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
         GetAllowedProductTypesForSourceItemsInterface $allowedProductTypesForSourceItems,
-        GetProductTypesBySkus $getProductTypesBySkus
+        GetProductTypesBySkusInterface $getProductTypesBySkus
 
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
@@ -103,7 +103,6 @@ class ProcessRegisterProductsSalePlugin
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
         list($items, $productSkus) = $this->excludeUnsupportedTypes($items, $productSkus);
         if (null === $websiteId) {
-            //TODO: Do we need to throw exception?
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
@@ -137,7 +136,7 @@ class ProcessRegisterProductsSalePlugin
         foreach ($productSkus as $productId => $sku) {
             $qty = (float)$items[$productId];
             $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable();
-            if (!$isSalable) {
+            if (false === $isSalable) {
                 throw new LocalizedException(
                     __('Not all of your products are available in the requested quantity.')
                 );
