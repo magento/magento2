@@ -20,7 +20,7 @@ foreach ($websiteCodes as $websiteCode) {
     $websiteIds[] = $website->getId();
 }
 
-$skus = ['SKU-1', 'SKU-2', 'SKU-3'];
+$skus = ['SKU-1', 'SKU-2', 'SKU-3', 'SKU-4'];
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 foreach ($skus as $sku) {
