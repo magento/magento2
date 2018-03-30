@@ -90,6 +90,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logout"/>

@@ -37,6 +37,8 @@
                 comment="Name of the related message queue topic"/>
         <column xsi:type="blob" name="serialized_data" nullable="true"
                 comment="Data (serialized) required to perform an operation"/>
+        <column xsi:type="blob" name="result_serialized_data" nullable="true"
+                comment="Result data (serialized) after perform an operation"/>
         <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="true" identity="false"
                 default="0" comment="Operation status (OPEN | COMPLETE | RETRIABLY_FAILED | NOT_RETRIABLY_FAILED)"/>
         <column xsi:type="smallint" name="error_code" padding="6" unsigned="false" nullable="true" identity="false"
