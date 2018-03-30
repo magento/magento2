@@ -75,7 +75,6 @@ class ProcessRegisterProductsSalePlugin
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
         GetAllowedProductTypesForSourceItemsInterface $allowedProductTypesForSourceItems,
         GetProductTypesBySkusInterface $getProductTypesBySkus
-
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
@@ -150,6 +149,7 @@ class ProcessRegisterProductsSalePlugin
      * @param array $items
      * @param array $productSkus
      * @return array
+     * @throws \Magento\Framework\Exception\InputException
      */
     private function excludeUnsupportedTypes(array $items, array $productSkus): array
     {
