@@ -6,16 +6,12 @@
 -->
 <div class="admin__field"
      visible="visible"
-     attr="'data-index': index">
-    <label class="admin__field-label" if="$data.label" visible="$data.labelVisible" attr="for: uid">
-        <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
-    </label>
-    <div class="admin__field-control"
-         css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault">
-
-        <input type="hidden" id="colorPicker-spectrum" colorPicker="colorPickerConfig" ko-value="value" style="display: none"/>
-        <input type="text" id="colorPicker-input" ko-value="value" data-bind="event: { focus: showColorPicker, mouseout: setInputValue }"/>
-
-        <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
-    </div>
+     css="$data.additionalClasses">
+    <input type="hidden" class="colorpicker-spectrum" data-bind="
+        colorPicker: colorPickerConfig,
+        " style="display: none"/>
+    <input type="text" class="colorpicker-input" data-bind="
+        value: value,
+        hasFocus: focused,
+        " style="vertical-align: middle"/>
 </div>

@@ -967,8 +967,11 @@ define([
         ],
         'validate-color': [
             function (value) {
-                if (value === 'No Color')
-                return tinycolor(value).isValid();
+                if (value === '') {
+                    return true;
+                } else {
+                    return tinycolor(value).isValid();
+                }
             },
             $.mage.__('Wrong color format.')
         ],

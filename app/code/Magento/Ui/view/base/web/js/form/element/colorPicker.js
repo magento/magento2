@@ -38,47 +38,15 @@ define([
             }
         },
 
-        initConfig: function (config) {
-            this._super();
-
-            this.constructor.defaults.colorPickerConfig = Object.assign(this.constructor.defaults.colorPickerConfig, config.colorPickerConfig);
-            return this;
-        },
-
-        /**
-         * Initializes observable properties of instance
-         *
-         * @returns {Abstract} Chainable.
-         */
-        initObservable: function () {
-            this._super()
-                .observe('componentTemplate');
-            return this;
-        },
-
         /**
          * Invokes initialize method of parent class,
          * contains initialization logic
          */
         initialize: function () {
             this._super();
-
+            this.colorPickerConfig.value = this.value;
             return this;
-        },
-
-        showColorPicker: function () {
-            jQuery('#colorPicker-spectrum').spectrum("show");
-        },
-
-        setInputValue: function() {
-            var inputValue = jQuery('#colorPicker-input').val(),
-                inputColor = tinycolor(inputValue);
-
-            if (inputColor.isValid()) {
-                jQuery('#colorPicker-spectrum').spectrum("set", inputValue);
-            }
         }
-
     });
 });
  

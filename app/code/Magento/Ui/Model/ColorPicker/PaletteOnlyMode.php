@@ -22,7 +22,6 @@ class PaletteOnlyMode implements ModeInterface
     {
         return [
             'showInput' => false,
-            'allowEmpty' => false,
             'showInitial' => false,
             'showPalette' => true,
             'showAlpha' => false,

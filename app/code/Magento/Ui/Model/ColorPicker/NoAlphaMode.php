@@ -22,7 +22,6 @@ class NoAlphaMode implements ModeInterface
     {
         return [
             'showInput' => true,
-            'allowEmpty' => false,
             'showInitial' => false,
             'showPalette' => true,
             'showAlpha' => false,

@@ -22,7 +22,6 @@ class SimpleMode implements ModeInterface
     {
         return [
             'showInput' => false,
-            'allowEmpty' => false,
             'showInitial' => false,
             'showPalette' => false,
             'showAlpha' => false,
