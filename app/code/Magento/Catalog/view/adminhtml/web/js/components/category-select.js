@@ -12,7 +12,8 @@ define([
 
     return Select.extend({
         defaults: {
-            missingValuePlaceholder: $t('%s with ID: %s doesn\'t exist')
+            missingValuePlaceholder: $t('%s with ID: %s doesn\'t exist'),
+            filterPlaceholder: $t('Category Name')
         },
 
         /**
