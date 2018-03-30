@@ -211,6 +211,8 @@
     <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider">
         <arguments>
             <argument name="range" xsi:type="object">Magento\Catalog\Model\Layer\Filter\Price\Range\Proxy</argument>
+            <!-- @deprecated parameter customerSession has been deprecated and not in used now -->
+            <argument name="customerSession" xsi:type="null"/>
         </arguments>
         <plugin name="categoryIdAggregation" type="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider" />
     </type>
@@ -295,6 +297,16 @@
     <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView">
         <arguments>
             <argument name="name" xsi:type="string">catalog_view_container</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy">
+        <arguments>
+            <!-- @deprecated parameter storeManager has been deprecated and not in used now -->
+            <argument name="storeManager" xsi:type="null"/>
+            <!-- @deprecated parameter resourceConnection has been deprecated and not in used now -->
+            <argument name="resourceConnection" xsi:type="null"/>
+            <!-- @deprecated parameter scopeConfig has been deprecated and not in used now -->
+            <argument name="scopeConfig" xsi:type="null"/>
         </arguments>
     </type>
 </config>

@@ -68,8 +68,7 @@
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="browseClickCategory"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="browseAssertCategory">
             <argument name="category" value="$$createCategory$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.three"/>
+            <argument name="productCount" value="3"/>
         </actionGroup>
         <!-- Check simple product 1 in category -->
         <comment userInput="Check simple product 1 in category" stepKey="commentCheckSimpleProductInCategory" />
@@ -120,8 +119,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForCategoryloaded" />
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory">
             <argument name="category" value="$$createCategory$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.three"/>
+            <argument name="productCount" value="3"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="compareAssertSimpleProduct1">
             <argument name="product" value="$$createSimpleProduct1$$"/>
@@ -147,8 +145,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForCompareCategory1loaded" />
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory1">
             <argument name="category" value="$$createCategory$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.three"/>
+            <argument name="productCount" value="3"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="compareAssertSimpleProduct2">
             <argument name="product" value="$$createSimpleProduct2$$"/>
@@ -196,8 +193,7 @@
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategoryBeforeClear" after="commentClearComparisonSidebar"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory2">
             <argument name="category" value="$$createCategory$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.three"/>
+            <argument name="productCount" value="3"/>
         </actionGroup>
         <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="compareClearCompare"/>
         <comment userInput="End of Comparing Products" stepKey="endOfComparingProducts" />
