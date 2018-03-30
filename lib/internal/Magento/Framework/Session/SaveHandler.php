@@ -6,6 +6,7 @@
 namespace Magento\Framework\Session;
 
 use Magento\Framework\Session\Config\ConfigInterface;
+use \Magento\Framework\Exception\SessionException;
 
 /**
  * Magento session save handler
@@ -41,7 +42,7 @@ class SaveHandler implements SaveHandlerInterface
 
         try {
             $this->saveHandlerAdapter = $saveHandlerFactory->create($saveMethod);
-        } catch (\LogicException $e) {
+        } catch (SessionException $e) {
             $this->saveHandlerAdapter = $saveHandlerFactory->create($default);
         }
     }
