@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\GraphQl;
 
-use Magento\Framework\GraphQl\Type\Definition\InputObjectType;
-use Magento\Framework\GraphQl\Type\Definition\ObjectType;
-use Magento\Framework\GraphQl\Type\Definition\StringType;
-use Magento\Framework\GraphQl\Type\SchemaFactory;
+use Magento\Framework\GraphQl\Schema\Type\InputObjectType;
+use Magento\Framework\GraphQl\Schema\Type\ObjectType;
+use Magento\Framework\GraphQl\Schema\Type\StringType;
+use Magento\Framework\GraphQl\SchemaFactory;
 use Magento\Framework\ObjectManagerInterface;
 use \GraphQL\Type\Definition\Type;
 

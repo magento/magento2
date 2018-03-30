@@ -9,16 +9,16 @@ namespace Magento\DownloadableGraphQl\Model\Resolver\Product;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Catalog\Model\Product;
-use Magento\Downloadable\Model\Product\Type as Downloadable;
-use Magento\Framework\Data\Collection;
-use Magento\Framework\GraphQl\Config\Data\Field;
-use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
-use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;
+use Magento\Downloadable\Model\Product\Type as Downloadable;
 use Magento\Downloadable\Model\ResourceModel\Link\Collection as LinkCollection;
-use Magento\Framework\GraphQl\Resolver\ResolverInterface;
-use Magento\Framework\GraphQl\Resolver\Value;
-use Magento\Framework\GraphQl\Resolver\ValueFactory;
+use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\EnumLookup;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
  * Format for downloadable product types

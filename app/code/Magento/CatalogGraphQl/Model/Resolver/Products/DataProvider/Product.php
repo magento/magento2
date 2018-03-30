@@ -86,33 +86,38 @@ class Product
      */
     public function getList(SearchCriteriaInterface $searchCriteria, array $attributes = []) : SearchResultsInterface
     {
-        if (!$this->searchResult) {
-            /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
-            $collection = $this->collectionFactory->create();
-            $this->joinProcessor->process($collection);
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+        $collection = $this->collectionFactory->create();
+        $this->joinProcessor->process($collection);
 
-            $collection->addAttributeToSelect('*');
-            $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
-            $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
-
-            $this->collectionProcessor->process($searchCriteria, $collection);
-
-            $collection->load();
-
-            $collection->addCategoryIds();
-            $collection->addFinalPrice();
-            $collection->addMediaGalleryData();
-            $collection->addMinimalPrice();
-            $collection->addPriceData();
-            $collection->addWebsiteNamesToResult();
-            $collection->addOptionsToResult();
-            $collection->addTaxPercents();
-            $collection->addWebsiteNamesToResult();
-            $this->searchResult = $this->searchResultsFactory->create();
-            $this->searchResult->setSearchCriteria($searchCriteria);
-            $this->searchResult->setItems($collection->getItems());
-            $this->searchResult->setTotalCount($collection->getSize());
+        foreach ($attributes as $attributeCode) {
+            $collection->addAttributeToSelect($attributeCode);
         }
-        return $this->searchResult;
+        $collection->addMinimalPrice()->addFinalPrice();
+        $collection->addAttributeToSelect('special_price');
+        $collection->addAttributeToSelect('special_price_from');
+        $collection->addAttributeToSelect('special_price_to');
+        $collection->addAttributeToSelect('tax_class_id');
+        $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
+        $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+
+        $this->collectionProcessor->process($searchCriteria, $collection);
+        $collection->addWebsiteNamesToResult();
+        $collection->addTaxPercents();
+        $collection->addWebsiteNamesToResult();
+        $sql = $collection->getSelect()->assemble();
+        $collection->load();
+
+        // Methods that perform extra fetches
+        $collection->addCategoryIds();
+        $collection->addMediaGalleryData();
+        $collection->addOptionsToResult();
+
+        $searchResult = $this->searchResultsFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($collection->getItems());
+        $searchResult->setTotalCount($collection->getSize());
+
+        return $searchResult;
     }
 }

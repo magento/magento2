@@ -198,11 +198,6 @@ QUERY;
                 ? $assertionData['expected_value']
                 : $assertionData;
             $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            if ($responseField == 'id' && $expectedValue == null) {
-                var_dump($expectedValue);
-                var_dump($assertionData);
-                var_dump($assertionMap);
-            }
             $this->assertNotNull(
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"

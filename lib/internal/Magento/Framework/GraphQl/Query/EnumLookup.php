@@ -7,9 +7,9 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Query;
 
-use Magento\Framework\GraphQl\Config\ConfigInterface;
-use Magento\Framework\GraphQl\Type\Enum\DataMapperInterface;
-use Magento\Framework\GraphQl\Config\Data\Enum;
+use Magento\Framework\GraphQl\Config\Element\Enum;
+use Magento\Framework\GraphQl\ConfigInterface;
+use Magento\Framework\GraphQl\Schema\Type\Enum\DataMapperInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -47,7 +47,7 @@ class EnumLookup
      */
     public function getEnumValueFromField(string $enumName, string $fieldValue) : ?string
     {
-        $priceViewEnum = $this->typeConfig->getTypeStructure($enumName);
+        $priceViewEnum = $this->typeConfig->getConfigElement($enumName);
         if ($priceViewEnum instanceof Enum) {
             foreach ($priceViewEnum->getValues() as $enumItem) {
                 $mappedValues = $this->enumDataMapper->getMappedEnums($enumName);

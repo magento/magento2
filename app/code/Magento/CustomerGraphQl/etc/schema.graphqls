@@ -2,10 +2,10 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer")
+    customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer") @doc(description: "The customer query returns information about a customer account")
 }
 
-type Customer {
+type Customer @doc(description: "Customer defines the customer name and address and other details") {
     created_at: String @doc(description: "Timestamp indicating when the account was created")
     group_id: Int @doc(description: "The group assigned to the user. Default values are 0 (Not logged in), 1 (General), 2 (Wholesale), and 3 (Retailer)")
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
@@ -23,7 +23,7 @@ type Customer {
     addresses: [CustomerAddress] @doc(description: "Indicates whether the customer is subscribed to the company's newsletter")
 }
 
-type CustomerAddress {
+type CustomerAddress @doc(description: "CustomerAddress contains detailed information about a customer's billing and shipping addresses"){
     id: Int @doc(description: "The ID assigned to the address object")
     customer_id: Int @doc(description: "The customer ID")
     region: CustomerAddressRegion @doc(description: "An object containing the region name, region code, and region ID")
@@ -45,7 +45,7 @@ type CustomerAddress {
     default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address")
 }
 
-type CustomerAddressRegion {
+type CustomerAddressRegion @doc(description: "CustomerAddressRegion defines the customer's state or province") {
     region_code: String @doc(description: "The address region code")
     region: String @doc(description: "The state or province name")
     region_id: Int @doc(description: "Uniquely identifies the region")

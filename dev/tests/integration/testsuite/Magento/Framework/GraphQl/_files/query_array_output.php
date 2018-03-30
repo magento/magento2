@@ -4,202 +4,275 @@
  * See COPYING.txt for license details.
  */
 return [
-    'Query' =>
+      'Query' =>
         [
-            'name' => 'Query',
-            'type' => 'graphql_type',
-            'fields' =>
-                [
-                    'products' =>
+        'name' => 'Query',
+        'fields' =>
+            [
+                'customAttributeMetadata' =>
+                  [
+                    'name' => 'customAttributeMetadata',
+                    'type' => 'CustomAttributeMetadata',
+                    'arguments' =>
                         [
-                            'name' => 'products',
-                            'type' => 'Products',
-                            'required' => false,
-                            'resolver' => 'Magento\\Framework\\GraphQlPersistence\\Resolver\\Query\\Resolver',
-                            'arguments' =>
+                            'attributes' =>
                                 [
-                                    'search' =>
-                                        [
-                                            'type' => 'String',
-                                            'name' => 'search',
-                                            'description' => 'Text to be used in a full text search. If multiple keywords are specified, each keyword is evaluated separately.',
-                                        ],
+                                    'name' => 'attributes',
+                                    'type' => 'AttributeInput',
+                                    'description' => '',
+                                    'required' => true,
+                                    'isList' => true,
+                                    'itemsRequired' => true,
+                                    'defaultValue' => null
+                                ],
 
-                                    'filter' =>
-                                        [
-                                            'type' => 'ProductFilterInput',
-                                            'name' => 'filter',
-                                        'description' => 'Defines which search criteria to use to find the desired results. Each filter defines the field or fields to be searched, the condition type, and the search value.',
-                                    ],
-
-                                   'pageSize' =>
-                                    [
-                                        'type' => 'Int',
-                                        'name' => 'pageSize',
-                                        'description' => 'The maximum number of items to return. If no value is specified, the search returns 20 items.',
-                                    ],
-
-                                  'currentPage' =>
-                                    [
-                                        'type' => 'Int',
-                                        'name' => 'currentPage',
-                                        'description' => 'Specifies which page of results to return. If no value is specified, the first page is returned. If you specify a value that is greater than the number of available pages, an error is returned.',
-                                    ],
-
-                                  'sort' =>
-                                    [
-                                        'type' => 'ProductSortInput',
-                                        'name' => 'sort',
-                                        'description' => 'Specifies which field or fields to use for sorting the results. If you specify more than one field, Magento sorts by the first field listed. Then, if any items have the same value, those items will be sorted by the secondary field. The value for each field can be set to either ASC (ascending) or DESC (descending).',
-                                    ]
-                            ]
-                    ],
-                    'mergedField' =>
+                        ],
+                        'required' => false,
+                        'isList' => false,
+                        'resolver' => 'Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata',
+                        'description' => 'Returns the attribute type, given an attribute code and entity type'
+                  ],
+                  'products' => [
+                    'name' => 'products',
+                    'type' => 'Products',
+                    'arguments' =>
                         [
-                            'name' => 'mergedField',
-                            'type' => 'Int',
-                            'required' => false,
-                            'resolver' => 'testResolverPath',
-                            'description' => 'test field description',
-                            'arguments' =>
+                            'search' =>
                                 [
-                                    'mergedArgument' =>
-                                        [
-                                            'type' => 'String',
-                                            'name' => 'mergedArgument',
-                                            'description' => 'test argument description',
-                                        ]
+                                    'name' => 'search',
+                                    'type' => 'String',
+                                    'description' => '',
+                                    'required' => false,
+                                    'isList' => false,
+                                    'itemsRequired' => false,
+                                    'defaultValue' => null
+                                ],
+
+                                'filter' =>
+                                [
+                                    'name' => 'filter',
+                                    'type' => 'ProductFilterInput',
+                                    'description' => '',
+                                    'required' => false,
+                                    'isList' => false,
+                                    'itemsRequired' => false,
+                                    'defaultValue' => null
+                                ],
+
+                                'pageSize' =>
+                                [
+                                    'name' => 'pageSize',
+                                    'type' => 'Int',
+                                    'description' => 'number of records to display',
+                                    'required' => false,
+                                    'isList' => false,
+                                    'itemsRequired' => false,
+                                    'defaultValue' => 10
+                                ],
+
+                                'currentPage' =>
+                                [
+                                    'name' => 'currentPage',
+                                    'type' => 'Int',
+                                    'description' => '',
+                                    'required' => false,
+                                    'isList' => false,
+                                    'itemsRequired' => false,
+                                    'defaultValue' => 1
+                                ],
+                                'sort' =>
+                                [
+                                    'name' => 'sort',
+                                    'type' => 'ProductSortInput',
+                                    'description' => '',
+                                    'required' => false,
+                                    'isList' => false,
+                                    'itemsRequired' => false,
+                                    'defaultValue' => null
                                 ]
-                        ]
-            ]
-    ],
-    'PriceAdjustmentDescriptionEnum' =>
-        [
-            'name' => 'PriceAdjustmentDescriptionEnum',
-            'type' => 'graphql_enum',
-            'items' =>
-                [
-                    'INCLUDED' =>
-                        [
-                            'name' => 'included',
-                            '_value' => 'INCLUDED',
                         ],
-                    'EXCLUDED' =>
-                        [
-                            'name' => 'excluded',
-                            '_value' => 'EXCLUDED',
-                        ],
-                    'MERGEDITEM' =>
-                        [
-                            'name' => 'mergedItem',
-                            '_value' => 'MERGEDITEM',
-                        ],
-
-                ],
-        ],
-    'PriceTypeEnum' =>
-        [
-            'name' => 'PriceTypeEnum',
-            'type' => 'graphql_enum',
-            'items' =>
-                [
-                    'FIXED' =>
-                        [
-                            'name' => 'fixed',
-                            '_value' => 'FIXED',
-                        ],
-                    'PERCENT' =>
-                        [
-                            'name' => 'percent',
-                            '_value' => 'PERCENT',
-                        ],
-                    'DYNAMIC' =>
-                        [
-                            'name' => 'dynamic',
-                            '_value' => 'DYNAMIC',
-                        ]
+                    'required' => false,
+                    'isList' => false,
+                    'resolver' => 'Magento\\CatalogGraphQl\\Model\\Resolver\\Products',
+                    'description' => 'comment for products fields'
                 ]
-        ],
-    'ProductLinks' =>
-        [
-            'name' => 'ProductLinks',
-            'type' => 'graphql_type',
-            'implements' =>
-                [
-                    'ProductLinksInterface' =>
-                        [
-                            'interface' => 'ProductLinksInterface',
-                            'copyFields' => 'true',
-                        ],
-
-                     'MergedInterface' =>
-                         [
-                                'interface' => 'MergedInterface',
-                                'copyFields' => 'true',
-                            ],
-                ],
-            'fields' =>
-                [
-                    'sku' =>
-                        [
-                            'name' => 'sku',
-                            'type' => 'String',
-                            'required' => false,
-                            'description' => 'The identifier of the linked product',
-                            'arguments' =>
-                                [
-                                ],
-                        ],
-                    'link_type' =>
-                        [
-                            'name' => 'link_type',
-                            'type' => 'String',
-                            'required' => false,
-                            'description' => 'One of \'related\', \'associated\', \'upsell\', or \'crosssell\'.',
-                            'arguments' =>
-                                [
-                                ],
-                        ],
-                    'linked_product_sku' =>
-                        [
-                            'name' => 'linked_product_sku',
-                            'type' => 'String',
-                            'required' => false,
-                            'description' => 'The SKU of the linked product',
-                            'arguments' =>
-                                [
-                                ],
-                        ],
-                    'linked_product_type' =>
-                        [
-                            'name' => 'linked_product_type',
-                            'type' => 'String',
-                            'required' => false,
-                            'description' => 'The type of linked product (\'simple\', \'virtual\', \'bundle\', \'downloadable\',\'grouped\', \'configurable\')',
-                            'arguments' =>
-                                [
-                                ],
-                        ],
-                    'position' =>
-                        [
-                            'name' => 'position',
-                            'type' => 'Int',
-                            'required' => false,
-                            'description' => 'The position within the list of product links',
-                            'arguments' =>
-                                [
-                                ],
-                        ],
-                    'mergedFieldN' =>
-                        [
-                            'name' => 'mergedFieldN',
-                            'type' => 'String',
-                            'required' => false,
-                            'description' => 'The identifier of the linked merged product',
-                            'arguments' =>
-                                [
-                                ],
-                        ],
-                ],
         ]
+    ],
+        'PriceAdjustmentDescriptionEnum' =>
+          [
+              'name' => 'PriceAdjustmentDescriptionEnum',
+              'values' =>
+                  [
+                      'INCLUDED' =>
+                          [
+                              'name' => 'included',
+                              'value' => 'INCLUDED',
+                              'description' => 'price is included'
+                          ],
+                      'EXCLUDED' =>
+                          [
+                              'name' => 'excluded',
+                              'value' => 'EXCLUDED',
+                              'description' => 'price is excluded'
+                          ]
+                  ],
+              'description' => 'Description for enumType PriceAdjustmentDescriptionEnum'
+          ],
+          'ProductLinks' =>
+          [
+              'name' => 'ProductLinks',
+              'fields' =>
+                  [
+                      'sku' =>
+                          [
+                              'name' => 'sku',
+                              'type' => 'String',
+
+                              'arguments' =>
+                                  [
+                                  ],
+                                  'required' => false,
+                                  'isList'  => false,
+                                  'resolver' => '',
+                                  'description' => 'The identifier of the linked product',
+
+                          ],
+                          'link_type' =>
+                          [
+                              'name' => 'link_type',
+                              'type' => 'String',
+                              'arguments' =>
+                                  [
+                                  ],
+                                  'required' => false,
+                                  'isList'  => false,
+                                  'resolver' => '',
+                                  'description' => '',
+
+                          ],
+                          'linked_product_sku' =>
+                          [
+                              'name' => 'linked_product_sku',
+                              'type' => 'String',
+                              'arguments' =>
+                                  [
+                                  ],
+                                  'required' => false,
+                                  'isList'  => false,
+                                  'resolver' => '',
+                                  'description' => 'The SKU of the linked product',
+
+                          ],
+                          'linked_product_type' =>
+                          [
+                              'name' => 'linked_product_type',
+                              'type' => 'String',
+                              'arguments' =>
+                                  [
+                                  ],
+                                  'required' => false,
+                                  'isList'  => false,
+                                  'resolver' => '',
+                                  'description' => '',
+
+                          ],
+                          'position' =>
+                          [
+                              'name' => 'position',
+                              'type' => 'Int',
+                              'arguments' =>
+                                  [
+                                  ],
+                                  'required' => false,
+                                  'isList'  => false,
+                                  'resolver' => '',
+                                  'description' => 'The position within the list of product links',
+
+                          ]
+                  ],
+              'interfaces' =>
+                  [
+                      'ProductLinksInterface' =>
+                          [
+                              'interface' => 'ProductLinksInterface',
+                              'copyFields' => true,
+                          ],
+                  ],
+                  'description' => 'ProductLinks is an implementation of ProductLinksInterface.'
+          ],
+          'ProductLinksInterface' =>
+         [
+          'name' => 'ProductLinksInterface',
+          'fields' =>
+              [
+                  'sku' =>
+                      [
+                          'name' => 'sku',
+                          'type' => 'String',
+
+                          'arguments' =>
+                              [
+                              ],
+                          'required' => false,
+                          'isList'  => false,
+                          'resolver' => '',
+                          'description' => 'The identifier of the linked product',
+
+                      ],
+                  'link_type' =>
+                      [
+                          'name' => 'link_type',
+                          'type' => 'String',
+                          'arguments' =>
+                              [
+                              ],
+                          'required' => false,
+                          'isList'  => false,
+                          'resolver' => '',
+                          'description' => '',
+
+                      ],
+                  'linked_product_sku' =>
+                      [
+                          'name' => 'linked_product_sku',
+                          'type' => 'String',
+                          'arguments' =>
+                              [
+                              ],
+                          'required' => false,
+                          'isList'  => false,
+                          'resolver' => '',
+                          'description' => 'The SKU of the linked product',
+
+                      ],
+                  'linked_product_type' =>
+                      [
+                          'name' => 'linked_product_type',
+                          'type' => 'String',
+                          'arguments' =>
+                              [
+                              ],
+                          'required' => false,
+                          'isList'  => false,
+                          'resolver' => '',
+                          'description' => '',
+
+                      ],
+                  'position' =>
+                      [
+                          'name' => 'position',
+                          'type' => 'Int',
+                          'arguments' =>
+                              [
+                              ],
+                          'required' => false,
+                          'isList'  => false,
+                          'resolver' => '',
+                          'description' => 'The position within the list of product links',
+
+                      ]
+              ],
+              'typeResolver' =>'Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite',
+              'description' => 'description for ProductLinksInterface'
+      ]
 ];

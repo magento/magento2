@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace Magento\BundleGraphQl\Model\Resolver\Product\Fields;
 
 use GraphQL\Type\Definition\ResolveInfo;
-use Magento\Framework\GraphQl\Config\Data\Field;
-use Magento\Framework\GraphQl\Resolver\ResolverInterface;
-use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Bundle\Model\Product\Type as Bundle;
-use Magento\Framework\GraphQl\Resolver\Value;
-use Magento\Framework\GraphQl\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\EnumLookup;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
  * {@inheritdoc}
@@ -52,7 +52,7 @@ class ShipBundleItems implements ResolverInterface
         ResolveInfo $info
     ): ?Value {
         if ($value['type_id'] === Bundle::TYPE_CODE) {
-            $result = isset($value['price_view'])
+            $result = isset($value['shipment_type'])
                 ? $this->enumLookup->getEnumValueFromField('ShipBundleItemsEnum', $value['shipment_type']) : null;
             return $this->valueFactory->create(
                 function () use ($result) {

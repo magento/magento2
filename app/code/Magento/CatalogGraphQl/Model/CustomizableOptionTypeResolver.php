@@ -7,8 +7,8 @@ declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model;
 
-use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
-use Magento\Framework\GraphQl\Type\Entity\MapperInterface;
+use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\Entity\MapperInterface;
 
 /**
  * Resolve the CustomizableOptionType for graphql schema

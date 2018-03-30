@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\BundleGraphQl\Model\Resolver\Options;
 
 use GraphQL\Type\Definition\ResolveInfo;
-use Magento\Framework\GraphQl\Config\Data\Field;
-use Magento\Framework\GraphQl\Resolver\ResolverInterface;
-use Magento\Framework\GraphQl\Resolver\Value;
-use Magento\Framework\GraphQl\Resolver\ValueFactory;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
  * Class Label
@@ -55,6 +55,7 @@ class Label implements ResolverInterface
         }
 
         $this->product->addProductSku($value['sku']);
+        $this->product->addEavAttributes(['name']);
 
         $result = function () use ($value) {
             $productData = $this->product->getProductBySku($value['sku']);

@@ -8,15 +8,15 @@ declare(strict_types = 1);
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use GraphQL\Type\Definition\ResolveInfo;
+use Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\GraphQl\Config\Data\Field;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\GraphQl\Resolver\ResolverInterface;
-use Magento\Framework\GraphQl\Resolver\Value;
-use Magento\Framework\GraphQl\Resolver\ValueFactory;
-use Magento\GraphQl\Model\ResolverContextInterface;
-use Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataProvider;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
  * Customers field resolver, used for GraphQL request processing.
@@ -55,7 +55,7 @@ class Customer implements ResolverInterface
         $context,
         ResolveInfo $info
     ) : ?Value {
-        /** @var ResolverContextInterface $context */
+        /** @var ContextInterface $context */
         if ((!$context->getUserId()) || $context->getUserType() == 4) {
             throw new GraphQlAuthorizationException(
                 __(

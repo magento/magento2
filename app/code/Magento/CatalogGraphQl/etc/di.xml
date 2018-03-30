@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\GraphQl\Argument\AstConverterInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\AstConverter" />
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\Argument\AstConverterInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\AstConverter" />
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
@@ -20,11 +20,19 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Framework\GraphQlSchemaStiching\Reader" type="Magento\Framework\GraphQlSchemaStiching\Common\Reader">
+    <virtualType name="Magento\Framework\GraphQlSchemaStitching\Reader" type="Magento\Framework\GraphQlSchemaStitching\Common\Reader">
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="productDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\AttributeReader</item>
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\GraphQl\Query\FieldTranslator">
+        <arguments>
+            <argument name="translationMap" xsi:type="array">
+                <item name="new_from_date" xsi:type="string">news_from_date</item>
+                <item name="new_to_date" xsi:type="string">news_to_date</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -12,7 +12,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class IntrospectionQueryTest extends GraphQlAbstract
 {
     /**
-     *
+     * Tests that Introspection is disabled when not in developer mode
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testIntrospectionQueryWithFieldArgs()
@@ -54,13 +54,11 @@ fragment InputValue on __InputValue {
 }
 QUERY;
 
-        $response = $this->graphQlQuery($query);
-        $schemaResponseFields = $response['__schema']['types'][0]['fields'];
-        $expectedOutputArray = require __DIR__ . '/_files/query_introspection.php';
-        foreach($expectedOutputArray as $searchTerm){
-            $this->assertTrue((in_array($searchTerm, $schemaResponseFields)), 'Missing field array in the schema response');
-        }
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: GraphQL introspection is not allowed, but ' .
+            'the query contained __schema or __type'
+         );
+        $this->graphQlQuery($query);
     }
 }
-
-

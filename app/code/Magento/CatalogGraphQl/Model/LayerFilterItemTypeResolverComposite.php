@@ -7,7 +7,7 @@ declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model;
 
-use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
+use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
@@ -44,7 +44,7 @@ class LayerFilterItemTypeResolverComposite implements TypeResolverInterface
         }
         if (empty($resolvedType)) {
             throw new GraphQlInputException(
-                __('Concrete type for %1 not implemented', ['LayerFilterItemInterface'])
+                __('Concrete type for %1 not implemented', ['ProductLinksInterface'])
             );
         }
     }

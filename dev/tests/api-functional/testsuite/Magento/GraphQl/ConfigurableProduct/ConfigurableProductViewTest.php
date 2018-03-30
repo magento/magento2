@@ -315,7 +315,6 @@ QUERY;
             $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
             /** @var \Magento\Catalog\Model\Product $childProduct */
             $childProduct = $productRepository->get($indexValue);
-            var_dump($childProduct->getSku());
 
             /** @var  \Magento\Catalog\Api\Data\ProductLinkInterface[] */
             $links = $childProduct->getExtensionAttributes()->getCategoryLinks();
@@ -443,7 +442,7 @@ QUERY;
     {
         $this->assertNotEmpty(
             $actualResponse['configurable_options'],
-            "Precondition failed: 'configurable_product_options' must not be empty"
+            "Precondition failed: 'configurable_options' must not be empty"
         );
         $configurableAttributeOptions = $this->getConfigurableOptions();
         $configurableAttributeOption = array_shift($configurableAttributeOptions);

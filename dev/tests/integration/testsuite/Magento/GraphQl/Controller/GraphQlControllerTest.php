@@ -9,14 +9,7 @@ namespace Magento\GraphQl\Controller;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\HttpHeaderProcessorInterface;
-use Magento\Framework\GraphQl\HttpRequestProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Webapi\Request;
-use Magento\GraphQl\Controller\GraphQl;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query

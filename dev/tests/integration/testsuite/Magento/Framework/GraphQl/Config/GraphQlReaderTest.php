@@ -1,17 +1,16 @@
 <?php
-
-namespace Magento\Framework\GraphQl\Config;
-
-use Magento\Framework\App\Cache;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\GraphQl\Controller\GraphQl;
-use Magento\GraphQl\Model\SchemaGenerator;
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\GraphQl\Config;
+
+use Magento\Framework\App\Cache;
+use Magento\Framework\GraphQl\Config;
+use Magento\Framework\GraphQl\Schema\SchemaGenerator;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\GraphQl\Controller\GraphQl;
 
 /**
  * Tests the entire process of generating a schema from a given SDL and processing a request/query
@@ -48,11 +47,11 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
         ];
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
         $graphQlReader = $this->objectManager->create(
-            \Magento\Framework\GraphQlSchemaStiching\GraphQlReader::class,
+            \Magento\Framework\GraphQlSchemaStitching\GraphQlReader::class,
             ['fileResolver' => $fileResolverMock]
         );
         $reader = $this->objectManager->create(
-            \Magento\Framework\GraphQlSchemaStiching\Reader::class,
+            \Magento\Framework\GraphQlSchemaStitching\Reader::class,
             ['readers' => ['graphql_reader' => $graphQlReader]]
         );
         $data = $this->objectManager->create(
@@ -60,20 +59,16 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
             ['reader' => $reader]
         );
         $this->configModel = $this->objectManager->create(
-            \Magento\Framework\GraphQl\Config\Config::class,
+            \Magento\Framework\GraphQl\Config::class,
             ['data' => $data]
         );
-        $graphQlSchemaProvider = $this->objectManager->create(
-            \Magento\Framework\GraphQl\SchemaProvider::class,
-            ['config' =>$this->configModel]
+        $outputMapper = $this->objectManager->create(
+            \Magento\Framework\GraphQl\Schema\Type\Output\OutputMapper::class,
+            ['config' => $this->configModel]
         );
-        $typeGenerator = $this->objectManager->create(
-            \Magento\GraphQl\Model\Type\Generator::class,
-            ['schemaProvider' => $graphQlSchemaProvider]
-    );
         $schemaGenerator = $this->objectManager->create(
             SchemaGenerator::class,
-            ['typeGenerator' => $typeGenerator]
+            ['outputMapper' => $outputMapper]
         );
         $this->graphQlController = $this->objectManager->create(
              GraphQl::class,
@@ -183,11 +178,17 @@ QUERY;
         $request->setHeaders($headers);
         $response = $this->graphQlController->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
-        $expectedOutput = require __DIR__ . '/../_files/schema_with_description_sdl.php';
+        $expectedOutput = require __DIR__ . '/../_files/schema_response_sdl_description.php';
+
         $schemaResponseFields = $output['data']['__schema']['types'];
+        $schemaResponseFieldsFirstHalf = array_slice($schemaResponseFields,0,25);
+        $schemaResponseFieldsSecondHalf = array_slice($schemaResponseFields, -21, 21);
+        $mergedSchemaResponseFields = array_merge($schemaResponseFieldsFirstHalf, $schemaResponseFieldsSecondHalf);
+
         foreach ($expectedOutput as $searchTerm) {
+
             $this->assertTrue(
-                (in_array($searchTerm, $schemaResponseFields)),
+                (in_array($searchTerm, $mergedSchemaResponseFields)),
                 'Missing type in the response'
             );
         }
@@ -207,6 +208,14 @@ QUERY;
             ),
             $expectedOutput
         )
+        );
+        $this->assertTrue(array_key_exists(
+            array_search(
+                'Comment for SearchResultPageInfo',
+                array_column($expectedOutput, 'description')
+                ),
+            $expectedOutput
+            )
         );
     }
 }

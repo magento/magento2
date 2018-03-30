@@ -9,10 +9,10 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\GraphQl\Config\Data\Field;
-use Magento\Framework\GraphQl\Resolver\ResolverInterface;
-use Magento\Framework\GraphQl\Resolver\Value;
-use Magento\Framework\GraphQl\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
  * Format a product's media gallery information to conform to GraphQL schema representation

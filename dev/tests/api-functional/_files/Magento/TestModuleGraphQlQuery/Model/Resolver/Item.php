@@ -7,14 +7,14 @@ declare(strict_types = 1);
 
 namespace Magento\TestModuleGraphQlQuery\Model\Resolver;
 
+use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
-use Magento\Framework\GraphQl\Resolver\ResolverInterface;
-use Magento\Framework\GraphQl\Resolver\Value;
-use Magento\Framework\GraphQl\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\TestModuleGraphQlQuery\Api\Data\ItemInterface;
 use Magento\TestModuleGraphQlQuery\Model\Entity\ItemFactory;
-use Magento\Framework\GraphQl\Config\Data\Field;
-use GraphQL\Type\Definition\ResolveInfo;
 
 class Item implements ResolverInterface
 {
