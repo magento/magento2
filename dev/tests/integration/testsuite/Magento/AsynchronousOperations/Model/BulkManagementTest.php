@@ -136,7 +136,7 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
     {
         /** @var MetadataPool $metadataPool */
         $metadataPool = $this->objectManager->get(MetadataPool::class);
-        $operationMetadata = $metadataPool->getMetadata(DetailedOperationObStatusInterface::class);
+        $operationMetadata = $metadataPool->getMetadata(DetailedOperationStatusInterface::class);
         /** @var ResourceConnection $resourceConnection */
         $resourceConnection = $this->objectManager->get(ResourceConnection::class);
         $connection = $resourceConnection->getConnectionByName($operationMetadata->getEntityConnectionName());
