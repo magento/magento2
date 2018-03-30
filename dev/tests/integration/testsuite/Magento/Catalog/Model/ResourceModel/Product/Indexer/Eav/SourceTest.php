@@ -96,6 +96,19 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         $result = $connection->fetchAll($select);
         $this->assertCount(0, $result);
+
+        /** @var \Magento\Catalog\Model\Product $product1 **/
+        $product1 = $productRepository->getById(10);
+        $product1->setStatus(Status::STATUS_ENABLED)->setWebsiteIds([]);
+        $productRepository->save($product1);
+
+        /** @var \Magento\Catalog\Model\Product $product2 **/
+        $product2 = $productRepository->getById(20);
+        $product2->setStatus(Status::STATUS_ENABLED);
+        $productRepository->save($product2);
+
+        $result = $connection->fetchAll($select);
+        $this->assertCount(1, $result);
     }
 
     /**
@@ -127,8 +140,8 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Model\Product $product2 **/
         $product2 = $productRepository->getById($product2Id);
-        $product1->setSpecialFromDate(date('Y-m-d H:i:s'));
-        $product1->setNewsFromDate(date('Y-m-d H:i:s'));
+        $product2->setSpecialFromDate(date('Y-m-d H:i:s'));
+        $product2->setNewsFromDate(date('Y-m-d H:i:s'));
         $productRepository->save($product2);
 
         $this->_eavIndexerProcessor->reindexAll();
@@ -138,6 +151,7 @@ class SourceTest extends \PHPUnit\Framework\TestCase
             ->where('attribute_id = ?', $attr->getId());
 
         $result = $connection->fetchAll($select);
-        $this->assertCount(3, $result);
+        //Product #1 has 1st option selected, #2 has other 3.
+        $this->assertCount(4, $result);
     }
 }

@@ -52,7 +52,7 @@ define([
          * @param {Array} data - current component value
          */
         setPrepareToSendData: function (data) {
-            if (!data.length) {
+            if (_.isUndefined(data) || !data.length) {
                 data = '';
             }
 

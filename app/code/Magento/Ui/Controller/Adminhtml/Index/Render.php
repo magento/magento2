@@ -7,13 +7,56 @@ namespace Magento\Ui\Controller\Adminhtml\Index;
 
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\Controller\Result\JsonFactory;
 
 class Render extends AbstractAction
 {
     /**
-     * Action for AJAX request
+     * @var JsonFactory
+     */
+    private $resultJsonFactory;
+
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @param Context $context
+     * @param UiComponentFactory $factory
+     * @param JsonFactory|null $resultJsonFactory
+     * @param Escaper|null $escaper
+     * @param LoggerInterface|null $logger
+     */
+    public function __construct(
+        Context $context,
+        UiComponentFactory $factory,
+        JsonFactory $resultJsonFactory = null,
+        Escaper $escaper = null,
+        LoggerInterface $logger = null
+    ) {
+        parent::__construct($context, $factory);
+        $this->resultJsonFactory = $resultJsonFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Controller\Result\JsonFactory::class);
+        $this->escaper = $escaper ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Escaper::class);
+        $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Psr\Log\LoggerInterface::class);
+    }
+
+    /**
+     * Action for AJAX request.
      *
-     * @return void
+     * @return void|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -22,15 +65,50 @@ class Render extends AbstractAction
             return;
         }
 
-        $component = $this->factory->create($this->_request->getParam('namespace'));
-        if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
-            $this->prepareComponent($component);
-            $this->_response->appendBody((string) $component->render());
+        try {
+            $component = $this->factory->create($this->_request->getParam('namespace'));
+            if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
+                $this->prepareComponent($component);
+
+                if ($component->getContext()->getAcceptType() === 'json') {
+                    $this->_response->setHeader('Content-Type', 'application/json');
+                }
+
+                $this->_response->appendBody((string) $component->render());
+            }
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->logger->critical($e);
+            $result = [
+                'error' => $this->escaper->escapeHtml($e->getMessage()),
+                'errorcode' => $this->escaper->escapeHtml($e->getCode())
+            ];
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
+            $resultJson->setStatusHeader(
+                \Zend\Http\Response::STATUS_CODE_400,
+                \Zend\Http\AbstractMessage::VERSION_11,
+                'Bad Request'
+            );
+            return $resultJson->setData($result);
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            $result = [
+                'error' => __('UI component could not be rendered because of system exception'),
+                'errorcode' => $this->escaper->escapeHtml($e->getCode())
+            ];
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
+            $resultJson->setStatusHeader(
+                \Zend\Http\Response::STATUS_CODE_400,
+                \Zend\Http\AbstractMessage::VERSION_11,
+                'Bad Request'
+            );
+            return $resultJson->setData($result);
         }
     }
 
     /**
-     * Call prepare method in the component UI
+     * Call prepare method in the component UI.
      *
      * @param UiComponentInterface $component
      * @return void
@@ -45,7 +123,7 @@ class Render extends AbstractAction
     }
 
     /**
-     * Optionally validate ACL resource of components with a DataSource/DataProvider
+     * Optionally validate ACL resource of components with a DataSource/DataProvider.
      *
      * @param mixed $dataProviderConfigData
      * @return bool
@@ -54,7 +132,10 @@ class Render extends AbstractAction
     {
         if (isset($dataProviderConfigData['aclResource'])) {
             if (!$this->_authorization->isAllowed($dataProviderConfigData['aclResource'])) {
-                $this->_redirect('admin/denied');
+                if (!$this->_request->isAjax()) {
+                    $this->_redirect('admin/denied');
+                }
+
                 return false;
             }
         }

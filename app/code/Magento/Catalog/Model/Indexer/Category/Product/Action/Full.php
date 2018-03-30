@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Indexer\Model\ProcessManager;
 
 /**
  * Class Full reindex action
@@ -45,6 +46,16 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private $activeTableSwitcher;
 
     /**
+     * @var ProcessManager
+     */
+    private $processManager;
+
+    /**
+     * @var string[]
+     */
+    private $mainTmpTable;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
@@ -52,9 +63,10 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param \Magento\Framework\Indexer\BatchSizeManagementInterface|null $batchSizeManagement
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
-     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
      * @param int|null $batchRowsCount
      * @param ActiveTableSwitcher|null $activeTableSwitcher
+     * @param ProcessManager $processManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -65,7 +77,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         $batchRowsCount = null,
-        ActiveTableSwitcher $activeTableSwitcher = null
+        ActiveTableSwitcher $activeTableSwitcher = null,
+        ProcessManager $processManager = null
     ) {
         parent::__construct(
             $resource,
@@ -85,6 +98,21 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         );
         $this->batchRowsCount = $batchRowsCount;
         $this->activeTableSwitcher = $activeTableSwitcher ?: $objectManager->get(ActiveTableSwitcher::class);
+        $this->processManager = $processManager ?: $objectManager->get(ProcessManager::class);
+    }
+
+    /**
+     * Clear the table we'll be writing de-normalized data into
+     * to prevent archived data getting in the way of actual data.
+     *
+     * @return void
+     */
+    private function clearCurrentTable()
+    {
+        $this->connection->delete(
+            $this->activeTableSwitcher
+                ->getAdditionalTableName($this->getMainTable())
+        );
     }
 
     /**
@@ -94,15 +122,49 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     public function execute()
     {
+        $this->clearCurrentTable();
         $this->reindex();
         $this->activeTableSwitcher->switchTable($this->connection, [$this->getMainTable()]);
         return $this;
     }
 
     /**
+     * Run reindexation
+     *
+     * @return void
+     */
+    protected function reindex()
+    {
+        $userFunctions = [];
+
+        foreach ($this->storeManager->getStores() as $store) {
+            if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
+                $userFunctions[$store->getId()] = function () use ($store) {
+                    return $this->reindexStore($store);
+                };
+            }
+        }
+
+        $this->processManager->execute($userFunctions);
+    }
+
+    /**
+     * Execute indexation by store
+     *
+     * @param \Magento\Store\Model\Store $store
+     */
+    private function reindexStore($store)
+    {
+        $this->reindexRootCategory($store);
+        $this->reindexAnchorCategories($store);
+        $this->reindexNonAnchorCategories($store);
+    }
+
+    /**
      * Return select for remove unnecessary data
      *
      * @return \Magento\Framework\DB\Select
+     * @deprecated 102.0.1 Not needed anymore.
      */
     protected function getSelectUnnecessaryData()
     {
@@ -127,12 +189,15 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Remove unnecessary data
      *
      * @return void
+     *
+     * @deprecated 102.0.1 Not needed anymore.
      */
     protected function removeUnnecessaryData()
     {
-        $this->connection->query(
-            $this->connection->deleteFromSelect($this->getSelectUnnecessaryData(), $this->getMainTable())
-        );
+        //Called for backwards compatibility.
+        $this->getSelectUnnecessaryData();
+        //This method is useless,
+        //left it here just in case somebody's using it in child classes.
     }
 
     /**
@@ -235,5 +300,22 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $this->publishData();
             $this->removeUnnecessaryData();
         }
+    }
+
+    /**
+     * Create and return temporary index table name for current pid
+     *
+     * @return string
+     */
+    protected function getMainTmpTable()
+    {
+        $pid = getmypid();
+        if (!isset($this->mainTmpTable[$pid])) {
+            $originTableName = $this->connection->getTableName(parent::getMainTmpTable());
+            $temporaryTableName = $originTableName . $pid;
+            $this->connection->createTemporaryTableLike($temporaryTableName, $originTableName, true);
+            $this->mainTmpTable[$pid] = $temporaryTableName;
+        }
+        return $this->mainTmpTable[$pid];
     }
 }

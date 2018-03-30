@@ -29,7 +29,7 @@
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="adminhtml.block.report.product.lowstock.grid.columnSet">
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="name">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.product.lowstock.grid.columnSet.name" as="name">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Product</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
@@ -38,7 +38,7 @@
                             <argument name="column_css_class" xsi:type="string">col-product</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="sku">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.product.lowstock.grid.columnSet.sku" as="sku">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">SKU</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
@@ -47,7 +47,7 @@
                             <argument name="column_css_class" xsi:type="string">col-sku</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="qty">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.product.lowstock.grid.columnSet.qty" as="qty">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Stock Quantity</argument>
                             <argument name="filter" xsi:type="string">Magento\Backend\Block\Widget\Grid\Column\Filter\Range</argument>

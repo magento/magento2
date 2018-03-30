@@ -10,12 +10,12 @@
         <referenceContainer name="left">
             <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tabs" name="attribute_edit_tabs">
                 <container label="Main" name="main">
-                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main" as="base"/>
-                    <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options" as="advanced"/>
-                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced" as="options"/>
+                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main" name="main.base" as="base"/>
+                    <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options" name="main.advanced" as="advanced"/>
+                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced" name="main.options" as="options"/>
                 </container>
-                <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Labels" as="labels"/>
-                <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front" as="front"/>
+                <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Labels" name="attribute_edit_tabs.labels" as="labels"/>
+                <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front" name="attribute_edit_tabs.front" as="front"/>
             </block>
         </referenceContainer>
         <referenceContainer name="content">

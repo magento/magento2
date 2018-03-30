@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
+use Psr\Log\LoggerInterface;
 
 class Cache
 {
@@ -34,18 +35,28 @@ class Cache
     protected $data = [];
 
     /**
+     * Logger.
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ConfigInterface $viewConfig
      * @param ThemeCollection $themeCollection
      * @param ImageHelper $imageHelper
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ConfigInterface $viewConfig,
         ThemeCollection $themeCollection,
-        ImageHelper $imageHelper
+        ImageHelper $imageHelper,
+        LoggerInterface $logger = null
     ) {
         $this->viewConfig = $viewConfig;
         $this->themeCollection = $themeCollection;
         $this->imageHelper = $imageHelper;
+        $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -74,21 +85,37 @@ class Cache
     }
 
     /**
-     * Resize product images and save results to image cache
+     * Resize product images and save results to image cache.
      *
      * @param Product $product
+     *
      * @return $this
+     * @throws \Exception
      */
     public function generate(Product $product)
     {
+        $isException = false;
         $galleryImages = $product->getMediaGalleryImages();
         if ($galleryImages) {
             foreach ($galleryImages as $image) {
                 foreach ($this->getData() as $imageData) {
-                    $this->processImageData($product, $imageData, $image->getFile());
+                    try {
+                        $this->processImageData($product, $imageData, $image->getFile());
+                    } catch (\Exception $e) {
+                        $isException = true;
+                        $this->logger->error($e->getMessage());
+                        $this->logger->error(__('The image could not be resized: ') . $image->getPath());
+                    }
                 }
             }
         }
+
+        if ($isException === true) {
+            throw new \Magento\Framework\Exception\RuntimeException(
+                __('Some images could not be resized. See log file for details.')
+            );
+        }
+
         return $this;
     }
 

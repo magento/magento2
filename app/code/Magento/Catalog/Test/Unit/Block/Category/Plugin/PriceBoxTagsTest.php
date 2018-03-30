@@ -119,8 +119,8 @@ class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
         $this->session->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $rateRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)->getMock();
         $this->taxCalculation->expects($this->once())->method('getRateRequest')->with(
-            new \Magento\Framework\DataObject($billingAddress),
             new \Magento\Framework\DataObject($shippingAddress),
+            new \Magento\Framework\DataObject($billingAddress),
             $customerTaxClassId,
             $scopeId,
             $customerId

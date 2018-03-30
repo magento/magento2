@@ -61,7 +61,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @var string|null
      */
-    private $order = null;
+    private $relevanceOrderDirection = null;
 
     /**
      * @var string
@@ -361,10 +361,26 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             []
         );
 
-        if ($this->order && 'relevance' === $this->order['field']) {
-            $this->getSelect()->order('search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);
+        if ($this->relevanceOrderDirection) {
+            $this->getSelect()->order(
+                'search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->relevanceOrderDirection
+            );
         }
         return parent::_renderFiltersBefore();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _beforeLoad()
+    {
+        /*
+         * This order is required to force search results be the same
+         * for the same requests and products with the same relevance
+         * NOTE: this does not replace existing orders but ADDs one more
+         */
+        $this->setOrder('entity_id');
+        return parent::_beforeLoad();
     }
 
     /**
@@ -385,10 +401,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
-        $this->order = ['field' => $attribute, 'dir' => $dir];
-        if ($attribute !== 'relevance') {
+        if ($attribute === 'relevance') {
+            $this->relevanceOrderDirection = $dir;
+        } else {
             parent::setOrder($attribute, $dir);
         }
+
         return $this;
     }
 

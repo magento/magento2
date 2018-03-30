@@ -9,7 +9,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
@@ -140,7 +140,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Gallery\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var MediaGalleryProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $mediaGalleryProcessor;
 
@@ -235,7 +235,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $storeMock->expects($this->any())->method('getCode')->willReturn(\Magento\Store\Model\Store::ADMIN_CODE);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
-        $this->mediaGalleryProcessor = $this->createMock(\Magento\Catalog\Model\Product\Gallery\Processor::class);
+        $this->mediaGalleryProcessor = $this->createMock(MediaGalleryProcessor::class);
 
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
@@ -610,7 +610,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)
             ->willThrowException(new \Magento\Eav\Model\Entity\Attribute\Exception(__('123')));
-        $this->productMock->expects($this->once())->method('getId')->willReturn(null);
+        $this->productMock->expects($this->exactly(2))->method('getId')->willReturn(null);
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
@@ -634,7 +634,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->initializationHelperMock->expects($this->never())->method('initialize');
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
             ->willReturn(['error1', 'error2']);
-        $this->productMock->expects($this->never())->method('getId');
+        $this->productMock->expects($this->once())->method('getId')->willReturn(null);
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
@@ -1175,66 +1175,46 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                     ]
                 ]
         ];
-
+        $expectedEntriesData = [
+            [
+                'id' => null,
+                'label' => "label_text",
+                'position' => 10,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'content' => [
+                    ImageContentInterface::NAME => 'filename',
+                    ImageContentInterface::TYPE => 'image/jpeg',
+                    ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
+                ],
+                'media_type' => 'media_type',
+            ],
+        ];
         $this->setupProductMocksForSave();
         //media gallery data
-        $this->productData['media_gallery'] = $newEntriesData;
+        $this->productData['media_gallery_entries'] = [
+            [
+                'id' => null,
+                'label' => "label_text",
+                'position' => 10,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'content' => [
+                        ImageContentInterface::NAME => 'filename',
+                        ImageContentInterface::TYPE => 'image/jpeg',
+                        ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
+                ],
+                'media_type' => 'media_type',
+            ]
+        ];
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
 
         $this->initializedProductMock->setData('media_gallery', $newEntriesData);
-        $this->initializedProductMock->expects($this->any())
-            ->method('getMediaAttributes')
-            ->willReturn(["image" => "imageAttribute", "small_image" => "small_image_attribute"]);
-
-        //setup media attribute backend
-        $mediaTmpPath = '/tmp';
-        $absolutePath = '/a/b/filename.jpg';
-
-        $this->mediaGalleryProcessor->expects($this->once())->method('clearMediaAttribute')
-            ->with($this->initializedProductMock, ['image', 'small_image']);
-
-        $mediaConfigMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Media\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mediaConfigMock->expects($this->once())
-            ->method('getTmpMediaShortUrl')
-            ->with($absolutePath)
-            ->willReturn($mediaTmpPath . $absolutePath);
-        $this->initializedProductMock->expects($this->once())
-            ->method('getMediaConfig')
-            ->willReturn($mediaConfigMock);
-
-        //verify new entries
-        $contentDataObject = $this->getMockBuilder(\Magento\Framework\Api\ImageContent::class)
-            ->disableOriginalConstructor()
-            ->setMethods(null)
-            ->getMock();
-        $this->contentFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($contentDataObject);
-
-        $this->imageProcessorMock->expects($this->once())
-            ->method('processImageContent')
-            ->willReturn($absolutePath);
-
-        $imageFileUri = "imageFileUri";
-        $this->mediaGalleryProcessor->expects($this->once())->method('addImage')
-            ->with($this->initializedProductMock, $mediaTmpPath . $absolutePath, ['image', 'small_image'], true, false)
-            ->willReturn($imageFileUri);
-        $this->mediaGalleryProcessor->expects($this->once())->method('updateImage')
-            ->with(
-                $this->initializedProductMock,
-                $imageFileUri,
-                [
-                    'label' => 'label_text',
-                    'position' => 10,
-                    'disabled' => false,
-                    'media_type' => 'media_type',
-                ]
-            );
+        $this->mediaGalleryProcessor->expects($this->once())->method('processMediaGallery')
+            ->with($this->initializedProductMock, $expectedEntriesData);
         $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
         $this->initializedProductMock->expects($this->atLeastOnce())
             ->method('getSku')->willReturn($this->productData['sku']);
@@ -1288,7 +1268,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         //update one entry, delete one entry
         $newEntries = [
             [
-                'value_id' => 5,
+                'id' => 5,
                 "label" => "new_label_text",
                 'file' => 'filename1',
                 'position' => 10,
@@ -1312,48 +1292,24 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
-
-        $expectedResult = [
-            [
-                'value_id' => 5,
-                'value_id' => 5,
-                "label" => "new_label_text",
-                'file' => 'filename1',
-                'position' => 10,
-                'disabled' => false,
-                'types' => ['image', 'small_image'],
-            ],
-            [
-                'value_id' => 6, //will be deleted
-                'file' => 'filename2',
-                'removed' => true,
-            ],
-        ];
-
         $this->setupProductMocksForSave();
         //media gallery data
-        $this->productData['media_gallery']['images'] = $newEntries;
+        $this->productData['media_gallery_entries'] = $newEntries;
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
 
         $this->initializedProductMock->setData('media_gallery', $existingMediaGallery);
-        $this->initializedProductMock->expects($this->any())
-            ->method('getMediaAttributes')
-            ->willReturn(["image" => "filename1", "small_image" => "filename2"]);
 
-        $this->mediaGalleryProcessor->expects($this->once())->method('clearMediaAttribute')
-            ->with($this->initializedProductMock, ['image', 'small_image']);
         $this->mediaGalleryProcessor->expects($this->once())
-            ->method('setMediaAttribute')
-            ->with($this->initializedProductMock, ['image', 'small_image'], 'filename1');
+            ->method('processMediaGallery')
+            ->with($this->initializedProductMock, $newEntries);
         $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
         $this->initializedProductMock->expects($this->atLeastOnce())
             ->method('getSku')->willReturn($this->productData['sku']);
         $this->productMock->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
         $this->productMock->expects($this->any())->method('getMediaGalleryEntries')->willReturn(null);
         $this->model->save($this->productMock);
-        $this->assertEquals($expectedResult, $this->initializedProductMock->getMediaGallery('images'));
     }
 }

@@ -13,8 +13,6 @@ use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Config;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -58,11 +56,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
     private $ccType;
 
     /**
-     * @var StoreManagerInterface|MockObject
-     */
-    private $storeManager;
-
-    /**
      * @var Data|MockObject
      */
     private $paymentDataHelper;
@@ -72,8 +65,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->initCcTypeMock();
         $this->initSessionQuoteMock();
         $this->initGatewayConfigMock();
-        
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+
         $this->paymentDataHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMethodInstance'])
@@ -84,15 +76,13 @@ class FormTest extends \PHPUnit\Framework\TestCase
             'paymentConfig' => $managerHelper->getObject(Config::class),
             'sessionQuote' => $this->sessionQuote,
             'gatewayConfig' => $this->gatewayConfig,
-            'ccType' => $this->ccType,
-            'storeManager' => $this->storeManager
+            'ccType' => $this->ccType
         ]);
 
         $managerHelper->setBackwardCompatibleProperty($this->block, 'paymentDataHelper', $this->paymentDataHelper);
     }
 
     /**
-     * @covers \Magento\Braintree\Block\Form::getCcAvailableTypes
      * @param string $countryId
      * @param array $availableTypes
      * @param array $expected
@@ -100,21 +90,18 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCcAvailableTypes($countryId, array $availableTypes, array $expected)
     {
-        $this->sessionQuote->expects(static::once())
-            ->method('getCountryId')
+        $this->sessionQuote->method('getCountryId')
             ->willReturn($countryId);
 
-        $this->gatewayConfig->expects(static::once())
-            ->method('getAvailableCardTypes')
+        $this->gatewayConfig->method('getAvailableCardTypes')
             ->willReturn(self::$configCardTypes);
 
-        $this->gatewayConfig->expects(static::once())
-            ->method('getCountryAvailableCardTypes')
+        $this->gatewayConfig->method('getCountryAvailableCardTypes')
             ->with($countryId)
             ->willReturn($availableTypes);
 
         $result = $this->block->getCcAvailableTypes();
-        static::assertEquals($expected, array_values($result));
+        self::assertEquals($expected, array_values($result));
     }
 
     /**
@@ -131,33 +118,20 @@ class FormTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @covers \Magento\Braintree\Block\Form::isVaultEnabled
-     */
     public function testIsVaultEnabled()
     {
         $storeId = 1;
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
-        $this->storeManager->expects(static::once())
-            ->method('getStore')
-            ->willReturn($store);
-        
-        $store->expects(static::once())
-            ->method('getId')
-            ->willReturn($storeId);
 
         $vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
-        $this->paymentDataHelper->expects(static::once())
-            ->method('getMethodInstance')
+        $this->paymentDataHelper->method('getMethodInstance')
             ->with(ConfigProvider::CC_VAULT_CODE)
             ->willReturn($vaultPayment);
 
-        $vaultPayment->expects(static::once())
-            ->method('isActive')
-            ->with($storeId)
+        $vaultPayment->method('isActive')
+            ->with(self::equalTo($storeId))
             ->willReturn(true);
 
-        static::assertTrue($this->block->isVaultEnabled());
+        self::assertTrue($this->block->isVaultEnabled());
     }
 
     /**
@@ -170,8 +144,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCcTypeLabelMap'])
             ->getMock();
 
-        $this->ccType->expects(static::any())
-            ->method('getCcTypeLabelMap')
+        $this->ccType->method('getCcTypeLabelMap')
             ->willReturn(self::$baseCardTypes);
     }
 
@@ -182,15 +155,15 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $this->sessionQuote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getBillingAddress', 'getCountryId', '__wakeup'])
+            ->setMethods(['getQuote', 'getBillingAddress', 'getCountryId', 'getStoreId'])
             ->getMock();
 
-        $this->sessionQuote->expects(static::any())
-            ->method('getQuote')
+        $this->sessionQuote->method('getQuote')
             ->willReturnSelf();
-        $this->sessionQuote->expects(static::any())
-            ->method('getBillingAddress')
+        $this->sessionQuote->method('getBillingAddress')
             ->willReturnSelf();
+        $this->sessionQuote->method('getStoreId')
+            ->willReturn(1);
     }
 
     /**

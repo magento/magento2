@@ -27,26 +27,26 @@
                             <item name="generatorClass" xsi:type="string">Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorId</item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="entity_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.entity_id" as="entity_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID</argument>
                             <argument name="index" xsi:type="string">entity_id</argument>
                             <argument name="align" xsi:type="string">right</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="name">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.name" as="name">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Name</argument>
                             <argument name="index" xsi:type="string">name</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="email">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.email" as="email">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Email</argument>
                             <argument name="index" xsi:type="string">email</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="Telephone">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.telephone" as="Telephone">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Phone</argument>
                             <argument name="index" xsi:type="string">billing_telephone</argument>
@@ -54,26 +54,26 @@
                             <argument name="header_css_class" xsi:type="string">col-phone</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="billing_postcode">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.billing_postcode" as="billing_postcode">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ZIP/Post Code</argument>
                             <argument name="index" xsi:type="string">billing_postcode</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="billing_country_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.billing_country_id" as="billing_country_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Country</argument>
                             <argument name="index" xsi:type="string">billing_country_id</argument>
                             <argument name="type" xsi:type="string">country</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="billing_regione">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.billing_regione" as="billing_regione">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">State/Province</argument>
                             <argument name="index" xsi:type="string">billing_regione</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="store_name">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.store_name" as="store_name">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Signed-up Point</argument>
                             <argument name="index" xsi:type="string">store_name</argument>
@@ -81,7 +81,7 @@
                         </arguments>
                     </block>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="website_name">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.website_name" as="website_name">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Website</argument>
                         <argument name="index" xsi:type="string">website_name</argument>

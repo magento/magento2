@@ -1,0 +1,30 @@
+{
+    "name": "magento/magento2-functional-test-module-sample-data",
+    "description": "Magento 2 Functional Test Module Sample Data",
+    "type": "magento2-test-module",
+    "version": "100.0.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "magento/magento2-functional-testing-framework": "1.0.0",
+        "php": "~7.0.13|~7.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\FunctionalTest\\SampleData\\": ""
+        }
+    },
+    "extra": {
+        "map": [
+            [
+                "*",
+                "tests/functional/Magento/FunctionalTest/SampleData"
+            ]
+        ]
+    }
+}

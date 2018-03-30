@@ -30,11 +30,23 @@ class IndexersStatesApplyFixtureTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $cacheInterfaceMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
+        $indexerRegistryMock = $this->createMock(\Magento\Framework\Indexer\IndexerRegistry::class);
+        $indexerMock = $this->getMockForAbstractClass(\Magento\Framework\Indexer\IndexerInterface::class);
+
+        $indexerRegistryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($indexerMock);
+
+        $indexerMock->expects($this->once())
+            ->method('setScheduled');
 
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->willReturn($cacheInterfaceMock);
+        $objectManagerMock->expects($this->once())
+            ->method('create')
+            ->willReturn($indexerRegistryMock);
 
         $this->fixtureModelMock
             ->expects($this->once())
@@ -43,7 +55,6 @@ class IndexersStatesApplyFixtureTest extends \PHPUnit\Framework\TestCase
                 'indexer' => ['id' => 1]
             ]);
         $this->fixtureModelMock
-            ->expects($this->once())
             ->method('getObjectManager')
             ->willReturn($objectManagerMock);
 

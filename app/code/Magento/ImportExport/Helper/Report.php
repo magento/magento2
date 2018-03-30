@@ -7,7 +7,6 @@
 namespace Magento\ImportExport\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Stdlib\DateTime;
 use Magento\ImportExport\Model\Import;
 
 /**
@@ -125,6 +124,20 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function getFilePath($filename)
     {
+        if (preg_match('/\.\.(\\\|\/)/', $filename)) {
+            throw new \InvalidArgumentException('Filename has not permitted symbols in it');
+        }
+
         return $this->varDirectory->getRelativePath(Import::IMPORT_HISTORY_DIR . $filename);
+    }
+
+    /**
+     * Get csv delimiter from request.
+     *
+     * @return string
+     */
+    public function getDelimiter()
+    {
+        return $this->_request->getParam(Import::FIELD_FIELD_SEPARATOR, ',');
     }
 }

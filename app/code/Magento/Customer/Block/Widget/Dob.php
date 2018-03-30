@@ -186,7 +186,8 @@ class Dob extends AbstractWidget
             'max_date' => '-1d',
             'change_month' => 'true',
             'change_year' => 'true',
-            'show_on' => 'both'
+            'show_on' => 'both',
+            'first_day' => $this->getFirstDay()
         ]);
         return $this->dateElement->getHtml();
     }
@@ -208,17 +209,17 @@ class Dob extends AbstractWidget
      */
     public function getHtmlExtraParams()
     {
-        $extraParams = [
-            "'validate-date-au':true"
-        ];
+        $validators = [];
 
         if ($this->isRequired()) {
-            $extraParams[] = 'required:true';
+            $validators['required'] = true;
         }
 
-        $extraParams = implode(', ', $extraParams);
+        $validators['validate-date'] = [
+            'dateFormat' => $this->getDateFormat()
+        ];
 
-        return 'data-validate="{' . $extraParams . '}"';
+        return 'data-validate="' . $this->_escaper->escapeHtml(json_encode($validators)) . '"';
     }
 
     /**
@@ -228,7 +229,7 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        return $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
+        return $this->_localeDate->getDateFormatWithLongYear();
     }
 
     /**
@@ -306,5 +307,18 @@ class Dob extends AbstractWidget
             }
         }
         return null;
+    }
+
+    /**
+     * Return first day of the week
+     *
+     * @return int
+     */
+    public function getFirstDay()
+    {
+        return (int)$this->_scopeConfig->getValue(
+            'general/locale/firstday',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }
