@@ -67,6 +67,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
+    /**
+     * SetUp method
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->entityFactoryMock = $this->getMockBuilder(EntityFactoryInterface::class)

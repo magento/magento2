@@ -7,7 +7,7 @@ namespace Magento\Theme\Model\ResourceModel\Theme\Grid;
 
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Search\AggregationInterface;
+use Magento\Framework\Api\Search\AggregationInterface;
 
 /**
  * Theme grid collection
