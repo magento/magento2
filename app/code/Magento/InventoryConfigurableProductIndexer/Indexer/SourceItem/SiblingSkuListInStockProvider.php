@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem;
 
+use Exception;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
@@ -14,6 +15,8 @@ use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryIndexer\Indexer\SourceItem\SkuListInStock;
 use Magento\InventoryIndexer\Indexer\SourceItem\SkuListInStockFactory;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Returns relations between stock and sku list
@@ -34,22 +37,29 @@ class SiblingSkuListInStockProvider
      * @var int
      */
     private $groupConcatMaxLen;
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
 
     /**
      * GetSkuListInStock constructor.
      *
      * @param ResourceConnection $resourceConnection
      * @param SkuListInStockFactory $skuListInStockFactory
+     * @param MetadataPool $metadataPool
      * @param int $groupConcatMaxLen
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         SkuListInStockFactory $skuListInStockFactory,
+        MetadataPool $metadataPool,
         int $groupConcatMaxLen
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->skuListInStockFactory = $skuListInStockFactory;
         $this->groupConcatMaxLen = $groupConcatMaxLen;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -57,6 +67,7 @@ class SiblingSkuListInStockProvider
      *
      * @param int[] $sourceItemIds
      * @return SkuListInStock[] List of stock id to sku1,sku2 assignment
+     * @throws Exception
      */
     public function execute(array $sourceItemIds): array
     {
@@ -67,6 +78,9 @@ class SiblingSkuListInStockProvider
         $sourceItemTable = $this->resourceConnection->getTableName(
             SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM
         );
+
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
 
         $select = $connection
             ->select()
@@ -90,7 +104,7 @@ class SiblingSkuListInStockProvider
                 []
             )->joinInner(
                 ['parent_link' => $this->resourceConnection->getTableName('catalog_product_super_link')],
-                'parent_link.product_id = child_product_entity.entity_id',
+                'parent_link.product_id = child_product_entity.' . $linkField,
                 []
             )->joinInner(
                 ['sibling_link' => $this->resourceConnection->getTableName('catalog_product_super_link')],
@@ -98,7 +112,7 @@ class SiblingSkuListInStockProvider
                 []
             )->joinInner(
                 ['sibling_product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
-                'sibling_product_entity.entity_id = sibling_link.product_id',
+                'sibling_product_entity.' . $linkField . ' = sibling_link.product_id',
                 []
             )->where('source_item.source_item_id IN (?)', $sourceItemIds)
             ->group(['stock_source_link.' . StockSourceLink::STOCK_ID]);

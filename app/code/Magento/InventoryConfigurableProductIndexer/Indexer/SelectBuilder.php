@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurableProductIndexer\Indexer;
 
+use Exception;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
@@ -62,6 +63,7 @@ class SelectBuilder
      *
      * @param int $stockId
      * @return Select
+     * @throws Exception
      */
     public function execute(int $stockId): Select
     {
