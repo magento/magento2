@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model\ResourceModel\Block\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Search\AggregationInterface;
+use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Cms\Model\ResourceModel\Block\Collection as BlockCollection;
 
 /**
