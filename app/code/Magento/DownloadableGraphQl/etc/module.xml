@@ -9,7 +9,7 @@
     <module name="Magento_DownloadableGraphQl" >
         <sequence>
             <module name="Magento_Catalog"/>
-            <module name="Magento_DownloadableProduct"/>
+            <module name="Magento_Downloadable"/>
         </sequence>
     </module>
 </config>
