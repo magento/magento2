@@ -56,7 +56,6 @@ class GroupedItems implements ResolverInterface
             return null;
         }
 
-        /** @var \Magento\Catalog\Model\Product $productModel */
         $productModel = $value['model'];
         $links = $productModel->getProductLinks();
         foreach ($links as $link) {

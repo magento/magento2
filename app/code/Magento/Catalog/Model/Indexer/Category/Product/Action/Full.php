@@ -88,12 +88,28 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     }
 
     /**
+     *
+     * Clear the table we'll be writing de-normalized data into
+     * to prevent archived data getting in the way of actual data.
+     *
+     * @return void
+     */
+    private function clearCurrentTable()
+    {
+        $this->connection->delete(
+            $this->activeTableSwitcher
+                ->getAdditionalTableName($this->getMainTable())
+        );
+    }
+
+    /**
      * Refresh entities index
      *
      * @return $this
      */
     public function execute()
     {
+        $this->clearCurrentTable();
         $this->reindex();
         $this->activeTableSwitcher->switchTable($this->connection, [$this->getMainTable()]);
         return $this;
@@ -103,6 +119,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Return select for remove unnecessary data
      *
      * @return \Magento\Framework\DB\Select
+     *
+     * @deprecated Not used anymore.
+     * @see clearCurrentTable()
      */
     protected function getSelectUnnecessaryData()
     {
@@ -127,12 +146,14 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Remove unnecessary data
      *
      * @return void
+     *
+     * @deprecated Not used anymore.
+     * @see clearCurrentTable()
      */
     protected function removeUnnecessaryData()
     {
-        $this->connection->query(
-            $this->connection->deleteFromSelect($this->getSelectUnnecessaryData(), $this->getMainTable())
-        );
+        //Called for backward compatibility.
+        $this->getSelectUnnecessaryData();
     }
 
     /**
@@ -233,6 +254,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                 )
             );
             $this->publishData();
+            //Called for backward compatibility.
             $this->removeUnnecessaryData();
         }
     }

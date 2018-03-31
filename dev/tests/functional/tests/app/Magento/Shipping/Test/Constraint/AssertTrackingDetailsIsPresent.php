@@ -63,7 +63,7 @@ class AssertTrackingDetailsIsPresent extends AbstractConstraint
 
         $body = $browser->find($this->mainContainer)->getText();
         foreach ($resultTrackingData as $value) {
-            \PHPUnit_Framework_Assert::assertContains(
+            \PHPUnit\Framework\Assert::assertContains(
                 $value,
                 $body,
                 'The "' . $value . '" is not present in Shipping Tracking popup.'
