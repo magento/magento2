@@ -8,11 +8,10 @@ namespace Magento\GraphQl;
 use Magento\Framework\GraphQl\Schema\Type\InputObjectType;
 use Magento\Framework\GraphQl\Schema\Type\ObjectType;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\GraphQl\SchemaFactory;
 
 class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var SchemaFactory */
+    /** @var \Magento\Framework\GraphQl\SchemaFactory */
     private $schemaFactory;
 
     /** @var  ObjectManagerInterface */
@@ -21,7 +20,7 @@ class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->schemaFactory = $this->objectManager->create(SchemaFactory::class);
+        $this->schemaFactory = $this->objectManager->create(\Magento\Framework\GraphQl\SchemaFactory::class);
     }
 
     public function testIntrospectionQuery()
