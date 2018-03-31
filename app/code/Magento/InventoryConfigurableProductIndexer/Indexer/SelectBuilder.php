@@ -14,6 +14,8 @@ use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 class SelectBuilder
 {
@@ -33,18 +35,26 @@ class SelectBuilder
     private $indexNameResolver;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param IndexNameBuilder $indexNameBuilder
      * @param IndexNameResolverInterface $indexNameResolver
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         IndexNameBuilder $indexNameBuilder,
-        IndexNameResolverInterface $indexNameResolver
+        IndexNameResolverInterface $indexNameResolver,
+        MetadataPool $metadataPool
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->indexNameBuilder = $indexNameBuilder;
         $this->indexNameResolver = $indexNameResolver;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -65,6 +75,9 @@ class SelectBuilder
 
         $indexTableName = $this->indexNameResolver->resolveName($indexName);
 
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
+
         $select = $connection->select()
             ->from(
                 ['stock' => $indexTableName],
@@ -79,11 +92,11 @@ class SelectBuilder
                 []
             )->joinInner(
                 ['parent_link' => $this->resourceConnection->getTableName('catalog_product_super_link')],
-                'parent_link.product_id = product_entity.entity_id',
+                'parent_link.product_id = product_entity.' . $linkField,
                 []
             )->joinInner(
                 ['parent_product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
-                'parent_product_entity.entity_id = parent_link.parent_id',
+                'parent_product_entity.' . $linkField . ' = parent_link.parent_id',
                 []
             )
             ->group(['parent_product_entity.sku']);
