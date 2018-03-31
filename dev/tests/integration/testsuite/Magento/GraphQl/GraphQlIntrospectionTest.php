@@ -8,6 +8,7 @@ namespace Magento\GraphQl;
 use Magento\Framework\GraphQl\Schema\Type\InputObjectType;
 use Magento\Framework\GraphQl\Schema\Type\ObjectType;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\GraphQl\SchemaFactory;
 
 class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
 {
