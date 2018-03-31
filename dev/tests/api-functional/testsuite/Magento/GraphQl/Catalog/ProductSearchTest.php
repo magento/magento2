@@ -619,7 +619,8 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      */
-    public function testProductBasicFullTextSearchQuery(){
+    public function testProductBasicFullTextSearchQuery()
+    {
         $textToSearch = 'Simple';
         $query
             =<<<QUERY
