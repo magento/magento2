@@ -84,7 +84,6 @@ QUERY;
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
         $responseDataObject = new DataObject($response);
-        var_dump($responseDataObject->getData('categories/category_tree/0/children/7/children'));
         //Some sort of smoke testing
         self::assertEquals(
             'Ololo',
