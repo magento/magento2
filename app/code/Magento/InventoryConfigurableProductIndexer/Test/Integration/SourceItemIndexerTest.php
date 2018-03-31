@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
-class ConfigurableProductsIndexerTest extends TestCase
+class SourceItemIndexerTest extends TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -79,15 +79,15 @@ class ConfigurableProductsIndexerTest extends TestCase
 
         // EU-Stock
         $data = $this->getStockItemData->execute('configurable_1', 10);
-        $this->assertEquals(1, $data['is_salable']);
+        $this->assertEquals(1, $data[GetStockItemDataInterface::IS_SALABLE]);
 
         // US-Stock
         $data = $this->getStockItemData->execute('configurable_1', 20);
-        $this->assertEquals(1, $data['is_salable']);
+        $this->assertEquals(1, $data[GetStockItemDataInterface::IS_SALABLE]);
 
         // Global-Stock
         $data = $this->getStockItemData->execute('configurable_1', 30);
-        $this->assertEquals(1, $data['is_salable']);
+        $this->assertEquals(1, $data[GetStockItemDataInterface::IS_SALABLE]);
     }
 
     // @codingStandardsIgnoreStart
@@ -114,15 +114,15 @@ class ConfigurableProductsIndexerTest extends TestCase
 
         // EU-Stock
         $data = $this->getStockItemData->execute('configurable_1', 10);
-        $this->assertEquals(1, $data['is_salable']);
+        $this->assertEquals(1, $data[GetStockItemDataInterface::IS_SALABLE]);
 
         // US-Stock
         $data = $this->getStockItemData->execute('configurable_1', 20);
-        $this->assertEquals(0, $data['is_salable']);
+        $this->assertEquals(0, $data[GetStockItemDataInterface::IS_SALABLE]);
 
         // Global-Stock
         $data = $this->getStockItemData->execute('configurable_1', 30);
-        $this->assertEquals(1, $data['is_salable']);
+        $this->assertEquals(1, $data[GetStockItemDataInterface::IS_SALABLE]);
     }
 
     // @codingStandardsIgnoreStart
@@ -159,15 +159,15 @@ class ConfigurableProductsIndexerTest extends TestCase
 
         // EU-Stock
         $data = $this->getStockItemData->execute('configurable_1', 10);
-        $this->assertEquals(0, $data['is_salable']);
+        $this->assertEquals(0, $data[GetStockItemDataInterface::IS_SALABLE]);
 
         // US-Stock
         $data = $this->getStockItemData->execute('configurable_1', 20);
-        $this->assertEquals(0, $data['is_salable']);
+        $this->assertEquals(0, $data[GetStockItemDataInterface::IS_SALABLE]);
 
         // Global-Stock
         $data = $this->getStockItemData->execute('configurable_1', 30);
-        $this->assertEquals(0, $data['is_salable']);
+        $this->assertEquals(0, $data[GetStockItemDataInterface::IS_SALABLE]);
     }
 
     // @codingStandardsIgnoreStart
@@ -191,15 +191,15 @@ class ConfigurableProductsIndexerTest extends TestCase
 
         // EU-Stock
         $data = $this->getStockItemData->execute('configurable_1', 10);
-        $this->assertEquals(0, $data['is_salable']);
+        $this->assertEquals(0, $data[GetStockItemDataInterface::IS_SALABLE]);
 
         // US-Stock
         $data = $this->getStockItemData->execute('configurable_1', 20);
-        $this->assertEquals(1, $data['is_salable']);
+        $this->assertEquals(1, $data[GetStockItemDataInterface::IS_SALABLE]);
 
         // Global-Stock
         $data = $this->getStockItemData->execute('configurable_1', 30);
-        $this->assertEquals(1, $data['is_salable']);
+        $this->assertEquals(1, $data[GetStockItemDataInterface::IS_SALABLE]);
     }
 
     // @codingStandardsIgnoreStart
@@ -237,15 +237,15 @@ class ConfigurableProductsIndexerTest extends TestCase
 
         // EU-Stock
         $data = $this->getStockItemData->execute('configurable_1', 10);
-        $this->assertEquals(1, $data['is_salable']);
+        $this->assertEquals(1, $data[GetStockItemDataInterface::IS_SALABLE]);
 
         // US-Stock
         $data = $this->getStockItemData->execute('configurable_1', 20);
-        $this->assertEquals(1, $data['is_salable']);
+        $this->assertEquals(1, $data[GetStockItemDataInterface::IS_SALABLE]);
 
         // Global-Stock
         $data = $this->getStockItemData->execute('configurable_1', 30);
-        $this->assertEquals(1, $data['is_salable']);
+        $this->assertEquals(1, $data[GetStockItemDataInterface::IS_SALABLE]);
     }
 
     /**
