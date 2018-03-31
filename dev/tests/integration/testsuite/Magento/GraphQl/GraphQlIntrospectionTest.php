@@ -20,7 +20,7 @@ class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->schemaFactory = $this->objectManager->create(\Magento\Framework\GraphQl\SchemaFactory::class);
+        $this->schemaFactory = $this->objectManager->get(\Magento\Framework\GraphQl\SchemaFactory::class);
     }
 
     public function testIntrospectionQuery()
