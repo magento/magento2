@@ -66,5 +66,4 @@ class Label implements ResolverInterface
 
         return $this->valueFactory->create($result);
     }
-
 }

@@ -131,8 +131,7 @@ class Fields implements FormatterInterface
         TypeInterface $typeConfigElement,
         OutputTypeInterface $outputType,
         Field $field
-    ): array
-    {
+    ): array {
         $type = $this->getFieldType($typeConfigElement, $outputType, $field);
         $fieldConfig = [
             'name' => $field->getName(),

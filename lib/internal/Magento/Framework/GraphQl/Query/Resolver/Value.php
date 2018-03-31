@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Framework\GraphQl\Query\Resolver;
+
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**

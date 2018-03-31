@@ -108,7 +108,11 @@ QUERY;
                    'attributeA' =>['type' => Type::nonNull(Type::string()), 'description' =>'testDescriptionForA'],
                    'attributeB' => ['type' => Type::listOf(Type::string())],
                    'attributeC' => ['type' => Type::string(), 'defaultValue' => null ],
-                   'attributeD' => ['type' => Type::string(), 'defaultValue' => 'test', 'description' =>'testDescriptionForD'],
+                   'attributeD' => [
+                       'type' => Type::string(),
+                       'defaultValue' => 'test',
+                       'description' => 'testDescriptionForD'
+                   ],
 
                ]
             ]
@@ -223,7 +227,7 @@ QUERY;
     }
 
     /**
-     *  @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testIntrospectsIncludeTheDeprecatedParameter()
     {

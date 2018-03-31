@@ -25,4 +25,3 @@ foreach ($collection->addAttributeToFilter('level', ['in' => [2, 3, 4]]) as $cat
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
-

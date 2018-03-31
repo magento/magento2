@@ -22,7 +22,7 @@ return [
                                     'name' => null,
                                 ]
                         ],
-                    'defaultValue' => null,
+                        'defaultValue' => null,
                 ]
             ]
     ],
@@ -44,12 +44,12 @@ return [
                              ]
 
                      ],
-                 'defaultValue' => null,
+                     'defaultValue' => null,
 
              ]
          ]
 
-    ],
+     ],
      [
          'name' => 'urlResolver',
          'args' =>
@@ -67,7 +67,7 @@ return [
                                  'name' => 'String',
                              ]
                      ],
-                 'defaultValue' => null,
+                     'defaultValue' => null,
              ]
          ]
 

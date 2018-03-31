@@ -10,8 +10,10 @@ namespace Magento\Framework\GraphQl\Schema\Type;
 /**
  * Wrapper for GraphQl ListOfType
  */
-class ListOfType extends \GraphQL\Type\Definition\ListOfType
-    implements WrappedTypeInterface, InputTypeInterface, OutputTypeInterface
+class ListOfType extends \GraphQL\Type\Definition\ListOfType implements
+    WrappedTypeInterface,
+    InputTypeInterface,
+    OutputTypeInterface
 {
 
 }

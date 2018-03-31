@@ -24,7 +24,6 @@ class Area implements \Magento\Framework\App\AreaInterface
     const AREA_WEBAPI_SOAP = 'webapi_soap';
     const AREA_GRAPHQL = 'graphql';
 
-
     /**
      * @deprecated
      */

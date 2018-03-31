@@ -20,19 +20,12 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  string */
-    private $mageMode;
-
     const CONTENT_TYPE = 'application/json';
-
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
-
-    /** @var \Magento\Framework\App\Request\Http $request */
-    private $request;
 
     /**
      * @var GraphQl $graphql
@@ -93,7 +86,6 @@ QUERY;
         $this->assertEquals($output['data']['products']['items'][0]['name'], $product->getName());
     }
 
-
     public function testOutputErrorsWithMessageCategoryAndTrace()
     {
         $query
@@ -114,7 +106,6 @@ QUERY;
     }  
   }
 QUERY;
-
 
         $postData = [
             'query'         => $query,
@@ -141,8 +132,9 @@ QUERY;
                         $this->assertEquals($error['message'], 'Invalid entity_type specified: invalid');
                     }
                     if (isset($error['trace'])) {
-                        if (is_array($error['trace']))
-                        $this->assertNotEmpty($error['trace']);
+                        if (is_array($error['trace'])) {
+                            $this->assertNotEmpty($error['trace']);
+                        }
                     }
                 }
             }

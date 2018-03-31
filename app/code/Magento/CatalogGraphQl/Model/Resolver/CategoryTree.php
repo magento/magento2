@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
@@ -71,9 +72,7 @@ class CategoryTree implements ResolverInterface
      */
     public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?Value
     {
-        $that = $this;
-
-        return $this->valueFactory->create(function () use ($value, $args, $that, $field, $info) {
+        return $this->valueFactory->create(function () use ($value, $args, $field, $info) {
             if (isset($value[$field->getName()])) {
                 return $value[$field->getName()];
             }

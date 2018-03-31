@@ -201,7 +201,6 @@ class GraphQlReader implements ReaderInterface
             $allMatchesForImplements
         );
 
-
         if (!empty($allMatchesForImplements)) {
             foreach (array_unique($allMatchesForImplements[0]) as $implementsString) {
                 $implementsStatementString = preg_replace(
@@ -224,7 +223,6 @@ class GraphQlReader implements ReaderInterface
                     $annotationString .= ']) ';
                     $graphQlSchemaContent = str_replace($implementsString, $annotationString, $graphQlSchemaContent);
                 }
-
             }
         }
 

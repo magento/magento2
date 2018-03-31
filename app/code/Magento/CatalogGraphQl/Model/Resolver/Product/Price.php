@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
@@ -101,7 +101,7 @@ class Price implements ResolverInterface
      * @param AmountInterface $amount
      * @return array
      */
-    private function createAdjustmentsArray(array $adjustments, AmountInterface $amount)
+    private function createAdjustmentsArray(array $adjustments, AmountInterface $amount) : array
     {
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->storeManager->getStore();

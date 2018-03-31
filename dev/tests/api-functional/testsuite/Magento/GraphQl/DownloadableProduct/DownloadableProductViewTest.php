@@ -106,6 +106,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testDownloadableProductQueryWithNoSample()
     {

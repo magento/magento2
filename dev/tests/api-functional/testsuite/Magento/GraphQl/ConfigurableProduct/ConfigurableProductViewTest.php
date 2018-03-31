@@ -287,6 +287,7 @@ QUERY;
      *
      * @param $actualResponse
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function assertConfigurableVariants($actualResponse)
     {

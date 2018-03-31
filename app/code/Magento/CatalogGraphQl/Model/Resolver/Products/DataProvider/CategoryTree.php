@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
@@ -155,7 +155,7 @@ class CategoryTree
      * @param FieldNode $fieldNode
      * @return void
      */
-    private function joinAttributesRecursively(Collection $collection, FieldNode $fieldNode)
+    private function joinAttributesRecursively(Collection $collection, FieldNode $fieldNode) : void
     {
         if (!isset($fieldNode->selectionSet->selections)) {
             return;

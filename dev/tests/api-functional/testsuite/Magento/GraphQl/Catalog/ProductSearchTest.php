@@ -570,9 +570,10 @@ QUERY;
     }
 
     /**
-    * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
-    */
-    public function testProductQueryUsingFromAndToFilterInput(){
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
+     */
+    public function testProductQueryUsingFromAndToFilterInput()
+    {
         $query
             = <<<QUERY
 {
@@ -618,7 +619,8 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      */
-    public function testProductsThatMatchWithPricesFromList(){
+    public function testProductsThatMatchWithPricesFromList()
+    {
         $query
             =<<<QUERY
             {
@@ -881,8 +883,6 @@ QUERY;
             );
         }
     }
-
-
 
     private function assertProductItemsWithMaximalAndMinimalPriceCheck(array $filteredProducts, array $actualResponse)
     {
