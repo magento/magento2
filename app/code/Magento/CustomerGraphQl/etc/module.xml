@@ -10,7 +10,6 @@
         <sequence>
             <module name="Magento_Customer"/>
             <module name="Magento_Authorization"/>
-            <module name="Magento_GraphQl"/>
         </sequence>
     </module>
 </config>
