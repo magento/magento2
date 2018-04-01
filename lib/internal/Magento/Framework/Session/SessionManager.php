@@ -208,6 +208,8 @@ class SessionManager implements SessionManagerInterface
      * Start session.
      *
      * @throws \Magento\Framework\Exception\SessionException
+     *
+     * @return void
      */
     private function sessionStart()
     {
@@ -544,6 +546,8 @@ class SessionManager implements SessionManagerInterface
 
     /**
      * Regenerate session id, with saving relation between two sessions.
+     *
+     * @return void
      */
     protected function regenerateSessionId()
     {
@@ -562,7 +566,9 @@ class SessionManager implements SessionManagerInterface
     /**
      * Restart the session with new ID.
      *
-     * @param $sid
+     * @param string $sid
+     *
+     * @return void
      */
     protected function restartSession($sid)
     {

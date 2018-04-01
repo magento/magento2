@@ -84,7 +84,7 @@
                 <use_http_x_forwarded_for>0</use_http_x_forwarded_for>
                 <use_http_user_agent>0</use_http_user_agent>
                 <use_frontend_sid>1</use_frontend_sid>
-                <old_session_access_delta>300</old_session_access_delta>
+                <old_session_access_delta>30</old_session_access_delta>
             </session>
             <browser_capabilities>
                 <cookies>1</cookies>
