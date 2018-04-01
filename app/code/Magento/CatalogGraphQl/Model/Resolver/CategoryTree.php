@@ -65,7 +65,7 @@ class CategoryTree implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
     {
         return $this->valueFactory->create(function () use ($value, $args, $field, $info) {
             if (isset($value[$field->getName()])) {

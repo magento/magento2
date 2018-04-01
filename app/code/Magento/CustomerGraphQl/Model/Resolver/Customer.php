@@ -51,10 +51,10 @@ class Customer implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
     ) : Value {
         /** @var ContextInterface $context */
         if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {

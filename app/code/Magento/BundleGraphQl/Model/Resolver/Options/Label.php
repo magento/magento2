@@ -45,10 +45,10 @@ class Label implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
     ): Value {
         if (!isset($value['sku'])) {
             $result = function () {

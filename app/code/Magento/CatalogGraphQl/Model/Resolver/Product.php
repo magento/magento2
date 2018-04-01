@@ -54,7 +54,7 @@ class Product implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
     {
         if (!isset($value['sku'])) {
             throw new GraphQlInputException(__('No child sku found for product link.'));

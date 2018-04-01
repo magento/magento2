@@ -45,10 +45,10 @@ class CustomAttributeMetadata implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
     ) : Value {
         $attributes['items'] = null;
         $attributeInputs = $args['attributes'];

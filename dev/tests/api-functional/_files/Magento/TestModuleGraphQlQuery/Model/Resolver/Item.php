@@ -53,10 +53,10 @@ class Item implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
     ) : Value {
         $id = 0;
         foreach ($args as $key => $argValue) {

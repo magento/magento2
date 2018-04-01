@@ -87,7 +87,7 @@ class Category implements ResolverInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
     {
         $this->categoryIds = array_merge($this->categoryIds, $value[self::PRODUCT_CATEGORY_IDS_KEY]);
         $that = $this;

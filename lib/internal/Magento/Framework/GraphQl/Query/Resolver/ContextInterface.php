@@ -54,7 +54,7 @@ interface ContextInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface|null
+     * @return \Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface
      */
     public function getExtensionAttributes();
 

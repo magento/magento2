@@ -148,7 +148,7 @@ class Fields implements FormatterInterface
 
             $fieldConfig['resolve'] =
                 function ($value, $args, $context, $info) use ($resolver, $field) {
-                    return $resolver->resolve($field, $value, $args, $context, $info);
+                    return $resolver->resolve($field, $context, $info, $value, $args);
                 };
         }
         return $this->formatArguments($field, $fieldConfig);
