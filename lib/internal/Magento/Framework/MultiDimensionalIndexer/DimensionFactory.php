@@ -30,15 +30,11 @@ class DimensionFactory
     }
 
     /**
-     * @param string $name
-     * @param string $value
+     * @param array $arguments
      * @return Dimension
      */
-    public function create(string $name, $value): Dimension
+    public function create(array $arguments = []): Dimension
     {
-        return $this->objectManager->create(Dimension::class, [
-            'name' => $name,
-            'value' => (string) $value,
-        ]);
+        return $this->objectManager->create(Dimension::class, $arguments);
     }
 }
