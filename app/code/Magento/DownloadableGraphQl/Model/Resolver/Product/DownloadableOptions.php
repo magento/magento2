@@ -84,9 +84,12 @@ class DownloadableOptions implements ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ): ?Value {
+    ): Value {
         if (!isset($value['model'])) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
 
         /** @var Product $product */

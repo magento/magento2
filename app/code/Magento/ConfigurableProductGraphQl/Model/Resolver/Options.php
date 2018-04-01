@@ -57,17 +57,20 @@ class Options implements ResolverInterface
      *
      * {@inheritDoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?Value
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : Value
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         if ($value['type_id'] !== Type::TYPE_CODE || !isset($value[$linkField])) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
 
         $this->optionCollection->addProductId((int)$value[$linkField]);
 
         $result = function () use ($value, $linkField) {
-            return $this->optionCollection->getAttributesByProductId((int)$value[$linkField]) ?: [];
+            return $this->optionCollection->getAttributesByProductId((int)$value[$linkField]);
         };
 
         return $this->valueFactory->create($result);

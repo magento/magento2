@@ -57,14 +57,17 @@ class BundleItems implements ResolverInterface
      *
      * {@inheritDoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?Value
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : Value
     {
         $linkField = $this->metdataPool->getMetadata(ProductInterface::class)->getLinkField();
         if ($value['type_id'] !== Type::TYPE_CODE
             || !isset($value[$linkField])
             || !isset($value[ProductInterface::SKU])
         ) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
 
         $this->bundleOptionCollection->addParentFilterData(

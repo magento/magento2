@@ -25,7 +25,7 @@ interface ResolverInterface
      * @param $context
      * @param ResolveInfo $info
      * @throws \Exception
-     * @return Value|null
+     * @return Value
      */
     public function resolve(
         Field $field,
@@ -33,5 +33,5 @@ interface ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ) : ?Value;
+    ) : Value;
 }

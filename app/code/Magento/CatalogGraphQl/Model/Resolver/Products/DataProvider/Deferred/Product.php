@@ -102,14 +102,14 @@ class Product
      * Get product from result set.
      *
      * @param string $sku
-     * @return array|null
+     * @return array
      */
-    public function getProductBySku(string $sku) : ?array
+    public function getProductBySku(string $sku) : array
     {
         $products = $this->fetch();
 
         if (!isset($products[$sku])) {
-            return null;
+            return [];
         }
 
         return $products[$sku];

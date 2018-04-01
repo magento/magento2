@@ -52,20 +52,23 @@ class EntityIdToId implements ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ): ?Value {
+    ): Value {
         if (!isset($value['model'])) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
 
         /** @var Product $product */
         $product = $value['model'];
 
-        $id = $product->getData(
+        $productId = $product->getData(
             $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
         );
 
-        $result = function () use ($id) {
-            return $id;
+        $result = function () use ($productId) {
+            return $productId;
         };
 
         return $this->valueFactory->create($result);

@@ -49,9 +49,12 @@ class Label implements ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ): ?Value {
+    ): Value {
         if (!isset($value['sku'])) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
 
         $this->product->addProductSku($value['sku']);

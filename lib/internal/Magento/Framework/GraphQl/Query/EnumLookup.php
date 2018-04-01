@@ -42,10 +42,10 @@ class EnumLookup
      *
      * @param string $enumName
      * @param string $fieldValue
-     * @return string|null
+     * @return string
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function getEnumValueFromField(string $enumName, string $fieldValue) : ?string
+    public function getEnumValueFromField(string $enumName, string $fieldValue) : string
     {
         $priceViewEnum = $this->typeConfig->getConfigElement($enumName);
         if ($priceViewEnum instanceof Enum) {
@@ -60,6 +60,6 @@ class EnumLookup
                 new Phrase('Enum type "%1" not defined', [$enumName])
             );
         }
-        return null;
+        return '';
     }
 }

@@ -72,13 +72,13 @@ class Collection
      * Fetch data for bundle options and return the options for the given parent id.
      *
      * @param int $parentId
-     * @return array|null
+     * @return array
      */
-    public function getOptionsByParentId(int $parentId) : ?array
+    public function getOptionsByParentId(int $parentId) : array
     {
         $options = $this->fetch();
         if (!isset($options[$parentId])) {
-            return null;
+            return [];
         }
 
         return $options[$parentId];

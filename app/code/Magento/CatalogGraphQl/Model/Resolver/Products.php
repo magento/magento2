@@ -69,7 +69,7 @@ class Products implements ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ) : ?Value {
+    ) : Value {
         $searchCriteria = $this->searchCriteriaBuilder->build($args);
 
         if (!isset($args['search']) && !isset($args['filter'])) {

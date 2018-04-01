@@ -55,7 +55,7 @@ class Customer implements ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ) : ?Value {
+    ) : Value {
         /** @var ContextInterface $context */
         if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
             throw new GraphQlAuthorizationException(
@@ -69,7 +69,7 @@ class Customer implements ResolverInterface
         try {
             $data = $this->customerResolver->getCustomerById($context->getUserId());
             $result = function () use ($data) {
-                return $data;
+                return !empty($data) ? $data : [];
             };
             return $this->valueFactory->create($result);
         } catch (NoSuchEntityException $exception) {

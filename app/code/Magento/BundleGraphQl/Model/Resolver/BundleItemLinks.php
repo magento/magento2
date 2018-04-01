@@ -44,10 +44,13 @@ class BundleItemLinks implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?Value
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : Value
     {
         if (!isset($value['option_id']) || !isset($value['parent_id'])) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
         $this->linkCollection->addIdFilters((int)$value['option_id'], (int)$value['parent_id']);
         $result = function () use ($value) {

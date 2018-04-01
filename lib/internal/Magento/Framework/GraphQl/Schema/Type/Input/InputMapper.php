@@ -83,7 +83,7 @@ class InputMapper
             'description' => $argument->getDescription()
         ];
 
-        if ($this->scalarTypes->isScalarType($typeName) && $argument->getDefaultValue() !== null) {
+        if ($this->scalarTypes->isScalarType($typeName) && $argument->hasDefaultValue()) {
             switch ($argument->getTypeName()) {
                 case 'Int':
                     $calculatedArgument['defaultValue'] = (int)$argument->getDefaultValue();

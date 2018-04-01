@@ -42,9 +42,12 @@ class Attributes implements ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ): ?Value {
+    ): Value {
         if (!isset($value['options']) || !isset($value['product'])) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
 
         $result = function () use ($value) {

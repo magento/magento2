@@ -159,10 +159,20 @@ class Argument implements FieldInterface
     /**
      * Return defaultValue if argument is a scalar and has a configured defaultValue. Otherwise return an empty string.
      *
-     * @return string|null
+     * @return string
      */
-    public function getDefaultValue() : ?string
+    public function getDefaultValue() : string
     {
         return $this->defaultValue;
+    }
+
+    /**
+     * Return true if defaultValue is set, otherwise false
+     *
+     * @return bool
+     */
+    public function hasDefaultValue() : bool
+    {
+        return $this->defaultValue ? true: false;
     }
 }

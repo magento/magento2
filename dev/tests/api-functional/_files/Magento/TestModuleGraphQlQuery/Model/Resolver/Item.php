@@ -57,7 +57,7 @@ class Item implements ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ) : ?Value {
+    ) : Value {
         $id = 0;
         foreach ($args as $key => $argValue) {
             if ($key === "id") {

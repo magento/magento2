@@ -49,7 +49,7 @@ class CustomAttributeMetadata implements ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ) : ?Value {
+    ) : Value {
         $attributes['items'] = null;
         $attributeInputs = $args['attributes'];
         foreach ($attributeInputs as $attribute) {

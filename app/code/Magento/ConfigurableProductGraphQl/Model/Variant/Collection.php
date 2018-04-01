@@ -113,14 +113,14 @@ class Collection
      * Retrieve child products from for passed in parent id.
      *
      * @param int $id
-     * @return array|null
+     * @return array
      */
-    public function getChildProductsByParentId(int $id) : ?array
+    public function getChildProductsByParentId(int $id) : array
     {
         $childrenMap = $this->fetch();
 
         if (!isset($childrenMap[$id])) {
-            return null;
+            return [];
         }
 
         return $childrenMap[$id];
