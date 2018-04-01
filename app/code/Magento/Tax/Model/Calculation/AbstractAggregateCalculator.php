@@ -154,12 +154,6 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
             $priceInclTax = $this->calculationTool->round($priceInclTax);
         }
 
-        $pricePerItemInclTax = $rowTotalInclTax / $quantity;
-
-        if (($pricePerItemInclTax - $priceInclTax) < 0) {
-            $priceInclTax = $pricePerItemInclTax;
-        }
-
         return $this->taxDetailsItemDataObjectFactory->create()
             ->setCode($item->getCode())
             ->setType($item->getType())
