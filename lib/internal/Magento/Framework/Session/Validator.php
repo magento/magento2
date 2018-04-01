@@ -31,6 +31,8 @@ class Validator implements ValidatorInterface
 
     const XML_PATH_USE_USER_AGENT = 'web/session/use_http_user_agent';
 
+    const XML_PATH_OLD_SESSION_ACCESS_DELTA = 'web/session/old_session_access_delta';
+
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
@@ -102,6 +104,17 @@ class Validator implements ValidatorInterface
     {
         $sessionData = $_SESSION[self::VALIDATOR_KEY];
         $validatorData = $this->_getSessionEnvironment();
+
+        if (isset($_SESSION[SessionManager::SESSION_OLD_TIMESTAMP]) &&
+            (time() - $_SESSION[SessionManager::SESSION_OLD_TIMESTAMP])  >  $this->_scopeConfig->getValue(
+                self::XML_PATH_OLD_SESSION_ACCESS_DELTA,
+                $this->_scopeType
+            )
+        ) {
+            throw new SessionException(
+                new Phrase('Detected attempt to access an old session.')
+            );
+        }
 
         if ($this->_scopeConfig->getValue(
             self::XML_PATH_USE_REMOTE_ADDR,

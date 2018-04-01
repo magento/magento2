@@ -15,6 +15,12 @@ use Magento\Framework\Session\Config\ConfigInterface;
  */
 class SessionManager implements SessionManagerInterface
 {
+    const SESSION_OLD_TIMESTAMP = 'destroyed';
+
+    const NEW_SESSION_ID = 'new_session_id';
+
+    const OLD_SESSION_ID = 'old_session_id';
+
     /**
      * Default options when a call destroy()
      *
@@ -186,8 +192,7 @@ class SessionManager implements SessionManagerInterface
             $sid = $this->sidResolver->getSid($this);
             // potential custom logic for session id (ex. switching between hosts)
             $this->setSessionId($sid);
-            session_start();
-            $this->validator->validate($this);
+            $this->sessionStart();
             $this->renewCookie($sid);
 
             register_shutdown_function([$this, 'writeClose']);
@@ -198,6 +203,33 @@ class SessionManager implements SessionManagerInterface
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
 
         return $this;
+    }
+
+    /**
+     * Start session.
+     *
+     * @throws \Magento\Framework\Exception\SessionException
+     */
+    private function sessionStart()
+    {
+        session_start();
+        $this->validator->validate($this);
+
+        if (isset($_SESSION[self::NEW_SESSION_ID])) {
+            // Looks like we work with unstable network. Start actual session.
+            $this->restartSession($_SESSION[self::NEW_SESSION_ID]);
+            $this->validator->validate($this);
+        } elseif (isset($_SESSION[self::OLD_SESSION_ID])) {
+            // New cookie was received. Proceed with old session delete.
+            $currentSessionId = $this->getSessionId();
+            $oldSessionId = $_SESSION[self::OLD_SESSION_ID];
+            unset($_SESSION[self::OLD_SESSION_ID]);
+            $this->restartSession($oldSessionId);
+            if ($currentSessionId == $_SESSION[self::NEW_SESSION_ID]) {
+                session_destroy();
+            }
+            $this->restartSession($currentSessionId);
+        }
     }
 
     /**
@@ -505,7 +537,7 @@ class SessionManager implements SessionManagerInterface
         }
 
         if ($this->isSessionExists()) {
-            session_regenerate_id(true);
+            $this->regenerateSessionId();
         } else {
             session_start();
         }
@@ -515,6 +547,37 @@ class SessionManager implements SessionManagerInterface
             $this->clearSubDomainSessionCookie();
         }
         return $this;
+    }
+
+    /**
+     * Regenerate session id, with saving relation between two sessions.
+     */
+    protected function regenerateSessionId()
+    {
+        $oldSessionId = session_id();
+        session_regenerate_id();
+        $_SESSION[self::OLD_SESSION_ID] = $oldSessionId;
+
+        $newSessionId = session_id();
+        $this->restartSession($oldSessionId);
+        $_SESSION[self::SESSION_OLD_TIMESTAMP] = time();
+        $_SESSION[self::NEW_SESSION_ID] = $newSessionId;
+
+        $this->restartSession($newSessionId);
+    }
+
+    /**
+     * Restart the session with new ID.
+     *
+     * @param $sid
+     */
+    protected function restartSession($sid)
+    {
+        session_commit();
+        ini_set('session.use_strict_mode', 0);
+        $this->setSessionId($sid);
+        session_start();
+        ini_restore('session.use_strict_mode');
     }
 
     /**
