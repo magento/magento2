@@ -7,6 +7,7 @@ namespace Magento\Framework\Session;
 
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Session\Actualization\StorageInterface as ActualizationStorageInterface;
 
 /**
  * Session Validator
@@ -105,17 +106,7 @@ class Validator implements ValidatorInterface
         $sessionData = $_SESSION[self::VALIDATOR_KEY];
         $validatorData = $this->_getSessionEnvironment();
 
-        if (isset($_SESSION[SessionManager::SESSION_OLD_TIMESTAMP]) &&
-            (time() - $_SESSION[SessionManager::SESSION_OLD_TIMESTAMP])  >  $this->_scopeConfig->getValue(
-                self::XML_PATH_OLD_SESSION_ACCESS_DELTA,
-                $this->_scopeType
-            )
-        ) {
-            throw new SessionException(
-                new Phrase('Detected attempt to access an old session.')
-            );
-        }
-
+        $this->actualizationValidation();
         if ($this->_scopeConfig->getValue(
             self::XML_PATH_USE_REMOTE_ADDR,
             $this->_scopeType
@@ -174,6 +165,31 @@ class Validator implements ValidatorInterface
         }
 
         return true;
+    }
+
+    /**
+     * Validate session actualization data.
+     *
+     * @return void
+     * @throws SessionException
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    protected function actualizationValidation()
+    {
+        $storageData = isset($_SESSION[ActualizationStorageInterface::STORAGE_NAMESPACE]) ?
+            $_SESSION[ActualizationStorageInterface::STORAGE_NAMESPACE] : [];
+
+        if (isset($storageData[ActualizationStorageInterface::SESSION_OLD_TIMESTAMP]) &&
+            (time() - $storageData[ActualizationStorageInterface::SESSION_OLD_TIMESTAMP]) >
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_OLD_SESSION_ACCESS_DELTA,
+                $this->_scopeType
+            )
+        ) {
+            throw new SessionException(
+                new Phrase('Detected attempt to access an old session.')
+            );
+        }
     }
 
     /**
