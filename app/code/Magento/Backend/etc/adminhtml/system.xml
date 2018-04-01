@@ -547,6 +547,11 @@
                     <comment>Allows customers to stay logged in when switching between different stores.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="old_session_access_delta" translate="label comment" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Old session access delta</label>
+                    <comment>Time when access to old session is allowed. It uses to save session in unstable networks.</comment>
+                    <validate>validate-digits</validate>
+                </field>
             </group>
         </section>
     </system>
