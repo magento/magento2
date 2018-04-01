@@ -7,6 +7,7 @@
  */
 namespace Magento\Framework\Session;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
@@ -15,12 +16,6 @@ use Magento\Framework\Session\Config\ConfigInterface;
  */
 class SessionManager implements SessionManagerInterface
 {
-    const SESSION_OLD_TIMESTAMP = 'destroyed';
-
-    const NEW_SESSION_ID = 'new_session_id';
-
-    const OLD_SESSION_ID = 'old_session_id';
-
     /**
      * Default options when a call destroy()
      *
@@ -99,6 +94,11 @@ class SessionManager implements SessionManagerInterface
     private $appState;
 
     /**
+     * @var \Magento\Framework\Session\Actualization\StorageInterface
+     */
+    private $actualizationStorage;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param SidResolverInterface $sidResolver
      * @param ConfigInterface $sessionConfig
@@ -108,7 +108,9 @@ class SessionManager implements SessionManagerInterface
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Framework\Session\Actualization\StorageInterface $actualizationStorage
      * @throws \Magento\Framework\Exception\SessionException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -119,7 +121,8 @@ class SessionManager implements SessionManagerInterface
         StorageInterface $storage,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\App\State $appState
+        \Magento\Framework\App\State $appState,
+        \Magento\Framework\Session\Actualization\StorageInterface $actualizationStorage = null
     ) {
         $this->request = $request;
         $this->sidResolver = $sidResolver;
@@ -130,7 +133,8 @@ class SessionManager implements SessionManagerInterface
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->appState = $appState;
-
+        $this->actualizationStorage = $actualizationStorage ?:
+            ObjectManager::getInstance()->get('Magento\Framework\Session\Actualization\StorageInterface');
         // Enable session.use_only_cookies
         ini_set('session.use_only_cookies', '1');
         $this->start();
@@ -207,26 +211,27 @@ class SessionManager implements SessionManagerInterface
     /**
      * Start session.
      *
-     * @throws \Magento\Framework\Exception\SessionException
-     *
      * @return void
+     * @throws \Magento\Framework\Exception\SessionException
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     private function sessionStart()
     {
         session_start();
         $this->validator->validate($this);
+        $this->actualizationStorage->init(isset($_SESSION) ? $_SESSION : []);
 
-        if (isset($_SESSION[self::NEW_SESSION_ID])) {
+        if ($this->actualizationStorage->hasNewSessionId()) {
             // Looks like we work with unstable network. Start actual session.
-            $this->restartSession($_SESSION[self::NEW_SESSION_ID]);
+            $this->restartSession($this->actualizationStorage->getNewSessionId());
             $this->validator->validate($this);
-        } elseif (isset($_SESSION[self::OLD_SESSION_ID])) {
+        } elseif ($this->actualizationStorage->hasOldSessionId()) {
             // New cookie was received. Proceed with old session delete.
             $currentSessionId = $this->getSessionId();
-            $oldSessionId = $_SESSION[self::OLD_SESSION_ID];
-            unset($_SESSION[self::OLD_SESSION_ID]);
+            $oldSessionId = $this->actualizationStorage->getOldSessionId();
+            $this->actualizationStorage->unsOldSessionId();
             $this->restartSession($oldSessionId);
-            if ($currentSessionId == $_SESSION[self::NEW_SESSION_ID]) {
+            if ($currentSessionId == $this->actualizationStorage->getNewSessionId()) {
                 session_destroy();
             }
             $this->restartSession($currentSessionId);
@@ -553,12 +558,12 @@ class SessionManager implements SessionManagerInterface
     {
         $oldSessionId = session_id();
         session_regenerate_id();
-        $_SESSION[self::OLD_SESSION_ID] = $oldSessionId;
+        $this->actualizationStorage->setOldSessionId($oldSessionId);
 
         $newSessionId = session_id();
         $this->restartSession($oldSessionId);
-        $_SESSION[self::SESSION_OLD_TIMESTAMP] = time();
-        $_SESSION[self::NEW_SESSION_ID] = $newSessionId;
+        $this->actualizationStorage->setSessionOldTimestamp();
+        $this->actualizationStorage->setNewSessionId($newSessionId);
 
         $this->restartSession($newSessionId);
     }
@@ -567,8 +572,8 @@ class SessionManager implements SessionManagerInterface
      * Restart the session with new ID.
      *
      * @param string $sid
-     *
      * @return void
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function restartSession($sid)
     {
@@ -577,6 +582,7 @@ class SessionManager implements SessionManagerInterface
         $this->setSessionId($sid);
         session_start();
         ini_restore('session.use_strict_mode');
+        $this->actualizationStorage->init(isset($_SESSION) ? $_SESSION : []);
     }
 
     /**
