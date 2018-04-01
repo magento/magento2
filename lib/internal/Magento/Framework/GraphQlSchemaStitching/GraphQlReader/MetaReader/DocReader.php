@@ -16,9 +16,9 @@ class DocReader
      * Read documentation annotation for a specific node if exists
      *
      * @param \GraphQL\Language\AST\NodeList $directives
-     * @return string|null
+     * @return string
      */
-    public function read(\GraphQL\Language\AST\NodeList $directives) : ?string
+    public function read(\GraphQL\Language\AST\NodeList $directives) : string
     {
         foreach ($directives as $directive) {
             if ($directive->name->value == 'doc') {
@@ -29,6 +29,6 @@ class DocReader
                 }
             }
         }
-        return null;
+        return '';
     }
 }

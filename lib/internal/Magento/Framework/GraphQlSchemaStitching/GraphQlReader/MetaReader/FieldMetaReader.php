@@ -50,7 +50,7 @@ class FieldMetaReader
         ];
 
         $fieldResolver = $this->getFieldResolver($fieldMeta);
-        if ($fieldResolver) {
+        if (!empty($fieldResolver)) {
             $result['resolver'] = $fieldResolver;
         }
 
@@ -90,9 +90,9 @@ class FieldMetaReader
      * Read resolver if an annotation with the class of the resolver is defined in the meta
      *
      * @param \GraphQL\Type\Definition\FieldDefinition $fieldMeta
-     * @return string|null
+     * @return string
      */
-    private function getFieldResolver(\GraphQL\Type\Definition\FieldDefinition $fieldMeta) : ?string
+    private function getFieldResolver(\GraphQL\Type\Definition\FieldDefinition $fieldMeta) : string
     {
         /** @var \GraphQL\Language\AST\NodeList $directives */
         $directives = $fieldMeta->astNode->directives;
@@ -105,6 +105,6 @@ class FieldMetaReader
                 }
             }
         }
-        return null;
+        return '';
     }
 }

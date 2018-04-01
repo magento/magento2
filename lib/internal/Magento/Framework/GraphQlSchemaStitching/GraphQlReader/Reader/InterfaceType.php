@@ -40,7 +40,7 @@ class InterfaceType implements TypeMetaReaderInterface
      * @param \GraphQL\Type\Definition\Type $typeMeta
      * @return array
      */
-    public function read(\GraphQL\Type\Definition\Type $typeMeta) : ?array
+    public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
         if ($typeMeta instanceof \GraphQL\Type\Definition\InterfaceType) {
             $typeName = $typeMeta->name;
@@ -51,7 +51,7 @@ class InterfaceType implements TypeMetaReaderInterface
             ];
 
             $interfaceTypeResolver = $this->getInterfaceTypeResolver($typeMeta);
-            if ($interfaceTypeResolver) {
+            if (!empty($interfaceTypeResolver)) {
                 $result['typeResolver'] = $interfaceTypeResolver;
             }
 
@@ -66,7 +66,7 @@ class InterfaceType implements TypeMetaReaderInterface
 
             return $result;
         } else {
-            return null;
+            return [];
         }
     }
 
@@ -74,9 +74,9 @@ class InterfaceType implements TypeMetaReaderInterface
      * Retrieve the interface type resolver if it exists from the meta data
      *
      * @param \GraphQL\Type\Definition\InterfaceType $interfaceTypeMeta
-     * @return string|null
+     * @return string
      */
-    private function getInterfaceTypeResolver(\GraphQL\Type\Definition\InterfaceType $interfaceTypeMeta) : ?string
+    private function getInterfaceTypeResolver(\GraphQL\Type\Definition\InterfaceType $interfaceTypeMeta) : string
     {
         /** @var \GraphQL\Language\AST\NodeList $directives */
         $directives = $interfaceTypeMeta->astNode->directives;
@@ -89,6 +89,6 @@ class InterfaceType implements TypeMetaReaderInterface
                 }
             }
         }
-        return null;
+        return '';
     }
 }
