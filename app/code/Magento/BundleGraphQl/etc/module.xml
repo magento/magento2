@@ -10,8 +10,9 @@
         <sequence>
             <module name="Magento_Catalog"/>
             <module name="Magento_BundleProduct"/>
-            <module name="Magento_CatalogGraphQl"/>
             <module name="Magento_Store"/>
+            <module name="Magento_GraphQl"/>
+            <module name="Magento_CatalogGraphQl"/>
         </sequence>
     </module>
 </config>

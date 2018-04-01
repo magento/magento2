@@ -10,6 +10,8 @@
         <sequence>
             <module name="Magento_Catalog"/>
             <module name="Magento_Downloadable"/>
+            <module name="Magento_GraphQl"/>
+            <module name="Magento_CatalogGraphQl"/>
         </sequence>
     </module>
 </config>

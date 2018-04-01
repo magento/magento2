@@ -53,7 +53,7 @@
         "tubalmartin/cssmin": "4.1.0",
         "webonyx/graphql-php": "^0.11.1",
         "zendframework/zend-captcha": "^2.7.1",
-        "zendframework/zend-code": "^3.3.0",
+        "zendframework/zend-code": "^3.1.0",
         "zendframework/zend-config": "^2.6.0",
         "zendframework/zend-console": "^2.6.0",
         "zendframework/zend-crypt": "^2.6.0",
@@ -298,6 +298,5 @@
             "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
         }
     },
-    "prefer-stable": false,
-    "minimum-stability": "RC"
+    "prefer-stable": true
 }
