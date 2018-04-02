@@ -14,8 +14,8 @@ settings:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
-        - Yandex\Allure\Adapter\AllureAdapter
         - Magento\FunctionalTestingFramework\Extension\TestContextExtension
+        - Magento\FunctionalTestingFramework\Allure\Adapter\MagentoAllureAdapter
     config:
         Yandex\Allure\Adapter\AllureAdapter:
             deletePreviousResults: true
