@@ -317,11 +317,8 @@ class SessionManager implements SessionManagerInterface
      */
     public function destroy(array $options = null)
     {
-        if (null === $options) {
-            $options = $this->defaultDestroyOptions;
-        } else {
-            $options = array_merge($this->defaultDestroyOptions, $options);
-        }
+        $options = $options ?? [];
+        $options = array_merge($this->defaultDestroyOptions, $options);
 
         if ($options['clear_storage']) {
             $this->clearStorage();
@@ -504,11 +501,7 @@ class SessionManager implements SessionManagerInterface
             return $this;
         }
 
-        if ($this->isSessionExists()) {
-            session_regenerate_id(true);
-        } else {
-            session_start();
-        }
+        $this->isSessionExists() ? session_regenerate_id(true) : session_start();
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
 
         if ($this->sessionConfig->getUseCookies()) {
