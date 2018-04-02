@@ -86,4 +86,10 @@
             <argument name="stockSourceLinkValidator" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain</argument>
         </arguments>
     </type>
+    <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
+        <plugin name="prevent_default_stock_save" type="Magento\Inventory\Plugin\InventoryApi\StockSourceLinksSave\PreventSave\DefaultStockPlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface">
+        <plugin name="prevent_default_stock_delete" type="Magento\Inventory\Plugin\InventoryApi\StockSourceLinksDelete\PreventDelete\DefaultStockPlugin"/>
+    </type>
 </config>
