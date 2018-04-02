@@ -211,6 +211,7 @@
         <arguments>
             <argument name="linksConfiguration" xsi:type="array">
                 <item name="product" xsi:type="string">Magento\Catalog\Ui\Component\UrlInput\Product</item>
+                <item name="category" xsi:type="string">Magento\Catalog\Ui\Component\UrlInput\Category</item>
             </argument>
         </arguments>
     </type>

@@ -14,7 +14,6 @@ use Magento\Ui\Model\UrlInput\ConfigInterface;
  */
 class Category implements ConfigInterface
 {
-
     /**
      * @var \Magento\Catalog\Ui\Component\Product\Form\Categories\Options
      */
@@ -35,7 +34,7 @@ class Category implements ConfigInterface
     {
         return [
             'label' => __('Category'),
-            'component' => 'Magento_Catalog/js/components/category-select',
+            'component' => 'Magento_Ui/js/form/element/ui-select',
             'template' => 'ui/grid/filters/elements/ui-select',
             'formElement' => 'select',
             'disableLabel' => true,
@@ -45,6 +44,7 @@ class Category implements ConfigInterface
             'levelsVisibility' => '1',
             'options' => $this->options->toOptionArray(),
             'sortOrder' => 30,
+            'missingValuePlaceholder' => 'Category with ID: %s doesn\'t exist'
         ];
     }
 }

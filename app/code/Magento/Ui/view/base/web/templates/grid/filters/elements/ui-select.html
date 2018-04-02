@@ -48,7 +48,7 @@
              text: setCaption()
         ">
         </div>
-        <!-- ko if: typeof showXWhenOptionSelected !== 'undefined' && showXWhenOptionSelected && hasData()  -->
+        <!-- ko if: showXWhenOptionSelected && hasData()  -->
             <button
                     class="action-close"
                     type="button"
@@ -117,7 +117,7 @@
                 },
                 attr: {
                     id: uid+2,
-                    placeholder: searchPlaceholder
+                    placeholder: filterPlaceholder
                 },
                 valueUpdate: 'afterkeydown',
                 value: filterInputValue,

@@ -105,5 +105,4 @@ class Search extends \Magento\Backend\App\Action
             );
         }
     }
-
 }

@@ -34,21 +34,23 @@ class Product implements \Magento\Ui\Model\UrlInput\ConfigInterface
     {
         return [
             'label' => __('Product'),
-            'component' => 'Magento_Ui/js/form/element/ui-select',
+            'component' => 'Magento_Catalog/js/components/product-ui-select',
             'disableLabel' => true,
             'filterOptions' => true,
             'searchOptions' => true,
             'chipsEnabled' => true,
             'levelsVisibility' => '1',
             'options' => [],
-            'sortOrder' => 20,
+            'sortOrder' => 25,
             'multiple' => false,
             'closeBtn' => true,
             'template' => 'ui/grid/filters/elements/ui-select',
             'requestUrl' => $this->urlBuilder->getUrl('catalog/product/search'),
-            'searchPlaceholder' => __('Product Name or SKU'),
+            'filterPlaceholder' => __('Product Name or SKU'),
             'isDisplayEmptyPlaceholder' => true,
-            'emptyOptionsHtml' => __('Start typing to find products')
+            'emptyOptionsHtml' => __('Start typing to find products'),
+            'missingValuePlaceholder' => 'Product with ID: %s doesn\'t exist',
+            'validationUrl' => $this->urlBuilder->getUrl('catalog/product/getSelected'),
         ];
     }
 }

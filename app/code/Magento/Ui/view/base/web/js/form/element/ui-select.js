@@ -165,16 +165,17 @@ define([
                 lotPlaceholders: $t('Selected')
             },
             separator: 'optgroup',
-            //configuration for search mechanizm
             searchOptions: false,
             loading: false,
             requestUrl: false,
             lastSearchKey: '',
             lastSearchPage: 1,
-            searchPlaceholder: '',
+            filterPlaceholder: '',
             emptyOptionsHtml: '',
             cachedSearchResults: {},
             pageLimit: 50,
+            showXWhenOptionSelected: true,
+            missingValuePlaceholder: $t('Entity with ID: %s doesn\'t exist'),
             listens: {
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList',
@@ -954,7 +955,7 @@ define([
          * Set caption
          */
         setCaption: function () {
-            var length;
+            var length, caption;
 
             if (!_.isArray(this.value()) && this.value()) {
                 length = 1;
@@ -964,6 +965,21 @@ define([
                 this.value([]);
                 length = 0;
             }
+
+            //check if option was removed
+            if (length && !this.getSelected().length) {
+                caption = this.missingValuePlaceholder.replace('%s', this.value());
+
+                this.placeholder(caption);
+
+                // set warning state
+                this.warn(caption);
+
+                return this.placeholder();
+            }
+
+            // reset warning state
+            this.warn('');
 
             if (length > 1) {
                 this.placeholder(length + ' ' + this.selectedPlaceholders.lotPlaceholders);
@@ -1119,6 +1135,8 @@ define([
         },
 
         /**
+         * Returns options from cache or send request
+         *
          * @param {String} searchKey
          */
         loadOptions: function (searchKey) {
@@ -1142,13 +1160,13 @@ define([
             this.processRequest(searchKey, currentPage);
             this.setCachedSearchResults(searchKey, this.options(), currentPage);
             this._setItemsQuantity(this.options().length);
-            this.loading(false);
             this.lastSearchPage = currentPage;
             this.lastSearchKey = searchKey;
+            this.loading(false);
         },
 
         /**
-         *
+         * Load more options on scroll down
          * @param {Object} data
          * @param {Event} event
          */
@@ -1157,7 +1175,7 @@ define([
                 scrollHeight = event.target.scrollHeight,
                 deviation = 30;
 
-            if (clientHight > scrollHeight - deviation) {
+            if (clientHight > scrollHeight - deviation && this.options().length >= this.pageLimit) {
                 this.loadOptions(data.filterInputValue());
             }
         },
@@ -1190,7 +1208,6 @@ define([
         setCachedSearchResults: function (searchKey, optionsArray, page) {
             var cachedData = this.getCachedSearchResults(searchKey);
 
-            // _.extend(cachedData.options, optionsArray);
             cachedData.options = optionsArray;
             cachedData.lastPage = page;
             this.cachedSearchResults[searchKey] = cachedData;
