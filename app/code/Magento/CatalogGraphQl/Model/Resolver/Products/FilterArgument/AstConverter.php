@@ -8,8 +8,6 @@ declare(strict_types = 1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument;
 
 use Magento\Framework\GraphQl\Query\Resolver\Argument\AstConverterInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\Clause\ReferenceType;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\Clause\ReferenceTypeFactory;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\ClauseFactory;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\Connective;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\ConnectiveFactory;
@@ -33,11 +31,6 @@ class AstConverter implements AstConverterInterface
     private $connectiveFactory;
 
     /**
-     * @var ReferenceTypeFactory
-     */
-    private $referenceTypeFactory;
-
-    /**
      * @var ConfigInterface
      */
     private $config;
@@ -50,20 +43,17 @@ class AstConverter implements AstConverterInterface
     /**
      * @param ClauseFactory $clauseFactory
      * @param ConnectiveFactory $connectiveFactory
-     * @param ReferenceTypeFactory $referenceTypeFactory
      * @param ConfigInterface $config
      * @param array $additionalAttributes
      */
     public function __construct(
         ClauseFactory $clauseFactory,
         ConnectiveFactory $connectiveFactory,
-        ReferenceTypeFactory $referenceTypeFactory,
         ConfigInterface $config,
         array $additionalAttributes = ['min_price', 'max_price']
     ) {
         $this->clauseFactory = $clauseFactory;
         $this->connectiveFactory = $connectiveFactory;
-        $this->referenceTypeFactory = $referenceTypeFactory;
         $this->config = $config;
         $this->additionalAttributes = $additionalAttributes;
     }
@@ -71,11 +61,10 @@ class AstConverter implements AstConverterInterface
     /**
      * Get a clause from an AST
      *
-     * @param ReferenceType $referenceType
      * @param array $arguments
      * @return array
      */
-    private function getClausesFromAst(ReferenceType $referenceType, array $arguments) : array
+    private function getClausesFromAst(array $arguments) : array
     {
         $entityInfo = ['attributes' => $this->getCatalogProductFields()];
         $attributes = array_keys($entityInfo['attributes']);
@@ -92,7 +81,6 @@ class AstConverter implements AstConverterInterface
                         $value = $clause;
                     }
                     $conditions[] = $this->clauseFactory->create(
-                        $referenceType,
                         $argumentName,
                         $clauseType,
                         $value
@@ -101,7 +89,7 @@ class AstConverter implements AstConverterInterface
             } else {
                 $conditions[] =
                     $this->connectiveFactory->create(
-                        $this->getClausesFromAst($referenceType, $argument),
+                        $this->getClausesFromAst($argument),
                         $argumentName
                     );
             }
@@ -140,18 +128,11 @@ class AstConverter implements AstConverterInterface
     }
 
     /**
-     * Get a connective filter from an AST input
-     *
-     * @param string $entityType
-     * @param array $arguments
-     * @return Connective
+     * {@inheritdoc}
      */
-    public function convert(string $entityType, array $arguments) : Connective
+    public function convert(array $arguments) : Connective
     {
-        $filters =  $this->getClausesFromAst(
-            $this->referenceTypeFactory->create($entityType),
-            $arguments
-        );
+        $filters =  $this->getClausesFromAst($arguments);
         return $this->connectiveFactory->create($filters);
     }
 }

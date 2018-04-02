@@ -14,9 +14,8 @@ interface AstConverterInterface
     /**
      * Get a connective filter from an AST input
      *
-     * @param string $entityType
      * @param array $arguments
      * @return Connective
      */
-    public function convert(string $entityType, array $arguments) : Connective;
+    public function convert(array $arguments) : Connective;
 }

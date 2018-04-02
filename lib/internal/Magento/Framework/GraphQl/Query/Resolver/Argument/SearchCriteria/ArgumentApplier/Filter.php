@@ -44,7 +44,7 @@ class Filter implements ArgumentApplierInterface
      */
     public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument) : SearchCriteriaInterface
     {
-        $filters = $this->astConverter->convert(\Magento\Catalog\Model\Product::ENTITY, $argument);
+        $filters = $this->astConverter->convert($argument);
         $filterGroups = $searchCriteria->getFilterGroups();
         $filterGroups = array_merge($filterGroups, $this->filterGroupFactory->create($filters));
         $searchCriteria->setFilterGroups($filterGroups);

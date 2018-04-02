@@ -7,8 +7,6 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Query\Resolver\Argument\Filter;
 
-use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\Clause\ReferenceType;
-
 /**
  * Class clause refers to a closure in find argument.
  *
@@ -16,11 +14,6 @@ use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\Clause\ReferenceTyp
  */
 class Clause
 {
-    /**
-     * @var ReferenceType
-     */
-    private $referenceType;
-
     /**
      * @var string
      */
@@ -37,31 +30,18 @@ class Clause
     private $clauseValue;
 
     /**
-     * @param ReferenceType $referenceType
      * @param string $fieldName
      * @param string $clauseType
      * @param string|array $clauseValue
      */
     public function __construct(
-        ReferenceType $referenceType,
         string $fieldName,
         string $clauseType,
         $clauseValue
     ) {
-        $this->referenceType = $referenceType;
         $this->fieldName = $fieldName;
         $this->clauseType = $clauseType;
         $this->clauseValue = $clauseValue;
-    }
-
-    /**
-     * Get the referenced type of the entity for the field
-     *
-     * @return ReferenceType
-     */
-    public function getReferencedType() : ReferenceType
-    {
-        return $this->referenceType;
     }
 
     /**

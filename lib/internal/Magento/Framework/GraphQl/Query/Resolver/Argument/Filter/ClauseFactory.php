@@ -8,7 +8,6 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Query\Resolver\Argument\Filter;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\Clause\ReferenceType;
 
 /**
  * Factory for the @see Clause class
@@ -32,14 +31,12 @@ class ClauseFactory
     /**
      * Create a clause class
      *
-     * @param ReferenceType $referenceType
      * @param string $fieldName
      * @param string $clauseType
      * @param string|array $clauseValue
      * @return Clause
      */
     public function create(
-        ReferenceType $referenceType,
         string $fieldName,
         string $clauseType,
         $clauseValue
@@ -47,7 +44,6 @@ class ClauseFactory
         return $this->objectManager->create(
             Clause::class,
             [
-                'referenceType' => $referenceType,
                 'fieldName' => $fieldName,
                 'clauseType' => $clauseType,
                 'clauseValue' => $clauseValue
