@@ -126,9 +126,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testAllcartAction()
     {
-        $this->markTestSkipped(
-            'Fix Integration Test for Quantity Increment Message https://github.com/magento-engcom/msi/issues/690'
-        );
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey();
         $this->getRequest()->setParam('form_key', $formKey);
         $this->dispatch('wishlist/index/allcart');
