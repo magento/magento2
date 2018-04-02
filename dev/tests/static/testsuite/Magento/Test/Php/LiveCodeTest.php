@@ -334,8 +334,6 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
     {
         $changedFiles = self::getAddedFilesList('');
 
-        $componentRegistrar = new ComponentRegistrar();
-        $directoriesToCheck = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         try {
             $blackList = Files::init()->readLists(
                 self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt'
@@ -346,7 +344,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         }
 
         $toBeTestedFiles = array_diff(
-            self::filterFiles($changedFiles, ['php'], $directoriesToCheck),
+            self::filterFiles($changedFiles, ['php'], []),
             $blackList
         );
 
