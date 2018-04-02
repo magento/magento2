@@ -6,18 +6,19 @@
 namespace Magento\Braintree\Gateway\Command;
 
 use Braintree\Transaction;
-use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Braintree\Model\Adapter\BraintreeSearchAdapter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\CommandInterface;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
+use Magento\Sales\Api\TransactionRepositoryInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
  * Class CaptureStrategyCommand
@@ -66,9 +67,9 @@ class CaptureStrategyCommand implements CommandInterface
     private $subjectReader;
 
     /**
-     * @var BraintreeAdapter
+     * @var BraintreeAdapterFactory
      */
-    private $braintreeAdapter;
+    private $braintreeAdapterFactory;
 
     /**
      * @var BraintreeSearchAdapter
@@ -83,7 +84,7 @@ class CaptureStrategyCommand implements CommandInterface
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SubjectReader $subjectReader
-     * @param BraintreeAdapter $braintreeAdapter
+     * @param BraintreeAdapterFactory $braintreeAdapterFactory,
      * @param BraintreeSearchAdapter $braintreeSearchAdapter
      */
     public function __construct(
@@ -92,7 +93,7 @@ class CaptureStrategyCommand implements CommandInterface
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SubjectReader $subjectReader,
-        BraintreeAdapter $braintreeAdapter,
+        BraintreeAdapterFactory $braintreeAdapterFactory,
         BraintreeSearchAdapter $braintreeSearchAdapter
     ) {
         $this->commandPool = $commandPool;
@@ -100,7 +101,7 @@ class CaptureStrategyCommand implements CommandInterface
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->subjectReader = $subjectReader;
-        $this->braintreeAdapter = $braintreeAdapter;
+        $this->braintreeAdapterFactory = $braintreeAdapterFactory;
         $this->braintreeSearchAdapter = $braintreeSearchAdapter;
     }
 
@@ -112,29 +113,29 @@ class CaptureStrategyCommand implements CommandInterface
         /** @var \Magento\Payment\Gateway\Data\PaymentDataObjectInterface $paymentDO */
         $paymentDO = $this->subjectReader->readPayment($commandSubject);
 
-        /** @var \Magento\Sales\Api\Data\OrderPaymentInterface $paymentInfo */
-        $paymentInfo = $paymentDO->getPayment();
-        ContextHelper::assertOrderPayment($paymentInfo);
-
-        $command = $this->getCommand($paymentInfo);
+        $command = $this->getCommand($paymentDO);
         $this->commandPool->get($command)->execute($commandSubject);
     }
 
     /**
-     * Get execution command name
-     * @param OrderPaymentInterface $payment
+     * Get execution command name.
+     *
+     * @param PaymentDataObjectInterface $paymentDO
      * @return string
      */
-    private function getCommand(OrderPaymentInterface $payment)
+    private function getCommand(PaymentDataObjectInterface $paymentDO)
     {
-        // if auth transaction is not exists execute authorize&capture command
+        $payment = $paymentDO->getPayment();
+        ContextHelper::assertOrderPayment($payment);
+
+        // if auth transaction does not exist then execute authorize&capture command
         $existsCapture = $this->isExistsCaptureTransaction($payment);
         if (!$payment->getAuthorizationTransaction() && !$existsCapture) {
             return self::SALE;
         }
 
         // do capture for authorization transaction
-        if (!$existsCapture && !$this->isExpiredAuthorization($payment)) {
+        if (!$existsCapture && !$this->isExpiredAuthorization($payment, $paymentDO->getOrder())) {
             return self::CAPTURE;
         }
 
@@ -143,12 +144,16 @@ class CaptureStrategyCommand implements CommandInterface
     }
 
     /**
+     * Checks if authorization transaction does not expired yet.
+     *
      * @param OrderPaymentInterface $payment
-     * @return boolean
+     * @param OrderAdapterInterface $orderAdapter
+     * @return bool
      */
-    private function isExpiredAuthorization(OrderPaymentInterface $payment)
+    private function isExpiredAuthorization(OrderPaymentInterface $payment, OrderAdapterInterface $orderAdapter)
     {
-        $collection = $this->braintreeAdapter->search(
+        $adapter = $this->braintreeAdapterFactory->create($orderAdapter->getStoreId());
+        $collection = $adapter->search(
             [
                 $this->braintreeSearchAdapter->id()->is($payment->getLastTransId()),
                 $this->braintreeSearchAdapter->status()->is(Transaction::AUTHORIZATION_EXPIRED)

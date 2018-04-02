@@ -40,10 +40,11 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
         $this->entityManagerMock = $this->createMock(\Magento\Framework\EntityManager\EntityManager::class);
         $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->operationFactoryMock = $this->createPartialMock(
-            \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory::class,
+            \Magento\AsynchronousOperations\Api\Data\DetailedOperationStatusInterfaceFactory::class,
             ['create']
         );
-        $this->operationMock = $this->createMock(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class);
+        $this->operationMock =
+            $this->createMock(\Magento\AsynchronousOperations\Api\Data\DetailedOperationStatusInterface::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->model = new \Magento\AsynchronousOperations\Model\OperationManagement(
             $this->entityManagerMock,

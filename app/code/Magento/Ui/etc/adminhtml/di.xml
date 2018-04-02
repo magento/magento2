@@ -48,6 +48,7 @@
         <arguments>
             <argument name="linksConfiguration" xsi:type="array">
                 <item name="default" xsi:type="string">Magento\Ui\Model\UrlInput\Url</item>
+                <item name="category" xsi:type="string">Magento\Catalog\Ui\Component\UrlInput\Category</item>
             </argument>
         </arguments>
     </type>
