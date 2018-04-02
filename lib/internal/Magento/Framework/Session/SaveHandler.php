@@ -5,9 +5,8 @@
  */
 namespace Magento\Framework\Session;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\Config\ConfigInterface;
+use \Magento\Framework\Exception\SessionException;
 
 /**
  * Magento session save handler
@@ -22,22 +21,15 @@ class SaveHandler implements SaveHandlerInterface
     protected $saveHandlerAdapter;
 
     /**
-     * Config
-     *
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
      * Constructor
      *
      * @param SaveHandlerFactory $saveHandlerFactory
-     * @param DeploymentConfig $deploymentConfig
+     * @param ConfigInterface $sessionConfig
      * @param string $default
      */
     public function __construct(
         SaveHandlerFactory $saveHandlerFactory,
-        DeploymentConfig $deploymentConfig,
+        ConfigInterface $sessionConfig,
         $default = self::DEFAULT_HANDLER
     ) {
         /**
@@ -46,17 +38,13 @@ class SaveHandler implements SaveHandlerInterface
          * Save handler may be set to custom value in deployment config, which will override everything else.
          * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
          */
-        $defaultSaveHandler = ini_get('session.save_handler') ?: SaveHandlerInterface::DEFAULT_HANDLER;
-        $saveMethod = $deploymentConfig->get(Config::PARAM_SESSION_SAVE_METHOD, $defaultSaveHandler);
-        $this->setSaveHandler($saveMethod);
+        $saveMethod = $sessionConfig->getOption('session.save_handler') ?: $default;
 
         try {
-            $connection = $saveHandlerFactory->create($saveMethod);
-        } catch (\LogicException $e) {
-            $connection = $saveHandlerFactory->create($default);
-            $this->setSaveHandler($default);
+            $this->saveHandlerAdapter = $saveHandlerFactory->create($saveMethod);
+        } catch (SessionException $e) {
+            $this->saveHandlerAdapter = $saveHandlerFactory->create($default);
         }
-        $this->saveHandlerAdapter = $connection;
     }
 
     /**
@@ -126,34 +114,5 @@ class SaveHandler implements SaveHandlerInterface
     public function gc($maxLifetime)
     {
         return $this->saveHandlerAdapter->gc($maxLifetime);
-    }
-
-    /**
-     * Get config
-     *
-     * @return ConfigInterface
-     * @deprecated 100.0.8
-     */
-    private function getConfig()
-    {
-        if ($this->config === null) {
-            $this->config = ObjectManager::getInstance()->get(ConfigInterface::class);
-        }
-        return $this->config;
-    }
-
-    /**
-     * Set session.save_handler option
-     *
-     * @param string $saveHandler
-     * @return $this
-     */
-    private function setSaveHandler($saveHandler)
-    {
-        if ($saveHandler === 'db' || $saveHandler === 'redis') {
-            $saveHandler = 'user';
-        }
-        $this->getConfig()->setOption('session.save_handler', $saveHandler);
-        return $this;
     }
 }
