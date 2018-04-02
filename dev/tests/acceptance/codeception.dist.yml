@@ -5,8 +5,8 @@ paths:
     tests: tests
     log: tests/_output
     data: tests/_data
-    support: vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework
-    envs: vendor/magento/magento2-functional-testing-framework/etc/_envs
+    support: %REPLACED IN BUILD:PROJECT%
+    envs: %REPLACED IN BUILD:PROJECT%
 settings:
     bootstrap: _bootstrap.php
     colors: true
