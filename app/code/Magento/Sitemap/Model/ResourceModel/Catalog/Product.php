@@ -9,7 +9,6 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Store\Model\Store;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface as ConfigInterface;
 use Magento\Catalog\Helper\Product as HelperProduct;
 
 /**
@@ -91,12 +90,13 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Catalog\Helper\Image
      */
     private $catalogImageHelper;
+    
     /**
      * Scope Config
      *
-     * @var ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -108,7 +108,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $mediaGalleryResourceModel
      * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
-     * @param ConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $connectionName
      * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Image $catalogImageHelper
@@ -124,7 +124,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Catalog\Model\ResourceModel\Product\Gallery $mediaGalleryResourceModel,
         \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        ConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $connectionName = null,
         \Magento\Catalog\Model\Product $productModel = null,
         \Magento\Catalog\Helper\Image $catalogImageHelper = null
@@ -286,7 +286,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $connection = $this->getConnection();
         $urlsConfigCondition = '';
-        if ($this->getCategoryProductURLsConfig($storeId)) {
+        if ($this->isCategoryProductURLsConfig($storeId)) {
             $urlsConfigCondition = 'NOT ';
         }
 
@@ -475,7 +475,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return bool
      */
-    protected function getCategoryProductURLsConfig($storeId)
+    private function isCategoryProductURLsConfig($storeId)
     {
         return (bool)$this->scopeConfig->getValue(
             HelperProduct::XML_PATH_PRODUCT_URL_USE_CATEGORY,
