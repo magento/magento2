@@ -6,6 +6,7 @@
 namespace Magento\CatalogUrlRewrite\Plugin\Store\Block;
 
 use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Framework\App\Route\ConfigInterface as RouteConfig;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -28,15 +29,23 @@ class Switcher
     private $urlFinder;
 
     /**
+     * @var RouteConfig
+     */
+    private $routeConfig;
+
+    /**
      * @param PostHelper $postHelper
-     * @param  UrlFinderInterface $urlFinder
+     * @param UrlFinderInterface $urlFinder
+     * @param RouteConfig $routeConfig
      */
     public function __construct(
         PostHelper $postHelper,
-        UrlFinderInterface $urlFinder
+        UrlFinderInterface $urlFinder,
+        RouteConfig $routeConfig
     ) {
         $this->postHelper = $postHelper;
         $this->urlFinder = $urlFinder;
+        $this->routeConfig = $routeConfig;
     }
 
     /**
@@ -59,12 +68,20 @@ class Switcher
         $baseUrl = $store->getBaseUrl();
         $urlPath = parse_url($currentUrl, PHP_URL_PATH);
 
-        $currentRewrite = $this->urlFinder->findOneByData([
-            UrlRewrite::REQUEST_PATH => ltrim($urlPath, '/'),
-            UrlRewrite::STORE_ID => $store->getId(),
-        ]);
+        $urlToSwitch = $currentUrl;
 
-        $urlToSwitch = (null === $currentRewrite) ? $baseUrl : $currentUrl;
+        //check rewrites for non-existing routes
+        $frontName = ltrim($urlPath, '/');
+        if (false === $this->routeConfig->getRouteByFrontName($frontName)) {
+            $currentRewrite = $this->urlFinder->findOneByData([
+                UrlRewrite::REQUEST_PATH => $frontName,
+                UrlRewrite::STORE_ID => $store->getId(),
+            ]);
+            if (null === $currentRewrite) {
+                $urlToSwitch = $baseUrl;
+            }
+        }
+
         return $this->postHelper->getPostData($urlToSwitch, $data);
     }
 }
