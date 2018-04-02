@@ -96,7 +96,7 @@ class FilePermissions
                 DirectoryList::MEDIA,
                 DirectoryList::STATIC_VIEW,
             ];
-            if ($this->state->getMode() !== State::MODE_PRODUCTION) {
+            if (PHP_SAPI !== 'cli' || $this->state->getMode() !== State::MODE_PRODUCTION) {
                 $data[] = DirectoryList::GENERATED;
             }
             foreach ($data as $code) {
