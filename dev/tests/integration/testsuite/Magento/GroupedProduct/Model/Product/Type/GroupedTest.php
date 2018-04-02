@@ -150,7 +150,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped_with_out_of_stock.php
      * @magentoAppArea frontend
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @dataProvider outOfStockSubProductDataProvider
      * @param bool $outOfStockShown
      * @param array $data
