@@ -829,12 +829,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento-engcom/zf1-php-7.2-support.git",
-                "reference": "d99ca643e52e2465ef84abc61646159807a0de93"
+                "reference": "10d8c93d5fc04b5e7d93ff1f69c3d30a5f6865b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento-engcom/zf1-php-7.2-support/zipball/d99ca643e52e2465ef84abc61646159807a0de93",
-                "reference": "d99ca643e52e2465ef84abc61646159807a0de93",
+                "url": "https://api.github.com/repos/magento-engcom/zf1-php-7.2-support/zipball/10d8c93d5fc04b5e7d93ff1f69c3d30a5f6865b8",
+                "reference": "10d8c93d5fc04b5e7d93ff1f69c3d30a5f6865b8",
                 "shasum": ""
             },
             "archive": {
@@ -878,7 +878,7 @@
                 "source": "https://github.com/magento-engcom/zf1-php-7.2-support/tree/master",
                 "issues": "https://github.com/magento-engcom/zf1-php-7.2-support/issues"
             },
-            "time": "2018-03-20T01:20:27+00:00"
+            "time": "2018-03-30T18:59:41+00:00"
         },
         {
             "name": "monolog/monolog",
