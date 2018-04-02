@@ -14,7 +14,10 @@
             <group value="wishlist"/>
         </annotations>
         <before>
-            <createData stepKey="storeGroup" entity="customStoreGroup"/>
+            <getData entity="DefaultRootCategoryGetter" stepKey="getDefaultRootCategory"/>
+            <createData stepKey="storeGroup" entity="customStoreGroup">
+                <requiredEntity createDataKey="getDefaultRootCategory"/>
+            </createData>
             <createData stepKey="product" entity="SimpleOne" />
             <createData stepKey="secondProduct" entity="SimpleOne" />
             <createData stepKey="customer" entity="Simple_US_Customer"/>
