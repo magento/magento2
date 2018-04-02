@@ -222,21 +222,35 @@ class SessionManager implements SessionManagerInterface
         $this->validator->validate($this);
         $this->actualizationStorage->init(isset($_SESSION) ? $_SESSION : []);
 
-        if ($this->actualizationStorage->hasNewSessionId()) {
-            // Looks like we work with unstable network. Start actual session.
+        $forwarded = false;
+        while ($this->actualizationStorage->hasNewSessionId()) {
+            // Looks like we work with unstable network. Start more actual session.
             $this->restartSession($this->actualizationStorage->getNewSessionId());
             $this->validator->validate($this);
-        } elseif ($this->actualizationStorage->hasOldSessionId()) {
-            // New cookie was received. Proceed with old session delete.
-            $currentSessionId = $this->getSessionId();
-            $oldSessionId = $this->actualizationStorage->getOldSessionId();
-            $this->actualizationStorage->unsOldSessionId();
-            $this->restartSession($oldSessionId);
-            if ($currentSessionId == $this->actualizationStorage->getNewSessionId()) {
-                session_destroy();
-            }
-            $this->restartSession($currentSessionId);
+            $forwarded = true;
         }
+
+        if ($forwarded == false && $this->actualizationStorage->hasOldSessionId()) {
+            // New cookie was received. Proceed with old session delete.
+            $this->destroyOldSession();
+        }
+    }
+
+    /**
+     * Destroy old session.
+     *
+     * @return void
+     */
+    private function destroyOldSession()
+    {
+        $currentSessionId = $this->getSessionId();
+        $oldSessionId = $this->actualizationStorage->getOldSessionId();
+        $this->actualizationStorage->unsOldSessionId();
+        $this->restartSession($oldSessionId);
+        if ($currentSessionId == $this->actualizationStorage->getNewSessionId()) {
+            session_destroy();
+        }
+        $this->restartSession($currentSessionId);
     }
 
     /**
@@ -585,10 +599,8 @@ class SessionManager implements SessionManagerInterface
     protected function restartSession($sid)
     {
         session_commit();
-        ini_set('session.use_strict_mode', 0);
         $this->setSessionId($sid);
         session_start();
-        ini_restore('session.use_strict_mode');
         $this->actualizationStorage->init(isset($_SESSION) ? $_SESSION : []);
     }
 
