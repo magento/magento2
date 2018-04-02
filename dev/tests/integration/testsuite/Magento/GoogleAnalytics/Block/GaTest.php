@@ -6,7 +6,6 @@
 
 namespace Magento\GoogleAnalytics\Block;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\TestFramework\TestCase\AbstractController;
 
 class GaTest extends AbstractController
@@ -25,9 +24,7 @@ class GaTest extends AbstractController
     {
         parent::setUp();
         $this->dispatch('/');
-        $this->layout = ObjectManager::getInstance()->get(
-            \Magento\Framework\View\LayoutInterface::class
-        );
+        $this->layout = $this->_objectManager->get(\Magento\Framework\View\LayoutInterface::class);
     }
 
     /**
@@ -90,6 +87,12 @@ class GaTest extends AbstractController
      */
     private function getGaBlockFromNode($nodeName = 'head.additional')
     {
-        return $this->layout->getChildBlock($nodeName, 'google_analytics');
+        $childBlocks = $this->layout->getChildBlocks($nodeName);
+        foreach ($childBlocks as $block) {
+            if (strpos($block->getNameInLayout(), 'google_analytics') !== false) {
+                return $block;
+            }
+        }
+        return false;
     }
 }
