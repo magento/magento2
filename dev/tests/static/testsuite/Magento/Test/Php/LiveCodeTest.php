@@ -350,7 +350,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             sprintf(
                 "Frozen code must not be modified. %d modified files detected:\n\t%s",
                 count($changedFrozenCode),
-                join("\n\t",$changedFrozenCode)
+                join("\n\t", $changedFrozenCode)
             )
         );
     }
