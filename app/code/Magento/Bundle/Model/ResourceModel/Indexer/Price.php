@@ -169,7 +169,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             '0'
         );
 
-        $tierExpr = new \Zend_Db_Expr("tp.min_price");
+        $tierExpr = new \Zend_Db_Expr('tp.min_price');
 
         if ($priceType == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
             $finalPrice = $connection->getCheckSql(
@@ -179,17 +179,17 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             );
             $tierPrice = $connection->getCheckSql(
                 $tierExpr . ' IS NOT NULL',
-                'ROUND(' . $price . ' - ' . '(' . $price . ' * (' . $tierExpr . ' / 100)), 4)',
+                'ROUND((1 - ' . $tierExpr . ' / 100) * ' . $price . ', 4)',
                 'NULL'
             );
 
             $finalPrice = $connection->getCheckSql(
-                "{$tierPrice} < {$finalPrice}",
+                "{$tierExpr} IS NOT NULL AND {$tierPrice} < {$finalPrice}",
                 $tierPrice,
                 $finalPrice
             );
         } else {
-            $finalPrice = new \Zend_Db_Expr("0");
+            $finalPrice = new \Zend_Db_Expr('0');
             $tierPrice = $connection->getCheckSql($tierExpr . ' IS NOT NULL', '0', 'NULL');
         }
 
@@ -198,7 +198,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
                 'price_type' => new \Zend_Db_Expr($priceType),
                 'special_price' => $specialExpr,
                 'tier_percent' => $tierExpr,
-                'orig_price' => $connection->getCheckSql($price . ' IS NULL', '0', $price),
+                'orig_price' => $connection->getIfNullSql($price, '0'),
                 'price' => $finalPrice,
                 'min_price' => $finalPrice,
                 'max_price' => $finalPrice,
@@ -246,20 +246,20 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         $this->_prepareBundleOptionTable();
 
         $select = $connection->select()->from(
-            ['i' => $this->_getBundleSelectionTable()],
+            $this->_getBundleSelectionTable(),
             ['entity_id', 'customer_group_id', 'website_id', 'option_id']
         )->group(
             ['entity_id', 'customer_group_id', 'website_id', 'option_id']
         );
-        $minPrice = $connection->getCheckSql('i.is_required = 1', 'i.price', '0');
-        $tierPrice = $connection->getCheckSql('i.is_required = 1', 'i.tier_price', '0');
+        $minPrice = $connection->getCheckSql('is_required = 1', 'price', 'NULL');
+        $tierPrice = $connection->getCheckSql('is_required = 1', 'tier_price', 'NULL');
         $select->columns(
             [
                 'min_price' => new \Zend_Db_Expr('MIN(' . $minPrice . ')'),
-                'alt_price' => new \Zend_Db_Expr('NULL'),
-                'max_price' => new \Zend_Db_Expr('SUM(i.price)'),
+                'alt_price' => new \Zend_Db_Expr('MIN(price)'),
+                'max_price' => $connection->getCheckSql('group_type = 0', 'MAX(price)', 'SUM(price)'),
                 'tier_price' => new \Zend_Db_Expr('MIN(' . $tierPrice . ')'),
-                'alt_tier_price' => new \Zend_Db_Expr('NULL'),
+                'alt_tier_price' => new \Zend_Db_Expr('MIN(tier_price)'),
             ]
         );
 
@@ -314,33 +314,33 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
                     'ROUND(i.base_tier - (i.base_tier * (' . $selectionPriceValue . ' / 100)),4)',
                     $connection->getCheckSql(
                         'i.tier_percent > 0',
-                        'ROUND(' .
-                        $selectionPriceValue .
-                        ' - (' .
-                        $selectionPriceValue .
-                        ' * (i.tier_percent / 100)),4)',
+                        'ROUND((1 - i.tier_percent / 100) * ' . $selectionPriceValue . ',4)',
                         $selectionPriceValue
                     )
                 ) . ' * bs.selection_qty',
                 'NULL'
             );
 
-            $priceExpr = new \Zend_Db_Expr(
-                $connection->getCheckSql("{$tierExpr} < {$priceExpr}", $tierExpr, $priceExpr)
-            );
+            $priceExpr = $connection->getLeastSql([
+                $priceExpr,
+                $connection->getIfNullSql($tierExpr, $priceExpr),
+            ]);
         } else {
-            $priceExpr = new \Zend_Db_Expr(
-                $connection->getCheckSql(
-                    'i.special_price > 0 AND i.special_price < 100',
-                    'ROUND(idx.min_price * (i.special_price / 100), 4)',
-                    'idx.min_price'
-                ) . ' * bs.selection_qty'
+            $price = 'idx.min_price * bs.selection_qty';
+            $specialExpr = $connection->getCheckSql(
+                'i.special_price > 0 AND i.special_price < 100',
+                'ROUND(' . $price . ' * (i.special_price / 100), 4)',
+                $price
             );
             $tierExpr = $connection->getCheckSql(
-                'i.base_tier IS NOT NULL',
-                'ROUND(idx.min_price * (i.base_tier / 100), 4)* bs.selection_qty',
+                'i.tier_percent IS NOT NULL',
+                'ROUND((1 - i.tier_percent / 100) * ' . $price . ', 4)',
                 'NULL'
             );
+            $priceExpr = $connection->getLeastSql([
+                $specialExpr,
+                $connection->getIfNullSql($tierExpr, $price),
+            ]);
         }
 
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
@@ -509,13 +509,17 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
                 'customer_group_id',
                 'website_id',
                 'min_price' => new \Zend_Db_Expr('SUM(min_price)'),
+                'alt_price' => new \Zend_Db_Expr('MIN(alt_price)'),
                 'max_price' => new \Zend_Db_Expr('SUM(max_price)'),
                 'tier_price' => new \Zend_Db_Expr('SUM(tier_price)'),
+                'alt_tier_price' => new \Zend_Db_Expr('MIN(alt_tier_price)'),
             ]
         )->group(
             ['entity_id', 'customer_group_id', 'website_id']
         );
 
+        $minPrice = 'i.min_price + ' . $connection->getIfNullSql('io.min_price', '0');
+        $tierPrice = 'i.tier_price + ' . $connection->getIfNullSql('io.tier_price', '0');
         $select = $connection->select()->join(
             ['io' => $subSelect],
             'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
@@ -523,9 +527,9 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             []
         )->columns(
             [
-                'min_price' => new \Zend_Db_Expr('io.min_price + i.min_price'),
+                'min_price' => $connection->getCheckSql("{$minPrice} = 0", 'io.alt_price', $minPrice),
                 'max_price' => new \Zend_Db_Expr('io.max_price + i.max_price'),
-                'tier_price' => new \Zend_Db_Expr('io.tier_price + i.tier_price'),
+                'tier_price' => $connection->getCheckSql("{$tierPrice} = 0", 'io.alt_tier_price', $tierPrice),
             ]
         );
 
