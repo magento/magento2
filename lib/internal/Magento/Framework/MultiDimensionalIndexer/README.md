@@ -1,3 +1,5 @@
+MultiDimensionalIndexer
+=======
 The **\Magento\Framework\MultiDimensionalIndexer** library provides functionality of multi-dimension index creation and
 handling.
 
