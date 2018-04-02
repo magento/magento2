@@ -17,11 +17,11 @@ class BundleProductTypeResolver implements TypeResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolveType(array $data) : ?string
+    public function resolveType(array $data) : string
     {
         if (isset($data['type_id']) && $data['type_id'] == 'bundle') {
             return 'BundleProduct';
         }
-        return null;
+        return '';
     }
 }

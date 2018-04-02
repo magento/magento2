@@ -5,14 +5,14 @@
  */
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Api\Data\DetailedOperationStatusInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Class Operation
  */
-class Operation extends DataObject implements OperationInterface, ExtensibleDataInterface
+class Operation extends DataObject implements DetailedOperationStatusInterface, ExtensibleDataInterface
 {
     /**
      * @inheritDoc
@@ -76,6 +76,22 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
     public function setSerializedData($serializedData)
     {
         return $this->setData(self::SERIALIZED_DATA, $serializedData);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getResultSerializedData()
+    {
+        return $this->getData(self::RESULT_SERIALIZED_DATA);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setResultSerializedData($resultSerializedData)
+    {
+        return $this->setData(self::RESULT_SERIALIZED_DATA, $resultSerializedData);
     }
 
     /**

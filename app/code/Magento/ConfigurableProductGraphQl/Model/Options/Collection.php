@@ -74,17 +74,17 @@ class Collection
     }
 
     /**
-     * Retrieve attributes for given product id
+     * Retrieve attributes for given product id or empty array
      *
      * @param int $productId
-     * @return array|null
+     * @return array
      */
-    public function getAttributesByProductId(int $productId) : ?array
+    public function getAttributesByProductId(int $productId) : array
     {
         $attributes = $this->fetch();
 
         if (!isset($attributes[$productId])) {
-            return null;
+            return [];
         }
 
         return $attributes[$productId];

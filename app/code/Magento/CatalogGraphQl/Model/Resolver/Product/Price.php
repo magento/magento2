@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
@@ -62,18 +62,21 @@ class Price implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ): ?Value {
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ): Value {
         if (!isset($value['model'])) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
 
         /** @var Product $product */
         $product = $value['model'];
-
+        $product->unsetData('minimal_price');
         $priceInfo = $this->priceInfoFactory->create($product);
         /** @var \Magento\Catalog\Pricing\Price\FinalPriceInterface $finalPrice */
         $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
@@ -101,7 +104,7 @@ class Price implements ResolverInterface
      * @param AmountInterface $amount
      * @return array
      */
-    private function createAdjustmentsArray(array $adjustments, AmountInterface $amount)
+    private function createAdjustmentsArray(array $adjustments, AmountInterface $amount) : array
     {
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->storeManager->getStore();

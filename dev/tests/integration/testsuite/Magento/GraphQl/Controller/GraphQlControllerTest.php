@@ -9,6 +9,7 @@ namespace Magento\GraphQl\Controller;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -20,19 +21,12 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  string */
-    private $mageMode;
-
     const CONTENT_TYPE = 'application/json';
-
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
-
-    /** @var \Magento\Framework\App\Request\Http $request */
-    private $request;
 
     /**
      * @var GraphQl $graphql
@@ -42,12 +36,16 @@ class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
     /** @var SerializerInterface */
     private $jsonSerializer;
 
+    /** @var MetadataPool */
+    private $metadataPool;
+
     protected function setUp()
     {
         // parent::setUp();
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
+        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
     }
 
     /**
@@ -88,11 +86,11 @@ QUERY;
         $request->setHeaders($headers);
         $response = $this->graphql->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
-        $this->assertEquals($output['data']['products']['items'][0]['id'], $product->getId());
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $this->assertEquals($output['data']['products']['items'][0]['id'], $product->getData($linkField));
         $this->assertEquals($output['data']['products']['items'][0]['sku'], $product->getSku());
         $this->assertEquals($output['data']['products']['items'][0]['name'], $product->getName());
     }
-
 
     public function testOutputErrorsWithMessageCategoryAndTrace()
     {
@@ -114,7 +112,6 @@ QUERY;
     }  
   }
 QUERY;
-
 
         $postData = [
             'query'         => $query,
@@ -141,12 +138,12 @@ QUERY;
                         $this->assertEquals($error['message'], 'Invalid entity_type specified: invalid');
                     }
                     if (isset($error['trace'])) {
-                        if (is_array($error['trace']))
-                        $this->assertNotEmpty($error['trace']);
+                        if (is_array($error['trace'])) {
+                            $this->assertNotEmpty($error['trace']);
+                        }
                     }
                 }
             }
         }
     }
 }
-

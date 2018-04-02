@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader;
 
@@ -18,5 +17,5 @@ interface TypeMetaReaderInterface
      * @param \GraphQL\Type\Definition\Type $typeMeta
      * @return array
      */
-    public function read(\GraphQL\Type\Definition\Type $typeMeta) : ?array;
+    public function read(\GraphQL\Type\Definition\Type $typeMeta)  : array;
 }

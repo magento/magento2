@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\DownloadableGraphQl\Model\Resolver\Product;
 
@@ -80,13 +80,16 @@ class DownloadableOptions implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ): ?Value {
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ): Value {
         if (!isset($value['model'])) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
 
         /** @var Product $product */
@@ -134,10 +137,19 @@ class DownloadableOptions implements ResolverInterface
             $resultData[$linkKey]['is_shareable'] = $this->downloadableHelper->getIsShareable($link);
             $resultData[$linkKey]['price'] = $link->getPrice();
             $resultData[$linkKey]['number_of_downloads'] = $link->getNumberOfDownloads();
-            $resultData[$linkKey]['link_type']
-                = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $link->getLinkType());
-            $resultData[$linkKey]['sample_type']
-                = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $link->getSampleType());
+            $sampleType = $link->getSampleType();
+            $linkType = $link->getLinkType();
+
+            if ($linkType !== null) {
+                $resultData[$linkKey]['link_type']
+                    = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $linkType);
+            }
+
+            if ($sampleType !== null) {
+                $resultData[$linkKey]['sample_type']
+                    = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $sampleType);
+            }
+
             $resultData[$linkKey]['sample_file'] = $link->getSampleFile();
             $resultData[$linkKey]['sample_url'] = $link->getSampleUrl();
         }

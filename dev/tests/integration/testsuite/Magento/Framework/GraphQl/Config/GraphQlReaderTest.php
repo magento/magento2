@@ -71,12 +71,15 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
             ['outputMapper' => $outputMapper]
         );
         $this->graphQlController = $this->objectManager->create(
-             GraphQl::class,
+            GraphQl::class,
             ['schemaGenerator' => $schemaGenerator]
         );
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testDispatchIntrospectionWithCustomSDL()
     {
         $query
@@ -181,40 +184,42 @@ QUERY;
         $expectedOutput = require __DIR__ . '/../_files/schema_response_sdl_description.php';
 
         $schemaResponseFields = $output['data']['__schema']['types'];
-        $schemaResponseFieldsFirstHalf = array_slice($schemaResponseFields,0,25);
+        $schemaResponseFieldsFirstHalf = array_slice($schemaResponseFields, 0, 25);
         $schemaResponseFieldsSecondHalf = array_slice($schemaResponseFields, -21, 21);
         $mergedSchemaResponseFields = array_merge($schemaResponseFieldsFirstHalf, $schemaResponseFieldsSecondHalf);
 
         foreach ($expectedOutput as $searchTerm) {
-
             $this->assertTrue(
                 (in_array($searchTerm, $mergedSchemaResponseFields)),
                 'Missing type in the response'
             );
         }
         //Checks to make sure that the the given description exists in the expectedOutput array
-        $this->assertTrue(array_key_exists(
-            array_search(
-                'Comment for empty PhysicalProductInterface',
-                array_column($expectedOutput, 'description')
-            ),
-            $expectedOutput
-        )
-        );
-        $this->assertTrue(array_key_exists(
-            array_search(
-                'Comment for empty Enum',
-                array_column($expectedOutput, 'description')
-            ),
-            $expectedOutput
-        )
-        );
-        $this->assertTrue(array_key_exists(
-            array_search(
-                'Comment for SearchResultPageInfo',
-                array_column($expectedOutput, 'description')
+        $this->assertTrue(
+            array_key_exists(
+                array_search(
+                    'Comment for empty PhysicalProductInterface',
+                    array_column($expectedOutput, 'description')
                 ),
-            $expectedOutput
+                $expectedOutput
+            )
+        );
+        $this->assertTrue(
+            array_key_exists(
+                array_search(
+                    'Comment for empty Enum',
+                    array_column($expectedOutput, 'description')
+                ),
+                $expectedOutput
+            )
+        );
+        $this->assertTrue(
+            array_key_exists(
+                array_search(
+                    'Comment for SearchResultPageInfo',
+                    array_column($expectedOutput, 'description')
+                ),
+                $expectedOutput
             )
         );
     }

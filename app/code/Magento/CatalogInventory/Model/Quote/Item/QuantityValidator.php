@@ -104,8 +104,7 @@ class QuantityValidator
         $quoteItem = $observer->getEvent()->getItem();
         if (!$quoteItem ||
             !$quoteItem->getProductId() ||
-            !$quoteItem->getQuote() ||
-            $quoteItem->getQuote()->getIsSuperMode()
+            !$quoteItem->getQuote()
         ) {
             return;
         }
@@ -116,6 +115,18 @@ class QuantityValidator
         $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
         if (!$stockItem instanceof StockItemInterface) {
             throw new LocalizedException(__('The Product stock item is invalid. Verify the stock item and try again.'));
+        }
+
+        if (($options = $quoteItem->getQtyOptions()) && $qty > 0) {
+            foreach ($options as $option) {
+                $this->optionInitializer->initialize($option, $quoteItem, $qty);
+            }
+        } else {
+            $this->stockItemInitializer->initialize($stockItem, $quoteItem, $qty);
+        }
+
+        if ($quoteItem->getQuote()->getIsSuperMode()) {
+            return;
         }
 
         /* @var \Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus */
@@ -160,7 +171,7 @@ class QuantityValidator
         /**
          * Check item for options
          */
-        if (($options = $quoteItem->getQtyOptions()) && $qty > 0) {
+        if ($options) {
             $qty = $product->getTypeInstance()->prepareQuoteItemQty($qty, $product);
             $quoteItem->setData('qty', $qty);
             if ($stockStatus) {
@@ -194,7 +205,7 @@ class QuantityValidator
             $removeError = true;
 
             foreach ($options as $option) {
-                $result = $this->optionInitializer->initialize($option, $quoteItem, $qty);
+                $result = $option->getStockStateResult();
                 if ($result->getHasError()) {
                     $option->setHasError(true);
                     //Setting this to false, so no error statuses are cleared
@@ -207,7 +218,7 @@ class QuantityValidator
             }
         } else {
             if ($quoteItem->getParentItem() === null) {
-                $result = $this->stockItemInitializer->initialize($stockItem, $quoteItem, $qty);
+                $result = $quoteItem->getStockStateResult();
                 if ($result->getHasError()) {
                     $this->addErrorInfoToQuote($result, $quoteItem);
                 } else {

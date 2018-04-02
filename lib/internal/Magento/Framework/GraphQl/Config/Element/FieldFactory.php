@@ -42,13 +42,22 @@ class FieldFactory
         array $fieldData,
         array $arguments = []
     ) : Field {
+        $arraySign = '/^.*(\[\])$/';
+        $isList = false;
+
+        if (preg_match($arraySign, $fieldData['type'])) {
+            $isList = true;
+            $fieldData['type'] = str_replace('[]', '', $fieldData['type']);
+            $fieldData['itemType'] = str_replace('[]', '', $fieldData['type']);
+        }
+
         return $this->objectManager->create(
             Field::class,
             [
                 'name' => $fieldData['name'],
                 'type' => $fieldData['type'],
                 'required' => isset($fieldData['required']) ? $fieldData['required'] : false,
-                'isList' => isset($fieldData['itemType']),
+                'isList' => isset($fieldData['itemType']) || $isList,
                 'itemType' => isset($fieldData['itemType']) ? $fieldData['itemType'] : '',
                 'resolver' => isset($fieldData['resolver']) ? $fieldData['resolver'] : '',
                 'description' => isset($fieldData['description']) ? $fieldData['description'] : '',

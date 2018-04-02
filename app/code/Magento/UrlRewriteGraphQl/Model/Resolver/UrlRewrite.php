@@ -55,11 +55,14 @@ class UrlRewrite implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ) : ?Value {
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) : Value {
+        $result = function () {
+            return null;
+        };
         if (isset($args['url'])) {
             $urlRewrite = $this->findCanonicalUrl($args['url']);
             if ($urlRewrite) {
@@ -71,11 +74,9 @@ class UrlRewrite implements ResolverInterface
                 $result = function () use ($urlRewriteReturnArray) {
                     return $urlRewriteReturnArray;
                 };
-
-                return $this->valueFactory->create($result);
             }
         }
-        return null;
+        return $this->valueFactory->create($result);
     }
 
     /**

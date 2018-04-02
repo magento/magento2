@@ -45,13 +45,16 @@ class Label implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ): ?Value {
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ): Value {
         if (!isset($value['sku'])) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
 
         $this->product->addProductSku($value['sku']);
@@ -66,5 +69,4 @@ class Label implements ResolverInterface
 
         return $this->valueFactory->create($result);
     }
-
 }

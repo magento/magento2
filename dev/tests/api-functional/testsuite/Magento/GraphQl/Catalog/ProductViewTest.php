@@ -9,6 +9,7 @@ namespace Magento\GraphQl\Catalog;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -40,12 +41,6 @@ class ProductViewTest extends GraphQlAbstract
     {
         items {
             attribute_set_id
-            category_ids
-            category_links
-            {
-                category_id
-                position
-            }
             country_of_manufacture
             created_at
             custom_design
@@ -56,6 +51,13 @@ class ProductViewTest extends GraphQlAbstract
             description
             gift_message_available
             id
+            categories {
+               name
+               is_active
+               url_path
+               available_sort_by
+               level
+            }
             image
             image_label
             meta_description
@@ -249,7 +251,7 @@ QUERY;
 
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
-
+        $responseObject = new DataObject($response);
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
@@ -264,305 +266,403 @@ QUERY;
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
-        $this->assertCategoryIds($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
         $this->assertTierPrices($product, $response['products']['items'][0]);
+        self::assertEquals(
+            'Movable Position 2',
+            $responseObject->getData('products/items/0/categories/1/name')
+        );
+        self::assertEquals(
+            'Filter category',
+            $responseObject->getData('products/items/0/categories/2/name')
+        );
     }
-//
-//    /**
-//     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_media_gallery_entries.php
-//     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-//     */
-//    public function testQueryMediaGalleryEntryFieldsSimpleProduct()
-//    {
-//
-//        $productSku = 'simple';
-//
-//        $query = <<<QUERY
-//{
-//    products(filter: {sku: {eq: "{$productSku}"}})
-//    {
-//        items{
-//            attribute_set_id
-//            category_ids
-//            category_links
-//            {
-//                category_id
-//                position
-//            }
-//            country_of_manufacture
-//            created_at
-//            custom_design
-//            custom_design_from
-//            custom_design_to
-//            custom_layout
-//            custom_layout_update
-//            description
-//            gift_message_available
-//            id
-//            image
-//            image_label
-//            meta_description
-//            meta_keyword
-//            meta_title
-//            media_gallery_entries
-//            {
-//                disabled
-//                file
-//                id
-//                label
-//                media_type
-//                position
-//                types
-//                content
-//                {
-//                    base64_encoded_data
-//                    type
-//                    name
-//                }
-//                video_content
-//                {
-//                    media_type
-//                    video_description
-//                    video_metadata
-//                    video_provider
-//                    video_title
-//                    video_url
-//                }
-//            }
-//            name
-//            new_from_date
-//            new_to_date
-//            options_container
-//            ... on CustomizableProductInterface {
-//              field_options: options {
-//                title
-//                required
-//                sort_order
-//                ... on CustomizableFieldOption {
-//                  product_sku
-//                  field_option: value {
-//                    sku
-//                    price
-//                    price_type
-//                    max_characters
-//                  }
-//                }
-//                ... on CustomizableAreaOption {
-//                  product_sku
-//                  area_option: value {
-//                    sku
-//                    price
-//                    price_type
-//                    max_characters
-//                  }
-//                }
-//                ... on CustomizableDateOption {
-//                  product_sku
-//                  date_option: value {
-//                    sku
-//                    price
-//                    price_type
-//                  }
-//                }
-//                ... on CustomizableDropDownOption {
-//                  drop_down_option: value {
-//                    option_type_id
-//                    sku
-//                    price
-//                    price_type
-//                    title
-//                  }
-//                }
-//                ... on CustomizableRadioOption {
-//                  radio_option: value {
-//                    option_type_id
-//                    sku
-//                    price
-//                    price_type
-//                    title
-//                  }
-//                }
-//                ...on CustomizableFileOption {
-//                    product_sku
-//                    file_option: value {
-//                      sku
-//                      price
-//                      price_type
-//                      file_extension
-//                      image_size_x
-//                      image_size_y
-//                    }
-//                  }
-//              }
-//            }
-//            page_layout
-//            price {
-//              minimalPrice {
-//                amount {
-//                  value
-//                  currency
-//                }
-//                adjustments {
-//                  amount {
-//                    value
-//                    currency
-//                  }
-//                  code
-//                  description
-//                }
-//              }
-//              maximalPrice {
-//                amount {
-//                  value
-//                  currency
-//                }
-//                adjustments {
-//                  amount {
-//                    value
-//                    currency
-//                  }
-//                  code
-//                  description
-//                }
-//              }
-//              regularPrice {
-//                amount {
-//                  value
-//                  currency
-//                }
-//                adjustments {
-//                  amount {
-//                    value
-//                    currency
-//                  }
-//                  code
-//                  description
-//                }
-//              }
-//            }
-//            product_links
-//            {
-//                link_type
-//                linked_product_sku
-//                linked_product_type
-//                position
-//                sku
-//            }
-//            short_description
-//            sku
-//            small_image
-//            small_image_label
-//            special_from_date
-//            special_price
-//            special_to_date
-//            swatch_image
-//            tax_class_id
-//            thumbnail
-//            thumbnail_label
-//            tier_price
-//            tier_prices
-//            {
-//                customer_group_id
-//                percentage_value
-//                qty
-//                value
-//                website_id
-//            }
-//            type_id
-//            updated_at
-//            url_key
-//            url_path
-//            website_ids
-//            ... on PhysicalProductInterface {
-//                weight
-//            }
-//        }
-//    }
-//}
-//QUERY;
-//
-//        $response = $this->graphQlQuery($query);
-//
-//        /**
-//         * @var ProductRepositoryInterface $productRepository
-//         */
-//        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-//        $product = $productRepository->get($productSku, false, null, true);
-//        $this->assertArrayHasKey('products', $response);
-//        $this->assertArrayHasKey('items', $response['products']);
-//        $this->assertEquals(1, count($response['products']['items']));
-//        $this->assertArrayHasKey(0, $response['products']['items']);
-//        $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
-//    }
-//
-//    /**
-//     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_attribute.php
-//     */
-//    public function testQueryCustomAttributeField()
-//    {
-//        if (!$this->cleanCache()) {
-//            $this->fail('Cache could not be cleaned properly.');
-//        }
-//        $prductSku = 'simple';
-//
-//        $query = <<<QUERY
-//{
-//    products(filter: {sku: {eq: "{$prductSku}"}})
-//    {
-//        items
-//        {
-//            attribute_code_custom
-//        }
-//    }
-//}
-//QUERY;
-//
-//        $response = $this->graphQlQuery($query);
-//
-//        $this->assertArrayHasKey('products', $response);
-//        $this->assertArrayHasKey('items', $response['products']);
-//        $this->assertEquals(1, count($response['products']['items']));
-//        $this->assertArrayHasKey(0, $response['products']['items']);
-//        $this->assertCustomAttribute($response['products']['items'][0]);
-//    }
-//
-//    /**
-//     * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
-//     */
-//    public function testProductLinks()
-//    {
-//        $productSku = 'simple_with_cross';
-//
-//        $query = <<<QUERY
-//       {
-//           products(filter: {sku: {eq: "{$productSku}"}})
-//           {
-//               items {
-//                   attribute_set_id
-//                   type_id
-//                   product_links
-//                   {
-//                       link_type
-//                       linked_product_sku
-//                       linked_product_type
-//                       position
-//                       sku
-//                   }
-//               }
-//           }
-//       }
-//QUERY;
-//
-//        $response = $this->graphQlQuery($query);
-//        /**
-//         * @var ProductRepositoryInterface $productRepository
-//         */
-//        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-//        $product = $productRepository->get($productSku, false, null, true);
-//        $this->assertNotNull($response['products']['items'][0]['product_links'], "product_links must not be null");
-//        $this->assertProductLinks($product, $response['products']['items'][0]['product_links'][0]);
-//    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_media_gallery_entries.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testQueryMediaGalleryEntryFieldsSimpleProduct()
+    {
+
+        $productSku = 'simple';
+
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "{$productSku}"}})
+    {
+        items{
+            attribute_set_id
+            category_ids
+            categories
+            {
+                id
+            }
+            country_of_manufacture
+            created_at
+            custom_design
+            custom_design_from
+            custom_design_to
+            custom_layout
+            custom_layout_update
+            description
+            gift_message_available
+            id
+            image
+            image_label
+            meta_description
+            meta_keyword
+            meta_title
+            media_gallery_entries
+            {
+                disabled
+                file
+                id
+                label
+                media_type
+                position
+                types
+                content
+                {
+                    base64_encoded_data
+                    type
+                    name
+                }
+                video_content
+                {
+                    media_type
+                    video_description
+                    video_metadata
+                    video_provider
+                    video_title
+                    video_url
+                }
+            }
+            name
+            new_from_date
+            new_to_date
+            options_container
+            ... on CustomizableProductInterface {
+              field_options: options {
+                title
+                required
+                sort_order
+                ... on CustomizableFieldOption {
+                  product_sku
+                  field_option: value {
+                    sku
+                    price
+                    price_type
+                    max_characters
+                  }
+                }
+                ... on CustomizableAreaOption {
+                  product_sku
+                  area_option: value {
+                    sku
+                    price
+                    price_type
+                    max_characters
+                  }
+                }
+                ... on CustomizableDateOption {
+                  product_sku
+                  date_option: value {
+                    sku
+                    price
+                    price_type
+                  }
+                }
+                ... on CustomizableDropDownOption {
+                  drop_down_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                  }
+                }
+                ... on CustomizableRadioOption {
+                  radio_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                  }
+                }
+                ...on CustomizableFileOption {
+                    product_sku
+                    file_option: value {
+                      sku
+                      price
+                      price_type
+                      file_extension
+                      image_size_x
+                      image_size_y
+                    }
+                  }
+              }
+            }
+            page_layout
+            price {
+              minimalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              maximalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              regularPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+            }
+            product_links
+            {
+                link_type
+                linked_product_sku
+                linked_product_type
+                position
+                sku
+            }
+            short_description
+            sku
+            small_image
+            small_image_label
+            special_from_date
+            special_price
+            special_to_date
+            swatch_image
+            tax_class_id
+            thumbnail
+            thumbnail_label
+            tier_price
+            tier_prices
+            {
+                customer_group_id
+                percentage_value
+                qty
+                value
+                website_id
+            }
+            type_id
+            updated_at
+            url_key
+            url_path
+            website_ids
+            ... on PhysicalProductInterface {
+                weight
+            }
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku, false, null, true);
+        $this->assertArrayHasKey('products', $response);
+        $this->assertArrayHasKey('items', $response['products']);
+        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertArrayHasKey(0, $response['products']['items']);
+        $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_attribute.php
+     */
+    public function testQueryCustomAttributeField()
+    {
+        if (!$this->cleanCache()) {
+            $this->fail('Cache could not be cleaned properly.');
+        }
+        $prductSku = 'simple';
+
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "{$prductSku}"}})
+    {
+        items
+        {
+            attribute_code_custom
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey('products', $response);
+        $this->assertArrayHasKey('items', $response['products']);
+        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertArrayHasKey(0, $response['products']['items']);
+        $this->assertCustomAttribute($response['products']['items'][0]);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
+     */
+    public function testProductLinks()
+    {
+        $productSku = 'simple_with_cross';
+
+        $query = <<<QUERY
+       {
+           products(filter: {sku: {eq: "{$productSku}"}})
+           {
+               items {
+                   attribute_set_id
+                   type_id
+                   product_links
+                   {
+                       link_type
+                       linked_product_sku
+                       linked_product_type
+                       position
+                       sku
+                   }
+               }
+           }
+       }
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku, false, null, true);
+        $this->assertNotNull($response['products']['items'][0]['product_links'], "product_links must not be null");
+        $this->assertProductLinks($product, $response['products']['items'][0]['product_links'][0]);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_list.php
+     */
+    public function testProductPrices()
+    {
+        $firstProductSku = 'simple-249';
+        $secondProductSku = 'simple-156';
+        $query = <<<QUERY
+       {
+           products(filter: {min_price: {gt: "100.0"}, max_price: {gt: "150.0", lt: "250.0"}})
+           {
+               items {
+                   attribute_set_id
+                   created_at
+                   id
+                   name
+                   price {
+                      minimalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      maximalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      regularPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                    }
+                   sku
+                   type_id
+                   updated_at
+                   ... on PhysicalProductInterface {
+                        weight
+                   }
+               }
+           }
+       }
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $firstProduct = $productRepository->get($firstProductSku, false, null, true);
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        $firstProduct->setId(
+            $firstProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
+        $secondProduct = $productRepository->get($secondProductSku, false, null, true);
+        $secondProduct->setId(
+            $secondProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
+        self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
+        self::assertCount(2, $response['products']['items']);
+        $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
+        $this->assertBaseFields($secondProduct, $response['products']['items'][1]);
+    }
 
     /**
      * @param ProductInterface $product
@@ -601,18 +701,6 @@ QUERY;
                 'video_url' => $videoContent->getVideoUrl(),
             ]
         );
-    }
-
-    /**
-     * @param ProductInterface $product
-     * @param array $actualResponse
-     */
-    private function assertCategoryIds($product, $actualResponse)
-    {
-        $categoryIdsAttribute = $product->getCustomAttribute('category_ids');
-        $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
-        $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-        $this->assertEquals($categoryIdsAttributeValue, $actualResponse['category_ids']);
     }
 
     /**
@@ -745,7 +833,7 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-        // ['product_object_field_name', 'expected_value']
+
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
@@ -794,7 +882,6 @@ QUERY;
         /** @var ProductLinkInterface $productLinks */
         $productLinks = $product->getProductLinks();
         $productLink = $productLinks[0];
-     //   $this->assertNotEmpty($actualResponse['product_links'],"Precondition failed: 'product_links' must not be empty");
         $assertionMap = [
             ['response_field' => 'link_type', 'expected_value' => $productLink->getLinkType()],
             ['response_field' => 'linked_product_sku', 'expected_value' => $productLink->getLinkedProductSku()],
@@ -869,11 +956,11 @@ QUERY;
                 ? $assertionData['expected_value']
                 : $assertionData;
             $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            $this->assertNotNull(
+            self::assertNotNull(
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"
             );
-            $this->assertEquals(
+            self::assertEquals(
                 $expectedValue,
                 $actualResponse[$responseField],
                 "Value of '{$responseField}' field in response does not match expected value: "

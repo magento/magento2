@@ -31,7 +31,7 @@ class EnumType implements TypeMetaReaderInterface
     /**
      * {@inheritdoc}
      */
-    public function read(\GraphQL\Type\Definition\Type $typeMeta) : ?array
+    public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
         if ($typeMeta instanceof \GraphQL\Type\Definition\EnumType) {
             $result = [
@@ -57,7 +57,7 @@ class EnumType implements TypeMetaReaderInterface
 
             return $result;
         } else {
-            return null;
+            return [];
         }
     }
 }

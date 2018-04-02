@@ -32,7 +32,7 @@ class ProductLinkTypeResolverComposite implements TypeResolverInterface
      * {@inheritdoc}
      * @throws GraphQlInputException
      */
-    public function resolveType(array $data) : ?string
+    public function resolveType(array $data) : string
     {
         $resolvedType = null;
 

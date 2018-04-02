@@ -6,7 +6,6 @@
 
 namespace Magento\GraphQl;
 
-
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class IntrospectionQueryTest extends GraphQlAbstract
@@ -58,7 +57,7 @@ QUERY;
         $this->expectExceptionMessage(
             'GraphQL response contains errors: GraphQL introspection is not allowed, but ' .
             'the query contained __schema or __type'
-         );
+        );
         $this->graphQlQuery($query);
     }
 }

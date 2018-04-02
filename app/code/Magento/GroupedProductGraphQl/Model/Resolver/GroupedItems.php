@@ -47,16 +47,18 @@ class GroupedItems implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ): ?Value {
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ): Value {
         if (!isset($value['model'])) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
 
-        /** @var \Magento\Catalog\Model\Product $productModel */
         $productModel = $value['model'];
         $links = $productModel->getProductLinks();
         foreach ($links as $link) {

@@ -90,7 +90,10 @@ class Collection
      */
     public function addParentId(int $id) : void
     {
-        if (!in_array($id, $this->parentIds)) {
+        if (!in_array($id, $this->parentIds) && !empty($this->childrenMap)) {
+            $this->childrenMap = [];
+            $this->parentIds[] = $id;
+        } elseif (!in_array($id, $this->parentIds)) {
             $this->parentIds[] = $id;
         }
     }
@@ -110,14 +113,14 @@ class Collection
      * Retrieve child products from for passed in parent id.
      *
      * @param int $id
-     * @return array|null
+     * @return array
      */
-    public function getChildProductsByParentId(int $id) : ?array
+    public function getChildProductsByParentId(int $id) : array
     {
         $childrenMap = $this->fetch();
 
         if (!isset($childrenMap[$id])) {
-            return null;
+            return [];
         }
 
         return $childrenMap[$id];
@@ -135,24 +138,24 @@ class Collection
         }
 
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        /** @var ChildCollection $childCollection */
-        $childCollection = $this->childCollectionFactory->create();
         foreach ($this->parentIds as $id) {
+            /** @var ChildCollection $childCollection */
+            $childCollection = $this->childCollectionFactory->create();
             /** @var Product $product */
             $product = $this->productFactory->create();
             $product->setData($linkField, $id);
             $childCollection->setProductFilter($product);
-        }
 
-        /** @var Product $childProduct */
-        foreach ($childCollection->getItems() as $childProduct) {
-            $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
-            $parentId = (int)$childProduct->getParentId();
-            if (!isset($this->childrenMap[$parentId])) {
-                $this->childrenMap[$parentId] = [];
+            /** @var Product $childProduct */
+            foreach ($childCollection->getItems() as $childProduct) {
+                $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
+                $parentId = (int)$childProduct->getParentId();
+                if (!isset($this->childrenMap[$parentId])) {
+                    $this->childrenMap[$parentId] = [];
+                }
+
+                $this->childrenMap[$parentId][] = $formattedChild;
             }
-
-            $this->childrenMap[$parentId][] = $formattedChild;
         }
 
         return $this->childrenMap;

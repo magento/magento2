@@ -3,27 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\GraphQl;
+namespace Magento\GraphQl;
 
 use Magento\Framework\GraphQl\Schema\Type\InputObjectType;
 use Magento\Framework\GraphQl\Schema\Type\ObjectType;
-use Magento\Framework\GraphQl\Schema\Type\StringType;
-use Magento\Framework\GraphQl\SchemaFactory;
 use Magento\Framework\ObjectManagerInterface;
-use \GraphQL\Type\Definition\Type;
 
 class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
 {
-
-    /** @var  SchemaFactory */
+    /** @var \Magento\Framework\GraphQl\SchemaFactory */
     private $schemaFactory;
+
     /** @var  ObjectManagerInterface */
     private $objectManager;
 
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->schemaFactory = $this->objectManager->create(SchemaFactory::class);
+        $this->schemaFactory = $this->objectManager->get(\Magento\Framework\GraphQl\SchemaFactory::class);
     }
 
     public function testIntrospectionQuery()
@@ -34,7 +31,7 @@ class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
                     [
                         'name' => 'Query',
                         'description' =>'Description at type level',
-                        'fields' => ['a' => Type::string()]
+                        'fields' => ['a' => \GraphQL\Type\Definition\Type::string()]
                     ]
                 )
             ]
@@ -105,10 +102,23 @@ QUERY;
             [
                'name' => 'ProductFilterInput',
                'fields' => [
-                   'attributeA' =>['type' => Type::nonNull(Type::string()), 'description' =>'testDescriptionForA'],
-                   'attributeB' => ['type' => Type::listOf(Type::string())],
-                   'attributeC' => ['type' => Type::string(), 'defaultValue' => null ],
-                   'attributeD' => ['type' => Type::string(), 'defaultValue' => 'test', 'description' =>'testDescriptionForD'],
+                   'attributeA' => [
+                       'type' => \GraphQL\Type\Definition\Type::nonNull(
+                           \GraphQL\Type\Definition\Type::string()
+                       ),
+                       'description' => 'testDescriptionForA'
+                   ],
+                   'attributeB' => [
+                       'type' => \GraphQL\Type\Definition\Type::listOf(
+                           \GraphQL\Type\Definition\Type::string()
+                       )
+                   ],
+                   'attributeC' => ['type' => \GraphQL\Type\Definition\Type::string(), 'defaultValue' => null],
+                   'attributeD' => [
+                       'type' => \GraphQL\Type\Definition\Type::string(),
+                       'defaultValue' => 'test',
+                       'description' => 'testDescriptionForD'
+                   ],
 
                ]
             ]
@@ -117,7 +127,7 @@ QUERY;
             'name' => 'Query',
             'fields' => [
                 'field' => [
-                    'type' => Type::string(),
+                    'type' => \GraphQL\Type\Definition\Type::string(),
                     'args' => ['complex' => ['type' => $testInputObject]],
                     'resolve' => function ($args) {
                         return json_encode($args['complex']);
@@ -223,7 +233,7 @@ QUERY;
     }
 
     /**
-     *  @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testIntrospectsIncludeTheDeprecatedParameter()
     {
@@ -234,11 +244,11 @@ QUERY;
                     'name' => 'Query',
                     'fields' => [
                        'deprecated' => [
-                         'type' => Type::string(),
+                         'type' => \GraphQL\Type\Definition\Type::string(),
                          'deprecationReason' =>'Deprecated in an older version'
                        ],
                          'nonDeprecated' => [
-                            'type' => Type::string()
+                            'type' => \GraphQL\Type\Definition\Type::string()
                          ]
                     ]
                     ]

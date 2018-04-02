@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Variant;
 
@@ -38,13 +38,16 @@ class Attributes implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ): ?Value {
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ): Value {
         if (!isset($value['options']) || !isset($value['product'])) {
-            return null;
+            $result = function () {
+                return null;
+            };
+            return $this->valueFactory->create($result);
         }
 
         $result = function () use ($value) {

@@ -10,7 +10,7 @@ namespace Magento\Framework\GraphQl\Schema\Type;
 /**
  * Wrapper for GraphQl StringType
  */
-class StringType extends \GraphQL\Type\Definition\StringType implements InputType, OutputType
+class StringType extends \GraphQL\Type\Definition\StringType implements InputTypeInterface, OutputTypeInterface
 {
     /**
      * @var string

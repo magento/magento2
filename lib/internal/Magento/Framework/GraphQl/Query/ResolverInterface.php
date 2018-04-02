@@ -20,18 +20,18 @@ interface ResolverInterface
      * Fetches the data from persistence models and format it according to the GraphQL schema.
      *
      * @param \Magento\Framework\GraphQl\Config\Element\Field $field
-     * @param array|null $value
-     * @param array|null $args
      * @param $context
      * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
      * @throws \Exception
-     * @return Value|null
+     * @return Value
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ) : ?Value;
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) : Value;
 }

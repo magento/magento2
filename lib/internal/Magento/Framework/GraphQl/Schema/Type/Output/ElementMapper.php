@@ -8,7 +8,7 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Schema\Type\Output;
 
 use Magento\Framework\GraphQl\Config\ConfigElementInterface;
-use Magento\Framework\GraphQl\Schema\Type\OutputType;
+use Magento\Framework\GraphQl\Schema\Type\OutputTypeInterface;
 use Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\FormatterInterface;
 
 /**
@@ -33,10 +33,10 @@ class ElementMapper
      * Convert provided config element to the object compatible with GraphQL schema generator.
      *
      * @param \Magento\Framework\GraphQl\Config\ConfigElementInterface $configElement
-     * @param OutputType $outputType
+     * @param OutputTypeInterface $outputType
      * @return array
      */
-    public function buildSchemaArray(ConfigElementInterface $configElement, OutputType $outputType) : array
+    public function buildSchemaArray(ConfigElementInterface $configElement, OutputTypeInterface $outputType) : array
     {
         return $this->formatter->format($configElement, $outputType);
     }

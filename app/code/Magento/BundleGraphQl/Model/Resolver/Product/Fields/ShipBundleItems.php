@@ -46,21 +46,23 @@ class ShipBundleItems implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ): ?Value {
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ): Value {
+        $result = function () {
+            return null;
+        };
         if ($value['type_id'] === Bundle::TYPE_CODE) {
             $result = isset($value['shipment_type'])
                 ? $this->enumLookup->getEnumValueFromField('ShipBundleItemsEnum', $value['shipment_type']) : null;
-            return $this->valueFactory->create(
-                function () use ($result) {
-                    return $result;
-                }
-            );
         }
 
-        return null;
+        return $this->valueFactory->create(
+            function () use ($result) {
+                return $result;
+            }
+        );
     }
 }

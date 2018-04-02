@@ -50,19 +50,19 @@ class CustomerDataProvider
     }
 
     /**
-     * Get customer data by Id
+     * Get customer data by Id or empty array
      *
      * @param int $customerId
-     * @return array|null
+     * @return array
      * @throws NoSuchEntityException|LocalizedException
      */
-    public function getCustomerById(int $customerId) : ?array
+    public function getCustomerById(int $customerId) : array
     {
         try {
             $customerObject = $this->customerRepository->getById($customerId);
         } catch (NoSuchEntityException $e) {
             // No error should be thrown, null result should be returned
-            return null;
+            return [];
         }
         return $this->processCustomer($customerObject);
     }

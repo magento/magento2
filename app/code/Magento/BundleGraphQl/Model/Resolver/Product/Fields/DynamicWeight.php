@@ -38,12 +38,14 @@ class DynamicWeight implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ): ?Value {
-        $result = null;
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ): Value {
+        $result = function () {
+            return null;
+        };
         if ($value['type_id'] === Bundle::TYPE_CODE) {
             $result = isset($value['weight_type']) ? !$value['weight_type'] : null;
         }

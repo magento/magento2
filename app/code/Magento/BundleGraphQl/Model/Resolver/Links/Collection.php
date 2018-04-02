@@ -73,14 +73,14 @@ class Collection
      * Retrieve links for passed in option id.
      *
      * @param int $optionId
-     * @return array|null
+     * @return array
      */
-    public function getLinksForOptionId(int $optionId) : ?array
+    public function getLinksForOptionId(int $optionId) : array
     {
         $linksList = $this->fetch();
 
         if (!isset($linksList[$optionId])) {
-            return null;
+            return [];
         }
 
         return $linksList[$optionId];

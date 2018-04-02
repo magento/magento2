@@ -146,7 +146,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $outputInterfaceValues = $outputInterface->getInterfaces();
         /** @var \Magento\Framework\GraphQl\Config\Element\Field $outputInterfaceFields */
         $outputInterfaceFields =$outputInterface->getFields();
-        foreach(array_keys($outputInterfaceValues) as $outputInterfaceValue){
+        foreach (array_keys($outputInterfaceValues) as $outputInterfaceValue) {
             $this->assertEquals(
                 $expectedOutputArray['ProductLinks']['interfaces'][$outputInterfaceValue]['interface'],
                 $outputInterfaceValues[$outputInterfaceValue]['interface']
@@ -177,14 +177,21 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testGraphQlInterfaceConfigElement() {
+    public function testGraphQlInterfaceConfigElement()
+    {
         $interfaceType ='ProductLinksInterface';
         /** @var InterfaceType $outputConfigElement */
         $outputConfigElement = $this->model->getConfigElement($interfaceType);
         $expectedOutput = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($outputConfigElement->getName(), $expectedOutput['ProductLinksInterface']['name']);
-        $this->assertEquals($outputConfigElement->getTypeResolver(), $expectedOutput['ProductLinksInterface']['typeResolver']);
-        $this->assertEquals($outputConfigElement->getDescription(), $expectedOutput['ProductLinksInterface']['description']);
+        $this->assertEquals(
+            $outputConfigElement->getTypeResolver(),
+            $expectedOutput['ProductLinksInterface']['typeResolver']
+        );
+        $this->assertEquals(
+            $outputConfigElement->getDescription(),
+            $expectedOutput['ProductLinksInterface']['description']
+        );
     }
 
     /**

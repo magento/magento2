@@ -10,7 +10,7 @@ namespace Magento\Framework\GraphQl\Schema\Type;
 /**
  * Wrapper for GraphQl IdType
  */
-class IdType extends \GraphQL\Type\Definition\IDType implements InputType, OutputType
+class IdType extends \GraphQL\Type\Definition\IDType implements InputTypeInterface, OutputTypeInterface
 {
     /**
      * @var string

@@ -40,7 +40,7 @@ class ReferenceTypeFactory
         string $entityType,
         string $linkField = null,
         ReferenceType $referenceType = null
-    ) : ? ReferenceType {
+    ) : ReferenceType {
         return $this->objectManager->create(
             ReferenceType::class,
             [

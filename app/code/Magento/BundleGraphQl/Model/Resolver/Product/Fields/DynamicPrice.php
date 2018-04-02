@@ -38,11 +38,11 @@ class DynamicPrice implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ): ?Value {
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ): Value {
         $result = null;
         if ($value['type_id'] === Bundle::TYPE_CODE) {
             $result = isset($value['price_type']) ? !$value['price_type'] : null;

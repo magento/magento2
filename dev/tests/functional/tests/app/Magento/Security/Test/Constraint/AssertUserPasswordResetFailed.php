@@ -26,7 +26,7 @@ class AssertUserPasswordResetFailed extends AbstractConstraint
      */
     public function processAssert(AdminAuthLogin $adminAuth)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::TOO_MANY_RESET_REQUESTS_MESSAGE,
             $adminAuth->getMessagesBlock()->getErrorMessage(),
             'Wrong user reset password failed message is displayed.'

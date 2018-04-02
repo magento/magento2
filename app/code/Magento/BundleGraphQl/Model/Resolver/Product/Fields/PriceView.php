@@ -46,21 +46,23 @@ class PriceView implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ): ?Value {
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ): Value {
+        $result = function () {
+            return null;
+        };
         if ($value['type_id'] === Bundle::TYPE_CODE) {
             $result = isset($value['price_view'])
                 ? $this->enumLookup->getEnumValueFromField('PriceViewEnum', $value['price_view']) : null;
-            return $this->valueFactory->create(
-                function () use ($result) {
-                    return $result;
-                }
-            );
         }
 
-        return null;
+        return $this->valueFactory->create(
+            function () use ($result) {
+                return $result;
+            }
+        );
     }
 }

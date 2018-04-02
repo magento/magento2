@@ -6,9 +6,11 @@
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/module-catalog": "101.2.*",
-        "magento/module-downloadable": "100.3.*",
-        "magento/module-catalog-graph-ql": "100.0.*",
+        "magento/module-downloadable": "103.0.*",
         "magento/framework": "100.3.*"
+    },
+    "suggest": {
+        "magento/module-catalog-graph-ql": "100.0.*"
     },
     "license": [
         "OSL-3.0",

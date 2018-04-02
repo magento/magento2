@@ -22,7 +22,7 @@ class ProductLinksTypeResolver implements TypeResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolveType(array $data) : ?string
+    public function resolveType(array $data) : string
     {
         if (isset($data['link_type'])) {
             $linkType = $data['link_type'];
@@ -30,6 +30,6 @@ class ProductLinksTypeResolver implements TypeResolverInterface
                 return 'ProductLinks';
             }
         }
-        return null;
+        return '';
     }
 }

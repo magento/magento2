@@ -95,9 +95,17 @@ class Tree extends \Magento\Backend\Block\Template
      */
     public function getTreeLoaderUrl()
     {
+        $params = [];
+
+        $currentTreePath = $this->getRequest()->getParam('current_tree_path');
+
+        if (strlen($currentTreePath)) {
+            $params['current_tree_path'] = $currentTreePath;
+        }
+
         return $this->getUrl(
             'cms/*/treeJson',
-            ['use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root')]
+            $params
         );
     }
 
@@ -119,7 +127,14 @@ class Tree extends \Magento\Backend\Block\Template
     public function getTreeCurrentPath()
     {
         $treePath = ['root'];
-        if ($path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath()) {
+
+        if ($idEncodedPath = $this->getRequest()->getParam('current_tree_path')) {
+            $path = $this->_cmsWysiwygImages->idDecode($idEncodedPath);
+        } else {
+            $path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath();
+        }
+
+        if (strlen($path)) {
             $path = str_replace($this->_cmsWysiwygImages->getStorageRoot(), '', $path);
             $relative = [];
             foreach (explode('/', $path) as $dirName) {
@@ -129,6 +144,7 @@ class Tree extends \Magento\Backend\Block\Template
                 }
             }
         }
+
         return $treePath;
     }
 

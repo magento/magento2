@@ -109,8 +109,10 @@ class GraphQlReader implements ReaderInterface
         foreach ($schema->getTypeMap() as $typeName => $typeMeta) {
             // Only process custom types and skip built-in object types
             if ((strpos($typeName, '__') !== 0 && (!$typeMeta instanceof \GraphQL\Type\Definition\ScalarType))) {
-                $partialResults[$typeName] = $this->typeReader->read($typeMeta);
-                if (!$partialResults[$typeName]) {
+                $type = $this->typeReader->read($typeMeta);
+                if (!empty($type)) {
+                    $partialResults[$typeName] = $type;
+                } else {
                     throw new \LogicException("'{$typeName}' cannot be processed.");
                 }
             }
@@ -201,7 +203,6 @@ class GraphQlReader implements ReaderInterface
             $allMatchesForImplements
         );
 
-
         if (!empty($allMatchesForImplements)) {
             foreach (array_unique($allMatchesForImplements[0]) as $implementsString) {
                 $implementsStatementString = preg_replace(
@@ -224,7 +225,6 @@ class GraphQlReader implements ReaderInterface
                     $annotationString .= ']) ';
                     $graphQlSchemaContent = str_replace($implementsString, $annotationString, $graphQlSchemaContent);
                 }
-
             }
         }
 

@@ -7,7 +7,10 @@ declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
+use Magento\Catalog\Model\ResourceModel\CategoryProduct;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Data\SearchResultInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -41,6 +44,16 @@ class Product
     private $searchResultsFactory;
 
     /**
+     * @var CategoryProduct
+     */
+    private $categoryProduct;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @var \Magento\Catalog\Model\Layer\Resolver
      */
     private $layerResolver;
@@ -60,11 +73,16 @@ class Product
      * @param JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @param ProductSearchResultsInterfaceFactory $searchResultsFactory
+     * @param CategoryProduct $categoryProduct
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
+        ProductSearchResultsInterfaceFactory $searchResultsFactory,
+        CategoryProduct $categoryProduct,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         ProductSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Catalog\Model\ProductRepository $productRepository
@@ -73,6 +91,8 @@ class Product
         $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->categoryProduct = $categoryProduct;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->layerResolver = $layerResolver;
         $this->productRepository = $productRepository;
     }
@@ -93,7 +113,6 @@ class Product
         foreach ($attributes as $attributeCode) {
             $collection->addAttributeToSelect($attributeCode);
         }
-        $collection->addMinimalPrice()->addFinalPrice();
         $collection->addAttributeToSelect('special_price');
         $collection->addAttributeToSelect('special_price_from');
         $collection->addAttributeToSelect('special_price_to');
@@ -103,9 +122,6 @@ class Product
 
         $this->collectionProcessor->process($searchCriteria, $collection);
         $collection->addWebsiteNamesToResult();
-        $collection->addTaxPercents();
-        $collection->addWebsiteNamesToResult();
-        $sql = $collection->getSelect()->assemble();
         $collection->load();
 
         // Methods that perform extra fetches
@@ -117,7 +133,6 @@ class Product
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
-
         return $searchResult;
     }
 }

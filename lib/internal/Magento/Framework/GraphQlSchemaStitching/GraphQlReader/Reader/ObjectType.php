@@ -50,7 +50,7 @@ class ObjectType implements TypeMetaReaderInterface
     /**
      * {@inheritdoc}
      */
-    public function read(\GraphQL\Type\Definition\Type $typeMeta) : ?array
+    public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
         if ($typeMeta instanceof \GraphQL\Type\Definition\ObjectType) {
             $typeName = $typeMeta->name;
@@ -79,7 +79,7 @@ class ObjectType implements TypeMetaReaderInterface
 
             return $result;
         } else {
-            return null;
+            return [];
         }
     }
 

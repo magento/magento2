@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
@@ -54,7 +54,7 @@ class Product implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
     {
         if (!isset($value['sku'])) {
             throw new GraphQlInputException(__('No child sku found for product link.'));
@@ -65,7 +65,7 @@ class Product implements ResolverInterface
 
         $result = function () use ($value) {
             $data = $this->productDataProvider->getProductBySku($value['sku']);
-            if (!$data) {
+            if (empty($data)) {
                 return null;
             }
             $productModel = $data['model'];
@@ -93,7 +93,7 @@ class Product implements ResolverInterface
      * @param ResolveInfo $info
      * @return string[]
      */
-    private function getProductFields(ResolveInfo $info)
+    private function getProductFields(ResolveInfo $info) : array
     {
         $fieldNames = [];
         foreach ($info->fieldNodes as $node) {
