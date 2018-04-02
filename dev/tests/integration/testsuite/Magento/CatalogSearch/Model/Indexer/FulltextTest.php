@@ -26,11 +26,6 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
     protected $engine;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext
-     */
-    protected $resourceFulltext;
-
-    /**
      * @var \Magento\CatalogSearch\Model\Fulltext
      */
     protected $fulltext;
@@ -80,10 +75,6 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
 
         $this->engine = Bootstrap::getObjectManager()->get(
             \Magento\CatalogSearch\Model\ResourceModel\Engine::class
-        );
-
-        $this->resourceFulltext = Bootstrap::getObjectManager()->get(
-            \Magento\CatalogSearch\Model\ResourceModel\Fulltext::class
         );
 
         $this->queryFactory = Bootstrap::getObjectManager()->get(
@@ -194,7 +185,6 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      */
     protected function search($text)
     {
-        $this->resourceFulltext->resetSearchResults();
         $query = $this->queryFactory->get();
         $query->unsetData();
         $query->setQueryText($text);
