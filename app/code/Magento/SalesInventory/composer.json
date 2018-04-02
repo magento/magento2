@@ -10,7 +10,7 @@
         "magento/framework": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.1.1",
+    "version": "100.1.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
