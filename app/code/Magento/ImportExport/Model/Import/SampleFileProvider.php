@@ -53,9 +53,9 @@ class SampleFileProvider
      *
      * @param string $entityName
      * @throws NoSuchEntityException
-     * @return int
+     * @return int|null
      */
-    public function getSize(string $entityName): int
+    public function getSize(string $entityName)
     {
         $directoryRead = $this->getDirectoryRead($entityName);
         $filePath = $this->getPath($entityName);
@@ -81,7 +81,6 @@ class SampleFileProvider
     }
 
     /**
-     * @param string $entityName
      * @return string $entityName
      * @throws NoSuchEntityException
      */
