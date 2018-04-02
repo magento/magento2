@@ -47,15 +47,15 @@ class GetInvalidationRequired
         $connection = $this->resource->getConnection();
         $select = $connection->select()
             ->from(
-                ['tis' => Source::TABLE_NAME_SOURCE],
+                ['tis' => $connection->getTableName(Source::TABLE_NAME_SOURCE)],
                 'IF(tis.' . SourceInterface::ENABLED . '=' . $enabled . ', 0, 1)'
             )
             ->joinInner(
-                ['isi' => SourceItem::TABLE_NAME_SOURCE_ITEM],
+                ['isi' => $connection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM)],
                 'tis.' . SourceInterface::SOURCE_CODE . '=' . 'isi.' . SourceInterface::SOURCE_CODE,
                 ''
             )->joinInner(
-                ['issl' => StockSourceLink::TABLE_NAME_STOCK_SOURCE_LINK],
+                ['issl' => $connection->getTableName(StockSourceLink::TABLE_NAME_STOCK_SOURCE_LINK)],
                 'tis.' . SourceInterface::SOURCE_CODE . '=' . 'issl.' . SourceInterface::SOURCE_CODE,
                 ''
             )
