@@ -9,13 +9,21 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SimpleMsiProduct" type="product">
-        <data key="name" unique="suffix">Simple Product </data>
-        <data key="sku" unique="suffix">Simple_Product_</data>
+        <data key="name" unique="suffix">Simple MSI Product </data>
+        <data key="sku" unique="suffix">Simple_MSI_Product_</data>
         <data key="price">10.00</data>
         <data key="quantity">100</data>
         <data key="weight">1</data>
-        <data key="urlKey" unique="suffix">simple-product-</data>
+        <data key="urlKey" unique="suffix">simple-msi-product-</data>
         <data key="stockStatus">In Stock</data>
         <data key="notifyQuantity">1</data>
+    </entity>
+    <entity name="ConfigurableMsiProduct" type="product">
+        <data key="name" unique="suffix">Configurable MSI Product </data>
+        <data key="sku" unique="suffix">Configurable_MSI_Product_</data>
+        <data key="price">100</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <data key="urlKey" unique="suffix">configurable-msi-product-</data>
     </entity>
 </entities>
