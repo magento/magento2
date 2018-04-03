@@ -7,8 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryLinkManagement;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -496,6 +501,82 @@ QUERY;
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()]
          ];
         $this->assertResponseFields($response['products']['items'][0], $assertionMap);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
+     * @return void
+     */
+    public function testFilterProductsByCategoryIds()
+    {
+        $queryCategoryId = 333;
+        $query
+            = <<<QUERY
+{
+  products(
+        filter:
+        {
+            category_ids:{eq:"{$queryCategoryId}"}
+        }
+    pageSize:2
+            
+     )
+    {
+      items
+      {
+       sku
+       name
+       type_id
+       category_ids
+       categories{
+          name
+          id
+          path
+          is_active
+        }
+      }
+       total_count
+        
+    }
+}
+
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        /** @var CategoryLinkManagement $productLinks */
+        $productLinks = ObjectManager::getInstance()->get(CategoryLinkManagement::class);
+        /** @var CategoryRepositoryInterface $categoryRepository */
+        $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
+
+        $links = $productLinks->getAssignedProducts($queryCategoryId);
+        foreach($response['products']['items'] as $itemIndex => $itemData) {
+            $this->assertEquals($response['products']['items'][$itemIndex]['sku'], $links[$itemIndex]->getSku());
+            /** @var ProductRepositoryInterface $productRepository */
+            $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+            /** @var ProductInterface $product */
+            $product = $productRepository->get($links[$itemIndex]->getSku());
+            $this->assertEquals($response['products']['items'][$itemIndex]['name'], $product->getName());
+            $this->assertEquals($response['products']['items'][$itemIndex]['type_id'], $product->getTypeId());
+            $categoryIds  = $product->getCategoryIds();
+            foreach ($categoryIds as $index => $value) {
+                $categoryIds[$index] = (int)$value;
+            }
+            $this->assertEquals($response['products']['items'][$itemIndex]['category_ids'], $categoryIds);
+            $categoryInResponse = array_map(null, $categoryIds, $response['products']['items'][$itemIndex]['categories']);
+            $i = 1;
+            foreach( $categoryInResponse as $key => $categoryData){
+                /** @var CategoryInterface | Category $category */
+                 $category = $categoryRepository->get($categoryInResponse[$key][0]);
+                $this->assertResponseFields($categoryInResponse[$key][1],
+                    [
+                        'name' => $category->getName(),
+                        'id' => $category->getId(),
+                        'path' => $category->getPath(),
+                        'is_active' => $category->getIsActive(),
+                    ]);
+             }
+        }
     }
 
     /**

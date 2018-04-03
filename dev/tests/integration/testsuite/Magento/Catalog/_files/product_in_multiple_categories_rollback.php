@@ -17,6 +17,12 @@ if ($product->getId()) {
     $product->delete();
 }
 
+/** @var $product \Magento\Catalog\Model\Product */
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+$product->load(334);
+if ($product->getId()) {
+    $product->delete();
+}
 /** @var $category \Magento\Catalog\Model\Category */
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
 $category->load(333);

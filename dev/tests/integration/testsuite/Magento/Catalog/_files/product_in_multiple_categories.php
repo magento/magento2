@@ -74,3 +74,33 @@ $product->setTypeId(
 )->setStatus(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
 )->save();
+
+/** @var $product \Magento\Catalog\Model\Product */
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+$product->setTypeId(
+    \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+)->setId(
+    334
+)->setAttributeSetId(
+    4
+)->setStoreId(
+    1
+)->setWebsiteIds(
+    [1]
+)->setName(
+    'Simple Product four'
+)->setSku(
+    'simple444'
+)->setPrice(
+    10
+)->setWeight(
+    18
+)->setStockData(
+    ['use_config_manage_stock' => 0]
+)->setCategoryIds(
+    [333, 4]
+)->setVisibility(
+    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+)->setStatus(
+    \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+)->save();
