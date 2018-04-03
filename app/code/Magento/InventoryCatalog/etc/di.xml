@@ -9,6 +9,7 @@
     <preference for="Magento\InventoryCatalog\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
     <preference for="Magento\InventoryCatalog\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
     <preference for="Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface" type="Magento\InventoryCatalog\Model\GetProductIdsBySkus"/>
+    <preference for="Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface" type="Magento\InventoryCatalog\Model\GetProductTypesBySkus" />
     <preference for="Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface" type="Magento\InventoryCatalog\Model\GetSkusByProductIds"/>
     <preference for="Magento\InventoryCatalog\Model\IsSingleSourceModeInterface" type="Magento\InventoryCatalog\Model\IsSingleSourceMode"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
@@ -22,10 +23,6 @@
     <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
         <plugin name="set_to_zero_legacy_catalog_inventory_at_source_items_delete"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin"/>
-    </type>
-    <type name="Magento\InventoryReservationsApi\Api\AppendReservationsInterface">
-        <plugin name="apply_data_to_legacy_catalog_inventory_at_reservation_placing"
-                type="Magento\InventoryCatalog\Plugin\InventoryReservationsApi\ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface">
         <plugin name="update_source_item_at_legacy_qty_counter" type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyQtyCounterPlugin"/>

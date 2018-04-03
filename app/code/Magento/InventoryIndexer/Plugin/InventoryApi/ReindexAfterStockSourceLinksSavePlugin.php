@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Plugin\InventoryApi;
 
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
@@ -15,7 +16,7 @@ use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 /**
  * Invalidate InventoryIndexer
  */
-class ReindexAroundStockSourceLinksSavePlugin
+class ReindexAfterStockSourceLinksSavePlugin
 {
     /**
      * @var IndexerRegistry
@@ -43,20 +44,22 @@ class ReindexAroundStockSourceLinksSavePlugin
      * We don't need to neither process Stock Source Links save nor invalidate cache for Default Stock.
      *
      * @param StockSourceLinksSaveInterface $subject
-     * @param callable $proceed
-     * @param array $links
+     * @param void $result
+     * @param StockSourceLinkInterface[] $links
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(
+    public function afterExecute(
         StockSourceLinksSaveInterface $subject,
-        callable $proceed,
+        $result,
         array $links
     ) {
-        if ($this->defaultStockProvider->getId() !== reset($links)) {
-            $proceed($links);
-            $indexer = $this->indexerRegistry->get(InventoryIndexer::INDEXER_ID);
-            if ($indexer->isValid()) {
-                $indexer->invalidate();
+        foreach ($links as $link) {
+            if ($this->defaultStockProvider->getId() !== $link->getStockId()) {
+                $indexer = $this->indexerRegistry->get(InventoryIndexer::INDEXER_ID);
+                if ($indexer->isValid()) {
+                    $indexer->invalidate();
+                }
+                break;
             }
         }
     }
