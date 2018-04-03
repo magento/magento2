@@ -23,9 +23,15 @@ define([
         init: function (element, valueAccessor, allBindings, viewModel) {
             var config = valueAccessor();
             config.change = function (value) {
+                if (value == null) {
+                    value = '';
+                }
                 config.value(value.toString());
             };
             config.hide = function (value) {
+                if (value == null) {
+                    value = '';
+                }
                 config.value(value.toString());
             };
             $(element).spectrum(config);
@@ -33,7 +39,6 @@ define([
 
         update: function(element, valueAccessor, allBindings, viewModel) {
             var config = valueAccessor();
-            console.log(config.value());
             $(element).spectrum("set", config.value());
         }
     };

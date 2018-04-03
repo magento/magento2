@@ -7,11 +7,9 @@
 <div class="admin__field"
      visible="visible"
      css="$data.additionalClasses">
-    <input type="hidden" class="colorpicker-spectrum" data-bind="
-        colorPicker: colorPickerConfig,
-        " style="display: none"/>
+    <input type="hidden" class="colorpicker-spectrum" data-bind="colorPicker: colorPickerConfig" />
     <input type="text" class="colorpicker-input" data-bind="
         value: value,
-        hasFocus: focused,
-        " style="vertical-align: middle"/>
+        hasFocus: true,
+        attr: { placeholder: placeholder }" />
 </div>

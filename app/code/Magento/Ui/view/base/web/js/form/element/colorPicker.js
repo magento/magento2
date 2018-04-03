@@ -8,9 +8,8 @@ define([
     'uiLayout',
     'mage/translate',
     'Magento_Ui/js/form/element/abstract',
-    'spectrum',
-    'tinycolor'
-], function ($, _, layout, $t, Abstract, spectrum, tinycolor) {
+    'spectrum'
+], function ($, _, layout, $t, Abstract, spectrum) {
     'use strict';
 
     var defaultColorPalette = [
@@ -45,8 +44,16 @@ define([
         initialize: function () {
             this._super();
             this.colorPickerConfig.value = this.value;
+            // $(document).on('click', '.sp-replacer', function () {
+            //     this.focused(true);
+            // });
             return this;
-        }
+        },
+
+        // setFocus: function () {
+        //     this.focused(true);
+        // }
+
     });
 });
  
