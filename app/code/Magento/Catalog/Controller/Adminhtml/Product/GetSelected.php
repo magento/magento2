@@ -65,7 +65,7 @@ class GetSelected extends \Magento\Backend\App\Action
                 'label' => $product->getName(),
                 'is_active' => $product->getStatus(),
                 'path' => $product->getSku(),
-         ];
+            ];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
