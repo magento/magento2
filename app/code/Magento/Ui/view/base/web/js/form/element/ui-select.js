@@ -973,6 +973,7 @@ define([
                 caption = this.missingValuePlaceholder.replace('%s', this.value());
                 this.placeholder(caption);
                 this.warn(caption);
+
                 return this.placeholder();
             }
 

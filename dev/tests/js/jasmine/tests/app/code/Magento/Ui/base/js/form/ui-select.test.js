@@ -515,5 +515,93 @@ define([
                 expect(type).toEqual('string');
             });
         });
+        describe('"filterOptionsList" method', function () {
+            it('Should be defined on instance', function () {
+                expect(obj.hasOwnProperty('filterOptionsList')).toBeDefined();
+            });
+
+            it('Should call loadOptions with value when searchOptions is true', function () {
+                spyOn(obj, 'filterInputValue').and.returnValue(' heLlO ');
+
+                spyOn(obj, 'loadOptions');
+
+                obj.searchOptions = true;
+
+                obj.filterOptionsList();
+
+                expect(obj.loadOptions).toHaveBeenCalledWith('hello');
+            });
+        });
+        describe('"isSelectedValue" method', function () {
+            it('Should return false if option is undefined', function () {
+                expect(obj.isSelectedValue()).toBe(false);
+            });
+
+            it('Should call isSelected with value of option', function () {
+                spyOn(obj, 'isSelected');
+
+                obj.isSelectedValue({
+                    value: 'hello'
+                });
+
+                expect(obj.isSelected).toHaveBeenCalledWith('hello');
+            });
+        });
+        describe('"loadOptions" method', function () {
+            it('Should call processRequest if search key is not cached', function () {
+                var searchKey = 'cake';
+
+                spyOn(obj, 'processRequest');
+                spyOn(obj, 'isSearchKeyCached').and.returnValue(false);
+                spyOn(obj, 'options');
+
+                obj.loadOptions(searchKey);
+
+                // assert options are set to empty array
+                expect(obj.options).toHaveBeenCalledWith([]);
+                expect(obj.processRequest).toHaveBeenCalledWith(searchKey, 1);
+            });
+        });
+        describe('"isSearchKeyCached" method', function () {
+            it('Should return true if searchKey has already been cached and currentPage <= lastPage', function () {
+                obj.cachedSearchResults = {
+                    cake: {
+                        options: [],
+                        lastPage: 1
+                    }
+                };
+
+                expect(obj.isSearchKeyCached('cake', 1)).toBe(true);
+            });
+
+            it('Should return false if searchKey has already been cached and currentPage > lastPage', function () {
+                obj.cachedSearchResults = {
+                    cake: {
+                        options: [],
+                        lastPage: 1
+                    }
+                };
+
+                expect(obj.isSearchKeyCached('cake', 2)).toBe(false);
+            });
+
+            it('Should return false if searchKey is not cached', function () {
+                expect(obj.isSearchKeyCached('cake', 2)).toBe(false);
+            });
+        });
+        describe('Cached search results getting/setting', function () {
+            it('Should set cached search results and be able to be the same value when fetched', function () {
+                var options = [{
+                    value: 'delicious'
+                }];
+
+                obj.setCachedSearchResults('cake', options, 1);
+
+                expect(obj.getCachedSearchResults('cake')).toEqual({
+                    options: options,
+                    lastPage: 1
+                });
+            });
+        });
     });
 });
