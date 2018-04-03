@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
-
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -532,6 +531,8 @@ QUERY;
           name
           id
           path
+          children_count
+          product_count
           is_active
         }
       }
@@ -550,7 +551,8 @@ QUERY;
         $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
 
         $links = $productLinks->getAssignedProducts($queryCategoryId);
-        foreach($response['products']['items'] as $itemIndex => $itemData) {
+        foreach ($response['products']['items'] as $itemIndex => $itemData) {
+            $this->assertNotEmpty($itemData);
             $this->assertEquals($response['products']['items'][$itemIndex]['sku'], $links[$itemIndex]->getSku());
             /** @var ProductRepositoryInterface $productRepository */
             $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
@@ -563,18 +565,26 @@ QUERY;
                 $categoryIds[$index] = (int)$value;
             }
             $this->assertEquals($response['products']['items'][$itemIndex]['category_ids'], $categoryIds);
-            $categoryInResponse = array_map(null, $categoryIds, $response['products']['items'][$itemIndex]['categories']);
-            $i = 1;
-            foreach( $categoryInResponse as $key => $categoryData){
+            $categoryInResponse = array_map(
+                null,
+                $categoryIds,
+                $response['products']['items'][$itemIndex]['categories']
+            );
+            foreach ($categoryInResponse as $key => $categoryData) {
+                $this->assertNotEmpty($categoryData);
                 /** @var CategoryInterface | Category $category */
                  $category = $categoryRepository->get($categoryInResponse[$key][0]);
-                $this->assertResponseFields($categoryInResponse[$key][1],
+                $this->assertResponseFields(
+                    $categoryInResponse[$key][1],
                     [
                         'name' => $category->getName(),
                         'id' => $category->getId(),
                         'path' => $category->getPath(),
+                        'children_count' => $category->getChildrenCount(),
+                        'product_count' => $category->getProductCount(),
                         'is_active' => $category->getIsActive(),
-                    ]);
+                    ]
+                );
              }
         }
     }
@@ -637,12 +647,9 @@ QUERY;
 QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-
         $visibleProduct1 = $productRepository->get('simple1');
         $visibleProduct2 = $productRepository->get('simple2');
-
         $filteredProducts = [$visibleProduct2, $visibleProduct1];
-
         $response = $this->graphQlQuery($query);
         $this->assertEquals(6, $response['products']['total_count']);
         $this->assertProductItems($filteredProducts, $response);
@@ -734,7 +741,6 @@ QUERY;
         $this->assertEquals(2, $response['products']['total_count']);
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-
         $prod1 = $productRepository->get('simple2');
         $prod2 = $productRepository->get('simple1');
         $filteredProducts = [$prod1, $prod2];
