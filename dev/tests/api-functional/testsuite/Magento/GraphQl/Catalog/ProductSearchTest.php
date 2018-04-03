@@ -283,7 +283,6 @@ QUERY;
         page_info
         {
           page_size
-          current_page
         }
     }
 }
@@ -298,7 +297,7 @@ QUERY;
         $filteredProducts = [$product];
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertEquals(1, $response['products']['total_count']);
         $this->assertProductItems($filteredProducts, $response);
     }
 
@@ -310,7 +309,6 @@ QUERY;
      */
     public function testQueryProductsInCurrentPageSortedByPriceASC()
     {
-     //   $this->markTestSkipped('Need to turn this test on after MAGETWO-89246 is fixed');
         $query
             = <<<QUERY
 {
@@ -365,10 +363,6 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $childProduct1 = $productRepository->get('simple1');
         $childProduct2 = $productRepository->get('simple2');
-       /* $childProduct3 = $productRepository->get('simple_31');
-        $childProduct4 = $productRepository->get('simple_32');
-        $filteredChildProducts = [$childProduct1, $childProduct2, $childProduct3, $childProduct4];
-       */
         $filteredChildProducts = [$childProduct1, $childProduct2];
 
         $response = $this->graphQlQuery($query);
@@ -431,7 +425,6 @@ QUERY;
         page_info
         {
           page_size
-          current_page
         }
     }
 }
@@ -444,10 +437,9 @@ QUERY;
         $filteredProducts = [$product];
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(5, $response['products']['total_count']);
+        $this->assertEquals(1, $response['products']['total_count']);
         $this->assertProductItems($filteredProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
-        $this->assertEquals(2, $response['products']['page_info']['current_page']);
     }
 
     /**
@@ -506,7 +498,6 @@ QUERY;
      */
     public function testQuerySortByPriceDESCWithDefaultPageSize()
     {
-   //     $this->markTestSkipped('Need to turn this test on after MAGETWO-89246 is fixed');
         $query
             = <<<QUERY
 {
@@ -559,14 +550,8 @@ QUERY;
 
         $visibleProduct1 = $productRepository->get('simple1');
         $visibleProduct2 = $productRepository->get('simple2');
-       /* $visibleProduct3 = $productRepository->get('simple_42');
-        $visibleProduct4 = $productRepository->get('simple_41');
-        $visibleProduct5 = $productRepository->get('simple_32');
-        $visibleProduct6 = $productRepository->get('simple_31');
-        $filteredProducts = [$visibleProduct3, $visibleProduct4,
-                             $visibleProduct5, $visibleProduct6, $visibleProduct2, $visibleProduct1];
-        */
-        $filteredProducts = [$visibleProduct2, $visibleProduct1];
+          $filteredProducts = [$visibleProduct2, $visibleProduct1];
+
         $response = $this->graphQlQuery($query);
         $this->assertEquals(2, $response['products']['total_count']);
         $this->assertProductItems($filteredProducts, $response);
@@ -617,7 +602,8 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product1 = $productRepository->get('simple1');
         $product2 = $productRepository->get('simple2');
-        $filteredProducts = [$product1, $product2];
+        $filteredProducts = [$product2, $product1];
+
         $this->assertProductItemsWithMaximalAndMinimalPriceCheck($filteredProducts, $response);
     }
 
@@ -654,30 +640,31 @@ QUERY;
       }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
 
-        $prod1 = $productRepository->get('simple2');
-        $prod2 = $productRepository->get('simple1');
-        $filteredProducts = [$prod1, $prod2];
+        $prod1 = $productRepository->get('simple1');
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(1, $response['products']['total_count']);
+
+        $filteredProducts = [$prod1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [
-                 'sku' => $filteredProducts[$itemIndex]->getSku(),
-                 'name' => $filteredProducts[$itemIndex]->getName(),
-                 'price' => [
-                     'minimalPrice' => [
-                         'amount' => [
-                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
-                             'currency' => 'USD'
-                         ]
-                     ]
-                  ]
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
                 ]
             );
         }

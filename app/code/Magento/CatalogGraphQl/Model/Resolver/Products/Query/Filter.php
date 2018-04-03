@@ -54,12 +54,16 @@ class Filter
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @param ResolveInfo $info
+     * @param bool $isSearch
      * @return SearchResult
      */
-    public function getResult(SearchCriteriaInterface $searchCriteria, ResolveInfo $info) : SearchResult
-    {
+    public function getResult(
+        SearchCriteriaInterface $searchCriteria,
+        ResolveInfo $info,
+        bool $isSearch = false
+    ): SearchResult {
         $fields = $this->getProductFields($info);
-        $products = $this->productDataProvider->getList($searchCriteria, $fields);
+        $products = $this->productDataProvider->getList($searchCriteria, $fields, $isSearch);
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($products->getItems() as $product) {

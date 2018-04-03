@@ -127,7 +127,12 @@ class Product
         }
 
         $this->searchCriteriaBuilder->addFilter(ProductInterface::SKU, $this->productSkus, 'in');
-        $result = $this->productDataProvider->getList($this->searchCriteriaBuilder->create(), $this->attributeCodes);
+        $result = $this->productDataProvider->getList(
+            $this->searchCriteriaBuilder->create(),
+            $this->attributeCodes,
+            false,
+            true
+        );
 
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($result->getItems() as $product) {

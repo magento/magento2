@@ -7,6 +7,7 @@ declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\CategoryProduct;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -53,6 +54,11 @@ class Product
     private $searchCriteriaBuilder;
 
     /**
+     * @var Visibility
+     */
+    private $visibility;
+
+    /**
      * @param CollectionFactory $collectionFactory
      * @param JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
@@ -66,7 +72,8 @@ class Product
         CollectionProcessorInterface $collectionProcessor,
         ProductSearchResultsInterfaceFactory $searchResultsFactory,
         CategoryProduct $categoryProduct,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        Visibility $visibility
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->joinProcessor = $joinProcessor;
@@ -74,6 +81,7 @@ class Product
         $this->searchResultsFactory = $searchResultsFactory;
         $this->categoryProduct = $categoryProduct;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->visibility = $visibility;
     }
 
     /**
@@ -81,10 +89,16 @@ class Product
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @param string[] $attributes
+     * @param bool $isSearch
+     * @param bool $isChildSearch
      * @return SearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria, array $attributes = []) : SearchResultsInterface
-    {
+    public function getList(
+        SearchCriteriaInterface $searchCriteria,
+        array $attributes = [],
+        bool $isSearch = false,
+        bool $isChildSearch = false
+    ): SearchResultsInterface {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process($collection);
@@ -98,6 +112,12 @@ class Product
         $collection->addAttributeToSelect('tax_class_id');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+
+        if (!$isChildSearch) {
+            $visibilityIds
+                = $isSearch ? $this->visibility->getVisibleInSearchIds() : $this->visibility->getVisibleInCatalogIds();
+            $collection->setVisibility($visibilityIds);
+        }
 
         $this->collectionProcessor->process($searchCriteria, $collection);
         $collection->addWebsiteNamesToResult();

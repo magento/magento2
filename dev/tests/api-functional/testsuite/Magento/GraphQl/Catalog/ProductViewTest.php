@@ -284,7 +284,7 @@ QUERY;
      */
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
-
+        $this->markTestSkipped("Skipped until ticket MAGETWO-90021 is resolved.");
         $productSku = 'simple';
 
         $query = <<<QUERY
@@ -491,7 +491,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-
+        
         /**
          * @var ProductRepositoryInterface $productRepository
          */
