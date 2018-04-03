@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller;
 
@@ -104,7 +104,6 @@ class GraphQl implements FrontControllerInterface
             $result = $this->queryProcessor->process(
                 $schema,
                 isset($data['query']) ? $data['query'] : '',
-                null,
                 $this->resolverContext,
                 isset($data['variables']) ? $data['variables'] : []
             );

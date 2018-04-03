@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria;
 
@@ -19,33 +19,36 @@ class Builder
     private $searchCriteriaFactory;
 
     /**
-     * @var ArgumentApplierFactory
+     * @var ArgumentApplierPool
      */
-    private $argumentApplierFactory;
+    private $argumentApplierPool;
     /**
      * @param SearchCriteriaInterfaceFactory $searchCriteriaFactory
-     * @param ArgumentApplierFactory $argumentApplierFactory
+     * @param ArgumentApplierPool $ArgumentApplierPool
      */
     public function __construct(
         SearchCriteriaInterfaceFactory $searchCriteriaFactory,
-        ArgumentApplierFactory $argumentApplierFactory
+        ArgumentApplierPool $ArgumentApplierPool
     ) {
         $this->searchCriteriaFactory = $searchCriteriaFactory;
-        $this->argumentApplierFactory = $argumentApplierFactory;
+        $this->argumentApplierPool = $ArgumentApplierPool;
     }
 
     /**
      * Build a search criteria and apply arguments to it as filters
      *
+     * @param string $fieldName
      * @param array $arguments
      * @return SearchCriteriaInterface
      */
-    public function build(array $arguments) : SearchCriteriaInterface
+    public function build(string $fieldName, array $arguments) : SearchCriteriaInterface
     {
         $searchCriteria = $this->searchCriteriaFactory->create();
         foreach ($arguments as $argumentName => $argument) {
-            $argumentApplier = $this->argumentApplierFactory->create($argumentName);
-            $argumentApplier->applyArgument($searchCriteria, $argument);
+            if ($this->argumentApplierPool->hasApplier($argumentName)) {
+                $argumentApplier = $this->argumentApplierPool->getApplier($argumentName);
+                $argumentApplier->applyArgument($searchCriteria, $fieldName, $argumentName, $argument);
+            }
         }
         return $searchCriteria;
     }
