@@ -6,7 +6,6 @@
 
 namespace Magento\GraphQl\Catalog;
 
-use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -14,6 +13,9 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Model\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class ProductSearchTest extends GraphQlAbstract
 {
     /**
@@ -365,9 +367,7 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $childProduct1 = $productRepository->get('simple1');
         $childProduct2 = $productRepository->get('simple2');
-        //$childProduct3 = $productRepository->get('simple_31');
-      //  $childProduct4 = $productRepository->get('simple_32');
-      //  $filteredChildProducts = [$childProduct1, $childProduct2, $childProduct3, $childProduct4];
+
         $filteredChildProducts = [$childProduct1, $childProduct2];
 
         $response = $this->graphQlQuery($query);
@@ -558,12 +558,8 @@ QUERY;
 
         $visibleProduct1 = $productRepository->get('simple1');
         $visibleProduct2 = $productRepository->get('simple2');
-       // $visibleProduct3 = $productRepository->get('simple_42');
-     //   $visibleProduct4 = $productRepository->get('simple_41');
-     //   $visibleProduct5 = $productRepository->get('simple_32');
-     //   $visibleProduct6 = $productRepository->get('simple_31');
-     //   $filteredProducts = [$visibleProduct3, $visibleProduct4, $visibleProduct5, $visibleProduct6, $visibleProduct2, $visibleProduct1];
-          $filteredProducts = [$visibleProduct2, $visibleProduct1];
+
+        $filteredProducts = [$visibleProduct2, $visibleProduct1];
 
         $response = $this->graphQlQuery($query);
         $this->assertEquals(6, $response['products']['total_count']);
@@ -925,8 +921,8 @@ QUERY;
     {
         $productItemsInResponse = array_map(null, $actualResponse['products']['items'], $filteredProducts);
 
-        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
-            $this->assertNotEmpty($itemArray);
+        foreach ($filteredProducts as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 ['attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),

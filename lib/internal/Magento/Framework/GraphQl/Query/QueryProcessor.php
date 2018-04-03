@@ -12,6 +12,7 @@ use GraphQL\Validator\Rules\DisableIntrospection;
 use GraphQL\Validator\Rules\QueryDepth;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Schema;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 
 /**
  * Wrapper for GraphQl execution of a schema
@@ -36,24 +37,23 @@ class QueryProcessor
      *
      * @param Schema $schema
      * @param string $source
-     * @param mixed $rootValue
-     * @param mixed $contextValue
+     * @param ContextInterface $contextValue
      * @param array|null $variableValues
      * @param string|null $operationName
      * @return Promise|array
      */
     public function process(
         Schema $schema,
-        $source,
-        $rootValue = null,
-        $contextValue = null,
-        $variableValues = null,
-        $operationName = null
-    ) {
+        string $source,
+        ContextInterface $contextValue = null,
+        array $variableValues = null,
+        string $operationName = null
+    ) : array {
         if (!$this->exceptionFormatter->shouldShowDetail()) {
             DocumentValidator::addRule(new QueryDepth(10));
             DocumentValidator::addRule(new DisableIntrospection());
         }
+        $rootValue = null;
         return \GraphQL\GraphQL::executeQuery(
             $schema,
             $source,

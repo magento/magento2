@@ -15,7 +15,7 @@ interface TypeMetaReaderInterface
      * Read schema data from type metadata if proper type is provided for a specific implementation
      *
      * @param \GraphQL\Type\Definition\Type $typeMeta
-     * @return array
+     * @return array|null
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta)  : ?array;
 }

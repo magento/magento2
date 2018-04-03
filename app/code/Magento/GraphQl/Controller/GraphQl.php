@@ -104,7 +104,6 @@ class GraphQl implements FrontControllerInterface
             $result = $this->queryProcessor->process(
                 $schema,
                 isset($data['query']) ? $data['query'] : '',
-                null,
                 $this->resolverContext,
                 isset($data['variables']) ? $data['variables'] : []
             );

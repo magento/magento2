@@ -229,7 +229,6 @@ QUERY;
                 'id' => $downloadableProductLink->getId(),
                 'sample_url' => $downloadableProductLink->getSampleUrl(),
                 'sample_type' => strtoupper($downloadableProductLink->getSampleType()),
-              //'sample_file' => $downloadableProductLink->getSampleFile(),
                 'is_shareable' => false,
                 'number_of_downloads' => $downloadableProductLink->getNumberOfDownloads(),
                 'sort_order' => $downloadableProductLink->getSortOrder(),

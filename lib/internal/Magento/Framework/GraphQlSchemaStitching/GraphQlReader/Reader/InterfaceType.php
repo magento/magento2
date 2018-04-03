@@ -37,8 +37,7 @@ class InterfaceType implements TypeMetaReaderInterface
     }
 
     /**
-     * @param \GraphQL\Type\Definition\Type $typeMeta
-     * @return array
+     * {@inheritdoc}
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : ?array
     {

@@ -5,14 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplier;
+namespace Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplierInterface;
 
-class Search implements ArgumentApplierInterface
+class SearchFilter
 {
     const ARGUMENT_NAME = 'search';
 
@@ -37,11 +36,14 @@ class Search implements ArgumentApplierInterface
     }
 
     /**
-     * {@inheritDoc}
+     * Add search term to the search criteria
+     *
+     * @param string $searchTerm
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchCriteriaInterface
      */
-    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument) : SearchCriteriaInterface
+    public function add(string $searchTerm, SearchCriteriaInterface $searchCriteria) : SearchCriteriaInterface
     {
-        $searchTerm = $argument;
         $searchTermFilter = $this->filterBuilder->setField('search_term')->setValue($searchTerm)->create();
         $this->filterGroupBuilder->addFilter($searchTermFilter);
         $filterGroups = $searchCriteria->getFilterGroups();

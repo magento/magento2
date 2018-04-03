@@ -13,6 +13,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\SearchFilter;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -38,6 +39,11 @@ class Products implements ResolverInterface
     private $filterQuery;
 
     /**
+     * @var SearchFilter
+     */
+    private $searchFilter;
+
+    /**
      * @var ValueFactory
      */
     private $valueFactory;
@@ -52,11 +58,13 @@ class Products implements ResolverInterface
         Builder $searchCriteriaBuilder,
         Search $searchQuery,
         Filter $filterQuery,
+        SearchFilter $searchFilter,
         ValueFactory $valueFactory
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
         $this->filterQuery = $filterQuery;
+        $this->searchFilter = $searchFilter;
         $this->valueFactory = $valueFactory;
     }
 
@@ -70,13 +78,17 @@ class Products implements ResolverInterface
         $context,
         ResolveInfo $info
     ) : ?Value {
-        $searchCriteria = $this->searchCriteriaBuilder->build($args);
+        $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
+
+        $searchCriteria->setCurrentPage($args['currentPage']);
+        $searchCriteria->setPageSize($args['pageSize']);
 
         if (!isset($args['search']) && !isset($args['filter'])) {
             throw new GraphQlInputException(
                 __("'search' or 'filter' input argument is required.")
             );
         } elseif (isset($args['search'])) {
+            $this->searchFilter->add($args['search'], $searchCriteria);
             $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
         } else {
             $searchResult = $this->filterQuery->getResult($searchCriteria, $info);

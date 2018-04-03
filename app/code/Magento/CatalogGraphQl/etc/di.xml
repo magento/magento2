@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\GraphQl\Query\Resolver\Argument\AstConverterInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\AstConverter" />
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
@@ -32,6 +31,13 @@
             <argument name="translationMap" xsi:type="array">
                 <item name="new_from_date" xsi:type="string">news_from_date</item>
                 <item name="new_to_date" xsi:type="string">news_to_date</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\FieldEntityAttributesPool">
+        <arguments>
+            <argument name="attributesInstances" xsi:type="array">
+                <item name="products" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\ProductEntityAttributesforAst</item>
             </argument>
         </arguments>
     </type>
