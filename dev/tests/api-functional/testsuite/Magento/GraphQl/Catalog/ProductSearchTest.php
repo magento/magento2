@@ -6,7 +6,6 @@
 
 namespace Magento\GraphQl\Catalog;
 
-use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
