@@ -6,6 +6,8 @@
 namespace Magento\Framework\Session;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Phrase;
 use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -124,7 +126,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->saveHandlerFactoryMock->expects($this->at(0))
             ->method('create')
-            ->willThrowException(new \LogicException());
+            ->willThrowException(new SessionException(new Phrase('Session Exception')));
         $this->saveHandlerFactoryMock->expects($this->at(1))
             ->method('create')
             ->with(SaveHandlerInterface::DEFAULT_HANDLER);
