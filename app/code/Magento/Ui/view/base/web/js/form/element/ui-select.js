@@ -177,6 +177,7 @@ define([
             deviation: 30,
             isRemoveSelectedIcon: true,
             missingValuePlaceholder: $t('Entity with ID: %s doesn\'t exist'),
+            isDisplayMissingValuePlaceholder: false,
             listens: {
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList',
@@ -969,7 +970,7 @@ define([
             this.warn(caption);
 
             //check if option was removed
-            if (this.multiple === 'single' && length && !this.getSelected().length) {
+            if (this.isDisplayMissingValuePlaceholder && length && !this.getSelected().length) {
                 caption = this.missingValuePlaceholder.replace('%s', this.value());
                 this.placeholder(caption);
                 this.warn(caption);

@@ -50,6 +50,7 @@ class Product implements \Magento\Ui\Model\UrlInput\ConfigInterface
             'isDisplayEmptyPlaceholder' => true,
             'emptyOptionsHtml' => __('Start typing to find products'),
             'missingValuePlaceholder' => __('Product with ID: %s doesn\'t exist'),
+            'isDisplayMissingValuePlaceholder' => true,
             'validationUrl' => $this->urlBuilder->getUrl('catalog/product/getSelected'),
         ];
     }
