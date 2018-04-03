@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Bundle;
 use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 

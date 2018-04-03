@@ -73,11 +73,11 @@ class Products implements ResolverInterface
      */
     public function resolve(
         Field $field,
-        array $value = null,
-        array $args = null,
         $context,
-        ResolveInfo $info
-    ) : ?Value {
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) : Value {
         $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
 
         $searchCriteria->setCurrentPage($args['currentPage']);
