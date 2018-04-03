@@ -7,8 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurableProduct\Plugin\Block;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\ProductMatrixProvider;
+use Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix;
 use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 use Magento\InventoryConfigurableProduct\Model\GetQuantityInformationPerSource;
 
@@ -16,7 +15,7 @@ use Magento\InventoryConfigurableProduct\Model\GetQuantityInformationPerSource;
  * Add value for field "quantityPerSource" for grid "Associated Products" and "Disassociated Products"
  * on step "Summary".
  */
-class AdaptProductMatrixProvider
+class AdaptMatrix
 {
     /**
      * @var GetQuantityInformationPerSource
@@ -41,23 +40,21 @@ class AdaptProductMatrixProvider
     }
 
     /**
-     * @param ProductMatrixProvider $subject
-     * @param array $result
-     * @param ProductInterface $product
-     * @param array $variationOptions
+     * @param Matrix $subject
+     * @param $result
      *
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGet(
-        ProductMatrixProvider $subject,
-        array $result,
-        ProductInterface $product,
-        array $variationOptions
+    public function afterGetProductMatrix(
+        Matrix $subject,
+        $result
     ): array {
         if ($this->isSingleSourceMode->execute() === false) {
-            $result['quantityPerSource'] = $this->getQuantityInformationPerSource->execute($product->getSku());
+            foreach ($result as $key => $variation) {
+                $result[$key]['quantityPerSource'] = $this->getQuantityInformationPerSource->execute($variation['sku']);
+            }
         }
 
         return $result;

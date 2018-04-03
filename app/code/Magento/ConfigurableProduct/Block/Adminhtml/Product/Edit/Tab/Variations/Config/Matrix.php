@@ -8,7 +8,6 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variation
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -41,7 +40,6 @@ class Matrix extends \Magento\Backend\Block\Template
     protected $productRepository;
 
     /**
-     * @deprecated not in usage anymore.
      * @var \Magento\Catalog\Helper\Image
      */
     protected $image;
@@ -68,11 +66,6 @@ class Matrix extends \Magento\Backend\Block\Template
     protected $locator;
 
     /**
-     * @var ProductMatrixProvider
-     */
-    private $productMatrixProvider;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
@@ -82,9 +75,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param LocatorInterface $locator
      * @param array $data
-     * @param ProductMatrixProvider|null $productMatrixProvider
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -95,8 +85,7 @@ class Matrix extends \Magento\Backend\Block\Template
         \Magento\Catalog\Helper\Image $image,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         LocatorInterface $locator,
-        array $data = [],
-        ProductMatrixProvider $productMatrixProvider = null
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_configurableType = $configurableType;
@@ -106,8 +95,6 @@ class Matrix extends \Magento\Backend\Block\Template
         $this->localeCurrency = $localeCurrency;
         $this->image = $image;
         $this->locator = $locator;
-        $this->productMatrixProvider = $productMatrixProvider
-            ?: ObjectManager::getInstance()->get(ProductMatrixProvider::class);
     }
 
     /**
@@ -211,8 +198,8 @@ class Matrix extends \Magento\Backend\Block\Template
                         $attributes[$key]['values'] = array_merge(
                             isset($attribute['values']) ? $attribute['values'] : [],
                             isset($configurableData[$key]['values'])
-                            ? array_filter($configurableData[$key]['values'])
-                            : []
+                                ? array_filter($configurableData[$key]['values'])
+                                : []
                         );
                     }
                 }
@@ -354,6 +341,7 @@ class Matrix extends \Magento\Backend\Block\Template
                 $key = implode('-', $attributeValues);
                 if (isset($productByUsedAttributes[$key])) {
                     $product = $productByUsedAttributes[$key];
+                    $price = $product->getPrice();
                     $variationOptions = [];
                     foreach ($usedProductAttributes as $attribute) {
                         if (!isset($attributes[$attribute->getAttributeId()])) {
@@ -388,7 +376,19 @@ class Matrix extends \Magento\Backend\Block\Template
                         $attributes[$attribute->getAttributeId()]['chosen'][] = $variationOption;
                     }
 
-                    $productMatrix[] = $this->productMatrixProvider->get($product, $variationOptions);
+                    $productMatrix[] = [
+                        'productId' => $product->getId(),
+                        'images' => [
+                            'preview' => $this->image->init($product, 'product_thumbnail_image')->getUrl()
+                        ],
+                        'sku' => $product->getSku(),
+                        'name' => $product->getName(),
+                        'quantity' => $this->getProductStockQty($product),
+                        'price' => $price,
+                        'options' => $variationOptions,
+                        'weight' => $product->getWeight(),
+                        'status' => $product->getStatus()
+                    ];
                 }
             }
         }
