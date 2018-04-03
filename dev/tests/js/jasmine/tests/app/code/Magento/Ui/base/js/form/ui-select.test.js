@@ -14,14 +14,18 @@ define([
 
     describe('Magento_Ui/js/form/element/ui-select', function () {
 
-        var obj = new Constr({
-            name: 'uiSelect',
-            dataScope: '',
-            provider: 'provider'
-        });
+        var obj;
 
-        obj.value = ko.observableArray([]);
-        obj.cacheOptions.plain = [];
+        beforeEach(function () {
+            obj = new Constr({
+                name: 'uiSelect',
+                dataScope: '',
+                provider: 'provider'
+            });
+
+            obj.value = ko.observableArray([]);
+            obj.cacheOptions.plain = [];
+        });
 
         describe('"initialize" method', function () {
             it('Check for defined ', function () {
@@ -407,6 +411,25 @@ define([
 
                 expect(type).toEqual('string');
             });
+            it('Should return label of selected option when not using multiple options and option exists', function () {
+                obj.multiple = 'single';
+                obj.cacheOptions.plain.push({
+                    label: 'one',
+                    value: 1
+                });
+                obj.value('1');
+
+                expect(obj.setCaption()).toEqual('one');
+            });
+            it(
+                'Should return missing value template when not using multiple options and option does not exist',
+                function () {
+                    obj.multiple = 'single';
+                    obj.value('1');
+
+                    expect(obj.setCaption()).toEqual('Entity with ID: 1 doesn\'t exist');
+                }
+            );
             it('Check returned value if selected array length more then 1', function () {
                 obj.value(['one', 'two']);
 

@@ -967,7 +967,7 @@ define([
             }
 
             //check if option was removed
-            if (length && !this.getSelected().length) {
+            if (this.multiple === 'single' && length && !this.getSelected().length) {
                 caption = this.missingValuePlaceholder.replace('%s', this.value());
 
                 this.placeholder(caption);
