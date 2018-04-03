@@ -36,7 +36,6 @@ class ConfigProviderFactory
      * @param string $instance
      * @param array $arguments
      * @return \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
-     * @throws \InvalidArgumentException
      */
     public function create(string $instance, array $arguments = []): WysiwygConfigInterface
     {
