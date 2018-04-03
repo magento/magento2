@@ -167,14 +167,15 @@ define([
             separator: 'optgroup',
             searchOptions: false,
             loading: false,
-            requestUrl: false,
+            searchUrl: false,
             lastSearchKey: '',
             lastSearchPage: 1,
             filterPlaceholder: '',
             emptyOptionsHtml: '',
             cachedSearchResults: {},
             pageLimit: 50,
-            showXWhenOptionSelected: true,
+            deviation: 30,
+            isRemoveSelectedIcon: true,
             missingValuePlaceholder: $t('Entity with ID: %s doesn\'t exist'),
             listens: {
                 listVisible: 'cleanHoveredElement',
@@ -454,7 +455,6 @@ define([
             }
 
             if (this.searchOptions) {
-
                 return this.loadOptions(value);
             }
 
@@ -630,6 +630,7 @@ define([
             }
 
             elementData = ko.dataFor(this.hoveredElement);
+
             if (_.isUndefined(elementData)) {
                 return false;
             }
@@ -955,7 +956,7 @@ define([
          * Set caption
          */
         setCaption: function () {
-            var length, caption;
+            var length, caption = '';
 
             if (!_.isArray(this.value()) && this.value()) {
                 length = 1;
@@ -965,21 +966,15 @@ define([
                 this.value([]);
                 length = 0;
             }
+            this.warn(caption);
 
             //check if option was removed
             if (length && !this.getSelected().length) {
                 caption = this.missingValuePlaceholder.replace('%s', this.value());
-
                 this.placeholder(caption);
-
-                // set warning state
                 this.warn(caption);
-
                 return this.placeholder();
             }
-
-            // reset warning state
-            this.warn('');
 
             if (length > 1) {
                 this.placeholder(length + ' ' + this.selectedPlaceholders.lotPlaceholders);
@@ -1142,11 +1137,11 @@ define([
         loadOptions: function (searchKey) {
             var currentPage = searchKey === this.lastSearchKey ? this.lastSearchPage + 1 : 1;
 
-            this.loading(true);
-            this.showPath ? this.renderPath = true : false;
+            this.renderPath = !this.showPath;
 
             if (this.isSearchKeyCached(searchKey, currentPage)) {
                 this.options(this.getCachedSearchResults(searchKey).options);
+                this._setItemsQuantity(this.options().length);
                 this.lastSearchPage = this.getCachedSearchResults(searchKey).lastPage;
                 this.lastSearchKey = searchKey;
                 this.loading(false);
@@ -1154,15 +1149,10 @@ define([
                 return;
             }
 
-            if (!(searchKey === this.lastSearchKey)) {
+            if (searchKey !== this.lastSearchKey) {
                 this.options([]);
             }
             this.processRequest(searchKey, currentPage);
-            this.setCachedSearchResults(searchKey, this.options(), currentPage);
-            this._setItemsQuantity(this.options().length);
-            this.lastSearchPage = currentPage;
-            this.lastSearchKey = searchKey;
-            this.loading(false);
         },
 
         /**
@@ -1172,10 +1162,9 @@ define([
          */
         onScrollDown: function (data, event) {
             var clientHight = event.target.scrollTop + event.target.clientHeight,
-                scrollHeight = event.target.scrollHeight,
-                deviation = 30;
+                scrollHeight = event.target.scrollHeight;
 
-            if (clientHight > scrollHeight - deviation && this.options().length >= this.pageLimit) {
+            if (clientHight > scrollHeight - this.deviation && this.options().length >= this.pageLimit) {
                 this.loadOptions(data.filterInputValue());
             }
         },
@@ -1184,7 +1173,7 @@ define([
          * Returns cached search result by search key
          *
          * @param {String} searchKey
-         * @return {*}
+         * @return {Object}
          */
         getCachedSearchResults: function (searchKey) {
 
@@ -1203,7 +1192,7 @@ define([
          *
          * @param {String} searchKey
          * @param {Array} optionsArray
-         * @param {integer} page
+         * @param {Number} page
          */
         setCachedSearchResults: function (searchKey, optionsArray, page) {
             var cachedData = this.getCachedSearchResults(searchKey);
@@ -1217,33 +1206,32 @@ define([
          * Check if search key cached
          *
          * @param {String} searchKey
-         * @param {Integer} currentPage
+         * @param {Number} currentPage
          * @return {Boolean}
          */
         isSearchKeyCached: function (searchKey, currentPage) {
             return this.cachedSearchResults.hasOwnProperty(searchKey) &&
-                this.cachedSearchResults.lastPage >= currentPage;
+                this.cachedSearchResults[searchKey].lastPage >= currentPage;
         },
 
         /**
          * Submit request to load data
          *
          * @param {String} searchKey
-         * @param {Integer} page
+         * @param {Number} page
          */
         processRequest: function (searchKey, page) {
             var existingOptions = this.options();
-
+            this.loading(true);
             $.ajax({
-                url: this.requestUrl,
+                url: this.searchUrl,
                 type: 'post',
-                async: false,
                 dataType: 'json',
                 context: this,
                 data: {
-                    'searchKey': searchKey,
-                    'page': page,
-                    'limit': this.pageLimit
+                    searchKey: searchKey,
+                    page: page,
+                    limit: this.pageLimit
                 },
 
                 /** @param {Object} response */
@@ -1258,6 +1246,15 @@ define([
                 /** set empty array if error occurs */
                 error: function () {
                     this.options([]);
+                },
+
+                /** cache options and stop loading*/
+                complete: function () {
+                    this.setCachedSearchResults(searchKey, this.options(), page);
+                    this._setItemsQuantity(this.options().length);
+                    this.lastSearchPage = page;
+                    this.lastSearchKey = searchKey;
+                    this.loading(false);
                 }
             });
         }

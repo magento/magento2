@@ -44,7 +44,7 @@ class Category implements ConfigInterface
             'levelsVisibility' => '1',
             'options' => $this->options->toOptionArray(),
             'sortOrder' => 30,
-            'missingValuePlaceholder' => 'Category with ID: %s doesn\'t exist'
+            'missingValuePlaceholder' => __('Category with ID: %s doesn\'t exist')
         ];
     }
 }
