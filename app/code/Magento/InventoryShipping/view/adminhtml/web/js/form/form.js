@@ -12,7 +12,7 @@ define([
 
     return Form.extend({
         defaults: {
-            source_selection_url: '${ $.source_selection_url }'
+            sourceSelectionUrl: '${ $.sourceSelectionUrl }'
         },
 
         /**
@@ -22,10 +22,11 @@ define([
          * @param {Object} data
          */
         processAlgorithm: function (redirect, data) {
-            var process = $.Deferred();
-            var self = this;
-            var formData = utils.filterFormData(this.source.get('data'));
-            var requestData = [];
+            var process = $.Deferred(),
+                self = this,
+                formData = utils.filterFormData(this.source.get('data')),
+                requestData = [];
+
             _.each(formData.items, function (item) {
                 requestData.push({
                     orderItem: item.orderItemId,
@@ -39,15 +40,14 @@ define([
             data = utils.serialize(utils.filterFormData(data));
             data['form_key'] = window.FORM_KEY;
 
-            if (!this.source_selection_url || this.source_selection_url === 'undefined') {
+            if (!this.sourceSelectionUrl || this.sourceSelectionUrl === 'undefined') {
                 return process.resolve();
             }
 
-            var url = this.source_selection_url;
             $('body').trigger('processStart');
 
             $.ajax({
-                url: url,
+                url: this.sourceSelectionUrl,
                 data: data,
 
                 /**
@@ -62,7 +62,7 @@ define([
                         _.each(formData.items, function (item) {
                             if (resp.items[item.orderItemId]) {
                                 //TODO: this feature doesn't work
-                                self.source.set('data.items.'+item.record_id+'.sources', resp.items[item.orderItemId]);
+                                self.source.set('data.items.' + item['record_id'] + '.sources', resp.items[item.orderItemId]);
                             }
                         });
 

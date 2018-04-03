@@ -16,9 +16,9 @@ define([
          */
         initialize: function () {
             this._super();
-            var self = this;
-            var provider = registry.get(this.provider);
-            var optionArray = [];
+            var self = this,
+                provider = registry.get(this.provider),
+                optionArray = [];
 
             if (provider.data.sourceCodes) {
                 optionArray = provider.data.sourceCodes;

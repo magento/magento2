@@ -102,71 +102,78 @@ class SourceDeductionProcessor implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        $shipmentItem = $observer->getEvent()->getShipmentItem();
+        /** @var \Magento\Sales\Model\Order\Shipment $shipment */
+        $shipment = $observer->getEvent()->getShipment();
 
-        if ($shipmentItem->getOrigData('entity_id')) {
+        if ($shipment->getOrigData('entity_id')) {
             return;
         }
 
-        $shipment = $shipmentItem->getShipment();
         if (empty($shipment->getExtensionAttributes())
             || !$shipment->getExtensionAttributes()->getSourceCode()) {
             throw new LocalizedException(__('Source not specified.'));
         }
+
         $sourceCode = $shipment->getExtensionAttributes()->getSourceCode();
-        $orderItem = $shipmentItem->getOrderItem();
-        $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(
-            [$shipmentItem->getProductId()]
-        )[$shipmentItem->getProductId()];
-        $qty = $this->castQty($orderItem, $shipmentItem->getQty());
-        $itemsToShip = [];
-        if ($orderItem->getHasChildren()) {
-            if (!$orderItem->isDummy(true)) {
-                foreach ($orderItem->getChildrenItems() as $item) {
-                    if ($item->getIsVirtual() || $item->getLockedDoShip()) {
-                        continue;
-                    }
-                    $productOptions = $item->getProductOptions();
-                    if (isset($productOptions['bundle_selection_attributes'])) {
-                        $bundleSelectionAttributes = $this->jsonSerializer->unserialize(
-                            $productOptions['bundle_selection_attributes']
-                        );
-                        if ($bundleSelectionAttributes) {
-                            $qty = $bundleSelectionAttributes['qty'] * $shipmentItem->getQty();
-                            $qty = $this->castQty($item, $qty);
-                            $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
-                                [$item->getProductId()]
-                            )[$item->getProductId()];
+        $order = $shipment->getOrder();
+
+        $websiteId = $order->getStore()->getWebsiteId();
+        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+
+        foreach ($shipment->getItems() as $shipmentItem) {
+            $orderItem = $shipmentItem->getOrderItem();
+            $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(
+                [$shipmentItem->getProductId()]
+            )[$shipmentItem->getProductId()];
+            $qty = $this->castQty($orderItem, $shipmentItem->getQty());
+            $itemsToShip = [];
+            if ($orderItem->getHasChildren()) {
+                if (!$orderItem->isDummy(true)) {
+                    foreach ($orderItem->getChildrenItems() as $item) {
+                        if ($item->getIsVirtual() || $item->getLockedDoShip()) {
+                            continue;
+                        }
+                        $productOptions = $item->getProductOptions();
+                        if (isset($productOptions['bundle_selection_attributes'])) {
+                            $bundleSelectionAttributes = $this->jsonSerializer->unserialize(
+                                $productOptions['bundle_selection_attributes']
+                            );
+                            if ($bundleSelectionAttributes) {
+                                $qty = $bundleSelectionAttributes['qty'] * $shipmentItem->getQty();
+                                $qty = $this->castQty($item, $qty);
+                                $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
+                                    [$item->getProductId()]
+                                )[$item->getProductId()];
+                                $itemsToShip[] = [
+                                    'sku' => $itemSku,
+                                    'qty' => $qty
+                                ];
+                                continue;
+                            }
+                        } else {
+                            // configurable product
                             $itemsToShip[] = [
                                 'sku' => $itemSku,
                                 'qty' => $qty
                             ];
-                            continue;
                         }
-                    } else {
-                        // configurable product
-                        $itemsToShip[] = [
-                            'sku' => $itemSku,
-                            'qty' => $qty
-                        ];
                     }
                 }
+            } else {
+                $itemsToShip[] = [
+                    'sku' => $itemSku,
+                    'qty' => $qty
+                ];
             }
-        } else {
-            $itemsToShip[] = [
-                'sku' => $itemSku,
-                'qty' => $qty
-            ];
-        }
 
-        $websiteId = $shipmentItem->getShipment()->getOrder()->getStore()->getWebsiteId();
-        $this->processItems($websiteId, $sourceCode, $itemsToShip);
+            $this->processItems($stockId, $sourceCode, $itemsToShip);
+        }
 
         return;
     }
 
     /**
-     * @param $websiteId
+     * @param $stockId
      * @param $sourceCode
      * @param $itemsToShip
      * @throws LocalizedException
@@ -174,9 +181,8 @@ class SourceDeductionProcessor implements ObserverInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Validation\ValidationException
      */
-    private function processItems($websiteId, $sourceCode, $itemsToShip)
+    private function processItems($stockId, $sourceCode, $itemsToShip)
     {
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
         $sourceItemToSave = [];
         $reservationsToBuild = [];
 

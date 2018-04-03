@@ -17,7 +17,7 @@ class ShipmentProvider extends LegacyShipmentProvider
     public function getShipment()
     {
         $sourceCode = $this->request->getParam('sourceCode');
-        $items = $this->request->getParam('items');
+        $items = $this->request->getParam('items', []);
 
         $shipmentItems = [];
         foreach ($items as $item) {

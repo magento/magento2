@@ -8,7 +8,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" component="Magento_InventoryShipping/js/form/form" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="config" xsi:type="array">
-            <item name="source_selection_url" xsi:type="url" path="*/*/ProcessAlgorithm"/>
+            <item name="sourceSelectionUrl" xsi:type="url" path="*/*/ProcessAlgorithm"/>
         </item>
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">inventory_shipping_source_selection_form.inventory_shipping_source_selection_form_data_source</item>
@@ -52,12 +52,8 @@
         </dataProvider>
     </dataSource>
     <fieldset name="general" sortOrder="10">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="dataScope" xsi:type="string" />
-            </item>
-        </argument>
         <settings>
+            <dataScope />
             <label />
             <collapsible>false</collapsible>
             <opened>true</opened>
