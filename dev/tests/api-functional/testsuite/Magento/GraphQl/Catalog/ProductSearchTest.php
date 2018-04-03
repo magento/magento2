@@ -17,6 +17,138 @@ use Magento\Catalog\Model\Product;
 class ProductSearchTest extends GraphQlAbstract
 {
     /**
+     * Verify that layered navigation filters are returned for product query
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testFilterLn()
+    {
+        $query = <<<QUERY
+{
+    products (
+        filter: {
+            sku: {
+                like:"simple%"
+            }
+        }
+        pageSize: 4
+        currentPage: 1
+        sort: {
+            name: DESC
+        }
+    )
+    {
+        items {
+            sku
+        }
+        filters {
+            name
+            filter_items_count
+            request_var
+            filter_items {
+                label
+                value_string
+                items_count
+                ... on SwatchLayerFilterItemInterface {
+                    swatch_data {
+                        type
+                        value
+                    }
+                }
+            }
+        }
+    }
+}
+QUERY;
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey(
+            'filters',
+            $response['products'],
+            'Filters are missing in product query result.'
+        );
+        $this->assertFilters(
+            $response,
+            $this->getExpectedFiltersDataSet(),
+            'Returned filters data set does not match the expected value'
+        );
+    }
+
+    /**
+     * Get array with expected data for layered navigation filters
+     *
+     * @return array
+     */
+    private function getExpectedFiltersDataSet()
+    {
+        /** @var \Magento\Eav\Model\Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
+        /** @var \Magento\Eav\Api\Data\AttributeOptionInterface[] $options */
+        $options = $attribute->getOptions();
+        // Fetching option ID is required for continuous debug as of autoincrement IDs.
+        return [
+            [
+                'name' => 'Category',
+                'filter_items_count' => 1,
+                'request_var' => 'cat',
+                'filter_items' => [
+                    [
+                        'label' => 'Category 1',
+                        'value_string' => '333',
+                        'items_count' => 3,
+                    ],
+                ],
+            ],
+            [
+                'name' => 'Test Configurable',
+                'filter_items_count' => 1,
+                'request_var' => 'test_configurable',
+                'filter_items' => [
+                    [
+                        'label' => 'Option 1',
+                        'value_string' => $options[1]->getValue(),
+                        'items_count' => 1,
+                    ],
+                ],
+            ],
+            [
+                'name' => 'Price',
+                'filter_items_count' => 2,
+                'request_var' => 'price',
+                'filter_items' => [
+                    [
+                        'label' => '<span class="price">$0.00</span> - <span class="price">$9.99</span>',
+                        'value_string' => '-10',
+                        'items_count' => 1,
+                    ],
+                    [
+                        'label' => '<span class="price">$10.00</span> and above',
+                        'value_string' => '10-',
+                        'items_count' => 1,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Assert filters data.
+     *
+     * @param array $response
+     * @param array $expectedFilters
+     * @param string $message
+     */
+    private function assertFilters($response, $expectedFilters, $message = '')
+    {
+        $this->assertEquals($expectedFilters, $response['products']['filters'], $message);
+    }
+
+    /**
      * Verify that items between the price range of 5 and 50 are returned after sorting name in DESC
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php

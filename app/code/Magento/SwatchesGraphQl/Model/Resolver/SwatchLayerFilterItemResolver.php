@@ -10,18 +10,20 @@ namespace Magento\SwatchesGraphQl\Model\Resolver;
 use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * {@inheritdoc}
+ * Resolver for swatches layer filter type.
+ *
+ * @package Magento\SwatchesGraphQl\Model\Resolver
  */
 class SwatchLayerFilterItemResolver implements TypeResolverInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function resolveType(array $data) : ?string
+    public function resolveType(array $data) : string
     {
         if (isset($data['swatch_data'])) {
             return 'SwatchLayerFilterItem';
         }
-        return null;
+        return '';
     }
 }

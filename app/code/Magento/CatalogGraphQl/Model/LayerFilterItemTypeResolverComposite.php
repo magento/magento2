@@ -11,7 +11,9 @@ use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
- * {@inheritdoc}
+ * Composite resolver fo layered filter types.
+ *
+ * @package Magento\CatalogGraphQl\Model
  */
 class LayerFilterItemTypeResolverComposite implements TypeResolverInterface
 {
@@ -33,7 +35,7 @@ class LayerFilterItemTypeResolverComposite implements TypeResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolveType(array $data) : ?string
+    public function resolveType(array $data) : string
     {
         /** @var TypeResolverInterface $typeResolver */
         foreach ($this->typeResolvers as $typeResolver) {

@@ -12,6 +12,11 @@ use Magento\Catalog\Model\Layer\FilterListFactory;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogGraphQl\Model\Resolver\Layer\FilterableAttributesListFactory;
 
+/**
+ * Layer types filters provider.
+ *
+ * @package Magento\CatalogGraphQl\Model\Resolver\Layer
+ */
 class FiltersProvider
 {
     /**

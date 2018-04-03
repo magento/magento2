@@ -10,13 +10,11 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 use Magento\Catalog\Model\ResourceModel\CategoryProduct;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Data\SearchResultInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchResultsInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Product field data provider, used for GraphQL resolver processing.
@@ -83,7 +81,6 @@ class Product
         ProductSearchResultsInterfaceFactory $searchResultsFactory,
         CategoryProduct $categoryProduct,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        ProductSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Catalog\Model\ProductRepository $productRepository
     ) {

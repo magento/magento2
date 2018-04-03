@@ -10,20 +10,22 @@ namespace Magento\CatalogGraphQl\Model;
 use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * {@inheritdoc}
+ * Resolver for layered filter type.
+ *
+ * @package Magento\CatalogGraphQl\Model
  */
 class LayerFilterItemTypeResolver implements TypeResolverInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function resolveType(array $data) : ?string
+    public function resolveType(array $data) : string
     {
         return isset($data['value_string'])
             && isset($data['label'])
             && isset($data['items_count'])
             && count($data) == 3
                 ? 'LayerFilterItem'
-                : null;
+                : '';
     }
 }

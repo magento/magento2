@@ -10,7 +10,8 @@ use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Layer\Search\FilterableAttributeList;
 
 /**
- * Class FilterableAttributesListFactory
+ * Factory for filterable attributes list.
+ *
  * @package Magento\CatalogGraphQl\Model\Resolver\Layer
  */
 class FilterableAttributesListFactory

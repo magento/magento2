@@ -10,7 +10,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
 use Magento\Framework\Registry;
 
 /**
- * Class CollectionProvider
+ * Collection Provider for graphql layered navigation.
+ *
  * @package Magento\CatalogGraphQl\Model\Layer
  */
 class CollectionProvider implements \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface

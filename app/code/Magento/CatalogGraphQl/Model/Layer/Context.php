@@ -10,7 +10,8 @@ use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
 use Magento\Catalog\Model\Layer\StateKeyInterface;
 
 /**
- * Class Context
+ * Context for graphql layered navigation.
+ *
  * @package Magento\CatalogGraphQl\Model\Layer
  */
 class Context implements \Magento\Catalog\Model\Layer\ContextInterface
