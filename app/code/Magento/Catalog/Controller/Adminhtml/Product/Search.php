@@ -38,21 +38,28 @@ class Search extends \Magento\Backend\App\Action
     private $filterStrategies;
 
     /**
-     * Search constructor.
-     * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
+     * @var \Magento\Catalog\Model\Product\Visibility
+     */
+    private $catalogVisibility;
+
+    /**
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\Product\Visibility $catalogVisibility
      * @param \Magento\Backend\App\Action\Context $context
      * @param array $filterStrategies
      */
     public function __construct(
-        \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\Product\Visibility $catalogVisibility,
         \Magento\Backend\App\Action\Context $context,
         array $filterStrategies = []
     ) {
-        $this->resultJsonFactory = $jsonFactory;
+        $this->resultJsonFactory = $resultFactory;
         $this->productCollectionFactory = $productCollectionFactory;
         $this->filterStrategies = $filterStrategies;
+        $this->catalogVisibility = $catalogVisibility;
         parent::__construct($context);
     }
 
@@ -68,6 +75,7 @@ class Search extends \Magento\Backend\App\Action
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->addAttributeToSelect(ProductInterface::NAME);
+        $productCollection->setVisibility($this->catalogVisibility->getVisibleInCatalogIds());
         $productCollection->setPage($pageNum, $limit);
         $this->addFilter($productCollection, 'fulltext', $searchKey);
         $productById = [];
@@ -84,7 +92,11 @@ class Search extends \Magento\Backend\App\Action
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
-        return $resultJson->setData($productById);
+        return $resultJson->setData(
+            [
+                'options' => $productById,
+                'total' => $productCollection->getSize()
+            ]);
     }
 
     /**

@@ -1137,17 +1137,15 @@ define([
          * @param {String} searchKey
          */
         loadOptions: function (searchKey) {
-            var currentPage = searchKey === this.lastSearchKey ? this.lastSearchPage + 1 : 1;
+            var currentPage = searchKey === this.lastSearchKey ? this.lastSearchPage + 1 : 1,
+                cachedSearchResult;
 
-            this.renderPath = !this.showPath;
+            this.renderPath = !!this.showPath;
 
-            if (this.isSearchKeyCached(searchKey, currentPage)) {
-                this.options(this.getCachedSearchResults(searchKey).options);
-                this._setItemsQuantity(this.options().length);
-                this.lastSearchPage = this.getCachedSearchResults(searchKey).lastPage;
-                this.lastSearchKey = searchKey;
-                this.loading(false);
-
+            if (this.isSearchKeyCached(searchKey)) {
+                cachedSearchResult = this.getCachedSearchResults(searchKey);
+                this.options(cachedSearchResult.options);
+                this.afterLoadOptions(searchKey, cachedSearchResult.lastPage, cachedSearchResult.total);
                 return;
             }
 
@@ -1166,7 +1164,7 @@ define([
             var clientHight = event.target.scrollTop + event.target.clientHeight,
                 scrollHeight = event.target.scrollHeight;
 
-            if (clientHight > scrollHeight - this.deviation && this.options().length >= this.pageLimit) {
+            if (clientHight > scrollHeight - this.deviation && !this.isSearchKeyCached(data.filterInputValue())) {
                 this.loadOptions(data.filterInputValue());
             }
         },
@@ -1185,7 +1183,8 @@ define([
 
             return {
                 options: [],
-                lastPage: 1
+                lastPage: 1,
+                total: 0
             };
         },
 
@@ -1196,11 +1195,12 @@ define([
          * @param {Array} optionsArray
          * @param {Number} page
          */
-        setCachedSearchResults: function (searchKey, optionsArray, page) {
-            var cachedData = this.getCachedSearchResults(searchKey);
+        setCachedSearchResults: function (searchKey, optionsArray, page, total) {
+            var cachedData = {};
 
             cachedData.options = optionsArray;
             cachedData.lastPage = page;
+            cachedData.total = total;
             this.cachedSearchResults[searchKey] = cachedData;
         },
 
@@ -1208,12 +1208,14 @@ define([
          * Check if search key cached
          *
          * @param {String} searchKey
-         * @param {Number} currentPage
          * @return {Boolean}
          */
-        isSearchKeyCached: function (searchKey, currentPage) {
-            return this.cachedSearchResults.hasOwnProperty(searchKey) &&
-                this.cachedSearchResults[searchKey].lastPage >= currentPage;
+        isSearchKeyCached: function (searchKey) {
+            var totalCached = this.cachedSearchResults.hasOwnProperty(searchKey) ?
+                this.deviation * this.cachedSearchResults[searchKey].lastPage :
+                0;
+
+            return totalCached > 0 && totalCached >= this.cachedSearchResults[searchKey].total;
         },
 
         /**
@@ -1223,7 +1225,9 @@ define([
          * @param {Number} page
          */
         processRequest: function (searchKey, page) {
-            var existingOptions = this.options();
+            var total = 0,
+                existingOptions = this.options();
+
             this.loading(true);
             $.ajax({
                 url: this.searchUrl,
@@ -1238,10 +1242,10 @@ define([
 
                 /** @param {Object} response */
                 success: function (response) {
-                    _.each(response, function (opt) {
+                    _.each(response.options, function (opt) {
                         existingOptions.push(opt);
                     });
-
+                    total = response.total;
                     this.options(existingOptions);
                 },
 
@@ -1252,13 +1256,24 @@ define([
 
                 /** cache options and stop loading*/
                 complete: function () {
-                    this.setCachedSearchResults(searchKey, this.options(), page);
-                    this._setItemsQuantity(this.options().length);
-                    this.lastSearchPage = page;
-                    this.lastSearchKey = searchKey;
-                    this.loading(false);
+                    this.setCachedSearchResults(searchKey, this.options(), page, total);
+                    this.afterLoadOptions(searchKey, page, total);
                 }
             });
+        },
+
+        /**
+         * Stop loading and update data after options were updated
+         *
+         * @param {String} searchKey
+         * @param {Number} page
+         * @param {Number} total
+         */
+        afterLoadOptions: function (searchKey, page, total) {
+            this._setItemsQuantity(total);
+            this.lastSearchPage = page;
+            this.lastSearchKey = searchKey;
+            this.loading(false);
         }
     });
 });

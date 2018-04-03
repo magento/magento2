@@ -28,6 +28,7 @@ define([
                     url: this.validationUrl,
                     type: 'GET',
                     dataType: 'json',
+                    async: false,
                     context: this,
                     data: {
                         productId: this.value()
