@@ -77,6 +77,8 @@ define([
                 createShippingAddress(newCustomerShippingAddress);
             }
             this.applyShippingAddress();
+            this.resolveBillingAddress();
+
         },
 
         /**
