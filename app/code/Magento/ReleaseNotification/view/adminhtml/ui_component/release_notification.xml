@@ -95,7 +95,7 @@
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -131,7 +131,7 @@
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[<p>With <a href="http://docs.magento.com/m2/ce/user_guide/payment/amazon-pay.html" target="_blank">Amazon Pay</a>, we make it simple for the hundreds of millions of Amazon customers worldwide to easily login and purchase from your store using information already stored their Amazon account. With easy set up in Magento 2.2.4, Amazon Pay provides your customers with a trusted and familiar checkout experience. In just a few taps, they can complete a transaction without ever leaving your site.</p>
-						<ul>
+                        <ul>
                         <li><span>Your customers use one familiar login to identify themselves and transact anywhere Amazon Pay is offered.</span></li>
                         <li><span>Checkout experience is covered by the Amazon A-to-z Guarantee at no additional cost.</span></li>
                         <li><span>Built on years of Amazon eCommerce innovation and trusted by merchants and buyers alike.</span></li>
@@ -153,7 +153,7 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
@@ -174,11 +174,11 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -220,7 +220,7 @@
                         <li><span>Easy application process with the ability to pay over time increases average order value and conversion rates.</span></li>
                         <li><span>Assumes all credit and fraud risk and ensures you are paid for ordered goods.</span></li>
                         <li><span>Ready for all devices and supports one click repeat purchases across all Klarna merchant sites.</span></li>
-						<li><span>Fast and easy setup, right from the Magento Admin.</span></li>
+                        <li><span>Fast and easy setup, right from the Magento Admin.</span></li>
                         </ul>]]>
                         </item>
                     </item>
@@ -238,11 +238,11 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -259,11 +259,11 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = tax_automation_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -305,8 +305,8 @@
                         <li><span>Automatically comply with the latest tax rules for each product and every jurisdiction.</span></li>
                         <li><span>Perform tax calculations and generate signature-ready PDF returns in one solution.</span></li>
                         <li><span>No penalty to merchants for tax estimates from abandoned carts.</span></li>
-						<li><span>Flexible deployment options that fit your organization&#8217;s needs, whether in the cloud or on-premise.</span></li>
-						<li><span>Award-winning customer support specialists are available to answer questions and assist customers.</span></li>
+                        <li><span>Flexible deployment options that fit your organization&#8217;s needs, whether in the cloud or on-premise.</span></li>
+                        <li><span>Award-winning customer support specialists are available to answer questions and assist customers.</span></li>
                         </ul>]]>
                         </item>
                     </item>
@@ -324,11 +324,11 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = tax_automation_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -345,7 +345,7 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = tax_automation_modal</item>
                                     <item name="actionName" xsi:type="string">closeReleaseNotes</item>
                                 </item>
                             </item>
