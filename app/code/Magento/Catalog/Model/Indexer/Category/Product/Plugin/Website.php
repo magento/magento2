@@ -15,7 +15,7 @@ class Website
     /**
      * @var TableResolver
      */
-    protected $tableResolver;
+    private $tableResolver;
 
     /**
      * @param TableResolver $tableResolver

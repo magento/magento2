@@ -41,25 +41,17 @@ class TableResolver
     private $connection;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var string[]
      */
     private $mainTmpTable;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\App\ResourceConnection $resource
     ) {
         $this->resource = $resource;
-        $this->storeManager = $storeManager;
         $this->connection = $resource->getConnection();
     }
 
