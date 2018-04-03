@@ -153,41 +153,32 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         $specialPrice = $this->_addAttributeToSelect($select, 'special_price', "e.$linkField", 'cs.store_id');
         $specialFrom = $this->_addAttributeToSelect($select, 'special_from_date', "e.$linkField", 'cs.store_id');
         $specialTo = $this->_addAttributeToSelect($select, 'special_to_date', "e.$linkField", 'cs.store_id');
-        $curentDate = new \Zend_Db_Expr('cwd.website_date');
+        $currentDate = new \Zend_Db_Expr('cwd.website_date');
 
-        $specialExpr = $connection->getCheckSql(
-            $connection->getCheckSql(
-                $specialFrom . ' IS NULL',
-                '1',
-                $connection->getCheckSql($specialFrom . ' >= ' . $curentDate, '1', '0')
-            ) . " > 0 AND " . $connection->getCheckSql(
-                $specialTo . ' IS NULL',
-                '1',
-                $connection->getCheckSql($specialTo . ' <= ' . $curentDate, '1', '0')
-            ) . " > 0 AND {$specialPrice} > 0 AND {$specialPrice} < 100 ",
-            $specialPrice,
-            '0'
-        );
-
+        $specialFromDate = $connection->getDatePartSql($specialFrom);
+        $specialToDate = $connection->getDatePartSql($specialTo);
+        $specialFromExpr = "{$specialFrom} IS NULL OR {$specialFromDate} <= {$currentDate}";
+        $specialToExpr = "{$specialTo} IS NULL OR {$specialToDate} >= {$currentDate}";
+        $specialExpr = "{$specialPrice} IS NOT NULL AND {$specialPrice} > 0 AND {$specialPrice} < 100"
+            . " AND {$specialFromExpr} AND {$specialToExpr}";
         $tierExpr = new \Zend_Db_Expr('tp.min_price');
 
         if ($priceType == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
-            $finalPrice = $connection->getCheckSql(
-                $specialExpr . ' > 0',
-                'ROUND(' . $price . ' * (' . $specialExpr . '  / 100), 4)',
-                $price
+            $specialPriceExpr = $connection->getCheckSql(
+                $specialExpr,
+                'ROUND(' . $price . ' * (' . $specialPrice . '  / 100), 4)',
+                'NULL'
             );
             $tierPrice = $connection->getCheckSql(
                 $tierExpr . ' IS NOT NULL',
                 'ROUND((1 - ' . $tierExpr . ' / 100) * ' . $price . ', 4)',
                 'NULL'
             );
-
-            $finalPrice = $connection->getCheckSql(
-                "{$tierExpr} IS NOT NULL AND {$tierPrice} < {$finalPrice}",
-                $tierPrice,
-                $finalPrice
-            );
+            $finalPrice = $connection->getLeastSql([
+                $price,
+                $connection->getIfNullSql($specialPriceExpr, $price),
+                $connection->getIfNullSql($tierPrice, $price),
+            ]);
         } else {
             $finalPrice = new \Zend_Db_Expr('0');
             $tierPrice = $connection->getCheckSql($tierExpr . ' IS NOT NULL', '0', 'NULL');
@@ -196,7 +187,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         $select->columns(
             [
                 'price_type' => new \Zend_Db_Expr($priceType),
-                'special_price' => $specialExpr,
+                'special_price' => $connection->getCheckSql($specialExpr, $specialPrice, '0'),
                 'tier_percent' => $tierExpr,
                 'orig_price' => $connection->getIfNullSql($price, '0'),
                 'price' => $finalPrice,
