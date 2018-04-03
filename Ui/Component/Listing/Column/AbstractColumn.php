@@ -76,7 +76,7 @@ abstract class AbstractColumn extends \Magento\Ui\Component\Listing\Columns\Colu
                     $item[$this->getData('name')]['edit'] = [
                         'href' => $this->urlBuilder->getUrl(
                             'loginascustomer/guest/convert',
-                            ['customer_id' => $item[$this->sourceColumnName]]
+                            ['order_id' => $item['entity_id']]
                         ),
                         'label' => __('Convert Guest to Customer'),
                         'hidden' => $hidden,

@@ -16,6 +16,11 @@ class Convert extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
+     * @var \Magento\Framework\Module\Manager
+     */
+    protected $moduleManager;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -23,10 +28,12 @@ class Convert extends \Magento\Backend\App\Action
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Framework\Module\Manager $moduleManager
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -34,6 +41,12 @@ class Convert extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        return  $resultPage = $this->resultPageFactory->create();
+        if ($this->moduleManager->isEnabled('Magefan_GuestToCustomer')) {
+            $this->_redirect('mfguesttocustomer/order/convert', [
+                'order_id' => $this->getRequest()->getParam('order_id')
+            ]);
+        } else {
+            return  $resultPage = $this->resultPageFactory->create();
+        }
     }
 }
