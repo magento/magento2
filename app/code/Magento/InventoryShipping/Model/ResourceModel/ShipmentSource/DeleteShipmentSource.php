@@ -17,7 +17,7 @@ class DeleteShipmentSource
     /**
      * Constant for fields in data array
      */
-    const SHIPMENT_ID = 'shipment_id';
+    private const SHIPMENT_ID = 'shipment_id';
     
     /**
      * @var ResourceConnection

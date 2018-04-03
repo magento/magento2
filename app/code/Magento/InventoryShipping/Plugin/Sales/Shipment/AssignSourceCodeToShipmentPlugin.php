@@ -13,9 +13,8 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Api\Data\ShipmentExtensionFactory;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 
 class AssignSourceCodeToShipmentPlugin
 {
@@ -35,35 +34,27 @@ class AssignSourceCodeToShipmentPlugin
     private $stockByWebsiteIdResolver;
 
     /**
-     * @var SearchCriteriaBuilder
+     * @var GetSourcesAssignedToStockOrderedByPriorityInterface
      */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var GetStockSourceLinksInterface
-     */
-    private $getStockSourceLinks;
+    private $getSourcesAssignedToStockOrderedByPriority;
 
     /**
      * AssignSourceCodeToShipmentPlugin constructor.
      * @param RequestInterface $request
      * @param ShipmentExtensionFactory $shipmentExtensionFactory
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param GetStockSourceLinksInterface $getStockSourceLinks
+     * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      */
     public function __construct(
         RequestInterface $request,
         ShipmentExtensionFactory $shipmentExtensionFactory,
         StockByWebsiteIdResolver $stockByWebsiteIdResolver,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        GetStockSourceLinksInterface $getStockSourceLinks
+        GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
     ) {
         $this->request = $request;
         $this->shipmentExtensionFactory = $shipmentExtensionFactory;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->getStockSourceLinks = $getStockSourceLinks;
+        $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
     }
 
     /**
@@ -71,6 +62,8 @@ class AssignSourceCodeToShipmentPlugin
      * @param ShipmentInterface $shipment
      * @param Order $order
      * @return ShipmentInterface
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterCreate(ShipmentFactory $subject, ShipmentInterface $shipment, Order $order)
@@ -78,10 +71,11 @@ class AssignSourceCodeToShipmentPlugin
         $sourceCode = $this->request->getParam('source_code');
         if (empty($sourceCode)) {
             $websiteId = $order->getStore()->getWebsiteId();
-            $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
-            $sources = $this->getAssignedSourcesForStock($stockId);
+            $stockId = $this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+            $sources = $this->getSourcesAssignedToStockOrderedByPriority->execute((int)$stockId);
+            //TODO: need ro rebuild this logic | create separate service
             if (!empty($sources) && count($sources) == 1) {
-                $sourceCode = $sources[0];
+                $sourceCode = $sources[0]->getSourceCode();
             }
         }
         $shipmentExtension = $shipment->getExtensionAttributes();
@@ -93,24 +87,5 @@ class AssignSourceCodeToShipmentPlugin
         $shipment->setExtensionAttributes($shipmentExtension);
 
         return $shipment;
-    }
-
-    /**
-     * Retrieves sources that are assigned to $stockId
-     *
-     * @param int $stockId
-     * @return StockSourceLinkInterface[]
-     */
-    private function getAssignedSourcesForStock(int $stockId): array
-    {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
-            ->create();
-
-        $result = [];
-        foreach ($this->getStockSourceLinks->execute($searchCriteria)->getItems() as $source) {
-            $result[] = $source->getSourceCode();
-        }
-        return $result;
     }
 }

@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="sales_order_shipment_save_after">
+    <event name="sales_shipment_item_save_after">
         <observer name="inventory_sales_source_deduction_processor" instance="Magento\InventoryShipping\Observer\SourceDeductionProcessor"/>
     </event>
 </config>

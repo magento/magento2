@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Controller\Adminhtml\Algorithm;
+namespace Magento\InventoryShipping\Controller\Adminhtml\SourceSelection;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -17,11 +17,12 @@ use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
- * GetSources Controller | used ONLY for TEST.
+ * ProcessAlgorithm Controller
  */
-class GetSources extends Action
+class ProcessAlgorithm extends Action
 {
     /**
      * @see _isAllowed()
@@ -54,6 +55,16 @@ class GetSources extends Action
     private $getDefaultSourceSelectionAlgorithmCode;
 
     /**
+     * @var SourceRepositoryInterface
+     */
+    private $sourceRepository;
+
+    /**
+     * @var array
+     */
+    private $sources = [];
+
+    /**
      * GetSources constructor.
      * @param Context $context
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
@@ -61,6 +72,7 @@ class GetSources extends Action
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+     * @param SourceRepositoryInterface $sourceRepository
      */
     public function __construct(
         Context $context,
@@ -68,7 +80,8 @@ class GetSources extends Action
         ItemRequestInterfaceFactory $itemRequestFactory,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
         SourceSelectionServiceInterface $sourceSelectionService,
-        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
+        SourceRepositoryInterface $sourceRepository
     ) {
         parent::__construct($context);
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
@@ -76,6 +89,7 @@ class GetSources extends Action
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
+        $this->sourceRepository = $sourceRepository;
     }
 
     /**
@@ -112,15 +126,33 @@ class GetSources extends Action
                     $algorithmCode
                 );
                 foreach ($sourceSelectionResult->getSourceSelectionItems() as $item) {
-                    $result[$orderItem][] = [
+                    $sourceCode = $item->getSourceCode();
+                    if (!isset($this->sources[$sourceCode])) {
+                        $this->sources[$sourceCode] = $this->getSourceName($sourceCode);
+                    }
+                    $result['items'][$orderItem][] = [
+                        'sourceName' => $this->sources[$sourceCode],
                         'sourceCode' => $item->getSourceCode(),
                         'qtyAvailable' => $item->getQtyAvailable(),
                         'qtyToDeduct' => $item->getQtyToDeduct()
                     ];
                 }
+                $result['sourceCodes'] = $this->sources;
             }
             $resultJson->setData($result);
         }
         return $resultJson;
+    }
+
+    /**
+     * Get source name by code
+     *
+     * @param string $sourceCode
+     * @return mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getSourceName(string $sourceCode): string
+    {
+        return $this->sourceRepository->get($sourceCode)->getName();
     }
 }

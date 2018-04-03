@@ -17,8 +17,8 @@ class SaveShipmentSource
     /**
      * Constant for fields in data array
      */
-    const SHIPMENT_ID = 'shipment_id';
-    const SOURCE_CODE = 'source_code';
+    private const SHIPMENT_ID = 'shipment_id';
+    private const SOURCE_CODE = 'source_code';
     
     /**
      * @var ResourceConnection
