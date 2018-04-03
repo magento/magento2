@@ -7,9 +7,9 @@
 <div class="admin__field"
      visible="visible"
      css="$data.additionalClasses">
-    <input type="hidden" class="colorpicker-spectrum" data-bind="colorPicker: colorPickerConfig" />
+    <input type="hidden" class="colorpicker-spectrum" data-bind="colorPicker: colorPickerConfig, attr: { disabled: disabled }" />
     <input type="text" class="colorpicker-input" data-bind="
         value: value,
-        hasFocus: true,
-        attr: { placeholder: placeholder }" />
+        hasFocus: focused,
+        attr: { id: uid, placeholder: placeholder, disabled: disabled }" />
 </div>

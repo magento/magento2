@@ -149,7 +149,7 @@
             <initialMediaGalleryOpenSubpath>wysiwyg</initialMediaGalleryOpenSubpath>
         </settings>
     </imageUploader>
-    <colorPicker class="Magento\Ui\Component\Form\Element\ColorPicker" component="Magento_Ui/js/form/element/colorPicker" template="ui/form/field">
+    <colorPicker class="Magento\Ui\Component\Form\Element\ColorPicker" component="Magento_Ui/js/form/element/color-picker" template="ui/form/field">
         <settings>
             <elementTmpl>ui/form/element/colorPicker</elementTmpl>
             <colorFormat>rgb</colorFormat>

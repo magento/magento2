@@ -18,7 +18,7 @@ class FullMode implements ModeInterface
      *
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return [
             'showInput' => true,

@@ -14,6 +14,8 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
+ * Class ColorPicker
+ *
  * @api
  */
 class ColorPicker extends AbstractElement

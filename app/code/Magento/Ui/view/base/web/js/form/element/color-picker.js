@@ -1,15 +1,15 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 /**
  * @api
  */
 define([
-    'jquery',
-    'underscore',
-    'uiLayout',
     'mage/translate',
-    'Magento_Ui/js/form/element/abstract',
-    'spectrum'
-], function ($, _, layout, $t, Abstract, spectrum) {
+    'Magento_Ui/js/form/element/abstract'
+], function ($t, Abstract) {
     'use strict';
 
     var defaultColorPalette = [
@@ -43,17 +43,10 @@ define([
          */
         initialize: function () {
             this._super();
+
             this.colorPickerConfig.value = this.value;
-            // $(document).on('click', '.sp-replacer', function () {
-            //     this.focused(true);
-            // });
             return this;
-        },
-
-        // setFocus: function () {
-        //     this.focused(true);
-        // }
-
+        }
     });
 });
  

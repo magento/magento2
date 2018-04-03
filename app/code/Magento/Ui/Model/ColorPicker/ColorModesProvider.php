@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Ui\Model\ColorPicker;
 
+/**
+ * Class ColorModesProvider
+ */
 class ColorModesProvider
 {
     private $colorModes;
@@ -22,7 +25,12 @@ class ColorModesProvider
         $this->objectManager = $objectManager;
     }
 
-    public function getModes()
+    /**
+     * Return all available modes and their configuration
+     *
+     * @return array
+     */
+    public function getModes(): array
     {
         $config = [];
         foreach ($this->colorModes as $modeName => $className) {
@@ -36,9 +44,9 @@ class ColorModesProvider
      * Create mode provider
      *
      * @param string $instance
-     * @return ConfigInterface
+     * @return ModeInterface
      */
-    private function createModeProvider($instance)
+    private function createModeProvider(string $instance): ModeInterface
     {
         if (!is_subclass_of(
             $instance,

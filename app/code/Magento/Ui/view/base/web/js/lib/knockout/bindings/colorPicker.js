@@ -6,8 +6,9 @@ define([
     'ko',
     'jquery',
     '../template/renderer',
-    'spectrum'
-], function (ko, $, renderer, spectrum) {
+    'spectrum',
+    'tinycolor'
+], function (ko, $, renderer, spectrum, tinycolor) {
     'use strict';
 
     ko.bindingHandlers.colorPicker = {
@@ -22,24 +23,40 @@ define([
          */
         init: function (element, valueAccessor, allBindings, viewModel) {
             var config = valueAccessor();
-            config.change = function (value) {
-                if (value == null) {
-                    value = '';
-                }
-                config.value(value.toString());
-            };
-            config.hide = function (value) {
-                if (value == null) {
-                    value = '';
-                }
-                config.value(value.toString());
-            };
-            $(element).spectrum(config);
+
+            if (!viewModel.disabled()) {
+                config.change = function (value) {
+                    if (value == null) {
+                        value = '';
+                    }
+                    config.value(value.toString());
+                };
+
+                config.hide = function (value) {
+                    if (value == null) {
+                        value = '';
+                    }
+                    config.value(value.toString());
+                };
+                config.show = function () {
+                    if (!viewModel.focused()) {
+                        viewModel.focused(true);
+                    }
+                    return true;
+                };
+                $(element).spectrum(config);
+            } else {
+                $(element).spectrum({
+                    disabled: true
+                });
+            }
         },
 
         update: function(element, valueAccessor, allBindings, viewModel) {
             var config = valueAccessor();
-            $(element).spectrum("set", config.value());
+            if (tinycolor(config.value()).isValid() || config.value() === '') {
+                $(element).spectrum("set", config.value());
+            }
         }
     };
 

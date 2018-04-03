@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Ui\Model\ColorPicker;
 
 /**
- * Returns config parameters for full mode
+ * Returns config parameters for simple mode
  */
 class SimpleMode implements ModeInterface
 {
@@ -18,7 +18,7 @@ class SimpleMode implements ModeInterface
      *
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return [
             'showInput' => false,

@@ -294,7 +294,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 .sp-input {
   font-size: 12px !important;
-  border: 1px solid #9d9d9d;
+  border: 1px solid @button__border-color;
   padding: 4px 5px;
   margin: 5px 0px 0px 0px;
   width: 100%;
@@ -341,7 +341,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   border:solid 2px transparent;
 }
 .sp-palette .sp-thumb-el:hover, .sp-palette .sp-thumb-el.sp-thumb-active {
-  border-color: orange;
+  border-color: @button__hover__border-color;
 }
 .sp-thumb-el {
   position:relative;
@@ -381,7 +381,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   display:inline-block;
   *zoom: 1;
   *display: inline;
-  border: solid 1px #9d9d9d;
+  border: solid 1px @button__border-color;
   background: #eaeaea;
   color: #333;
   vertical-align: middle;
@@ -407,7 +407,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   position:relative;
   width: 25px;
   height: 25px;
-  border: solid 1px #9d9d9d;
+  border: solid 1px @button__border-color;
   float:left;
   z-index: 0;
 }
@@ -426,51 +426,31 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .sp-container {
   padding-bottom:0;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+  margin-top: 4px;
 }
 
 
 /* Buttons: http://hellohappy.org/css3-buttons/ */
 .sp-container button {
-  background-color: #dcdcdc;
-  //background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
-  //background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
-  //background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
-  //background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
-  //background-image: linear-gradient(to bottom, #eeeeee, #cccccc);
-  border: 1px solid #9f9d9c;
-  //border-bottom: 1px solid #bbb;
-  //border-radius: 3px;
+  background-color: @button__background-color;
+  border: 1px solid @button__border-color;
   color: #333;
-  font-size: 14px;
-  line-height: 1;
+  font-size: @button__font-size;
+  line-height: @button__line-height;
   padding: 5px 4px;
   text-align: center;
-  //text-shadow: 0 1px 0 #eee;
   vertical-align: middle;
 }
 .sp-container button:hover {
-  background-color: #dddddd;
-  //background-image: -webkit-linear-gradient(top, #dddddd, #bbbbbb);
-  //background-image: -moz-linear-gradient(top, #dddddd, #bbbbbb);
-  //background-image: -ms-linear-gradient(top, #dddddd, #bbbbbb);
-  //background-image: -o-linear-gradient(top, #dddddd, #bbbbbb);
-  //background-image: linear-gradient(to bottom, #dddddd, #bbbbbb);
-  border: 1px solid #9f9d9c;
-  border-bottom: 1px solid #999;
+  background-color: @button__hover__background-color;
+  border: 1px solid @button__border-color;
   cursor: pointer;
-  //text-shadow: 0 1px 0 #ddd;
 }
 .sp-container button:active {
   border: 1px solid #aaa;
-  //border-bottom: 1px solid #888;
-  //-webkit-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
-  //-moz-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
-  //-ms-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
-  //-o-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
-  //box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
 }
 .sp-cancel {
-  font-size: 11px;
+  font-size: @button__font-size;
   color: #1979c3 !important;
   margin:0;
   padding:2px;
@@ -520,5 +500,9 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 
 .sp-palette-row-selection {
-  padding-top: 25px;
+  padding-top: 10px;
+}
+
+.sp-palette-row-selection:before {
+  content: "Favorite Colors";
 }

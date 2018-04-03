@@ -455,8 +455,8 @@
     <xs:element name="colorPicker" type="componentColorPicker">
         <xs:annotation>
             <xs:documentation>
-                The ColorPicker component utilizes the Spectrum js library to allow user greater flexibility in entering
-                color values.
+                The ColorPicker component uses the Spectrum and tinycolor .js libraries to make it easier to choose and
+                implement color values.
             </xs:documentation>
         </xs:annotation>
     </xs:element>
