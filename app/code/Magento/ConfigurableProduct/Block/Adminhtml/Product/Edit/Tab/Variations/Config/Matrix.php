@@ -198,8 +198,8 @@ class Matrix extends \Magento\Backend\Block\Template
                         $attributes[$key]['values'] = array_merge(
                             isset($attribute['values']) ? $attribute['values'] : [],
                             isset($configurableData[$key]['values'])
-                                ? array_filter($configurableData[$key]['values'])
-                                : []
+                            ? array_filter($configurableData[$key]['values'])
+                            : []
                         );
                     }
                 }
