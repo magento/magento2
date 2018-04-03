@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 //Register components (via a list of glob patterns)
 namespace Magento\NonComposerComponentRegistration;
 use RuntimeException;
