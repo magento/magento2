@@ -1994,7 +1994,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function addCustomOption($code, $value, $product = null)
     {
-        $product = $product ? $product : $this;
+        $product = $product ?: $this;
         $option = $this->_itemOptionFactory->create()->addData(
             ['product_id' => $product->getId(), 'product' => $product, 'code' => $code, 'value' => $value]
         );
