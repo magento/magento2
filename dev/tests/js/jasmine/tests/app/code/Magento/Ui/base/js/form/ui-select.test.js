@@ -412,7 +412,7 @@ define([
                 expect(type).toEqual('string');
             });
             it('Should return label of selected option when not using multiple options and option exists', function () {
-                obj.multiple = 'single';
+                obj.multiple = false;
                 obj.cacheOptions.plain.push({
                     label: 'one',
                     value: 1
@@ -422,9 +422,21 @@ define([
                 expect(obj.setCaption()).toEqual('one');
             });
             it(
-                'Should return missing value template when not using multiple options and option does not exist',
+                'Should return select placeholder when isDisplayMissingValuePlaceholder is false ' +
+                ' and option does not exist',
                 function () {
-                    obj.multiple = 'single';
+                    obj.isDisplayMissingValuePlaceholder = false;
+                    obj.value('1');
+
+                    obj.multiple = false;
+                    expect(obj.setCaption()).toEqual('Select...');
+                }
+            );
+            it(
+                'Should return missing value template when isDisplayMissingValuePlaceholder is true ' +
+                ' and option does not exist',
+                function () {
+                    obj.isDisplayMissingValuePlaceholder = true;
                     obj.value('1');
 
                     expect(obj.setCaption()).toEqual('Entity with ID: 1 doesn\'t exist');
