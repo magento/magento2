@@ -1009,7 +1009,7 @@ QUERY;
     {
         $productItemsInResponse = array_map(null, $actualResponse['products']['items'], $filteredProducts);
 
-        foreach ($filteredProducts as $itemIndex => $itemArray) {
+        for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
             $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
