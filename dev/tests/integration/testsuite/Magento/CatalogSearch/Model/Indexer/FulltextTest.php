@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
@@ -183,7 +185,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      * @param string $text
      * @return Product[]
      */
-    protected function search($text)
+    protected function search($text): array
     {
         $query = $this->queryFactory->get();
         $query->unsetData();
@@ -209,7 +211,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      * @param string $sku
      * @return Product
      */
-    protected function getProductBySku($sku)
+    protected function getProductBySku($sku): Product
     {
         /** @var Product $product */
         $product = Bootstrap::getObjectManager()->get(
