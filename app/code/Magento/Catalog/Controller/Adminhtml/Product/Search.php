@@ -16,6 +16,13 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Search extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
+    /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     private $resultJsonFactory;
@@ -90,7 +97,8 @@ class Search extends \Magento\Backend\App\Action
     private function addFilter(
         \Magento\Catalog\Model\ResourceModel\Product\Collection $collection,
         string $filterType,
-        string $searchKey) : void {
+        string $searchKey
+    ) : void {
         if (isset($this->filterStrategies[$filterType])) {
             $this->filterStrategies[$filterType]
                 ->addFilter(

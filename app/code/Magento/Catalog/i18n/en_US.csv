@@ -799,3 +799,5 @@ Details,Details
 "The value of Admin must be unique. (%1)", "The value of Admin must be unique. (%1)"
 "Product Name or SKU", "Product Name or SKU"
 "Start typing to find products", "Start typing to find products"
+"Product with ID: (%1) doesn't exist", "Product with ID: (%1) doesn't exist"
+"Category with ID: (%1) doesn't exist", "Category with ID: (%1) doesn't exist"

@@ -14,6 +14,13 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class GetSelected extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
+    /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     private $resultJsonFactory;

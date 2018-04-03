@@ -27,11 +27,10 @@ define([
                 $.ajax({
                     url: this.validationUrl,
                     type: 'GET',
-                    async: false,
                     dataType: 'json',
                     context: this,
                     data: {
-                        'productId': this.value()
+                        productId: this.value()
                     },
 
                     /** @param {Object} response */

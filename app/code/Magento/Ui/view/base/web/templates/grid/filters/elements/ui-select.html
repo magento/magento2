@@ -48,17 +48,15 @@
              text: setCaption()
         ">
         </div>
-        <!-- ko if: showXWhenOptionSelected && hasData()  -->
-            <button
+            <button if="isRemoveSelectedIcon && hasData()"
                     class="action-close"
                     type="button"
                     data-action="remove-selected-item"
                     tabindex="-1"
-                    data-bind="click: clear"
+                    click="clear"
             >
                 <span class="action-close-text" translate="'Close'"></span>
             </button>
-        <!-- /ko -->
     </div>
     <!-- /ko -->
     <!-- ko if: chipsEnabled -->
@@ -94,9 +92,7 @@
         <!-- /ko -->
     </div>
     <!-- /ko -->
-    <div class="action-menu"
-         data-bind="css: { _active: listVisible}
-    ">
+    <div class="action-menu" css="{ _active: listVisible}">
         <div data-role="spinner"
            class="admin__data-grid-loading-mask"
            visible="loading"
@@ -134,7 +130,7 @@
                  class="admin__action-multiselect-search-count">
             </div>
         </div>
-        <div ifnot="options().length > 0"
+        <div if="options().length == 0"
              class="admin__action-multiselect-empty-area">
             <ul data-bind="html: emptyOptionsHtml"/>
         </div>

@@ -45,11 +45,11 @@ class Product implements \Magento\Ui\Model\UrlInput\ConfigInterface
             'multiple' => false,
             'closeBtn' => true,
             'template' => 'ui/grid/filters/elements/ui-select',
-            'requestUrl' => $this->urlBuilder->getUrl('catalog/product/search'),
+            'searchUrl' => $this->urlBuilder->getUrl('catalog/product/search'),
             'filterPlaceholder' => __('Product Name or SKU'),
             'isDisplayEmptyPlaceholder' => true,
             'emptyOptionsHtml' => __('Start typing to find products'),
-            'missingValuePlaceholder' => 'Product with ID: %s doesn\'t exist',
+            'missingValuePlaceholder' => __('Product with ID: %s doesn\'t exist'),
             'validationUrl' => $this->urlBuilder->getUrl('catalog/product/getSelected'),
         ];
     }
