@@ -20,6 +20,7 @@ use Magento\Catalog\Model\Product;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
 class ProductSearchTest extends GraphQlAbstract
 {
@@ -498,7 +499,7 @@ QUERY;
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()]
-         ];
+        ];
         $this->assertResponseFields($response['products']['items'][0], $assertionMap);
     }
 
@@ -573,7 +574,7 @@ QUERY;
             foreach ($categoryInResponse as $key => $categoryData) {
                 $this->assertNotEmpty($categoryData);
                 /** @var CategoryInterface | Category $category */
-                 $category = $categoryRepository->get($categoryInResponse[$key][0]);
+                $category = $categoryRepository->get($categoryInResponse[$key][0]);
                 $this->assertResponseFields(
                     $categoryInResponse[$key][1],
                     [
@@ -585,7 +586,7 @@ QUERY;
                         'is_active' => $category->getIsActive(),
                     ]
                 );
-             }
+            }
         }
     }
 
@@ -750,16 +751,16 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [
-                 'sku' => $filteredProducts[$itemIndex]->getSku(),
-                 'name' => $filteredProducts[$itemIndex]->getName(),
-                 'price' => [
-                     'minimalPrice' => [
-                         'amount' => [
-                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
-                             'currency' => 'USD'
-                         ]
-                     ]
-                  ]
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
                 ]
             );
         }
@@ -828,18 +829,18 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 ['attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
-                 'sku' => $filteredProducts[$itemIndex]->getSku(),
-                 'name' => $filteredProducts[$itemIndex]->getName(),
-                 'price' => [
-                     'regularPrice' => [
-                         'amount' => [
-                             'value' => $filteredProducts[$itemIndex]->getPrice(),
-                             'currency' => 'USD'
-                         ]
-                     ]
-                 ],
-                 'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
-                 'weight' => $filteredProducts[$itemIndex]->getWeight()
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'regularPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ],
+                    'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                    'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
             );
         }
@@ -1014,18 +1015,18 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 ['attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
-                 'sku' => $filteredProducts[$itemIndex]->getSku(),
-                 'name' => $filteredProducts[$itemIndex]->getName(),
-                 'price' => [
-                     'minimalPrice' => [
-                         'amount' => [
-                             'value' => $filteredProducts[$itemIndex]->getFinalPrice(),
-                             'currency' => 'USD'
-                         ]
-                     ]
-                 ],
-                 'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
-                 'weight' => $filteredProducts[$itemIndex]->getWeight()
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getFinalPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ],
+                    'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                    'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
             );
         }
@@ -1040,24 +1041,24 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 ['attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
-                 'sku' => $filteredProducts[$itemIndex]->getSku(),
-                 'name' => $filteredProducts[$itemIndex]->getName(),
-                 'price' => [
-                     'minimalPrice' => [
-                         'amount' => [
-                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
-                             'currency' => 'USD'
-                         ]
-                     ],
-                     'maximalPrice' => [
-                         'amount' => [
-                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
-                             'currency' => 'USD'
-                         ]
-                     ]
-                 ],
-                 'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
-                 'weight' => $filteredProducts[$itemIndex]->getWeight()
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ],
+                        'maximalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ],
+                    'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                    'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
             );
         }
