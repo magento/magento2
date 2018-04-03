@@ -12,7 +12,7 @@ use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemsInterface;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductType;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
@@ -49,14 +49,14 @@ class ProcessRegisterProductsSalePlugin
     private $isProductSalableForRequestedQty;
 
     /**
-     * @var GetAllowedProductTypesForSourceItemsInterface
-     */
-    private $allowedProductTypesForSourceItems;
-
-    /**
      * @var GetProductTypesBySkusInterface
      */
     private $getProductTypesBySkus;
+
+    /**
+     * @var IsSourceItemsAllowedForProductType
+     */
+    private $isSourceItemsAllowedForProductType;
 
     /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
@@ -64,8 +64,8 @@ class ProcessRegisterProductsSalePlugin
      * @param ReservationBuilderInterface $reservationBuilder
      * @param AppendReservationsInterface $appendReservations
      * @param IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
-     * @param GetAllowedProductTypesForSourceItemsInterface $allowedProductTypesForSourceItems
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
+     * @param IsSourceItemsAllowedForProductType $isSourceItemsAllowedForProductType
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
@@ -73,16 +73,16 @@ class ProcessRegisterProductsSalePlugin
         ReservationBuilderInterface $reservationBuilder,
         AppendReservationsInterface $appendReservations,
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
-        GetAllowedProductTypesForSourceItemsInterface $allowedProductTypesForSourceItems,
-        GetProductTypesBySkusInterface $getProductTypesBySkus
+        GetProductTypesBySkusInterface $getProductTypesBySkus,
+        IsSourceItemsAllowedForProductType $isSourceItemsAllowedForProductType
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
         $this->isProductSalableForRequestedQty = $isProductSalableForRequestedQty;
-        $this->allowedProductTypesForSourceItems = $allowedProductTypesForSourceItems;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
     }
 
     /**
@@ -99,15 +99,18 @@ class ProcessRegisterProductsSalePlugin
         if (empty($items)) {
             return [];
         }
-        $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
-        list($items, $productSkus) = $this->excludeUnsupportedTypes($items, $productSkus);
         if (null === $websiteId) {
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
-        $this->checkItemsQuantity($items, $productSkus, $stockId);
+        $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
+        $productTypes = $this->getProductTypesBySkus->execute(array_values($productSkus));
+        $this->checkItemsQuantity($items, $productSkus, $productTypes, $stockId);
         $reservations = [];
         foreach ($productSkus as $productId => $sku) {
+            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
+                continue;
+            }
             $reservations[] = $this->reservationBuilder
                 ->setSku($sku)
                 ->setQuantity(-(float)$items[$productId])
@@ -126,13 +129,17 @@ class ProcessRegisterProductsSalePlugin
      *
      * @param array $items
      * @param array $productSkus
+     * @param array $productTypes
      * @param int $stockId
      * @return void
      * @throws LocalizedException
      */
-    private function checkItemsQuantity(array $items, array $productSkus, int $stockId)
+    private function checkItemsQuantity(array $items, array $productSkus, array $productTypes, int $stockId)
     {
         foreach ($productSkus as $productId => $sku) {
+            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
+                continue;
+            }
             $qty = (float)$items[$productId];
             $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable();
             if (false === $isSalable) {
@@ -141,28 +148,5 @@ class ProcessRegisterProductsSalePlugin
                 );
             }
         }
-    }
-
-    /**
-     * Exclude all unsupported product types from new behavior process.
-     *
-     * @param array $items
-     * @param array $productSkus
-     * @return array
-     * @throws \Magento\Framework\Exception\InputException
-     */
-    private function excludeUnsupportedTypes(array $items, array $productSkus): array
-    {
-        $incomingProductTypes = $this->getProductTypesBySkus->execute($productSkus);
-        $allowedProductTypes = $this->allowedProductTypesForSourceItems->execute();
-        foreach ($incomingProductTypes as $sku => $type) {
-            if (!in_array($type, $allowedProductTypes, true)) {
-                $excludedProductId = array_search($sku, $productSkus, true);
-                //Exclude unsupported product types from new behavior process.
-                unset($productSkus[$excludedProductId], $items[$excludedProductId]);
-            }
-        }
-
-        return [$items, $productSkus];
     }
 }
