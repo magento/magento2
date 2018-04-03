@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurableProduct\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryCatalog\Observer\SourceItemsProcessor;
 
 /**
@@ -27,20 +27,20 @@ class ProcessSourceItemsObserver implements ObserverInterface
     private $sourceItemsProcessor;
 
     /**
-     * @var ProductRepositoryInterface
+     * @var GetSkusByProductIdsInterface
      */
-    private $productRepository;
+    private $getSkusByProductIdsInterface;
 
     /**
      * @param SourceItemsProcessor $sourceItemsProcessor
-     * @param ProductRepositoryInterface $productRepository
+     * @param GetSkusByProductIdsInterface $getSkusByProductIdsInterface
      */
     public function __construct(
         SourceItemsProcessor $sourceItemsProcessor,
-        ProductRepositoryInterface $productRepository
+        GetSkusByProductIdsInterface $getSkusByProductIdsInterface
     ) {
         $this->sourceItemsProcessor = $sourceItemsProcessor;
-        $this->productRepository = $productRepository;
+        $this->getSkusByProductIdsInterface = $getSkusByProductIdsInterface;
     }
 
     /**
@@ -69,9 +69,8 @@ class ProcessSourceItemsObserver implements ObserverInterface
 
                     // get sku by child id, because child sku can be changed if product with such sku already exists.
                     $childProductId = $product->getExtensionAttributes()->getConfigurableProductLinks()[$key];
-                    $childProduct = $this->productRepository->getById($childProductId);
-
-                    $this->processSourceItems($quantityPerSource, $childProduct->getSku());
+                    $childProductSku = $this->getSkusByProductIdsInterface->execute([$childProductId])[$childProductId];
+                    $this->processSourceItems($quantityPerSource, $childProductSku);
                 }
             }
         }

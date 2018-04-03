@@ -15,7 +15,7 @@ use Magento\InventoryConfigurableProduct\Model\GetQuantityInformationPerSource;
  * Add value for field "quantityPerSource" for grid "Associated Products" and "Disassociated Products"
  * on step "Summary".
  */
-class AdaptMatrix
+class AddQuantityPerSourceToVariationsMatrix
 {
     /**
      * @var GetQuantityInformationPerSource
@@ -50,8 +50,8 @@ class AdaptMatrix
     public function afterGetProductMatrix(
         Matrix $subject,
         $result
-    ): array {
-        if ($this->isSingleSourceMode->execute() === false) {
+    ) {
+        if ($this->isSingleSourceMode->execute() === false && is_array($result)) {
             foreach ($result as $key => $variation) {
                 $result[$key]['quantityPerSource'] = $this->getQuantityInformationPerSource->execute($variation['sku']);
             }

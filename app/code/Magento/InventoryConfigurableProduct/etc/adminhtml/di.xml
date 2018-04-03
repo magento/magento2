@@ -32,7 +32,7 @@
         </arguments>
     </type>
     <type name="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix">
-        <plugin name="adapt_grids_on_summary_step_to_msi"
-                type="Magento\InventoryConfigurableProduct\Plugin\Block\AdaptMatrix"/>
+        <plugin name="add_quantity_per_source_to_variations_matrix"
+                type="Magento\InventoryConfigurableProduct\Plugin\Block\AddQuantityPerSourceToVariationsMatrix"/>
     </type>
 </config>
