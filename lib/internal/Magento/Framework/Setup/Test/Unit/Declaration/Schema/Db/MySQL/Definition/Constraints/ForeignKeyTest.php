@@ -122,6 +122,14 @@ class ForeignKeyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test creating SQL View does not throw any exception.
+     */
+    public function testCreateView()
+    {
+        $this->foreignKey->fromDefinition(['Create View' => '']);
+    }
+
+    /**
      * @return array
      */
     public function definitionDataProvider()
