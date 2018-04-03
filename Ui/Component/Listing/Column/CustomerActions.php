@@ -5,6 +5,7 @@
  *
  * Glory to Ukraine! Glory to the heroes!
  */
+
 namespace Magefan\LoginAsCustomer\Ui\Component\Listing\Column;
 
 /**

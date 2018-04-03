@@ -5,6 +5,7 @@
  *
  * Glory to Ukraine! Glory to the heroes!
  */
+
 namespace Magefan\LoginAsCustomer\Block\Adminhtml\Customer\Edit;
 
 use Magento\Customer\Block\Adminhtml\Edit\GenericButton;
