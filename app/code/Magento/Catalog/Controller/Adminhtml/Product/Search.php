@@ -76,8 +76,10 @@ class Search extends \Magento\Backend\App\Action
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->addAttributeToSelect(ProductInterface::NAME);
         $productCollection->setVisibility($this->catalogVisibility->getVisibleInCatalogIds());
-        $productCollection->setPage($pageNum, $limit);
         $this->addFilter($productCollection, 'fulltext', $searchKey);
+        $totalVaues = $productCollection->getSize();
+        $productCollection->setPage($pageNum, $limit);
+
         $productById = [];
         /** @var  ProductInterface $product */
         foreach ($productCollection as $product) {
@@ -95,7 +97,7 @@ class Search extends \Magento\Backend\App\Action
         return $resultJson->setData(
             [
                 'options' => $productById,
-                'total' => $productCollection->getSize()
+                'total' => empty($productById) ? 0 : $totalVaues
             ]);
     }
 
