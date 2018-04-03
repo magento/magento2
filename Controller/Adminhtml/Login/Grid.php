@@ -13,14 +13,14 @@ namespace Magefan\LoginAsCustomer\Controller\Adminhtml\Login;
  */
 class Grid extends \Magento\Backend\App\Action
 {
-	/**
+    /**
      * Login as customer log grid
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-		$this->_view->loadLayout(false);
+        $this->_view->loadLayout(false);
         $this->_view->renderLayout();
     }
 

@@ -45,13 +45,15 @@ class ToolbarPlugin
         ButtonList $buttonList
     ) {
         $order = false;
-        if ('sales_order_edit' == $context->getNameInLayout()) {
+        $nameInLayout = $context->getNameInLayout();
+
+        if ('sales_order_edit' == $nameInLayout) {
             $order = $context->getOrder();
-        } elseif ('sales_invoice_view' == $context->getNameInLayout()) {
+        } elseif ('sales_invoice_view' == $nameInLayout) {
             $order = $context->getInvoice()->getOrder();
-        } elseif ('sales_shipment_view' == $context->getNameInLayout()) {
+        } elseif ('sales_shipment_view' == $nameInLayout) {
             $order = $context->getShipment()->getOrder();
-        } elseif ('sales_creditmemo_view' == $context->getNameInLayout()) {
+        } elseif ('sales_creditmemo_view' == $nameInLayout) {
             $order = $context->getCreditmemo()->getOrder();
         }
         if ($order) {
@@ -69,7 +71,7 @@ class ToolbarPlugin
                     $buttonUrl = $context->getUrl('loginascustomer/guest/convert');
                     $buttonList->add(
                         'guest_to_customer',
-                        ['label' => __('Convert Guest to Customer'), 'onclick' => 'window.location=\'' . $buttonUrl . '\'', 'class' => 'reset'],
+                        ['label' => __('Convert Guest to Customer'), 'onclick' => 'window.open(\'' . $buttonUrl . '\')', 'class' => 'reset'],
                         -1
                     );
                 }

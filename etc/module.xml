@@ -11,7 +11,8 @@
     <module name="Magefan_LoginAsCustomer" setup_version="2.1.5">
          <sequence>
          	<module name="Magento_Customer"/>
-             <module name="Magento_Sales"/>
+            <module name="Magento_Sales"/>
+            <module name="Magefan_Community"/>
         </sequence>
     </module>
 </config>

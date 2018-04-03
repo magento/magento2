@@ -14,8 +14,7 @@ use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\AuthorizationInterface;
 
-
-abstract class AbstractColumn extends  \Magento\Ui\Component\Listing\Columns\Column
+abstract class AbstractColumn extends \Magento\Ui\Component\Listing\Columns\Column
 {
 
     /**
@@ -57,12 +56,13 @@ abstract class AbstractColumn extends  \Magento\Ui\Component\Listing\Columns\Col
      * @param array $dataSource
      * @return array
      */
-    public function prepareDataSource(array $dataSource){
+    public function prepareDataSource(array $dataSource)
+    {
 
         if (isset($dataSource['data']['items'])) {
             $hidden = !$this->_authorization->isAllowed('Magefan_LoginAsCustomer::login_button');
             foreach ($dataSource['data']['items'] as &$item) {
-                if(!empty($item[$this->sourceColumnName])) {
+                if (!empty($item[$this->sourceColumnName])) {
                     $item[$this->getData('name')]['edit'] = [
                         'href' => $this->urlBuilder->getUrl(
                             'loginascustomer/login/login',
@@ -83,7 +83,6 @@ abstract class AbstractColumn extends  \Magento\Ui\Component\Listing\Columns\Col
                         'target' => '_blank',
                     ];
                 }
-
             }
         }
 

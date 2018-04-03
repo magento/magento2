@@ -13,14 +13,14 @@ namespace Magefan\LoginAsCustomer\Controller\Adminhtml\Login;
  */
 class Index extends \Magento\Backend\App\Action
 {
-	/**
+    /**
      * Login as customer log
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-    	if ($this->getRequest()->getParam('ajax')) {
+        if ($this->getRequest()->getParam('ajax')) {
             $this->_forward('grid');
             return;
         }

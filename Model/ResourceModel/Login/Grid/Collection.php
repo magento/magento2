@@ -35,13 +35,13 @@ class Collection extends \Magefan\LoginAsCustomer\Model\ResourceModel\Login\Coll
         parent::_initSelect();
         $this->getSelect()
             ->joinLeft(
-                array('c' => $this->getTable('customer_entity')),
+                ['c' => $this->getTable('customer_entity')],
                 'c.entity_id = main_table.customer_id',
-                array('email')
+                ['email']
             )->joinLeft(
-                array('a' => $this->getTable('admin_user')),
+                ['a' => $this->getTable('admin_user')],
                 'a.user_id = main_table.admin_id',
-                array('username')
+                ['username']
             );
         return $this;
     }

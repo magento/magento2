@@ -132,7 +132,8 @@ class Login extends \Magento\Framework\Model\AbstractModel
     {
         $resource = $this->getResource();
         $resource->getConnection()->delete(
-            $resource->getTable('magefan_login_as_customer'), [
+            $resource->getTable('magefan_login_as_customer'),
+            [
                 'created_at < ?' => $this->getDateTimePoint(),
                 'used = ?' => 0,
             ]

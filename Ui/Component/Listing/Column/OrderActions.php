@@ -11,5 +11,4 @@ class OrderActions extends AbstractColumn
 {
 
     protected $sourceColumnName = 'customer_id';
-
 }

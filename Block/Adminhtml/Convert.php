@@ -9,7 +9,6 @@
 
 namespace Magefan\LoginAsCustomer\Block\Adminhtml;
 
-
 class Convert extends \Magento\Framework\View\Element\Template
 {
 
