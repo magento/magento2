@@ -114,16 +114,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->driverMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Filesystem\DriverInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getRealPath']
-        );
+        $this->driverMock = $this->getMockBuilder(\Magento\Framework\Filesystem\DriverInterface::class)
+            ->setMethods(['getRealPath', 'getRealPathSafety'])
+            ->getMockForAbstractClass();
         $this->driverMock->expects($this->any())->method('getRealPath')->will($this->returnArgument(0));
+        $this->driverMock->expects($this->any())->method('getRealPathSafety')->will($this->returnArgument(0));
 
         $this->directoryMock = $this->createPartialMock(
             \Magento\Framework\Filesystem\Directory\Write::class,
