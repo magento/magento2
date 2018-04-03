@@ -12,23 +12,20 @@ define([
 
     return Select.extend({
         defaults: {
-            validationUrl: false
+            validationUrl: false,
+            loadedOption: [],
+            validationLoading: true
         },
 
-        /**
-         * Get selected element labels
-         *
-         * @returns {Array} array labels
-         */
-        getSelected: function () {
-            var options = this._super();
+        /** @inheritdoc */
+        initialize: function () {
+            this._super();
 
-            if (this.validationUrl && _.isEmpty(options)) {
+            if (this.value()) {
                 $.ajax({
                     url: this.validationUrl,
                     type: 'GET',
                     dataType: 'json',
-                    async: false,
                     context: this,
                     data: {
                         productId: this.value()
@@ -37,15 +34,35 @@ define([
                     /** @param {Object} response */
                     success: function (response) {
                         if (!_.isEmpty(response)) {
-                            options = [response];
+                            this.options([response]);
+                            this.loadedOption = response;
                         }
                     },
 
                     /** set empty array if error occurs */
                     error: function () {
-                        options = [];
+                        this.options([]);
+                    },
+
+                    /** stop loader */
+                    complete: function () {
+                        this.validationLoading(false);
+                        this.setCaption();
                     }
                 });
+            } else {
+                this.validationLoading(false);
+            }
+
+            return this;
+        },
+
+        /** @inheritdoc */
+        getSelected: function () {
+            var options = this._super();
+
+            if (!_.isEmpty(this.loadedOption)) {
+                return this.value() === this.loadedOption.value ? [this.loadedOption] : options;
             }
 
             return options;

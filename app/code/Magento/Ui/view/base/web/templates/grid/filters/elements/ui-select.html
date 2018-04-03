@@ -42,21 +42,30 @@
             }
     ">
         <div class="admin__action-multiselect-text"
-             data-role="selected-option"
-             data-bind="
-             css: {warning: warn().length},
-             text: setCaption()
-        ">
+         data-role="selected-option"
+         ifnot="validationLoading"
+         data-bind="
+         css: {warning: warn().length},
+         text: setCaption()
+    ">
+    </div>
+        <button if="isRemoveSelectedIcon && hasData() || !validationLoading"
+                class="action-close"
+                type="button"
+                data-action="remove-selected-item"
+                tabindex="-1"
+                click="clear"
+        >
+            <span class="action-close-text" translate="'Close'"></span>
+        </button>
+        <div data-role="spinner"
+             class="admin__data-grid-loading-mask"
+             visible="validationLoading"
+             if="validationLoading">
+            <div class="spinner">
+                <span repeat="8"/>
+            </div>
         </div>
-            <button if="isRemoveSelectedIcon && hasData()"
-                    class="action-close"
-                    type="button"
-                    data-action="remove-selected-item"
-                    tabindex="-1"
-                    click="clear"
-            >
-                <span class="action-close-text" translate="'Close'"></span>
-            </button>
     </div>
     <!-- /ko -->
     <!-- ko if: chipsEnabled -->

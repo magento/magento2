@@ -175,6 +175,7 @@ define([
             cachedSearchResults: {},
             pageLimit: 50,
             deviation: 30,
+            validationLoading: false,
             isRemoveSelectedIcon: true,
             missingValuePlaceholder: $t('Entity with ID: %s doesn\'t exist'),
             isDisplayMissingValuePlaceholder: false,
@@ -322,7 +323,9 @@ define([
                 'itemsQuantity',
                 'filterInputValue',
                 'filterOptionsFocus',
-                'loading'
+                'loading',
+                'validationLoading',
+                'isDisplayMissingValuePlaceholder'
             ]);
 
             this.filterInputValue.extend({

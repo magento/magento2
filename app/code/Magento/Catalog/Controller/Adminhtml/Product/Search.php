@@ -76,6 +76,7 @@ class Search extends \Magento\Backend\App\Action
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->addAttributeToSelect(ProductInterface::NAME);
         $productCollection->setVisibility($this->catalogVisibility->getVisibleInCatalogIds());
+        $productCollection->setPage($pageNum, $limit);
         $this->addFilter($productCollection, 'fulltext', $searchKey);
         $totalVaues = $productCollection->getSize();
         $productCollection->setPage($pageNum, $limit);
