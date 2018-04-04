@@ -114,29 +114,43 @@ class RoboFile extends \Robo\Tasks
      * @return void
      */
 
-    function generateTests(array $tests, $opts = ['config' => null, 'force' => false, 'nodes' => null, 'lines' => null])
+    function generateTests(array $tests, $opts = [
+        'config' => null,
+        'force' => false,
+        'nodes' => null,
+        'lines' => null,
+        'tests' => null
+    ])
     {
         $GLOBALS['GENERATE_TESTS'] = true;
         require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
-        $testsObjects = [];
-        if (!empty($tests))
-        {
-            foreach ($tests as $test)
-            {
-                $testsObjects[] = Magento\FunctionalTestingFramework\Test\Handlers\TestObjectHandler::getInstance()->getObject($test);
-            }
-        }
+        $testObjects = [];
+        $suitesReferences = [];
 
         if ($opts['force'])
         {
             $GLOBALS['FORCE_PHP_GENERATE'] = true;
         }
 
+        if ($opts['tests']) {
+            $testConfigArray = json_decode($opts['tests'],true);
+            $tests = $testConfigArray['tests'] ?? [];
+            $suitesReferences = $testConfigArray['suites'] ?? [];
+        }
+
+        if (!empty($tests))
+        {
+            foreach ($tests as $test)
+            {
+                $testObjects[] = Magento\FunctionalTestingFramework\Test\Handlers\TestObjectHandler::getInstance()->getObject($test);
+            }
+        }
+
         // maintain backwards compatability for devops
         $lines = $opts['lines'] ?? $opts ['nodes'];
 
-        $testsReferencedInSuites = \Magento\FunctionalTestingFramework\Suite\SuiteGenerator::getInstance()->getTestsReferencedInSuites();
-        $testManifest = \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance(null, $testsObjects)->createAllTestFiles($opts['config'], $lines, $testsReferencedInSuites);
+        $testsReferencedInSuites = \Magento\FunctionalTestingFramework\Suite\SuiteGenerator::getInstance($suitesReferences)->getTestsReferencedInSuites();
+        $testManifest = \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance(null, $testObjects)->createAllTestFiles($opts['config'], $lines, $testsReferencedInSuites);
         \Magento\FunctionalTestingFramework\Suite\SuiteGenerator::getInstance()->generateAllSuites($testManifest);
 
         $this->say("Generate Tests Command Run");
@@ -281,6 +295,4 @@ class RoboFile extends \Robo\Tasks
     {
         $this->_exec('php pre-install.php');
     }
-
-
 }
