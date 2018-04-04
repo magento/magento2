@@ -11,7 +11,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
-use Magento\InventoryIndexer\Model\GetInvalidationRequired;
+use Magento\InventoryIndexer\Model\ResourceModel\GetInvalidationRequired;
 
 /**
  * Invalidate Inventory Indexer after Source was enabled or disabled.
