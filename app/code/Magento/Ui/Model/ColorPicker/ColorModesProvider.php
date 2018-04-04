@@ -13,8 +13,18 @@ namespace Magento\Ui\Model\ColorPicker;
  */
 class ColorModesProvider
 {
+    /**
+     * Stores color picker modes configuration
+     *
+     * @var array
+     */
     private $colorModes;
 
+    /**
+     * Magento object manager
+     *
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     private $objectManager;
 
     public function __construct(
