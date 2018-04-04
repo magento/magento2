@@ -20,6 +20,7 @@
         </annotations>
 
         <before>
+            <createData entity="FullSource1" stepKey="createSource1"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -38,12 +39,14 @@
         <fillField userInput="{{FullSource1.longitude}}" selector="{{AdminEditSourceGeneralSection.longitude}}" stepKey="fillLongitudeField1"/>
 
         <conditionalClick selector="{{AdminEditSourceContactInfoSection.closed}}" dependentSelector="{{AdminEditSourceContactInfoSection.opened}}" visible="false" stepKey="clickOnContactInfo1"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad1"/>
         <fillField userInput="{{FullSource1.contact_name}}" selector="{{AdminEditSourceContactInfoSection.contactName}}" stepKey="fillContactNameField1"/>
         <fillField userInput="{{FullSource1.email}}" selector="{{AdminEditSourceContactInfoSection.email}}" stepKey="fillEmailField1"/>
         <fillField userInput="{{FullSource1.phone}}" selector="{{AdminEditSourceContactInfoSection.phone}}" stepKey="fillPhoneField1"/>
         <fillField userInput="{{FullSource1.fax}}" selector="{{AdminEditSourceContactInfoSection.fax}}" stepKey="fillFaxField1"/>
 
         <conditionalClick selector="{{AdminEditSourceAddressDataSection.closed}}" dependentSelector="{{AdminEditSourceAddressDataSection.opened}}" visible="false" stepKey="clickOnAddresses1"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad2"/>
         <selectOption userInput="{{FullSource1.country}}" selector="{{AdminEditSourceAddressDataSection.country}}" stepKey="selectCountry1"/>
         <selectOption userInput="{{FullSource1.stateProvince}}" selector="{{AdminEditSourceAddressDataSection.state}}" stepKey="selectState1"/>
         <fillField userInput="{{FullSource1.city}}" selector="{{AdminEditSourceAddressDataSection.city}}" stepKey="fillCityField1"/>
@@ -51,6 +54,7 @@
         <fillField userInput="{{FullSource1.postcode}}" selector="{{AdminEditSourceAddressDataSection.postcode}}" stepKey="fillPostcodeField1"/>
 
         <conditionalClick selector="{{AdminEditSourceCarriersSection.closed}}" dependentSelector="{{AdminEditSourceCarriersSection.opened}}" visible="false" stepKey="clickOnCarriers1"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad3"/>
         <checkOption selector="{{AdminEditSourceCarriersSection.useGlobalShippingConfiguration}}" stepKey="checkUseGlobalShippingConfiguration1"/>
 
         <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue"/>
@@ -62,12 +66,14 @@
         <seeInField selector="{{AdminEditSourceGeneralSection.longitude}}" userInput="0" stepKey="seeLongitudeInField"/>
 
         <conditionalClick selector="{{AdminEditSourceContactInfoSection.closed}}" dependentSelector="{{AdminEditSourceContactInfoSection.opened}}" visible="false" stepKey="clickOnContactInfo3"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad4"/>
         <seeInField selector="{{AdminEditSourceContactInfoSection.contactName}}" userInput="{{FullSource1.contact_name}}" stepKey="seeContactNameInField"/>
         <seeInField selector="{{AdminEditSourceContactInfoSection.email}}" userInput="{{FullSource1.email}}" stepKey="seeEmailInField"/>
         <seeInField selector="{{AdminEditSourceContactInfoSection.phone}}" userInput="{{FullSource1.phone}}" stepKey="seePhoneInField"/>
         <seeInField selector="{{AdminEditSourceContactInfoSection.fax}}" userInput="{{FullSource1.fax}}" stepKey="seeFaxInField"/>
 
         <conditionalClick selector="{{AdminEditSourceAddressDataSection.closed}}" dependentSelector="{{AdminEditSourceAddressDataSection.opened}}" visible="false" stepKey="clickOnAddresses3"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad5"/>
         <seeOptionIsSelected selector="{{AdminEditSourceAddressDataSection.country}}" userInput="{{FullSource1.country}}" stepKey="seeCountryInDropDown"/>
         <seeOptionIsSelected selector="{{AdminEditSourceAddressDataSection.state}}" userInput="{{FullSource1.stateProvince}}" stepKey="seeStateProvinceInDropDown"/>
         <seeInField selector="{{AdminEditSourceAddressDataSection.city}}" userInput="{{FullSource1.city}}" stepKey="seeCityInField"/>
@@ -77,6 +83,7 @@
         <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage2"/>
 
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad6"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="value" value="FullSource1.source_code"/>

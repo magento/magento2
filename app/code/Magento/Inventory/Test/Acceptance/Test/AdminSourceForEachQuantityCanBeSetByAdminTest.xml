@@ -29,9 +29,9 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>

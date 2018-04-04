@@ -21,6 +21,7 @@
 
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
 
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
