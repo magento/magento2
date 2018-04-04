@@ -40,6 +40,6 @@ class AddInStockFilterToCollectionOnDefaultStockTest extends TestCase
 
         $this->stockHelper->addInStockFilterToCollection($collection);
 
-        self::assertEquals(2, $collection->getSize());
+        self::assertEquals(3, $collection->getSize());
     }
 }

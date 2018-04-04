@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8549e85c50597c0494002f415527fcad",
+    "content-hash": "2771fad0a15e2894a259dca0ced002f3",
     "packages": [
         {
             "name": "allure-framework/allure-codeception",
-            "version": "dev-master",
+            "version": "1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/allure-framework/allure-codeception.git",
-                "reference": "af40af5ae2b717618a42fe3e137d75878508c75d"
+                "reference": "e2672e57e6839edb770fa5de5f2b3fcc47917aa1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/allure-framework/allure-codeception/zipball/af40af5ae2b717618a42fe3e137d75878508c75d",
-                "reference": "af40af5ae2b717618a42fe3e137d75878508c75d",
+                "url": "https://api.github.com/repos/allure-framework/allure-codeception/zipball/e2672e57e6839edb770fa5de5f2b3fcc47917aa1",
+                "reference": "e2672e57e6839edb770fa5de5f2b3fcc47917aa1",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +55,7 @@
                 "steps",
                 "testing"
             ],
-            "time": "2017-03-30T09:01:00+00:00"
+            "time": "2017-12-27T11:38:21+00:00"
         },
         {
             "name": "allure-framework/allure-php-api",
@@ -1641,11 +1641,11 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.0.3",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "git@github.com:magento/magento2-functional-testing-framework.git",
-                "reference": "22c803fc16024d417d920d03fdd95dea84779dd6"
+                "reference": "10d547a984cde1e1e9d9100c658011b467b10010"
             },
             "require": {
                 "codeception/codeception": "~2.3.4",
@@ -1653,17 +1653,19 @@
                 "flow/jsonpath": ">0.2",
                 "fzaninotto/faker": "^1.6",
                 "mustache/mustache": "~2.5",
-                "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
+                "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0"
             },
             "require-dev": {
                 "brainmaestro/composer-git-hooks": "^2.3",
                 "codacy/coverage": "^1.4",
                 "codeception/aspect-mock": "^2.0",
                 "goaop/framework": "2.1.2",
+                "php-coveralls/php-coveralls": "^1.0",
                 "phpmd/phpmd": "^2.6.0",
                 "rregeer/phpunit-coverage-check": "^0.1.4",
                 "sebastian/phpcpd": "~3.0",
-                "squizlabs/php_codesniffer": "1.5.3"
+                "squizlabs/php_codesniffer": "1.5.3",
+                "symfony/stopwatch": "~3.4.6"
             },
             "type": "library",
             "extra": {
@@ -1699,7 +1701,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-01-30T15:17:13+00:00"
+            "time": "2018-03-14T19:09:58+00:00"
         },
         {
             "name": "moontoast/math",
@@ -4420,13 +4422,11 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "allure-framework/allure-codeception": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0"
     },
     "platform-dev": []
 }

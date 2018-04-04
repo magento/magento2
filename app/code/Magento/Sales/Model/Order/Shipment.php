@@ -262,8 +262,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
                 if (!$item->getOrderItem()->isDummy(true)) {
                     $totalQty += $item->getQty();
                 }
-            } else {
-                $item->isDeleted(true);
             }
         }
 
@@ -326,7 +324,10 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     {
         $item->setShipment($this)->setParentId($this->getId())->setStoreId($this->getStoreId());
         if (!$item->getId()) {
-            $this->getItemsCollection()->addItem($item);
+            $this->setItems(array_merge(
+                $this->getItems() ?? [],
+                [$item]
+            ));
         }
         return $this;
     }
@@ -537,7 +538,11 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
                 $this->setData(ShipmentInterface::ITEMS, $collection->getItems());
             }
         }
-        return $this->getData(ShipmentInterface::ITEMS);
+        $shipmentItems = $this->getData(ShipmentInterface::ITEMS);
+        if ($shipmentItems !== null && !is_array($shipmentItems)) {
+            $shipmentItems = $shipmentItems->getItems();
+        }
+        return $shipmentItems;
     }
 
     /**

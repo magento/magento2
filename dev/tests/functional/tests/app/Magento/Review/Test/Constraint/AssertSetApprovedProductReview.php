@@ -70,7 +70,7 @@ class AssertSetApprovedProductReview extends AbstractConstraint
         $this->cachePage->open();
         $this->cachePage->getActionsBlock()->flushCacheStorage();
         $this->cachePage->getModalBlock()->acceptAlert();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $this->cachePage->getActionsBlock()->isStorageCacheFlushed(),
             'Cache is not flushed.'
         );

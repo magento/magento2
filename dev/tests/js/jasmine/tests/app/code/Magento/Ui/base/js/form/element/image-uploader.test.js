@@ -63,7 +63,8 @@ define([
                 component.mediaGallery = {
                     openDialogUrl: 'http://example.com/',
                     openDialogTitle: 'Hello world',
-                    storeId: 3
+                    storeId: 3,
+                    initialOpenSubpath: 'wysiwyg'
                 };
 
                 spyOn(browser, 'openDialog');
@@ -74,7 +75,7 @@ define([
 
                 expect(browser.openDialog).toHaveBeenCalledWith(
                     'http://example.com/target_element_id/theTargetId/store/3/type/image/' +
-                        'use_storage_root/1?isAjax=true',
+                        '?isAjax=true&current_tree_path=d3lzaXd5Zw,,',
                     null,
                     null,
                     'Hello world'

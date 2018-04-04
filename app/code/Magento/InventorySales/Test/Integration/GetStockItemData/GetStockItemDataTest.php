@@ -48,13 +48,10 @@ class GetStockItemDataTest extends TestCase
         self::assertEquals($expectedData, $stockItemData);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Could not receive Stock Item data
-     */
-    public function testGetStockItemDataException()
+    public function testGetStockItemDataReturnNullWhenTableDoesNotExist()
     {
-        $this->getStockItemData->execute('SKU-1', 10);
+        $stockItemData = $this->getStockItemData->execute('SKU-1', 10);
+        self::assertNull($stockItemData);
     }
 
     /**

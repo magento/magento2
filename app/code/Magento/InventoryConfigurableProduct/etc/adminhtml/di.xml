@@ -31,4 +31,8 @@
             <argument name="multiSourceTemplate" xsi:type="string">Magento_InventoryConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml</argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix">
+        <plugin name="add_quantity_per_source_to_variations_matrix"
+                type="Magento\InventoryConfigurableProduct\Plugin\Block\AddQuantityPerSourceToVariationsMatrix"/>
+    </type>
 </config>

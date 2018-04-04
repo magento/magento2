@@ -31,12 +31,10 @@ class CollectSourcesForShipmentItems
         array $items = [],
         $tracks = null
     ) {
-        $legacyItems = [];
         $itemToProcess = [];
         foreach ($items as $orderItemId => $data) {
             if (!is_array($data)) {
                 //TODO: What we should do with bundle product items?
-               // $legacyItems[$orderItemId] = $data;
             } else {
                 $qtySum = 0;
                 foreach ($data as $sourceCode => $qty) {
@@ -49,10 +47,10 @@ class CollectSourcesForShipmentItems
                         ];
                     }
                 }
-                $legacyItems[$orderItemId] = $qtySum;
             }
         }
-        $shipment = $proceed($order, $legacyItems, $tracks);
+        /** @var \Magento\Sales\Api\Data\ShipmentInterface $shipment */
+        $shipment = $proceed($order, $items, $tracks);
         if (empty($items)) {
             return $shipment;
         }

@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Ui\Component\Listing\Column;
 
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Add grid column with source items data
@@ -74,9 +74,10 @@ class SourceItems extends Column
     {
         if ($dataSource['data']['totalRecords'] > 0 && $this->isSingleSourceMode->execute() === false) {
             foreach ($dataSource['data']['items'] as &$row) {
-                $row['qty'] = $this->isSourceItemsAllowedForProductType->execute($row['type_id']) === true
-                    ? $this->getSourceItemsData($row['sku'])
-                    : [];
+                $row['quantity_per_source'] =
+                    $this->isSourceItemsAllowedForProductType->execute($row['type_id']) === true
+                        ? $this->getSourceItemsData($row['sku'])
+                        : [];
             }
         }
         unset($row);

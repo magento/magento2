@@ -27,7 +27,7 @@ class AssertStoreDisabledErrorSaveMessage extends AbstractConstraint
      */
     public function processAssert(EditStore $editStore)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_MESSAGE,
             $editStore->getMessagesBlock()->getErrorMessage(),
             'Wrong error message is displayed.'
