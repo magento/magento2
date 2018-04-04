@@ -153,7 +153,22 @@ QUERY;
      */
     private function assertFilters($response, $expectedFilters, $message = '')
     {
-        $this->assertEquals($expectedFilters, $response['products']['filters'], $message);
+        $this->assertArrayHasKey('filters', $response['products'], 'Product has filters');
+        $this->assertTrue(is_array(($response['products']['filters'])), 'Product filters is array');
+        $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
+        foreach ($expectedFilters as $expectedFilter) {
+            $found = false;
+            foreach ($response['products']['filters'] as $responseFilter) {
+                if ($responseFilter['name'] == $expectedFilter['name']
+                    && $responseFilter['request_var'] == $expectedFilter['request_var']) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $this->fail($message);
+            }
+        }
     }
 
     /**
