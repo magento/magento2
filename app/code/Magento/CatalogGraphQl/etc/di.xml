@@ -37,7 +37,7 @@
     <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\FieldEntityAttributesPool">
         <arguments>
             <argument name="attributesInstances" xsi:type="array">
-                <item name="products" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\ProductEntityAttributesforAst</item>
+                <item name="products" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\ProductEntityAttributesForAst</item>
             </argument>
         </arguments>
     </type>
