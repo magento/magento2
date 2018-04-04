@@ -41,7 +41,7 @@ class FilterableAttributesListFactory
      * @param array $data
      * @return FilterList
      */
-    public function create(string $type, array $data = array()) : FilterList
+    public function create(string $type, array $data = array())
     {
         if ($type === Resolver::CATALOG_LAYER_CATEGORY) {
             return $this->objectManager->create(CategoryFilterableAttributeList::class, $data);
