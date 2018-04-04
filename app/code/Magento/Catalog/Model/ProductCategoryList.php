@@ -51,7 +51,7 @@ class ProductCategoryList
     public function __construct(
         ResourceModel\Product $productResource,
         ResourceModel\Category $category,
-        StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager = null,
         TableResolver $tableResolver = null
     ) {
         $this->productResource = $productResource;
