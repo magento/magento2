@@ -88,6 +88,7 @@ class ExtensionAttributesFactory
         $exceptionMessage = "Class '{$extensibleClassName}' must implement an interface, "
             . "which extends from '" . self::EXTENSIBLE_INTERFACE_NAME . "'";
         $notExtensibleClassFlag = '';
+
         if (isset($this->classInterfaceMap[$extensibleClassName])) {
             if ($notExtensibleClassFlag === $this->classInterfaceMap[$extensibleClassName]) {
                 throw new \LogicException($exceptionMessage);

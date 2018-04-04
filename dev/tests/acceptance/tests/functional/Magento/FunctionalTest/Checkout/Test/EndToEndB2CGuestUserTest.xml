@@ -17,8 +17,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForCartCategoryloaded" after="cartClickCategory"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory" after="waitForCartCategoryloaded">
             <argument name="category" value="$$createCategory$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.three"/>
+            <argument name="productCount" value="3"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="cartAssertSimpleProduct1" after="cartAssertCategory">
             <argument name="product" value="$$createSimpleProduct1$$"/>
@@ -46,8 +45,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForCartCategory1loaded" after="cartClickCategory1"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForSimpleProduct2" after="waitForCartCategory1loaded">
             <argument name="category" value="$$createCategory$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.three"/>
+            <argument name="productCount" value="3"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="cartAssertSimpleProduct2" after="cartAssertCategory1ForSimpleProduct2">
             <argument name="product" value="$$createSimpleProduct2$$"/>
