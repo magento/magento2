@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: lestare
- * Date: 4/2/18
- * Time: 4:55 PM
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\InventoryCatalog\Model\ResourceModel;
