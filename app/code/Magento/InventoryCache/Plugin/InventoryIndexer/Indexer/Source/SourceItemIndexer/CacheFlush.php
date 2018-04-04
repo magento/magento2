@@ -44,14 +44,13 @@ class CacheFlush
      * Clean cache for specific products after source items reindex.
      *
      * @param SourceItemIndexer $subject
-     * @param \Closure $proceed
      * @param array $sourceItemIds
+     * @param null $result
      * @throws \Exception in case catalog product entity type hasn't been initialize.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecuteList(SourceItemIndexer $subject, \Closure $proceed, array $sourceItemIds)
+    public function afterExecuteList(SourceItemIndexer $subject, $result, array $sourceItemIds)
     {
-        $proceed($sourceItemIds);
         $productIds = $this->getProductIdsBySourceItemIds->execute($sourceItemIds);
         $this->flushCacheByIds->execute($productIds);
     }

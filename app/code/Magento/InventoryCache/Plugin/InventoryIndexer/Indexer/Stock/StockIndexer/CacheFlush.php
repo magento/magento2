@@ -44,14 +44,13 @@ class CacheFlush
      * Clean cache after non default stock reindex.
      *
      * @param StockIndexer $subject
-     * @param \Closure $proceed
      * @param array $stockIds
+     * @param null $result
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecuteList(StockIndexer $subject, \Closure $proceed, array $stockIds)
+    public function afterExecuteList(StockIndexer $subject, $result, array $stockIds)
     {
-        $proceed($stockIds);
         unset($stockIds[$this->defaultStockProvider->getId()]);
         if ($stockIds) {
             $this->flushCache->execute();
