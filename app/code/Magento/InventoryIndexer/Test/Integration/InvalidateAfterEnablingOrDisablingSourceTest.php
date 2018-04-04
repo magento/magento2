@@ -83,7 +83,7 @@ class InvalidateAfterEnablingOrDisablingSourceTest extends TestCase
      * @param bool $enable
      * @param bool $expectedValid
      */
-    public function testIndexerInvalidationIfSourceHasNotAnyRelations(
+    public function testIndexerInvalidationIfSourceDoesNotHaveAnyRelations(
         string $sourceCode,
         bool $enable,
         bool $expectedValid
@@ -96,7 +96,7 @@ class InvalidateAfterEnablingOrDisablingSourceTest extends TestCase
     /**
      * @return array
      */
-    public function sourceHasNotAnyRelationsDataProvider(): array
+    public function sourceDoesNotHaveAnyRelationsDataProvider(): array
     {
         return [
             ['eu-1', true, true],
