@@ -78,7 +78,7 @@ class InvalidateAfterEnablingOrDisablingSourceTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
-     * @dataProvider sourceHasNotAnyRelationsDataProvider
+     * @dataProvider sourceDoesNotHaveAnyRelationsDataProvider
      * @param string $sourceCode
      * @param bool $enable
      * @param bool $expectedValid
