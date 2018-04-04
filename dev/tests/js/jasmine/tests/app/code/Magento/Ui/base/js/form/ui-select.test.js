@@ -451,8 +451,21 @@ define([
                     expect(obj.setCaption()).toEqual('Entity with ID: 1 doesn\'t exist');
                 }
             );
-            it('Check returned value if selected array length more then 1', function () {
+            it('Check returned value if selected array length more than 1 and options exist', function () {
                 obj.value(['one', 'two']);
+                obj.multiple = true;
+                obj.isDisplayMissingValuePlaceholder = false;
+
+                obj.cacheOptions.plain = [
+                    {
+                        label: 'one',
+                        value: 'one'
+                    },
+                    {
+                        label: 'two',
+                        value: 'one'
+                    }
+                ];
 
                 expect(obj.setCaption()).toEqual('2 ' + obj.selectedPlaceholders.lotPlaceholders);
             });
