@@ -10,7 +10,6 @@ namespace Magento\Catalog\Ui\Component\UrlInput;
 
 use Magento\Framework\UrlInterface;
 
-
 class Product implements \Magento\Ui\Model\UrlInput\ConfigInterface
 {
     /**
