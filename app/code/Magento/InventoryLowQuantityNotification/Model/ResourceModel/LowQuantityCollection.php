@@ -91,6 +91,7 @@ class LowQuantityCollection extends AbstractCollection
             $connection,
             $resource
         );
+
         $this->attributeRepository = $attributeRepository;
         $this->stockConfiguration = $stockConfiguration;
         $this->getAllowedProductTypesForSourceItems = $getAllowedProductTypesForSourceItems;
@@ -103,6 +104,10 @@ class LowQuantityCollection extends AbstractCollection
     protected function _construct()
     {
         $this->_init(SourceItemModel::class, SourceItemResourceModel::class);
+
+        $this->addFilterToMap('source_code', 'main_table.source_code');
+        $this->addFilterToMap('sku', 'main_table.sku');
+        $this->addFilterToMap('product_name', 'product_entity_varchar.value');
     }
 
     /**
@@ -112,19 +117,6 @@ class LowQuantityCollection extends AbstractCollection
     public function addStoreFilter(int $storeId)
     {
         $this->filterStoreId = $storeId;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function _initSelect()
-    {
-        parent::_initSelect();
-
-        $this->addFilterToMap('source_code', 'main_table.source_code');
-        $this->addFilterToMap('sku', 'main_table.sku');
-        $this->addFilterToMap('product_name', 'product_entity_varchar.value');
-        return $this;
     }
 
     /**
