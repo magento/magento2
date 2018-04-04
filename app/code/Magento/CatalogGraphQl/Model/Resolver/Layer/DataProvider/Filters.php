@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
@@ -36,7 +38,7 @@ class Filters
      * @param string $layerType
      * @return array
      */
-    public function getData(string $layerType)
+    public function getData(string $layerType) : array
     {
         $filtersData = [];
         /** @var AbstractFilter $filter */

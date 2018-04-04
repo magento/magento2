@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogGraphQl\Model\Layer;
 
-use \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
-use Magento\Framework\Registry;
+use Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection;
 
 /**
  * Collection Provider for graphql layered navigation.

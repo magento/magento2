@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogGraphQl\Model\Layer;
 
 use Magento\Catalog\Model\Layer\CollectionFilterInterface;
@@ -11,8 +13,6 @@ use Magento\Catalog\Model\Layer\StateKeyInterface;
 
 /**
  * Context for graphql layered navigation.
- *
- * @package Magento\CatalogGraphQl\Model\Layer
  */
 class Context implements \Magento\Catalog\Model\Layer\ContextInterface
 {

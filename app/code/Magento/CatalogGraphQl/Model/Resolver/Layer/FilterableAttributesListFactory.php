@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogGraphQl\Model\Resolver\Layer;
 
 use Magento\Catalog\Model\Layer\Category\FilterableAttributeList as CategoryFilterableAttributeList;
+use Magento\Catalog\Model\Layer\FilterList;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Layer\Search\FilterableAttributeList;
 
@@ -36,11 +39,11 @@ class FilterableAttributesListFactory
     /**
      * Create class instance with specified parameters
      *
-     * @param $type
+     * @param string $type
      * @param array $data
-     * @return \Magento\Catalog\Model\Layer\FilterList
+     * @return FilterList
      */
-    public function create($type, array $data = array())
+    public function create(string $type, array $data = array()) : FilterList
     {
         if ($type === Resolver::CATALOG_LAYER_CATEGORY) {
             return $this->objectManager->create(CategoryFilterableAttributeList::class, $data);
