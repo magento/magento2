@@ -7,10 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Ui\Component\Listing\Column;
 
-use Magento\Directory\Model\ResourceModel\RegionFactory as RegionResourceFactory;
-use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Inventory\Model\OptionSource\RegionSource;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
@@ -19,35 +18,26 @@ use Magento\Ui\Component\Listing\Columns\Column;
 class Region extends Column
 {
     /**
-     * @var RegionResourceFactory
+     * @var RegionSource
      */
-    private $regionResourceFactory;
-
-    /**
-     * @var RegionFactory
-     */
-    private $regionFactory;
+    private $regionSource;
 
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param RegionFactory $regionFactory
-     * @param RegionResourceFactory $regionResourceFactory
+     * @param RegionSource $regionSource
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        RegionFactory $regionFactory,
-        RegionResourceFactory $regionResourceFactory,
+        RegionSource $regionSource,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
-
-        $this->regionFactory = $regionFactory;
-        $this->regionResourceFactory = $regionResourceFactory;
+        $this->regionSource = $regionSource;
     }
 
     /**
@@ -56,17 +46,15 @@ class Region extends Column
     public function prepareDataSource(array $dataSource)
     {
         if ($dataSource['data']['totalRecords'] > 0) {
-            foreach ($dataSource['data']['items'] as &$item) {
-                if (isset($item['region_id']) && $item['region_id'] != 0) {
-                    $region = $this->regionFactory->create();
-                    $regionResource = $this->regionResourceFactory->create();
-                    $regionResource->load($region, $item['region_id']);
+            $options = array_column($this->regionSource->toOptionArray(), 'label', 'value');
 
-                    $item['region'] = $region->getName();
+            foreach ($dataSource['data']['items'] as &$item) {
+                if (isset($item['region_id'])) {
+                    $item['region'] = $options[$item['region_id']] ?? '';
                 }
             }
+            unset($item);
         }
-
         return $dataSource;
     }
 }

@@ -186,13 +186,11 @@
                 <label translate="true">Country</label>
             </settings>
         </column>
-        <column name="region"
-                class="Magento\Inventory\Ui\Component\Listing\Column\Region"
-                sortOrder="100">
+        <column name="region" class="Magento\Inventory\Ui\Component\Listing\Column\Region" sortOrder="90">
             <settings>
-                <filter>text</filter>
                 <label translate="true">State/Province</label>
                 <visible>false</visible>
+                <sortable>false</sortable>
             </settings>
         </column>
         <column name="city" sortOrder="110">
