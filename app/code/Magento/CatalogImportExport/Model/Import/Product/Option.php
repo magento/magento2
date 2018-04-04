@@ -1221,9 +1221,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $optionId = $nextOptionId;
                 $valueId = $nextValueId;
                 $multiRowData = $this->_getMultiRowFormat($rowData);
-                if ($rowData[self::COLUMN_SKU] != '' && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
+                if (!empty($rowData[self::COLUMN_SKU]) && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
                     $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
-                    if (array_key_exists('custom_options', $rowData) && !isset($rowData['custom_options'])) {
+                    if (array_key_exists('custom_options', $rowData) && trim($rowData['custom_options']) === "") {
                         $optionsToRemove[] = $this->_rowProductId;
                     }
                 }
