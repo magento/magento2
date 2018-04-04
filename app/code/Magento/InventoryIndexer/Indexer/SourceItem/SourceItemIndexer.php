@@ -12,7 +12,7 @@ use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
-use Magento\InventoryCatalog\Model\DefaultStockProvider;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 
@@ -54,7 +54,7 @@ class SourceItemIndexer
     private $stockIndexer;
 
     /**
-     * @var DefaultStockProvider
+     * @var DefaultStockProviderInterface
      */
     private $defaultStockProvider;
 
@@ -67,7 +67,7 @@ class SourceItemIndexer
      * @param IndexDataBySkuListProvider $indexDataBySkuListProvider
      * @param IndexNameBuilder $indexNameBuilder
      * @param StockIndexer $stockIndexer
-     * @param DefaultStockProvider $defaultStockProvider
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         GetSkuListInStock $getSkuListInStockToUpdate,
@@ -76,7 +76,7 @@ class SourceItemIndexer
         IndexDataBySkuListProvider $indexDataBySkuListProvider,
         IndexNameBuilder $indexNameBuilder,
         StockIndexer $stockIndexer,
-        DefaultStockProvider $defaultStockProvider
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->getSkuListInStock = $getSkuListInStockToUpdate;
         $this->indexStructure = $indexStructureHandler;

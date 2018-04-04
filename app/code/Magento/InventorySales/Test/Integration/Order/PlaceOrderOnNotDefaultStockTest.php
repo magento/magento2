@@ -7,13 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Test\Integration\Order;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
-use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Quote\Api\CartManagementInterface;
@@ -123,10 +121,6 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @throws ValidationException
      */
     public function testPlaceOrderWithInStockProduct()
     {
@@ -136,18 +130,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
 
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
-        $cartItem =
-            $this->cartItemFactory->create(
-                [
-                    'data' => [
-                        CartItemInterface::KEY_SKU => $product->getSku(),
-                        CartItemInterface::KEY_QTY => $quoteItemQty,
-                        CartItemInterface::KEY_QUOTE_ID => $cart->getId(),
-                        'product_id' => $product->getId(),
-                        'product' => $product
-                    ]
-                ]
-            );
+        $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
         $cart->addItem($cartItem);
         $this->cartRepository->save($cart);
         $orderId = $this->cartManagement->placeOrder($cart->getId());
@@ -167,10 +150,6 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @throws ValidationException
      */
     public function testPlaceOrderWithOutOffStockProduct()
     {
@@ -180,18 +159,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
 
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
-        $cartItem =
-            $this->cartItemFactory->create(
-                [
-                    'data' => [
-                        CartItemInterface::KEY_SKU => $product->getSku(),
-                        CartItemInterface::KEY_QTY => $quoteItemQty,
-                        CartItemInterface::KEY_QUOTE_ID => $cart->getId(),
-                        'product_id' => $product->getId(),
-                        'product' => $product
-                    ]
-                ]
-            );
+        $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
         $cart->addItem($cartItem);
         $this->cartRepository->save($cart);
 
@@ -202,9 +170,72 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @magentoConfigFixture store_for_global_website_store cataloginventory/item_options/backorders 1
+     */
+    public function testPlaceOrderWithOutOffStockProductAndBackOrdersTurnedOn()
+    {
+        $sku = 'SKU-2';
+        $stockId = 30;
+        $quoteItemQty = 6.2;
+
+        $cart = $this->getCartByStockId($stockId);
+        $product = $this->productRepository->get($sku);
+        $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
+        $cart->addItem($cartItem);
+        $this->cartRepository->save($cart);
+
+        $orderId = $this->cartManagement->placeOrder($cart->getId());
+
+        self::assertNotNull($orderId);
+
+        //cleanup
+        $this->deleteOrderById((int)$orderId);
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @magentoConfigFixture current_store cataloginventory/item_options/manage_stock 0
+     */
+    public function testPlaceOrderWithOutOffStockProductAndManageStockTurnedOff()
+    {
+        $sku = 'SKU-2';
+        $stockId = 30;
+        $quoteItemQty = 6.2;
+
+        $cart = $this->getCartByStockId($stockId);
+        $product = $this->productRepository->get($sku);
+        $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
+        $cart->addItem($cartItem);
+        $this->cartRepository->save($cart);
+
+        $orderId = $this->cartManagement->placeOrder($cart->getId());
+
+        self::assertNotNull($orderId);
+
+        //cleanup
+        $this->deleteOrderById((int)$orderId);
+    }
+
+    /**
      * @param int $stockId
      * @return CartInterface
-     * @throws NoSuchEntityException
      */
     private function getCartByStockId(int $stockId): CartInterface
     {
@@ -243,6 +274,30 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $this->orderRepository->delete($this->orderRepository->get($orderId));
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', false);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param float $quoteItemQty
+     * @param int $cartId
+     * @return CartItemInterface
+     */
+    private function getCartItem(ProductInterface $product, float $quoteItemQty, int $cartId): CartItemInterface
+    {
+        /** @var CartItemInterface $cartItem */
+        $cartItem =
+            $this->cartItemFactory->create(
+                [
+                    'data' => [
+                        CartItemInterface::KEY_SKU => $product->getSku(),
+                        CartItemInterface::KEY_QTY => $quoteItemQty,
+                        CartItemInterface::KEY_QUOTE_ID => $cartId,
+                        'product_id' => $product->getId(),
+                        'product' => $product
+                    ]
+                ]
+            );
+        return $cartItem;
     }
 
     protected function tearDown()

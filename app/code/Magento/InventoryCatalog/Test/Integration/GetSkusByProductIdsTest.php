@@ -20,6 +20,8 @@ class GetSkusByProductIdsTest extends TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->getSkusByProductIds = Bootstrap::getObjectManager()->get(GetSkusByProductIdsInterface::class);
     }
 
@@ -37,11 +39,11 @@ class GetSkusByProductIdsTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_for_search.php
      *
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Following products with requested ids were not found: 999
+     * @expectedExceptionMessage Following products with requested ids were not found: 998, 999
      */
-    public function testExecuteWithNotExistedSkus()
+    public function testExecuteWithNotExistedIds()
     {
-        $ids = [999, 102];
+        $ids = [998, 999, 102];
 
         $this->getSkusByProductIds->execute($ids);
     }

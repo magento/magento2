@@ -9,6 +9,7 @@
         "magento/module-inventory": "100.0.*",
         "magento/module-inventory-api": "100.0.*",
         "magento/module-inventory-catalog": "100.0.*",
+        "magento/module-inventory-configuration": "100.0.*",
         "magento/module-inventory-configuration-api": "100.0.*",
         "magento/module-inventory-reservations": "100.0.*",
         "magento/module-inventory-reservations-api": "100.0.*",

@@ -20,6 +20,8 @@ class GetProductIdsBySkusTest extends TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->getProductIdsBySkus = Bootstrap::getObjectManager()->get(GetProductIdsBySkusInterface::class);
     }
 
@@ -37,11 +39,11 @@ class GetProductIdsBySkusTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_for_search.php
      *
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Following products with requested skus were not found: not_existed_sku
+     * @expectedExceptionMessage Following products with requested skus were not found: not_existed_1, not_existed_2
      */
     public function testExecuteWithNotExistedSkus()
     {
-        $skus = ['not_existed_sku', 'search_product_2'];
+        $skus = ['not_existed_1', 'not_existed_2', 'search_product_2'];
 
         $this->getProductIdsBySkus->execute($skus);
     }
