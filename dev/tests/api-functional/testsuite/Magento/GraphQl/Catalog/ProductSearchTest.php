@@ -792,32 +792,41 @@ QUERY;
         $query
             = <<<QUERY
 {
-  products(filter: { price:{from:"5" to:"20"} }) {
-    total_count
-    items{
-     	  attribute_set_id
-     	  sku
-      	  name
-      price{
-        minimalPrice{
-          amount{
-            value
-            currency
-          }
+    products(
+        filter: { 
+            price:{
+                from:"5" to:"20"
+            } 
         }
-         maximalPrice{
-          amount{
-            value
-            currency
-          }
+        sort: {
+            sku: DESC
         }
-      }
-      type_id
-      ...on PhysicalProductInterface{
-        weight
-      }
-     }
-  }
+    ) {
+        total_count
+        items {
+            attribute_set_id
+            sku
+            name
+            price {
+                minimalPrice {
+                    amount {
+                        value
+                        currency
+                    }
+                }
+                maximalPrice {
+                    amount {
+                        value
+                        currency
+                    }
+                }
+            }     
+            type_id
+            ...on PhysicalProductInterface {
+                weight
+            }
+        }
+    }
 }
 QUERY;
 
