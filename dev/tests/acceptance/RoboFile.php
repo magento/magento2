@@ -169,18 +169,18 @@ class RoboFile extends \Robo\Tasks
      */
     function functional()
     {
-        $this->_exec(VENDOR_BIN_PATH . 'codecept run functional --skip-group skip');
+        $this->_exec(VENDOR_BIN_PATH . 'codecept run functional');
     }
 
     /**
-     * Run all Tests with the specified @group tag, excluding @group 'skip'.
+     * Run all Tests with the specified @group tag'.
      *
      * @param string $args
      * @return void
      */
     function group($args = '')
     {
-        $this->taskExec(VENDOR_BIN_PATH . 'codecept run functional --verbose --steps --skip-group skip --group')->args($args)->run();
+        $this->taskExec(VENDOR_BIN_PATH . 'codecept run functional --verbose --steps --group')->args($args)->run();
     }
 
     /**
@@ -201,7 +201,7 @@ class RoboFile extends \Robo\Tasks
      */
     function example()
     {
-        $this->_exec(VENDOR_BIN_PATH . 'codecept run --group example --skip-group skip');
+        $this->_exec(VENDOR_BIN_PATH . 'codecept run --group example');
     }
 
     /**
