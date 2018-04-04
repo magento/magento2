@@ -35038,6 +35038,351 @@ if (testLabel
         </BeanShellSampler>
         <hashTree/>
     
+    <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Admin Controller" enabled="true">
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/once_only_controller.jmx</stringProp>
+</OnceOnlyController>
+    <hashTree>
+        <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Get admin form key PostProcessor" enabled="true">
+        <stringProp name="script">
+        function getFormKeyFromResponse()
+        {
+            var url = prev.getUrlAsString(),
+            responseCode =  prev.getResponseCode(),
+            formKey = null;
+            searchPattern = /var FORM_KEY = '(.+)'/;
+            if (responseCode == "200" &amp;&amp; url) {
+                response = prev.getResponseDataAsString();
+                formKey = response  &amp;&amp; response.match(searchPattern) ? response.match(searchPattern)[1] : null;
+            }
+            return formKey;
+        }
+
+        formKey = vars.get("form_key_storage");
+
+	   currentFormKey = getFormKeyFromResponse();
+
+	   if (currentFormKey != null &amp;&amp; currentFormKey != formKey) {
+		  vars.put("form_key_storage", currentFormKey);
+	   }
+        </stringProp>
+        <stringProp name="scriptLanguage">javascript</stringProp>
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/admin/handle_admin_form_key.jmx</stringProp></JSR223PostProcessor>
+        <hashTree/>
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Set admin form key PreProcessor" enabled="true">
+            <stringProp name="script">
+                formKey =  vars.get("form_key_storage");
+                if (formKey
+                    &amp;&amp; sampler.getClass().getName() == 'org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy'
+                    &amp;&amp; sampler.getMethod() == "POST")
+                    {
+                        arguments = sampler.getArguments();
+                        for (i=0; i&lt;arguments.getArgumentCount(); i++)
+                        {
+                            argument = arguments.getArgument(i);
+                            if (argument.getName() == 'form_key' &amp;&amp; argument.getValue() != formKey) {
+                            log.info("admin form key updated: " + argument.getValue() + " =&gt; " + formKey);
+                            argument.setValue(formKey);
+                        }
+                    }
+                }
+            </stringProp>
+            <stringProp name="scriptLanguage">javascript</stringProp>
+        </JSR223PreProcessor>
+        <hashTree/>
+    
+    <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager" enabled="true">
+      <collectionProp name="CookieManager.cookies"/>
+      <boolProp name="CookieManager.clearEachIteration">false</boolProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/http_cookie_manager_without_clear_each_iteration.jmx</stringProp></CookieManager>
+    <hashTree/>
+  
+    <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Admin Login" enabled="true">
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/simple_controller.jmx</stringProp>
+</GenericController>
+    <hashTree>
+    <CriticalSectionController guiclass="CriticalSectionControllerGui" testclass="CriticalSectionController" testname="Admin Login Lock" enabled="true">
+        <stringProp name="CriticalSectionController.lockName">get-admin-email</stringProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/lock_controller.jmx</stringProp></CriticalSectionController>
+    <hashTree>
+    
+    <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Get Admin Email" enabled="true">
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/get_admin_email.jmx</stringProp>
+      <stringProp name="BeanShellSampler.query">
+adminUserList = props.get("adminUserList");
+adminUser = adminUserList.poll();
+if (adminUser == null) {
+  SampleResult.setResponseMessage("adminUser list is empty");
+  SampleResult.setResponseData("adminUser list is empty","UTF-8");
+  IsSuccess=false;
+  SampleResult.setSuccessful(false);
+  SampleResult.setStopThread(true);
+}
+vars.put("admin_user", adminUser);
+      </stringProp>
+      <stringProp name="BeanShellSampler.filename"/>
+      <stringProp name="BeanShellSampler.parameters"/>
+      <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
+    </BeanShellSampler>
+    <hashTree/>
+  </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Login" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}${admin_path}</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/admin_login/admin_login.jmx</stringProp></HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert login form shown" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="-1397214398">Welcome</stringProp>
+          <stringProp name="-515240035">&lt;title&gt;Magento Admin&lt;/title&gt;</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+      <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract form key" enabled="true">
+        <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+        <stringProp name="RegexExtractor.refname">admin_form_key</stringProp>
+        <stringProp name="RegexExtractor.regex">&lt;input name="form_key" type="hidden" value="([^'"]+)" /&gt;</stringProp>
+        <stringProp name="RegexExtractor.template">$1$</stringProp>
+        <stringProp name="RegexExtractor.default"/>
+        <stringProp name="RegexExtractor.match_number">1</stringProp>
+      </RegexExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert form_key extracted" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="2845929">^.+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">admin_form_key</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Login Submit Form" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="dummy" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">true</boolProp>
+            <stringProp name="Argument.value"/>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">dummy</stringProp>
+          </elementProp>
+          <elementProp name="form_key" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">true</boolProp>
+            <stringProp name="Argument.value">${admin_form_key}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">form_key</stringProp>
+          </elementProp>
+          <elementProp name="login[password]" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">true</boolProp>
+            <stringProp name="Argument.value">${admin_password}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">login[password]</stringProp>
+          </elementProp>
+          <elementProp name="login[username]" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">true</boolProp>
+            <stringProp name="Argument.value">${admin_user}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">login[username]</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/dashboard/</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <stringProp name="HTTPSampler.implementation">Java</stringProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/admin_login/admin_login_submit_form.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+        <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract form key" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+            <stringProp name="RegexExtractor.refname">admin_form_key</stringProp>
+            <stringProp name="RegexExtractor.regex">&lt;input name="form_key" type="hidden" value="([^'"]+)" /&gt;</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"/>
+            <stringProp name="RegexExtractor.match_number">1</stringProp>
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/admin_login/admin_retrieve_form_key.jmx</stringProp></RegexExtractor>
+        <hashTree/>
+    </hashTree>
+  </hashTree>
+  
+    <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Indexer Controller" enabled="true">
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/simple_controller.jmx</stringProp>
+</GenericController>
+    <hashTree>
+    <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Indexers Management Catalog Set On Save" enabled="true">
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/admin_indexers_management/admin_indexer_management_catalog_set_on_save.jmx</stringProp>
+    </TestFragmentController>
+    <hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Index Page" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}${admin_path}/indexer/indexer/list/</stringProp>
+        <stringProp name="HTTPSampler.method">GET</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="Accept-Language" elementType="Header">
+              <stringProp name="Header.name">Accept-Language</stringProp>
+              <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+            </elementProp>
+            <elementProp name="Accept" elementType="Header">
+              <stringProp name="Header.name">Accept</stringProp>
+              <stringProp name="Header.value">text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</stringProp>
+            </elementProp>
+            <elementProp name="User-Agent" elementType="Header">
+              <stringProp name="Header.name">User-Agent</stringProp>
+              <stringProp name="Header.value">Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0</stringProp>
+            </elementProp>
+            <elementProp name="Accept-Encoding" elementType="Header">
+              <stringProp name="Header.name">Accept-Encoding</stringProp>
+              <stringProp name="Header.value">gzip, deflate</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+      </hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Set Indexers on Save" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="indexer_ids" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">true</boolProp>
+              <stringProp name="Argument.value">catalog_category_product,catalog_product_category,catalog_product_price,catalog_product_attribute,cataloginventory_stock,catalogsearch_fulltext</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+              <boolProp name="HTTPArgument.use_equals">true</boolProp>
+              <stringProp name="Argument.name">indexer_ids</stringProp>
+            </elementProp>
+            <elementProp name="form_key" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">true</boolProp>
+              <stringProp name="Argument.value">${admin_form_key}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+              <boolProp name="HTTPArgument.use_equals">true</boolProp>
+              <stringProp name="Argument.name">form_key</stringProp>
+            </elementProp>
+            <elementProp name="massaction_prepare_key" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">false</boolProp>
+              <stringProp name="Argument.value">indexer_ids</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+              <boolProp name="HTTPArgument.use_equals">true</boolProp>
+              <stringProp name="Argument.name">massaction_prepare_key</stringProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}${admin_path}/indexer/indexer/massOnTheFly/</stringProp>
+        <stringProp name="HTTPSampler.method">POST</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="49586">200</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">16</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Logout" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/auth/logout/</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/admin_logout.jmx</stringProp></HTTPSamplerProxy>
+    <hashTree>
+    
+    <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="Return Admin to Pool" enabled="true">
+        <boolProp name="resetInterpreter">false</boolProp>
+        <stringProp name="parameters"/>
+        <stringProp name="filename"/>
+        <stringProp name="script">
+adminUserList = props.get("adminUserList");
+adminUserList.add(vars.get("admin_user"));
+        </stringProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/common/return_admin_email_to_pool.jmx</stringProp></BeanShellPostProcessor>
+    <hashTree/>
+  </hashTree>
+  
+    <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Product Fixtures Controller" enabled="true">
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/simple_controller.jmx</stringProp>
+</GenericController>
+    <hashTree>
     <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
       <collectionProp name="HeaderManager.headers">
         <elementProp name="" elementType="Header">
@@ -35110,63 +35455,6 @@ if (testLabel
     <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/header_manager.jmx</stringProp></HeaderManager>
     <hashTree/>
   
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query multiple products" enabled="true">
-            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                        <stringProp name="Argument.value">{"query":"{\n  products(\n    filter: {\n         price: {gt: \"10\"}\n         or: {\n            sku:{like:\"%Product%\"}\n            name:{like:\"%Configurable Product%\"}\n          }\n        }\n    pageSize: 200\n    currentPage: 1\n    sort: {\n      price: ASC\n      name:DESC\n    }\n  ) {\n    total_count\n    items {\n        attribute_set_id\n        country_of_manufacture\n        created_at\n        custom_design\n        custom_design_from\n        custom_design_to\n        custom_layout\n        custom_layout_update\n        description\n        gift_message_available\n        image\n        image_label\n        meta_description\n        meta_keyword\n        meta_title\n        name\n        new_from_date\n        new_to_date\n        options_container\n        ... on CustomizableProductInterface {\n            options\n            {\n                title\n                required\n                sort_order\n            }\n        }\n        page_layout\n        price {\n            minimalPrice {\n                amount {\n                    value\n                    currency\n                }\n                adjustments {\n                    amount {\n                        value\n                        currency\n                    }\n                    code\n                    description\n                }\n            }\n            maximalPrice {\n                amount {\n                    value\n                    currency\n                }\n                adjustments {\n                    amount {\n                        value\n                        currency\n                    }\n                    code\n                    description\n                }\n            }\n            regularPrice {\n                amount {\n                    value\n                    currency\n                }\n                adjustments {\n                    amount {\n                        value\n                        currency\n                    }\n                    code\n                    description\n                }\n            }\n        }\n        short_description\n        sku\n        small_image\n        small_image_label\n        special_from_date\n        special_price\n        special_to_date\n        swatch_image\n        tax_class_id\n        thumbnail\n        thumbnail_label\n        tier_price\n        type_id\n        updated_at\n        url_key\n        url_path\n        website_ids\n      \t... on PhysicalProductInterface {\n        \tweight\n      \t}\n    }\n    page_info {\n      page_size\n      current_page\n    }\n  }\n}\n","variables":null,"operationName":null}</stringProp>
-                        <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                </collectionProp>
-            </elementProp>
-            <stringProp name="HTTPSampler.domain"/>
-            <stringProp name="HTTPSampler.port"/>
-            <stringProp name="HTTPSampler.connect_timeout"/>
-            <stringProp name="HTTPSampler.response_timeout"/>
-            <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
-            <stringProp name="HTTPSampler.contentEncoding"/>
-            <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
-            <stringProp name="HTTPSampler.method">POST</stringProp>
-            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-            <boolProp name="HTTPSampler.monitor">false</boolProp>
-            <stringProp name="HTTPSampler.embedded_url_re"/>
-            <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_multiple_products_with_extensible_data_objects_using_filter_only.jmx</stringProp>
-        </HTTPSamplerProxy>
-        <hashTree>
-            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
-                <stringProp name="VAR">graphql_multiple_products_query_total_count</stringProp>
-                <stringProp name="JSONPATH">$.data.products.total_count</stringProp>
-                <stringProp name="DEFAULT"/>
-                <stringProp name="VARIABLE"/>
-                <stringProp name="SUBJECT">BODY</stringProp>
-            </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
-            <hashTree/>
-            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Assert total count &gt; 300" enabled="true">
-                <stringProp name="BeanShellAssertion.query">String totalCount=vars.get("graphql_multiple_products_query_total_count");
-                    if (totalCount == null) {
-                    Failure = true;
-                    FailureMessage = "Not Expected \"totalCount\" to be null";
-                    } else {
-                    if (Integer.parseInt(totalCount) &lt; 300) {
-                    Failure = true;
-                    FailureMessage = "Expected \"totalCount\" to be greater than 300, Actual: " + totalCount;
-                    } else {
-                    Failure = false;
-                    }
-                    }
-                </stringProp>
-                <stringProp name="BeanShellAssertion.filename"/>
-                <stringProp name="BeanShellAssertion.parameters"/>
-                <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
-            </BeanShellAssertion>
-            <hashTree/>
-        </hashTree>
-    
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create product with extensible data objects" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -37301,6 +37589,141 @@ if (testLabel
                 </hashTree>
             </hashTree>
         </hashTree>
+    </hashTree>
+  </hashTree>
+  
+    <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Graphql Query Controller" enabled="true">
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/simple_controller.jmx</stringProp>
+</GenericController>
+    <hashTree>
+    <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+      <collectionProp name="HeaderManager.headers">
+        <elementProp name="" elementType="Header">
+          <stringProp name="Header.name">Content-Type</stringProp>
+          <stringProp name="Header.value">application/json</stringProp>
+        </elementProp>
+        <elementProp name="" elementType="Header">
+          <stringProp name="Header.name">Accept</stringProp>
+          <stringProp name="Header.value">*/*</stringProp>
+        </elementProp>
+      </collectionProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/header_manager_before_token.jmx</stringProp></HeaderManager>
+    <hashTree/>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Admin Token Retrieval" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"username":"${admin_user}","password":"${admin_password}"}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/admin_token_retrieval.jmx</stringProp></HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="jp@gc - JSON Path Extractor" enabled="true">
+        <stringProp name="VAR">admin_token</stringProp>
+        <stringProp name="JSONPATH">$</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert token not null" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="484395188">^[a-z0-9-]+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">admin_token</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+      <collectionProp name="HeaderManager.headers">
+        <elementProp name="" elementType="Header">
+          <stringProp name="Header.name">Authorization</stringProp>
+          <stringProp name="Header.value">Bearer ${admin_token}</stringProp>
+        </elementProp>
+      </collectionProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/header_manager.jmx</stringProp></HeaderManager>
+    <hashTree/>
+  
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query multiple products" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{"query":"{\n  products(\n    filter: {\n         price: {gt: \"10\"}\n         or: {\n            sku:{like:\"%Product%\"}\n            name:{like:\"%Configurable Product%\"}\n          }\n        }\n    pageSize: 200\n    currentPage: 1\n    sort: {\n      price: ASC\n      name:DESC\n    }\n  ) {\n    total_count\n    items {\n        attribute_set_id\n        country_of_manufacture\n        created_at\n        custom_design\n        custom_design_from\n        custom_design_to\n        custom_layout\n        custom_layout_update\n        description\n        gift_message_available\n        image\n        image_label\n        meta_description\n        meta_keyword\n        meta_title\n        name\n        new_from_date\n        new_to_date\n        options_container\n        ... on CustomizableProductInterface {\n            options\n            {\n                title\n                required\n                sort_order\n            }\n        }\n        page_layout\n        price {\n            minimalPrice {\n                amount {\n                    value\n                    currency\n                }\n                adjustments {\n                    amount {\n                        value\n                        currency\n                    }\n                    code\n                    description\n                }\n            }\n            maximalPrice {\n                amount {\n                    value\n                    currency\n                }\n                adjustments {\n                    amount {\n                        value\n                        currency\n                    }\n                    code\n                    description\n                }\n            }\n            regularPrice {\n                amount {\n                    value\n                    currency\n                }\n                adjustments {\n                    amount {\n                        value\n                        currency\n                    }\n                    code\n                    description\n                }\n            }\n        }\n        short_description\n        sku\n        small_image\n        small_image_label\n        special_from_date\n        special_price\n        special_to_date\n        swatch_image\n        tax_class_id\n        thumbnail\n        thumbnail_label\n        tier_price\n        type_id\n        updated_at\n        url_key\n        url_path\n        website_ids\n      \t... on PhysicalProductInterface {\n        \tweight\n      \t}\n    }\n    page_info {\n      page_size\n      current_page\n    }\n  }\n}\n","variables":null,"operationName":null}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain"/>
+            <stringProp name="HTTPSampler.port"/>
+            <stringProp name="HTTPSampler.connect_timeout"/>
+            <stringProp name="HTTPSampler.response_timeout"/>
+            <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"/>
+            <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.monitor">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"/>
+            <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_multiple_products_with_extensible_data_objects_using_filter_only.jmx</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
+                <stringProp name="VAR">graphql_multiple_products_query_total_count</stringProp>
+                <stringProp name="JSONPATH">$.data.products.total_count</stringProp>
+                <stringProp name="DEFAULT"/>
+                <stringProp name="VARIABLE"/>
+                <stringProp name="SUBJECT">BODY</stringProp>
+            </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+            <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Assert total count &gt; 200" enabled="true">
+                <stringProp name="BeanShellAssertion.query">String totalCount=vars.get("graphql_multiple_products_query_total_count");
+                    if (totalCount == null) {
+                    Failure = true;
+                    FailureMessage = "Not Expected \"totalCount\" to be null";
+                    } else {
+                    if (Integer.parseInt(totalCount) &lt; 200) {
+                    Failure = true;
+                    FailureMessage = "Expected \"totalCount\" to be greater than 200, Actual: " + totalCount;
+                    } else {
+                    Failure = false;
+                    }
+                    }
+                </stringProp>
+                <stringProp name="BeanShellAssertion.filename"/>
+                <stringProp name="BeanShellAssertion.parameters"/>
+                <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
+        </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query simple product" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
@@ -37346,16 +37769,6 @@ if (testLabel
             <stringProp name="VARIABLE"/>
             <stringProp name="SUBJECT">BODY</stringProp>
         </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
-        <hashTree/>
-        <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="print graphql_multiple_products_query_response" enabled="true">
-            <boolProp name="resetInterpreter">false</boolProp>
-            <stringProp name="parameters"/>
-            <stringProp name="filename"/>
-            <stringProp name="script">String resp=vars.get("graphql_multiple_products_query_response");
-
-                log.error("Simple product Response :" + resp);
-            </stringProp>
-        </BeanShellPostProcessor>
         <hashTree/>
         <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Assert total count = 1" enabled="true">
         <stringProp name="BeanShellAssertion.query">String totalCount=vars.get("graphql_simple_products_query_total_count");
@@ -37543,6 +37956,66 @@ if (totalCount == null) {
       <boolProp name="HTTPSampler.monitor">false</boolProp>
       <stringProp name="HTTPSampler.embedded_url_re"/>
       <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_multiple_products_with_extensible_data_objects_using_full_text_only.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
+        <stringProp name="VAR">graphql_search_products_query_total_count</stringProp>
+        <stringProp name="JSONPATH">$.data.products.total_count</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Assert total count &gt; 0" enabled="true">
+        <stringProp name="BeanShellAssertion.query">String totalCount=vars.get("graphql_search_products_query_total_count");
+
+if (totalCount == null) {
+        Failure = true;
+        FailureMessage = "Not Expected \"totalCount\" to be null";
+} else {
+	if (Integer.parseInt(totalCount) &lt; 1) {
+   Failure = true;
+   FailureMessage = "Expected \"totalCount\" to be greater than zero, Actual: " + totalCount;
+	} else {
+		Failure = false;
+	}
+}
+
+
+</stringProp>
+        <stringProp name="BeanShellAssertion.filename"/>
+        <stringProp name="BeanShellAssertion.parameters"/>
+        <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+      </BeanShellAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query products with full text search only" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"{\n    products(search: \"color\") {\n        filters {\n            name\n            filter_items_count\n            request_var\n            filter_items {\n                label\n                value_string\n                items_count\n                ... on SwatchLayerFilterItemInterface {\n                    swatch_data {\n                        type\n                        value\n                    }\n                }\n            }\n        }\n        total_count\n        items {\n            attribute_set_id\n            category_ids\n            categories\n            {\n                id\n                position\n            }\n            country_of_manufacture\n            created_at\n            custom_design\n            custom_design_from\n            custom_design_to\n            custom_layout\n            custom_layout_update\n            description\n            gift_message_available\n            id\n            image\n            image_label\n            meta_description\n            meta_keyword\n            meta_title\n            media_gallery_entries\n            {\n                disabled\n                file\n                id\n                label\n                media_type\n                position\n                types\n                content\n                {\n                    base64_encoded_data\n                    type\n                    name\n                }\n                video_content\n                {\n                    media_type\n                    video_description\n                    video_metadata\n                    video_provider\n                    video_title\n                    video_url\n                }\n            }\n            name\n            new_from_date\n            new_to_date\n            options_container\n            ... on CustomizableProductInterface {\n                options\n                {\n                    title\n                    required\n                    sort_order\n                }\n            }\n            page_layout\n            price {\n                minimalPrice {\n                    amount {\n                        value\n                        currency\n                    }\n                    adjustments {\n                        amount {\n                            value\n                            currency\n                        }\n                        code\n                        description\n                    }\n                }\n                maximalPrice {\n                    amount {\n                        value\n                        currency\n                    }\n                    adjustments {\n                        amount {\n                            value\n                            currency\n                        }\n                        code\n                        description\n                    }\n                }\n                regularPrice {\n                    amount {\n                        value\n                        currency\n                    }\n                    adjustments {\n                        amount {\n                            value\n                            currency\n                        }\n                        code\n                        description\n                    }\n                }\n            }\n            product_links\n            {\n                link_type\n                linked_product_sku\n                linked_product_type\n                position\n                sku\n            }\n            short_description\n            sku\n            small_image\n            small_image_label\n            special_from_date\n            special_price\n            special_to_date\n            swatch_image\n            tax_class_id\n            thumbnail\n            thumbnail_label\n            tier_price\n            tier_prices\n            {\n                customer_group_id\n                percentage_value\n                qty\n                value\n                website_id\n            }\n            type_id\n            updated_at\n            url_key\n            url_path\n            website_ids\n            ... on PhysicalProductInterface {\n                    weight\n                  }\n            ... on ConfigurableProduct {\n                configurable_options {\n                    id\n                    attribute_id\n                    label\n                    position\n                    use_default\n                    attribute_code\n                    values {\n                        value_index\n                        label\n                        store_label\n                        default_label\n                        use_default_value\n                    }\n                    product_id\n                }\n                variants {\n                    product {\n                        ... on PhysicalProductInterface {\n                            weight\n                        }\n                        sku\n                        color\n                        attribute_set_id\n                        category_ids\n                        categories\n                        {\n                            id\n                            position\n                        }\n                        country_of_manufacture\n                        created_at\n                        custom_design\n                        custom_design_from\n                        custom_design_to\n                        custom_layout\n                        custom_layout_update\n                        description\n                        gift_message_available\n                        id\n                        image\n                        image_label\n                        meta_description\n                        meta_keyword\n                        meta_title\n                        media_gallery_entries\n                        {\n                            disabled\n                            file\n                            id\n                            label\n                            media_type\n                            position\n                            types\n                            content\n                            {\n                                base64_encoded_data\n                                type\n                                name\n                            }\n                            video_content\n                            {\n                                media_type\n                                video_description\n                                video_metadata\n                                video_provider\n                                video_title\n                                video_url\n                            }\n                        }\n                        name\n                        new_from_date\n                        new_to_date\n                        options_container\n                        ... on CustomizableProductInterface {\n                            options\n                            {\n                                title\n                                required\n                                sort_order\n                            }\n                        }\n                        page_layout\n                        price {\n                            minimalPrice {\n                                amount {\n                                    value\n                                    currency\n                                }\n                                adjustments {\n                                    amount {\n                                        value\n                                        currency\n                                    }\n                                    code\n                                    description\n                                }\n                            }\n                            maximalPrice {\n                                amount {\n                                    value\n                                    currency\n                                }\n                                adjustments {\n                                    amount {\n                                        value\n                                        currency\n                                    }\n                                    code\n                                    description\n                                }\n                            }\n                            regularPrice {\n                                amount {\n                                    value\n                                    currency\n                                }\n                                adjustments {\n                                    amount {\n                                        value\n                                        currency\n                                    }\n                                    code\n                                    description\n                                }\n                            }\n                        }\n                        product_links\n                        {\n                            link_type\n                            linked_product_sku\n                            linked_product_type\n                            position\n                            sku\n                        }\n                        short_description\n                        sku\n                        small_image\n                        small_image_label\n                        special_from_date\n                        special_price\n                        special_to_date\n                        swatch_image\n                        tax_class_id\n                        thumbnail\n                        thumbnail_label\n                        tier_price\n                        tier_prices\n                        {\n                            customer_group_id\n                            percentage_value\n                            qty\n                            value\n                            website_id\n                        }\n                        type_id\n                        updated_at\n                        url_key\n                        url_path\n                        website_ids\n\n\n                    }\n                    attributes {\n                        label\n                        code\n                        value_index\n                    }\n                }\n            }\n        }\n    }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_multiple_products_with_extensible_data_objects_using_full_text_and_filters.jmx</stringProp>
     </HTTPSamplerProxy>
     <hashTree>
       <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
@@ -38066,7 +38539,45 @@ if (totalCount == null) {
                 <hashTree/>
             </hashTree>
         </hashTree>
+    
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query Category" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"{\n  categories(filter: {root_category_id: 4}) {\n    category_tree {\n      id\n      level\n      is_active\n      description\n      all_children\n      path\n      path_in_store\n      product_count\n      url_key\n      url_path\n      children {\n        id\n        is_active\n        description\n        available_sort_by\n        default_sort_by\n        image\n        level\n        children {\n          id\n          is_active\n          filter_price_range\n          description\n          image\n          meta_keywords\n          level\n          is_anchor\n          children {\n            level\n            id\n            children {\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_root_category.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
+        <stringProp name="VAR">graphql_category_query_category_tree</stringProp>
+        <stringProp name="JSONPATH">$.data.categories.category_tree</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
     </hashTree>
+  </hashTree>
+  </hashTree>
 
   </hashTree>
 
