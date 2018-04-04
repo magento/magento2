@@ -56,7 +56,7 @@ class InvalidateAfterEnablingOrDisablingSourcePlugin
     ) {
         $invalidationRequired = $this->isInvalidationRequiredForSource->execute(
             $source->getSourceCode(),
-            $source->isEnabled()
+            (bool)$source->isEnabled()
         );
 
         $proceed($source);

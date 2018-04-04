@@ -78,7 +78,7 @@ class InvalidateAfterEnablingOrDisablingSourceTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
-     * @dataProvider sourceDoesNotHaveAnyRelationsDataProvider
+     * @dataProvider sourceDoesNotHaveAllRelationsDataProvider
      * @param string $sourceCode
      * @param bool $enable
      * @param bool $expectedValid
@@ -94,9 +94,55 @@ class InvalidateAfterEnablingOrDisablingSourceTest extends TestCase
     }
 
     /**
+     * Tests Source enabling and disabling when no Stocks are connected to current Source.
+     *
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @dataProvider sourceDoesNotHaveAllRelationsDataProvider
+     * @param string $sourceCode
+     * @param bool $enable
+     * @param bool $expectedValid
+     */
+    public function testIndexerInvalidationIfSourceDoesNotHaveStockLinks(
+        string $sourceCode,
+        bool $enable,
+        bool $expectedValid
+    ) {
+        $this->setSourceEnabledStatus($sourceCode, $enable);
+
+        $this->assertEquals($expectedValid, $this->indexer->isValid());
+    }
+
+    /**
+     * Tests Source enabling and disabling when no Source Items are connected to current Source.
+     *
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @dataProvider sourceDoesNotHaveAllRelationsDataProvider
+     * @param string $sourceCode
+     * @param bool $enable
+     * @param bool $expectedValid
+     */
+    public function testIndexerInvalidationIfSourceDoesNotHaveSourceItems(
+        string $sourceCode,
+        bool $enable,
+        bool $expectedValid
+    ) {
+        $this->setSourceEnabledStatus($sourceCode, $enable);
+
+        $this->assertEquals($expectedValid, $this->indexer->isValid());
+    }
+
+    /**
      * @return array
      */
-    public function sourceDoesNotHaveAnyRelationsDataProvider(): array
+    public function sourceDoesNotHaveAllRelationsDataProvider(): array
     {
         return [
             ['eu-1', true, true],
