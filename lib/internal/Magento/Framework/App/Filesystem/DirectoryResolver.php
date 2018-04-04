@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 namespace Magento\Framework\App\Filesystem;
 
 use Magento\Framework\Filesystem;
@@ -48,7 +47,7 @@ class DirectoryResolver
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function validatePath(string $path, string $directoryConfig = DirectoryList::MEDIA): bool
+    public function validatePath($path, $directoryConfig = DirectoryList::MEDIA)
     {
         $directory = $this->filesystem->getDirectoryWrite($directoryConfig);
         $realPath = $directory->getDriver()->getRealPathSafety($path);
