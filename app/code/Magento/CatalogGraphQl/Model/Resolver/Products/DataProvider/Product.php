@@ -56,12 +56,6 @@ class Product
      * @var \Magento\Catalog\Model\Layer\Resolver
      */
     private $layerResolver;
-
-    /**
-     * @var \Magento\Catalog\Api\Data\ProductSearchResultsInterface
-     */
-    private $searchResult;
-
     /**
      * @var \Magento\Catalog\Model\ProductRepository
      */

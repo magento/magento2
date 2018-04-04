@@ -54,8 +54,9 @@ class DataProviderPlugin
      * @param Filters $subject
      * @param \Closure $proceed
      * @param string $layerType
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function aroundGetData(Filters $subject, \Closure $proceed, string $layerType)
     {
