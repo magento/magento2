@@ -11,8 +11,6 @@ use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
  * Resolver for layered filter type.
- *
- * @package Magento\CatalogGraphQl\Model
  */
 class LayerFilterItemTypeResolver implements TypeResolverInterface
 {

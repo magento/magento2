@@ -12,8 +12,6 @@ use Magento\Catalog\Model\Layer\Resolver;
 
 /**
  * Layer types filters provider.
- *
- * @package Magento\CatalogGraphQl\Model\Resolver\Layer
  */
 class FiltersProvider
 {

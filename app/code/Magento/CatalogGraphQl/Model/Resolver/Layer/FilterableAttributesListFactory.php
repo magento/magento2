@@ -14,8 +14,6 @@ use Magento\Catalog\Model\Layer\Search\FilterableAttributeList;
 
 /**
  * Factory for filterable attributes list.
- *
- * @package Magento\CatalogGraphQl\Model\Resolver\Layer
  */
 class FilterableAttributesListFactory
 {

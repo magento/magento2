@@ -11,8 +11,6 @@ use Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection;
 
 /**
  * Collection Provider for graphql layered navigation.
- *
- * @package Magento\CatalogGraphQl\Model\Layer
  */
 class CollectionProvider implements \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface
 {

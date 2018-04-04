@@ -11,8 +11,6 @@ use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
  * Resolver for swatches layer filter type.
- *
- * @package Magento\SwatchesGraphQl\Model\Resolver
  */
 class SwatchLayerFilterItemResolver implements TypeResolverInterface
 {

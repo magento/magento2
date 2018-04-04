@@ -12,8 +12,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Composite resolver fo layered filter types.
- *
- * @package Magento\CatalogGraphQl\Model
  */
 class LayerFilterItemTypeResolverComposite implements TypeResolverInterface
 {

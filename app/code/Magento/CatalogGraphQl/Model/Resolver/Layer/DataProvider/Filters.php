@@ -12,8 +12,6 @@ use Magento\CatalogGraphQl\Model\Resolver\Layer\FiltersProvider;
 
 /**
  * Layered navigation filters data provider.
- *
- * @package Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider
  */
 class Filters
 {
