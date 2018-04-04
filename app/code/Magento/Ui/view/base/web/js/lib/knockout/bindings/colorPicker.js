@@ -52,8 +52,9 @@ define([
             }
         },
 
-        update: function(element, valueAccessor, allBindings, viewModel) {
+        update: function(element, valueAccessor) {
             var config = valueAccessor();
+
             if (tinycolor(config.value()).isValid() || config.value() === '') {
                 $(element).spectrum("set", config.value());
             }

@@ -969,9 +969,8 @@ define([
             function (value) {
                 if (value === '') {
                     return true;
-                } else {
-                    return tinycolor(value).isValid();
                 }
+                return tinycolor(value).isValid();
             },
             $.mage.__('Wrong color format.')
         ],

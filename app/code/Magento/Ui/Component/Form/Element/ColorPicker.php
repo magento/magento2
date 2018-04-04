@@ -29,7 +29,7 @@ class ColorPicker extends AbstractElement
      *
      * @var ColorModesProvider
      */
-    private $modeProvider;
+    private $modesProvider;
 
     /**
      * Constructor
