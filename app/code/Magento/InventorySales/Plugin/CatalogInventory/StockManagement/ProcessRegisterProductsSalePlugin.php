@@ -12,7 +12,7 @@ use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductType;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
@@ -54,7 +54,7 @@ class ProcessRegisterProductsSalePlugin
     private $getProductTypesBySkus;
 
     /**
-     * @var IsSourceItemsAllowedForProductType
+     * @var IsSourceItemsAllowedForProductTypeInterface
      */
     private $isSourceItemsAllowedForProductType;
 
@@ -65,7 +65,7 @@ class ProcessRegisterProductsSalePlugin
      * @param AppendReservationsInterface $appendReservations
      * @param IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
-     * @param IsSourceItemsAllowedForProductType $isSourceItemsAllowedForProductType
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
@@ -74,7 +74,7 @@ class ProcessRegisterProductsSalePlugin
         AppendReservationsInterface $appendReservations,
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
         GetProductTypesBySkusInterface $getProductTypesBySkus,
-        IsSourceItemsAllowedForProductType $isSourceItemsAllowedForProductType
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
@@ -102,10 +102,12 @@ class ProcessRegisterProductsSalePlugin
         if (null === $websiteId) {
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
+
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
         $productTypes = $this->getProductTypesBySkus->execute(array_values($productSkus));
         $this->checkItemsQuantity($items, $productSkus, $productTypes, $stockId);
+
         $reservations = [];
         foreach ($productSkus as $productId => $sku) {
             if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
@@ -117,10 +119,10 @@ class ProcessRegisterProductsSalePlugin
                 ->setStockId($stockId)
                 ->build();
         }
+
         if (!empty($reservations)) {
             $this->appendReservations->execute($reservations);
         }
-
         return [];
     }
 
