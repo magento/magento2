@@ -1168,6 +1168,10 @@ define([
             var clientHight = event.target.scrollTop + event.target.clientHeight,
                 scrollHeight = event.target.scrollHeight;
 
+            if (!this.searchOptions) {
+                return;
+            }
+
             if (clientHight > scrollHeight - this.deviation && !this.isSearchKeyCached(data.filterInputValue())) {
                 this.loadOptions(data.filterInputValue());
             }
