@@ -3,16 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryLinkManagement;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Model\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ */
 class ProductSearchTest extends GraphQlAbstract
 {
     /**
@@ -414,7 +423,6 @@ QUERY;
         page_info
         {
           page_size
-          current_page
         }
     }
 }
@@ -429,7 +437,7 @@ QUERY;
         $filteredProducts = [$product];
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertEquals(1, $response['products']['total_count']);
         $this->assertProductItems($filteredProducts, $response);
     }
 
@@ -495,14 +503,12 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $childProduct1 = $productRepository->get('simple1');
         $childProduct2 = $productRepository->get('simple2');
-        $childProduct3 = $productRepository->get('simple_31');
-        $childProduct4 = $productRepository->get('simple_32');
-        $filteredChildProducts = [$childProduct1, $childProduct2, $childProduct3, $childProduct4];
+        $filteredChildProducts = [$childProduct1, $childProduct2];
 
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('total_count', $response['products']);
-        $this->assertEquals(6, $response['products']['total_count']);
+        $this->assertEquals(2, $response['products']['total_count']);
         $this->assertProductItems($filteredChildProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
         $this->assertEquals(1, $response['products']['page_info']['current_page']);
@@ -559,7 +565,6 @@ QUERY;
         page_info
         {
           page_size
-          current_page
         }
     }
 }
@@ -572,10 +577,9 @@ QUERY;
         $filteredProducts = [$product];
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(5, $response['products']['total_count']);
+        $this->assertEquals(1, $response['products']['total_count']);
         $this->assertProductItems($filteredProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
-        $this->assertEquals(2, $response['products']['page_info']['current_page']);
     }
 
     /**
@@ -622,8 +626,95 @@ QUERY;
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()]
-         ];
+        ];
         $this->assertResponseFields($response['products']['items'][0], $assertionMap);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
+     * @return void
+     */
+    public function testFilterProductsByCategoryIds()
+    {
+        $queryCategoryId = 333;
+        $query
+            = <<<QUERY
+{
+  products(
+        filter:
+        {
+            category_ids:{eq:"{$queryCategoryId}"}
+        }
+    pageSize:2
+            
+     )
+    {
+      items
+      {
+       sku
+       name
+       type_id
+       category_ids
+       categories{
+          name
+          id
+          path
+          children_count
+          product_count
+          is_active
+        }
+      }
+       total_count
+        
+    }
+}
+
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        /** @var CategoryLinkManagement $productLinks */
+        $productLinks = ObjectManager::getInstance()->get(CategoryLinkManagement::class);
+        /** @var CategoryRepositoryInterface $categoryRepository */
+        $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
+
+        $links = $productLinks->getAssignedProducts($queryCategoryId);
+        foreach ($response['products']['items'] as $itemIndex => $itemData) {
+            $this->assertNotEmpty($itemData);
+            $this->assertEquals($response['products']['items'][$itemIndex]['sku'], $links[$itemIndex]->getSku());
+            /** @var ProductRepositoryInterface $productRepository */
+            $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+            /** @var ProductInterface $product */
+            $product = $productRepository->get($links[$itemIndex]->getSku());
+            $this->assertEquals($response['products']['items'][$itemIndex]['name'], $product->getName());
+            $this->assertEquals($response['products']['items'][$itemIndex]['type_id'], $product->getTypeId());
+            $categoryIds  = $product->getCategoryIds();
+            foreach ($categoryIds as $index => $value) {
+                $categoryIds[$index] = (int)$value;
+            }
+            $this->assertEquals($response['products']['items'][$itemIndex]['category_ids'], $categoryIds);
+            $categoryInResponse = array_map(
+                null,
+                $categoryIds,
+                $response['products']['items'][$itemIndex]['categories']
+            );
+            foreach ($categoryInResponse as $key => $categoryData) {
+                $this->assertNotEmpty($categoryData);
+                /** @var CategoryInterface | Category $category */
+                $category = $categoryRepository->get($categoryInResponse[$key][0]);
+                $this->assertResponseFields(
+                    $categoryInResponse[$key][1],
+                    [
+                        'name' => $category->getName(),
+                        'id' => $category->getId(),
+                        'path' => $category->getPath(),
+                        'children_count' => $category->getChildrenCount(),
+                        'product_count' => $category->getProductCount(),
+                        'is_active' => $category->getIsActive(),
+                    ]
+                );
+            }
+        }
     }
 
     /**
@@ -683,18 +774,11 @@ QUERY;
 QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-
         $visibleProduct1 = $productRepository->get('simple1');
         $visibleProduct2 = $productRepository->get('simple2');
-        $visibleProduct3 = $productRepository->get('simple_42');
-        $visibleProduct4 = $productRepository->get('simple_41');
-        $visibleProduct5 = $productRepository->get('simple_32');
-        $visibleProduct6 = $productRepository->get('simple_31');
-        $filteredProducts = [$visibleProduct3, $visibleProduct4,
-                             $visibleProduct5, $visibleProduct6, $visibleProduct2, $visibleProduct1];
-
+        $filteredProducts = [$visibleProduct2, $visibleProduct1];
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(6, $response['products']['total_count']);
+        $this->assertEquals(2, $response['products']['total_count']);
         $this->assertProductItems($filteredProducts, $response);
         $this->assertEquals(20, $response['products']['page_info']['page_size']);
         $this->assertEquals(1, $response['products']['page_info']['current_page']);
@@ -743,7 +827,8 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product1 = $productRepository->get('simple1');
         $product2 = $productRepository->get('simple2');
-        $filteredProducts = [$product1, $product2];
+        $filteredProducts = [$product2, $product1];
+
         $this->assertProductItemsWithMaximalAndMinimalPriceCheck($filteredProducts, $response);
     }
 
@@ -780,30 +865,31 @@ QUERY;
       }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
 
-        $prod1 = $productRepository->get('simple2');
-        $prod2 = $productRepository->get('simple1');
-        $filteredProducts = [$prod1, $prod2];
+        $prod1 = $productRepository->get('simple1');
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(1, $response['products']['total_count']);
+
+        $filteredProducts = [$prod1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [
-                 'sku' => $filteredProducts[$itemIndex]->getSku(),
-                 'name' => $filteredProducts[$itemIndex]->getName(),
-                 'price' => [
-                     'minimalPrice' => [
-                         'amount' => [
-                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
-                             'currency' => 'USD'
-                         ]
-                     ]
-                  ]
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
                 ]
             );
         }
@@ -872,18 +958,18 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 ['attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
-                 'sku' => $filteredProducts[$itemIndex]->getSku(),
-                 'name' => $filteredProducts[$itemIndex]->getName(),
-                 'price' => [
-                     'regularPrice' => [
-                         'amount' => [
-                             'value' => $filteredProducts[$itemIndex]->getPrice(),
-                             'currency' => 'USD'
-                         ]
-                     ]
-                 ],
-                 'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
-                 'weight' => $filteredProducts[$itemIndex]->getWeight()
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'regularPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ],
+                    'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                    'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
             );
         }
@@ -1053,23 +1139,23 @@ QUERY;
     {
         $productItemsInResponse = array_map(null, $actualResponse['products']['items'], $filteredProducts);
 
-        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
-            $this->assertNotEmpty($itemArray);
+        for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
+            $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 ['attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
-                 'sku' => $filteredProducts[$itemIndex]->getSku(),
-                 'name' => $filteredProducts[$itemIndex]->getName(),
-                 'price' => [
-                     'minimalPrice' => [
-                         'amount' => [
-                             'value' => $filteredProducts[$itemIndex]->getFinalPrice(),
-                             'currency' => 'USD'
-                         ]
-                     ]
-                 ],
-                 'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
-                 'weight' => $filteredProducts[$itemIndex]->getWeight()
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getFinalPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ],
+                    'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                    'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
             );
         }
@@ -1084,24 +1170,24 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 ['attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
-                 'sku' => $filteredProducts[$itemIndex]->getSku(),
-                 'name' => $filteredProducts[$itemIndex]->getName(),
-                 'price' => [
-                     'minimalPrice' => [
-                         'amount' => [
-                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
-                             'currency' => 'USD'
-                         ]
-                     ],
-                     'maximalPrice' => [
-                         'amount' => [
-                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
-                             'currency' => 'USD'
-                         ]
-                     ]
-                 ],
-                 'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
-                 'weight' => $filteredProducts[$itemIndex]->getWeight()
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ],
+                        'maximalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ],
+                    'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                    'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
             );
         }

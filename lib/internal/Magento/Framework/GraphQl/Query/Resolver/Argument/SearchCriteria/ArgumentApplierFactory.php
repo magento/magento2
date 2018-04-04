@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria;
 
@@ -39,10 +39,7 @@ class ArgumentApplierFactory
     {
         $appliers = [
             ArgumentApplier\Filter::ARGUMENT_NAME => ArgumentApplier\Filter::class,
-            ArgumentApplier\PageSize::ARGUMENT_NAME => ArgumentApplier\PageSize::class,
-            ArgumentApplier\CurrentPage::ARGUMENT_NAME => ArgumentApplier\CurrentPage::class,
-            ArgumentApplier\Sort::ARGUMENT_NAME => ArgumentApplier\Sort::class,
-            ArgumentApplier\Search::ARGUMENT_NAME => ArgumentApplier\Search::class
+            ArgumentApplier\Sort::ARGUMENT_NAME => ArgumentApplier\Sort::class
         ];
         if (isset($appliers[$argumentName])) {
             return $this->objectManager->create($appliers[$argumentName]);

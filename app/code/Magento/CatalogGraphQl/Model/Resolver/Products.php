@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
@@ -13,6 +13,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\SearchFilter;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -39,6 +40,11 @@ class Products implements ResolverInterface
     private $filterQuery;
 
     /**
+     * @var SearchFilter
+     */
+    private $searchFilter;
+
+    /**
      * @var ValueFactory
      */
     private $valueFactory;
@@ -58,12 +64,14 @@ class Products implements ResolverInterface
         Builder $searchCriteriaBuilder,
         Search $searchQuery,
         Filter $filterQuery,
+        SearchFilter $searchFilter,
         ValueFactory $valueFactory,
         \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
         $this->filterQuery = $filterQuery;
+        $this->searchFilter = $searchFilter;
         $this->valueFactory = $valueFactory;
         $this->filtersDataProvider = $filtersDataProvider;
     }
@@ -78,13 +86,16 @@ class Products implements ResolverInterface
         array $value = null,
         array $args = null
     ) : Value {
-        $searchCriteria = $this->searchCriteriaBuilder->build($args);
+        $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
+$searchCriteria->setCurrentPage($args['currentPage']);
+        $searchCriteria->setPageSize($args['pageSize']);
         if (!isset($args['search']) && !isset($args['filter'])) {
             throw new GraphQlInputException(
                 __("'search' or 'filter' input argument is required.")
             );
         } elseif (isset($args['search'])) {
             $layerType = Resolver::CATALOG_LAYER_SEARCH;
+            $this->searchFilter->add($args['search'], $searchCriteria);
             $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
         } else {
             $layerType = Resolver::CATALOG_LAYER_CATEGORY;

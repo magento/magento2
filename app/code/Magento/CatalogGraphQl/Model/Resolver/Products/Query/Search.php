@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
@@ -93,11 +93,11 @@ class Search
         $filter = $this->filterHelper->generate($idField, 'in', $searchIds);
         $searchCriteria = $this->filterHelper->remove($searchCriteria, 'search_term');
         $searchCriteria = $this->filterHelper->add($searchCriteria, $filter);
-        $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
+        $searchResult = $this->filterQuery->getResult($searchCriteria, $info, true);
 
         $searchCriteria->setPageSize($realPageSize);
         $searchCriteria->setCurrentPage($realCurrentPage);
-        $paginatedProducts = $this->paginateList($searchResult->getProductsSearchResult(), $searchCriteria);
+        $paginatedProducts = $this->paginateList($searchResult, $searchCriteria);
 
         $products = [];
         if (!isset($searchCriteria->getSortOrders()[0])) {
@@ -122,15 +122,25 @@ class Search
     /**
      * Paginate an array of Ids that get pulled back in search based off search criteria and total count.
      *
-     * @param array $products
+     * @param SearchResult $searchResult
      * @param SearchCriteriaInterface $searchCriteria
      * @return int[]
      */
-    private function paginateList(array $products, SearchCriteriaInterface $searchCriteria) : array
+    private function paginateList(SearchResult $searchResult, SearchCriteriaInterface $searchCriteria) : array
     {
         $length = $searchCriteria->getPageSize();
         // Search starts pages from 0
         $offset = $length * ($searchCriteria->getCurrentPage() - 1);
-        return array_slice($products, $offset, $length);
+
+        if ($searchCriteria->getPageSize()) {
+            $maxPages = ceil($searchResult->getTotalCount() / $searchCriteria->getPageSize()) - 1;
+        } else {
+            $maxPages = 0;
+        }
+
+        if ($searchCriteria->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
+            $offset = (int)$maxPages;
+        }
+        return array_slice($searchResult->getProductsSearchResult(), $offset, $length);
     }
 }

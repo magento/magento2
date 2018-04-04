@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
@@ -284,7 +285,7 @@ QUERY;
      */
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
-
+        $this->markTestSkipped("Skipped until ticket MAGETWO-90021 is resolved.");
         $productSku = 'simple';
 
         $query = <<<QUERY
@@ -491,7 +492,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-
+        
         /**
          * @var ProductRepositoryInterface $productRepository
          */

@@ -1,9 +1,10 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GraphQl\Controller;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -16,7 +17,7 @@ use Magento\Framework\Serialize\SerializerInterface;
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
  *
  * @magentoAppArea graphql
- * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
+ * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
  */
 
 class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
@@ -49,7 +50,7 @@ class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *  Tests if a graphql schema is generated and request is dispatched and response generated
+     * Tests if a graphql schema is generated and request is dispatched and response generated
      */
     public function testDispatch()
     {
@@ -57,12 +58,12 @@ class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
 
         /** @var ProductInterface $product */
-        $product = $productRepository->get('simple');
+        $product = $productRepository->get('simple1');
 
         $query
             = <<<QUERY
  {
-           products(filter: {sku: {eq: "simple"}})
+           products(filter: {sku: {eq: "simple1"}})
            {
                items {
                    id
@@ -87,6 +88,7 @@ QUERY;
         $response = $this->graphql->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $this->assertTrue(count($output['data']['products']['items']) > 0, 'Products array has items');
         $this->assertEquals($output['data']['products']['items'][0]['id'], $product->getData($linkField));
         $this->assertEquals($output['data']['products']['items'][0]['sku'], $product->getSku());
         $this->assertEquals($output['data']['products']['items'][0]['name'], $product->getName());

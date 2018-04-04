@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Config\Data;
 
@@ -43,8 +43,8 @@ class WrappedTypeProcessor
      * Examples: nullable or required
      *
      * @param FieldInterface $field
-     * @param \Magento\Framework\GraphQl\Config\Element\TypeInterface $object
-     * @return \Magento\Framework\GraphQl\Config\Element\TypeInterface
+     * @param TypeInterface $object
+     * @return TypeInterface
      */
     public function processWrappedType(FieldInterface $field, TypeInterface $object = null) : TypeInterface
     {
@@ -57,7 +57,7 @@ class WrappedTypeProcessor
      * Examples: nullable or required.
      *
      * @param FieldInterface $field
-     * @param \Magento\Framework\GraphQl\Config\Element\TypeInterface $object
+     * @param TypeInterface $object
      * @return \GraphQL\Type\Definition\Type
      */
     public function processScalarWrappedType(
@@ -74,8 +74,8 @@ class WrappedTypeProcessor
      * Return passed in type wrapped as a non null type if definition determines necessary.
      *
      * @param FieldInterface $field
-     * @param \Magento\Framework\GraphQl\Config\Element\TypeInterface $object
-     * @return \Magento\Framework\GraphQl\Config\Element\TypeInterface
+     * @param TypeInterface $object
+     * @return TypeInterface
      */
     private function processIsNullable(FieldInterface $field, TypeInterface $object = null) : TypeInterface
     {
@@ -89,8 +89,8 @@ class WrappedTypeProcessor
      * Return passed in type wrapped as a list if definition determines necessary.
      *
      * @param FieldInterface $field
-     * @param \Magento\Framework\GraphQl\Config\Element\TypeInterface $object
-     * @return \Magento\Framework\GraphQl\Config\Element\TypeInterface
+     * @param TypeInterface $object
+     * @return TypeInterface
      */
     private function processIsList(FieldInterface $field, TypeInterface $object = null) : TypeInterface
     {

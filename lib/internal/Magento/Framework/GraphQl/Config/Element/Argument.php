@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Config\Element;
 
@@ -159,9 +159,9 @@ class Argument implements FieldInterface
     /**
      * Return defaultValue if argument is a scalar and has a configured defaultValue. Otherwise return an empty string.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDefaultValue() : string
+    public function getDefaultValue() : ?string
     {
         return $this->defaultValue;
     }

@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplier;
 
-use Magento\Framework\GraphQl\Query\Resolver\Argument\AstConverterInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\AstConverter;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplierInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\FilterGroupFactory;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\Filter\ConnectiveFactory;
 
 /**
  * Class for Filter Argument
@@ -25,28 +26,43 @@ class Filter implements ArgumentApplierInterface
     private $filterGroupFactory;
 
     /**
-     * @var AstConverterInterface
+     * @var AstConverter
      */
     private $astConverter;
 
     /**
-     * @param AstConverterInterface $astConverter
-     * @param FilterGroupFactory $filterGroupFactory
+     * @var ConnectiveFactory
      */
-    public function __construct(AstConverterInterface $astConverter, FilterGroupFactory $filterGroupFactory)
-    {
+    private $connectiveFactory;
+
+    /**
+     * @param AstConverter $astConverter
+     * @param FilterGroupFactory $filterGroupFactory
+     * @param ConnectiveFactory $connectiveFactory
+     */
+    public function __construct(
+        AstConverter $astConverter,
+        FilterGroupFactory $filterGroupFactory,
+        ConnectiveFactory $connectiveFactory
+    ) {
         $this->astConverter = $astConverter;
         $this->filterGroupFactory = $filterGroupFactory;
+        $this->connectiveFactory = $connectiveFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument) : SearchCriteriaInterface
-    {
-        $filters = $this->astConverter->convert('catalog_product', $argument);
+    public function applyArgument(
+        SearchCriteriaInterface $searchCriteria,
+        string $fieldName,
+        string $argumentName,
+        array $argument
+    ) : SearchCriteriaInterface {
+        $filters = $this->astConverter->getClausesFromAst($fieldName, $argument);
+        $filtersForGroup = $this->connectiveFactory->create($filters);
         $filterGroups = $searchCriteria->getFilterGroups();
-        $filterGroups = array_merge($filterGroups, $this->filterGroupFactory->create($filters));
+        $filterGroups = array_merge($filterGroups, $this->filterGroupFactory->create($filtersForGroup));
         $searchCriteria->setFilterGroups($filterGroups);
         return $searchCriteria;
     }
