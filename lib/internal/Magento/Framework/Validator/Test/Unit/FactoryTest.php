@@ -53,8 +53,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->_defaultTranslator = \Magento\Framework\Validator\AbstractValidator::getDefaultTranslator();
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList');
-        $this->_fileIterator = $this->getMock('Magento\Framework\Config\FileIteratorFactory');
+        $this->_directoryList = $this->_objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
+        $this->_fileIterator = $this->_objectManager->get('Magento\Framework\Config\FileIteratorFactory');
         $this->_validatorConfig = $this->getMockBuilder(
             'Magento\Framework\Validator\Config'
         )->setMethods(
