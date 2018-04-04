@@ -117,30 +117,47 @@ class LowQuantityCollection extends AbstractCollection
     /**
      * @inheritdoc
      */
-    protected function _beforeLoad()
+    protected function _initSelect()
     {
-        parent::_beforeLoad();
+        parent::_initSelect();
 
         $this->addFilterToMap('source_code', 'main_table.source_code');
         $this->addFilterToMap('sku', 'main_table.sku');
         $this->addFilterToMap('product_name', 'product_entity_varchar.value');
-
-        $this->addFieldToSelect('*');
-
-        $this->joinCatalogProduct();
-        $this->joinInventoryConfiguration();
-
-        $this->addProductTypeFilter();
-        $this->addNotifyStockQtyFilter();
-        $this->addEnabledSourceFilter();
-        $this->addSourceItemInStockFilter();
-
-        $this->setOrder(SourceItemInterface::QUANTITY, self::SORT_ORDER_ASC);
-
         return $this;
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function _renderFilters()
+    {
+        if (false === $this->_isFiltersRendered) {
+            $this->joinInventoryConfiguration();
+            $this->joinCatalogProduct();
+
+            $this->addProductTypeFilter();
+            $this->addNotifyStockQtyFilter();
+            $this->addEnabledSourceFilter();
+            $this->addSourceItemInStockFilter();
+        }
+        return parent::_renderFilters();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _renderOrders()
+    {
+        if (false === $this->_isOrdersRendered) {
+            $this->setOrder(SourceItemInterface::QUANTITY, self::SORT_ORDER_ASC);
+        }
+        return parent::_renderOrders();
+    }
+
+    /**
+     * joinCatalogProduct depends on dynamic condition 'filterStoreId'
+     *
      * @return void
      */
     private function joinCatalogProduct()
@@ -209,7 +226,7 @@ class LowQuantityCollection extends AbstractCollection
      */
     private function addProductTypeFilter()
     {
-        $this->addFieldToFilter('type_id', $this->getAllowedProductTypesForSourceItems->execute());
+        $this->addFieldToFilter('product_entity.type_id', $this->getAllowedProductTypesForSourceItems->execute());
     }
 
     /**
