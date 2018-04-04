@@ -8,13 +8,14 @@ define([
     'underscore',
     'uiRegistry',
     'Magento_Ui/js/form/element/ui-select',
-    'ko'
-], function (_, registry, Constr, ko) {
+    'ko',
+    'jquery'
+], function (_, registry, Constr, ko, $) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/ui-select', function () {
-
-        var obj;
+        var obj,
+            jQueryMethodsOverridden = {};
 
         beforeEach(function () {
             obj = new Constr({
@@ -25,6 +26,14 @@ define([
 
             obj.value = ko.observableArray([]);
             obj.cacheOptions.plain = [];
+
+            jQueryMethodsOverridden = {};
+        });
+
+        afterEach(function () {
+            _.each(jQueryMethodsOverridden, function (value, key) {
+                $.fn[key] = value;
+            });
         });
 
         describe('"initialize" method', function () {
@@ -575,26 +584,30 @@ define([
             });
         });
         describe('"isSearchKeyCached" method', function () {
-            it('Should return true if searchKey has already been cached and currentPage <= lastPage', function () {
+            it('Should return false if searchKey has already been cached and total covers > 1 page', function () {
+                obj.deviation = 30;
                 obj.cachedSearchResults = {
                     cake: {
-                        options: [],
-                        lastPage: 1
+                        options: [/** 50 options **/],
+                        lastPage: 1,
+                        total: 50
                     }
                 };
 
-                expect(obj.isSearchKeyCached('cake', 1)).toBe(true);
+                expect(obj.isSearchKeyCached('cake')).toBe(false);
             });
 
-            it('Should return false if searchKey has already been cached and currentPage > lastPage', function () {
+            it('Should return true if searchKey has already been cached and total only covers 1 page', function () {
+                obj.deviation = 30;
                 obj.cachedSearchResults = {
                     cake: {
-                        options: [],
-                        lastPage: 1
+                        options: [/** 29 options **/],
+                        lastPage: 1,
+                        total: 29
                     }
                 };
 
-                expect(obj.isSearchKeyCached('cake', 2)).toBe(false);
+                expect(obj.isSearchKeyCached('cake')).toBe(true);
             });
 
             it('Should return false if searchKey is not cached', function () {
@@ -607,12 +620,41 @@ define([
                     value: 'delicious'
                 }];
 
-                obj.setCachedSearchResults('cake', options, 1);
+                obj.setCachedSearchResults('cake', options, 1, 1);
 
                 expect(obj.getCachedSearchResults('cake')).toEqual({
                     options: options,
-                    lastPage: 1
+                    lastPage: 1,
+                    total: 1
                 });
+            });
+        });
+        describe('"processRequest" method', function () {
+            it('Should store options successfully fetched from ajax request', function () {
+                var ajaxRequest,
+                    successfulAjaxResponse = {
+                    options: {
+                        '2053': {
+                            value: '2053',
+                            label: 'testProductName5a8ddfd933b5c',
+                            'is_active': 1,
+                            path: 'testSku5a8ddfd933b5c',
+                            optgroup: false
+                        }
+                    }
+                };
+
+                jQueryMethodsOverridden.ajax = $.ajax;
+
+                spyOn($, 'ajax').and.callFake(function (request) {
+                    ajaxRequest = request.success.bind(obj);
+                });
+
+                expect(obj.processRequest()).toBeUndefined();
+
+                ajaxRequest(successfulAjaxResponse);
+
+                expect(obj.options()).toEqual([successfulAjaxResponse.options['2053']]);
             });
         });
     });
