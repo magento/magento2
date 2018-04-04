@@ -11,6 +11,7 @@ use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * Plugin makes connection between Store and UrlRewrite modules
@@ -29,23 +30,24 @@ class Switcher
     private $urlFinder;
 
     /**
-     * @var RouteConfig
+     * @var HttpRequest
      */
-    private $routeConfig;
+    private $request;
 
     /**
      * @param PostHelper $postHelper
      * @param UrlFinderInterface $urlFinder
      * @param RouteConfig $routeConfig
+     * @param HttpRequest $request
      */
     public function __construct(
         PostHelper $postHelper,
         UrlFinderInterface $urlFinder,
-        RouteConfig $routeConfig
+        HttpRequest $request
     ) {
         $this->postHelper = $postHelper;
         $this->urlFinder = $urlFinder;
-        $this->routeConfig = $routeConfig;
+        $this->request = $request;
     }
 
     /**
@@ -70,11 +72,10 @@ class Switcher
 
         $urlToSwitch = $currentUrl;
 
-        //check rewrites for non-existing routes
-        $frontName = ltrim($urlPath, '/');
-        if (false === $this->routeConfig->getRouteByFrontName($frontName)) {
+        //check only catalog pages
+        if ($this->request->getFrontName() === 'catalog') {
             $currentRewrite = $this->urlFinder->findOneByData([
-                UrlRewrite::REQUEST_PATH => $frontName,
+                UrlRewrite::REQUEST_PATH => ltrim($urlPath, '/'),
                 UrlRewrite::STORE_ID => $store->getId(),
             ]);
             if (null === $currentRewrite) {
