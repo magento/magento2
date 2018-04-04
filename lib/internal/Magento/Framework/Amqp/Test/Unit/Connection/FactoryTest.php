@@ -14,7 +14,7 @@ use PhpAmqpLib\Connection\AMQPSSLConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 /**
- * Tests \Magento\Framework\Amqp\Connection\Factory
+ * Tests \Magento\Framework\Amqp\Connection\Factory.
  */
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -121,7 +121,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             [
                 'ssl_enabled' => false,
                 'connection_class' => AMQPStreamConnection::class,
-            ]
+            ],
         ];
     }
 
