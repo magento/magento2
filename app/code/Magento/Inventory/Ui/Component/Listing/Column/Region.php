@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Ui\Component\Listing\Column;
 
+use Magento\Directory\Model\ResourceModel\RegionFactory as RegionResourceFactory;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -18,6 +19,11 @@ use Magento\Ui\Component\Listing\Columns\Column;
 class Region extends Column
 {
     /**
+     * @var RegionResourceFactory
+     */
+    private $regionResourceFactory;
+
+    /**
      * @var RegionFactory
      */
     private $regionFactory;
@@ -26,6 +32,7 @@ class Region extends Column
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param RegionFactory $regionFactory
+     * @param RegionResourceFactory $regionResourceFactory
      * @param array $components
      * @param array $data
      */
@@ -33,11 +40,14 @@ class Region extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         RegionFactory $regionFactory,
+        RegionResourceFactory $regionResourceFactory,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
+
         $this->regionFactory = $regionFactory;
+        $this->regionResourceFactory = $regionResourceFactory;
     }
 
     /**
@@ -49,7 +59,9 @@ class Region extends Column
             foreach ($dataSource['data']['items'] as &$item) {
                 if (isset($item['region_id']) && $item['region_id'] != 0) {
                     $region = $this->regionFactory->create();
-                    $region->load($item['region_id']);
+                    $regionResource = $this->regionResourceFactory->create();
+                    $regionResource->load($region, $item['region_id']);
+
                     $item['region'] = $region->getName();
                 }
             }
