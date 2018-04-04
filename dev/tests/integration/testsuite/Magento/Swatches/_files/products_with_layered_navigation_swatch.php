@@ -95,7 +95,6 @@ $eavConfig->clear();
 $attribute = $eavConfig->getAttribute('catalog_product', 'color_swatch');
 $options = $attribute->getOptions();
 
-
 // workaround for saved attribute
 $attribute->setDefaultValue($options[1]->getValue());
 
@@ -173,8 +172,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setSpecialPrice('25.99')
     ->save();
 
-
-
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(
@@ -201,8 +198,6 @@ $category->setId(
     [10 => 10, 11 => 11, 12 => 12]
 )->save();
 
-
-
 /** @var \Magento\Indexer\Model\Indexer\Collection $indexerCollection */
 $indexerCollection = Bootstrap::getObjectManager()->get(\Magento\Indexer\Model\Indexer\Collection::class);
 $indexerCollection->load();
@@ -210,4 +205,3 @@ $indexerCollection->load();
 foreach ($indexerCollection->getItems() as $indexer) {
     $indexer->reindexAll();
 }
-

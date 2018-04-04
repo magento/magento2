@@ -87,7 +87,7 @@ class Products implements ResolverInterface
         array $args = null
     ) : Value {
         $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
-$searchCriteria->setCurrentPage($args['currentPage']);
+        $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
         if (!isset($args['search']) && !isset($args['filter'])) {
             throw new GraphQlInputException(

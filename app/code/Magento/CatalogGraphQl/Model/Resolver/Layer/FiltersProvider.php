@@ -21,7 +21,7 @@ class FiltersProvider
     private $layerResolver;
 
     /**
-     * @var \Magento\CatalogGraphQl\Model\Resolver\Layer\FilterableAttributesListFactory
+     * @var FilterableAttributesListFactory
      */
     private $filterableAttributesListFactory;
 
@@ -33,7 +33,7 @@ class FiltersProvider
     /**
      * FiltersProvider constructor.
      * @param Resolver $layerResolver
-     * @param \Magento\CatalogGraphQl\Model\Resolver\Layer\FilterableAttributesListFactory $filterableAttributesListFactory
+     * @param FilterableAttributesListFactory $filterableAttributesListFactory
      * @param FilterListFactory $filterListFactory
      */
     public function __construct(
@@ -41,7 +41,6 @@ class FiltersProvider
         FilterableAttributesListFactory $filterableAttributesListFactory,
         FilterListFactory $filterListFactory
     ) {
-
         $this->layerResolver = $layerResolver;
         $this->filterableAttributesListFactory = $filterableAttributesListFactory;
         $this->filterListFactory = $filterListFactory;

@@ -44,7 +44,7 @@ class CollectionProvider implements \Magento\Catalog\Model\Layer\ItemCollectionP
     public function getCollection(\Magento\Catalog\Model\Category $category)
     {
         if (!$this->collection) {
-            $this->collection = $this->collectionFactory->create();;
+            $this->collection = $this->collectionFactory->create();
         }
         return $this->collection;
     }
