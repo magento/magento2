@@ -18,11 +18,11 @@ class SourceRegionDataProcessor
      */
     public function process(array $data): array
     {
-        if (isset($data['region_id']) && '' === $data['region_id']) {
+        if (!isset($data['region_id']) || '' === $data['region_id']) {
             $data['region_id'] = null;
         }
 
-        if (isset($data['region']) && '' === trim($data['region'])) {
+        if (null !== $data['region_id'] || !isset($data['region']) || '' === trim($data['region'])) {
             $data['region'] = null;
         }
 
