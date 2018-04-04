@@ -23,6 +23,7 @@ use Magento\Framework\DataObject;
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductSearchTest extends GraphQlAbstract
 {
