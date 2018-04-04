@@ -36,16 +36,16 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
             'selector' => '.price-to .price',
         ],
         'price_excluding_tax' => [
-            'selector' => '.price-excluding-tax .price'
+            'selector' => '.price-excluding-tax .price',
         ],
         'price_including_tax' => [
-            'selector' => '.price-including-tax .price'
+            'selector' => '.price-including-tax .price',
         ],
         'old_price_from' => [
-            'selector' => '.price-from .old-price .price-wrapper'
+            'selector' => '.price-from .old-price .price-wrapper',
         ],
         'old_price_to' => [
-            'selector' => '.price-to .old-price .price-wrapper'
+            'selector' => '.price-to .old-price .price-wrapper',
         ],
     ];
 

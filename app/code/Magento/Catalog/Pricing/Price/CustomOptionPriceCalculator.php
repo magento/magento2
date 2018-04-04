@@ -37,8 +37,10 @@ class CustomOptionPriceCalculator
         if ($optionValue->getPriceType() === ProductOptionValue::TYPE_PERCENT) {
             $basePrice = $optionValue->getOption()->getProduct()->getPriceInfo()->getPrice($priceCode)->getValue();
             $price = $basePrice * ($optionValue->getData(ProductOptionValue::KEY_PRICE) / 100);
+
             return $price;
         }
+
         return $optionValue->getData(ProductOptionValue::KEY_PRICE);
     }
 }

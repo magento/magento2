@@ -1414,12 +1414,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $productTypePriceMock->expects($this->any())
             ->method('getFinalPrice')
             ->with($qty, $this->model)
-            ->will($this->returnValue($finalPrice));
+            ->willReturn($finalPrice);
 
         $this->productTypeInstanceMock->expects($this->any())
             ->method('priceFactory')
             ->with($this->model->getTypeId())
-            ->will($this->returnValue($productTypePriceMock));
+            ->willReturn($productTypePriceMock);
 
         $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
     }
