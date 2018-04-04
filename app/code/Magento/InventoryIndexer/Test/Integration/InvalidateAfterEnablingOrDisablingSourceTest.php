@@ -38,118 +38,21 @@ class InvalidateAfterEnablingOrDisablingSourceTest extends TestCase
     }
 
     /**
-     * Tests Source enabling and disabling when no Stocks or Source Items are connected to current Source.
-     *
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     *
-     * @dataProvider IndexerInvalidationOnlySourcesDataProvider
-     * @param string $sourceCode
-     * @param bool $enable
-     * @param bool $expectedValid
-     */
-    public function testIndexerInvalidationOnlySources(string $sourceCode, bool $enable, bool $expectedValid)
-    {
-        $this->setSourceEnabledStatus($sourceCode, $enable);
-
-        $this->assertEquals($expectedValid, $this->indexer->isValid());
-    }
-
-    /**
-     * @return array
-     */
-    public function indexerInvalidationOnlySourcesDataProvider(): array
-    {
-        return [
-            ['eu-1', true, true],
-            ['eu-1', false, true],
-            ['eu-disabled', true, true],
-            ['eu-disabled', false, true],
-        ];
-    }
-
-    /**
-     * Tests Source enabling and disabling when no Stocks are connected to current Source.
-     *
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     *
-     * @dataProvider IndexerInvalidationNoStockLinksDataProvider
-     * @param string $sourceCode
-     * @param bool $enable
-     * @param bool $expectedValid
-     */
-    public function testIndexerInvalidationNoStockLinks(string $sourceCode, bool $enable, bool $expectedValid)
-    {
-        $this->setSourceEnabledStatus($sourceCode, $enable);
-
-        $this->assertEquals($expectedValid, $this->indexer->isValid());
-    }
-
-    /**
-     * @return array
-     */
-    public function indexerInvalidationNoStockLinksDataProvider(): array
-    {
-        return [
-            ['eu-1', true, true],
-            ['eu-1', false, true],
-            ['eu-disabled', true, true],
-            ['eu-disabled', false, true],
-        ];
-    }
-
-    /**
-     * Tests Source enabling and disabling when no Source Items are connected to current Source.
-     *
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     *
-     * @dataProvider IndexerInvalidationNoSourceItemsDataProvider
-     * @param string $sourceCode
-     * @param bool $enable
-     * @param bool $expectedValid
-     */
-    public function testIndexerInvalidationNoSourceItems(string $sourceCode, bool $enable, bool $expectedValid)
-    {
-        $this->setSourceEnabledStatus($sourceCode, $enable);
-
-        $this->assertEquals($expectedValid, $this->indexer->isValid());
-    }
-
-    /**
-     * @return array
-     */
-    public function indexerInvalidationNoSourceItemsDataProvider(): array
-    {
-        return [
-            ['eu-1', true, true],
-            ['eu-1', false, true],
-            ['eu-disabled', true, true],
-            ['eu-disabled', false, true],
-        ];
-    }
-
-    /**
      * Tests Source enabling and disabling when both Stocks and Source Items are connected to current Source.
      *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
-     * @dataProvider IndexerInvalidationFullDataProvider
+     * @dataProvider indexerInvalidationDataProvider
      * @param string $sourceCode
      * @param bool $enable
      * @param bool $expectedValid
      */
-    public function testIndexerInvalidationFull(string $sourceCode, bool $enable, bool $expectedValid)
+    public function testIndexerInvalidation(string $sourceCode, bool $enable, bool $expectedValid)
     {
         $this->setSourceEnabledStatus($sourceCode, $enable);
 
@@ -159,12 +62,46 @@ class InvalidateAfterEnablingOrDisablingSourceTest extends TestCase
     /**
      * @return array
      */
-    public function indexerInvalidationFullDataProvider(): array
+    public function indexerInvalidationDataProvider(): array
     {
         return [
             ['eu-1', true, true],
             ['eu-1', false, false],
             ['eu-disabled', true, false],
+            ['eu-disabled', false, true],
+        ];
+    }
+
+    /**
+     * Tests Source enabling and disabling when no Stocks or Source Items are connected to Source.
+     *
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @dataProvider sourceHasNotAnyRelationsDataProvider
+     * @param string $sourceCode
+     * @param bool $enable
+     * @param bool $expectedValid
+     */
+    public function testIndexerInvalidationIfSourceHasNotAnyRelations(
+        string $sourceCode,
+        bool $enable,
+        bool $expectedValid
+    ) {
+        $this->setSourceEnabledStatus($sourceCode, $enable);
+
+        $this->assertEquals($expectedValid, $this->indexer->isValid());
+    }
+
+    /**
+     * @return array
+     */
+    public function sourceHasNotAnyRelationsDataProvider(): array
+    {
+        return [
+            ['eu-1', true, true],
+            ['eu-1', false, true],
+            ['eu-disabled', true, true],
             ['eu-disabled', false, true],
         ];
     }
