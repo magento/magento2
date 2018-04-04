@@ -42,9 +42,9 @@
                                 <label
                                     class="rating-<?php /* @escapeNotVerified */ echo $iterator; ?>"
                                     for="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>"
-                                    title="<?php /* @escapeNotVerified */ echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?>"
+                                    title="<?php /* @escapeNotVerified */ echo __('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star')) ?>"
                                     id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>_label">
-                                    <span><?php /* @escapeNotVerified */ echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?></span>
+                                    <span><?php /* @escapeNotVerified */ echo __('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star')) ?></span>
                                 </label>
                             <?php $iterator++; ?>
                             <?php endforeach; ?>
