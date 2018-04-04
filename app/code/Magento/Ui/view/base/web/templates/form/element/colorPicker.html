@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__field"
+<div class="admin__field-control"
      visible="visible"
      css="$data.additionalClasses">
     <input type="hidden" class="colorpicker-spectrum" data-bind="colorPicker: colorPickerConfig, attr: { disabled: disabled }" />
-    <input type="text" class="colorpicker-input" data-bind="
+    <input type="text" class="admin__control-text colorpicker-input" data-bind="
         value: value,
         hasFocus: focused,
         attr: { id: uid, placeholder: placeholder, disabled: disabled }" />
