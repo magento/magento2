@@ -20,7 +20,7 @@ class DefaultMapper implements MapperInterface
     /**
      * @param array $map
      */
-    public function __construct(array $map)
+    public function __construct(array $map = [])
     {
         $this->map = $map;
     }

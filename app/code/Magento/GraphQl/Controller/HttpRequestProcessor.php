@@ -22,7 +22,7 @@ class HttpRequestProcessor
     /**
      * @param HttpHeaderProcessorInterface[] $graphQlHeaders
      */
-    public function __construct(array $graphQlHeaders)
+    public function __construct(array $graphQlHeaders = [])
     {
         $this->headerProcessors = $graphQlHeaders;
     }
