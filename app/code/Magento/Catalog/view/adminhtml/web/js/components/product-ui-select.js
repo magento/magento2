@@ -21,6 +21,15 @@ define([
         initialize: function () {
             this._super();
 
+            this.validateInitialValue();
+
+            return this;
+        },
+
+        /**
+         * Validate initial value actually exists
+         */
+        validateInitialValue: function () {
             if (this.value()) {
                 $.ajax({
                     url: this.validationUrl,
@@ -53,8 +62,6 @@ define([
             } else {
                 this.validationLoading(false);
             }
-
-            return this;
         },
 
         /** @inheritdoc */
