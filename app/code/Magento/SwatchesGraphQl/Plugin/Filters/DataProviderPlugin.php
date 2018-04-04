@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\SwatchesGraphQl\Plugin\Filters;
 
@@ -12,8 +13,6 @@ use Magento\CatalogGraphQl\Model\Resolver\Layer\FiltersProvider;
 
 /**
  * Plugin to add swatch data to filters data from filters data provider.
- *
- * @package Magento\SwatchesGraphQl\Plugin\Filters
  */
 class DataProviderPlugin
 {
@@ -58,7 +57,7 @@ class DataProviderPlugin
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function aroundGetData(Filters $subject, \Closure $proceed, string $layerType)
+    public function aroundGetData(Filters $subject, \Closure $proceed, string $layerType) : array
     {
         $swatchFilters = [];
         /** @var AbstractFilter $filter */

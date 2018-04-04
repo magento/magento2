@@ -49,7 +49,7 @@ class Context implements \Magento\Catalog\Model\Layer\ContextInterface
     /**
      * @return ItemCollectionProviderInterface
      */
-    public function getCollectionProvider()
+    public function getCollectionProvider() : ItemCollectionProviderInterface
     {
         return $this->collectionProvider;
     }
@@ -57,7 +57,7 @@ class Context implements \Magento\Catalog\Model\Layer\ContextInterface
     /**
      * @return StateKeyInterface
      */
-    public function getStateKey()
+    public function getStateKey() : StateKeyInterface
     {
         return $this->stateKey;
     }
@@ -65,7 +65,7 @@ class Context implements \Magento\Catalog\Model\Layer\ContextInterface
     /**
      * @return CollectionFilterInterface
      */
-    public function getCollectionFilter()
+    public function getCollectionFilter() : CollectionFilterInterface
     {
         return $this->collectionFilter;
     }

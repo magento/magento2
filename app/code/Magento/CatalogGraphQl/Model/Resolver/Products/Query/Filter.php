@@ -88,7 +88,7 @@ class Filter
      * @param ResolveInfo $info
      * @return string[]
      */
-    private function getProductFields(ResolveInfo $info)
+    private function getProductFields(ResolveInfo $info) : array
     {
         $fieldNames = [];
         foreach ($info->fieldNodes as $node) {

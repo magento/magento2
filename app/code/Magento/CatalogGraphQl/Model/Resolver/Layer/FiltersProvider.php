@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Layer;
 
@@ -31,7 +31,6 @@ class FiltersProvider
     private $filterListFactory;
 
     /**
-     * FiltersProvider constructor.
      * @param Resolver $layerResolver
      * @param FilterableAttributesListFactory $filterableAttributesListFactory
      * @param FilterListFactory $filterListFactory
