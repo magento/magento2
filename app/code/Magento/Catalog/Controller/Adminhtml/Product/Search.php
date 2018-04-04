@@ -94,11 +94,10 @@ class Search extends \Magento\Backend\App\Action
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
-        return $resultJson->setData(
-            [
-                'options' => $productById,
-                'total' => empty($productById) ? 0 : $totalVaues
-            ]);
+        return $resultJson->setData([
+            'options' => $productById,
+            'total' => empty($productById) ? 0 : $totalVaues
+        ]);
     }
 
     /**
