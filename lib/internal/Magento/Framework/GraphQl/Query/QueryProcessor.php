@@ -61,9 +61,6 @@ class QueryProcessor
             $contextValue,
             $variableValues,
             $operationName
-        )->toArray(
-            $this->exceptionFormatter->shouldShowDetail() ?
-                \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE | \GraphQL\Error\Debug::INCLUDE_TRACE : false
-        );
+        )->toArray(\GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE | \GraphQL\Error\Debug::INCLUDE_TRACE);
     }
 }
