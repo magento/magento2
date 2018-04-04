@@ -7,6 +7,7 @@
 declare(strict_types=1);
 
 namespace Magento\Webapi\Model;
+
 /**
  * This class gives access to consolidated web API configuration from <Module_Name>/etc/webapi.xml files.
  *
