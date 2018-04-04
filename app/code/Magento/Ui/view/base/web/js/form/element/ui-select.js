@@ -1195,6 +1195,7 @@ define([
          * @param {String} searchKey
          * @param {Array} optionsArray
          * @param {Number} page
+         * @param {Number} total
          */
         setCachedSearchResults: function (searchKey, optionsArray, page, total) {
             var cachedData = {};
