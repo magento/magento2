@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Inventory\Model\ResourceModel\Source;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -25,12 +26,20 @@ class ApplyBaseJoins
     private $resourceConnection;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param ResourceConnection $resourceConnection
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        MetadataPool $metadataPool
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -40,6 +49,9 @@ class ApplyBaseJoins
      */
     public function execute(Select $select)
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
+
         $sourceItemConfigurationTable = 'inventory_low_stock_notification_configuration';
         $configurationJoinCondition =
             'source_item_config.' . SourceItemConfigurationInterface::SKU . ' = product.' . ProductInterface::SKU . ' '
@@ -61,20 +73,11 @@ class ApplyBaseJoins
             ['source_item_config.' . SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]
         )->join(
             ['invtr' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
-            'invtr.product_id = product.entity_id',
+            'invtr.product_id = product.' . $linkField,
             [
                 'invtr.' . StockItemInterface::LOW_STOCK_DATE,
                 'use_config' => 'invtr.' . StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY
             ]
-        )->join(
-            ['product_varchar' => $this->resourceConnection->getTableName('catalog_product_entity_varchar')],
-            'product_varchar.entity_id = product.entity_id',
-            ['name' => 'product_varchar.value']
-        )->join(
-            ['product_int' => $this->resourceConnection->getTableName('catalog_product_entity_int')],
-            'product_int.entity_id = product.entity_id',
-            ['status' => 'product_int.value']
-        )
-            ->group('main_table.' . SourceItem::ID_FIELD_NAME);
+        )->group('main_table.' . SourceItem::ID_FIELD_NAME);
     }
 }
