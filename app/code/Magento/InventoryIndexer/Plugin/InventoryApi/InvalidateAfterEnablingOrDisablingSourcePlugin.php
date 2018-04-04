@@ -11,12 +11,12 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
-use Magento\InventoryIndexer\Model\ResourceModel\GetInvalidationRequired;
+use Magento\InventoryIndexer\Model\ResourceModel\IsInvalidationRequiredForSource;
 
 /**
  * Invalidate Inventory Indexer after Source was enabled or disabled.
  */
-class InvalidateAfterSourceSetEnabledPlugin
+class InvalidateAfterEnablingOrDisablingSourcePlugin
 {
     /**
      * @var IndexerRegistry
@@ -24,20 +24,20 @@ class InvalidateAfterSourceSetEnabledPlugin
     private $indexerRegistry;
 
     /**
-     * @var GetInvalidationRequired
+     * @var IsInvalidationRequiredForSource
      */
-    private $getInvalidationRequired;
+    private $isInvalidationRequiredForSource;
 
     /**
      * @param IndexerRegistry $indexerRegistry
-     * @param GetInvalidationRequired $getInvalidationRequired
+     * @param IsInvalidationRequiredForSource $isInvalidationRequiredForSource
      */
     public function __construct(
         IndexerRegistry $indexerRegistry,
-        GetInvalidationRequired $getInvalidationRequired
+        IsInvalidationRequiredForSource $isInvalidationRequiredForSource
     ) {
         $this->indexerRegistry = $indexerRegistry;
-        $this->getInvalidationRequired = $getInvalidationRequired;
+        $this->isInvalidationRequiredForSource = $isInvalidationRequiredForSource;
     }
 
     /**
@@ -54,10 +54,13 @@ class InvalidateAfterSourceSetEnabledPlugin
         callable $proceed,
         SourceInterface $source
     ) {
-        $sourceCode = $source->getSourceCode();
-        $enabled = (int)$source->isEnabled();
-        $invalidationRequired = $this->getInvalidationRequired->execute($sourceCode, $enabled);
+        $invalidationRequired = $this->isInvalidationRequiredForSource->execute(
+            $source->getSourceCode(),
+            $source->isEnabled()
+        );
+
         $proceed($source);
+
         if ($invalidationRequired) {
             $indexer = $this->indexerRegistry->get(InventoryIndexer::INDEXER_ID);
             if ($indexer->isValid()) {
