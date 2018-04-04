@@ -7,24 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 
 class SelectBuilder
 {
     /**
-     * @var ApplyBaseJoins
+     * @var ResourceConnection
      */
-    private $applyBaseJoins;
+    private $resourceConnection;
 
     /**
-     * @var ApplyStatusAttributeCondition
+     * @var ApplyNameAttributeJoin
      */
-    private $applyStatusAttributeCondition;
+    private $applyNameAttributeJoin;
 
     /**
-     * @var ApplyNameAttributeCondition
+     * @var ApplyStatusAttributeJoin
      */
-    private $applyNameAttributeCondition;
+    private $applyStatusAttributeJoin;
 
     /**
      * @var ApplyConfigurationCondition
@@ -32,20 +33,28 @@ class SelectBuilder
     private $applyConfigurationCondition;
 
     /**
+     * @var ApplyBaseJoins
+     */
+    private $applyBaseJoins;
+
+    /**
+     * @param ResourceConnection $resourceConnection
      * @param ApplyBaseJoins $applyBaseJoins
-     * @param ApplyStatusAttributeCondition $applyStatusAttributeCondition
-     * @param ApplyNameAttributeCondition $applyNameAttributeCondition
+     * @param ApplyNameAttributeJoin $applyNameAttributeJoin
+     * @param ApplyStatusAttributeJoin $applyStatusAttributeJoin
      * @param ApplyConfigurationCondition $applyConfigurationCondition
      */
     public function __construct(
+        ResourceConnection $resourceConnection,
         ApplyBaseJoins $applyBaseJoins,
-        ApplyStatusAttributeCondition $applyStatusAttributeCondition,
-        ApplyNameAttributeCondition $applyNameAttributeCondition,
+        ApplyNameAttributeJoin $applyNameAttributeJoin,
+        ApplyStatusAttributeJoin $applyStatusAttributeJoin,
         ApplyConfigurationCondition $applyConfigurationCondition
     ) {
+        $this->resourceConnection = $resourceConnection;
         $this->applyBaseJoins = $applyBaseJoins;
-        $this->applyStatusAttributeCondition = $applyStatusAttributeCondition;
-        $this->applyNameAttributeCondition = $applyNameAttributeCondition;
+        $this->applyNameAttributeJoin = $applyNameAttributeJoin;
+        $this->applyStatusAttributeJoin = $applyStatusAttributeJoin;
         $this->applyConfigurationCondition = $applyConfigurationCondition;
     }
 
@@ -57,8 +66,8 @@ class SelectBuilder
     public function build(Select $select)
     {
         $this->applyBaseJoins->execute($select);
+        $this->applyNameAttributeJoin->execute($select);
+        $this->applyStatusAttributeJoin->execute($select);
         $this->applyConfigurationCondition->execute($select);
-        $this->applyNameAttributeCondition->execute($select);
-        $this->applyStatusAttributeCondition->execute($select);
     }
 }

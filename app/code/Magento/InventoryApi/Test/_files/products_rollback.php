@@ -27,7 +27,7 @@ $stockStatusCriteriaFactory = $objectManager->create(StockStatusCriteriaInterfac
 $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
 $searchCriteria = $searchCriteriaBuilder->addFilter(
     ProductInterface::SKU,
-    ['SKU-1', 'SKU-2', 'SKU-3'],
+    ['SKU-1', 'SKU-2', 'SKU-3', 'SKU-4'],
     'in'
 )->create();
 $products = $productRepository->getList($searchCriteria)->getItems();

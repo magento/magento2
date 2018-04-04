@@ -65,7 +65,7 @@ class SourceItemIndexerTest extends TestCase
      */
     protected function tearDown()
     {
-//        $this->removeIndexData->execute([10, 20, 30]);
+        $this->removeIndexData->execute([10, 20, 30]);
     }
 
     /**
@@ -201,11 +201,11 @@ class SourceItemIndexerTest extends TestCase
     }
 
     /**
-     * @param $sku
-     * @param $sourceCode
+     * @param string $sku
+     * @param string $sourceCode
      * @return SourceItemInterface
      */
-    private function getSourceItem($sku, $sourceCode): SourceItemInterface
+    private function getSourceItem(string $sku, string $sourceCode): SourceItemInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SKU, $sku)

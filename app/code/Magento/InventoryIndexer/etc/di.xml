@@ -38,10 +38,10 @@
     </type>
     <!-- StockSourceLink -->
     <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
-        <plugin name="reindex_around_stock_source_links_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAroundStockSourceLinksSavePlugin"/>
+        <plugin name="reindex_after_stock_source_links_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterStockSourceLinksSavePlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface">
-        <plugin name="reindex_around_stock_source_links_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAroundStockSourceLinksDeletePlugin"/>
+        <plugin name="reindex_after_stock_source_links_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterStockSourceLinksDeletePlugin"/>
     </type>
     <!-- Stock -->
     <preference for="Magento\InventorySales\Model\GetStockItemDataInterface" type="Magento\InventoryIndexer\Model\GetStockItemData"/>

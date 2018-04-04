@@ -21,7 +21,7 @@ $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilde
 
 $searchCriteria = $searchCriteriaBuilder->addFilter(
     SourceItemInterface::SKU,
-    ['SKU-1', 'SKU-2', 'SKU-3'],
+    ['SKU-1', 'SKU-2', 'SKU-3', 'SKU-4'],
     'in'
 )->create();
 $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();
