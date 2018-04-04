@@ -58,16 +58,8 @@ class ColorModesProvider
      */
     private function createModeProvider(string $instance): ModeInterface
     {
-        if (!is_subclass_of(
-            $instance,
-            ModeInterface::class
-        )
-        ) {
-            throw new \InvalidArgumentException(
-                $instance .
-                ' does not implement ' .
-                ModeInterface::class
-            );
+        if (!is_subclass_of($instance, ModeInterface::class)) {
+            throw new \InvalidArgumentException($instance . ' does not implement ' . ModeInterface::class);
         }
         return $this->objectManager->create($instance);
     }
