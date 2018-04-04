@@ -335,5 +335,32 @@
             <field name="is_required" xsi:type="string">No</field>
             <field name="is_used_for_promo_rules" xsi:type="string">Yes</field>
         </dataset>
+
+        <dataset name="sizes_S_M_L_Filterable">
+            <field name="frontend_label" xsi:type="string">size_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">size_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="is_searchable" xsi:type="string">Yes</field>
+            <field name="is_filterable" xsi:type="string">Filterable (with results)</field>
+            <field name="is_filterable_in_search" xsi:type="string">Yes</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_S</item>
+                    <item name="view" xsi:type="string">SIZE_S</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_M</item>
+                    <item name="view" xsi:type="string">SIZE_M</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_L</item>
+                    <item name="view" xsi:type="string">SIZE_L</item>
+                </item>
+            </field>
+        </dataset>
     </repository>
 </config>
