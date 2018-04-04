@@ -1146,6 +1146,7 @@ define([
                 cachedSearchResult = this.getCachedSearchResults(searchKey);
                 this.options(cachedSearchResult.options);
                 this.afterLoadOptions(searchKey, cachedSearchResult.lastPage, cachedSearchResult.total);
+
                 return;
             }
 
