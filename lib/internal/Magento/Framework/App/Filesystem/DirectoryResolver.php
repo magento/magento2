@@ -28,10 +28,10 @@ class DirectoryResolver
      * @param Filesystem|null $filesystem
      * @throws \RuntimeException
      */
-    public function __construct(DirectoryList $directoryList, Filesystem $filesystem)
+    public function __construct(DirectoryList $directoryList, Filesystem $filesystem = null)
     {
         $this->directoryList = $directoryList;
-        $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
     }
 
     /**
