@@ -12,7 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 
 /**
- * Set data to legacy catalocinventory_stock_item table via plain MySql query
+ * Set data to legacy cataloginventory_stock_item table via plain MySql query
  */
 class SetDataToLegacyStockItem
 {
@@ -46,19 +46,23 @@ class SetDataToLegacyStockItem
      */
     public function execute(string $sku, float $quantity, int $status)
     {
-        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+        $productIds = $this->getProductIdsBySkus->execute([$sku]);
 
-        $connection = $this->resourceConnection->getConnection();
-        $connection->update(
-            $this->resourceConnection->getTableName('cataloginventory_stock_item'),
-            [
-                StockItemInterface::QTY => $quantity,
-                StockItemInterface::IS_IN_STOCK => $status,
-            ],
-            [
-                StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
-                'website_id = ?' => 0,
-            ]
-        );
+        if (isset($productIds[$sku])) {
+            $productId = $productIds[$sku];
+
+            $connection = $this->resourceConnection->getConnection();
+            $connection->update(
+                $this->resourceConnection->getTableName('cataloginventory_stock_item'),
+                [
+                    StockItemInterface::QTY => $quantity,
+                    StockItemInterface::IS_IN_STOCK => $status,
+                ],
+                [
+                    StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
+                    'website_id = ?' => 0,
+                ]
+            );
+        }
     }
 }

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -91,7 +89,7 @@ abstract class AbstractGroupPrice extends Price
      */
     protected function _getWebsiteCurrencyRates()
     {
-        if (is_null($this->_rates)) {
+        if ($this->_rates === null) {
             $this->_rates = [];
             $baseCurrency = $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
@@ -360,7 +358,7 @@ abstract class AbstractGroupPrice extends Price
     {
         /** @var array $priceItem */
         foreach ($data as $key => $priceItem) {
-            if (isset($priceItem['price']) && $priceItem['price'] > 0) {
+            if (array_key_exists('price', $priceItem)) {
                 $data[$key]['website_price'] = $priceItem['price'];
             }
             if ($priceItem['all_groups']) {

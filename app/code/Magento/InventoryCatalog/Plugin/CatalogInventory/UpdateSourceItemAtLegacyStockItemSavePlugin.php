@@ -7,17 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
-use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Class provides around Plugin on \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::save
@@ -26,34 +23,24 @@ use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 class UpdateSourceItemAtLegacyStockItemSavePlugin
 {
     /**
-     * @var SourceItemRepositoryInterface
-     */
-    private $sourceItemRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var SourceItemInterfaceFactory
-     */
-    private $sourceItemFactory;
-
-    /**
-     * @var SourceItemsSaveInterface
-     */
-    private $sourceItemsSave;
-
-    /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
+
+    /**
+     * @var IsSourceItemsAllowedForProductTypeInterface
+     */
+    private $isSourceItemsAllowedForProductType;
+
+    /**
+     * @var UpdateSourceItemBasedOnLegacyStockItem
+     */
+    private $updateSourceItemBasedOnLegacyStockItem;
+
+    /**
+     * @var GetProductTypesBySkusInterface
+     */
+    private $getProductTypeBySku;
 
     /**
      * @var GetSkusByProductIdsInterface
@@ -61,29 +48,23 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     private $getSkusByProductIds;
 
     /**
-     * @param SourceItemRepositoryInterface $sourceItemRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param SourceItemInterfaceFactory $sourceItemFactory
-     * @param SourceItemsSaveInterface $sourceItemsSave
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
+     * @param UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem
      * @param ResourceConnection $resourceConnection
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param GetProductTypesBySkusInterface $getProductTypeBySku
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      */
     public function __construct(
-        SourceItemRepositoryInterface $sourceItemRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        SourceItemInterfaceFactory $sourceItemFactory,
-        SourceItemsSaveInterface $sourceItemsSave,
-        DefaultSourceProviderInterface $defaultSourceProvider,
+        UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem,
         ResourceConnection $resourceConnection,
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        GetProductTypesBySkusInterface $getProductTypeBySku,
         GetSkusByProductIdsInterface $getSkusByProductIds
     ) {
-        $this->sourceItemRepository = $sourceItemRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->sourceItemFactory = $sourceItemFactory;
-        $this->sourceItemsSave = $sourceItemsSave;
-        $this->defaultSourceProvider = $defaultSourceProvider;
+        $this->updateSourceItemBasedOnLegacyStockItem = $updateSourceItemBasedOnLegacyStockItem;
         $this->resourceConnection = $resourceConnection;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->getProductTypeBySku = $getProductTypeBySku;
         $this->getSkusByProductIds = $getSkusByProductIds;
     }
 
@@ -93,6 +74,7 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
      * @param AbstractModel $legacyStockItem
      * @return ItemResourceModel
      * @throws \Exception
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(ItemResourceModel $subject, callable $proceed, AbstractModel $legacyStockItem)
@@ -103,9 +85,13 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
             // need to save configuration
             $proceed($legacyStockItem);
 
-            $this->updateSourceItemBasedOnLegacyStockItem($legacyStockItem);
+            $typeId = $this->getTypeId($legacyStockItem);
+            if ($this->isSourceItemsAllowedForProductType->execute($typeId)) {
+                $this->updateSourceItemBasedOnLegacyStockItem->execute($legacyStockItem);
+            }
 
             $connection->commit();
+
             return $subject;
         } catch (\Exception $e) {
             $connection->rollBack();
@@ -115,29 +101,20 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
 
     /**
      * @param Item $legacyStockItem
-     * @return void
+     * @return string
      */
-    private function updateSourceItemBasedOnLegacyStockItem(Item $legacyStockItem)
+    private function getTypeId(Item $legacyStockItem): string
     {
-        $productSku = $this->getSkusByProductIds
-            ->execute([$legacyStockItem->getProductId()])[$legacyStockItem->getProductId()];
-
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SKU, $productSku)
-            ->addFilter(SourceItemInterface::SOURCE_CODE, $this->defaultSourceProvider->getCode())
-            ->create();
-        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
-        if (count($sourceItems)) {
-            $sourceItem = reset($sourceItems);
-        } else {
-            /** @var SourceItemInterface $sourceItem */
-            $sourceItem = $this->sourceItemFactory->create();
-            $sourceItem->setSourceCode($this->defaultSourceProvider->getCode());
-            $sourceItem->setSku($productSku);
+        $typeId = $legacyStockItem->getTypeId();
+        if ($typeId === null) {
+            $sku = $legacyStockItem->getSku();
+            if ($sku === null) {
+                $productId = $legacyStockItem->getProductId();
+                $sku = $this->getSkusByProductIds->execute([$productId])[$productId];
+            }
+            $typeId = $this->getProductTypeBySku->execute([$sku])[$sku];
         }
 
-        $sourceItem->setQuantity((float)$legacyStockItem->getQty());
-        $sourceItem->setStatus((int)$legacyStockItem->getIsInStock());
-        $this->sourceItemsSave->execute([$sourceItem]);
+        return $typeId;
     }
 }

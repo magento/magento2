@@ -40,7 +40,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->collection->offsetExists('node1'), true);
         $this->collection->offsetSet('node1', 'Hello');
         $this->assertSame($this->collection->offsetExists('node1'), true);
-        $this->assertSame($this->collection->offsetget('node1'), 'Hello');
+        $this->assertSame($this->collection->offsetGet('node1'), 'Hello');
         $this->collection->offsetUnset('node1');
         $this->assertSame($this->collection->offsetExists('node1'), false);
     }

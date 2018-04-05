@@ -43,7 +43,6 @@ class UpdateTest extends WebapiAbstract
             SourceInterface::POSTCODE => 'source-postcode-updated',
             SourceInterface::PHONE => 'source-phone-updated',
             SourceInterface::FAX => 'source-fax-updated',
-            SourceInterface::PRIORITY => 300,
             SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
             SourceInterface::CARRIER_LINKS => [
                 [

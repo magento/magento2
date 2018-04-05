@@ -7,19 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Ui\DataProvider;
 
-use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
-use Magento\Ui\DataProvider\SearchResultFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
-use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder as SearchSearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\Ui\DataProvider\SearchResultFactory;
 
 /**
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockDataProvider extends DataProvider
 {
@@ -34,21 +39,39 @@ class StockDataProvider extends DataProvider
     private $searchResultFactory;
 
     /**
-     * @var GetAssignedSourcesForStockInterface
+     * @var GetStockSourceLinksInterface
      */
-    private $getAssignedSourcesForStock;
+    private $getStockSourceLinks;
+
+    /**
+     * @var SourceRepositoryInterface
+     */
+    private $sourceRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $apiSearchCriteriaBuilder;
+
+    /**
+     * @var SortOrderBuilder
+     */
+    private $sortOrderBuilder;
 
     /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param ReportingInterface $reporting
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SearchSearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
      * @param StockRepositoryInterface $stockRepository
      * @param SearchResultFactory $searchResultFactory
-     * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
+     * @param GetStockSourceLinksInterface $getStockSourceLinks
+     * @param SourceRepositoryInterface $sourceRepository
+     * @param SearchCriteriaBuilder $apiSearchCriteriaBuilder
+     * @param SortOrderBuilder $sortOrderBuilder
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
@@ -58,12 +81,15 @@ class StockDataProvider extends DataProvider
         $primaryFieldName,
         $requestFieldName,
         ReportingInterface $reporting,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SearchSearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         StockRepositoryInterface $stockRepository,
         SearchResultFactory $searchResultFactory,
-        GetAssignedSourcesForStockInterface $getAssignedSourcesForStock,
+        GetStockSourceLinksInterface $getStockSourceLinks,
+        SourceRepositoryInterface $sourceRepository,
+        SearchCriteriaBuilder $apiSearchCriteriaBuilder,
+        SortOrderBuilder $sortOrderBuilder,
         array $meta = [],
         array $data = []
     ) {
@@ -80,7 +106,10 @@ class StockDataProvider extends DataProvider
         );
         $this->stockRepository = $stockRepository;
         $this->searchResultFactory = $searchResultFactory;
-        $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
+        $this->getStockSourceLinks = $getStockSourceLinks;
+        $this->sourceRepository = $sourceRepository;
+        $this->apiSearchCriteriaBuilder = $apiSearchCriteriaBuilder;
+        $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
     /**
@@ -132,13 +161,30 @@ class StockDataProvider extends DataProvider
      */
     private function getAssignedSourcesData(int $stockId): array
     {
-        $assignedSources = $this->getAssignedSourcesForStock->execute($stockId);
+        $sortOrder = $this->sortOrderBuilder
+            ->setField(StockSourceLinkInterface::PRIORITY)
+            ->setAscendingDirection()
+            ->create();
+        $searchCriteria = $this->apiSearchCriteriaBuilder
+            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
+            ->addSortOrder($sortOrder)
+            ->create();
+
+        $searchResult = $this->getStockSourceLinks->execute($searchCriteria);
+
+        if ($searchResult->getTotalCount() === 0) {
+            return [];
+        }
 
         $assignedSourcesData = [];
-        foreach ($assignedSources as $assignedSource) {
+        foreach ($searchResult->getItems() as $link) {
+            $source = $this->sourceRepository->get($link->getSourceCode());
+
             $assignedSourcesData[] = [
-                SourceInterface::SOURCE_CODE => $assignedSource->getSourceCode(),
-                SourceInterface::NAME => $assignedSource->getName(),
+                SourceInterface::NAME => $source->getName(),
+                StockSourceLinkInterface::SOURCE_CODE => $link->getSourceCode(),
+                StockSourceLinkInterface::STOCK_ID => $link->getStockId(),
+                StockSourceLinkInterface::PRIORITY => $link->getPriority(),
             ];
         }
         return $assignedSourcesData;

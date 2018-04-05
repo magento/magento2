@@ -159,7 +159,7 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
         );
 
         // Verify the consistency of custom attribute metadata from two services
-        // after getAttrbiuteCode was called
+        // after getAttributeCode was called
         foreach ($customAttributesMetadata2 as $attribute) {
             $attribute->getAttributeCode();
         }

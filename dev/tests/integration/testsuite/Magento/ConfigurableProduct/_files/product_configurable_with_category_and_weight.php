@@ -55,8 +55,8 @@ foreach ($options as $option) {
     $eavAttributeValues = [
         'category_ids' => [2]
         ];
-    foreach ($eavAttributeValues as $eavCategoryAttributeCode => $eavCategoryAtttributeValues) {
-        $product->setCustomAttribute($eavCategoryAttributeCode, $eavCategoryAtttributeValues);
+    foreach ($eavAttributeValues as $eavCategoryAttributeCode => $eavCategoryAttributeValues) {
+        $product->setCustomAttribute($eavCategoryAttributeCode, $eavCategoryAttributeValues);
     }
 
     $product = $productRepository->save($product);

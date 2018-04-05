@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -75,17 +73,21 @@ class RowsTest extends \PHPUnit\Framework\TestCase
         $this->_productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
         $this->_flatItemEraser = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class);
         $this->_flatItemWriter = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class);
-        $this->_flatTableBuilder = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class);
+        $this->_flatTableBuilder = $this->createMock(
+            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class
+        );
 
         $this->_model = $objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows::class, [
-            'resource' => $this->_resource,
-            'storeManager' => $this->_storeManager,
-            'productHelper' => $this->_productIndexerHelper,
-            'flatItemEraser' => $this->_flatItemEraser,
-            'flatItemWriter' => $this->_flatItemWriter,
-            'flatTableBuilder' => $this->_flatTableBuilder
-        ]);
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows::class,
+            [
+                'resource' => $this->_resource,
+                'storeManager' => $this->_storeManager,
+                'productHelper' => $this->_productIndexerHelper,
+                'flatItemEraser' => $this->_flatItemEraser,
+                'flatItemWriter' => $this->_flatItemWriter,
+                'flatTableBuilder' => $this->_flatTableBuilder
+            ]
+        );
     }
 
     /**

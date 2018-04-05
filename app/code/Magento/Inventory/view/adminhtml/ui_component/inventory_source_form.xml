@@ -54,6 +54,7 @@
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="no-whitespace" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Code</label>
@@ -118,15 +119,6 @@
                 </validation>
                 <dataType>number</dataType>
                 <label translate="true">Longitude</label>
-            </settings>
-        </field>
-        <field name="priority" formElement="input" sortOrder="70">
-            <settings>
-                <validation>
-                    <rule name="validate-integer" xsi:type="boolean">true</rule>
-                </validation>
-                <dataType>number</dataType>
-                <label translate="true">Priority</label>
             </settings>
         </field>
     </fieldset>

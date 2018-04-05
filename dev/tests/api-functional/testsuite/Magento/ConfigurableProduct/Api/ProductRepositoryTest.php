@@ -286,7 +286,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId1, $nonExistingId
         ];
 
-        $expectedMessage = 'Unable to save product';
+        $expectedMessage = 'The product was unable to be saved. Please try again.';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");
@@ -362,7 +362,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId1, $productId2
         ];
 
-        $expectedMessage = 'Unable to save product';
+        $expectedMessage = 'The product was unable to be saved. Please try again.';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");

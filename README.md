@@ -1,17 +1,18 @@
-[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=develop)](https://travis-ci.org/magento/magento2)
+[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=2.3-develop)](https://travis-ci.org/magento/magento2)
+[![Open Source Helpers](https://www.codetriage.com/magento/magento2/badges/users.svg)](https://www.codetriage.com/magento/magento2)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.png)](https://crowdin.com/project/magento-2)
 <h2>Welcome</h2>
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting edge, feature-rich eCommerce solution that gets results.
 
 ## Magento system requirements
-[Magento system requirements](http://devdocs.magento.com/magento-system-requirements.html)
+[Magento system requirements](http://devdocs.magento.com/guides/v2.2/install-gde/system-requirements2.html)
 
 ## Install Magento
 To install Magento, see either:
 
 *	[Magento DevBox](https://magento.com/tech-resources/download), the easiest way to get started with Magento.
-*	[Installation guide](http://devdocs.magento.com/guides/v2.0/install-gde/bk-install-guide.html)
+*	[Installation guide](http://devdocs.magento.com/guides/v2.2/install-gde/bk-install-guide.html)
 
 <h2>Contributing to the Magento 2 code base</h2>
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
@@ -22,8 +23,8 @@ To learn about issues, click [here][2]. To open an issue, click [here][3].
 
 To suggest documentation improvements, click [here][4].
 
-[1]: <http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html>
-[2]: <http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html#report>
+[1]: <http://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html>
+[2]: <http://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html#report>
 [3]: <https://github.com/magento/magento2/issues>
 [4]: <http://devdocs.magento.com>
 
@@ -38,8 +39,10 @@ To suggest documentation improvements, click [here][4].
 | ![reject](http://devdocs.magento.com/common/images/github_reject.png) | The pull request has been rejected and will not be merged into mainline code. Possible reasons can include but are not limited to: issue has already been fixed in another code contribution, or there is an issue with the code contribution. |
 | ![bug report](http://devdocs.magento.com/common/images/github_bug.png) | The Magento Team has confirmed that this issue contains the minimum required information to reproduce. |
 | ![acknowledged](http://devdocs.magento.com/common/images/gitHub_acknowledged.png) | The Magento Team has validated the issue and an internal ticket has been created. |
-| ![acknowledged](http://devdocs.magento.com/common/images/github_inProgress.png) | The internal ticket is currently in progress, fix is scheduled to be delivered. |
-| ![acknowledged](http://devdocs.magento.com/common/images/github_needsUpdate.png) | The Magento Team needs additional information from the reporter to properly prioritize and process the issue or pull request. |
+| ![in progress](http://devdocs.magento.com/common/images/github_inProgress.png) | The internal ticket is currently in progress, fix is scheduled to be delivered. |
+| ![needs update](http://devdocs.magento.com/common/images/github_needsUpdate.png) | The Magento Team needs additional information from the reporter to properly prioritize and process the issue or pull request. |
+
+To learn more about issue gate labels click [here](https://github.com/magento/magento2/wiki/Magento-Issue-Gates)
 
 <h2>Reporting security issues</h2>
 

@@ -1,0 +1,15 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="data-grid-cell-content">
+    <ul data-bind="foreach: { data: $col.getSalableQuantityData($row()), as: '$salableQuantityData' }">
+        <li>
+            <strong data-bind="text: $salableQuantityData.stock_name"></strong>
+            :
+            <span data-bind="text: $salableQuantityData.qty"></span>
+        </li>
+    </ul>
+</div>

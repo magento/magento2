@@ -233,7 +233,6 @@ Sales,Sales
 "You can't create an invoice without products.","You can't create an invoice without products."
 "New Invoice","New Invoice"
 "We can't save the invoice right now.","We can't save the invoice right now."
-"The invoice and the shipment  have been created. The shipping label cannot be created now.","The invoice and the shipment  have been created. The shipping label cannot be created now."
 "You created the invoice and shipment.","You created the invoice and shipment."
 "The invoice has been created.","The invoice has been created."
 "We can't send the invoice email right now.","We can't send the invoice email right now."

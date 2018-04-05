@@ -27,7 +27,7 @@ class AssertDevdocsLink extends AbstractConstraint
      */
     public function processAssert(DevdocsInstall $devdocsInstallPage)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::DEVDOCS_TITLE_TEXT,
             $devdocsInstallPage->getDevdocsBlock()->getDevdocsTitle(),
             'Developer Documentation link is wrong.'

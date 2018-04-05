@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Test\Unit\Console\Command;
 
 use Magento\Deploy\Console\Command\SetModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\App\State;
 
 /**
  * @package Magento\Deploy\Test\Unit\Console\Command
@@ -67,6 +67,18 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testSetDefaultMode()
+    {
+        $this->modeMock->expects($this->once())->method('enableDefaultMode');
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['mode' => 'default']);
+        $this->assertContains(
+            "default mode",
+            $tester->getDisplay()
+        );
+    }
+
     public function testSetProductionSkipCompilation()
     {
         $this->modeMock->expects($this->once())->method('enableProductionModeMinimal');
@@ -84,7 +96,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'invalid-mode']);
         $this->assertContains(
-            "Cannot switch into given mode",
+            'The mode can\'t be switched to "invalid-mode".',
             $tester->getDisplay()
         );
     }

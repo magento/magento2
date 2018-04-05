@@ -621,7 +621,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Retrieve Product data obects for store
+     * Retrieve Product data objects for store
      *
      * @param int $storeId
      * @param int &$lastEntityId

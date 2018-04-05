@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -453,7 +451,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 ];
                 $subEntityId = $this->connection->fetchOne(
                     $this->connection->select()->from(
-                        ['cpe' => $this->_resource->getTableName('catalog_product_entity')], ['entity_id']
+                        ['cpe' => $this->_resource->getTableName('catalog_product_entity')],
+                        ['entity_id']
                     )->where($metadata->getLinkField() . ' = ?', $assocId)
                 );
                 $this->_superAttributesData['relation'][] = [
@@ -835,7 +834,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             if (isset($option['_super_products_sku'])) {
                 if (in_array($option['_super_products_sku'], $skus)) {
                     $error = true;
-                    $this->_entityModel->addRowError(sprintf($this->_messageTemplates[self::ERROR_DUPLICATED_VARIATIONS], $option['_super_products_sku']), $rowNum);
+                    $this->_entityModel->addRowError(
+                        sprintf(
+                            $this->_messageTemplates[self::ERROR_DUPLICATED_VARIATIONS],
+                            $option['_super_products_sku']
+                        ),
+                        $rowNum
+                    );
                 }
                 $skus[] = $option['_super_products_sku'];
             }

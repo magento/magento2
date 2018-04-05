@@ -143,7 +143,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
                     [$conditionFullName, $rowData, 40],
                     [ColumnResolver::COLUMN_PRICE, $rowData, 350],
                 ],
-                'Please correct Country "XX" in the Row #120.',
+                'The "XX" country in row number "120" is incorrect. Verify the country and try again.',
             ],
             [
                 $rowData,
@@ -155,7 +155,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
                     [$conditionFullName, $rowData, 40],
                     [ColumnResolver::COLUMN_PRICE, $rowData, 350],
                 ],
-                'Please correct Region/State "AA" in the Row #120.',
+                'The "AA" region or state in row number "120" is incorrect. Verify the region or state and try again.',
             ],
             [
                 $rowData,
@@ -179,7 +179,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
                     [$conditionFullName, $rowData, 40],
                     [ColumnResolver::COLUMN_PRICE, $rowData, 'BBB'],
                 ],
-                'Please correct Shipping Price "BBB" in the Row #120.',
+                'The "BBB" shipping price in row number "120" is incorrect. Verify the shipping price and try again.',
             ],
         ];
     }

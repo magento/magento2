@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Model\Import;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -10,7 +12,8 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
- * Import Sample File Provider model
+ * Import Sample File Provider model.
+ * This class support only *.csv.
  */
 class SampleFileProvider
 {
@@ -50,9 +53,9 @@ class SampleFileProvider
      *
      * @param string $entityName
      * @throws NoSuchEntityException
-     * @return int
+     * @return int|null
      */
-    public function getSize(string $entityName): int
+    public function getSize(string $entityName)
     {
         $directoryRead = $this->getDirectoryRead($entityName);
         $filePath = $this->getPath($entityName);
@@ -78,14 +81,13 @@ class SampleFileProvider
     }
 
     /**
-     * @param $entityName
      * @return string $entityName
      * @throws NoSuchEntityException
      */
     private function getPath(string $entityName): string
     {
-        $directoryRead = $this->getDirectoryRead($entityName);
         $moduleName = $this->getModuleName($entityName);
+        $directoryRead = $this->getDirectoryRead($entityName);
         $moduleDir = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
         $fileAbsolutePath = $moduleDir . '/Files/Sample/' . $entityName . '.csv';
 

@@ -53,7 +53,6 @@ class SaveMultiple
         ]);
         $valuesSql = $this->buildValuesSqlPart($sourceItems);
         $onDuplicateSql = $this->buildOnDuplicateSqlPart([
-            SourceItemInterface::SKU,
             SourceItemInterface::QUANTITY,
             SourceItemInterface::STATUS,
         ]);

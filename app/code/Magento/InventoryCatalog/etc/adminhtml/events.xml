@@ -9,4 +9,7 @@
     <event name="controller_action_catalog_product_save_entity_after">
         <observer name="process_source_items" instance="Magento\InventoryCatalog\Observer\ProcessSourceItemsObserver"/>
     </event>
+    <event name="admin_system_config_changed_section_cataloginventory">
+        <observer name="inventory_configuration" instance="Magento\InventoryCatalog\Observer\UpdateSourceItemsUponConfigChangeObserver"/>
+    </event>
 </config>

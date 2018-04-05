@@ -7,10 +7,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <inventory>
+        <cataloginventory>
             <inventory_source_carriers>
                 <use_enabled_carriers>1</use_enabled_carriers>
             </inventory_source_carriers>
-        </inventory>
+        </cataloginventory>
     </default>
 </config>
