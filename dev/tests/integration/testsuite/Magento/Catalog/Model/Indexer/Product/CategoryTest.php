@@ -77,6 +77,7 @@ class CategoryTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
      */
     public function testReindexAll()
     {

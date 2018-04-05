@@ -13,8 +13,8 @@
         <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
         <element name="productPrice" type="text" selector=".price"/>
         <element name="productStockStatus" type="text" selector=".stock[title=Availability]>span"/>
-        <element name="productDescription" type="text" selector="//div[@id='product.info.description']//p[1]"/>
-        <element name="productShortDescription" type="text" selector="//div[@class='product attribute overview']//p"/>
+        <element name="productDescription" type="text" selector="#description .value"/>
+        <element name="productShortDescription" type="text" selector="//div[@class='product attribute overview']//div[@class='value']"/>
         <element name="productAttributeTitle1" type="text" selector="#product-options-wrapper div[tabindex='0'] label"/>
         <element name="productAttributeOptions1" type="select" selector="#product-options-wrapper div[tabindex='0'] option"/>
         <element name="mediaDescription" type="text" selector=".product.attribute.description>div>p>img"/>
