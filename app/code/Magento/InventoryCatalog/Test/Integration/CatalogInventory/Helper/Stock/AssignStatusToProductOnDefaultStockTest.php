@@ -30,7 +30,6 @@ class AssignStatusToProductOnDefaultStockTest extends TestCase
      */
     protected function setUp()
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/385');
         $this->stockHelper = Bootstrap::getObjectManager()->get(Stock::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
     }
