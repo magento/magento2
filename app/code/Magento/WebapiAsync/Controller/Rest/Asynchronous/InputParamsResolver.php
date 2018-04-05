@@ -44,6 +44,10 @@ class InputParamsResolver
      * @var \Magento\Webapi\Controller\Rest\InputParamsResolver
      */
     private $inputParamsResolver;
+    /**
+     * @var bool
+     */
+    private $isBulk;
 
     /**
      * Initialize dependencies.
@@ -54,6 +58,7 @@ class InputParamsResolver
      * @param \Magento\Webapi\Controller\Rest\Router $router
      * @param \Magento\Webapi\Controller\Rest\RequestValidator $requestValidator
      * @param \Magento\Webapi\Controller\Rest\InputParamsResolver $inputParamsResolver
+     * @param bool $isBulk
      */
     public function __construct(
         RestRequest $request,
@@ -61,7 +66,8 @@ class InputParamsResolver
         ServiceInputProcessor $inputProcessor,
         Router $router,
         RequestValidator $requestValidator,
-        WebapiInputParamsResolver $inputParamsResolver
+        WebapiInputParamsResolver $inputParamsResolver,
+        $isBulk = false
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
@@ -69,6 +75,7 @@ class InputParamsResolver
         $this->router = $router;
         $this->requestValidator = $requestValidator;
         $this->inputParamsResolver = $inputParamsResolver;
+        $this->isBulk = $isBulk;
     }
 
     /**
@@ -82,6 +89,9 @@ class InputParamsResolver
      */
     public function resolve()
     {
+        if ($this->isBulk === false) {
+            return [$this->inputParamsResolver->resolve()];
+        }
         $this->requestValidator->validate();
         $webapiResolvedParams = [];
         $inputData = $this->request->getRequestData();
