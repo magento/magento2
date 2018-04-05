@@ -15,7 +15,7 @@ use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 /**
  * Invalidate InventoryIndexer
  */
-class ReindexAfterStockSourceLinksDeletePlugin
+class InvalidateAfterStockSourceLinksDeletePlugin
 {
     /**
      * @var IndexerRegistry

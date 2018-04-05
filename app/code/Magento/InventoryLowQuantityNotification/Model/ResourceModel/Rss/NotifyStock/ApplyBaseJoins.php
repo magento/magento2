@@ -26,20 +26,12 @@ class ApplyBaseJoins
     private $resourceConnection;
 
     /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
-    /**
      * @param ResourceConnection $resourceConnection
-     * @param MetadataPool $metadataPool
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
-        MetadataPool $metadataPool
+        ResourceConnection $resourceConnection
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -49,9 +41,6 @@ class ApplyBaseJoins
      */
     public function execute(Select $select)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $linkField = $metadata->getLinkField();
-
         $sourceItemConfigurationTable = 'inventory_low_stock_notification_configuration';
         $configurationJoinCondition =
             'source_item_config.' . SourceItemConfigurationInterface::SKU . ' = product.' . ProductInterface::SKU . ' '
@@ -73,7 +62,7 @@ class ApplyBaseJoins
             ['source_item_config.' . SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]
         )->join(
             ['invtr' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
-            'invtr.product_id = product.' . $linkField,
+            'invtr.product_id = product.entity_id',
             [
                 'invtr.' . StockItemInterface::LOW_STOCK_DATE,
                 'use_config' => 'invtr.' . StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY

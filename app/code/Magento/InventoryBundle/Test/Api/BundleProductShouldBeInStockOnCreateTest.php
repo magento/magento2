@@ -47,7 +47,6 @@ class BundleProductShouldBeInStockOnCreateTest extends WebapiAbstract
      */
     public function testIsBundleProductWithSimpleProductInStockAfterCreate()
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/370');
         $bundleProductOptions = [
             [
                 "title" => "Test simple",
@@ -82,6 +81,9 @@ class BundleProductShouldBeInStockOnCreateTest extends WebapiAbstract
             ],
             "extension_attributes" => [
                 "bundle_product_options" => $bundleProductOptions,
+                'stock_item' => [
+                    'is_in_stock' => 1,
+                ],
             ],
         ];
 
