@@ -141,11 +141,12 @@ class Container implements Layout\ReaderInterface
     ) {
         $containerName = $currentElement->getAttribute('name');
         $containerRemove = filter_var($currentElement->getAttribute('remove'), FILTER_VALIDATE_BOOLEAN);
-
         if ($containerRemove) {
             $scheduledStructure->setElementToRemoveList($containerName);
-        } else {
-            $this->mergeContainerAttributes($scheduledStructure, $currentElement);
+            return;
+        } elseif ($currentElement->getAttribute('remove')) {
+            $scheduledStructure->unsetElementFromListToRemove($containerName);
         }
+        $this->mergeContainerAttributes($scheduledStructure, $currentElement);
     }
 }
