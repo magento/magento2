@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Plugin\InventoryApi;
 
 use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
@@ -41,27 +40,20 @@ class ReindexAfterStockSourceLinksDeletePlugin
     }
 
     /**
-     * We don't need to neither process Stock Source Links delete nor invalidate cache for Default Stock.
+     * Invalidate index after source links have been deleted.
      *
      * @param StockSourceLinksDeleteInterface $subject
      * @param void $result
-     * @param StockSourceLinkInterface[] $links
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
         StockSourceLinksDeleteInterface $subject,
-        $result,
-        array $links
+        $result
     ) {
-        foreach ($links as $link) {
-            if ($this->defaultStockProvider->getId() !== $link->getStockId()) {
-                $indexer = $this->indexerRegistry->get(InventoryIndexer::INDEXER_ID);
-                if ($indexer->isValid()) {
-                    $indexer->invalidate();
-                }
-                break;
-            }
+        $indexer = $this->indexerRegistry->get(InventoryIndexer::INDEXER_ID);
+        if ($indexer->isValid()) {
+            $indexer->invalidate();
         }
     }
 }

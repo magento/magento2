@@ -5,61 +5,49 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Plugin\InventoryApi\StockSourceLinksSave\PreventSave;
+namespace Magento\Inventory\Plugin\InventoryApi\StockSourceLinksDelete;
 
-use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
+use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 /**
- * Prevent saving links related to default stock, except installation process.
+ * Prevent deleting links related to default stock.
  */
-class DefaultStockPlugin
+class PreventDeleteDefaultStockLinksPlugin
 {
-    /**
-     * @var MaintenanceMode
-     */
-    private $maintenanceMode;
-
     /**
      * @var DefaultStockProviderInterface
      */
     private $defaultStockProvider;
 
     /**
-     * DefaultStockPlugin constructor.
+     * PreventDeleteDefaultStockLinksPlugin constructor.
      *
-     * @param MaintenanceMode $maintenanceMode
      * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
-        MaintenanceMode $maintenanceMode,
         DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->maintenanceMode = $maintenanceMode;
     }
 
     /**
-     * Prevent saving links related to default stock.
+     * Prevent deleting links related to default stock.
      *
-     * @param StockSourceLinksSaveInterface $subject
+     * @param StockSourceLinksDeleteInterface $subject
      * @param \Magento\InventoryApi\Api\Data\StockSourceLinkInterface[] $links
      * @throws LocalizedException
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(StockSourceLinksSaveInterface $subject, array $links)
+    public function beforeExecute(StockSourceLinksDeleteInterface $subject, array $links)
     {
-        //Exclude installation.
-        if ($this->maintenanceMode->isOn()) {
-            return;
-        }
         foreach ($links as $link) {
             if ($link->getStockId() === $this->defaultStockProvider->getId()) {
                 throw new LocalizedException(
                     __(
-                        'Can not save link for %1 source, as it is related to default stock',
+                        'Can not delete link for %1 source, as it is related to default stock',
                         $link->getSourceCode()
                     )
                 );

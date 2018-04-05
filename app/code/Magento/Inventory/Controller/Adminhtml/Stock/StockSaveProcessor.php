@@ -13,6 +13,7 @@ use Magento\Framework\EntityManager\EventManager;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 /**
  * Save stock processor for save stock controller
@@ -45,24 +46,32 @@ class StockSaveProcessor
     private $eventManager;
 
     /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
      * @param StockInterfaceFactory $stockFactory
      * @param StockRepositoryInterface $stockRepository
      * @param StockSourceLinkProcessor $stockSourceLinkProcessor
      * @param DataObjectHelper $dataObjectHelper
      * @param EventManager $eventManager
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         StockInterfaceFactory $stockFactory,
         StockRepositoryInterface $stockRepository,
         StockSourceLinkProcessor $stockSourceLinkProcessor,
         DataObjectHelper $dataObjectHelper,
-        EventManager $eventManager
+        EventManager $eventManager,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->stockFactory = $stockFactory;
         $this->stockRepository = $stockRepository;
         $this->stockSourceLinkProcessor = $stockSourceLinkProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->eventManager = $eventManager;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -102,7 +111,10 @@ class StockSaveProcessor
             && is_array($requestData['sources']['assigned_sources'])
                 ? $requestData['sources']['assigned_sources']
                 : [];
-        $this->stockSourceLinkProcessor->process($stockId, $assignedSources);
+        //Allow change name for default stock, but prevent editing it's source links.
+        if ($stockId !== $this->defaultStockProvider->getId()) {
+            $this->stockSourceLinkProcessor->process($stockId, $assignedSources);
+        }
 
         return $stockId;
     }
