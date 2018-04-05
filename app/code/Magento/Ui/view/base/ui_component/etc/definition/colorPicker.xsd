@@ -29,7 +29,7 @@
                 <xs:annotation>
                     <xs:documentation>
                         Defines the color format that is displayed in selection tool as well as in input field.
-                        Valid formats: hex, rgb, hsl, name, none
+                        Valid formats: hex, rgb, hsl, hsv, name, none
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

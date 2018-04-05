@@ -973,7 +973,7 @@ define([
 
                 return tinycolor(value).isValid();
             },
-            $.mage.__('Wrong color format.')
+            $.mage.__('Wrong color format. Please specify color in HEX, RGBa, HSVa, HSLa or use color name.')
         ],
         'blacklist-url': [
             function (value, param) {
