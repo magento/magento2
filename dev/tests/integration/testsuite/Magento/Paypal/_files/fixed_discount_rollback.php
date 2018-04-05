@@ -11,6 +11,13 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
+
+/** @var \Magento\Framework\Registry $registry */
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
+
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', true);
+
 /** @var RuleRepositoryInterface $ruleRepository */
 $ruleRepository = $objectManager->get(RuleRepositoryInterface::class);
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
@@ -24,3 +31,6 @@ $items = $ruleRepository->getList($searchCriteria)
 foreach ($items as $item) {
     $ruleRepository->deleteById($item->getRuleId());
 }
+
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', false);

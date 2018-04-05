@@ -9,7 +9,6 @@ namespace Magento\Bundle\Model\Product;
 use \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
  * @magentoAppArea frontend
  */
 class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
@@ -28,6 +27,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {

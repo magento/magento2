@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
 
 /**
  * Product entity resource model
@@ -84,6 +85,11 @@ class Product extends AbstractResource
     private $productCategoryLink;
 
     /**
+     * @var TableResolver
+     */
+    private $tableResolver;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -94,6 +100,7 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
+     * @param TableResolver|null $tableResolver
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -107,7 +114,8 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
-        $data = []
+        $data = [],
+        TableResolver $tableResolver = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -122,6 +130,7 @@ class Product extends AbstractResource
             $data
         );
         $this->connectionName  = 'catalog';
+        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
     }
 
     /**
@@ -368,7 +377,7 @@ class Product extends AbstractResource
         if (!isset($this->availableCategoryIdsCache[$entityId])) {
             $this->availableCategoryIdsCache[$entityId] = $this->getConnection()->fetchCol(
                 $this->getConnection()->select()->distinct()->from(
-                    $this->getTable('catalog_category_product_index'),
+                    $this->tableResolver->getMainTable($object->getStoreId()),
                     ['category_id']
                 )->where(
                     'product_id = ? AND is_parent = 1',
@@ -402,7 +411,7 @@ class Product extends AbstractResource
     public function canBeShowInCategory($product, $categoryId)
     {
         $select = $this->getConnection()->select()->from(
-            $this->getTable('catalog_category_product_index'),
+            $this->tableResolver->getMainTable($product->getStoreId()),
             'product_id'
         )->where(
             'product_id = ?',

@@ -7,7 +7,6 @@
 namespace Magento\Bundle\Model\Product;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product_with_special_price.php
  * @magentoAppArea frontend
  */
 class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
@@ -17,6 +16,8 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
      * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product_with_special_price.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {

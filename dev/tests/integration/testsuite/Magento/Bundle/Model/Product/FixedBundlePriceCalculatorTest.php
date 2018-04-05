@@ -9,7 +9,6 @@ namespace Magento\Bundle\Model\Product;
 use \Magento\Bundle\Api\Data\LinkInterface;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
  * @magentoAppArea frontend
  */
 class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
@@ -19,6 +18,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
@@ -56,6 +57,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForFixedBundleInWebsiteScope(array $strategyModifiers, array $expectedResults)
     {
