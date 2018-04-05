@@ -231,8 +231,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             );
         }
 
-        if (!$order->getForcedShipmentWithInvoice()
-            && $this->_isAllowedAction('Magento_Sales::ship')
+        if ($this->_isAllowedAction('Magento_Sales::ship')
+            && !$order->getForcedShipmentWithInvoice()
             && $order->canShip()
         ) {
             $this->addButton(
