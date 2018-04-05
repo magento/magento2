@@ -77,7 +77,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      */
     public function getNoticeStatus()
     {
-        return $this->getResource()->getNoticeStatus($this);
+        return $this->getResource()->getNoticeStatus();
     }
 
     /**
