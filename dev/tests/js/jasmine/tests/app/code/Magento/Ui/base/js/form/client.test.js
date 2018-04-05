@@ -19,7 +19,8 @@ define([
                 name: '',
                 index: ''
             }),
-            jQueryMethods = {};
+            jQueryMethods = {},
+            ajax = $.ajax;
 
         window.FORM_KEY = 'magentoFormKey';
 
@@ -41,6 +42,7 @@ define([
             _.each(jQueryMethods, function (value, key) {
                 $.fn[key] = value;
             });
+            $.ajax = ajax;
         });
 
         describe('"save" method', function () {

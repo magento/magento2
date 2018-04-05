@@ -666,8 +666,7 @@ define([
                 expect(obj.processRequest()).toBeUndefined();
 
                 ajaxRequest(successfulAjaxResponse);
-
-                expect(obj.options()).toEqual([successfulAjaxResponse.options['2053']]);
+                expect(JSON.stringify(obj.options())).toEqual(JSON.stringify([successfulAjaxResponse.options['2053']]));
             });
         });
     });
