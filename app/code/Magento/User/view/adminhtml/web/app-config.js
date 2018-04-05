@@ -23,7 +23,7 @@ require.config({
         }
     },
     'paths': {
-        'jquery/ui': 'jquery/jquery-ui-1.9.2',
+        'jquery/ui': 'jquery/jquery-ui',
         'jquery/validate': 'jquery/jquery.validate',
         'jquery/hover-intent': 'jquery/jquery.hoverIntent',
         'jquery/file-uploader': 'jquery/fileUploader/jquery.fileupload-fp',
