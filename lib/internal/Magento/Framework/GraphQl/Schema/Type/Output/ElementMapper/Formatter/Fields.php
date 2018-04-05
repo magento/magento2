@@ -60,8 +60,6 @@ class Fields implements FormatterInterface
      */
     private $resolveInfoFactory;
 
-
-
     /**
      * @param ObjectManagerInterface $objectManager
      * @param OutputMapper $outputMapper
