@@ -139,7 +139,7 @@ class Config
      */
     private function createConnection(): AbstractConnection
     {
-        $sslEnabled = !empty($this->getValue(self::SSL)) && $this->getValue(self::SSL) !== 'false';
+        $sslEnabled = trim($this->getValue(self::SSL)) === 'true';
         $options = new FactoryOptions();
         $options->setHost($this->getValue(self::HOST));
         $options->setPort($this->getValue(self::PORT));
