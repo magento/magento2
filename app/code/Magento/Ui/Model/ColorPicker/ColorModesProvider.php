@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Ui\Model\ColorPicker;
 
 /**
- * Class ColorModesProvider
+ * Collect all modes by configuration
  */
 class ColorModesProvider
 {
@@ -27,6 +27,10 @@ class ColorModesProvider
      */
     private $objectManager;
 
+    /**
+     * @param array $colorModesPool
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     */
     public function __construct(
         array $colorModesPool,
         \Magento\Framework\ObjectManagerInterface $objectManager
@@ -58,9 +62,6 @@ class ColorModesProvider
      */
     private function createModeProvider(string $instance): ModeInterface
     {
-        if (!is_subclass_of($instance, ModeInterface::class)) {
-            throw new \InvalidArgumentException($instance . ' does not implement ' . ModeInterface::class);
-        }
         return $this->objectManager->create($instance);
     }
 }

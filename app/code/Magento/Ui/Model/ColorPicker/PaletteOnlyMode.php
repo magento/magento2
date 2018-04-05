@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Ui\Model\ColorPicker;
 
 /**
- * Returns config parameters for paletteonly mode
+ * Returns config parameters for palette only mode
  */
 class PaletteOnlyMode implements ModeInterface
 {

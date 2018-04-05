@@ -16,7 +16,6 @@ class FullMode implements ModeInterface
     /**
      * {@inheritdoc}
      *
-     * @return array
      */
     public function getConfig(): array
     {

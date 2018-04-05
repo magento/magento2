@@ -12,7 +12,6 @@ define([
     'use strict';
 
     ko.bindingHandlers.colorPicker = {
-
         /**
          * Binding init callback.
          *
@@ -22,26 +21,27 @@ define([
          * @param {Object} viewModel
          */
         init: function (element, valueAccessor, allBindings, viewModel) {
-            var config = valueAccessor();
+            var config = valueAccessor(),
+
+                /** change value */
+                changeValue = function (value) {
+                    if (value == null) {
+                        value = '';
+                    }
+                    config.value(value.toString());
+                };
 
             if (!viewModel.disabled()) {
-                config.change = function (value) {
-                    if (value == null) {
-                        value = '';
-                    }
-                    config.value(value.toString());
-                };
+                config.change = changeValue;
 
-                config.hide = function (value) {
-                    if (value == null) {
-                        value = '';
-                    }
-                    config.value(value.toString());
-                };
+                config.hide = changeValue;
+
+                /** show value */
                 config.show = function () {
                     if (!viewModel.focused()) {
                         viewModel.focused(true);
                     }
+
                     return true;
                 };
                 $(element).spectrum(config);
@@ -52,11 +52,18 @@ define([
             }
         },
 
-        update: function(element, valueAccessor) {
+        /**
+         * Reads params passed to binding, parses component declarations.
+         * Fetches for those found and attaches them to the new context.
+         *
+         * @param {HTMLElement} element
+         * @param {Function} valueAccessor
+         */
+        update: function (element, valueAccessor) {
             var config = valueAccessor();
 
             if (tinycolor(config.value()).isValid() || config.value() === '') {
-                $(element).spectrum("set", config.value());
+                $(element).spectrum('set', config.value());
             }
         }
     };

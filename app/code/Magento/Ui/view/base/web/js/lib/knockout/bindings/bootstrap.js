@@ -38,6 +38,6 @@ define(function (require) {
         tooltip:        require('./tooltip'),
         repeat:         require('knockoutjs/knockout-repeat'),
         fastForEach:    require('knockoutjs/knockout-fast-foreach'),
-        colorPicker:    require('./colorPicker')
+        colorPicker:    require('./color-picker')
     };
 });

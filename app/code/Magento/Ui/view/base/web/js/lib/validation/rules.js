@@ -970,6 +970,7 @@ define([
                 if (value === '') {
                     return true;
                 }
+
                 return tinycolor(value).isValid();
             },
             $.mage.__('Wrong color format.')
