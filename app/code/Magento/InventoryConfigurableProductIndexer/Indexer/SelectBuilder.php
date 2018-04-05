@@ -41,29 +41,21 @@ class SelectBuilder
     private $metadataPool;
 
     /**
-     * @var ApplyStatusAttributeCondition
-     */
-    private $applyStatusAttributeCondition;
-
-    /**
      * @param ResourceConnection $resourceConnection
      * @param IndexNameBuilder $indexNameBuilder
      * @param IndexNameResolverInterface $indexNameResolver
      * @param MetadataPool $metadataPool
-     * @param ApplyStatusAttributeCondition $applyStatusAttributeCondition
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         IndexNameBuilder $indexNameBuilder,
         IndexNameResolverInterface $indexNameResolver,
-        MetadataPool $metadataPool,
-        ApplyStatusAttributeCondition $applyStatusAttributeCondition
+        MetadataPool $metadataPool
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->indexNameBuilder = $indexNameBuilder;
         $this->indexNameResolver = $indexNameResolver;
         $this->metadataPool = $metadataPool;
-        $this->applyStatusAttributeCondition = $applyStatusAttributeCondition;
     }
 
     /**
@@ -110,8 +102,6 @@ class SelectBuilder
                 []
             )
             ->group(['parent_product_entity.sku']);
-
-        $this->applyStatusAttributeCondition->execute($select);
 
         return $select;
     }
