@@ -11,7 +11,7 @@ use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
-use Magento\InventoryIndexer\Model\GetStockItemData;
+use Magento\InventoryIndexer\Model\ResourceModel\GetStockItemData;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -202,40 +202,5 @@ class StockIndexerTest extends TestCase
 
         $stockItemData = $this->getStockItemData->execute($configurableSku, 30);
         self::assertEquals(1, $stockItemData[GetStockItemDataInterface::IS_SALABLE]);
-    }
-
-
-    // @codingStandardsIgnoreStart
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProductIndexer/Test/_files/product_configurable_multiple.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProductIndexer/Test/_files/source_items_configurable_multiple.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
-     */
-    // @codingStandardsIgnoreEnd
-    public function testReindexListDisableAllSimples()
-    {
-        $configurableSku = 'configurable_1';
-        $children = $this->linkManagement->getChildren($configurableSku);
-        foreach ($children as $child) {
-            $child->setStatus(0);
-            $this->productRepository->save($child);
-        }
-
-        $this->removeIndexData->execute([10, 20, 30]);
-        $this->stockIndexer->executeList([10, 20, 30]);
-
-        $stockItemData = $this->getStockItemData->execute($configurableSku, 10);
-        self::assertEquals(0, $stockItemData[GetStockItemDataInterface::IS_SALABLE]);
-
-        $stockItemData = $this->getStockItemData->execute($configurableSku, 20);
-        self::assertEquals(0, $stockItemData[GetStockItemDataInterface::IS_SALABLE]);
-
-        $stockItemData = $this->getStockItemData->execute($configurableSku, 30);
-        self::assertEquals(0, $stockItemData[GetStockItemDataInterface::IS_SALABLE]);
     }
 }
