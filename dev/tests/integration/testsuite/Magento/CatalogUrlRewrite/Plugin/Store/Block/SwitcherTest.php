@@ -44,6 +44,7 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/two_categories_per_two_store_groups.php
      * @magentoAppArea frontend
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetTargetStorePostData()
     {
