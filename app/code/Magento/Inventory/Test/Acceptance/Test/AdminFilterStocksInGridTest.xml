@@ -14,7 +14,7 @@
             <stories value="Filter Stocks in Grid"/>
             <title value="Filter Stocks on the Manage Stocks grid"/>
             <description value="You should be able to Filter the Stocks from the Manage Stocks grid."/>
-            <testCaseId value=""/>
+            <testCaseId value="626"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
         </annotations>

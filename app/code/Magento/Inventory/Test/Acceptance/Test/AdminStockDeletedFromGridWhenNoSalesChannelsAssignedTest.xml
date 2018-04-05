@@ -17,9 +17,9 @@
             <testCaseId value="842"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
-            <group value="skip"/>
             <!-- SKIPPING DUE TO BUG #844 -->
             <!-- https://app.zenhub.com/workspace/o/magento-engcom/msi/issues/844 -->
+            <group value="skip"/>
         </annotations>
 
         <before>
