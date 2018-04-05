@@ -123,19 +123,22 @@ class RoboFile extends \Robo\Tasks
     ])
     {
         $GLOBALS['GENERATE_TESTS'] = true;
+        $GLOBALS['FORCE_PHP_GENERATE'] = $opts['force'];
         require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
+
         $testObjects = [];
         $suitesReferences = [];
 
-        if ($opts['force'])
-        {
-            $GLOBALS['FORCE_PHP_GENERATE'] = true;
-        }
-
-        if ($opts['tests']) {
+        if ($opts['tests'] != null) {
             $testConfigArray = json_decode($opts['tests'],true);
             $tests = $testConfigArray['tests'] ?? [];
             $suitesReferences = $testConfigArray['suites'] ?? [];
+        }
+
+        // stop execution if we have failed to properly parse any json
+        if (json_last_error() != JSON_ERROR_NONE) {
+            $this->say("JSON could not be parsed: " . json_last_error_msg());
+            return;
         }
 
         if (!empty($tests))
