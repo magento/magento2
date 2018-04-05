@@ -161,7 +161,6 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         $this->assertObjectHasAttribute('name', $json);
         $this->assertObjectHasAttribute('license', $json);
         $this->assertObjectHasAttribute('type', $json);
-        $this->assertObjectHasAttribute('version', $json);
         $this->assertObjectHasAttribute('require', $json);
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
