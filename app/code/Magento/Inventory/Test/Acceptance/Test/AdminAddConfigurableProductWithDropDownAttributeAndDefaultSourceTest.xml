@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminAddConfigurableProductWithDropDownAttributeAndDefaultSourceTest">
+        <annotations>
+            <features value="Multi-Source Inventory"/>
+            <stories value="Create Configurable Product with drop down attribute"/>
+            <title value="Create a Configurable Product with a drop down attribute"/>
+            <description value="You should be able to create a Configurable Product that is assigned to the Default Source with a drop down attribute."/>
+            <testCaseId value="745"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnTheAddProductToggle"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct('configurable')}}" stepKey="clickOnAddConfigurableProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+
+        <fillField userInput="{{ConfigurableMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{ConfigurableMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{ConfigurableMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <fillField userInput="{{ConfigurableMsiProduct.quantity}}" selector=".admin__control-text[name='product[quantity_and_stock_status][qty]']" stepKey="fillQuantity"/>
+        <fillField userInput="{{ConfigurableMsiProduct.weight}}" selector=".admin__control-text[name='product[weight]']" stepKey="fillWeight"/>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createPreReqCategory.name$$]"  stepKey="searchAndSelectCategory"/>
+
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
+
+        <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="clickOnTheColorAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
+        <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue2"/>
+        <fillField userInput="{{colorProductAttribute2.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute2"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue3"/>
+        <fillField userInput="{{colorProductAttribute3.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute3"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <click selector="(//button/span[contains(text(), 'Assign Sources')])[2]" stepKey="clickOnAssignSources"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminGridRow.checkboxByValue('default')}}" stepKey="clickOnTheDefaultSource"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click selector=".product_form_product_form_assign_sources_configurable_modal .action-primary" stepKey="clickOnDone"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+
+        <fillField selector="input[name='quantity_resolver[dynamicRows][dynamicRows][0][quantity_per_source]']" userInput="100" stepKey="fillTheQuantityField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton5"/>
+        <waitForPageLoad stepKey="waitForPageLoad5"/>
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+
+        <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsRows}}" userInput="3" stepKey="seeNumberOfRows"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeAttributeName1InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeAttributeName2InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute3.name}}" stepKey="seeAttributeName3InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeAttributeSku1InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeAttributeSku2InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute3.name}}" stepKey="seeAttributeSku3InField"/>
+        <see selector="td[data-index='quantity_per_source_container']" userInput="100" stepKey="seeQuantityInField1"/>
+        <see selector="td[data-index='quantity_per_source_container']" userInput="100" stepKey="seeQuantityInField2"/>
+        <see selector="td[data-index='quantity_per_source_container']" userInput="100" stepKey="seeQuantityInField3"/>
+
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
+            <argument name="category" value="$$createPreReqCategory$$"/>
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="assertProductInStorefront2">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+
+        <selectOption selector="select[id*='attribute']" userInput="{{colorProductAttribute1.name}}" stepKey="selectProductAttribute1"/>
+        <seeOptionIsSelected selector="select[id*='attribute']" userInput="{{colorProductAttribute1.name}}" stepKey="seeProductAttribute1IsSelected1"/>
+        <selectOption selector="select[id*='attribute']" userInput="{{colorProductAttribute2.name}}" stepKey="selectProductAttribute2"/>
+        <seeOptionIsSelected selector="select[id*='attribute']" userInput="{{colorProductAttribute2.name}}" stepKey="seeProductAttribute2IsSelected2"/>
+        <selectOption selector="select[id*='attribute']" userInput="{{colorProductAttribute3.name}}" stepKey="selectProductAttribute3"/>
+        <seeOptionIsSelected selector="select[id*='attribute']" userInput="{{colorProductAttribute3.name}}" stepKey="seeProductAttribute3IsSelected3"/>
+    </test>
+</tests>
