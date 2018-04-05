@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCache\Plugin\InventoryIndexer\Indexer\Source\SourceItemIndexer;
 
 use Magento\InventoryCache\Model\FlushCacheByProductIds;
-use Magento\InventoryCatalog\Model\GetProductIdsBySourceItemIds;
+use Magento\InventoryCatalog\Model\ResourceModel\GetProductIdsBySourceItemIds;
 use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
 
 /**
