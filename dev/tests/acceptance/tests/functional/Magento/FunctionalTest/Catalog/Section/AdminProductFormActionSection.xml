@@ -11,5 +11,7 @@
     <section name="AdminProductFormActionSection">
         <element name="backButton" type="button" selector="#back" timeout="30"/>
         <element name="saveButton" type="button" selector="#save-button" timeout="30"/>
+        <element name="saveArrow" type="button" selector="button[data-ui-id='save-button-dropdown']" timeout="10"/>
+        <element name="saveAndClose" type="button" selector="span[title='Save &amp; Close']" timeout="30"/>
     </section>
 </sections>
