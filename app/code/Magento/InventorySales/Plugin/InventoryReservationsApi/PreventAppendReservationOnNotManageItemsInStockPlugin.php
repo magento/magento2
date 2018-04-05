@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Plugin\InventoryReservationsApi;
 
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
@@ -23,11 +24,20 @@ class PreventAppendReservationOnNotManageItemsInStockPlugin
     private $getStockItemConfiguration;
 
     /**
-     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
+     * @var StockConfigurationInterface
      */
-    public function __construct(GetStockItemConfigurationInterface $getStockItemConfiguration)
-    {
+    private $stockConfiguration;
+
+    /**
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
+     * @param StockConfigurationInterface $stockConfiguration
+     */
+    public function __construct(
+        GetStockItemConfigurationInterface $getStockItemConfiguration,
+        StockConfigurationInterface $stockConfiguration
+    ) {
         $this->getStockItemConfiguration = $getStockItemConfiguration;
+        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
@@ -40,6 +50,10 @@ class PreventAppendReservationOnNotManageItemsInStockPlugin
      */
     public function aroundExecute(AppendReservationsInterface $subject, \Closure $proceed, array $reservations)
     {
+        if (!$this->stockConfiguration->canSubtractQty()) {
+            return;
+        }
+
         $reservationToAppend = [];
         foreach ($reservations as $reservation) {
             $stockItemConfiguration = $this->getStockItemConfiguration->execute(
