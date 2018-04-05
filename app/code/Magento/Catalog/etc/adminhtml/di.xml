@@ -215,4 +215,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ProductLink\Search">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddSearchKeyConditionToCollection</argument>
+        </arguments>
+    </type>
 </config>

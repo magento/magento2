@@ -30,7 +30,7 @@ define([
          * Validate initial value actually exists
          */
         validateInitialValue: function () {
-            if (this.value()) {
+            if (!_.isEmpty(this.value())) {
                 $.ajax({
                     url: this.validationUrl,
                     type: 'GET',

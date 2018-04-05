@@ -139,7 +139,7 @@
                  class="admin__action-multiselect-search-count">
             </div>
         </div>
-        <div if="options().length == 0"
+        <div ifnot="options().length"
              class="admin__action-multiselect-empty-area">
             <ul data-bind="html: emptyOptionsHtml"/>
         </div>

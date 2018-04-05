@@ -28,38 +28,22 @@ class Search extends \Magento\Backend\App\Action
     private $resultJsonFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ProductLink\Search
      */
-    private $productCollectionFactory;
-
-    /**
-     * @var \Magento\Ui\DataProvider\AddFilterToCollectionInterface[]
-     */
-    private $filterStrategies;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\Visibility
-     */
-    private $catalogVisibility;
+    private $productSearch;
 
     /**
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\Product\Visibility $catalogVisibility
+     * @param \Magento\Catalog\Model\ProductLink\Search $productSearch
      * @param \Magento\Backend\App\Action\Context $context
-     * @param array $filterStrategies
      */
     public function __construct(
         \Magento\Framework\Controller\Result\JsonFactory $resultFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\Product\Visibility $catalogVisibility,
-        \Magento\Backend\App\Action\Context $context,
-        array $filterStrategies = []
+        \Magento\Catalog\Model\ProductLink\Search $productSearch,
+        \Magento\Backend\App\Action\Context $context
     ) {
         $this->resultJsonFactory = $resultFactory;
-        $this->productCollectionFactory = $productCollectionFactory;
-        $this->filterStrategies = $filterStrategies;
-        $this->catalogVisibility = $catalogVisibility;
+        $this->productSearch = $productSearch;
         parent::__construct($context);
     }
 
@@ -69,18 +53,12 @@ class Search extends \Magento\Backend\App\Action
     public function execute() : \Magento\Framework\Controller\ResultInterface
     {
         $searchKey = $this->getRequest()->getParam('searchKey');
-        $pageNum = $this->getRequest()->getParam('page');
-        $limit = $this->getRequest()->getParam('limit');
+        $pageNum = (int)$this->getRequest()->getParam('page');
+        $limit = (int)$this->getRequest()->getParam('limit');
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
-        $productCollection = $this->productCollectionFactory->create();
-        $productCollection->addAttributeToSelect(ProductInterface::NAME);
-        $productCollection->setVisibility($this->catalogVisibility->getVisibleInCatalogIds());
-        $productCollection->setPage($pageNum, $limit);
-        $this->addFilter($productCollection, 'fulltext', $searchKey);
-        $totalVaues = $productCollection->getSize();
-        $productCollection->setPage($pageNum, $limit);
-
+        $productCollection = $this->productSearch->prepareCollection($searchKey, $pageNum, $limit);
+        $totalValues = $productCollection->getSize();
         $productById = [];
         /** @var  ProductInterface $product */
         foreach ($productCollection as $product) {
@@ -97,34 +75,7 @@ class Search extends \Magento\Backend\App\Action
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData([
             'options' => $productById,
-            'total' => empty($productById) ? 0 : $totalVaues
+            'total' => empty($productById) ? 0 : $totalValues
         ]);
-    }
-
-    /**
-     * Add filter to collection based on search data
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
-     * @param string $filterType
-     * @param string $searchKey
-     * @return void
-     */
-    private function addFilter(
-        \Magento\Catalog\Model\ResourceModel\Product\Collection $collection,
-        string $filterType,
-        string $searchKey
-    ) : void {
-        if (isset($this->filterStrategies[$filterType])) {
-            $this->filterStrategies[$filterType]
-                ->addFilter(
-                    $collection,
-                    $filterType,
-                    [$filterType => $searchKey]
-                );
-        } else {
-            $collection->addAttributeToSelect(
-                [ProductInterface::NAME, ProductInterface::SKU],
-                ['like' => "%{$searchKey}%"]
-            );
-        }
     }
 }

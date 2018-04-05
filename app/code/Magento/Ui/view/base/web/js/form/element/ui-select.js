@@ -1184,7 +1184,6 @@ define([
          * @return {Object}
          */
         getCachedSearchResults: function (searchKey) {
-
             if (this.cachedSearchResults.hasOwnProperty(searchKey)) {
                 return this.cachedSearchResults[searchKey];
             }
