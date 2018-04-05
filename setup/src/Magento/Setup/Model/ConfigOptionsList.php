@@ -138,6 +138,36 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'Database  initial set of commands',
                 'SET NAMES utf8;'
             ),
+            new TextConfigOption(
+                ConfigOptionsListConstants::INPUT_KEY_DB_SSL_KEY,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
+                '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_KEY,
+                'Client key file for SSL',
+                null
+            ),
+            new TextConfigOption(
+                ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CERT,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
+                '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_CERT,
+                'Client certificate for SSL',
+                null
+            ),
+            new TextConfigOption(
+                ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CA,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
+                '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_CA,
+                'Server sertificate for SSL',
+                null
+            ),
+            new FlagConfigOption(
+                ConfigOptionsListConstants::INPUT_KEY_DB_SSL_VERIFY,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
+                '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY,
+                'Verify server sertification'
+            ),
             new FlagConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION,
                 '',
@@ -334,12 +364,25 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         ) {
             try {
                 $options = $this->getDbSettings($options, $deploymentConfig);
+                $driverOptionKeys = [
+                    ConfigOptionsListConstants::KEY_MYSQL_SSL_KEY => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_KEY,
+                    ConfigOptionsListConstants::KEY_MYSQL_SSL_CERT => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CERT,
+                    ConfigOptionsListConstants::KEY_MYSQL_SSL_CA => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CA,
+                    ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_VERIFY
+                ];
+                $driverOptions = [];
+                foreach ($driverOptionKeys as $configKey => $driverOptionKey) {
+                    if ($options[$driverOptionKey] === false || !empty($options[$driverOptionKey])) {
+                        $driverOptions[$configKey] = $options[$driverOptionKey];
+                    }
+                }
 
                 $this->dbValidator->checkDatabaseConnection(
                     $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME],
                     $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST],
                     $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER],
-                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD]
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD],
+                    $driverOptions
                 );
             } catch (\Exception $exception) {
                 $errors[] = $exception->getMessage();

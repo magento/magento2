@@ -75,7 +75,7 @@ class DbValidator
      * @return boolean
      * @throws \Magento\Setup\Exception
      */
-    public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
+    public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '', $driverOptions = [])
     {
         // establish connection to information_schema view to retrieve information about user and table privileges
         $connection = $this->connectionFactory->create([
@@ -84,6 +84,7 @@ class DbValidator
             ConfigOptionsListConstants::KEY_USER => $dbUser,
             ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
             ConfigOptionsListConstants::KEY_ACTIVE => true,
+            ConfigOptionsListConstants::KEY_DRIVER_OPTIONS => $driverOptions
         ]);
 
         if (!$connection) {

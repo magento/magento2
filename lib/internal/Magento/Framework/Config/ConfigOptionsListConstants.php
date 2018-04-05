@@ -57,6 +57,10 @@ class ConfigOptionsListConstants
     const INPUT_KEY_DB_MODEL = 'db-model';
     const INPUT_KEY_DB_INIT_STATEMENTS = 'db-init-statements';
     const INPUT_KEY_DB_ENGINE = 'db-engine';
+    const INPUT_KEY_DB_SSL_KEY = 'db-ssl-key';
+    const INPUT_KEY_DB_SSL_CERT = 'db-ssl-cert';
+    const INPUT_KEY_DB_SSL_CA = 'db-ssl-ca';
+    const INPUT_KEY_DB_SSL_VERIFY = 'db-ssl-verify';
     const INPUT_KEY_RESOURCE = 'resource';
     const INPUT_KEY_SKIP_DB_VALIDATION = 'skip-db-validation';
     const INPUT_KEY_CACHE_HOSTS = 'http-cache-hosts';
@@ -97,6 +101,16 @@ class ConfigOptionsListConstants
     const KEY_MODEL = 'model';
     const KEY_INIT_STATEMENTS = 'initStatements';
     const KEY_ACTIVE = 'active';
+    const KEY_DRIVER_OPTIONS = 'driver_options';
+    /**#@-*/
+
+    /**#@+
+     * Array keys for database driver options configurations
+     */
+    const KEY_MYSQL_SSL_KEY = \PDO::MYSQL_ATTR_SSL_KEY;
+    const KEY_MYSQL_SSL_CERT = \PDO::MYSQL_ATTR_SSL_CERT;
+    const KEY_MYSQL_SSL_CA = \PDO::MYSQL_ATTR_SSL_CA;
+    const KEY_MYSQL_SSL_VERIFY = \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT;
     /**#@-*/
 
     /**

@@ -55,12 +55,26 @@ class AdminCredentialsValidator
      */
     public function validate(array $data)
     {
+        $driverOptionKeys = [
+            ConfigOption::KEY_MYSQL_SSL_KEY => ConfigOption::INPUT_KEY_DB_SSL_KEY,
+            ConfigOption::KEY_MYSQL_SSL_CERT => ConfigOption::INPUT_KEY_DB_SSL_CERT,
+            ConfigOption::KEY_MYSQL_SSL_CA => ConfigOption::INPUT_KEY_DB_SSL_CA,
+            ConfigOption::KEY_MYSQL_SSL_VERIFY => ConfigOption::INPUT_KEY_DB_SSL_VERIFY
+        ];
+        $driverOptions = [];
+        foreach ($driverOptionKeys as $configKey => $driverOptionKey) {
+            if ($data[$driverOptionKey] === false || !empty($data[$driverOptionKey])) {
+                $driverOptions[$configKey] = $data[$driverOptionKey];
+            }
+        }
+
         $dbConnection = $this->connectionFactory->create([
             ConfigOption::KEY_NAME => $data[ConfigOption::INPUT_KEY_DB_NAME],
             ConfigOption::KEY_HOST => $data[ConfigOption::INPUT_KEY_DB_HOST],
             ConfigOption::KEY_USER => $data[ConfigOption::INPUT_KEY_DB_USER],
             ConfigOption::KEY_PASSWORD => $data[ConfigOption::INPUT_KEY_DB_PASSWORD],
-            ConfigOption::KEY_PREFIX => $data[ConfigOption::INPUT_KEY_DB_PREFIX]
+            ConfigOption::KEY_PREFIX => $data[ConfigOption::INPUT_KEY_DB_PREFIX],
+            ConfigOption::KEY_DRIVER_OPTIONS => $driverOptions
         ]);
 
         $adminAccount = $this->adminAccountFactory->create(
