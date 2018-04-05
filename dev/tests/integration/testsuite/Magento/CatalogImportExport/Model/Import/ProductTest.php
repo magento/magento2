@@ -33,6 +33,7 @@ use Psr\Log\LoggerInterface;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
+ * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -343,6 +344,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testSaveCustomOptionsWithMultipleStoreViews()
     {
@@ -1010,7 +1012,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testProductsWithMultipleStores()
@@ -1202,7 +1204,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
@@ -1277,7 +1279,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/category_duplicates.php
      */
@@ -1419,6 +1421,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      */
     public function testValidateUrlKeysMultipleStores()
     {
@@ -1514,6 +1517,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testExistingProductWithUrlKeys()
@@ -1553,6 +1557,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testImportWithoutUrlKeys()
@@ -1630,7 +1635,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testProductWithMultipleStoresInDifferentBunches()
@@ -1679,10 +1684,36 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             },
             $productCollection->getItems()
         );
+        sort($products);
+        $result = array_values($actualProductSkus);
+        sort($result);
         $this->assertEquals(
             $products,
-            array_values($actualProductSkus)
+            $result
         );
+
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        $productSkuList = ['simple1', 'simple2', 'simple3'];
+        foreach ($productSkuList as $sku) {
+            try {
+                $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                    ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+                $product = $productRepository->get($sku, true);
+                if ($product->getId()) {
+                    $productRepository->delete($product);
+                }
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                //Product already removed
+            }
+        }
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
     }
 
     /**

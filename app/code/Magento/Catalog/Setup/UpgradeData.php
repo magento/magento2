@@ -392,6 +392,10 @@ class UpgradeData implements UpgradeDataInterface
             $this->upgradeWebsiteAttributes->upgrade($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.2.5') < 0) {
+            $this->enableSegmentation($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -435,5 +439,40 @@ class UpgradeData implements UpgradeDataInterface
                 );
             }
         }
+    }
+
+    /**
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function enableSegmentation(ModuleDataSetupInterface $setup)
+    {
+        $catalogCategoryProductIndexColumns = array_keys(
+            $setup->getConnection()->describeTable($setup->getTable('catalog_category_product_index'))
+        );
+
+        $storeSelect = $setup->getConnection()->select()->from($setup->getTable('store'))->where('store_id > 0');
+        foreach ($setup->getConnection()->fetchAll($storeSelect) as $store) {
+            $catalogCategoryProductIndexSelect = $setup->getConnection()->select()
+                ->from(
+                    $setup->getTable('catalog_category_product_index')
+                )->where(
+                    'store_id = ?',
+                    $store['store_id']
+                );
+
+            $setup->getConnection()->query(
+                $setup->getConnection()->insertFromSelect(
+                    $catalogCategoryProductIndexSelect,
+                    $setup->getTable('catalog_category_product_index') . '_store_' . $store['store_id'],
+                    $catalogCategoryProductIndexColumns,
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                )
+            );
+        }
+
+        $setup->getConnection()->truncateTable($setup->getTable('catalog_category_product_index'));
+        $setup->getConnection()->truncateTable($setup->getTable('catalog_category_product_index_replica'));
+        $setup->getConnection()->truncateTable($setup->getTable('catalog_category_product_index_tmp'));
     }
 }
