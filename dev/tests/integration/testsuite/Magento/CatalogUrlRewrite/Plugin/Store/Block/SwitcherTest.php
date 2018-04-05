@@ -51,6 +51,6 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
         $store = $this->storeRepository->get($storeCode);
         $result = json_decode($this->model->getTargetStorePostData($store), true);
         
-        $this->assertNotContains($storeCode, $result['action']);
+        $this->assertContains($storeCode, $result['action']);
     }
 }
