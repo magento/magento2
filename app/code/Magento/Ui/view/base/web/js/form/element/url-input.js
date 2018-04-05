@@ -133,7 +133,7 @@ define([
         createChildUrlInputComponent: function (value) {
             var elementConfig;
 
-            if (_.isUndefined(this.linkedElementInstances[value])) {
+            if (!_.isEmpty(value) && _.isUndefined(this.linkedElementInstances[value])) {
                 elementConfig = this.urlTypes[value];
                 layout([elementConfig]);
                 this.linkedElementInstances[value] = this.requestModule(elementConfig.name);
