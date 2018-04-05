@@ -19,17 +19,17 @@ class Context implements \Magento\Catalog\Model\Layer\ContextInterface
     /**
      * @var ItemCollectionProviderInterface
      */
-    protected $collectionProvider;
+    private $collectionProvider;
 
     /**
      * @var StateKeyInterface
      */
-    protected $stateKey;
+    private $stateKey;
 
     /**
      * @var CollectionFilterInterface
      */
-    protected $collectionFilter;
+    private $collectionFilter;
 
     /**
      * @param ItemCollectionProviderInterface $collectionProvider
