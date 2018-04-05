@@ -149,7 +149,7 @@ class Context
     }
 
     /**
-     * Check if there a need to find the current store.
+     * Check if there is a need to find the current store.
      *
      * @return bool
      */
