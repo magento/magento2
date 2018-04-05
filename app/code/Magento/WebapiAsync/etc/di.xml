@@ -10,4 +10,24 @@
     <type name="Magento\Webapi\Model\ServiceMetadata">
         <plugin name="webapiServiceMetadataAsync" type="Magento\WebapiAsync\Plugin\ServiceMetadata" />
     </type>
+    <virtualType name="Magento\WebapiAsync\Model\VirtualType\Rest\Config" type="Magento\Webapi\Model\Rest\Config">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\WebapiAsync\Model\BulkServiceConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\WebapiAsync\Controller\VirtualType\Rest\Router" type="Magento\Webapi\Controller\Rest\Router">
+        <arguments>
+            <argument name="apiConfig" xsi:type="object">Magento\WebapiAsync\Model\VirtualType\Rest\Config</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\WebapiAsync\Controller\VirtualType\Rest\RequestValidator" type="Magento\Webapi\Controller\Rest\RequestValidator">
+        <arguments>
+            <argument name="router" xsi:type="object">Magento\WebapiAsync\Controller\VirtualType\Rest\Router</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver">
+        <arguments>
+            <argument name="requestValidator" xsi:type="object">Magento\WebapiAsync\Controller\VirtualType\Rest\RequestValidator</argument>
+        </arguments>
+    </type>
 </config>
