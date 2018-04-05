@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Helper\Stock;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductType;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
@@ -35,26 +34,18 @@ class AdaptAssignStatusToProductPlugin
     private $defaultStockProvider;
 
     /**
-     * @var IsSourceItemsAllowedForProductType
-     */
-    private $isSourceItemsAllowedForProductType;
-
-    /**
      * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
      * @param IsProductSalableInterface $isProductSalable
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param IsSourceItemsAllowedForProductType $isSourceItemsAllowedForProductType
      */
     public function __construct(
         GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
         IsProductSalableInterface $isProductSalable,
-        DefaultStockProviderInterface $defaultStockProvider,
-        IsSourceItemsAllowedForProductType $isSourceItemsAllowedForProductType
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->isProductSalable = $isProductSalable;
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
     }
 
     /**
@@ -72,10 +63,6 @@ class AdaptAssignStatusToProductPlugin
         Product $product,
         $status = null
     ) {
-        if (!$this->isSourceItemsAllowedForProductType->execute($product->getTypeId())) {
-            return;
-        }
-
         if (null === $product->getSku()) {
             return;
         }
