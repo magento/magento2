@@ -7,6 +7,8 @@
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
 
 /**
  * Strategy which processes exclusions from general rules
@@ -35,18 +37,26 @@ class ExclusionStrategy implements FilterStrategyInterface
     private $validFields = ['price', 'category_ids'];
 
     /**
+     * @var TableResolver
+     */
+    private $tableResolver;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param AliasResolver $aliasResolver
+     * @param TableResolver|null $tableResolver
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        AliasResolver $aliasResolver
+        AliasResolver $aliasResolver,
+        TableResolver $tableResolver = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->storeManager = $storeManager;
         $this->aliasResolver = $aliasResolver;
+        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
     }
 
     /**
@@ -112,7 +122,7 @@ class ExclusionStrategy implements FilterStrategyInterface
         \Magento\Framework\DB\Select $select
     ) {
         $alias = $this->aliasResolver->getAlias($filter);
-        $tableName = $this->resourceConnection->getTableName('catalog_category_product_index');
+        $tableName = $this->tableResolver->getMainTable($this->storeManager->getStore()->getId());
         $mainTableAlias = $this->extractTableAliasFromSelect($select);
 
         $select->joinInner(
