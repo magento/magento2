@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Inventory\Model\ResourceModel\Source;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -66,15 +67,6 @@ class ApplyBaseJoins
                 'invtr.' . StockItemInterface::LOW_STOCK_DATE,
                 'use_config' => 'invtr.' . StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY
             ]
-        )->join(
-            ['product_varchar' => $this->resourceConnection->getTableName('catalog_product_entity_varchar')],
-            'product_varchar.entity_id = product.entity_id',
-            ['name' => 'product_varchar.value']
-        )->join(
-            ['product_int' => $this->resourceConnection->getTableName('catalog_product_entity_int')],
-            'product_int.entity_id = product.entity_id',
-            ['status' => 'product_int.value']
-        )
-            ->group('main_table.' . SourceItem::ID_FIELD_NAME);
+        )->group('main_table.' . SourceItem::ID_FIELD_NAME);
     }
 }

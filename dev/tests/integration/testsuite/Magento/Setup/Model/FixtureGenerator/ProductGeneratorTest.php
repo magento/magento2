@@ -71,7 +71,6 @@ class ProductGeneratorTest extends \PHPUnit\Framework\TestCase
 
     public function testProductGeneration()
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/421');
         $name = 'Simple Product Name';
         $sku = 'simple_product_sku';
         $price = 7.99;

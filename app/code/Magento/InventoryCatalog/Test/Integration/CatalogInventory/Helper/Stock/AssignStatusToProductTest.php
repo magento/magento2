@@ -41,7 +41,6 @@ class AssignStatusToProductTest extends TestCase
      */
     protected function setUp()
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/385');
         parent::setUp();
 
         $this->stockHelper = Bootstrap::getObjectManager()->get(Stock::class);

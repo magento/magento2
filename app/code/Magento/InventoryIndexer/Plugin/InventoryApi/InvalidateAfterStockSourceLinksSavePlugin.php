@@ -9,14 +9,14 @@ namespace Magento\InventoryIndexer\Plugin\InventoryApi;
 
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
+use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**
  * Invalidate InventoryIndexer
  */
-class ReindexAfterStockSourceLinksDeletePlugin
+class InvalidateAfterStockSourceLinksSavePlugin
 {
     /**
      * @var IndexerRegistry
@@ -41,16 +41,15 @@ class ReindexAfterStockSourceLinksDeletePlugin
     }
 
     /**
-     * We don't need to neither process Stock Source Links delete nor invalidate cache for Default Stock.
+     * We don't need to neither process Stock Source Links save nor invalidate cache for Default Stock.
      *
-     * @param StockSourceLinksDeleteInterface $subject
+     * @param StockSourceLinksSaveInterface $subject
      * @param void $result
      * @param StockSourceLinkInterface[] $links
-     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
-        StockSourceLinksDeleteInterface $subject,
+        StockSourceLinksSaveInterface $subject,
         $result,
         array $links
     ) {
