@@ -55,11 +55,9 @@ class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get notifications grouped by severity
      *
-     * @param \Magento\AdminNotification\Model\Inbox $object
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getNoticeStatus(\Magento\AdminNotification\Model\Inbox $object)
+    public function getNoticeStatus()
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
