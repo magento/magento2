@@ -116,7 +116,6 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
      */
     public function testExecute()
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/421');
         $profile = BP . "/setup/performance-toolkit/profiles/{$this->getEdition()}/small.xml";
         $this->commandTester->execute(
             [
