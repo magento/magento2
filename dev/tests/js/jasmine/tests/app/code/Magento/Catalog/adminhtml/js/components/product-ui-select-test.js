@@ -13,8 +13,7 @@ define([
     'use strict';
 
     describe('Magento_Catalog/js/components/product-ui-select', function () {
-        var obj,
-            jQueryMethodsOverridden = {};
+        var obj;
 
         beforeEach(function () {
             obj = new Constr({
@@ -24,14 +23,6 @@ define([
                 options: [],
                 value: ''
             });
-
-            jQueryMethodsOverridden = {};
-        });
-
-        afterEach(function () {
-            _.each(jQueryMethodsOverridden, function (value, key) {
-                $.fn[key] = value;
-            });
         });
 
         describe('"validateInitialValue" method', function () {
@@ -40,8 +31,7 @@ define([
             });
 
             it('Should call not call ajax if value is empty', function () {
-                jQueryMethodsOverridden.ajax = $.ajax;
-                spyOn($, 'ajax');
+                $.ajax = jasmine.createSpy();
 
                 spyOn(obj, 'validationLoading');
                 spyOn(obj, 'value').and.returnValue('');
@@ -60,8 +50,7 @@ define([
                     value: 'hello world'
                 };
 
-                jQueryMethodsOverridden.ajax = $.ajax;
-                spyOn($, 'ajax').and.callFake(function (request) {
+                $.ajax = jasmine.createSpy().and.callFake(function (request) {
                     successCallback = request.success.bind(obj);
                     completeCallback = request.complete.bind(obj);
                 });

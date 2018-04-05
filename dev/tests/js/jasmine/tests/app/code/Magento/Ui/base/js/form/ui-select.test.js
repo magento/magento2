@@ -14,8 +14,7 @@ define([
     'use strict';
 
     describe('Magento_Ui/js/form/element/ui-select', function () {
-        var obj,
-            jQueryMethodsOverridden = {};
+        var obj;
 
         beforeEach(function () {
             obj = new Constr({
@@ -26,14 +25,6 @@ define([
 
             obj.value = ko.observableArray([]);
             obj.cacheOptions.plain = [];
-
-            jQueryMethodsOverridden = {};
-        });
-
-        afterEach(function () {
-            _.each(jQueryMethodsOverridden, function (value, key) {
-                $.fn[key] = value;
-            });
         });
 
         describe('"initialize" method', function () {
@@ -657,9 +648,7 @@ define([
                     }
                 };
 
-                jQueryMethodsOverridden.ajax = $.ajax;
-
-                spyOn($, 'ajax').and.callFake(function (request) {
+                $.ajax = jasmine.createSpy().and.callFake(function (request) {
                     ajaxRequest = request.success.bind(obj);
                 });
 

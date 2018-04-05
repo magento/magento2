@@ -31,7 +31,7 @@ define([
         it('Should automatically load reviews after page load if review tab is active', function () {
             element.addClass('active');
 
-            spyOn($, 'ajax').and.callFake(function () {
+            $.ajax = jasmine.createSpy().and.callFake(function () {
                 var d = $.Deferred();
 
                 d.promise().complete = function () {};
@@ -45,7 +45,7 @@ define([
         });
 
         it('Should not automatically load reviews after page load if review tab is not active', function () {
-            spyOn($, 'ajax').and.callFake(function () {
+            $.ajax = jasmine.createSpy().and.callFake(function () {
                 var d = $.Deferred();
 
                 d.promise().complete = function () {};
@@ -59,7 +59,7 @@ define([
         });
 
         it('Should load reviews if non active review tab was opened', function () {
-            spyOn($, 'ajax').and.callFake(function () {
+            $.ajax = jasmine.createSpy().and.callFake(function () {
                 var d = $.Deferred();
 
                 d.promise().complete = function () {};
