@@ -92,6 +92,7 @@
                 <item name="store_id" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddStoreFieldToCollection</item>
             </argument>
             <argument name="collectionFactory" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory</argument>
+            <argument name="modifiersPool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
@@ -165,6 +166,7 @@
             <argument name="pool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool</argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool"/>
     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions">
         <arguments>
             <argument name="scopeName" xsi:type="string">product_form.product_form</argument>
