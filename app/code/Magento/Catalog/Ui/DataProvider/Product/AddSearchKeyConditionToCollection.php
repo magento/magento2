@@ -22,12 +22,15 @@ class AddSearchKeyConditionToCollection implements AddFilterToCollectionInterfac
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addFilter(Collection $collection, $field, $condition = null) {
+    public function addFilter(Collection $collection, $field, $condition = null) : void
+    {
         if (isset($condition['fulltext']) && !empty($condition['fulltext'])) {
             $collection->addFieldToFilter(
-                ProductInterface::NAME, $condition['fulltext']
+                ProductInterface::NAME,
+                $condition['fulltext']
             )->addFieldToFilter(
-                ProductInterface::SKU, $condition['fulltext']
+                ProductInterface::SKU,
+                $condition['fulltext']
             );
         }
     }

@@ -51,7 +51,10 @@ class Search
      * @param int $limit
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
-    public function prepareCollection(string $searchKey, int $pageNum, int $limit
+    public function prepareCollection(
+        string $searchKey,
+        int $pageNum,
+        int $limit
     ): \Magento\Catalog\Model\ResourceModel\Product\Collection {
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->addAttributeToSelect(ProductInterface::NAME);
