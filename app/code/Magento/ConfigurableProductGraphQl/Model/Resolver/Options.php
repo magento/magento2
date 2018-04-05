@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver;
 
-use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as Type;
 use Magento\ConfigurableProductGraphQl\Model\Options\Collection as OptionCollection;

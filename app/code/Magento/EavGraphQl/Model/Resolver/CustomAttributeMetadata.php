@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\EavGraphQl\Model\Resolver;
 
-use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;

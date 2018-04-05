@@ -56,6 +56,7 @@ class Product
      * @var \Magento\Catalog\Model\Layer\Resolver
      */
     private $layerResolver;
+
     /**
      * @var \Magento\Catalog\Model\ProductRepository
      */

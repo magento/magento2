@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
-use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
