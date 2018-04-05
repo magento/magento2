@@ -18,6 +18,7 @@ use Magento\Framework\GraphQl\Schema\Type\OutputTypeInterface;
 use Magento\Framework\GraphQl\Schema\Type\ScalarTypes;
 use Magento\Framework\GraphQl\Schema\TypeFactory;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfoFactory;
 
 /**
  * Convert fields of the given 'type' config element to the objects compatible with GraphQL schema generator.
@@ -55,12 +56,20 @@ class Fields implements FormatterInterface
     private $wrappedTypeProcessor;
 
     /**
+     * @var ResolveInfoFactory
+     */
+    private $resolveInfoFactory;
+
+
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param OutputMapper $outputMapper
      * @param InputMapper $inputMapper
      * @param TypeFactory $typeFactory
      * @param ScalarTypes $scalarTypes
      * @param WrappedTypeProcessor $wrappedTypeProcessor
+     * @param ResolveInfoFactory $resolveInfoFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -68,7 +77,8 @@ class Fields implements FormatterInterface
         InputMapper $inputMapper,
         TypeFactory $typeFactory,
         ScalarTypes $scalarTypes,
-        WrappedTypeProcessor $wrappedTypeProcessor
+        WrappedTypeProcessor $wrappedTypeProcessor,
+        ResolveInfoFactory $resolveInfoFactory
     ) {
         $this->objectManager = $objectManager;
         $this->outputMapper = $outputMapper;
@@ -76,6 +86,7 @@ class Fields implements FormatterInterface
         $this->typeFactory = $typeFactory;
         $this->scalarTypes = $scalarTypes;
         $this->wrappedTypeProcessor = $wrappedTypeProcessor;
+        $this->resolveInfoFactory = $resolveInfoFactory;
     }
 
     /**
@@ -148,7 +159,8 @@ class Fields implements FormatterInterface
 
             $fieldConfig['resolve'] =
                 function ($value, $args, $context, $info) use ($resolver, $field) {
-                    return $resolver->resolve($field, $context, $info, $value, $args);
+                    $wrapperInfo = $this->resolveInfoFactory->create($info);
+                    return $resolver->resolve($field, $context, $wrapperInfo, $value, $args);
                 };
         }
         return $this->formatArguments($field, $fieldConfig);

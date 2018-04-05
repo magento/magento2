@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;

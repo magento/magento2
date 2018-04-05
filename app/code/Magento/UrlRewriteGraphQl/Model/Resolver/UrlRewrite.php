@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
-use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\BundleGraphQl\Model\Resolver;
 
-use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\BundleGraphQl\Model\Resolver\Links\Collection;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\Value;

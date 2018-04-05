@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 /**
- * Flaternize custom attributes
+ * Flatten custom attributes
  */
-class CustomAttributesFlatternizer
+class CustomAttributesFlattener
 {
     /**
      * Graphql is waiting for flat array

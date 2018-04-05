@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 use GraphQL\Language\AST\FieldNode;
-use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
@@ -26,6 +26,7 @@ class CategoryTree
      * In depth we need to calculate only children nodes, so 2 first wrapped nodes should be ignored
      */
     const DEPTH_OFFSET = 2;
+
     /**
      * @var CollectionFactory
      */
@@ -47,9 +48,10 @@ class CategoryTree
     private $resourceCategory;
 
     /**
-     * @var CustomAttributesFlatternizer
+     * @var CustomAttributesFlattener
      */
-    private $customAttributesFlatternizer;
+    private $customAttributesFlatternner;
+
     /**
      * @var DataObjectProcessor
      */
@@ -60,7 +62,7 @@ class CategoryTree
      * @param AttributesJoiner $attributesJoiner
      * @param ResourceConnection $resourceConnection
      * @param Category $resourceCategory
-     * @param CustomAttributesFlatternizer $customAttributesFlatternizer
+     * @param CustomAttributesFlattener $customAttributesFlatternner
      * @param DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
@@ -68,14 +70,14 @@ class CategoryTree
         AttributesJoiner $attributesJoiner,
         ResourceConnection $resourceConnection,
         Category $resourceCategory,
-        CustomAttributesFlatternizer $customAttributesFlatternizer,
+        CustomAttributesFlattener $customAttributesFlatternner,
         DataObjectProcessor $dataObjectProcessor
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->attributesJoiner = $attributesJoiner;
         $this->resourceConnection = $resourceConnection;
         $this->resourceCategory = $resourceCategory;
-        $this->customAttributesFlatternizer = $customAttributesFlatternizer;
+        $this->customAttributesFlatternner = $customAttributesFlatternner;
         $this->dataObjectProcessor = $dataObjectProcessor;
     }
 
@@ -121,7 +123,7 @@ class CategoryTree
     }
 
     /**
-     * Hydrate and flaternize category object to flat array
+     * Hydrate and flatten category object to flat array
      *
      * @param CategoryInterface $category
      * @return array
@@ -134,7 +136,7 @@ class CategoryTree
         $categoryData['all_children'] = $category->getAllChildren();
         $categoryData['children'] = [];
         $categoryData['available_sort_by'] = $category->getAvailableSortBy();
-        return $this->customAttributesFlatternizer->flaternize($categoryData);
+        return $this->customAttributesFlatternner->flaternize($categoryData);
     }
 
     /**

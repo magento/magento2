@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\DownloadableGraphQl\Model\Resolver\Product;
 
-use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
 use Magento\Downloadable\Model\Product\Type as Downloadable;

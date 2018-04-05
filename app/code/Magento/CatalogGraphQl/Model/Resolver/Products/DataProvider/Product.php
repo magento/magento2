@@ -40,11 +40,6 @@ class Product
     private $visibility;
 
     /**
-     * @var
-     */
-    private $searchProcessor;
-
-    /**
      * @param CollectionFactory $collectionFactory
      * @param ProductSearchResultsInterfaceFactory $searchResultsFactory
      * @param Visibility $visibility

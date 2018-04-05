@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\AttributesJoiner;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CustomAttributesFlatternizer;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CustomAttributesFlattener;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
@@ -52,9 +52,9 @@ class Category implements ResolverInterface
     private $attributesJoiner;
 
     /**
-     * @var CustomAttributesFlatternizer
+     * @var CustomAttributesFlattener
      */
-    private $customAttributesFlatternizer;
+    private $customAttributesFlatternner;
 
     /**
      * @var ValueFactory
@@ -66,20 +66,20 @@ class Category implements ResolverInterface
      * @param CollectionFactory $collectionFactory
      * @param DataObjectProcessor $dataObjectProcessor
      * @param AttributesJoiner $attributesJoiner
-     * @param CustomAttributesFlatternizer $customAttributesFlatternizer
+     * @param CustomAttributesFlattener $customAttributesFlatternner
      * @param ValueFactory $valueFactory
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         DataObjectProcessor $dataObjectProcessor,
         AttributesJoiner $attributesJoiner,
-        CustomAttributesFlatternizer $customAttributesFlatternizer,
+        CustomAttributesFlattener $customAttributesFlatternner,
         ValueFactory $valueFactory
     ) {
         $this->collection = $collectionFactory->create();
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->attributesJoiner = $attributesJoiner;
-        $this->customAttributesFlatternizer = $customAttributesFlatternizer;
+        $this->customAttributesFlatternner = $customAttributesFlatternner;
         $this->valueFactory = $valueFactory;
     }
 
@@ -109,7 +109,7 @@ class Category implements ResolverInterface
                         $item,
                         CategoryInterface::class
                     );
-                    $categories[$item->getId()] = $this->customAttributesFlatternizer
+                    $categories[$item->getId()] = $this->customAttributesFlatternner
                         ->flaternize($categories[$item->getId()]);
                     $categories[$item->getId()]['product_count'] = $item->getProductCount();
                 }

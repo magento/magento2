@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -87,7 +87,7 @@ class Products implements ResolverInterface
         array $args = null
     ) : Value {
         $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
-$searchCriteria->setCurrentPage($args['currentPage']);
+        $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
         if (!isset($args['search']) && !isset($args['filter'])) {
             throw new GraphQlInputException(

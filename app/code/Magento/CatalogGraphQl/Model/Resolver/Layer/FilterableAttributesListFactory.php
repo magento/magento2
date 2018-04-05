@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Layer;
 
 use Magento\Catalog\Model\Layer\Category\FilterableAttributeList as CategoryFilterableAttributeList;
-use Magento\Catalog\Model\Layer\FilterList;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Layer\Search\FilterableAttributeList;
+use Magento\Catalog\Model\Layer\FilterableAttributeListInterface;
 
 /**
  * Factory for filterable attributes list.
@@ -22,11 +22,9 @@ class FilterableAttributesListFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManager = null;
+    private $objectManager;
 
     /**
-     * Factory constructor
-     *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
@@ -39,9 +37,9 @@ class FilterableAttributesListFactory
      *
      * @param string $type
      * @param array $data
-     * @return FilterList
+     * @return FilterableAttributeListInterface
      */
-    public function create(string $type, array $data = array())
+    public function create(string $type, array $data = []) : FilterableAttributeListInterface
     {
         if ($type === Resolver::CATALOG_LAYER_CATEGORY) {
             return $this->objectManager->create(CategoryFilterableAttributeList::class, $data);

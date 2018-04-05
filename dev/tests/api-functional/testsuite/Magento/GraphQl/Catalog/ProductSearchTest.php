@@ -17,10 +17,13 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductSearchTest extends GraphQlAbstract
 {
@@ -153,7 +156,22 @@ QUERY;
      */
     private function assertFilters($response, $expectedFilters, $message = '')
     {
-        $this->assertEquals($expectedFilters, $response['products']['filters'], $message);
+        $this->assertArrayHasKey('filters', $response['products'], 'Product has filters');
+        $this->assertTrue(is_array(($response['products']['filters'])), 'Product filters is array');
+        $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
+        foreach ($expectedFilters as $expectedFilter) {
+            $found = false;
+            foreach ($response['products']['filters'] as $responseFilter) {
+                if ($responseFilter['name'] == $expectedFilter['name']
+                    && $responseFilter['request_var'] == $expectedFilter['request_var']) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $this->fail($message);
+            }
+        }
     }
 
     /**
@@ -1136,6 +1154,55 @@ QUERY;
         $this->expectExceptionMessage('GraphQL response contains errors: \'search\' or \'filter\' input argument is ' .
             'required.');
         $this->graphQlQuery($query);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_few_out_of_stock.php
+     */
+    public function testFilterProductsThatAreOutOfStockWithConfigSettings()
+    {
+        $this->markTestSkipped('Skipped until visibility honors config settings is fixed in MAGETWO-89246');
+        $query
+            =<<<QUERY
+{
+  products(
+        filter:
+        {
+            sku:{like:"simple%"}
+        }
+    pageSize:20
+            
+     )
+    {
+      items
+      {
+       sku
+       name
+       category_ids
+      }
+       total_count
+        
+    }
+}
+QUERY;
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
+        $config->saveConfig(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            0,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+        ObjectManager::getInstance()->get(\Magento\Framework\App\Cache::class)
+            ->clean(\Magento\Framework\App\Config::CACHE_TAG);
+        $response = $this->graphQlQuery($query);
+        $responseObject = new DataObject($response);
+        self::assertEquals(
+            'simple_visible_in_stock',
+            $responseObject->getData('products/items/0/sku')
+        );
+        $this->assertEquals(1, $response['products']['total_count']);
     }
 
     /**
