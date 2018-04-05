@@ -6,7 +6,6 @@
 namespace Magento\CatalogUrlRewrite\Plugin\Store\Block;
 
 use Magento\Framework\Data\Helper\PostHelper;
-use Magento\Framework\App\Route\ConfigInterface as RouteConfig;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -37,7 +36,6 @@ class Switcher
     /**
      * @param PostHelper $postHelper
      * @param UrlFinderInterface $urlFinder
-     * @param RouteConfig $routeConfig
      * @param HttpRequest $request
      */
     public function __construct(
