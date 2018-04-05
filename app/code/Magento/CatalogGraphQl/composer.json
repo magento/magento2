@@ -9,7 +9,6 @@
         "magento/module-catalog": "101.2.*",
         "magento/module-search": "100.3.*",
         "magento/module-store": "100.3.*",
-        "magento/module-catalog-search": "100.3.*",
         "magento/module-eav-graph-ql": "100.0.*",
         "magento/framework": "100.3.*"
     },
