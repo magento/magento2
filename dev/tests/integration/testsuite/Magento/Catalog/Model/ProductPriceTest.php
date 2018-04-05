@@ -75,6 +75,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
      */
     public function testGetMinPrice()
