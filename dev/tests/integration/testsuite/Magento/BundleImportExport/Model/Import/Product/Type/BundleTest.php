@@ -111,6 +111,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
      */
     public function testBundleImportWithMultipleStoreViews()
     {
@@ -168,5 +169,29 @@ class BundleTest extends \PHPUnit\Framework\TestCase
                 }
             }
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $skus = [
+            'Simple 1',
+            'Simple 2',
+            'Simple 3',
+            'Bundle 1'
+        ];
+
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Model\ProductRepository::class);
+
+        foreach ($skus as $sku) {
+            try {
+                $product = $productRepository->get($sku, false, null, true);
+                $productRepository->delete($product);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            }
+        }
+        parent::tearDown();
     }
 }

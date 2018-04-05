@@ -32,6 +32,7 @@ class RuleProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/attribute.php
      * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/rule_by_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php

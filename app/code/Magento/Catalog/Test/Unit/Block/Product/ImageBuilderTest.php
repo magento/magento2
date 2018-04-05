@@ -252,6 +252,7 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
                     'custom_attributes' => '',
                     'resized_image_width' => 100,
                     'resized_image_height' => 100,
+                    'product_id' => null
                 ],
             ],
         ];
@@ -286,8 +287,69 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
                     'custom_attributes' => 'name_1="value_1" name_2="value_2"',
                     'resized_image_width' => 120,
                     'resized_image_height' => 70,
+                    'product_id' => null
                 ],
             ],
         ];
+    }
+
+    /**
+     * @param array $data
+     * @param array $expected
+     * @dataProvider createDataProvider
+     */
+    public function testCreateWithSimpleProduct($data, $expected)
+    {
+        $imageId = 'test_image_id';
+
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $simpleOptionMock = $this->createMock(\Magento\Wishlist\Model\Item\Option::class);
+        $simpleProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+
+        $productMock->expects($this->once())->method('getCustomOption')
+            ->with('simple_product')->willReturn($simpleOptionMock);
+
+        $simpleOptionMock->expects($this->once())->method('getProduct')->willReturn($simpleProductMock);
+
+        $helperMock = $this->createMock(\Magento\Catalog\Helper\Image::class);
+        $helperMock->expects($this->once())
+            ->method('init')
+            ->with($simpleProductMock, $imageId)
+            ->willReturnSelf();
+        $helperMock->expects($this->once())
+            ->method('getFrame')
+            ->willReturn($data['frame']);
+        $helperMock->expects($this->once())
+            ->method('getUrl')
+            ->willReturn($data['url']);
+        $helperMock->expects($this->exactly(2))
+            ->method('getWidth')
+            ->willReturn($data['width']);
+        $helperMock->expects($this->exactly(2))
+            ->method('getHeight')
+            ->willReturn($data['height']);
+        $helperMock->expects($this->once())
+            ->method('getLabel')
+            ->willReturn($data['label']);
+        $helperMock->expects($this->once())
+            ->method('getResizedImageInfo')
+            ->willReturn($data['imagesize']);
+
+        $this->helperFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($helperMock);
+
+        $imageMock = $this->createMock(\Magento\Catalog\Block\Product\Image::class);
+
+        $this->imageFactory->expects($this->once())
+            ->method('create')
+            ->with($expected)
+            ->willReturn($imageMock);
+
+        $this->model->setProduct($productMock);
+        $this->model->setImageId($imageId);
+        $this->model->setAttributes($data['custom_attributes']);
+
+        $this->assertInstanceOf(\Magento\Catalog\Block\Product\Image::class, $this->model->create());
     }
 }
