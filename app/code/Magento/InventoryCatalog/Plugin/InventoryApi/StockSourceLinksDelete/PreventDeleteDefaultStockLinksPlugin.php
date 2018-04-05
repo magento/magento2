@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Plugin\InventoryApi\StockSourceLinksDelete;
+namespace Magento\InventoryCatalog\Plugin\InventoryApi\StockSourceLinksDelete;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;

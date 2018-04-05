@@ -56,4 +56,10 @@
         <plugin name="adapt_stock_resolver_to_admin_website"
                 type="Magento\InventoryCatalog\Plugin\InventorySalesApi\StockResolver\AdaptStockResolverToAdminWebsitePlugin"/>
     </type>
+    <type name="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface">
+        <plugin name="prevent_delete_default_stock_links" type="Magento\InventoryCatalog\Plugin\InventoryApi\StockSourceLinksDelete\PreventDeleteDefaultStockLinksPlugin"/>
+    </type>
+    <type name="Magento\Inventory\Controller\Adminhtml\Stock\StockSourceLinkProcessor">
+        <plugin name="prevent_process_for_default_stock" type="Magento\InventoryCatalog\Plugin\Inventory\Controller\Adminhtml\Stock\StockSaveProcessor\PreventProcessDefaultStockLinksPlugin"/>
+    </type>
 </config>
