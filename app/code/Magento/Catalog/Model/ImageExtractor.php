@@ -35,7 +35,11 @@ class ImageExtractor implements TypeDataExtractorInterface
                 if ($attributeTagName === 'background') {
                     $nodeValue = $this->processImageBackground($attribute->nodeValue);
                 } elseif ($attributeTagName === 'width' || $attributeTagName === 'height') {
-                    $nodeValue = intval($attribute->nodeValue);
+                    if ((bool)$attribute->getAttribute('xsi:nil') !== true) {
+                        $nodeValue = intval($attribute->nodeValue);
+                    } else {
+                        $nodeValue = null;
+                    }
                 } else {
                     $nodeValue = $attribute->nodeValue;
                 }
