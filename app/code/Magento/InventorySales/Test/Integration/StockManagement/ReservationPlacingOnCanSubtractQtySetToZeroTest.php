@@ -17,6 +17,28 @@ use PHPUnit\Framework\TestCase;
 class ReservationPlacingOnCanSubtractQtySetToZeroTest extends TestCase
 {
     /**
+     * @var AppendReservationsInterface
+     */
+    private $appendReservations;
+
+    /**
+     * @var ReservationBuilderInterface
+     */
+    private $reservationBuilder;
+
+    /**
+     * @var GetReservationsQuantityInterface
+     */
+    private $getReservationQuantity;
+
+    protected function setUp()
+    {
+        $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
+        $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
+        $this->getReservationQuantity = Bootstrap::getObjectManager()->get(GetReservationsQuantityInterface::class);
+    }
+
+    /**
      * We broke transaction during indexation so we need to clean db state manually
      */
     protected function tearDown()
@@ -37,16 +59,12 @@ class ReservationPlacingOnCanSubtractQtySetToZeroTest extends TestCase
      */
     public function testPlacingReservationOnCanSubtractQtySetToZero()
     {
-        $appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
-        $reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
-        $getReservationQuantity = Bootstrap::getObjectManager()->get(GetReservationsQuantityInterface::class);
-
-        $appendReservations->execute(
+        $this->appendReservations->execute(
             [
-                $reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(2)->build()
+                $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(2)->build()
             ]
         );
 
-        self::assertEquals(0, $getReservationQuantity->execute('SKU-1', 10));
+        self::assertEquals(0, $this->getReservationQuantity->execute('SKU-1', 10));
     }
 }
