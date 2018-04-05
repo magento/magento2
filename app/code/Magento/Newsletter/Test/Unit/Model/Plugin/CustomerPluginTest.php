@@ -68,7 +68,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
                     'updateSubscription',
                     'subscribeCustomerById',
                     'unsubscribeCustomerById',
-                    'isSubscribed'
+                    'isSubscribed',
                 ]
             )->disableOriginalConstructor()
             ->getMock();
@@ -77,14 +77,14 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->customerExtensionMock = $this->getMockBuilder(CustomerExtensionInterface::class)
-            ->setMethods(["getIsSubscribed", "setIsSubscribed"])
+            ->setMethods(['getIsSubscribed', 'setIsSubscribed'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->subscriberResourceMock = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->setMethods(["getExtensionAttributes"])
+            ->setMethods(['getExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->subscriberFactory->expects($this->any())->method('create')->willReturn($this->subscriber);
@@ -104,6 +104,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
      * @param bool $subscriptionOriginalValue
      * @param bool $subscriptionNewValue
      * @dataProvider afterSaveDataProvider
+     * @return void
      */
     public function testAfterSave($subscriptionOriginalValue, $subscriptionNewValue)
     {
@@ -137,9 +138,9 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             ->willReturn($subscriptionNewValue);
 
         if ($subscriptionOriginalValue !== $subscriptionNewValue) {
-            if ($subscriptionNewValue === true) {
+            if ($subscriptionNewValue) {
                 $this->subscriber->expects($this->once())->method('subscribeCustomerById')->with($customerId);
-            } elseif ($subscriptionNewValue === false) {
+            } else {
                 $this->subscriber->expects($this->once())->method('unsubscribeCustomerById')->with($customerId);
             }
             $this->subscriber->expects($this->once())->method('isSubscribed')->willReturn($subscriptionNewValue);
@@ -196,6 +197,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
      * @param int|null $subscriberStatusValue
      * @param bool $isSubscribed
      * @dataProvider afterGetByIdDataProvider
+     * @return void
      */
     public function testAfterGetByIdCreatesExtensionAttributesIfItIsNotSet(
         $subscriberStatusKey,

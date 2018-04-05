@@ -83,9 +83,9 @@ class CustomerPlugin
         if ($newExtensionAttributes
             && $initialExtensionAttributes->getIsSubscribed() !== $newExtensionAttributes->getIsSubscribed()
         ) {
-            if ($newExtensionAttributes->getIsSubscribed() === true) {
+            if ($newExtensionAttributes->getIsSubscribed()) {
                 $subscriber->subscribeCustomerById($resultId);
-            } elseif ($newExtensionAttributes->getIsSubscribed() === false) {
+            } else {
                 $subscriber->unsubscribeCustomerById($resultId);
             }
         }
