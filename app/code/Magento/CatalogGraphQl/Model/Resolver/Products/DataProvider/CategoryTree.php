@@ -50,7 +50,7 @@ class CategoryTree
     /**
      * @var CustomAttributesFlattener
      */
-    private $customAttributesFlatternner;
+    private $customAttributesFlattener;
 
     /**
      * @var DataObjectProcessor
@@ -62,7 +62,7 @@ class CategoryTree
      * @param AttributesJoiner $attributesJoiner
      * @param ResourceConnection $resourceConnection
      * @param Category $resourceCategory
-     * @param CustomAttributesFlattener $customAttributesFlatternner
+     * @param CustomAttributesFlattener $customAttributesFlattener
      * @param DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
@@ -70,14 +70,14 @@ class CategoryTree
         AttributesJoiner $attributesJoiner,
         ResourceConnection $resourceConnection,
         Category $resourceCategory,
-        CustomAttributesFlattener $customAttributesFlatternner,
+        CustomAttributesFlattener $customAttributesFlattener,
         DataObjectProcessor $dataObjectProcessor
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->attributesJoiner = $attributesJoiner;
         $this->resourceConnection = $resourceConnection;
         $this->resourceCategory = $resourceCategory;
-        $this->customAttributesFlatternner = $customAttributesFlatternner;
+        $this->customAttributesFlattener = $customAttributesFlattener;
         $this->dataObjectProcessor = $dataObjectProcessor;
     }
 
@@ -136,7 +136,7 @@ class CategoryTree
         $categoryData['all_children'] = $category->getAllChildren();
         $categoryData['children'] = [];
         $categoryData['available_sort_by'] = $category->getAvailableSortBy();
-        return $this->customAttributesFlatternner->flaternize($categoryData);
+        return $this->customAttributesFlattener->flaternize($categoryData);
     }
 
     /**

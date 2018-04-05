@@ -54,7 +54,7 @@ class Category implements ResolverInterface
     /**
      * @var CustomAttributesFlattener
      */
-    private $customAttributesFlatternner;
+    private $customAttributesFlattener;
 
     /**
      * @var ValueFactory
@@ -66,20 +66,20 @@ class Category implements ResolverInterface
      * @param CollectionFactory $collectionFactory
      * @param DataObjectProcessor $dataObjectProcessor
      * @param AttributesJoiner $attributesJoiner
-     * @param CustomAttributesFlattener $customAttributesFlatternner
+     * @param CustomAttributesFlattener $customAttributesFlattener
      * @param ValueFactory $valueFactory
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         DataObjectProcessor $dataObjectProcessor,
         AttributesJoiner $attributesJoiner,
-        CustomAttributesFlattener $customAttributesFlatternner,
+        CustomAttributesFlattener $customAttributesFlattener,
         ValueFactory $valueFactory
     ) {
         $this->collection = $collectionFactory->create();
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->attributesJoiner = $attributesJoiner;
-        $this->customAttributesFlatternner = $customAttributesFlatternner;
+        $this->customAttributesFlattener = $customAttributesFlattener;
         $this->valueFactory = $valueFactory;
     }
 
@@ -109,7 +109,7 @@ class Category implements ResolverInterface
                         $item,
                         CategoryInterface::class
                     );
-                    $categories[$item->getId()] = $this->customAttributesFlatternner
+                    $categories[$item->getId()] = $this->customAttributesFlattener
                         ->flaternize($categories[$item->getId()]);
                     $categories[$item->getId()]['product_count'] = $item->getProductCount();
                 }
