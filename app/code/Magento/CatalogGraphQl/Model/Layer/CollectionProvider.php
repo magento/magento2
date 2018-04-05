@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Layer;
 
-use Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
  * Collection Provider for graphql layered navigation.
@@ -15,7 +15,7 @@ use Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection;
 class CollectionProvider implements \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface
 {
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     private $collectionFactory;
 
