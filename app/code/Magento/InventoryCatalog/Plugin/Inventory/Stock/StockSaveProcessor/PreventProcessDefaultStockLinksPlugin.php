@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\Inventory\Controller\Adminhtml\Stock\StockSaveProcessor;
+namespace Magento\InventoryCatalog\Plugin\Inventory\Stock\StockSaveProcessor;
 
 use Magento\Inventory\Controller\Adminhtml\Stock\StockSourceLinkProcessor;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
