@@ -64,6 +64,9 @@ define([
 
             if (tinycolor(config.value()).isValid() || config.value() === '') {
                 $(element).spectrum('set', config.value());
+                if (config.value() !== '') {
+                    config.value($(element).spectrum('get').toString());
+                }
             }
         }
     };
