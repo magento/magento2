@@ -50,7 +50,8 @@ class DataProvider
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
         Resolver $layerResolver,
-        TableResolver $tableResolver = null
+        TableResolver $tableResolver = null,
+        Dimension $catalogCategoryProductDimension = null
     ) {
         $this->resource = $resource;
         $this->scopeResolver = $scopeResolver;
@@ -79,9 +80,18 @@ class DataProvider
             $currentScopeId = $this->scopeResolver->getScope($dimensions['scope']->getValue())->getId();
             $currentCategory = $this->layer->getCurrentCategory();
 
+            $catalogCategoryProductDimension = new Dimension(\Magento\Store\Model\Store::ENTITY, $currentScopeId);
+
+            $catalogCategoryProductTableName = $this->tableResolver->resolve(
+                TableResolver::MAIN_INDEX_TABLE,
+                [
+                    $catalogCategoryProductDimension
+                ]
+            );
+
             $derivedTable = $this->resource->getConnection()->select();
             $derivedTable->from(
-                ['main_table' => $this->tableResolver->getMainTable($currentScopeId)],
+                ['main_table' => $catalogCategoryProductTableName],
                 [
                     'value' => 'category_id'
                 ]

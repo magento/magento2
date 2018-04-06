@@ -16,7 +16,7 @@ use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Class AbstractAction
@@ -112,9 +112,9 @@ abstract class AbstractAction
     protected $metadataPool;
 
     /**
-     * @var TableResolver
+     * @var TableMaintainer
      */
-    protected $tableResolver;
+    protected $tableMaintainer;
 
     /**
      * @var string
@@ -133,7 +133,7 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\Config $config
      * @param QueryGenerator $queryGenerator
      * @param MetadataPool|null $metadataPool
-     * @param TableResolver|null $tableResolver
+     * @param TableMaintainer|null $tableMaintainer
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -141,7 +141,7 @@ abstract class AbstractAction
         \Magento\Catalog\Model\Config $config,
         QueryGenerator $queryGenerator = null,
         MetadataPool $metadataPool = null,
-        TableResolver $tableResolver = null
+        TableMaintainer $tableMaintainer = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -149,7 +149,7 @@ abstract class AbstractAction
         $this->config = $config;
         $this->queryGenerator = $queryGenerator ?: ObjectManager::getInstance()->get(QueryGenerator::class);
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
-        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
+        $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
     }
 
     /**
@@ -222,8 +222,8 @@ abstract class AbstractAction
     protected function getIndexTable($storeId)
     {
         return $this->useTempTable
-            ? $this->tableResolver->getMainReplicaTable($storeId)
-            : $this->tableResolver->getMainTable($storeId);
+            ? $this->tableMaintainer->getMainReplicaTable($storeId)
+            : $this->tableMaintainer->getMainTable($storeId);
     }
 
     /**

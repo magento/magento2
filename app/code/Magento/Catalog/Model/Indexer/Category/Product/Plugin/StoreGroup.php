@@ -10,7 +10,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\Indexer\Category\Product;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
+use Magento\Catalog\Model\Indexer\Category\Product\tableMaintainer;
 
 class StoreGroup
 {
@@ -25,20 +25,20 @@ class StoreGroup
     protected $indexerRegistry;
 
     /**
-     * @var TableResolver
+     * @var TableMaintainer
      */
-    protected $tableResolver;
+    protected $tableMaintainer;
 
     /**
      * @param IndexerRegistry $indexerRegistry
-     * @param TableResolver $tableResolver
+     * @param TableMaintainer $tableMaintainer
      */
     public function __construct(
         IndexerRegistry $indexerRegistry,
-        TableResolver $tableResolver = null
+        TableMaintainer $tableMaintainer
     ) {
         $this->indexerRegistry = $indexerRegistry;
-        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
+        $this->tableMaintainer = $tableMaintainer;
     }
 
     /**
@@ -98,7 +98,7 @@ class StoreGroup
     public function afterDelete(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $storeGroup)
     {
         foreach ($storeGroup->getStores() as $store) {
-            $this->tableResolver->dropTablesForStore($store->getId());
+            $this->tableMaintainer->dropTablesForStore($store->getId());
         }
         return $objectResource;
     }
