@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\TestModuleGraphQlQueryExtension\Model\Resolver;
 
@@ -31,7 +32,7 @@ class ItemPostProcessor implements PostFetchProcessorInterface
     /**
      * @inheritDoc
      */
-    public function process(array $resultData)
+    public function process(array $resultData) : array
     {
         /** @var Item $item */
         $item = $this->itemFactory->create();
