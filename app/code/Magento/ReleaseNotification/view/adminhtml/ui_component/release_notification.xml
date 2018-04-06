@@ -43,7 +43,7 @@
             <state>true</state>
             <options>
                 <option name="modalClass" xsi:type="string">release-notification-modal</option>
-                <option name="title" xsi:type="string" translate="true">What's new with Magento 2.2.4</option>
+                <option name="title" xsi:type="string" translate="true">What&#8217;s new with Magento 2.2.4</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
@@ -219,7 +219,7 @@
                         <li><span>Customers never leave your site resulting in a smoother shopping experience.</span></li>
                         <li><span>Easy application process with the ability to pay over time increases average order value and conversion rates.</span></li>
                         <li><span>Assumes all credit and fraud risk and ensures you are paid for ordered goods.</span></li>
-                        <li><span>Ready for all devices and supports one click repeat purchases across all Klarna merchant sites.</span></li>
+                        <li><span>Ready for all devices.</span></li>
                         <li><span>Fast and easy setup, right from the Magento Admin.</span></li>
                         </ul>]]>
                         </item>
