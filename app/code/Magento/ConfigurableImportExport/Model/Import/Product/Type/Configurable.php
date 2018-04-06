@@ -479,7 +479,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $additionalRows = [];
         if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
-        } elseif(!empty($rowData['store_view_code'])) {
+        } elseif (!empty($rowData['store_view_code'])) {
             throw new LocalizedException(
                 __(
                     'Product with assigned super attributes should not have specified "%1" value',
