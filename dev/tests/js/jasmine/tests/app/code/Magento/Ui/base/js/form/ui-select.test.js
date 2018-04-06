@@ -550,7 +550,7 @@ define([
                 expect(obj.hasOwnProperty('filterOptionsList')).toBeDefined();
             });
 
-            it('Should call loadOptions with value when searchOptions is true', function () {
+            it('Should call loadOptions with value when searchOptions is true', function (done) {
                 spyOn(obj, 'filterInputValue').and.returnValue(' heLlO ');
 
                 spyOn(obj, 'loadOptions');
@@ -559,7 +559,10 @@ define([
 
                 obj.filterOptionsList();
 
-                expect(obj.loadOptions).toHaveBeenCalledWith('hello');
+                setTimeout(function () {
+                    expect(obj.loadOptions).toHaveBeenCalledWith('hello');
+                    done();
+                }, obj.debounce);
             });
         });
         describe('"isSelectedValue" method', function () {
