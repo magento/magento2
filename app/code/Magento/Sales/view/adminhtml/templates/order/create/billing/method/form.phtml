@@ -25,7 +25,7 @@
                    type="radio" name="payment[method]"
                    title="<?= $block->escapeHtml($_method->getTitle()); ?>"
                    onclick="payment.switchMethod('<?= $block->escapeHtml($_code); ?>')"
-                    <?php if ($block->getSelectedMethodCode() == $_code) : ?>
+                    <?php if ($currentSelectedMethod == $_code) : ?>
                     checked="checked"
                     <?php endif; ?>
                     <?php $className = ($_counter == $_methodsCount) ? ' validate-one-required-by-name' : ''; ?>
@@ -56,7 +56,7 @@
             'Magento_Sales/order/create/form'
         ], function(mage) {
             mage.apply();
-        <?php if ($_methodsCount != 1) : ?>
+        <?php if ($_methodsCount !== 1) : ?>
             order.setPaymentMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
         <?php else : ?>
             payment.switchMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
