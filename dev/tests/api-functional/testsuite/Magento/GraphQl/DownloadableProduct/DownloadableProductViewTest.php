@@ -222,10 +222,10 @@ QUERY;
         );
         /** @var LinkInterface $downloadableProductLinks */
         $downloadableProductLinks = $product->getExtensionAttributes()->getDownloadableProductLinks();
-        $downloadableProductLink = $downloadableProductLinks[1];
+        $downloadableProductLink = $downloadableProductLinks[0];
 
         $this->assertResponseFields(
-            $actualResponse['downloadable_product_links'][1],
+            $actualResponse['downloadable_product_links'][0],
             [
                 'id' => $downloadableProductLink->getId(),
                 'sample_url' => $downloadableProductLink->getSampleUrl(),

@@ -32,11 +32,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     private $productIds = [];
 
     /**
-     * @var bool
-     */
-    private $hasProductJoin = false;
-
-    /**
      * Init model and resource model
      *
      * @return void
@@ -54,7 +49,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function joinValues($storeId)
     {
-        $this->joinProductEntityTable();
         $this->getSelect()->joinLeft(
             ['option_value_default' => $this->getTable('catalog_product_bundle_option_value')],
             implode(
@@ -107,23 +101,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->productIds[] = $productId;
 
-        return $this;
-    }
-
-    private function joinProductEntityTable()
-    {
-        if ($this->hasProductJoin || empty($this->productIds)) {
-            return;
-        }
-
-        if (count($this->productIds) === 1) {
-            $comparedField = reset($this->productIds);
-            $whereClause = "cpe.entity_id = ?";
-        } else {
-            $comparedField = $this->productIds;
-            $whereClause = "cpe.entity_id IN (?)";
-        }
-
         $productTable = $this->getTable('catalog_product_entity');
         $linkField = $this->getConnection()->getAutoIncrementField($productTable);
         $this->getSelect()->join(
@@ -131,23 +108,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'cpe.'.$linkField.' = main_table.parent_id',
             []
         )->where(
-            $whereClause,
-            $comparedField
+            "cpe.entity_id = (?)",
+            $this->productIds
         );
-
-        $this->hasProductJoin = true;
-    }
-
-    /**
-     * Add base select based off product id buffer.
-     *
-     * @return $this
-     */
-    protected function _beforeLoad()
-    {
-        $this->joinProductEntityTable();
-
-        parent::_beforeLoad();
 
         return $this;
     }
@@ -160,7 +123,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _afterLoad()
     {
         $this->productIds = [];
-        $this->hasProductJoin = false;
 
         return parent::_afterLoad();
     }
