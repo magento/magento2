@@ -16,6 +16,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataProvider
 {
     /**
@@ -51,8 +54,7 @@ class DataProvider
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
         Resolver $layerResolver,
-        TableResolver $tableResolver = null,
-        Dimension $catalogCategoryProductDimension = null
+        TableResolver $tableResolver = null
     ) {
         $this->resource = $resource;
         $this->scopeResolver = $scopeResolver;
