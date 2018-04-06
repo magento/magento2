@@ -27,11 +27,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_selectionsAppended = false;
 
     /**
-     * @var int[]
-     */
-    private $productIds = [];
-
-    /**
      * Init model and resource model
      *
      * @return void
