@@ -14,7 +14,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
- * Class ColorPicker
+ * Prepares Color Picker UI component with mode and format
  *
  * @api
  */
