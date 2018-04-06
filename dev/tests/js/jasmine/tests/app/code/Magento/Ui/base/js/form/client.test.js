@@ -46,7 +46,7 @@ define([
             _.each(jQueryMethods, function (value, key) {
                 $.fn[key] = value;
             });
-
+            $.ajax = originaljQueryAjax;
         });
 
         describe('"save" method', function () {

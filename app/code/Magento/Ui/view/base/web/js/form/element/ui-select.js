@@ -177,6 +177,7 @@ define([
             deviation: 30,
             validationLoading: false,
             isRemoveSelectedIcon: true,
+            debounce: 300,
             missingValuePlaceholder: $t('Entity with ID: %s doesn\'t exist'),
             isDisplayMissingValuePlaceholder: false,
             listens: {
@@ -459,7 +460,7 @@ define([
             }
 
             if (this.searchOptions) {
-                return this.loadOptions(value);
+                return _.debounce(this.loadOptions.bind(this, value), this.debounce)();
             }
 
             this.cleanHoveredElement();
