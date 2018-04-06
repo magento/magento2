@@ -7,6 +7,9 @@
         "magento/module-graph-ql": "*",
         "magento/framework": "*"
     },
+    "suggest": {
+        "magento/module-graph-ql": "*"
+    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"

@@ -3,18 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GraphQl\UrlRewrite;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
-use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Test the GraphQL endpoint's URLResolver query to verify canonical URL's are correctly returned.
