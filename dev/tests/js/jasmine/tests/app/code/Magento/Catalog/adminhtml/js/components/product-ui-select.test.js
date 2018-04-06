@@ -13,9 +13,12 @@ define([
     'use strict';
 
     describe('Magento_Catalog/js/components/product-ui-select', function () {
-        var obj;
+        var obj,
+            originaljQueryAjax;
 
         beforeEach(function () {
+            originaljQueryAjax = $.ajax;
+
             obj = new Constr({
                 name: 'productUiSelect',
                 dataScope: '',
@@ -23,6 +26,10 @@ define([
                 options: [],
                 value: ''
             });
+        });
+
+        afterEach(function () {
+            $.ajax = originaljQueryAjax;
         });
 
         describe('"validateInitialValue" method', function () {

@@ -14,18 +14,21 @@ define([
 
     describe('Test product page reviews processor', function () {
         var element,
-        config = {
-            reviewsTabSelector: '#review-tab'
-        };
+            originaljQueryAjax,
+            config = {
+                reviewsTabSelector: '#review-tab'
+            };
 
         beforeEach(function () {
             element = $('<div id="review-tab" role="tab"></div>');
 
             $('body').append(element);
+            originaljQueryAjax = $.ajax;
         });
 
         afterEach(function () {
             element.remove();
+            $.ajax = originaljQueryAjax;
         });
 
         it('Should automatically load reviews after page load if review tab is active', function () {

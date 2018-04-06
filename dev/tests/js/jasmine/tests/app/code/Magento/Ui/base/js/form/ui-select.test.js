@@ -14,7 +14,7 @@ define([
     'use strict';
 
     describe('Magento_Ui/js/form/element/ui-select', function () {
-        var obj;
+        var obj, originaljQueryAjax;
 
         beforeEach(function () {
             obj = new Constr({
@@ -25,6 +25,11 @@ define([
 
             obj.value = ko.observableArray([]);
             obj.cacheOptions.plain = [];
+            originaljQueryAjax = $.ajax;
+        });
+
+        afterEach(function () {
+            $.ajax = originaljQueryAjax;
         });
 
         describe('"initialize" method', function () {
