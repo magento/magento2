@@ -6,7 +6,7 @@
 namespace Magento\Webapi\Model\Rest;
 
 use Magento\Webapi\Controller\Rest\Router\Route;
-use Magento\Webapi\Model\Config as ModelConfig;
+use Magento\Webapi\Model\ConfigInterface as ModelConfigInterface;
 use Magento\Webapi\Model\Config\Converter;
 
 /**
@@ -43,11 +43,13 @@ class Config
     protected $_routeFactory;
 
     /**
-     * @param ModelConfig $config
+     * @param ModelConfigInterface $config
      * @param \Magento\Framework\Controller\Router\Route\Factory $routeFactory
      */
-    public function __construct(ModelConfig $config, \Magento\Framework\Controller\Router\Route\Factory $routeFactory)
-    {
+    public function __construct(
+        ModelConfigInterface $config,
+        \Magento\Framework\Controller\Router\Route\Factory $routeFactory
+    ) {
         $this->_config = $config;
         $this->_routeFactory = $routeFactory;
     }
