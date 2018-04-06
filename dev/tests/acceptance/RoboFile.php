@@ -132,7 +132,7 @@ class RoboFile extends \Robo\Tasks
         if ($opts['tests'] != null) {
             $testConfigArray = json_decode($opts['tests'],true);
             $tests = $testConfigArray['tests'] ?? [];
-            $suitesReferences = $testConfigArray['suites'] ?? [];
+            $suitesReferences = $testConfigArray['suites'] ?? null;
         }
 
         // stop execution if we have failed to properly parse any json
@@ -152,9 +152,16 @@ class RoboFile extends \Robo\Tasks
         // maintain backwards compatability for devops
         $lines = $opts['lines'] ?? $opts ['nodes'];
 
-        $testsReferencedInSuites = \Magento\FunctionalTestingFramework\Suite\SuiteGenerator::getInstance($suitesReferences)->getTestsReferencedInSuites();
-        $testManifest = \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance(null, $testObjects)->createAllTestFiles($opts['config'], $lines, $testsReferencedInSuites);
+        // create our manifest file here
+        $testManifest = \Magento\FunctionalTestingFramework\Util\Manifest\TestManifestFactory::makeManifest($opts['config'],$suitesReferences);
+        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance(null, $testObjects)->createAllTestFiles($testManifest);
+
+        if ($opts['config'] == 'parallel') {
+            $testManifest->createTestGroups($lines);
+        }
+
         \Magento\FunctionalTestingFramework\Suite\SuiteGenerator::getInstance()->generateAllSuites($testManifest);
+        $testManifest->generate();
 
         $this->say("Generate Tests Command Run");
     }
