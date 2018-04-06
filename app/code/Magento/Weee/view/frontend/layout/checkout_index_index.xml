@@ -35,11 +35,11 @@
                                                                 <item name="subtotal" xsi:type="array">
                                                                     <item name="children" xsi:type="array">
                                                                         <item name="weee_row_incl_tax" xsi:type="array">
-                                                                            <item name="component"  xsi:type="string">Magento_Weee/js/view/checkout/summary/item/price/row_incl_tax</item>
+                                                                            <item name="component" xsi:type="string">Magento_Weee/js/view/checkout/summary/item/price/row_incl_tax</item>
                                                                         <item name="displayArea" xsi:type="string">row_incl_tax</item>
                                                                         </item>
                                                                         <item name="weee_row_excl_tax" xsi:type="array">
-                                                                            <item name="component"  xsi:type="string">Magento_Weee/js/view/checkout/summary/item/price/row_excl_tax</item>
+                                                                            <item name="component" xsi:type="string">Magento_Weee/js/view/checkout/summary/item/price/row_excl_tax</item>
                                                                             <item name="displayArea" xsi:type="string">row_excl_tax</item>
                                                                         </item>
                                                                     </item>
