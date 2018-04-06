@@ -142,7 +142,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'status' => 2,
-                'expected_count' => 0
+                'expected_count' => 1
             ],
             [
                 'status' => 1,
