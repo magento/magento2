@@ -7,6 +7,7 @@
 namespace Magento\WebapiAsync\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
@@ -20,13 +21,13 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Check async request for product creation service, scheduling bulk to rabbitmq
- * running consumers and check async.opearion.add consumer
+ * running consumers and check async.operation.add consumer
  * check if product was created by async requests
  *
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BulkScheduleTest extends WebapiAbstract
+class AsyncScheduleTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductRepositoryV1';
     const SERVICE_VERSION = 'V1';
@@ -41,7 +42,7 @@ class BulkScheduleTest extends WebapiAbstract
     const BULK_UUID_KEY = 'bulk_uuid';
 
     protected $consumers = [
-        self::ASYNC_CONSUMER_NAME
+        self::ASYNC_CONSUMER_NAME,
     ];
 
     /**
@@ -77,14 +78,14 @@ class BulkScheduleTest extends WebapiAbstract
 
         $params = array_merge_recursive(
             \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams(),
-            ['MAGE_DIRS'=> ['cache' => ['path' => TESTS_TEMP_DIR . '/cache']]]
+            ['MAGE_DIRS' => ['cache' => ['path' => TESTS_TEMP_DIR . '/cache']]]
         );
 
         /** @var PublisherConsumerController publisherConsumerController */
         $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
-            'consumers' => $this->consumers,
-            'logFilePath' => $this->logFilePath,
-            'appInitParams' => $params
+            'consumers'     => $this->consumers,
+            'logFilePath'   => $this->logFilePath,
+            'appInitParams' => $params,
         ]);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
 
@@ -172,12 +173,11 @@ class BulkScheduleTest extends WebapiAbstract
     /**
      * @param string $sku
      * @param string|null $storeCode
-     * @return array|bool|float|int|string
      * @dataProvider productGetDataProvider
      * @expectedException \Exception
      * @expectedExceptionMessage Specified request cannot be processed.
      */
-    public function testGetProductAsync($sku, $storeCode = null)
+    public function testGETRequestToAsync($sku, $storeCode = null)
     {
         $this->_markTestAsRestOnly();
         $serviceInfo = [
@@ -187,9 +187,13 @@ class BulkScheduleTest extends WebapiAbstract
             ],
         ];
 
-        $response = $this->_webApiCall($serviceInfo, [ProductInterface::SKU => $sku], null, $storeCode);
-
-        return $response;
+        $response = null;
+        try {
+            $response = $this->_webApiCall($serviceInfo, [ProductInterface::SKU => $sku], null, $storeCode);
+        } catch (NotFoundException $e) {
+            $this->assertEquals(400, $e->getCode());
+        }
+        $this->assertNull($response);
     }
 
     /**
@@ -206,17 +210,22 @@ class BulkScheduleTest extends WebapiAbstract
 
         return [
             [
-                ['product' =>
-                    $productBuilder([
-                        ProductInterface::TYPE_ID => 'simple',
-                        ProductInterface::SKU => 'psku-test-1'
-                    ])
-                ]
+                [
+                    'product' =>
+                        $productBuilder([
+                            ProductInterface::TYPE_ID => 'simple',
+                            ProductInterface::SKU     => 'psku-test-1',
+                        ]),
+                ],
             ],
-            [['product' => $productBuilder([
-                ProductInterface::TYPE_ID => 'virtual',
-                ProductInterface::SKU => 'psku-test-2'])
-            ]]
+            [
+                [
+                    'product' => $productBuilder([
+                        ProductInterface::TYPE_ID => 'virtual',
+                        ProductInterface::SKU     => 'psku-test-2',
+                    ]),
+                ],
+            ],
         ];
     }
 
@@ -226,7 +235,7 @@ class BulkScheduleTest extends WebapiAbstract
     public function productGetDataProvider()
     {
         return [
-            ['psku-test-1', null]
+            ['psku-test-1', null],
         ];
     }
 
@@ -279,6 +288,7 @@ class BulkScheduleTest extends WebapiAbstract
             ->addAttributeToFilter('sku', ['in' => $this->skus])
             ->load();
         $size = $collection->getSize();
+
         return $size == count($this->skus);
     }
 }

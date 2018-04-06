@@ -12,8 +12,8 @@
             <argument name="requestProcessors" xsi:type="array">
                 <item name="asyncSchema" xsi:type="object" sortOrder="60">Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor</item>
                 <item name="async" xsi:type="object" sortOrder="150">Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor</item>
-                <item name="asyncBulkSchema" xsi:type="object" sortOrder="180">Magento\WebapiAsync\Controller\Rest\AsynchronousBulkSchemaRequestProcessor</item>
-                <item name="asyncBulk" xsi:type="object" sortOrder="200">Magento\WebapiAsync\Controller\Rest\AsynchronousBulkRequestProcessor</item>
+                <item name="asyncBulkSchema" xsi:type="object" sortOrder="180">Magento\WebapiAsync\Controller\Rest\VirtualType\AsynchronousBulkSchemaRequestProcessor</item>
+                <item name="asyncBulk" xsi:type="object" sortOrder="200">Magento\WebapiAsync\Controller\Rest\VirtualType\AsynchronousBulkRequestProcessor</item>
             </argument>
         </arguments>
     </type>
