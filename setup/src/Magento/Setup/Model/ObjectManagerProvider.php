@@ -14,6 +14,7 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\Shell\ComplexParameter;
 use Magento\Framework\Console\Cli;
+
 /**
  * Object manager provider
  *
