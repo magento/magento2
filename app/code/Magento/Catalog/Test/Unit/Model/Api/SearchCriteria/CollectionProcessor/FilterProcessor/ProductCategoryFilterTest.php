@@ -31,7 +31,7 @@ class ProductCategoryFilterTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $filterMock->expects($this->exactly(2))
+        $filterMock->expects($this->exactly(1))
             ->method('getConditionType')
             ->willReturn('condition');
         $filterMock->expects($this->once())

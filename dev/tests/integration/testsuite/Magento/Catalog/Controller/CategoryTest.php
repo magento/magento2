@@ -57,6 +57,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @dataProvider getViewActionDataProvider
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
+     * @magentoDbIsolation disabled
      */
     public function testViewAction($categoryId, array $expectedHandles, array $expectedContent)
     {
@@ -109,7 +110,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
      * Test changing Store View on Category page.
      *
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/enable_using_store_codes.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_two_stores.php

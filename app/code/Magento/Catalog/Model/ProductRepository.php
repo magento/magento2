@@ -619,7 +619,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $fields = [];
         $categoryFilter = [];
         foreach ($filterGroup->getFilters() as $filter) {
-            $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $conditionType = $filter->getConditionType() ?: 'eq';
 
             if ($filter->getField() == 'category_id') {
                 $categoryFilter[$conditionType][] = $filter->getValue();

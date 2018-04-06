@@ -22,8 +22,8 @@ class ProductCategoryFilter implements CustomFilterInterface
     public function apply(Filter $filter, AbstractDb $collection)
     {
         $value = $filter->getValue();
-        $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'in';
-        if (($conditionType == 'in' || $conditionType == 'nin') && is_string($value)) {
+        $conditionType = $filter->getConditionType() ?: 'in';
+        if (($conditionType === 'in' || $conditionType === 'nin') && is_string($value)) {
             $value = explode(',', $value);
         } else {
             $value = [$value];

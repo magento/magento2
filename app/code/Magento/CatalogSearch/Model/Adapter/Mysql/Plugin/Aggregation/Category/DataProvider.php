@@ -12,6 +12,8 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
 
 class DataProvider
 {
@@ -33,19 +35,27 @@ class DataProvider
     protected $categoryFactory;
 
     /**
+     * @var TableResolver
+     */
+    private $tableResolver;
+
+    /**
      * DataProvider constructor.
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Resolver $layerResolver
+     * @param TableResolver|null $tableResolver
      */
     public function __construct(
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        Resolver $layerResolver
+        Resolver $layerResolver,
+        TableResolver $tableResolver = null
     ) {
         $this->resource = $resource;
         $this->scopeResolver = $scopeResolver;
         $this->layer = $layerResolver->get();
+        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
     }
 
     /**
@@ -71,7 +81,7 @@ class DataProvider
 
             $derivedTable = $this->resource->getConnection()->select();
             $derivedTable->from(
-                ['main_table' => $this->resource->getTableName('catalog_category_product_index')],
+                ['main_table' => $this->tableResolver->getMainTable($currentScopeId)],
                 [
                     'value' => 'category_id'
                 ]

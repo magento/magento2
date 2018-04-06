@@ -12,7 +12,6 @@ use \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 /**
  * Class FixedBundleWithTierPRiceCalculatorTest
  * @package Magento\Bundle\Model\Product
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
  * @magentoAppArea frontend
  */
 class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
@@ -31,6 +30,8 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
