@@ -40,7 +40,6 @@ abstract class AbstractAction
 
     /**
      * Catalog category index table name
-     * @deprecated
      */
     const MAIN_INDEX_TABLE = 'catalog_category_product_index';
 

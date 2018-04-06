@@ -13,7 +13,8 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
+use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 
 class DataProvider
 {
@@ -83,7 +84,7 @@ class DataProvider
             $catalogCategoryProductDimension = new Dimension(\Magento\Store\Model\Store::ENTITY, $currentScopeId);
 
             $catalogCategoryProductTableName = $this->tableResolver->resolve(
-                TableResolver::MAIN_INDEX_TABLE,
+                AbstractAction::MAIN_INDEX_TABLE,
                 [
                     $catalogCategoryProductDimension
                 ]

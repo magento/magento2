@@ -8,8 +8,9 @@ namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 
 /**
  * Strategy which processes exclusions from general rules
@@ -131,7 +132,7 @@ class ExclusionStrategy implements FilterStrategyInterface
         );
 
         $tableName = $this->tableResolver->resolve(
-            TableResolver::MAIN_INDEX_TABLE,
+            AbstractAction::MAIN_INDEX_TABLE,
             [
                 $catalogCategoryProductDimension
             ]

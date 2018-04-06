@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
 
 class TableMaintainer
 {
@@ -52,7 +55,19 @@ class TableMaintainer
     ) {
         $this->resource = $resource;
         $this->tableResolver = $tableResolver;
-        $this->connection = $resource->getConnection();
+    }
+
+    /**
+     * Get connection
+     *
+     * @return AdapterInterface
+     */
+    private function getConnection()
+    {
+        if (!isset($this->connection)) {
+            $this->connection = $this->resource->getConnection();
+        }
+        return $this->connection;
     }
 
     /**
@@ -76,9 +91,9 @@ class TableMaintainer
      */
     private function createTable($mainTableName, $newTableName)
     {
-        if (!$this->connection->isTableExists($newTableName)) {
-            $this->connection->createTable(
-                $this->connection->createTableByDdl($mainTableName, $newTableName)
+        if (!$this->getConnection()->isTableExists($newTableName)) {
+            $this->getConnection()->createTable(
+                $this->getConnection()->createTableByDdl($mainTableName, $newTableName)
             );
         }
     }
@@ -92,8 +107,8 @@ class TableMaintainer
      */
     private function dropTable($tableName)
     {
-        if ($this->connection->isTableExists($tableName)) {
-            $this->connection->dropTable($tableName);
+        if ($this->getConnection()->isTableExists($tableName)) {
+            $this->getConnection()->dropTable($tableName);
         }
     }
 
@@ -108,7 +123,7 @@ class TableMaintainer
     {
         $catalogCategoryProductDimension = new Dimension(\Magento\Store\Model\Store::ENTITY, $storeId);
 
-        return $this->tableResolver->resolve(TableResolver::MAIN_INDEX_TABLE, [$catalogCategoryProductDimension]);
+        return $this->tableResolver->resolve(AbstractAction::MAIN_INDEX_TABLE, [$catalogCategoryProductDimension]);
     }
 
     /**
@@ -121,10 +136,10 @@ class TableMaintainer
     public function createTablesForStore(int $storeId)
     {
         $mainTableName = $this->getMainTable($storeId);
-        $this->createTable($this->getTable(TableResolver::MAIN_INDEX_TABLE), $mainTableName);
+        $this->createTable($this->getTable(AbstractAction::MAIN_INDEX_TABLE), $mainTableName);
 
         $mainReplicaTableName = $this->getMainTable($storeId) . $this->additionalTableSuffix;
-        $this->createTable($this->getTable(TableResolver::MAIN_INDEX_TABLE), $mainReplicaTableName);
+        $this->createTable($this->getTable(AbstractAction::MAIN_INDEX_TABLE), $mainReplicaTableName);
     }
 
     /**
@@ -167,7 +182,7 @@ class TableMaintainer
         if (!isset($this->mainTmpTable[$storeId])) {
             $originTableName = $this->getMainTable($storeId);
             $temporaryTableName = $this->getMainTable($storeId) . $this->tmpTableSuffix;
-            $this->connection->createTemporaryTableLike($temporaryTableName, $originTableName, true);
+            $this->getConnection()->createTemporaryTableLike($temporaryTableName, $originTableName, true);
             $this->mainTmpTable[$storeId] = $temporaryTableName;
         }
     }
