@@ -11,6 +11,7 @@ namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Importing configurable products
@@ -472,12 +473,20 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
      */
     protected function _parseVariations($rowData)
     {
         $additionalRows = [];
-        if (!isset($rowData['configurable_variations'])) {
+        if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
+        } elseif(!empty($rowData['store_view_code'])) {
+            throw new LocalizedException(
+                __(
+                    'Product with assigned super attributes should not have specified "%1" value',
+                    'store_view_code'
+                )
+            );
         }
         $variations = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variations']);
         foreach ($variations as $variation) {
@@ -822,7 +831,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
         $error = false;
-        $dataWithExtraVirtualRows = $this->_parseVariations($rowData);
+        try {
+            $dataWithExtraVirtualRows = $this->_parseVariations($rowData);
+        } catch (LocalizedException $exception) {
+            $this->_entityModel->addRowError($exception->getMessage(), $rowNum);
+
+            return false;
+        }
+
         $skus = [];
         $rowData['price'] = isset($rowData['price']) && $rowData['price'] ? $rowData['price'] : '0.00';
         if (!empty($dataWithExtraVirtualRows)) {
