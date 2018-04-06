@@ -21,7 +21,6 @@ class PreventProcessDefaultStockLinksPlugin
     private $defaultStockProvider;
 
     /**
-     * PreventProcessDefaultStockLinksPlugin constructor.
      * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(DefaultStockProviderInterface $defaultStockProvider)

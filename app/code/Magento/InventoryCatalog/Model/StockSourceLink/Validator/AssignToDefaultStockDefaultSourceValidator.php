@@ -14,7 +14,7 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
-class AssignToDefaultStockValidator implements StockSourceLinkValidatorInterface
+class AssignToDefaultStockDefaultSourceValidator implements StockSourceLinkValidatorInterface
 {
     /**
      * @var ValidationResultFactory
@@ -32,8 +32,6 @@ class AssignToDefaultStockValidator implements StockSourceLinkValidatorInterface
     private $defaultStockProvider;
 
     /**
-     * AssignToDefaultStockValidator constructor.
-     *
      * @param ValidationResultFactory $validationResultFactory
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param DefaultStockProviderInterface $defaultStockProvider
@@ -54,12 +52,9 @@ class AssignToDefaultStockValidator implements StockSourceLinkValidatorInterface
     public function validate(StockSourceLinkInterface $link): ValidationResult
     {
         $errors = [];
-
-        if ($link->getStockId() === $this->defaultStockProvider->getId()) {
-            $errors[] = __(
-                'Can not save link for %1 source, as it is related to default stock',
-                $link->getSourceCode()
-            );
+        if ($link->getStockId() === $this->defaultStockProvider->getId()
+        || $link->getSourceCode() === $this->defaultSourceProvider->getCode()) {
+            $errors[] = __('Default Source can be assigned only to Default Stock');
         }
 
         return $this->validationResultFactory->create(['errors' => $errors]);

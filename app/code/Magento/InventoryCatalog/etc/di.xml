@@ -47,8 +47,9 @@
     <type name="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
-                <item name="default_source" xsi:type="object">Magento\InventoryCatalog\Model\StockSourceLink\Validator\AssignDefaultSourceToNonDefaultStockValidator</item>
-                <item name="default_stock" xsi:type="object">Magento\InventoryCatalog\Model\StockSourceLink\Validator\AssignToDefaultStockValidator</item>
+                <item name="default_stock_default_source" xsi:type="object">
+                    Magento\InventoryCatalog\Model\StockSourceLink\Validator\AssignToDefaultStockDefaultSourceValidator
+                </item>
             </argument>
         </arguments>
     </type>

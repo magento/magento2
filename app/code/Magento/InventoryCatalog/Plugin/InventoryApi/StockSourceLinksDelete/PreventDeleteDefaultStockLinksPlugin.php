@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi\StockSourceLinksDelete;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
+use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 /**
@@ -22,18 +23,24 @@ class PreventDeleteDefaultStockLinksPlugin
     private $defaultStockProvider;
 
     /**
-     * PreventDeleteDefaultStockLinksPlugin constructor.
-     *
+     * @var DefaultSourceProviderInterface
+     */
+    private $defaultSourceProvider;
+
+    /**
      * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
      */
     public function __construct(
-        DefaultStockProviderInterface $defaultStockProvider
+        DefaultStockProviderInterface $defaultStockProvider,
+        DefaultSourceProviderInterface $defaultSourceProvider
     ) {
         $this->defaultStockProvider = $defaultStockProvider;
+        $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**
-     * Prevent deleting links related to default stock.
+     * Prevent deleting links related to default stock or default source.
      *
      * @param StockSourceLinksDeleteInterface $subject
      * @param \Magento\InventoryApi\Api\Data\StockSourceLinkInterface[] $links
@@ -44,13 +51,10 @@ class PreventDeleteDefaultStockLinksPlugin
     public function beforeExecute(StockSourceLinksDeleteInterface $subject, array $links)
     {
         foreach ($links as $link) {
-            if ($link->getStockId() === $this->defaultStockProvider->getId()) {
-                throw new LocalizedException(
-                    __(
-                        'Can not delete link for %1 source, as it is related to default stock',
-                        $link->getSourceCode()
-                    )
-                );
+            if ($link->getStockId() === $this->defaultStockProvider->getId()
+                || $link->getSourceCode() === $this->defaultSourceProvider->getCode()
+            ) {
+                throw new LocalizedException(__('Can not delete link related to Default Source or Default Stock'));
             }
         }
     }
