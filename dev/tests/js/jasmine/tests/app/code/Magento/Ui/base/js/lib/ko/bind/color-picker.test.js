@@ -28,56 +28,54 @@ define([
     });
 
     describe('Colorpicker binding', function () {
-        describe('"init" method', function () {
-            it('Should call spectrum on $input with disabled configuration if view model disabled', function () {
-                var valueAccessor = jasmine.createSpy().and.returnValue({});
-                var viewModel = {
+        it('Should call spectrum on $input with disabled configuration if view model disabled', function () {
+            var valueAccessor = jasmine.createSpy().and.returnValue({}),
+                viewModel = {
                     disabled: jasmine.createSpy().and.returnValue(true)
                 };
 
-                $.fn.spectrum = jasmine.createSpy();
-                $input = jasmine.createSpy();
+            $.fn.spectrum = jasmine.createSpy();
+            $input = jasmine.createSpy();
 
-                ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
+            ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
 
-                expect($.fn.spectrum).toHaveBeenCalledWith({
-                    disabled: true
-                });
-
-                $.fn.init = jasmine.createSpy().and.returnValue($.fn);
-
-                ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
-
-                expect($.fn.init).toHaveBeenCalledWith($input, undefined);
+            expect($.fn.spectrum).toHaveBeenCalledWith({
+                disabled: true
             });
 
-            it('Should call spectrum on $input with extra configuration if view model enabled', function () {
-                var value = {
+            $.fn.init = jasmine.createSpy().and.returnValue($.fn);
+
+            ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
+
+            expect($.fn.init).toHaveBeenCalledWith($input, undefined);
+        });
+
+        it('Should call spectrum on $input with extra configuration if view model enabled', function () {
+            var value = {
                     configStuffInHere: true
-                };
-                var valueAccessor = jasmine.createSpy().and.returnValue(value);
-                var viewModel = {
+                },
+                valueAccessor = jasmine.createSpy().and.returnValue(value),
+                viewModel = {
                     disabled: jasmine.createSpy().and.returnValue(false)
                 };
 
-                $.fn.spectrum = jasmine.createSpy();
-                $input = jasmine.createSpy();
+            $.fn.spectrum = jasmine.createSpy();
+            $input = jasmine.createSpy();
 
-                ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
+            ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
 
-                expect(value.change).toEqual(jasmine.any(Function));
-                expect(value.hide).toEqual(jasmine.any(Function));
-                expect(value.show).toEqual(jasmine.any(Function));
-                expect(value.change).toBe(value.hide);
+            expect(value.change).toEqual(jasmine.any(Function));
+            expect(value.hide).toEqual(jasmine.any(Function));
+            expect(value.show).toEqual(jasmine.any(Function));
+            expect(value.change).toBe(value.hide);
 
-                expect($.fn.spectrum).toHaveBeenCalledWith(value);
+            expect($.fn.spectrum).toHaveBeenCalledWith(value);
 
-                $.fn.init = jasmine.createSpy().and.returnValue($.fn);
+            $.fn.init = jasmine.createSpy().and.returnValue($.fn);
 
-                ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
+            ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
 
-                expect($.fn.init).toHaveBeenCalledWith($input, undefined);
-            });
+            expect($.fn.init).toHaveBeenCalledWith($input, undefined);
         });
     });
 });
