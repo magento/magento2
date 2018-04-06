@@ -21,14 +21,19 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $fullVersion = $productMetadata->getVersion();
         $versionParts = explode('.', $fullVersion);
-        $majorMinor = $versionParts[0] . '.' . $versionParts[1];
+        if (isset($versionParts[1]) && isset($versionParts[0])) {
+            $majorMinor = $versionParts[0] . '.' . $versionParts[1];
 
-        // Response must contain Major.Minor version, product name, and edition
-        $this->assertContains($majorMinor, $body);
-        $this->assertContains($name, $body);
-        $this->assertContains($edition, $body);
+            // Response must contain Major.Minor version, product name, and edition
+            $this->assertContains($majorMinor, $body);
+            $this->assertContains($name, $body);
+            $this->assertContains($edition, $body);
 
-        // Response must not contain full version including patch version
-        $this->assertNotContains($fullVersion, $body);
+            // Response must not contain full version including patch version
+            $this->assertNotContains($fullVersion, $body);
+        } else {
+            // Response is supposed to be empty when the project is installed from git
+            $this->assertEmpty($body);
+        }
     }
 }
