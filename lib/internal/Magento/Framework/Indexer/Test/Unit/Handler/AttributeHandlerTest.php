@@ -5,23 +5,6 @@
  */
 declare(strict_types=1);
 
-// @codingStandardsIgnoreStart
-namespace Magento\Framework\Indexer\Handler;
-
-/**
- * Mock method for built-in function method_exists.
- *
- * @param mixed $object
- * @param string $method_name
- * @return bool
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
- */
-function method_exists($object, $method_name)
-{
-    return \Magento\Framework\Indexer\Test\Unit\Handler\AttributeHandlerTest::$methodExits;
-}
-// codingStandardsIgnoreEnd
-
 namespace Magento\Framework\Indexer\Test\Unit\Handler;
 
 use Magento\Framework\Indexer\Handler\AttributeHandler;
@@ -33,13 +16,6 @@ use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
  */
 class AttributeHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * Static field responsible for mocking built-in method_exists function result.
-     *
-     * @var bool
-     */
-    public static $methodExits = false;
-
     /**
      * @var SourceProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -65,24 +41,6 @@ class AttributeHandlerTest extends \PHPUnit\Framework\TestCase
         $this->subject = $objectManager->getObject(AttributeHandler::class);
     }
 
-    public function testPrepareSqlWithBindAndMissingJoinAttributeMethod()
-    {
-        $alias = 'e';
-        $fieldInfo = [
-            'name' => 'is_approved',
-            'origin' => 'is_approved',
-            'type' => 'searchable',
-            'dataType' => 'varchar',
-            'entity' => 'customer',
-            'bind' => '',
-        ];
-
-        self::$methodExits = false;
-        $this->source->expects($this->never())->method('joinAttribute');
-
-        $this->subject->prepareSql($this->source, $alias, $fieldInfo);
-    }
-
     public function testPrepareSqlWithBindAndExistingJoinAttributeMethod()
     {
         $alias = 'e';
@@ -92,10 +50,9 @@ class AttributeHandlerTest extends \PHPUnit\Framework\TestCase
             'type' => 'searchable',
             'dataType' => 'varchar',
             'entity' => 'customer',
-            'bind' => '',
+            'bind' => 'test',
         ];
 
-        self::$methodExits = true;
         $this->source->expects($this->once())
             ->method('joinAttribute')
             ->with(
@@ -119,7 +76,6 @@ class AttributeHandlerTest extends \PHPUnit\Framework\TestCase
             'type' => 'searchable',
             'dataType' => 'varchar',
             'entity' => 'customer',
-            'bind' => null,
         ];
         $this->source->expects($this->once())
             ->method('addFieldToSelect')
