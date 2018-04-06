@@ -6,11 +6,10 @@
   },
   "require": {
     "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-    "magento/framework": "100.1.*",
-    "magento/module-integration": "100.1.*"
+    "magento/framework": "*",
+    "magento/module-integration": "*"
   },
   "type": "magento2-module",
-  "version": "1.0",
   "extra": {
     "map": [
       [
