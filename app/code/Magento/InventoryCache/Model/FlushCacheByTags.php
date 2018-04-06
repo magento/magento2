@@ -21,30 +21,38 @@ class FlushCacheByTags
     private $cache;
 
     /**
-     * @var array
-     */
-    private $tags;
-
-    /**
      * @var Config
      */
     private $cacheConfig;
+
+    /**
+     * @var PurgeVarnishCacheByTags
+     */
+    private $purgeVarnishCacheByTags;
+
+    /**
+     * @var array
+     */
+    private $tags;
 
     /**
      * FlushCacheByTags constructor.
      *
      * @param Config $cacheConfig
      * @param CacheInterface $cache
+     * @param PurgeVarnishCacheByTags $purgeVarnishCacheByTags
      * @param array $tags
      */
     public function __construct(
         Config $cacheConfig,
         CacheInterface $cache,
+        PurgeVarnishCacheByTags $purgeVarnishCacheByTags,
         array $tags
     ) {
         $this->cache = $cache;
         $this->tags = $tags;
         $this->cacheConfig = $cacheConfig;
+        $this->purgeVarnishCacheByTags = $purgeVarnishCacheByTags;
     }
 
     /**
@@ -54,8 +62,15 @@ class FlushCacheByTags
      */
     public function execute()
     {
-        if ($this->cacheConfig->getType() == Config::BUILT_IN && $this->cacheConfig->isEnabled()) {
-            $this->cache->clean($this->tags);
+        if ($this->cacheConfig->isEnabled()) {
+            switch ($this->cacheConfig->getType()) {
+                case Config::BUILT_IN:
+                    $this->cache->clean($this->tags);
+                    break;
+                case Config::VARNISH:
+                    $this->purgeVarnishCacheByTags->execute($this->tags);
+                    break;
+            }
         }
     }
 }

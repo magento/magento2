@@ -39,15 +39,22 @@ class FlushCacheByProductIds
     private $cacheConfig;
 
     /**
+     * @var PurgeVarnishCacheByTags
+     */
+    private $purgeVarnishCacheByTags;
+
+    /**
      * FlushCacheByProductIds constructor.
      *
      * @param Type $fullPageCache
+     * @param PurgeVarnishCacheByTags $purgeVarnishCacheByTags
      * @param Config $cacheConfig
      * @param CacheContext $cacheContext
      * @param Resolver $tagResolver
      */
     public function __construct(
         Type $fullPageCache,
+        PurgeVarnishCacheByTags $purgeVarnishCacheByTags,
         Config $cacheConfig,
         CacheContext $cacheContext,
         Resolver $tagResolver
@@ -56,6 +63,7 @@ class FlushCacheByProductIds
         $this->cacheContext = $cacheContext;
         $this->fullPageCache = $fullPageCache;
         $this->cacheConfig = $cacheConfig;
+        $this->purgeVarnishCacheByTags = $purgeVarnishCacheByTags;
     }
 
     /**
@@ -66,11 +74,18 @@ class FlushCacheByProductIds
      */
     public function execute(array $productIds)
     {
-        if ($this->cacheConfig->getType() == Config::BUILT_IN && $this->cacheConfig->isEnabled()) {
+        if ($this->cacheConfig->isEnabled()) {
             $this->cacheContext->registerEntities(Product::CACHE_TAG, $productIds);
             $tags = $this->tagResolver->getTags($this->cacheContext);
             if ($tags) {
-                $this->fullPageCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array_unique($tags));
+                switch ($this->cacheConfig->getType()) {
+                    case Config::BUILT_IN:
+                        $this->fullPageCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array_unique($tags));
+                        break;
+                    case Config::VARNISH:
+                        $this->purgeVarnishCacheByTags->execute($tags);
+                        break;
+                }
             }
         }
     }
