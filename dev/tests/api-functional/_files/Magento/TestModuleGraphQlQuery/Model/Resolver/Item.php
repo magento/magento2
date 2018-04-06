@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\TestModuleGraphQlQuery\Model\Resolver;
 
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
-use Magento\GraphQl\Model\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\TestModuleGraphQlQuery\Api\Data\ItemInterface;
 use Magento\TestModuleGraphQlQuery\Model\Entity\ItemFactory;
 
@@ -24,25 +29,39 @@ class Item implements ResolverInterface
     private $postFetchProcessors;
 
     /**
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
      * @param ItemFactory $itemFactory
      * @param PostFetchProcessorInterface[] $postFetchProcessors
+     * @param ValueFactory $valueFactory
      */
-    public function __construct(ItemFactory $itemFactory, array $postFetchProcessors = [])
-    {
+    public function __construct(
+        ItemFactory $itemFactory,
+        ValueFactory $valueFactory,
+        array $postFetchProcessors = []
+    ) {
         $this->itemFactory = $itemFactory;
         $this->postFetchProcessors = $postFetchProcessors;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function resolve(array $args, \Magento\GraphQl\Model\ResolverContextInterface $context)
-    {
+    public function resolve(
+        Field $field,
+        $context,
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) : Value {
         $id = 0;
-        /** @var \Magento\Framework\GraphQl\ArgumentInterface $arg */
-        foreach ($args as $arg) {
-            if ($arg->getName() === "id") {
-                $id = (int)$arg->getValue();
+        foreach ($args as $key => $argValue) {
+            if ($key === "id") {
+                $id = (int)$argValue;
             }
         }
 
@@ -59,6 +78,10 @@ class Item implements ResolverInterface
             $itemData = $postFetchProcessor->process($itemData);
         }
 
-        return $itemData;
+        $result = function () use ($itemData) {
+            return $itemData;
+        };
+
+        return $this->valueFactory->create($result);
     }
 }
