@@ -101,7 +101,10 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         /**
          * Initialize ObjectManager
          */
-        $serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class)->get();
+        $serviceManager->setService(
+            \Magento\Framework\ObjectManagerInterface::class,
+            $serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class)->get()
+        );
 
         if (!($application->getRequest() instanceof Request)) {
             $eventManager = $application->getEventManager();
@@ -134,7 +137,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
             if ($serviceManager->get(\Magento\Framework\App\DeploymentConfig::class)->isAvailable()) {
                 /** @var \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider */
                 $objectManagerProvider = $serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class);
-                $objectManagerProvider->reset();
                 /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
                 $objectManager = $objectManagerProvider->get();
                 /** @var \Magento\Framework\App\State $adminAppState */

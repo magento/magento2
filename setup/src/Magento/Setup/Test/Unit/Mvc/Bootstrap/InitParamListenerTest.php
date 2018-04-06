@@ -48,9 +48,13 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testOnBootstrap()
     {
+        $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $omProvider = $this->getMockBuilder(\Magento\Setup\Model\ObjectManagerProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $omProvider->expects($this->once())
+            ->method('get')
+            ->willReturn($objectManager);
         /** @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject $mvcEvent */
         $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $mvcApplication = $this->getMockBuilder(\Zend\Mvc\Application::class)->disableOriginalConstructor()->getMock();
@@ -62,7 +66,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
                 [InitParamListener::BOOTSTRAP_PARAM, true, $initParams],
                 [\Magento\Setup\Model\ObjectManagerProvider::class, true, $omProvider],
             ]);
-        $serviceManager->expects($this->exactly(2))->method('setService')
+        $serviceManager->expects($this->exactly(3))->method('setService')
             ->withConsecutive(
                 [
                     \Magento\Framework\App\Filesystem\DirectoryList::class,
@@ -71,6 +75,10 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
                 [
                     \Magento\Framework\Filesystem::class,
                     $this->isInstanceOf(\Magento\Framework\Filesystem::class),
+                ],
+                [
+                    \Magento\Framework\ObjectManagerInterface::class,
+                    $this->isInstanceOf(\Magento\Framework\ObjectManagerInterface::class),
                 ]
             );
         $mvcApplication->expects($this->any())->method('getServiceManager')->willReturn($serviceManager);
