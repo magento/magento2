@@ -125,6 +125,7 @@
     <preference for="Magento\Framework\Filter\Encrypt\AdapterInterface" type="Magento\Framework\Filter\Encrypt\Basic" />
     <preference for="Magento\Framework\Cache\ConfigInterface" type="Magento\Framework\Cache\Config" />
     <preference for="Magento\Framework\View\Asset\MergeStrategyInterface" type="Magento\Framework\View\Asset\MergeStrategy\Direct" />
+    <preference for="Magento\Framework\Session\Actualization\StorageInterface" type="Magento\Framework\Session\Actualization\Storage"/>
     <preference for="Magento\Framework\App\ViewInterface" type="Magento\Framework\App\View" />
     <preference for="Magento\Framework\Data\Collection\EntityFactoryInterface" type="Magento\Framework\Data\Collection\EntityFactory" />
     <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
