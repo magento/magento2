@@ -40,8 +40,8 @@ class CustomerPlugin
      * Initialize dependencies.
      *
      * @param SubscriberFactory $subscriberFactory
-     * @param ExtensionAttributesFactory|null $extensionFactory
-     * @param Subscriber|null $subscriberResource
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param Subscriber $subscriberResource
      */
     public function __construct(
         SubscriberFactory $subscriberFactory,
