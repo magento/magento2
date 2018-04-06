@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7b90e7be9e8ea27efb8230cffb65322",
+    "content-hash": "cecf96ace5eaae67adee0940bba7bf93",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -825,16 +825,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "dev-master",
+            "version": "1.14.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento-engcom/zf1-php-7.2-support.git",
-                "reference": "7036c9e7784c7fd8cbe0d5df3a1bbc8161dbe774"
+                "url": "https://github.com/magento/zf1.git",
+                "reference": "68522e5768edc8e829d1f64b620a3de3753f1141"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento-engcom/zf1-php-7.2-support/zipball/7036c9e7784c7fd8cbe0d5df3a1bbc8161dbe774",
-                "reference": "7036c9e7784c7fd8cbe0d5df3a1bbc8161dbe774",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/68522e5768edc8e829d1f64b620a3de3753f1141",
+                "reference": "68522e5768edc8e829d1f64b620a3de3753f1141",
                 "shasum": ""
             },
             "archive": {
@@ -6583,7 +6583,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/zendframework1": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,
