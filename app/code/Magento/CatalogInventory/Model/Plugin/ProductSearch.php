@@ -9,33 +9,26 @@ declare(strict_types=1);
 namespace Magento\CatalogInventory\Model\Plugin;
 
 use Magento\CatalogInventory\Helper\Stock;
-use Magento\CatalogInventory\Model\Configuration;
 
+/** Plugin to add stock filter depends on configuration */
 class ProductSearch
 {
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
     /**
      * @var Stock
      */
     private $stockHelper;
 
     /**
-     * ProductLinks constructor.
-     *
-     * @param Configuration $configuration
      * @param Stock $stockHelper
      */
-    public function __construct(Configuration $configuration, Stock $stockHelper)
+    public function __construct(Stock $stockHelper)
     {
-        $this->configuration = $configuration;
         $this->stockHelper = $stockHelper;
     }
 
     /**
+     * Adds stock filter depends on configuration
+     *
      * @param \Magento\Catalog\Model\ProductLink\Search $subject
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection

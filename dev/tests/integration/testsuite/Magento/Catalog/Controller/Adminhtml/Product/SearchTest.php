@@ -40,4 +40,23 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $responseBody = $this->getResponse()->getBody();
         $this->assertContains('{"options":[],"total":0}', $responseBody);
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testExecuteNotVisibleIndividuallyProducts() : void
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+
+        $product = $productRepository->get('simple-3');
+        $this->assertEquals('simple-3', $product->getSku());
+        $this->getRequest()
+            ->setPostValue('searchKey', 'simple-3')
+            ->setPostValue('page', 1)
+            ->setPostValue('limit', 50);
+        $this->dispatch('backend/catalog/product/search');
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertContains('{"options":[],"total":0}', $responseBody);
+    }
 }
