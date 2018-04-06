@@ -8,7 +8,6 @@
         "magento/module-catalog": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
-        "magento/module-graph-ql": "*",
         "magento/module-eav-graph-ql": "*",
         "magento/framework": "*"
     },

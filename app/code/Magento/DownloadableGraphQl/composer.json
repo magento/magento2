@@ -6,7 +6,6 @@
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/module-catalog": "*",
         "magento/module-downloadable": "*",
-        "magento/module-catalog-graph-ql": "*",
         "magento/framework": "*"
     },
     "suggest": {
