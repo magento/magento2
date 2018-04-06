@@ -40,6 +40,7 @@ class Filter
     {
         $this->filter->applySelectionOnTargetProvider();
         $component = $this->filter->getComponent();
+        $this->filter->prepareComponent($component);
         $dataProvider = $component->getContext()->getDataProvider();
         $searchResult = $dataProvider->getSearchResult();
 
