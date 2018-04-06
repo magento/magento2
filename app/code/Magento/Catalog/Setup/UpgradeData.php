@@ -482,7 +482,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * Enable storeview level for product status attribute because products can't enable/disable
-     * for storeviewwise.
+     * for storeviewwise
      *
      * @param ModuleDataSetupInterface $setup
      * @return void

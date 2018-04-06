@@ -229,8 +229,7 @@ class Advanced extends Generic
             \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL => __('Global'),
         ];
 
-        if ($attributeObject->getAttributeCode() == 'tax_class_id'
-        ) {
+        if ($attributeObject->getAttributeCode() == 'tax_class_id') {
             unset($scopes[\Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE]);
         }
 
