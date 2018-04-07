@@ -13,7 +13,7 @@ use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcherInterface;
-use Magento\InventoryCatalog\Model\DefaultStockProvider;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**
@@ -55,7 +55,7 @@ class StockIndexer
     private $indexTableSwitcher;
 
     /**
-     * @var DefaultStockProvider
+     * @var DefaultStockProviderInterface
      */
     private $defaultStockProvider;
 
@@ -68,7 +68,7 @@ class StockIndexer
      * @param IndexNameBuilder $indexNameBuilder
      * @param IndexDataProviderByStockId $indexDataProviderByStockId
      * @param IndexTableSwitcherInterface $indexTableSwitcher
-     * @param DefaultStockProvider $defaultStockProvider
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         GetAllStockIds $getAllStockIds,
@@ -77,7 +77,7 @@ class StockIndexer
         IndexNameBuilder $indexNameBuilder,
         IndexDataProviderByStockId $indexDataProviderByStockId,
         IndexTableSwitcherInterface $indexTableSwitcher,
-        DefaultStockProvider $defaultStockProvider
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->getAllStockIds = $getAllStockIds;
         $this->indexStructure = $indexStructureHandler;

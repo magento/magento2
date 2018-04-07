@@ -3,7 +3,7 @@
     <body>
         <referenceBlock name="form">
             <block class="Magento\InventoryShipping\Block\Adminhtml\Shipment\Inventory" name="inventory_shipment"
-                   template="shipment/inventory.phtml" before="-" />
+                   template="Magento_InventoryShipping::shipment/inventory.phtml" before="-" />
         </referenceBlock>
     </body>
 </page>

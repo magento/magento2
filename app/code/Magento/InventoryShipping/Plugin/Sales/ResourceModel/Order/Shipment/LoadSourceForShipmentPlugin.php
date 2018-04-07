@@ -53,10 +53,9 @@ class LoadSourceForShipmentPlugin
             $shipmentExtension = $this->shipmentExtensionFactory->create();
         }
         $sourceCode = $this->getSourceCodeByShipmentId->execute((int)$shipment->getId());
-        if (!empty($sourceCode)) {
-            $shipmentExtension->setSourceCode($sourceCode);
-            $shipment->setExtensionAttributes($shipmentExtension);
-        }
+        $shipmentExtension->setSourceCode($sourceCode);
+        $shipment->setExtensionAttributes($shipmentExtension);
+
         return $result;
     }
 }

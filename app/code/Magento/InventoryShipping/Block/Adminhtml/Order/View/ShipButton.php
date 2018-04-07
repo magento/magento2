@@ -90,7 +90,7 @@ class ShipButton extends Container
     public function getSourceSelectionUrl()
     {
         return $this->getUrl(
-            'inventoryshipping/order_shipment/SourceSelection',
+            'inventoryshipping/SourceSelection/index',
             [
                 'order_id' => $this->getRequest()->getParam('order_id')
             ]
