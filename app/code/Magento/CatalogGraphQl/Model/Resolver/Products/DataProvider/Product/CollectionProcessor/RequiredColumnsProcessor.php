@@ -34,5 +34,4 @@ class RequiredColumnsProcessor implements CollectionProcessorInterface
 
         return $collection;
     }
-
 }
