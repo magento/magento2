@@ -63,8 +63,7 @@ class SalableQuantity extends AbstractModifier
     {
         $product = $this->locator->getProduct();
 
-        if ($this->isSingleSourceMode->execute() === true
-            || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false
+        if ($this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false
             || null === $product->getId()
         ) {
             return $data;
@@ -81,8 +80,7 @@ class SalableQuantity extends AbstractModifier
     {
         $product = $this->locator->getProduct();
 
-        if ($this->isSingleSourceMode->execute() === true
-            || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false
+        if ($this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false
             || null === $product->getId()
         ) {
             return $meta;

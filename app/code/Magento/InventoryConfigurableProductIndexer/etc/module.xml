@@ -9,6 +9,7 @@
     <module name="Magento_InventoryConfigurableProductIndexer" setup_version="1.0.0">
         <sequence>
             <module name="Magento_InventoryConfigurableProduct"/>
+            <module name="Magento_Catalog"/>
         </sequence>
     </module>
 </config>

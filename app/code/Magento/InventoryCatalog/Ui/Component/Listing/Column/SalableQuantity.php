@@ -63,7 +63,7 @@ class SalableQuantity extends Column
      */
     public function prepareDataSource(array $dataSource)
     {
-        if ($dataSource['data']['totalRecords'] > 0 && $this->isSingleSourceMode->execute() === false) {
+        if ($dataSource['data']['totalRecords'] > 0) {
             foreach ($dataSource['data']['items'] as &$row) {
                 $row['salable_quantity'] =
                     $this->isSourceItemsAllowedForProductType->execute($row['type_id']) === true
