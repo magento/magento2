@@ -20,6 +20,7 @@
         </annotations>
 
         <before>
+            <createData entity="FullSource1" stepKey="createSource1"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{ManageSources.url}}" stepKey="amOnSourceListPage1"/>
             <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>

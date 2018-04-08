@@ -21,6 +21,7 @@
 
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
@@ -29,7 +30,7 @@
         </after>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad0"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnTheAddProductToggle"/>
         <click selector="{{AdminProductGridActionSection.addTypeProduct('configurable')}}" stepKey="clickOnAddConfigurableProduct"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
@@ -41,8 +42,11 @@
         <fillField userInput="{{ConfigurableMsiProduct.weight}}" selector=".admin__control-text[name='product[weight]']" stepKey="fillWeight"/>
 
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createPreReqCategory.name$$]"  stepKey="searchAndSelectCategory"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
 
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
+        <waitForPageLoad time="15" stepKey="waitForPageLoad3"/>
+        <waitForElementVisible selector=".admin__data-grid-wrap tbody" time="10" stepKey="waitForGridPresent1"/>
 
         <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="clickOnTheColorAttribute"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
@@ -63,18 +67,19 @@
 
         <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
         <click selector="(//button/span[contains(text(), 'Assign Sources')])[2]" stepKey="clickOnAssignSources"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
 
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{AdminGridRow.checkboxByValue('default')}}" stepKey="clickOnTheDefaultSource"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <waitForPageLoad stepKey="waitForPageLoad5"/>
         <click selector=".product_form_product_form_assign_sources_configurable_modal .action-primary" stepKey="clickOnDone"/>
-        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
 
         <fillField selector="input[name='quantity_resolver[dynamicRows][dynamicRows][0][quantity_per_source]']" userInput="100" stepKey="fillTheQuantityField"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <waitForPageLoad stepKey="waitForPageLoad7"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton5"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <waitForPageLoad stepKey="waitForPageLoad8"/>
 
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>

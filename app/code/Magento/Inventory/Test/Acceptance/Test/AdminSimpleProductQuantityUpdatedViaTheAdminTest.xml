@@ -20,6 +20,7 @@
         </annotations>
         
         <before>
+            <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
             <createData entity="SimpleMsiProduct" stepKey="simpleProduct1">
                 <requiredEntity createDataKey="simpleCategory"/>
