@@ -19,6 +19,9 @@ interface StockItemImporterInterface
      *
      * @param array $stockData
      * @return void
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Validation\ValidationException
      */
     public function import(array $stockData);
 }

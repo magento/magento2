@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Braintree\Model\Paypal\Helper;
 
 use Magento\Quote\Model\Quote;
@@ -71,7 +72,9 @@ class OrderPlace extends AbstractHelper
     public function execute(Quote $quote, array $agreement)
     {
         if (!$this->agreementsValidator->isValid($agreement)) {
-            throw new LocalizedException(__('Please agree to all the terms and conditions before placing the order.'));
+            throw new LocalizedException(__(
+                "The order wasn't placed. First, agree to the terms and conditions, then try placing your order again."
+            ));
         }
 
         if ($this->getCheckoutMethod($quote) === Onepage::METHOD_GUEST) {

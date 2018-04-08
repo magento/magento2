@@ -52,7 +52,7 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
         $comments = array_values($comments);
 
         foreach ($capturedPrices as $key => $capturedPrice) {
-            \PHPUnit_Framework_Assert::assertRegExp(
+            \PHPUnit\Framework\Assert::assertRegExp(
                 sprintf(self::CAPTURED_AMOUNT_PATTERN, preg_quote(number_format($capturedPrice, 2, '.', ''))),
                 $comments[$key]['comment'],
                 'Incorrect captured amount value for the order #' . $orderId

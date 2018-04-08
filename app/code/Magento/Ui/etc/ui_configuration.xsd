@@ -34,6 +34,7 @@
             <xs:element ref="form" maxOccurs="unbounded"/>
             <xs:element ref="hidden" maxOccurs="unbounded"/>
             <xs:element ref="htmlContent" maxOccurs="unbounded"/>
+            <xs:element ref="imageUploader" maxOccurs="unbounded"/>
             <xs:element ref="input" maxOccurs="unbounded"/>
             <xs:element ref="insertForm" maxOccurs="unbounded"/>
             <xs:element ref="insertListing" maxOccurs="unbounded"/>
@@ -53,6 +54,7 @@
             <xs:element ref="text" maxOccurs="unbounded"/>
             <xs:element ref="textarea" maxOccurs="unbounded"/>
             <xs:element ref="wysiwyg" maxOccurs="unbounded"/>
+            <xs:element ref="urlInput" maxOccurs="unbounded"/>
         </xs:choice>
     </xs:group>
     <xs:group name="listingElements">
@@ -180,6 +182,7 @@
             <xs:element ref="form" maxOccurs="unbounded"/>
             <xs:element ref="hidden" maxOccurs="unbounded"/>
             <xs:element ref="htmlContent" maxOccurs="unbounded"/>
+            <xs:element ref="imageUploader" maxOccurs="unbounded"/>
             <xs:element ref="input" maxOccurs="unbounded"/>
             <xs:element ref="insertForm" maxOccurs="unbounded"/>
             <xs:element ref="insertListing" maxOccurs="unbounded"/>
@@ -615,6 +618,14 @@
             </xs:documentation>
         </xs:annotation>
     </xs:element>
+    <xs:element name="imageUploader" type="componentImageUploader">
+        <xs:annotation>
+            <xs:documentation>
+                Adds image gallery functionality alongside file uploader functionality.
+                See fileUploader component documentation for more information.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
     <xs:element name="input" type="componentInput">
         <xs:annotation>
             <xs:documentation>
@@ -767,6 +778,14 @@
                 The Wysiwyg component is an adapter for the TinyMCE editor which is used to integrate editor's instance
                 into the UI Form. It expects to receive complete widget declaration in the "content" option
                 which should contain both markup and the script responsible for creating editor's instance.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="urlInput" type="componentUrlInput">
+        <xs:annotation>
+            <xs:documentation>
+                The Url Input component allows to insert External URL and relative URL into the content. Add abilities
+                to define custom url link types.
             </xs:documentation>
         </xs:annotation>
     </xs:element>

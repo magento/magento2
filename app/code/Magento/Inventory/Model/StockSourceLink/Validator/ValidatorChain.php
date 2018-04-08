@@ -10,10 +10,10 @@ namespace Magento\Inventory\Model\StockSourceLink\Validator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\StockSourceLink;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 
 /**
- * Chain of validators. Extension point for new validators via di configuration
+ * Chain of validators for stock source link. Extension point for new validators via di configuration
  */
 class ValidatorChain implements StockSourceLinkValidatorInterface
 {
@@ -49,14 +49,13 @@ class ValidatorChain implements StockSourceLinkValidatorInterface
     }
 
     /**
-     * @param StockSourceLink[] $links
-     * @return ValidationResult
+     * @inheritdoc
      */
-    public function validate(array $links): ValidationResult
+    public function validate(StockSourceLinkInterface $link): ValidationResult
     {
         $errors = [];
         foreach ($this->validators as $validator) {
-            $validationResult = $validator->validate($links);
+            $validationResult = $validator->validate($link);
 
             if (!$validationResult->isValid()) {
                 $errors = array_merge($errors, $validationResult->getErrors());

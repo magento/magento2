@@ -70,7 +70,6 @@ class CreateDefaultSource
             SourceInterface::DESCRIPTION => 'Default Source',
             SourceInterface::LATITUDE => 0,
             SourceInterface::LONGITUDE => 0,
-            SourceInterface::PRIORITY => 0,
             SourceInterface::COUNTRY_ID => 'US',
             SourceInterface::POSTCODE => '00000'
         ];

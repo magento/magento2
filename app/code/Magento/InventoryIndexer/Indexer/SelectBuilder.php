@@ -9,16 +9,16 @@ namespace Magento\InventoryIndexer\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\GetIsStockItemSalableConditionInterface;
 
 /**
- * Select builder data provider
+ * Select builder
  */
 class SelectBuilder
 {
@@ -28,20 +28,20 @@ class SelectBuilder
     private $resourceConnection;
 
     /**
-     * @var GetIsSalableConditionInterface
+     * @var GetIsStockItemSalableConditionInterface
      */
-    private $getIsSalableCondition;
+    private $getIsStockItemSalableCondition;
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param GetIsSalableConditionInterface $getIsSalableCondition
+     * @param GetIsStockItemSalableConditionInterface $getIsStockItemSalableCondition
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        GetIsSalableConditionInterface $getIsSalableCondition
+        GetIsStockItemSalableConditionInterface $getIsStockItemSalableCondition
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->getIsSalableCondition = $getIsSalableCondition;
+        $this->getIsStockItemSalableCondition = $getIsStockItemSalableCondition;
     }
 
     /**
@@ -50,7 +50,7 @@ class SelectBuilder
      * @param int $stockId
      * @return Select
      */
-    public function execute($stockId): Select
+    public function execute(int $stockId): Select
     {
         $connection = $this->resourceConnection->getConnection();
         $sourceItemTable = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
@@ -78,7 +78,7 @@ class SelectBuilder
             [
                 SourceItemInterface::SKU,
                 IndexStructure::QUANTITY => 'SUM(' . $quantityExpression . ')',
-                IndexStructure::IS_SALABLE => $this->getIsSalableCondition->execute($select),
+                IndexStructure::IS_SALABLE => $this->getIsStockItemSalableCondition->execute($select),
             ]
         )
             ->where('source_item.' . SourceItemInterface::SOURCE_CODE . ' IN (?)', $sourceCodes)

@@ -9,7 +9,7 @@ define([
 
     return Column.extend({
         defaults: {
-            bodyTmpl: 'Magento_InventoryCatalog/product/grid/cell/source-items-cell.html'
+            bodyTmpl: 'Magento_InventoryCatalog/product/grid/cell/source-items.html'
         },
 
         /**

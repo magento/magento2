@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Ups\Model;
 
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -718,6 +716,9 @@ XMLRequest;
         if ($this->getConfigFlag('negotiated_active')) {
             $xmlParams .= "<RateInformation><NegotiatedRatesIndicator/></RateInformation>";
         }
+        if ($this->getConfigFlag('include_taxes')) {
+            $xmlParams .= "<TaxInformationIndicator/>";
+        }
 
         $xmlParams .= <<<XMLRequest
   </Shipment>
@@ -793,6 +794,8 @@ XMLRequest;
      * @param mixed $xmlResponse
      * @return Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     protected function _parseXmlResponse($xmlResponse)
     {
@@ -809,27 +812,60 @@ XMLRequest;
 
                 // Negotiated rates
                 $negotiatedArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates");
-                $negotiatedActive = $this->getConfigFlag(
-                        'negotiated_active'
-                    ) && $this->getConfigData(
-                        'shipper_number'
-                    ) && !empty($negotiatedArr);
+                $negotiatedActive = $this->getConfigFlag('negotiated_active')
+                    && $this->getConfigData('shipper_number')
+                    && !empty($negotiatedArr);
 
                 $allowedCurrencies = $this->_currencyFactory->create()->getConfigAllowCurrencies();
                 foreach ($arr as $shipElement) {
                     $code = (string)$shipElement->Service->Code;
                     if (in_array($code, $allowedMethods)) {
+                        //The location of tax information is in a different place
+                        // depending on whether we are using negotiated rates or not
                         if ($negotiatedActive) {
-                            $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
+                            $includeTaxesArr = $xml->getXpath(
+                                "//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates"
+                                . "/NetSummaryCharges/TotalChargesWithTaxes"
+                            );
+                            $includeTaxesActive = $this->getConfigFlag('include_taxes') && !empty($includeTaxesArr);
+                            if ($includeTaxesActive) {
+                                $cost = $shipElement->NegotiatedRates
+                                    ->NetSummaryCharges
+                                    ->TotalChargesWithTaxes
+                                    ->MonetaryValue;
+
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->NegotiatedRates
+                                        ->NetSummaryCharges
+                                        ->TotalChargesWithTaxes
+                                        ->CurrencyCode
+                                );
+                            } else {
+                                $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->CurrencyCode
+                                );
+                            }
                         } else {
-                            $cost = $shipElement->TotalCharges->MonetaryValue;
+                            $includeTaxesArr = $xml->getXpath(
+                                "//RatingServiceSelectionResponse/RatedShipment/TotalChargesWithTaxes"
+                            );
+                            $includeTaxesActive = $this->getConfigFlag('include_taxes') && !empty($includeTaxesArr);
+                            if ($includeTaxesActive) {
+                                $cost = $shipElement->TotalChargesWithTaxes->MonetaryValue;
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->TotalChargesWithTaxes->CurrencyCode
+                                );
+                            } else {
+                                $cost = $shipElement->TotalCharges->MonetaryValue;
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->TotalCharges->CurrencyCode
+                                );
+                            }
                         }
 
                         //convert price with Origin country currency code to base currency code
                         $successConversion = true;
-                        $responseCurrencyCode = $this->mapCurrencyCode(
-                            (string)$shipElement->TotalCharges->CurrencyCode
-                        );
                         if ($responseCurrencyCode) {
                             if (in_array($responseCurrencyCode, $allowedCurrencies)) {
                                 $cost = (double)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
@@ -1332,11 +1368,8 @@ XMLAuth;
         }
 
         // ups support reference number only for domestic service
-        if ($this->_isUSCountry(
-                $request->getRecipientAddressCountryCode()
-            ) && $this->_isUSCountry(
-                $request->getShipperAddressCountryCode()
-            )
+        if ($this->_isUSCountry($request->getRecipientAddressCountryCode())
+            && $this->_isUSCountry($request->getShipperAddressCountryCode())
         ) {
             if ($request->getReferenceData()) {
                 $referenceData = $request->getReferenceData() . $request->getPackageId();
@@ -1365,7 +1398,7 @@ XMLAuth;
                 default:
                     break;
             }
-            if (!is_null($serviceOptionsNode)) {
+            if ($serviceOptionsNode !== null) {
                 $serviceOptionsNode->addChild(
                     'DeliveryConfirmation'
                 )->addChild(
@@ -1386,13 +1419,10 @@ XMLAuth;
             $this->getConfigData('shipper_number')
         );
 
-        if ($request->getPackagingType() != $this->configHelper->getCode(
-                'container',
-                'ULE'
-            ) &&
-            $request->getShipperAddressCountryCode() == self::USA_COUNTRY_ID &&
-            ($request->getRecipientAddressCountryCode() == 'CA' ||
-                $request->getRecipientAddressCountryCode() == 'PR')
+        if ($request->getPackagingType() != $this->configHelper->getCode('container', 'ULE')
+            && $request->getShipperAddressCountryCode() == self::USA_COUNTRY_ID
+            && ($request->getRecipientAddressCountryCode() == 'CA'
+                || $request->getRecipientAddressCountryCode() == 'PR')
         ) {
             $invoiceLineTotalPart = $shipmentPart->addChild('InvoiceLineTotal');
             $invoiceLineTotalPart->addChild('CurrencyCode', $request->getBaseCurrencyCode());
@@ -1522,12 +1552,8 @@ XMLAuth;
             $result->setErrors($e->getMessage());
         }
 
-        if (isset(
-                $response->Response->Error
-            ) && in_array(
-                $response->Response->Error->ErrorSeverity,
-                ['Hard', 'Transient']
-            )
+        if (isset($response->Response->Error)
+            && in_array($response->Response->Error->ErrorSeverity, ['Hard', 'Transient'])
         ) {
             $result->setErrors((string)$response->Response->Error->ErrorDescription);
         }
@@ -1702,7 +1728,7 @@ XMLAuth;
      */
     protected function _getDeliveryConfirmationLevel($countyDestination = null)
     {
-        if (is_null($countyDestination)) {
+        if ($countyDestination === null) {
             return null;
         }
 

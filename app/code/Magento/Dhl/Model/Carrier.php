@@ -606,7 +606,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             'L' => __('Express 10:30'),
             'G' => __('Domestic economy select'),
             'W' => __('Economy select'),
-            'I' => __('Break bulk economy'),
+            'I' => __('Domestic express 9:00'),
             'N' => __('Domestic express'),
             'O' => __('Others'),
             'R' => __('Globalmail business'),
@@ -616,7 +616,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         ];
 
         $nonDocType = [
-            '1' => __('Customer services'),
+            '1' => __('Domestic express 12:00'),
             '3' => __('Easy shop'),
             '4' => __('Jetline'),
             '8' => __('Express easy'),

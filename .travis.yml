@@ -11,9 +11,11 @@ addons:
   firefox: "46.0"
   hosts:
       - magento2.travis
+services:
+  - rabbitmq
+  - elasticsearch
 language: php
 php:
-  - 7.0
   - 7.1
 env:
   global:
@@ -30,16 +32,6 @@ env:
     - TEST_SUITE=integration INTEGRATION_INDEX=2
     - TEST_SUITE=integration INTEGRATION_INDEX=3
     - TEST_SUITE=functional
-matrix:
-  exclude:
-    - php: 7.0
-      env: TEST_SUITE=static
-    - php: 7.0
-      env: TEST_SUITE=js GRUNT_COMMAND=spec
-    - php: 7.0
-      env: TEST_SUITE=js GRUNT_COMMAND=static
-    - php: 7.0
-      env: TEST_SUITE=functional
 cache:
   apt: true
   directories:
@@ -47,7 +39,9 @@ cache:
     - $HOME/.nvm
     - $HOME/node_modules
     - $HOME/yarn.lock
-before_install: ./dev/travis/before_install.sh
+before_install:
+  - curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.0/elasticsearch-2.3.0.deb && sudo dpkg -i --force-confnew elasticsearch-2.3.0.deb && sudo service elasticsearch restart
+  - ./dev/travis/before_install.sh
 install: composer install --no-interaction
 before_script: ./dev/travis/before_script.sh
 script:

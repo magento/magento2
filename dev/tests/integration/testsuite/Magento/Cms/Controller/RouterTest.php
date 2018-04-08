@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Cms\Controller;
 
 /**
@@ -23,7 +21,8 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->markTestIncomplete('MAGETWO-3393');
         $this->_model = new \Magento\Cms\Controller\Router(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\Framework\App\ActionFactory::class),
+                \Magento\Framework\App\ActionFactory::class
+            ),
             new \Magento\Framework\Event\ManagerInterfaceStub(
                 $this->getMockForAbstractClass(\Magento\Framework\Event\InvokerInterface::class),
                 $this->createMock(\Magento\Framework\Event\Config::class),
@@ -57,6 +56,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 }
 /**
  * Event manager stub
+ * @codingStandardsIgnoreStart
  */
 namespace Magento\Framework\Event;
 

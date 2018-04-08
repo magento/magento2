@@ -9,13 +9,16 @@ namespace Magento\InventoryCatalog\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
-use Magento\Catalog\Model\Product\Type;
+use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Save source product relations during product persistence via controller
@@ -26,9 +29,19 @@ use Magento\Catalog\Model\Product\Type;
 class ProcessSourceItemsObserver implements ObserverInterface
 {
     /**
+     * @var IsSourceItemsAllowedForProductTypeInterface
+     */
+    private $isSourceItemsAllowedForProductType;
+
+    /**
      * @var SourceItemsProcessor
      */
     private $sourceItemsProcessor;
+
+    /**
+     * @var IsSingleSourceModeInterface
+     */
+    private $isSingleSourceMode;
 
     /**
      * @var DefaultSourceProviderInterface
@@ -36,87 +49,105 @@ class ProcessSourceItemsObserver implements ObserverInterface
     private $defaultSourceProvider;
 
     /**
-     * @var SourceItemInterfaceFactory
+     * @var SearchCriteriaBuilderFactory
      */
-    private $sourceItemInterfaceFactory;
+    private $searchCriteriaBuilderFactory;
 
     /**
-     * @var SourceItemsSaveInterface
+     * @var SourceItemRepositoryInterface
      */
-    private $sourceItemsSave;
+    private $sourceItemRepository;
 
     /**
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param SourceItemsProcessor $sourceItemsProcessor
+     * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param SourceItemInterfaceFactory $sourceItemInterfaceFactory
-     * @param SourceItemsSaveInterface $sourceItemsSave
+     * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
+     * @param SourceItemRepositoryInterface $sourceItemRepository
      */
     public function __construct(
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         SourceItemsProcessor $sourceItemsProcessor,
+        IsSingleSourceModeInterface $isSingleSourceMode,
         DefaultSourceProviderInterface $defaultSourceProvider,
-        SourceItemInterfaceFactory $sourceItemInterfaceFactory,
-        SourceItemsSaveInterface $sourceItemsSave
+        SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
+        SourceItemRepositoryInterface $sourceItemRepository
     ) {
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->sourceItemsProcessor = $sourceItemsProcessor;
+        $this->isSingleSourceMode = $isSingleSourceMode;
         $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->sourceItemInterfaceFactory = $sourceItemInterfaceFactory;
-        $this->sourceItemsSave = $sourceItemsSave;
+        $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
+        $this->sourceItemRepository = $sourceItemRepository;
     }
 
     /**
      * Process source items during product saving via controller
      *
      * @param EventObserver $observer
-     *
      * @return void
      */
     public function execute(EventObserver $observer)
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
-        if ($product->getTypeId() != Type::TYPE_SIMPLE) {
+        if ($this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
             return;
         }
         /** @var Save $controller */
         $controller = $observer->getEvent()->getController();
+        $productData = $controller->getRequest()->getParam('product', []);
+        $singleSourceData = $productData['quantity_and_stock_status'] ?? [];
 
-        $sources = $controller->getRequest()->getParam('sources', []);
-        $assignedSources = isset($sources['assigned_sources']) && is_array($sources['assigned_sources'])
-            ? $sources['assigned_sources'] : [];
-
-        $this->sourceItemsProcessor->process(
-            $product->getSku(),
-            $assignedSources
-        );
-
-        $productParams = $controller->getRequest()->getParam('product');
-        if (is_array($productParams)) {
-            $this->updateDefaultSourceQty($productParams);
+        if (!$this->isSingleSourceMode->execute()) {
+            $sources = $controller->getRequest()->getParam('sources', []);
+            $assignedSources = $sources['assigned_sources'] ?? [];
+            $this->sourceItemsProcessor->process($productData['sku'], $assignedSources);
+        } elseif (!empty($singleSourceData)) {
+            /** @var StockItemInterface $stockItem */
+            $stockItem = $product->getExtensionAttributes()->getStockItem();
+            $qty = $singleSourceData['qty'] ?? (empty($stockItem) ? 0 : $stockItem->getQty());
+            $isInStock = $singleSourceData['is_in_stock'] ?? (empty($stockItem) ? 1 : (int)$stockItem->getIsInStock());
+            $defaultSourceData = [
+                SourceItemInterface::SKU => $productData['sku'],
+                SourceItemInterface::SOURCE_CODE => $this->defaultSourceProvider->getCode(),
+                SourceItemInterface::QUANTITY => $qty,
+                SourceItemInterface::STATUS => $isInStock
+            ];
+            $sourceItems = $this->getSourceItemsWithoutDefault($productData['sku']);
+            $sourceItems[] = $defaultSourceData;
+            $this->sourceItemsProcessor->process($productData['sku'], $sourceItems);
         }
     }
 
     /**
-     * @param array $productParams
-     * @return void
+     * Get Source Items Data without Default Source by SKU
+     *
+     * @param string $sku
+     * @return array
      */
-    private function updateDefaultSourceQty(array $productParams)
+    private function getSourceItemsWithoutDefault(string $sku): array
     {
-        $sku = $productParams['sku'];
-        $qtyAndStockStatus = $productParams['quantity_and_stock_status'];
-        $qty = $qtyAndStockStatus['qty'];
-        $stockStatus = $qtyAndStockStatus['is_in_stock'];
-        $defaultSourceCode = $this->defaultSourceProvider->getCode();
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->searchCriteriaBuilderFactory->create();
+        $searchCriteria = $searchCriteriaBuilder
+            ->addFilter(SourceItemInterface::SKU, $sku)
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $this->defaultSourceProvider->getCode(), 'neq')
+            ->create();
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
 
-        /** @var  $sourceItem SourceItemInterface */
-        $sourceItem = $this->sourceItemInterfaceFactory->create([
-            'data' => [
-                SourceItemInterface::SKU => $sku,
-                SourceItemInterface::QUANTITY => $qty,
-                SourceItemInterface::STATUS => $stockStatus,
-                SourceItemInterface::SOURCE_CODE => $defaultSourceCode,
-            ]
-        ]);
-
-        $this->sourceItemsSave->execute([$sourceItem]);
+        $sourceItemData = [];
+        if ($sourceItems) {
+            foreach ($sourceItems as $sourceItem) {
+                $sourceItemData[] = [
+                    SourceItemInterface::SKU => $sourceItem->getSku(),
+                    SourceItemInterface::SOURCE_CODE => $sourceItem->getSourceCode(),
+                    SourceItemInterface::QUANTITY => $sourceItem->getQuantity(),
+                    SourceItemInterface::STATUS => $sourceItem->getStatus()
+                ];
+            }
+        }
+        return $sourceItemData;
     }
 }

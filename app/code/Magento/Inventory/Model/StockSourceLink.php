@@ -9,8 +9,8 @@ namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 
 /**
  * {@inheritdoc}
@@ -57,6 +57,22 @@ class StockSourceLink extends AbstractExtensibleModel implements StockSourceLink
     public function setStockId($stockId)
     {
         $this->setData(self::STOCK_ID, $stockId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPriority()
+    {
+        return $this->getData(self::PRIORITY);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPriority($priority)
+    {
+        $this->setData(self::PRIORITY, $priority);
     }
 
     /**

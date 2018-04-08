@@ -6,7 +6,7 @@
 
 /** This is project's console commands configuration for Robo task runner.
  *
- * @codingStandardsIgnoreFile
+ * @codingStandardsIgnoreStart
  * @see http://robo.li/
  */
 class RoboFile extends \Robo\Tasks
@@ -21,8 +21,8 @@ class RoboFile extends \Robo\Tasks
     function cloneFiles()
     {
         $this->_exec('cp -vn .env.example .env');
-        $this->_exec('cp -vn codeception.dist.yml codeception.yml');
-        $this->_exec('cp -vn tests/functional.suite.dist.yml tests/functional.suite.yml');
+        $this->_exec('cp -vf codeception.dist.yml codeception.yml');
+        $this->_exec('cp -vf tests'. DIRECTORY_SEPARATOR .'functional.suite.dist.yml tests'. DIRECTORY_SEPARATOR .'functional.suite.yml');
     }
 
     /**
@@ -34,7 +34,7 @@ class RoboFile extends \Robo\Tasks
     function buildProject()
     {
         $this->cloneFiles();
-        $this->_exec('./vendor/bin/codecept build');
+        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept build');
     }
 
     /**
@@ -43,10 +43,17 @@ class RoboFile extends \Robo\Tasks
      * @param array $opts
      * @return void
      */
-    function generateTests($opts = ['config' => null])
+    function generateTests($opts = ['config' => null, 'force' => false, 'nodes' => null])
     {
+        $GLOBALS['GENERATE_TESTS'] = true;
+
+        if ($opts['force'])
+        {
+            $GLOBALS['FORCE_PHP_GENERATE'] = true;
+        }
+
         require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
-        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllCestFiles($opts['config']);
+        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllTestFiles($opts['config'], $opts['nodes']);
         $this->say("Generate Tests Command Run");
     }
 
@@ -72,75 +79,45 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests using the Chrome environment.
+     * Run all Functional tests.
      *
      * @return void
      */
-    function chrome()
+    function functional()
     {
-        $this->_exec('./vendor/bin/codecept run functional --env chrome --skip-group skip');
+        $this->_exec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional --skip-group skip');
     }
 
     /**
-     * Run all Functional tests using the FireFox environment.
-     *
-     * @return void
-     */
-    function firefox()
-    {
-        $this->_exec('./vendor/bin/codecept run functional --env firefox --skip-group skip');
-    }
-
-    /**
-     * Run all Functional tests using the PhantomJS environment.
-     *
-     * @return void
-     */
-    function phantomjs()
-    {
-        $this->_exec('./vendor/bin/codecept run functional --env phantomjs --skip-group skip');
-    }
-
-    /**
-     * Run all Functional tests using the Chrome Headless environment.
-     *
-     * @return void
-     */
-    function headless()
-    {
-        $this->_exec('./vendor/bin/codecept run functional --env headless --skip-group skip');
-    }
-
-    /**
-     * Run all Tests with the specified @group tag, excluding @group 'skip', using the Chrome environment.
+     * Run all Tests with the specified @group tag, excluding @group 'skip'.
      *
      * @param string $args
      * @return void
      */
     function group($args = '')
     {
-        $this->taskExec('./vendor/bin/codecept run functional --verbose --steps --env chrome --skip-group skip --group')->args($args)->run();
+        $this->taskExec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional --verbose --steps --skip-group skip --group')->args($args)->run();
     }
 
     /**
-     * Run all Functional tests located under the Directory Path provided using the Chrome environment.
+     * Run all Functional tests located under the Directory Path provided.
      *
      * @param string $args
      * @return void
      */
     function folder($args = '')
     {
-        $this->taskExec('./vendor/bin/codecept run functional --env chrome')->args($args)->run();
+        $this->taskExec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional')->args($args)->run();
     }
 
     /**
-     * Run all Tests marked with the @group tag 'example', using the Chrome environment.
+     * Run all Tests marked with the @group tag 'example'.
      *
      * @return void
      */
     function example()
     {
-        $this->_exec('./vendor/bin/codecept run --env chrome --group example --skip-group skip');
+        $this->_exec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run --group example --skip-group skip');
     }
 
     /**
@@ -150,7 +127,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure1Generate()
     {
-        return $this->_exec('allure generate tests/_output/allure-results/ -o tests/_output/allure-report/');
+        return $this->_exec('allure generate tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-results'. DIRECTORY_SEPARATOR .' -o tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
     }
 
     /**
@@ -160,7 +137,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure2Generate()
     {
-        return $this->_exec('allure generate tests/_output/allure-results/ --output tests/_output/allure-report/ --clean');
+        return $this->_exec('allure generate tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-results'. DIRECTORY_SEPARATOR .' --output tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .' --clean');
     }
 
     /**
@@ -170,7 +147,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure1Open()
     {
-        $this->_exec('allure report open --report-dir tests/_output/allure-report/');
+        $this->_exec('allure report open --report-dir tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
     }
 
     /**
@@ -180,7 +157,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure2Open()
     {
-        $this->_exec('allure open --port 0 tests/_output/allure-report/');
+        $this->_exec('allure open --port 0 tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
     }
 
     /**

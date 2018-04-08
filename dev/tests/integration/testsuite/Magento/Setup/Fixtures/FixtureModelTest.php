@@ -104,7 +104,6 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testFixtureGeneration()
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/421');
         $reindexCommand = Bootstrap::getObjectManager()->get(
             \Magento\Indexer\Console\Command\IndexerReindexCommand::class
         );
@@ -119,7 +118,7 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
 
         foreach ($this->entityAsserts as $entityAssert) {
             try {
-                $entityAssert->assert();
+                $this->assertTrue($entityAssert->assert());
             } catch (\AssertionError $assertionError) {
                 $this->assertTrue(false, $assertionError->getMessage());
             }

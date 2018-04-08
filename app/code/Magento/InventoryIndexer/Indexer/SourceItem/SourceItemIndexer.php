@@ -12,6 +12,7 @@ use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 
@@ -53,6 +54,11 @@ class SourceItemIndexer
     private $stockIndexer;
 
     /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
      * $indexStructure is reserved name for construct variable (in index internal mechanism)
      *
      * @param GetSkuListInStock $getSkuListInStockToUpdate
@@ -61,6 +67,7 @@ class SourceItemIndexer
      * @param IndexDataBySkuListProvider $indexDataBySkuListProvider
      * @param IndexNameBuilder $indexNameBuilder
      * @param StockIndexer $stockIndexer
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         GetSkuListInStock $getSkuListInStockToUpdate,
@@ -68,7 +75,8 @@ class SourceItemIndexer
         IndexHandlerInterface $indexHandler,
         IndexDataBySkuListProvider $indexDataBySkuListProvider,
         IndexNameBuilder $indexNameBuilder,
-        StockIndexer $stockIndexer
+        StockIndexer $stockIndexer,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->getSkuListInStock = $getSkuListInStockToUpdate;
         $this->indexStructure = $indexStructureHandler;
@@ -76,10 +84,11 @@ class SourceItemIndexer
         $this->indexDataBySkuListProvider = $indexDataBySkuListProvider;
         $this->indexNameBuilder = $indexNameBuilder;
         $this->stockIndexer = $stockIndexer;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
-     * @inheritdoc
+     * @return void
      */
     public function executeFull()
     {
@@ -87,15 +96,17 @@ class SourceItemIndexer
     }
 
     /**
-     * @inheritdoc
+     * @param int $sourceItemId
+     * @return void
      */
-    public function executeRow($sourceItemId)
+    public function executeRow(int $sourceItemId)
     {
         $this->executeList([$sourceItemId]);
     }
 
     /**
-     * @inheritdoc
+     * @param array $sourceItemIds
+     * @return void
      */
     public function executeList(array $sourceItemIds)
     {
@@ -103,6 +114,10 @@ class SourceItemIndexer
 
         foreach ($skuListInStockList as $skuListInStock) {
             $stockId = $skuListInStock->getStockId();
+            if ($this->defaultStockProvider->getId() === $stockId) {
+                continue;
+            }
+
             $skuList = $skuListInStock->getSkuList();
 
             $mainIndexName = $this->indexNameBuilder
@@ -121,9 +136,10 @@ class SourceItemIndexer
                 ResourceConnection::DEFAULT_CONNECTION
             );
 
+            $indexData = $this->indexDataBySkuListProvider->execute($stockId, $skuList);
             $this->indexHandler->saveIndex(
                 $mainIndexName,
-                $this->indexDataBySkuListProvider->execute($stockId, $skuList),
+                $indexData,
                 ResourceConnection::DEFAULT_CONNECTION
             );
         }

@@ -43,21 +43,20 @@ class SaveMultiple
         if (!count($links)) {
             return;
         }
-
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(
             StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
         );
 
-        $columns = [
+        $columnsSql = $this->buildColumnsSqlPart([
             StockSourceLink::SOURCE_CODE,
             StockSourceLink::STOCK_ID,
-        ];
-
-        $columnsSql = $this->buildColumnsSqlPart($columns);
-
+            StockSourceLink::PRIORITY,
+        ]);
         $valuesSql = $this->buildValuesSqlPart($links);
-        $onDuplicateSql = $this->buildOnDuplicateSqlPart($columns);
+        $onDuplicateSql = $this->buildOnDuplicateSqlPart([
+            StockSourceLink::PRIORITY,
+        ]);
         $bind = $this->getSqlBindData($links);
 
         $insertSql = sprintf(
@@ -67,7 +66,6 @@ class SaveMultiple
             $valuesSql,
             $onDuplicateSql
         );
-
         $connection->query($insertSql, $bind);
     }
 
@@ -78,9 +76,7 @@ class SaveMultiple
     private function buildColumnsSqlPart(array $columns): string
     {
         $connection = $this->resourceConnection->getConnection();
-
         $processedColumns = array_map([$connection, 'quoteIdentifier'], $columns);
-
         return implode(', ', $processedColumns);
     }
 
@@ -90,8 +86,7 @@ class SaveMultiple
      */
     private function buildValuesSqlPart(array $links): string
     {
-        $sql = rtrim(str_repeat('(?, ?), ', count($links)), ', ');
-
+        $sql = rtrim(str_repeat('(?, ?, ?), ', count($links)), ', ');
         return $sql;
     }
 
@@ -102,14 +97,13 @@ class SaveMultiple
     private function getSqlBindData(array $links): array
     {
         $bind = [];
-
         foreach ($links as $link) {
             $bind = array_merge($bind, [
                 $link->getSourceCode(),
-                $link->getStockId()
+                $link->getStockId(),
+                $link->getPriority(),
             ]);
         }
-
         return $bind;
     }
 
@@ -125,7 +119,6 @@ class SaveMultiple
         foreach ($fields as $field) {
             $processedFields[] = sprintf('%1$s = VALUES(%1$s)', $connection->quoteIdentifier($field));
         }
-
         return 'ON DUPLICATE KEY UPDATE ' . implode(', ', $processedFields);
     }
 }

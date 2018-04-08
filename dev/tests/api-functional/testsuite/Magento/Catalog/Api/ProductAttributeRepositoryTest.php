@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Api;
 
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
@@ -243,7 +244,8 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     public function testDeleteNoSuchEntityException()
     {
         $attributeCode = 'some_test_code';
-        $expectedMessage = 'Attribute with attributeCode "%1" does not exist.';
+        $expectedMessage =
+            'The attribute with a "%1" attributeCode doesn\'t exist. Verify the attribute and try again.';
 
         $serviceInfo = [
             'rest' => [
