@@ -166,13 +166,6 @@
                                 <item name="dataScope" xsi:type="string" />
                             </item>
                         </argument>
-                        <field name="sourceCode" formElement="hidden" sortOrder="1">
-                            <settings>
-                                <dataType>text</dataType>
-                                <dataScope>sourceCode</dataScope>
-                                <visible>false</visible>
-                            </settings>
-                        </field>
                         <field name="sourceName" formElement="input" sortOrder="10">
                             <settings>
                                 <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
@@ -195,7 +188,7 @@
                             <settings>
                                 <validation>
                                     <rule name="validate-number" xsi:type="boolean">true</rule>
-                                    <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                                    <rule name="validate-greater-than-zero" xsi:type="boolean">true</rule>
                                     <rule name="less-than-equals-to" xsi:type="number">0</rule>
                                 </validation>
                                 <elementTmpl>ui/form/element/input</elementTmpl>
@@ -203,7 +196,7 @@
                                 <dataScope>qtyToDeduct</dataScope>
                                 <label translate="true">Qty To Deduct</label>
                                 <imports>
-                                    <link name="sourceCode">${$.parentName}.sourceCode:value</link>
+                                    <link name="sourceCode">${$.provider}:${ $.parentScope }.sourceCode</link>
                                     <link name="qtyAvailable">${$.parentName}.qtyAvailable:value</link>
                                     <link name="toggleDisable">inventory_shipping_source_selection_form.inventory_shipping_source_selection_form.general.sourceCode:value</link>
                                 </imports>

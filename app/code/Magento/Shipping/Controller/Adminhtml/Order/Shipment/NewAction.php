@@ -21,20 +21,21 @@ class NewAction extends \Magento\Backend\App\Action
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
      */
     protected $shipmentLoader;
+
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentProvider
+     * @var \Magento\Shipping\Model\ShipmentProviderInterface
      */
     private $shipmentProvider;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
-     * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentProvider $shipmentProvider
+     * @param \Magento\Shipping\Model\ShipmentProviderInterface $shipmentProvider
      */
     public function __construct(
         Action\Context $context,
         \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentProvider $shipmentProvider
+        \Magento\Shipping\Model\ShipmentProviderInterface $shipmentProvider
     ) {
         $this->shipmentLoader = $shipmentLoader;
         $this->shipmentProvider = $shipmentProvider;

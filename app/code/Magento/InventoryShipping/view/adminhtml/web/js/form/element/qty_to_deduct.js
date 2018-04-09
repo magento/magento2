@@ -9,7 +9,7 @@ define([
 
     return Abstract.extend({
         defaults: {
-            sourceCode: '',
+            sourceCode: null,
             qtyAvailable: 0
         },
 
@@ -30,11 +30,7 @@ define([
          * @param {String} selected
          */
         toggleDisable: function (selected) {
-            if (selected === undefined) {
-                this.disabled(false);
-            } else {
-                this.disabled(!(selected === this.sourceCode));
-            }
+            this.disabled(selected ? selected !== this.sourceCode : !!selected);
         }
     });
 });

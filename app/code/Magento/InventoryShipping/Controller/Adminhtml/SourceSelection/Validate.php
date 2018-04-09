@@ -52,7 +52,7 @@ class Validate extends Action
         //TODO: This is simple check. Need to create separate service and add additional checks:
         //TODO: 1. manage stock
         //TODO: 2. sum of all qty less on equal to source available qty (for products that occur twice or more in order)
-
+        //TODO: 3. check total qty
         try {
             $itemsToShip = [];
             foreach ($items as $item) {

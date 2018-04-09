@@ -15,7 +15,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class Index | Need to rebuild
+ * Class Index
  */
 class Index extends Action
 {

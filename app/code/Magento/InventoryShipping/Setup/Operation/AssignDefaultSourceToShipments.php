@@ -10,7 +10,7 @@ namespace Magento\InventoryShipping\Setup\Operation;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
-use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface;
+use Magento\InventoryCatalog\Model\DefaultSourceProvider;
 
 class AssignDefaultSourceToShipments
 {
@@ -26,20 +26,20 @@ class AssignDefaultSourceToShipments
     private $resourceConnection;
 
     /**
-     * @var GetDefaultSourceSelectionAlgorithmCodeInterface
+     * @var DefaultSourceProvider
      */
-    private $getDefaultSourceSelectionAlgorithmCode;
+    private $defaultSourceProvider;
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+     * @param DefaultSourceProvider $defaultSourceProvider
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+        DefaultSourceProvider $defaultSourceProvider
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
+        $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**
@@ -48,7 +48,7 @@ class AssignDefaultSourceToShipments
      */
     public function execute(ModuleDataSetupInterface $setup)
     {
-        $defaultSourceCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
+        $defaultSourceCode = $this->defaultSourceProvider->getCode();
         $sourceShipmentTable = $setup->getTable('inventory_shipment_source');
         $salesShipmentTable = $setup->getTable('sales_shipment');
 

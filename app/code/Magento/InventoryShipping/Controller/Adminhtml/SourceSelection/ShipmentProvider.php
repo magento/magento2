@@ -7,10 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Controller\Adminhtml\SourceSelection;
 
-use Magento\Shipping\Controller\Adminhtml\Order\ShipmentProvider as LegacyShipmentProvider;
+use Magento\Shipping\Model\ShipmentProviderInterface;
+use Magento\Framework\App\RequestInterface;
 
-class ShipmentProvider extends LegacyShipmentProvider
+class ShipmentProvider implements ShipmentProviderInterface
 {
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @param RequestInterface $request
+     */
+    public function __construct(
+        RequestInterface $request
+    ) {
+        $this->request = $request;
+    }
+
     /**
      * @inheritdoc
      */

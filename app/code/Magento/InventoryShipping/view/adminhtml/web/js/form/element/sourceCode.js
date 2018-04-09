@@ -4,9 +4,8 @@
  */
 define([
     'Magento_Ui/js/form/element/select',
-    'underscore',
-    'uiRegistry'
-], function (Select, _, registry) {
+    'underscore'
+], function (Select, _) {
     'use strict';
 
     return Select.extend({
@@ -16,20 +15,13 @@ define([
          */
         initialize: function () {
             this._super();
-            var self = this,
-                provider = registry.get(this.provider),
-                optionArray = [];
 
-            if (provider.data.sourceCodes) {
-                optionArray = provider.data.sourceCodes;
-            }
-
-            _.each(optionArray, function (label, value) {
-                self.options.push({
+            _.each(this.source.get('data.sourceCodes'), function (label, value) {
+                this.options.push({
                     value: value,
                     label: label
                 });
-            });
+            }.bind(this));
 
             return this;
         }

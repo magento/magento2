@@ -68,7 +68,7 @@ class AssignSourceCodeToShipmentPlugin
      */
     public function afterCreate(ShipmentFactory $subject, ShipmentInterface $shipment, Order $order)
     {
-        $sourceCode = $this->request->getParam('source_code');
+        $sourceCode = $this->request->getParam('sourceCode');
         if (empty($sourceCode)) {
             $websiteId = $order->getStore()->getWebsiteId();
             $stockId = $this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
