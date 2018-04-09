@@ -126,13 +126,17 @@ class Csv
     /**
      * Saving data row array into file
      *
-     * @param   string $file
-     * @param   array $data
-     * @return  $this
+     * @param string $file
+     * @param array $data
+     * @param string $mode
+     *
+     * @return $this
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function saveData($file, $data)
+    public function saveData($file, $data, $mode = 'w')
     {
-        $fh = fopen($file, 'w');
+        $fh = fopen($file, $mode);
         foreach ($data as $dataRow) {
             $this->file->filePutCsv($fh, $dataRow, $this->_delimiter, $this->_enclosure);
         }
