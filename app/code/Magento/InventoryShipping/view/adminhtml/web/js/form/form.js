@@ -48,7 +48,7 @@ define([
 
                 /**
                  * Success callback.
-                 * @param {Object} resp
+                 * @param {Object} response
                  * @returns {Boolean}
                  */
                 success: function (response) {

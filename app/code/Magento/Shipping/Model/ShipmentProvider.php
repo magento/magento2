@@ -27,10 +27,10 @@ class ShipmentProvider implements ShipmentProviderInterface
     /**
      * Retrieve shipment items from request
      *
-     * @return array
+     * @return array|null
      */
     public function getShipment()
     {
-        return $this->request->getParam('shipment', []);
+        return $this->request->getParam('shipment');
     }
 }

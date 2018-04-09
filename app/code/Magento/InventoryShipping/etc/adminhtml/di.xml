@@ -18,7 +18,7 @@
 
     <type name="Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction">
         <arguments>
-            <argument name="shipmentProvider" xsi:type="object">Magento\InventoryShipping\Controller\Adminhtml\SourceSelection\ShipmentProvider</argument>
+            <argument name="shipmentProvider" xsi:type="object">Magento\InventoryShipping\Model\ShipmentProvider</argument>
         </arguments>
     </type>
 </config>

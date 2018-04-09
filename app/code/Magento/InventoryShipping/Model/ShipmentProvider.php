@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Controller\Adminhtml\SourceSelection;
+namespace Magento\InventoryShipping\Model;
 
 use Magento\Shipping\Model\ShipmentProviderInterface;
 use Magento\Framework\App\RequestInterface;
@@ -48,6 +48,6 @@ class ShipmentProvider implements ShipmentProviderInterface
             }
         }
 
-        return $shipmentItems;
+        return count($shipmentItems) > 0 ? $shipmentItems : null;
     }
 }

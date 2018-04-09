@@ -90,6 +90,7 @@ class SourceDeductionProcessor implements ObserverInterface
      * @param EventObserver $observer
      * @return void
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(EventObserver $observer)
     {

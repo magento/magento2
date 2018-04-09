@@ -72,7 +72,7 @@ class ShipButton extends Container
     {
         parent::_prepareLayout();
 
-        if ($this->isMultiSourceMode()) {
+        if (!$this->isMultiSourceMode()) {
             $this->buttonList->update(
                 'order_ship',
                 'onclick',
