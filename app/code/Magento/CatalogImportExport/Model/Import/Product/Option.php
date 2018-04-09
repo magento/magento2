@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection as ProductOptionValueCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory as ProductOptionValueCollectionFactory;
 use Magento\Store\Model\Store;
+use Magento\ImportExport\Model\Import;
 
 /**
  * Entity class which provide possibility to import product custom options
@@ -1924,7 +1925,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $beforeOptionValueSkuDelimiter = ';';
         if (empty($rowData['custom_options'])
-            || $rowData['custom_options'] === \Magento\ImportExport\Model\Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT) {
+            || $rowData['custom_options'] === Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT) {
             return $rowData;
         }
         $rowData['custom_options'] = str_replace(
