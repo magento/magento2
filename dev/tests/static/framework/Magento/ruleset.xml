@@ -10,6 +10,10 @@
 
     <rule ref="PSR2"/>
 
+    <rule ref="PSR2.Files.ClosingTag">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+
     <rule ref="Magento.Files.LineLength">
         <properties>
             <property name="lineLimit" value="120"/>
