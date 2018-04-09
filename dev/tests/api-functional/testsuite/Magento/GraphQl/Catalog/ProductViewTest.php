@@ -44,9 +44,6 @@ class ProductViewTest extends GraphQlAbstract
             attribute_set_id
             country_of_manufacture
             created_at
-            custom_design
-            custom_design_from
-            custom_design_to
             custom_layout
             custom_layout_update
             description
@@ -157,7 +154,6 @@ class ProductViewTest extends GraphQlAbstract
                   }
               }
             }
-            page_layout
             price {
               minimalPrice {
                 amount {
@@ -234,7 +230,7 @@ class ProductViewTest extends GraphQlAbstract
             updated_at
             url_key
             url_path
-            website_ids
+            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }
@@ -301,9 +297,6 @@ QUERY;
             }
             country_of_manufacture
             created_at
-            custom_design
-            custom_design_from
-            custom_design_to
             custom_layout
             custom_layout_update
             description
@@ -405,7 +398,6 @@ QUERY;
                   }
               }
             }
-            page_layout
             price {
               minimalPrice {
                 amount {
@@ -482,7 +474,7 @@ QUERY;
             updated_at
             url_key
             url_path
-            website_ids
+            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }

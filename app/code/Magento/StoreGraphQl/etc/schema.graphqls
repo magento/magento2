@@ -1,0 +1,11 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Website {
+    id : Int
+    name : String
+    code : String
+    sort_order : Int
+    default_group_id : String
+    is_default : Boolean
+}
