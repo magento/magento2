@@ -145,7 +145,7 @@ class RoboFile extends \Robo\Tasks
         {
             foreach ($tests as $test)
             {
-                $testObjects[] = Magento\FunctionalTestingFramework\Test\Handlers\TestObjectHandler::getInstance()->getObject($test);
+                $testObjects[$test] = Magento\FunctionalTestingFramework\Test\Handlers\TestObjectHandler::getInstance()->getObject($test);
             }
         }
 
