@@ -76,7 +76,8 @@ class UpdateHandler implements AttributeInterface
         AttributePersistor $attributePersistor,
         ReadSnapshot $readSnapshot,
         ScopeResolver $scopeResolver,
-        AttributeLoader $attributeLoader = null
+        AttributeLoader $attributeLoader = null,
+        ReadHandler $readHandler = null
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
@@ -85,6 +86,7 @@ class UpdateHandler implements AttributeInterface
         $this->readSnapshot = $readSnapshot;
         $this->scopeResolver = $scopeResolver;
         $this->attributeLoader = $attributeLoader ?: ObjectManager::getInstance()->get(AttributeLoader::class);
+        $this->readHandler = $readHandler ?: ObjectManager::getInstance()->get(ReadHandler::class);
     }
 
     /**
@@ -124,6 +126,7 @@ class UpdateHandler implements AttributeInterface
                 ? $entityData[AttributeLoader::ATTRIBUTE_SET_ID]
                 : null; // @todo verify is it normal to not have attributer_set_id
             $snapshot = $this->readSnapshot->execute($entityType, $entityDataForSnapshot);
+            $fallbackSnapshot = $this->readHandler->execute($entityType, $entityDataForSnapshot);
             foreach ($this->getAttributes($entityType, $attributeSetId) as $attribute) {
                 $code = $attribute->getAttributeCode();
                 $isAllowedValueType = array_key_exists($code, $entityData)
@@ -168,6 +171,13 @@ class UpdateHandler implements AttributeInterface
                         );
                     }
                 } else {
+                    if (array_key_exists($code, $fallbackSnapshot)) {
+                        $fallbackSnapshotValue = $fallbackSnapshot[$code];
+                        if ($fallbackSnapshotValue === (string) $newValue) {
+                            continue;
+                        }
+                    }
+
                     /**
                      * Only not empty value of attribute is insertable
                      */
