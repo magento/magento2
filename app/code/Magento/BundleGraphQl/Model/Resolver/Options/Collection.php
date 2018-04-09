@@ -99,9 +99,17 @@ class Collection
         $optionsCollection = $this->bundleOptionFactory->create()->getResourceCollection();
         // All products in collection will have same store id.
         $optionsCollection->joinValues($this->storeManager->getStore()->getId());
-        foreach ($this->skuMap as $parentInfo) {
-            $optionsCollection->setProductIdFilter($parentInfo['entity_id']);
-        }
+
+        $productTable = $optionsCollection->getTable('catalog_product_entity');
+        $linkField = $optionsCollection->getConnection()->getAutoIncrementField($productTable);
+        $optionsCollection->getSelect()->join(
+            ['cpe' => $productTable],
+            'cpe.'.$linkField.' = main_table.parent_id',
+            []
+        )->where(
+            "cpe.entity_id IN (?)",
+            $this->skuMap
+        );
         $optionsCollection->setPositionOrder();
 
         $this->extensionAttributesJoinProcessor->process($optionsCollection);

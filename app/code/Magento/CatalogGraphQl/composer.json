@@ -6,6 +6,7 @@
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/module-eav": "*",
         "magento/module-catalog": "*",
+        "magento/module-catalog-inventory": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
         "magento/module-eav-graph-ql": "*",
