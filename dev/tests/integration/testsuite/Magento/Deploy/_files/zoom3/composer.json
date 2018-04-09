@@ -6,11 +6,10 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0",
-        "magento/framework": "1.0.0-beta",
-        "magento/theme-frontend-zoom2": "1.0.0-beta"
+        "magento/framework": "*",
+        "magento/theme-frontend-zoom2": "*"
     },
     "type": "magento2-theme",
-    "version": "1.0.0-beta",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

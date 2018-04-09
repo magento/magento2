@@ -161,7 +161,6 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         $this->assertObjectHasAttribute('name', $json);
         $this->assertObjectHasAttribute('license', $json);
         $this->assertObjectHasAttribute('type', $json);
-        $this->assertObjectHasAttribute('version', $json);
         $this->assertObjectHasAttribute('require', $json);
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
@@ -178,11 +177,13 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
                 $this->assertAutoload($json);
+                $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-language':
                 $this->assertRegExp('/^magento\/language\-[a-z]{2}_([a-z]{4}_)?[a-z]{2}$/', $json->name);
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
+                $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-theme':
                 $this->assertRegExp('/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/', $json->name);
@@ -190,6 +191,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
+                $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-library':
                 $this->assertDependsOnPhp($json->require);
@@ -197,9 +199,11 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertRequireInSync($json);
                 $this->assertAutoload($json);
+                $this->assertNoVersionSpecified($json);
                 break;
             case 'project':
                 $this->checkProject();
+                $this->assertNoVersionSpecified($json);
                 break;
             default:
                 throw new \InvalidArgumentException("Unknown package type {$packageType}");
@@ -219,6 +223,19 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         $this->assertObjectHasAttribute('files', $json->autoload, $error);
         $this->assertTrue(in_array("registration.php", $json->autoload->files), $error);
         $this->assertFileExists("$dir/registration.php");
+    }
+
+    /**
+     * Version must not be specified in the root and package composer JSON files in Git.
+     *
+     * All versions are added by tools during release publication by version setter tool.
+     *
+     * @param \StdClass $json
+     */
+    private function assertNoVersionSpecified(\StdClass $json)
+    {
+        $errorMessage = 'Version must not be specified in the root and package composer JSON files in Git';
+        $this->assertObjectNotHasAttribute('version', $json, $errorMessage);
     }
 
     /**
