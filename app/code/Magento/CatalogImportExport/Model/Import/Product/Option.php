@@ -1090,7 +1090,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         // Parse custom options.
         $rowData = $this->_parseCustomOptions($rowData);
         $multiRow = [];
-        if (empty($rowData['custom_options'])) {
+        if (empty($rowData['custom_options']) || !is_array($rowData['custom_options'])) {
             return $multiRow;
         }
 
@@ -1923,7 +1923,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _parseCustomOptions($rowData)
     {
         $beforeOptionValueSkuDelimiter = ';';
-        if (empty($rowData['custom_options'])) {
+        if (empty($rowData['custom_options'])
+            || $rowData['custom_options'] === \Magento\ImportExport\Model\Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT) {
             return $rowData;
         }
         $rowData['custom_options'] = str_replace(
