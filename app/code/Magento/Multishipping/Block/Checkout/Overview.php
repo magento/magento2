@@ -196,9 +196,9 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @param Address $address
-     * @return mixed
+     * @return array
      */
-    public function getShippingAddressItems($address)
+    public function getShippingAddressItems($address): array
     {
         return $address->getAllVisibleItems();
     }

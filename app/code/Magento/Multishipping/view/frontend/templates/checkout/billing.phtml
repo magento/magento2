@@ -22,7 +22,23 @@
     window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
     window.customerData = window.checkoutConfig.customerData;
 </script>
-<div id="checkout"></div>
+<div id="checkout" data-bind="scope:'checkoutMessages'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "#checkout": {
+                "Magento_Ui/js/core/app": {
+                   "components": {
+                        "checkoutMessages": {
+                            "component": "Magento_Ui/js/view/messages",
+                            "displayArea": "messages"
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</div>
 <form action="<?= $block->escapeUrl($block->getPostActionUrl()); ?>"
       method="post"
       id="multishipping-billing-form"
