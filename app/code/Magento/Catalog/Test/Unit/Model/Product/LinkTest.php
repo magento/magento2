@@ -81,7 +81,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->model = $objectManager->getObject(
             \Magento\Catalog\Model\Product\Link::class,
             [
-                'websiteCollectionFactory' => $linkCollectionFactory,
+                'linkCollectionFactory' => $linkCollectionFactory,
                 'productCollectionFactory' => $productCollectionFactory,
                 'resource' => $this->resource,
                 'saveProductLinks' => $this->saveProductLinksMock
