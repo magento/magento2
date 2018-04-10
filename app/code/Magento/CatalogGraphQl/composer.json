@@ -9,6 +9,7 @@
         "magento/module-catalog-inventory": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
+        "magento/module-store-graph-ql": "*",
         "magento/module-eav-graph-ql": "*",
         "magento/framework": "*"
     },
