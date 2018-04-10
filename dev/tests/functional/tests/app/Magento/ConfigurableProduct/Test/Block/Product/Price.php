@@ -28,12 +28,12 @@ class Price extends \Magento\Catalog\Test\Block\Product\Price
      */
     protected $mapTypePrices = [
         'special_price' => [
-            'selector' => '.normal-price .price'
-        ]
+            'selector' => '.normal-price .price',
+        ],
     ];
 
     /**
-     * This method returns the price represented by the block.
+     * This method returns the price label represented by the block.
      *
      * @return SimpleElement
      */
