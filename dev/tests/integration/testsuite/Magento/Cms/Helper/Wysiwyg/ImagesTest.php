@@ -46,7 +46,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store web/unsecure/base_url http://example.com/
      * @dataProvider providerGetImageHtmlDeclaration
      */
-    public function testGetImageHtmlDeclarationWithUsingStaticUrlsAllowed(
+    public function testGetImageHtmlDeclaration(
         $staticUrlsAllowed,
         $filename,
         $renderAsTag,
@@ -66,6 +66,11 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * Data provider for testGetImageHtmlDeclaration
+     *
+     * @return array
+     */
     public function providerGetImageHtmlDeclaration()
     {
         return [
