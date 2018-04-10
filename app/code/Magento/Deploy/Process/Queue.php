@@ -215,8 +215,12 @@ class Queue
      * @param bool $dependenciesNotFinished
      * @return void
      */
-    private function executePackage(Package $package, $name, array &$packages, $dependenciesNotFinished)
-    {
+    private function executePackage(
+        Package $package,
+        string $name,
+        array &$packages,
+        bool $dependenciesNotFinished
+    ) {
         if (!$dependenciesNotFinished
             && !$this->isDeployed($package)
             && ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses))
