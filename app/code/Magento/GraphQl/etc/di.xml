@@ -15,7 +15,7 @@
         <arguments>
             <argument name="areas" xsi:type="array">
                 <item name="graphql" xsi:type="array">
-                    <item name="frontName" xsi:type="string">graphql5</item>
+                    <item name="frontName" xsi:type="string">graphql</item>
                 </item>
             </argument>
         </arguments>
