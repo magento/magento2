@@ -185,10 +185,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetPublicHeadersWithoutTtl()
     {
-        $this->expectException(
-            'InvalidArgumentException',
-            'Time to live is a mandatory parameter for set public headers'
-        );
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Time to live is a mandatory parameter for set public headers');
         $this->model->setPublicHeaders(null);
     }
 
@@ -223,10 +221,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetPrivateHeadersWithoutTtl()
     {
-        $this->expectException(
-            'InvalidArgumentException',
-            'Time to live is a mandatory parameter for set private headers'
-        );
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Time to live is a mandatory parameter for set private headers');
         $this->model->setPrivateHeaders(null);
     }
 

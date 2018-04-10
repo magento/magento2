@@ -21,7 +21,8 @@ class NodeTest extends \PHPUnit\Framework\TestCase
         $expectedException,
         $expectedExceptionMessage
     ) {
-        $this->expectException($expectedException, $expectedExceptionMessage);
+        $this->expectException($expectedException);
+        $this->expectExceptionMessage($expectedExceptionMessage);
         new \Magento\Framework\DB\Tree\Node($data['node_data'], $data['keys']);
     }
 

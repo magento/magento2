@@ -78,8 +78,8 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
      */
     public function testLargeSizeFile()
     {
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage(
             sprintf('The file you uploaded is larger than %s Megabytes allowed by server', $this->maxFileSizeInMb)
         );
         $this->prepareEnv();
@@ -152,8 +152,8 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidateFile()
     {
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage(
             "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The maximum allowed image size for 'MediaOption' is 2000x2000 px.\n"
@@ -217,10 +217,8 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
     {
         $this->prepareEnvForEmptyFile();
 
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            'The file is empty. Select another file and try again.'
-        );
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The file is empty. Select another file and try again.');
 
         $httpAdapterMock = $this->createPartialMock(\Zend_File_Transfer_Adapter_Http::class, ['isValid']);
         $httpAdapterMock->expects($this->once())->method('isValid')->will($this->returnValue(true));

@@ -299,7 +299,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProductWithException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, __('Cannot specify product.'));
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage(__('Cannot specify product.'));
+        $this->expectExceptionMessage('Cannot specify product.');
         $this->model->getProduct();
     }
 
