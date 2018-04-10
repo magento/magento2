@@ -38,6 +38,13 @@
         "zendframework/zend-uri": "^2.5.1",
         "zendframework/zend-validator": "^2.6.0"
     },
+    "archive": {
+        "exclude": [
+            "Amqp",
+            "Bulk",
+            "MessageQueue"
+        ]
+    },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"
     },
