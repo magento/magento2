@@ -15,5 +15,6 @@
         <element name="idFrom" type="input" selector=".admin__data-grid-filters-wrap input[name='stock_id[from]']"/>
         <element name="idTo" type="input" selector=".admin__data-grid-filters-wrap input[name='stock_id[to]']"/>
         <element name="name" type="input" selector=".admin__data-grid-filters-wrap input[name='name']"/>
+        <element name="noRecords" type="text" selector=".data-grid-tr-no-data"/>
     </section>
 </sections>

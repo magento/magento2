@@ -20,24 +20,24 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <amOnPage url="{{ManageStock.url}}" stepKey="amOnStockListPage"/>
+        <amOnPage url="{{ManageStock.url}}" stepKey="amOnStockListPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAdd"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAdd1"/>
 
         <fillField userInput="{{BasicMsiStock1.name}}" selector="{{AdminEditStockGeneralSection.name}}" stepKey="fillName1"/>
-        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="openSaveDropDown"/>
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="openSaveDropDown1"/>
 
         <fillField userInput="{{BasicMsiStock2.name}}" selector="{{AdminEditStockGeneralSection.name}}" stepKey="fillName2"/>
 
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
 
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword">
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">
             <argument name="keyword" value="BasicMsiStock2.name"/>
         </actionGroup>
 

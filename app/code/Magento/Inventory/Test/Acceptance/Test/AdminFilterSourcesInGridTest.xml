@@ -24,14 +24,14 @@
             <createData entity="FullSource2" stepKey="createSource2"/>
             <createData entity="FullSource1" stepKey="createSource3"/>
             <createData entity="FullSource2" stepKey="createSource4"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
@@ -44,7 +44,7 @@
         <see userInput="Enabled" selector="{{AdminGridRow.rowOne}}" stepKey="seeIsEnabledInRow1"/>
 
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns1"/>
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns2"/>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">

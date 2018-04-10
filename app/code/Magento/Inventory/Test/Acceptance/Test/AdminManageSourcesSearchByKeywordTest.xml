@@ -22,16 +22,16 @@
         <before>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="FullSource2" stepKey="createSource2"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword">
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">
             <argument name="keyword" value="$$createSource2.source[name]$$"/>
         </actionGroup>
 

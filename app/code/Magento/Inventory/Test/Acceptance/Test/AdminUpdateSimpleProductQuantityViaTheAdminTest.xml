@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminSimpleProductQuantityUpdatedViaTheAdminTest">
+    <test name="AdminUpdateSimpleProductQuantityViaTheAdminTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Update Simple Product Quantity"/>
@@ -21,15 +21,15 @@
         
         <before>
             <createData entity="FullSource1" stepKey="createSource1"/>
-            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
             <createData entity="SimpleMsiProduct" stepKey="simpleProduct1">
-                <requiredEntity createDataKey="simpleCategory"/>
+                <requiredEntity createDataKey="simpleCategory1"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
-            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
         </after>
 
@@ -50,15 +50,13 @@
         <click selector="{{AdminGridRow.editByValue('$$simpleProduct1.product[name]$$')}}" stepKey="clickOnEditForDefaultStock1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
 
-        <fillField selector="input[name='sources[assigned_sources][0][quantity]']" userInput="100" stepKey="enterNewProductQuantity1"/>
-        <click selector="#save-button" stepKey="clickOnSaveWebSite1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="enterNewProductQuantity1"/>
+        <click selector="{{AdminGridMainControls.save}}" stepKey="clickOnSaveWebSite1"/>
 
-        <seeInField selector="input[name='sources[assigned_sources][0][quantity]']" userInput="{{SimpleMsiProduct.quantity}}" stepKey="seeOldQuantityValue2"/>
-        <fillField selector="input[name='sources[assigned_sources][0][quantity]']" userInput="50" stepKey="enterNewProductQuantity2"/>
-        <click selector="#save-button" stepKey="clickOnSaveWebSite2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
-        <seeInField selector="input[name='sources[assigned_sources][0][quantity]']" userInput="50" stepKey="seeOldQuantityValue3"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="seeOldQuantityValue2"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="50" stepKey="enterNewProductQuantity2"/>
+        <click selector="{{AdminGridMainControls.save}}" stepKey="clickOnSaveWebSite2"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="50" stepKey="seeOldQuantityValue3"/>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>

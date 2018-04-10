@@ -24,16 +24,16 @@
             <createData entity="_defaultStock" stepKey="createStock2"/>
             <createData entity="_defaultStock" stepKey="createStock3"/>
             <createData entity="_defaultStock" stepKey="createStock4"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStockListPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStockListPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword">
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">
             <argument name="keyword" value="$$createStock4.stock[name]$$"/>
         </actionGroup>
 

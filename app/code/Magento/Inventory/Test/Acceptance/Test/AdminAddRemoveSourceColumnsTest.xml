@@ -21,17 +21,17 @@
 
         <before>
             <createData entity="FullSource1" stepKey="createSource1"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
             <amOnPage url="{{ManageSources.url}}" stepKey="amOnSourceListPage1"/>
             <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
-        <see selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" userInput="4 out of 16 visible" stepKey="seeAllColumnsAreActive"/>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton1"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
+        <see selector="{{AdminManageSourcesGridColumnControls.dropDown}}" userInput="4 out of 16 visible" stepKey="seeAllColumnsAreActive1"/>
 
         <see selector="{{AdminGridHeaders.headerByName('Code')}}" userInput="Code" stepKey="seeCodeHeader1"/>
         <see selector="{{AdminGridHeaders.headerByName('Is Enabled')}}" userInput="Is Enabled" stepKey="seeIsEnabledHeader1"/>
@@ -80,7 +80,7 @@
         <click selector="{{AdminGridColumnsControls.columnName('Latitude')}}" stepKey="enableLatitudeColumn2"/>
         <click selector="{{AdminGridColumnsControls.columnName('Street')}}" stepKey="enableStreetColumn2"/>
         <click selector="{{AdminGridColumnsControls.columnName('Phone')}}" stepKey="enablePhoneColumn2"/>
-        <click selector="{{AdminGridColumnsControls.cancel}}" stepKey="clickOnCancel"/>
+        <click selector="{{AdminGridColumnsControls.cancel}}" stepKey="clickOnCancel1"/>
 
         <see selector="{{AdminGridHeaders.headerByName('Code')}}" userInput="Code" stepKey="seeCodeHeader3"/>
         <see selector="{{AdminGridHeaders.headerByName('Is Enabled')}}" userInput="Is Enabled" stepKey="seeIsEnabledHeader3"/>

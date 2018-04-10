@@ -20,27 +20,25 @@
         </annotations>
         
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStockListPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStockListPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
 
         <click selector="{{AdminGridRow.checkboxByValue('Default Stock')}}" stepKey="checkDefaultStock1"/>
         <click selector="{{AdminGridActionsMenu.dropDown}}" stepKey="clickOnTheActionMenu1"/>
-        <click selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .action-menu-items li" stepKey="clickOnDelete1"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminGridActionsMenu.delete}}" stepKey="clickOnDelete1"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="clickOnOk1"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
 
-        <seeElement selector=".message-error.error" stepKey="seeErrorMessage1"/>
-        <see selector=".message-error.error" userInput="[ID: 1] Default Stock could not be deleted." stepKey="seeInErrorMessage1"/>
+        <seeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="seeErrorMessage1"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="[ID: 1] Default Stock could not be deleted." stepKey="seeInErrorMessage1"/>
 
-        <see userInput="Default Stock" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Default Stock" stepKey="seeCodeInRow1"/>
     </test>
 </tests>

@@ -25,10 +25,10 @@
             <createData entity="FullSource2" stepKey="createSource2"/>
             <createData entity="FullSource1" stepKey="createSource3"/>
             <createData entity="FullSource2" stepKey="createSource4"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
         <amOnPage url="{{ManageStock.url}}" stepKey="amOnStockListPage1"/>
@@ -46,32 +46,28 @@
             <argument name="keyword" value="$$createSource1.source[name]$$"/>
         </actionGroup>
         <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource2"/>
-        <click selector=".page-main-actions button.action-primary" stepKey="clickOnDone1"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDone1"/>
 
         <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSources2"/>
         <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword3">
             <argument name="keyword" value="$$createSource2.source[name]$$"/>
         </actionGroup>
         <click selector="{{AdminGridRow.checkboxByValue($$createSource2.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource3"/>
-        <click selector=".page-main-actions button.action-primary" stepKey="clickOnDone2"/>
-        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDone2"/>
 
         <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSources3"/>
         <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword4">
             <argument name="keyword" value="$$createSource3.source[name]$$"/>
         </actionGroup>
         <click selector="{{AdminGridRow.checkboxByValue($$createSource3.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource4"/>
-        <click selector=".page-main-actions button.action-primary" stepKey="clickOnDone3"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDone3"/>
 
         <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSources4"/>
         <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword5">
             <argument name="keyword" value="$$createSource4.source[name]$$"/>
         </actionGroup>
         <click selector="{{AdminGridRow.checkboxByValue($$createSource4.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource5"/>
-        <click selector=".page-main-actions button.action-primary" stepKey="clickOnDone4"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDone4"/>
 
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSource1CodeInGrid1"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSource1NameInGrid1"/>
@@ -85,8 +81,7 @@
         <see selector="{{AdminProductSourcesGrid.rowByIndex('3')}}" userInput="$$createSource4.source[source_code]$$" stepKey="seeSource4CodeInGrid1"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('3')}}" userInput="$$createSource4.source[name]$$" stepKey="seeSource4NameInGrid1"/>
 
-        <click selector="#save-button" stepKey="clickOnSaveAndContinue"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinue"/>
 
         <seeElement selector=".success" stepKey="seeSuccessMessage"/>
 

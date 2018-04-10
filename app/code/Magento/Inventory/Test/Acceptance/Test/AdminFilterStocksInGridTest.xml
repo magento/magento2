@@ -24,12 +24,12 @@
             <createData entity="BasicMsiStock2" stepKey="createStock2"/>
             <createData entity="BasicMsiStock1" stepKey="createStock3"/>
             <createData entity="BasicMsiStock2" stepKey="createStock4"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStocksListPage"/>
-            <waitForPageLoad stepKey="waitForPageLoad1"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStocksListPage1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
@@ -40,13 +40,13 @@
         <see userInput="$$createStock4.stock[name]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow1"/>
 
         <!-- Since the AdminFormPost does NOT return the ID we have to grab the ID from the UI -->
-        <grabTextFrom selector="//tr[contains(@data-repeat-index, '0')]/td[2]/div" stepKey="grabID1"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.id}}" stepKey="grabID1"/>
         <click selector="{{AdminGridFilterControls.clearAll}}" stepKey="clickOnClearAllFilters1"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">
             <argument name="selector" value="AdminManageStockGridFilterControls.name"/>
             <argument name="value" value="$$createStock3.stock[name]$$"/>
         </actionGroup>
-        <grabTextFrom selector="//tr[contains(@data-repeat-index, '0')]/td[2]/div" stepKey="grabID2"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.id}}" stepKey="grabID2"/>
         <click selector="{{AdminGridFilterControls.clearAll}}" stepKey="clickOnClearAllFilters2"/>
 
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>

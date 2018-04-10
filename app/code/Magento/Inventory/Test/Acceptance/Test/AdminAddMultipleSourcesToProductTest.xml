@@ -20,30 +20,32 @@
         </annotations>
 
         <before>
-            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct1">
-                <requiredEntity createDataKey="simpleCategory"/>
+                <requiredEntity createDataKey="simpleCategory1"/>
             </createData>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="FullSource2" stepKey="createSource2"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
                 <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
                 <argument name="value" value="SimpleProduct.sku"/>
             </actionGroup>
 
-            <click selector="{{AdminGridRow.editByValue(SimpleProduct.sku)}}" stepKey="clickOnEdit"/>
+            <click selector="{{AdminGridRow.editByValue(SimpleProduct.sku)}}" stepKey="clickOnEdit1"/>
             <waitForPageLoad stepKey="waitForPageLoad1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
-            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
         </after>
 
         <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources1"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters2"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="value" value="$$createSource1.source[source_code]$$"/>
@@ -52,6 +54,7 @@
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone1"/>
 
         <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources2"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters3"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="value" value="$$createSource2.source[source_code]$$"/>

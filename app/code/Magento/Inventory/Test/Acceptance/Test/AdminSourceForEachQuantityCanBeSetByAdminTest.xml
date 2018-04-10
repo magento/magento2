@@ -20,21 +20,21 @@
         </annotations>
 
         <before>
-            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct1">
-                <requiredEntity createDataKey="simpleCategory"/>
+                <requiredEntity createDataKey="simpleCategory1"/>
             </createData>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="FullSource2" stepKey="createSource2"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
-            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
         </after>
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
@@ -84,8 +84,7 @@
         <see selector="{{AdminGridRow.rowOne}}" userInput="$$simpleProduct1.product[name]$$" stepKey="seeNameInGrid1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="$$simpleProduct1.product[sku]$$" stepKey="seeSkuInGrid1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="$$simpleProduct1.product[price]$$" stepKey="seePriceInGrid1"/>
-        <!-- Disabling this action due to a bue in MSI were it displays [object Object] instead of the Quantity. -->
-        <!--<see selector="{{AdminGridRow.rowOne}}" userInput="100" stepKey="seeQuantityInGrid1"/>-->
+        <see selector="{{AdminGridRow.rowOne}}" userInput="100" stepKey="seeQuantityInGrid1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeStatusInGrid1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeWebsiteInGrid1"/>
 

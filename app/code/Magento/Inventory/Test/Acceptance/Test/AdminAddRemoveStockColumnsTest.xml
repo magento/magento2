@@ -21,17 +21,17 @@
 
         <before>
             <createData entity="_defaultStock" stepKey="createStock1"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
             <amOnPage url="{{ManageStock.url}}" stepKey="amOnStockListPage1"/>
             <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
-        <see selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" userInput="4 out of 4 visible" stepKey="seeAllColumnsAreActive"/>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton1"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
+        <see selector="{{AdminManageSourcesGridColumnControls.dropDown}}" userInput="4 out of 4 visible" stepKey="seeAllColumnsAreActive1"/>
 
         <see selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="seeTheHeaderId1"/>
         <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName1"/>
@@ -56,7 +56,7 @@
         <click selector="{{AdminGridColumnsControls.columnName('ID')}}" stepKey="disableIdColumn3"/>
         <click selector="{{AdminGridColumnsControls.columnName('Name')}}" stepKey="disableNameColumn3"/>
         <click selector="{{AdminGridColumnsControls.columnName('Action')}}" stepKey="disableActionColumn3"/>
-        <click selector="{{AdminGridColumnsControls.cancel}}" stepKey="clickOnCancel"/>
+        <click selector="{{AdminGridColumnsControls.cancel}}" stepKey="clickOnCancel1"/>
 
         <see selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="seeTheHeaderId3"/>
         <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName3"/>

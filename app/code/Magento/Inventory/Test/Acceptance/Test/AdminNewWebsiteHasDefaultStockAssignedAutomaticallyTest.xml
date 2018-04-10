@@ -23,25 +23,25 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite"/>
-        <fillField selector="#website_name" userInput="{{BasicMsiWebsite1.name}}" stepKey="enterWebsiteName"/>
-        <fillField selector="#website_code" userInput="{{BasicMsiWebsite1.code}}" stepKey="enterWebsiteCode"/>
-        <click selector="#save" stepKey="clickOnSaveWebSite"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite1"/>
+        <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="enterWebsiteName1"/>
+        <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite1.code}}" stepKey="enterWebsiteCode1"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite1"/>
 
-        <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStockGridPage"/>
+        <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStockGridPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
 
-        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminManageSourcesGridFilterControls.dropDown}}" visible="true" stepKey="clearTheFiltersIfPresent"/>
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminManageSourcesGridFilterControls.dropDown}}" visible="true" stepKey="clearTheFiltersIfPresent1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
-        <see selector="{{AdminGridRow.rowOne}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeTheNewWebsiteAssignedToDefaultSource"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeTheNewWebsiteAssignedToDefaultSource1"/>
     </test>
 </tests>
