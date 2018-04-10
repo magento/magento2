@@ -172,8 +172,8 @@ class UpdateHandler implements AttributeInterface
                     }
                 } else {
                     if (array_key_exists($code, $fallbackSnapshot)) {
-                        $fallbackSnapshotValue = $fallbackSnapshot[$code];
-                        if ($fallbackSnapshotValue === (string) $newValue) {
+                        $fallbackValue = $fallbackSnapshot[$code];
+                        if ($fallbackValue === (string) $newValue) {
                             continue;
                         }
                     }
