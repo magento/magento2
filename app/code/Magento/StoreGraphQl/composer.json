@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-tax-graph-ql",
+    "name": "magento/module-store-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
     "require": {
