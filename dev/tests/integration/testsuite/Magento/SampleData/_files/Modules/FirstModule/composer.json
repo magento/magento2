@@ -5,7 +5,6 @@
     "magento/module-first-sample-data": "Sample Data version:777.7.*"
   },
   "type": "magento2-module",
-  "version": "777.7.7",
   "config": {
     "sort-packages": true
   }

@@ -1162,7 +1162,6 @@ QUERY;
      */
     public function testFilterProductsThatAreOutOfStockWithConfigSettings()
     {
-        $this->markTestSkipped('Skipped until visibility honors config settings is fixed in MAGETWO-89246');
         $query
             =<<<QUERY
 {
@@ -1201,6 +1200,10 @@ QUERY;
         self::assertEquals(
             'simple_visible_in_stock',
             $responseObject->getData('products/items/0/sku')
+        );
+        self::assertEquals(
+            'Simple Product Visible and InStock',
+            $responseObject->getData('products/items/0/name')
         );
         $this->assertEquals(1, $response['products']['total_count']);
     }
