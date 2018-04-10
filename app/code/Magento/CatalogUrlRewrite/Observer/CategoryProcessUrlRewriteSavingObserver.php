@@ -102,7 +102,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         $mapsGenerated = false;
         if ($category->dataHasChangedFor('url_key')
             || $category->dataHasChangedFor('is_anchor')
-            || $category->getIsChangedProductList()
+            || !empty($category->getChangedProductIds())
         ) {
             if ($category->dataHasChangedFor('url_key')) {
                 $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category);

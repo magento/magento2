@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GraphQl\GroupedProduct;
 
@@ -51,7 +52,7 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $groupedProduct = $productRepository->get($productSku, false, null, true);
-      // $groupedProductLinks = $groupedProduct->getProductLinks();
+
         $this->assertGroupedProductItems($groupedProduct, $response['products']['items'][0]);
     }
 
@@ -59,15 +60,14 @@ QUERY;
     {
         $this->assertNotEmpty(
             $actualResponse['items'],
-            "Precondition failed: 'bundle product items' must not be empty"
+            "Precondition failed: 'grouped product items' must not be empty"
         );
         $this->assertEquals(2, count($actualResponse['items']));
         $groupedProductLinks = $product->getProductLinks();
         foreach ($actualResponse['items'] as $itemIndex => $bundleItems) {
             $this->assertNotEmpty($bundleItems);
             $associatedProductSku = $groupedProductLinks[$itemIndex]->getLinkedProductSku();
-          //  $products = ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
-          //  $associatedProduct = $products->getIdBySku($associatedProductSku);
+
             $productsRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
             /** @var \Magento\Catalog\Model\Product $associatedProduct */
             $associatedProduct = $productsRepository->get($associatedProductSku);
