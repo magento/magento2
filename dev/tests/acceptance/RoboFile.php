@@ -113,7 +113,6 @@ class RoboFile extends \Robo\Tasks
      * @param array $opts
      * @return void
      */
-
     function generateTests(array $tests, $opts = [
         'config' => null,
         'force' => false,
@@ -122,39 +121,15 @@ class RoboFile extends \Robo\Tasks
         'tests' => null
     ])
     {
-        $GLOBALS['GENERATE_TESTS'] = true;
-        $GLOBALS['FORCE_PHP_GENERATE'] = $opts['force'];
         require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
-
-        $testObjects = [];
-        $suitesReferences = [];
-
-        if ($opts['tests'] != null) {
-            $testConfigArray = json_decode($opts['tests'],true);
-            $tests = $testConfigArray['tests'] ?? [];
-            $suitesReferences = $testConfigArray['suites'] ?? null;
-        }
-
-        // stop execution if we have failed to properly parse any json
-        if (json_last_error() != JSON_ERROR_NONE) {
-            $this->say("JSON could not be parsed: " . json_last_error_msg());
-            return;
-        }
-
-        if (!empty($tests))
-        {
-            foreach ($tests as $test)
-            {
-                $testObjects[$test] = Magento\FunctionalTestingFramework\Test\Handlers\TestObjectHandler::getInstance()->getObject($test);
-            }
-        }
+        $testConfiguration = $this->createTestConfiguration($tests, $opts);
 
         // maintain backwards compatability for devops
         $lines = $opts['lines'] ?? $opts ['nodes'];
 
         // create our manifest file here
-        $testManifest = \Magento\FunctionalTestingFramework\Util\Manifest\TestManifestFactory::makeManifest($opts['config'],$suitesReferences);
-        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance(null, $testObjects)->createAllTestFiles($testManifest);
+        $testManifest = \Magento\FunctionalTestingFramework\Util\Manifest\TestManifestFactory::makeManifest($opts['config'],$testConfiguration['suites']);
+        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance(null, $testConfiguration['tests'])->createAllTestFiles($testManifest);
 
         if ($opts['config'] == 'parallel') {
             $testManifest->createTestGroups($lines);
@@ -164,6 +139,69 @@ class RoboFile extends \Robo\Tasks
         $testManifest->generate();
 
         $this->say("Generate Tests Command Run");
+    }
+
+
+    /**
+     * Function which builds up a configuration including test and suites for consumption of Magento generation methods.
+     *
+     * @param array $tests
+     * @param array $opts
+     * @return array
+     */
+    private function createTestConfiguration($tests, $opts)
+    {
+        // set these globals as we only run this method during generation.
+        $GLOBALS['GENERATE_TESTS'] = true;
+        $GLOBALS['FORCE_PHP_GENERATE'] = $opts['force'];
+
+        $testConfiguration = [];
+        $testConfiguration['tests'] = $tests;
+        $testConfiguration['suites'] = [];
+
+        $testConfiguration = $this->parseTestsConfigJson($opts['tests'], $testConfiguration);
+
+        // if we have references to specific tests, we resolve the test objects and pass them to the config
+        if (!empty($testConfiguration['tests']))
+        {
+            $testObjects = [];
+
+            foreach ($testConfiguration['tests'] as $test)
+            {
+                $testObjects[$test] = Magento\FunctionalTestingFramework\Test\Handlers\TestObjectHandler::getInstance()->getObject($test);
+            }
+
+            $testConfiguration['tests'] = $testObjects;
+        }
+
+        return $testConfiguration;
+    }
+
+    /**
+     * Function which takes a json string of potential custom configuration and parses/validates the resulting json
+     * passed in by the user. The result is a testConfiguration array.
+     *
+     * @param string $json
+     * @param array $testConfiguration
+     * @return array
+     */
+    private function parseTestsConfigJson($json, $testConfiguration) {
+        if ($json == null) {
+            return $testConfiguration;
+        }
+
+        $jsonTestConfiguration = [];
+        $testConfigArray = json_decode($json, true);
+
+        // stop execution if we have failed to properly parse any json
+        if (json_last_error() != JSON_ERROR_NONE) {
+            $this->say("JSON could not be parsed: " . json_last_error_msg());
+            exit(1);
+        }
+
+        $jsonTestConfiguration['tests'] = $testConfigArray['tests'] ?? null;;
+        $jsonTestConfiguration['suites'] = $testConfigArray['suites'] ?? null;
+        return $jsonTestConfiguration;
     }
 
     /**

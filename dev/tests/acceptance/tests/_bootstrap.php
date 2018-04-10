@@ -57,9 +57,6 @@ if ($COMPOSER_MAGENTO_FULL_PREFIX === null) {
 
 $RELATIVE_TESTS_MODULE_PATH = '/Magento/FunctionalTest';
 
-defined('FW_BP') || define('FW_BP', realpath($FW_PATH));
-defined('TESTS_BP') || define('TESTS_BP', realpath($TEST_PATH));
-defined('TESTS_MODULE_PATH') || define('TESTS_MODULE_PATH', realpath($TEST_PATH . $RELATIVE_TESTS_MODULE_PATH));
 defined('MAGENTO_BP') || define('MAGENTO_BP', realpath($MAGENTO_PATH));
 
 //Load constants from .env file
@@ -81,6 +78,10 @@ if (file_exists(MAGENTO_BP . '/dev/tests/acceptance/.env')) {
     defined('MAGENTO_CLI_COMMAND_PARAMETER') || define('MAGENTO_CLI_COMMAND_PARAMETER', 'command');
     $env->setEnvironmentVariable('MAGENTO_CLI_COMMAND_PARAMETER', MAGENTO_CLI_COMMAND_PARAMETER);
 }
+
+defined('FW_BP') || define('FW_BP', realpath($FW_PATH));
+defined('TESTS_BP') || define('TESTS_BP', realpath($TEST_PATH));
+defined('TESTS_MODULE_PATH') || define('TESTS_MODULE_PATH', realpath($TEST_PATH . $RELATIVE_TESTS_MODULE_PATH));
 
 // add the debug flag here
 $debug_mode = $_ENV['MFTF_DEBUG'] ?? false;
