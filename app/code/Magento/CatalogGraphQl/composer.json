@@ -9,12 +9,12 @@
         "magento/module-catalog-inventory": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
-        "magento/module-store-graph-ql": "*",
         "magento/module-eav-graph-ql": "*",
         "magento/framework": "*"
     },
     "suggest": {
-        "magento/module-graph-ql": "100.0.*"
+        "magento/module-graph-ql": "*",
+        "magento/module-store-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",
