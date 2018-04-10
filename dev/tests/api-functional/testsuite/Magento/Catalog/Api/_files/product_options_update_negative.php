@@ -15,7 +15,7 @@ return [
             'price_type'     => 'fixed',
             'max_characters' => 10,
         ],
-        'ProductSku should be specified',
+        'The ProductSku is empty. Set the ProductSku and try again.',
         400,
     ],
     'invalid_product_sku' => [
