@@ -74,7 +74,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
             'hasData',
             'getParentId',
             'dataHasChangedFor',
-            'getIsChangedProductList',
+            'getChangedProductIds',
         ]);
         $this->observer->expects($this->any())
             ->method('getEvent')
@@ -131,6 +131,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
             ->willReturn(2);
         $this->category->expects($this->once())
             ->method('hasData')
+            ->with('store_id')
             ->willReturn(true);
         $this->storeGroupFactory->expects($this->never())
             ->method('create');
@@ -143,8 +144,8 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
                 ]
             );
         $this->category->expects($this->once())
-            ->method('getIsChangedProductList')
-            ->willReturn(false);
+            ->method('getChangedProductIds')
+            ->willReturn([]);
 
         $this->categoryProcessUrlRewriteSavingObserver->execute($this->observer);
     }
@@ -169,8 +170,8 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
                 ]
             );
         $this->category->expects($this->once())
-            ->method('getIsChangedProductList')
-            ->willReturn(false);
+            ->method('getChangedProductIds')
+            ->willReturn([]);
         $this->databaseMapPoolMock->expects($this->never())
             ->method('resetMap');
 
@@ -197,8 +198,8 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
                 ]
             );
         $this->category->expects($this->any())
-            ->method('getIsChangedProductList')
-            ->willReturn(false);
+            ->method('getChangedProductIds')
+            ->willReturn([]);
 
         $result1 = ['test'];
         $this->categoryUrlRewriteGeneratorMock->expects($this->once())
