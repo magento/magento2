@@ -27,7 +27,10 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Filesystem::class
         );
         $mediaPath = $filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
-        $helper = $this->generateHelper(null);
+        /** @var \Magento\Cms\Helper\Wysiwyg\Images $helper */
+        $helper = $this->objectManager->create(
+            \Magento\Cms\Helper\Wysiwyg\Images::class
+        );
         $this->assertStringStartsWith($mediaPath, $helper->getStorageRoot());
     }
 
@@ -36,7 +39,10 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCurrentUrl()
     {
-        $helper = $this->generateHelper(null);
+        /** @var \Magento\Cms\Helper\Wysiwyg\Images $helper */
+        $helper = $this->objectManager->create(
+            \Magento\Cms\Helper\Wysiwyg\Images::class
+        );
         $this->assertStringStartsWith('http://example.com/', $helper->getCurrentUrl());
     }
 
@@ -98,7 +104,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     /**
      * Generate instance of Images Helper
      *
-     * @param bool|null $isStaticUrlsAllowed - if boolean, mock is created to override value of isUsingStaticUrlsAllowed
+     * @param bool $isStaticUrlsAllowed - mock is created to override value of isUsingStaticUrlsAllowed method in class
      * @return \Magento\Cms\Helper\Wysiwyg\Images
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -106,29 +112,25 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 1;
 
-        if (!is_bool($isStaticUrlsAllowed)) {
-            $helper = $this->objectManager->create(\Magento\Cms\Helper\Wysiwyg\Images::class);
-        } else {
-            $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
-            $contextMock = $this->objectManager->create(\Magento\Framework\App\Helper\Context::class, [
-                'eventManager' => $eventManagerMock,
-            ]);
+        $contextMock = $this->objectManager->create(\Magento\Framework\App\Helper\Context::class, [
+            'eventManager' => $eventManagerMock,
+        ]);
 
-            $helper = $this->objectManager->create(\Magento\Cms\Helper\Wysiwyg\Images::class, [
-                'context' => $contextMock
-            ]);
+        $helper = $this->objectManager->create(\Magento\Cms\Helper\Wysiwyg\Images::class, [
+            'context' => $contextMock
+        ]);
 
-            $checkResult = new \stdClass();
-            $checkResult->isAllowed = false;
+        $checkResult = new \stdClass();
+        $checkResult->isAllowed = false;
 
-            $eventManagerMock->expects($this->any())
-                ->method('dispatch')
-                ->with('cms_wysiwyg_images_static_urls_allowed', ['result' => $checkResult, 'store_id' => $storeId])
-                ->willReturnCallback(function ($_, $arr) use ($isStaticUrlsAllowed) {
-                    $arr['result']->isAllowed = $isStaticUrlsAllowed;
-                });
-        }
+        $eventManagerMock->expects($this->any())
+            ->method('dispatch')
+            ->with('cms_wysiwyg_images_static_urls_allowed', ['result' => $checkResult, 'store_id' => $storeId])
+            ->willReturnCallback(function ($_, $arr) use ($isStaticUrlsAllowed) {
+                $arr['result']->isAllowed = $isStaticUrlsAllowed;
+            });
 
         $helper->setStoreId($storeId);
 
