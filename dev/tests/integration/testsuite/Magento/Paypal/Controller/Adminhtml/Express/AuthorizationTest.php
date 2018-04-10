@@ -39,6 +39,8 @@ class AuthorizationTest extends \Magento\TestFramework\TestCase\AbstractBackendC
 
     /**
      * Negative scenario for controller calls.
+     *
+     * @return void
      */
     public function testNoOrderPassed()
     {
@@ -53,6 +55,7 @@ class AuthorizationTest extends \Magento\TestFramework\TestCase\AbstractBackendC
      * @magentoConfigFixture current_store payment/paypal_express/payment_action Order
      * @magentoDataFixture Magento/Paypal/_files/order_express_payment_action_order.php
      * @magentoDbIsolation enabled
+     * @return void
      */
     public function testAuthorization()
     {

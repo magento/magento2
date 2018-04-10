@@ -17,7 +17,7 @@ use Magento\Sales\Model\Order;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Adminhtml sales order view
+ * Adminhtml sales order view.
  * @api
  */
 class View extends OrderView

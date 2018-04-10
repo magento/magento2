@@ -43,7 +43,7 @@ class ValidatorCanInvoice
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterValidate(CanInvoice $subject, $result, OrderInterface $order): array
+    public function afterValidate(CanInvoice $subject, bool $result, OrderInterface $order): array
     {
         if ($this->express->isOrderAuthorizationAllowed($order->getPayment())) {
             $result[] = __('An invoice cannot be created when none of authorization transactions available.');

@@ -130,6 +130,8 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests order payment action.
+     *
+     * @return void
      */
     public function testOrder()
     {

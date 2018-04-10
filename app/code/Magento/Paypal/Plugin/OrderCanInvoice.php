@@ -38,7 +38,7 @@ class OrderCanInvoice
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function afterCanInvoice(Order $order, $result): bool
+    public function afterCanInvoice(Order $order, bool $result): bool
     {
         if ($this->express->isOrderAuthorizationAllowed($order->getPayment())) {
             return false;
