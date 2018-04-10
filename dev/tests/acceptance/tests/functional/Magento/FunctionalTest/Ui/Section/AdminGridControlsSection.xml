@@ -40,6 +40,7 @@
     </section>
     <section name="AdminGridActionsMenu">
         <element name="dropDown" type="select" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .action-select" timeout="30"/>
+        <element name="delete" type="select" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .action-menu-items li" timeout="5"/>
     </section>
     <section name="AdminGridRowsPerPage">
         <element name="count" type="select" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .selectmenu-value input" timeout="30"/>
