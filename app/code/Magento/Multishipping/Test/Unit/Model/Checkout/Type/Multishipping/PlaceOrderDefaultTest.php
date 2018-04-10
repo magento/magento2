@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type\Multishipping;
 
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderDefault;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 
+/**
+ * Tests Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderDefault.
+ */
 class PlaceOrderDefaultTest extends \PHPUnit\Framework\TestCase
 {
     /**
