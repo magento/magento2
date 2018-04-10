@@ -13,38 +13,20 @@ use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\TestModuleGraphQlQuery\Api\Data\ItemInterface;
-use Magento\TestModuleGraphQlQuery\Model\Entity\ItemFactory;
 
 class Item implements ResolverInterface
 {
-    /**
-     * @var ItemFactory
-     */
-    private $itemFactory;
-
-    /**
-     * @var PostFetchProcessorInterface[]
-     */
-    private $postFetchProcessors;
-
     /**
      * @var ValueFactory
      */
     private $valueFactory;
 
     /**
-     * @param ItemFactory $itemFactory
-     * @param PostFetchProcessorInterface[] $postFetchProcessors
      * @param ValueFactory $valueFactory
      */
     public function __construct(
-        ItemFactory $itemFactory,
-        ValueFactory $valueFactory,
-        array $postFetchProcessors = []
+        ValueFactory $valueFactory
     ) {
-        $this->itemFactory = $itemFactory;
-        $this->postFetchProcessors = $postFetchProcessors;
         $this->valueFactory = $valueFactory;
     }
 
@@ -64,19 +46,10 @@ class Item implements ResolverInterface
                 $id = (int)$argValue;
             }
         }
-
-        /** @var ItemInterface $item */
-        $item = $this->itemFactory->create();
-        $item->setItemId($id);
-        $item->setName("itemName");
         $itemData = [
-            'item_id' => $item->getItemId(),
-            'name' => $item->getName()
+            'item_id' => $id,
+            'name' => "itemName"
         ];
-
-        foreach ($this->postFetchProcessors as $postFetchProcessor) {
-            $itemData = $postFetchProcessor->process($itemData);
-        }
 
         $result = function () use ($itemData) {
             return $itemData;
