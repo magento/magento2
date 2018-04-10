@@ -11,6 +11,9 @@ use Magento\Framework\Console\CommandListInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use Magento\Framework\App\Bootstrap as AppBootstrap;
+use Magento\Framework\Shell\ComplexParameter;
+use Magento\Framework\Console\Cli;
 
 /**
  * Object manager provider
@@ -57,9 +60,17 @@ class ObjectManagerProvider
     public function get()
     {
         if (null === $this->objectManager) {
+            $params = (new ComplexParameter(Cli::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
+            $params[AppBootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
             $initParams = $this->serviceLocator->get(InitParamListener::BOOTSTRAP_PARAM);
-            $factory = $this->getObjectManagerFactory($initParams);
-            $this->objectManager = $factory->create($initParams);
+            $appBootstrapKey = AppBootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
+
+            if (isset($initParams[$appBootstrapKey]) && !isset($params[$appBootstrapKey])) {
+                $params[$appBootstrapKey] = $initParams[$appBootstrapKey];
+            }
+
+            $factory = $this->getObjectManagerFactory($params);
+            $this->objectManager = $factory->create($params);
             if (PHP_SAPI == 'cli') {
                 $this->createCliCommands();
             }

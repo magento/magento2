@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Console;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ProductMetadata;
@@ -14,12 +13,9 @@ use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Console\Exception\GenerationDirectoryAccessException;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Shell\ComplexParameter;
 use Magento\Setup\Application;
 use Magento\Setup\Console\CompilerPreparation;
-use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console;
-use Zend\ServiceManager\ServiceManager;
 
 /**
  * Magento 2 CLI Application.
@@ -71,9 +67,9 @@ class Cli extends Console\Application
             $bootstrapApplication = new Application();
             $application = $bootstrapApplication->bootstrap($configuration);
             $this->serviceManager = $application->getServiceManager();
+            $this->objectManager = $this->serviceManager->get(ObjectManagerInterface::class);
 
             $this->assertCompilerPreparation();
-            $this->initObjectManager();
             $this->assertGenerationPermissions();
         } catch (\Exception $exception) {
             $output = new \Symfony\Component\Console\Output\ConsoleOutput();
@@ -147,23 +143,6 @@ class Cli extends Console\Application
         }
 
         return $commands;
-    }
-
-    /**
-     * Object Manager initialization.
-     *
-     * @return void
-     */
-    private function initObjectManager()
-    {
-        $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
-        $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
-
-        $this->objectManager = Bootstrap::create(BP, $params)->getObjectManager();
-
-        /** @var ObjectManagerProvider $omProvider */
-        $omProvider = $this->serviceManager->get(ObjectManagerProvider::class);
-        $omProvider->setObjectManager($this->objectManager);
     }
 
     /**
