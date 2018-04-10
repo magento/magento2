@@ -15,14 +15,30 @@ use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Preconditions:
- * 1. Create four categories assigned in ascending order (Default Category->first->second->third->fourth)
- * first and third categories should not be anchored, second and fourth categories should be anchored
- * 2. Create configurable product with two configurable options and assign it to category "fourth"
+ * 1. Create four categories assigned in ascending order:
+ *  - Category 1:
+ *      Category name: "Test1"
+ *      Parent Category: Default Category.
+ *      Display settings -> Is Anchor: No
+ *  - Category 2:
+ *      Category name: "Test2"
+ *      Parent Category: Test1
+ *      Display settings -> Is Anchor: Yes
+ *  - Category 3:
+ *      Category name: "Test3"
+ *      Parent Category: Test2
+ *      Display settings -> Is Anchor: No
+ *  - Category 4:
+ *      Category name: "Test4"
+ *      Parent Category: Test3
+ *      Display settings -> Is Anchor: Yes
+ * 2. Create configurable product with two configurable options and assign it to category "Test4"
  *
  * Steps:
  * 1. Disable configurable options via massaction or from edit product page
- * 2. Open created non anchored categories on frontend
- * 3. Perform assertions
+ * 2. Open created non anchored categories on frontend.
+ *    On the left side in the Layered Navigation there is one category inside each of achored with zero products inside.
+ * 3. Open created anchored categories on frontend. There are no products inside.
  *
  * @group Layered_Navigation
  * @ZephyrId MAGETWO-90123
@@ -69,15 +85,15 @@ class ProductsCountInLayeredNavigationTest extends Injectable
     }
 
     /**
-     * Test category name and products count displaying in layered navigation after configurable options disabling
+     * Test category name and products count displaying in layered navigation after configurable options disabling.
      *
      * @param Category $category
-     * @param boolean $disableFromProductsGreed
+     * @param bool $disableFromProductsGreed
      * @return array
      */
     public function test(
         Category $category,
-        $disableFromProductsGreed = true
+        bool $disableFromProductsGreed = true
     ) {
         // Preconditions
         $category->persist();
@@ -116,8 +132,9 @@ class ProductsCountInLayeredNavigationTest extends Injectable
                 $this->editProductPage->getFormPageActions()->save();
             }
         }
+
         return [
-            'products' => $configurableOptions
+            'products' => $configurableOptions,
         ];
     }
 }

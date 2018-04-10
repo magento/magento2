@@ -32,7 +32,7 @@ class AssertProductsCount extends AbstractConstraint
     private $catalogCategoryView;
 
     /**
-     * Assert that category name and products cont in layered navigation are correct
+     * Assert that category name and products cont in layered navigation are correct.
      *
      * @param CatalogCategoryView $catalogCategoryView
      * @param Category $category
@@ -44,7 +44,7 @@ class AssertProductsCount extends AbstractConstraint
         CatalogCategoryView $catalogCategoryView,
         Category $category,
         BrowserInterface $browser,
-        $productsCount
+        string $productsCount
     ) {
         $this->browser = $browser;
         $this->catalogCategoryView = $catalogCategoryView;

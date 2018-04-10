@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\CacheContext;
 
 /**
+ * Reindex products categories.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
@@ -205,8 +206,9 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     }
 
     /**
-     * Returns a list of category ids which are assigned to product ids in the index
+     * Returns a list of category ids which are assigned to product ids in the index.
      *
+     * @param array $productIds
      * @return \Magento\Framework\Indexer\CacheContext
      */
     private function getCategoryIdsFromIndex(array $productIds)

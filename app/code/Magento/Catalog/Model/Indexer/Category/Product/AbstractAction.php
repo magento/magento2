@@ -319,7 +319,7 @@ abstract class AbstractAction
     }
 
     /**
-     * Add filtering by child products to select
+     * Add filtering by child products to select.
      *
      * It's used for correct handling of composite products.
      * This method makes assumption that select already joins `catalog_product_entity` as `cpe`.
@@ -364,7 +364,7 @@ abstract class AbstractAction
             [
                 'cc.entity_id',
                 'ccp.product_id',
-                'visibility'
+                'visibility',
             ]
         );
     }
@@ -387,8 +387,11 @@ abstract class AbstractAction
      * @param int $range
      * @return Select[]
      */
-    protected function prepareSelectsByRange(Select $select, $field, $range = self::RANGE_CATEGORY_STEP)
-    {
+    protected function prepareSelectsByRange(
+        Select $select,
+        string $field,
+        int $range = self::RANGE_CATEGORY_STEP
+    ) {
         if ($this->isRangingNeeded()) {
             $iterator = $this->queryGenerator->generate(
                 $field,

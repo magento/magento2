@@ -186,6 +186,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      * Such behavior should enforce parent product to be deleted from the index as its latest child become unavailable
      * and the configurable cannot be sold anymore.
      *
+     * @return void
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_with_single_child.php
      */
@@ -215,7 +216,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      * @param array|null $visibilityFilter
      * @return Product[]
      */
-    protected function search($text, $visibilityFilter = null): array
+    protected function search(string $text, $visibilityFilter = null): array
     {
         $query = $this->queryFactory->get();
         $query->unsetData();
@@ -246,7 +247,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      * @param string $sku
      * @return Product|bool
      */
-    protected function getProductBySku($sku)
+    protected function getProductBySku(string $sku)
     {
         /** @var Product $product */
         $product = Bootstrap::getObjectManager()->get(
