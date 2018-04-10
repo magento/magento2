@@ -27,32 +27,34 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Filesystem::class
         );
         $mediaPath = $filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
-        $helper = $this->generateHelper();
+        $helper = $this->generateHelper(null);
         $this->assertStringStartsWith($mediaPath, $helper->getStorageRoot());
     }
 
+    /**
+     * @magentoConfigFixture current_store web/unsecure/base_url http://example.com/
+     */
     public function testGetCurrentUrl()
     {
-        $helper = $this->generateHelper();
-        $this->assertStringStartsWith('http://localhost/', $helper->getCurrentUrl());
+        $helper = $this->generateHelper(null);
+        $this->assertStringStartsWith('http://example.com/', $helper->getCurrentUrl());
     }
 
     /**
-     * @param bool $staticUrlsAllowed
+     * @param bool $isStaticUrlsAllowed
      * @param string $filename
      * @param bool $renderAsTag
      * @param string|callable $expectedResult - string or callable to make unique assertions on $expectedResult
-     *
      * @magentoConfigFixture current_store web/unsecure/base_url http://example.com/
      * @dataProvider providerGetImageHtmlDeclaration
      */
     public function testGetImageHtmlDeclaration(
-        $staticUrlsAllowed,
+        $isStaticUrlsAllowed,
         $filename,
         $renderAsTag,
         $expectedResult
     ) {
-        $helper = $this->generateHelper($staticUrlsAllowed);
+        $helper = $this->generateHelper($isStaticUrlsAllowed);
 
         $actualResult = $helper->getImageHtmlDeclaration($filename, $renderAsTag);
 
@@ -96,38 +98,39 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     /**
      * Generate instance of Images Helper
      *
-     * @param bool|null $staticUrlsAllowed - if boolean, mock is created to override value of isUsingStaticUrlsAllowed
+     * @param bool|null $isStaticUrlsAllowed - if boolean, mock is created to override value of isUsingStaticUrlsAllowed
      * @return \Magento\Cms\Helper\Wysiwyg\Images
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    private function generateHelper($staticUrlsAllowed = null)
+    private function generateHelper($isStaticUrlsAllowed = false)
     {
-        if (!is_bool($staticUrlsAllowed)) {
-            return $this->objectManager->create(\Magento\Cms\Helper\Wysiwyg\Images::class);
+        $storeId = 1;
+
+        if (!is_bool($isStaticUrlsAllowed)) {
+            $helper = $this->objectManager->create(\Magento\Cms\Helper\Wysiwyg\Images::class);
+        } else {
+            $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+
+            $contextMock = $this->objectManager->create(\Magento\Framework\App\Helper\Context::class, [
+                'eventManager' => $eventManagerMock,
+            ]);
+
+            $helper = $this->objectManager->create(\Magento\Cms\Helper\Wysiwyg\Images::class, [
+                'context' => $contextMock
+            ]);
+
+            $checkResult = new \stdClass();
+            $checkResult->isAllowed = false;
+
+            $eventManagerMock->expects($this->any())
+                ->method('dispatch')
+                ->with('cms_wysiwyg_images_static_urls_allowed', ['result' => $checkResult, 'store_id' => $storeId])
+                ->willReturnCallback(function ($_, $arr) use ($isStaticUrlsAllowed) {
+                    $arr['result']->isAllowed = $isStaticUrlsAllowed;
+                });
         }
 
-        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-
-        $contextMock = $this->objectManager->create(\Magento\Framework\App\Helper\Context::class, [
-            'eventManager' => $eventManagerMock,
-        ]);
-
-        $helper = $this->objectManager->create(\Magento\Cms\Helper\Wysiwyg\Images::class, [
-            'context' => $contextMock
-        ]);
-
-        $storeId = 1;
         $helper->setStoreId($storeId);
-
-        $checkResult = new \stdClass();
-        $checkResult->isAllowed = false;
-
-        $eventManagerMock->expects($this->any())
-            ->method('dispatch')
-            ->with('cms_wysiwyg_images_static_urls_allowed', ['result' => $checkResult, 'store_id' => $storeId])
-            ->willReturnCallback(function ($_, $arr) use ($staticUrlsAllowed) {
-                $arr['result']->isAllowed = $staticUrlsAllowed;
-            });
 
         return $helper;
     }
