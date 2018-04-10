@@ -165,10 +165,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testWrongMethodCall()
     {
-        $this->expectException(
-            '\BadMethodCallException',
-            'Method "methodThatNotExist" does not exist in Magento\Framework\Session\Config'
-        );
+        $this->expectException('\BadMethodCallException');
+        $this->expectExceptionMessage('Method "methodThatNotExist" does not exist in Magento\Framework\Session\Config');
         $this->_model->methodThatNotExist();
     }
 
