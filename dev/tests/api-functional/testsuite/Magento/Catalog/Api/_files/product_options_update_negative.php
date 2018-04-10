@@ -16,7 +16,7 @@ return [
             'max_characters' => 10,
         ],
         'ProductSku should be specified',
-        400
+        400,
     ],
     'invalid_product_sku' => [
         [
@@ -30,6 +30,6 @@ return [
             'max_characters' => 10,
         ],
         'The product that was requested doesn\'t exist. Verify the product and try again.',
-        404
+        404,
     ],
 ];
