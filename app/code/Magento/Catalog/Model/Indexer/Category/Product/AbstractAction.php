@@ -401,7 +401,7 @@ abstract class AbstractAction
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
-        $temporaryTreeTable = $this->makeTempCategoryTreeIndex();
+        $temporaryTreeTable = $this->makeTempCategoryTreeIndex($store);
 
         $productMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $categoryMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
@@ -521,10 +521,11 @@ abstract class AbstractAction
      *
      * Returns the name of the temporary table to use in queries.
      *
+     * @param \Magento\Store\Model\Store $store
      * @return string
      * @since 101.0.0
      */
-    protected function makeTempCategoryTreeIndex()
+    protected function makeTempCategoryTreeIndex(\Magento\Store\Model\Store $store)
     {
         // Note: this temporary table is per-connection, so won't conflict by prefix.
         $temporaryName = $this->getTemporaryTreeIndexTableName();
@@ -553,7 +554,7 @@ abstract class AbstractAction
         $this->connection->dropTemporaryTable($temporaryName);
         $this->connection->createTemporaryTable($temporaryTable);
 
-        $this->fillTempCategoryTreeIndex($temporaryName);
+        $this->fillTempCategoryTreeIndex($temporaryName, $store);
 
         return $temporaryName;
     }
@@ -561,11 +562,19 @@ abstract class AbstractAction
     /**
      * Populate the temporary category tree index table
      *
+     * @param \Magento\Store\Model\Store $store
      * @param string $temporaryName
      * @since 101.0.0
      */
-    protected function fillTempCategoryTreeIndex($temporaryName)
+    protected function fillTempCategoryTreeIndex($temporaryName, \Magento\Store\Model\Store $store)
     {
+        $isActiveAttributeId = $this->config->getAttribute(
+            \Magento\Catalog\Model\Category::ENTITY,
+            'is_active'
+        )->getId();
+        $categoryMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $categoryLinkField = $categoryMetadata->getLinkField();
+
         // This finds all children (cc2) that descend from a parent (cc) by path.
         // For example, cc.path may be '1/2', and cc2.path may be '1/2/3/4/5'.
         $temporarySelect = $this->connection->select()->from(
@@ -577,6 +586,20 @@ abstract class AbstractAction
                 [$this->connection->quoteIdentifier('cc.path'), $this->connection->quote('/%')]
             ),
             ['child_id' => 'entity_id']
+        )->joinInner(
+            ['ccacd' => $this->getTable('catalog_category_entity_int')],
+            'ccacd.' . $categoryLinkField . ' = cc2.' . $categoryLinkField . ' AND ccacd.store_id = 0' .
+            ' AND ccacd.attribute_id = ' . $isActiveAttributeId,
+            []
+        )->joinLeft(
+            ['ccacs' => $this->getTable('catalog_category_entity_int')],
+            'ccacs.' . $categoryLinkField . ' = cc2.' . $categoryLinkField
+            . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' .
+            $store->getId(),
+            []
+        )->where(
+            $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
+            1
         );
 
         $this->connection->query(
