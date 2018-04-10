@@ -11,14 +11,17 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\Service\OrderService;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @magentoAppArea frontend
@@ -209,6 +212,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks a case when multiple orders with different shipping addresses are created successfully.
      *
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Multishipping/Fixtures/quote_with_split_items.php
      */
     public function testCreateOrders()
@@ -282,6 +286,99 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Checks a case when some of multiple orders are failed to place.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Multishipping/Fixtures/quote_with_split_items.php
+     */
+    public function testCreateOrdersWithSomeFailedOrders()
+    {
+        $quote = $this->getQuote('multishipping_quote_id');
+        /** @var CheckoutSession $session */
+        $checkoutSession = $this->objectManager->get(CheckoutSession::class);
+        $checkoutSession->replaceQuote($quote);
+
+        $this->objectManager->addSharedInstance(
+            $this->getOrderServiceMock(),
+            OrderService::class
+        );
+
+        $this->model->createOrders();
+        $session = $this->objectManager->get(SessionManagerInterface::class);
+
+        // get address errors, stored in session
+        $addressErrorsIds = array_keys($session->getAddressErrors());
+        $shippingFailedAddressId = $addressErrorsIds[0];
+        $billingFailedAddressId = $addressErrorsIds[1];
+
+        // successfully placed order shipping address has to be removed from quote
+        $this->assertFalse(
+            $this->findAddressInQuote(
+                [
+                    'street' => ['Main Division 1'],
+                    'city' => 'Culver City',
+                    'region' => 'California',
+                    'postcode' => '90800'
+                ],
+                $this->model->getQuote()
+            ),
+            'This shipping address shouldn\'t be present in quote'
+        );
+
+        // failed order shipping address has to remain in quote
+        $this->assertTrue(
+            $this->findAddressInQuote(
+                [
+                    'id' => (string)$shippingFailedAddressId,
+                    'street' => ['Second Division 2'],
+                    'city' => 'Denver',
+                    'region' => 'Colorado',
+                    'postcode' => '80203'
+                ],
+                $this->model->getQuote()
+            ),
+            'This shipping address should be present in quote'
+        );
+
+        $this->assertTrue(
+            $this->findAddressInQuote(
+                [
+                    'id' => (string)$billingFailedAddressId,
+                    'street' => ['Third Division 1'],
+                    'city' => 'New York',
+                    'region' => 'New York',
+                    'postcode' => '10029'
+                ],
+                $this->model->getQuote()
+            ),
+            'Billing address should be present in quote'
+        );
+    }
+
+    /**
+     * Returns order service mock with successful place on first call and exceptions on other calls.
+     *
+     * @return MockObject
+     */
+    private function getOrderServiceMock(): MockObject
+    {
+        $orderService = $this->getMockBuilder(OrderService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $exception = new \Exception('Place order error');
+        $orderService->expects($this->exactly(3))
+            ->method('place')
+            ->willReturnOnConsecutiveCalls(
+                $this->returnArgument(0),
+                $this->throwException($exception),
+                $this->throwException($exception)
+            );
+
+        return $orderService;
+    }
+
+    /**
      * Retrieves quote by reserved order id.
      *
      * @param string $reservedOrderId
@@ -332,6 +429,34 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             $methodName = 'get' . ucfirst($key);
             self::assertEquals($item, $address->$methodName(), 'The "'. $key . '" does not match.');
         }
+    }
+
+    /**
+     * Search address in quote address array.
+     *
+     * @param array $searchAddress
+     * @param Quote $quote
+     * @return bool
+     */
+    private function findAddressInQuote(array $searchAddress, Quote $quote)
+    {
+        $quoteAddresses = $quote->getAllShippingAddresses();
+        if ($quote->hasVirtualItems()) {
+            $quoteAddresses[] = $quote->getBillingAddress();
+        }
+
+        foreach ($quoteAddresses as $quoteAddress) {
+            $isFound = true;
+            foreach ($searchAddress as $key => $item) {
+                $methodName = 'get' . ucfirst($key);
+                $isFound = $isFound ? $item === $quoteAddress->$methodName() : false;
+            }
+            if ($isFound) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
