@@ -9,8 +9,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Wysiwyg Images Helper.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Images extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -213,15 +211,12 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
                 $html = $fileUrl;
             } else {
                 $directive = $this->urlEncoder->encode($directive);
-                $html = rtrim(
-                    $this->_backendData->getUrl(
-                        'cms/wysiwyg/directive',
-                        [
-                            '___directive' => $directive,
-                            '_escape_params' => false,
-                        ]
-                    ),
-                    '/'
+                $html = $this->_backendData->getUrl(
+                    'cms/wysiwyg/directive',
+                    [
+                        '___directive' => $directive,
+                        '_escape_params' => false,
+                    ]
                 );
             }
         }
