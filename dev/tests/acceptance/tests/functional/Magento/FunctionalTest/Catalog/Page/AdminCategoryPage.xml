@@ -13,5 +13,6 @@
         <section name="AdminCategorySidebarTreeSection"/>
         <section name="AdminCategoryBasicFieldSection"/>
         <section name="AdminCategorySEOSection"/>
+        <section name="AdminCategoryModalSection"/>
     </page>
 </pages>
