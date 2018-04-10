@@ -96,29 +96,38 @@ class GetSources extends Action
             $websiteId = $postRequest['websiteId'] ?? 1;
             $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
 
-            $result = [];
+            $result = $requestItems = [];
+            foreach ($requestData as $data) {
+                $requestItems[] = $this->itemRequestFactory->create(
+                    [
+                        'sku' => $data['sku'],
+                        'qty' => $data['qty']
+                    ]
+                );
+            }
+            $inventoryRequest = $this->inventoryRequestFactory->create(
+                [
+                    'stockId' => $stockId,
+                    'items'   => $requestItems
+                ]
+            );
+            $sourceSelectionResult = $this->sourceSelectionService->execute(
+                $inventoryRequest,
+                $algorithmCode
+            );
             foreach ($requestData as $data) {
                 $orderItem = $data['orderItem'];
-                $requestItem = $this->itemRequestFactory->create([
-                    'sku' => $data['sku'],
-                    'qty' => $data['qty']
-                ]);
-                $inventoryRequest = $this->inventoryRequestFactory->create([
-                    'stockId' => $stockId,
-                    'items' => [$requestItem]
-                ]);
-                $sourceSelectionResult = $this->sourceSelectionService->execute(
-                    $inventoryRequest,
-                    $algorithmCode
-                );
                 foreach ($sourceSelectionResult->getSourceSelectionItems() as $item) {
-                    $result[$orderItem][] = [
-                        'sourceCode' => $item->getSourceCode(),
-                        'qtyAvailable' => $item->getQtyAvailable(),
-                        'qtyToDeduct' => $item->getQtyToDeduct()
-                    ];
+                    if ($item->getSku() == $data['sku']) {
+                        $result[$orderItem][] = [
+                            'sourceCode'   => $item->getSourceCode(),
+                            'qtyAvailable' => $item->getQtyAvailable(),
+                            'qtyToDeduct'  => $item->getQtyToDeduct()
+                        ];
+                    }
                 }
             }
+
             $resultJson->setData($result);
         }
         return $resultJson;
