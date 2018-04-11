@@ -14,6 +14,7 @@ use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
+use Magento\Customer\Model\Metadata\FormFactory;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
@@ -62,6 +63,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $loadedData;
 
     /**
+     * @var array
+     */
+    protected $allowedMetaDataAttributes = [];
+
+    /**
      * @var CountryWithWebsites
      */
     private $countryWithWebsiteSource;
@@ -95,6 +101,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         'text' => 'input',
         'hidden' => 'input',
         'boolean' => 'checkbox',
+    ];
+
+    /**
+     * Entity to meta data form mao
+     * @var array
+     */
+    protected $entityMetaDataFormMap = [
+        'customer' => 'adminhtml_customer',
+        'customer_address' => 'adminhtml_customer_address'
     ];
 
     /**
@@ -147,6 +162,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $allowToShowHiddenAttributes;
 
     /**
+     * @var FormFactory
+     */
+    private $formFactory;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -154,6 +174,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
      * @param FilterPool $filterPool
+     * @param FormFactory $formFactory
      * @param FileProcessorFactory $fileProcessorFactory
      * @param ContextInterface $context
      * @param array $meta
@@ -169,6 +190,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
         FilterPool $filterPool,
+        FormFactory $formFactory,
         FileProcessorFactory $fileProcessorFactory = null,
         array $meta = [],
         array $data = [],
@@ -181,6 +203,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
+        $this->formFactory = $formFactory;
         $this->fileProcessorFactory = $fileProcessorFactory ?: $this->getFileProcessorFactory();
         $this->context = $context ?: ObjectManager::getInstance()->get(ContextInterface::class);
         $this->allowToShowHiddenAttributes = $allowToShowHiddenAttributes;
@@ -336,6 +359,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $attributes = $entityType->getAttributeCollection();
         /* @var AbstractAttribute $attribute */
         foreach ($attributes as $attribute) {
+            if (!$this->isAttributeRenderAble($attribute, $entityType)) {
+                continue;
+            }
             $this->processFrontendInput($attribute, $meta);
 
             $code = $attribute->getAttributeCode();
@@ -373,6 +399,41 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         $this->processWebsiteMeta($meta);
         return $meta;
+    }
+
+    /**
+     * Check is attribute is render able on form
+     *
+     * @param $attribute
+     * @param $entityType
+     * @return bool
+     */
+    private function isAttributeRenderAble($attribute, $entityType)
+    {
+        return !$attribute->getIsVisible()
+            || in_array($attribute->getAttributeCode(), $this->getMetaDataFormAttributes($entityType));
+    }
+
+    /**
+     * Retrieve attributes list from form based on entity type
+     *
+     * @param Type $entityType
+     * @return mixed
+     */
+    private function getMetaDataFormAttributes(Type $entityType)
+    {
+        if (empty($this->allowedMetaDataAttributes[$entityType->getEntityTypeCode()])) {
+            $metadataForm = $this->formFactory->create(
+                $entityType->getEntityTypeCode(),
+                $this->entityMetaDataFormMap[$entityType->getEntityTypeCode()],
+                [],
+                false,
+                \Magento\Customer\Model\Metadata\Form::DONT_IGNORE_INVISIBLE
+            );
+            $this->allowedMetaDataAttributes[$entityType->getEntityTypeCode()] = array_keys($metadataForm->getAttributes());
+        }
+
+        return $this->allowedMetaDataAttributes[$entityType->getEntityTypeCode()];
     }
 
     /**
