@@ -102,7 +102,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private function createTables()
     {
         foreach ($this->storeManager->getStores() as $store) {
-            $this->tableResolver->createTablesForStore($store->getId());
+            $this->tableMaintainer->createTablesForStore($store->getId());
         }
     }
 
@@ -112,7 +112,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private function clearReplicaTables()
     {
         foreach ($this->storeManager->getStores() as $store) {
-            $this->connection->truncateTable($this->tableResolver->getMainReplicaTable($store->getId()));
+            $this->connection->truncateTable($this->tableMaintainer->getMainReplicaTable($store->getId()));
         }
     }
 
@@ -123,7 +123,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     {
         $tablesToSwitch = [];
         foreach ($this->storeManager->getStores() as $store) {
-            $tablesToSwitch[] = $this->tableResolver->getMainTable($store->getId());
+            $tablesToSwitch[] = $this->tableMaintainer->getMainTable($store->getId());
         }
         $this->activeTableSwitcher->switchTable($this->connection, $tablesToSwitch);
     }
@@ -182,11 +182,11 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     private function publishData($store)
     {
-        $select = $this->connection->select()->from($this->tableResolver->getMainTmpTable($store->getId()));
+        $select = $this->connection->select()->from($this->tableMaintainer->getMainTmpTable($store->getId()));
         $columns = array_keys(
-            $this->connection->describeTable($this->tableResolver->getMainReplicaTable($store->getId()))
+            $this->connection->describeTable($this->tableMaintainer->getMainReplicaTable($store->getId()))
         );
-        $tableName = $this->tableResolver->getMainReplicaTable($store->getId());
+        $tableName = $this->tableMaintainer->getMainReplicaTable($store->getId());
 
         $this->connection->query(
             $this->connection->insertFromSelect(
@@ -240,8 +240,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     private function reindexCategoriesBySelect(\Magento\Framework\DB\Select $basicSelect, $whereCondition, $store)
     {
+        $this->tableMaintainer->createMainTmpTable($store->getId());
+
         $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $columns = array_keys($this->connection->describeTable($this->tableResolver->getMainTmpTable($store->getId())));
+        $columns = array_keys(
+            $this->connection->describeTable($this->tableMaintainer->getMainTmpTable($store->getId()))
+        );
         $this->batchSizeManagement->ensureBatchSize($this->connection, $this->batchRowsCount);
         $batches = $this->batchProvider->getBatches(
             $this->connection,
@@ -250,7 +254,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $this->batchRowsCount
         );
         foreach ($batches as $batch) {
-            $this->connection->delete($this->tableResolver->getMainTmpTable($store->getId()));
+            $this->connection->delete($this->tableMaintainer->getMainTmpTable($store->getId()));
             $resultSelect = clone $basicSelect;
             $select = $this->connection->select();
             $select->distinct(true);
@@ -260,7 +264,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $this->connection->query(
                 $this->connection->insertFromSelect(
                     $resultSelect,
-                    $this->tableResolver->getMainTmpTable($store->getId()),
+                    $this->tableMaintainer->getMainTmpTable($store->getId()),
                     $columns,
                     \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )

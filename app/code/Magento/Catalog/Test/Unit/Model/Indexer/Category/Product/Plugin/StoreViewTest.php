@@ -34,9 +34,9 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
     protected $indexerRegistryMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Product\TableResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $tableResolver;
+    protected $tableMaintainer;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -65,14 +65,14 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
                 '__wakeup'
             ]
         );
-        $this->tableResolver = $this->createPartialMock(
-            \Magento\Catalog\Model\Indexer\Category\Product\TableResolver::class,
+        $this->tableMaintainer = $this->createPartialMock(
+            \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer::class,
             [
                 'createTablesForStore'
             ]
         );
 
-        $this->model = new StoreView($this->indexerRegistryMock, $this->tableResolver);
+        $this->model = new StoreView($this->indexerRegistryMock, $this->tableMaintainer);
     }
 
     public function testAroundSaveNewObject()
