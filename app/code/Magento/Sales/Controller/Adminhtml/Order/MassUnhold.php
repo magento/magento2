@@ -23,7 +23,7 @@ class MassUnhold extends AbstractMassAction
     /**
      * @var OrderManagementInterface
      */
-    protected $orderManagement;
+    private $orderManagement;
 
     /**
      * @param Context $context
@@ -35,7 +35,7 @@ class MassUnhold extends AbstractMassAction
     {
         parent::__construct($context, $filter);
         $this->collectionFactory = $collectionFactory;
-        $this->orderManagement = $orderManagement;
+        $this->orderManagement = $orderManagement ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Sales\Api\OrderManagementInterface::class);
     }
 
     /**
