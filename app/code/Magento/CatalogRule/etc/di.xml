@@ -134,4 +134,27 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="CatalogRuleCustomConditionProcessors" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProcessorBuilder">
+        <arguments>
+            <argument name="customConditionProcessor" xsi:type="array">
+                <item name="category_ids" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ProductCategoryCondition</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CatalogRuleAdvancedFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\AdvancedFilterProcessor">
+        <arguments>
+            <argument name="defaultConditionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\DefaultCondition</argument>
+            <argument name="customConditionProcessorBuilder" xsi:type="object">CatalogRuleCustomConditionProcessors</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier">
+        <arguments>
+            <argument name="searchCriteriaProcessor" xsi:type="object">CatalogRuleAdvancedFilterProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor">
+        <arguments>
+            <argument name="customConditionProcessorBuilder" xsi:type="object">CatalogRuleCustomConditionProcessors</argument>
+        </arguments>
+    </type>
 </config>

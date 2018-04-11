@@ -7,11 +7,12 @@
 namespace Magento\Framework\Api\Search;
 
 use Magento\Framework\Api\AbstractSimpleObject;
+use Magento\Framework\Api\FilterGroupInterface;
 
 /**
  * Groups two or more filters together using a logical OR
  */
-class FilterGroup extends AbstractSimpleObject
+class FilterGroup extends AbstractSimpleObject implements FilterGroupInterface
 {
     const FILTERS = 'filters';
 

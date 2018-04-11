@@ -1067,4 +1067,10 @@
             <argument name="connectionName" xsi:type="string">indexer</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\ConditionBuilderFactory">
+        <arguments>
+            <argument name="eavAttrConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\EavAttributeCondition</argument>
+            <argument name="nativeAttrConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\NativeAttributeCondition</argument>
+        </arguments>
+    </type>
 </config>
