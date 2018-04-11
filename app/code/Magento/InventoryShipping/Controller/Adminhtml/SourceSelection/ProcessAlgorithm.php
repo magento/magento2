@@ -5,23 +5,24 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Controller\Adminhtml\Algorithm;
+namespace Magento\InventoryShipping\Controller\Adminhtml\SourceSelection;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
-use Magento\Backend\Model\View\Result\Page;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
- * GetSources Controller | used ONLY for TEST.
+ * ProcessAlgorithm Controller
  */
-class GetSources extends Action
+class ProcessAlgorithm extends Action
 {
     /**
      * @see _isAllowed()
@@ -54,13 +55,23 @@ class GetSources extends Action
     private $getDefaultSourceSelectionAlgorithmCode;
 
     /**
-     * GetSources constructor.
+     * @var SourceRepositoryInterface
+     */
+    private $sourceRepository;
+
+    /**
+     * @var array
+     */
+    private $sources = [];
+
+    /**
      * @param Context $context
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+     * @param SourceRepositoryInterface $sourceRepository
      */
     public function __construct(
         Context $context,
@@ -68,7 +79,8 @@ class GetSources extends Action
         ItemRequestInterfaceFactory $itemRequestFactory,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
         SourceSelectionServiceInterface $sourceSelectionService,
-        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
+        SourceRepositoryInterface $sourceRepository
     ) {
         parent::__construct($context);
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
@@ -76,6 +88,7 @@ class GetSources extends Action
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
+        $this->sourceRepository = $sourceRepository;
     }
 
     /**
@@ -93,36 +106,33 @@ class GetSources extends Action
             $defaultCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
             $algorithmCode = !empty($postRequest['algorithmCode']) ? $postRequest['algorithmCode'] : $defaultCode;
 
+            //TODO: maybe need to add exception when websiteId empty
             $websiteId = $postRequest['websiteId'] ?? 1;
             $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
 
             $result = $requestItems = [];
             foreach ($requestData as $data) {
-                $requestItems[] = $this->itemRequestFactory->create(
-                    [
-                        'sku' => $data['sku'],
-                        'qty' => $data['qty']
-                    ]
-                );
+                $requestItems[] = $this->itemRequestFactory->create([
+                    'sku' => $data['sku'],
+                    'qty' => $data['qty']
+                ]);
             }
-            $inventoryRequest = $this->inventoryRequestFactory->create(
-                [
-                    'stockId' => $stockId,
-                    'items'   => $requestItems
-                ]
-            );
-            $sourceSelectionResult = $this->sourceSelectionService->execute(
-                $inventoryRequest,
-                $algorithmCode
-            );
+            $inventoryRequest = $this->inventoryRequestFactory->create([
+                'stockId' => $stockId,
+                'items'   => $requestItems
+            ]);
+
+            $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest, $algorithmCode);
+
             foreach ($requestData as $data) {
                 $orderItem = $data['orderItem'];
                 foreach ($sourceSelectionResult->getSourceSelectionItems() as $item) {
-                    if ($item->getSku() == $data['sku']) {
+                    if ($item->getSku() === $data['sku']) {
                         $result[$orderItem][] = [
-                            'sourceCode'   => $item->getSourceCode(),
+                            'sourceName' => $this->getSourceName($item->getSourceCode()),
+                            'sourceCode' => $item->getSourceCode(),
                             'qtyAvailable' => $item->getQtyAvailable(),
-                            'qtyToDeduct'  => $item->getQtyToDeduct()
+                            'qtyToDeduct' => $item->getQtyToDeduct()
                         ];
                     }
                 }
@@ -130,6 +140,23 @@ class GetSources extends Action
 
             $resultJson->setData($result);
         }
+
         return $resultJson;
+    }
+
+    /**
+     * Get source name by code
+     *
+     * @param string $sourceCode
+     * @return mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getSourceName(string $sourceCode): string
+    {
+        if (!isset($this->sources[$sourceCode])) {
+            $this->sources[$sourceCode] = $this->sourceRepository->get($sourceCode)->getName();
+        }
+
+        return $this->sources[$sourceCode];
     }
 }

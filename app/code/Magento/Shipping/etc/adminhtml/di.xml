@@ -14,4 +14,5 @@
             <argument name="url" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
     </type>
+    <preference for="Magento\Shipping\Model\ShipmentProviderInterface" type="Magento\Shipping\Model\ShipmentProvider" />
 </config>
