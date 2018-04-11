@@ -33,7 +33,7 @@ class StoreView extends StoreGroup
     public function afterSave(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $store = null)
     {
         if ($store->isObjectNew()) {
-            $this->tableResolver->createTablesForStore($store->getId());
+            $this->tableMaintainer->createTablesForStore($store->getId());
         }
 
         return parent::afterSave($subject, $objectResource);
@@ -51,7 +51,7 @@ class StoreView extends StoreGroup
      */
     public function afterDelete(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $store)
     {
-        $this->tableResolver->dropTablesForStore($store->getId());
+        $this->tableMaintainer->dropTablesForStore($store->getId());
         return $objectResource;
     }
 }
