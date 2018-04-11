@@ -25,6 +25,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const INPUT_KEY_QUEUE_AMQP_PASSWORD = 'amqp-password';
     const INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST = 'amqp-virtualhost';
     const INPUT_KEY_QUEUE_AMQP_SSL = 'amqp-ssl';
+    const INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS = 'amqp-ssl-options';
 
     /**
      * Path to the values in the deployment config
@@ -35,6 +36,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const CONFIG_PATH_QUEUE_AMQP_PASSWORD = 'queue/amqp/password';
     const CONFIG_PATH_QUEUE_AMQP_VIRTUAL_HOST = 'queue/amqp/virtualhost';
     const CONFIG_PATH_QUEUE_AMQP_SSL = 'queue/amqp/ssl';
+    const CONFIG_PATH_QUEUE_AMQP_SSL_OPTIONS = 'queue/amqp/ssl_options';
 
     /**
      * Default values
@@ -109,6 +111,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'Amqp SSL',
                 self::DEFAULT_AMQP_SSL
             ),
+            new TextConfigOption(
+                self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS,
+                TextConfigOption::FRONTEND_WIZARD_TEXTAREA,
+                self::CONFIG_PATH_QUEUE_AMQP_SSL_OPTIONS,
+                'Amqp SSL Options (JSON)',
+                self::DEFAULT_AMQP_SSL
+            ),
         ];
     }
 
@@ -140,6 +149,21 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             if (!$this->isDataEmpty($data, self::INPUT_KEY_QUEUE_AMQP_SSL)) {
                 $configData->set(self::CONFIG_PATH_QUEUE_AMQP_SSL, $data[self::INPUT_KEY_QUEUE_AMQP_SSL]);
             }
+            if (!$this->isDataEmpty(
+                $data,
+                self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS
+            )) {
+                $options = json_decode(
+                    $data[self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS],
+                    true
+                );
+                if ($options !== null) {
+                    $configData->set(
+                        self::CONFIG_PATH_QUEUE_AMQP_SSL_OPTIONS,
+                        $options
+                    );
+                }
+            }
         }
 
         return [$configData];
@@ -154,12 +178,28 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
         if (isset($options[self::INPUT_KEY_QUEUE_AMQP_HOST])
             && $options[self::INPUT_KEY_QUEUE_AMQP_HOST] !== '') {
+            if (!$this->isDataEmpty(
+                $options,
+                self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS
+            )) {
+                $sslOptions = json_decode(
+                    $options[self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS],
+                    true
+                );
+            } else {
+                $sslOptions = null;
+            }
+            $isSslEnabled = !empty($options[self::INPUT_KEY_QUEUE_AMQP_SSL])
+                && $options[self::INPUT_KEY_QUEUE_AMQP_SSL] !== 'false';
+
             $result = $this->connectionValidator->isConnectionValid(
                 $options[self::INPUT_KEY_QUEUE_AMQP_HOST],
                 $options[self::INPUT_KEY_QUEUE_AMQP_PORT],
                 $options[self::INPUT_KEY_QUEUE_AMQP_USER],
                 $options[self::INPUT_KEY_QUEUE_AMQP_PASSWORD],
-                $options[self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST]
+                $options[self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST],
+                $isSslEnabled,
+                $sslOptions
             );
 
             if (!$result) {
