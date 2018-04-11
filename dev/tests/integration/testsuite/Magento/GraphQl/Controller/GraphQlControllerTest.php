@@ -35,7 +35,7 @@ class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
     /** @var MetadataPool */
     private $metadataPool;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
@@ -44,9 +44,11 @@ class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests if a graphql schema is generated and request is dispatched and response generated
+     * Test if a graphql schema is generated and request is dispatched and response generated
+     *
+     * @return void
      */
-    public function testDispatch()
+    public function testDispatch() : void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -91,7 +93,12 @@ QUERY;
         $this->assertEquals($output['data']['products']['items'][0]['name'], $product->getName());
     }
 
-    public function testOutputErrorsWithMessageCategoryAndTrace()
+    /**
+     * Test the errors on graphql output
+     *
+     * @return void
+     */
+    public function testOutputErrorsWithMessageCategoryAndTrace() : void
     {
         $query
             = <<<QUERY
