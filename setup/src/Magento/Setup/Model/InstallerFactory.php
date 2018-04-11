@@ -65,7 +65,8 @@ class InstallerFactory
             $this->serviceLocator->get(\Magento\Setup\Module\DataSetupFactory::class),
             $this->serviceLocator->get(\Magento\Framework\Setup\SampleData\State::class),
             new \Magento\Framework\Component\ComponentRegistrar(),
-            $this->serviceLocator->get(\Magento\Setup\Model\PhpReadinessCheck::class)
+            $this->serviceLocator->get(\Magento\Setup\Model\PhpReadinessCheck::class),
+            $this->serviceLocator->get(\Magento\Framework\EntityManager\EventManager::class),
         );
     }
 }
