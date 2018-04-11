@@ -19,19 +19,14 @@ use Magento\Framework\Serialize\SerializerInterface;
  * @magentoAppArea graphql
  * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
  */
-
 class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
 {
     const CONTENT_TYPE = 'application/json';
 
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
-    /**
-     * @var GraphQl $graphql
-     */
+    /** @var GraphQl */
     private $graphql;
 
     /** @var SerializerInterface */
@@ -42,7 +37,6 @@ class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        // parent::setUp();
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
@@ -88,7 +82,10 @@ QUERY;
         $response = $this->graphql->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        $this->assertTrue(count($output['data']['products']['items']) > 0, 'Products array has items');
+
+        $this->assertArrayNotHasKey('errors', $output, 'Response has errors');
+        $this->assertTrue(!empty($output['data']['products']['items']), 'Products array has items');
+        $this->assertTrue(!empty($output['data']['products']['items'][0]), 'Products array has items');
         $this->assertEquals($output['data']['products']['items'][0]['id'], $product->getData($linkField));
         $this->assertEquals($output['data']['products']['items'][0]['sku'], $product->getSku());
         $this->assertEquals($output['data']['products']['items'][0]['name'], $product->getName());
