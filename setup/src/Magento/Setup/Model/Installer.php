@@ -38,6 +38,7 @@ use Magento\Setup\Module\Setup;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
+use Magento\Framework\EntityManager\EventManager;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -219,6 +220,11 @@ class Installer
     private $phpReadinessCheck;
 
     /**
+     * @var EventManager
+     */
+    private $eventManager;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -241,6 +247,7 @@ class Installer
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      * @param ComponentRegistrar $componentRegistrar
      * @param PhpReadinessCheck $phpReadinessCheck
+     * @param EventManager $eventManager
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -264,7 +271,8 @@ class Installer
         DataSetupFactory $dataSetupFactory,
         \Magento\Framework\Setup\SampleData\State $sampleDataState,
         ComponentRegistrar $componentRegistrar,
-        PhpReadinessCheck $phpReadinessCheck
+        PhpReadinessCheck $phpReadinessCheck,
+        EventManager $eventManager
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -287,6 +295,7 @@ class Installer
         $this->sampleDataState = $sampleDataState;
         $this->componentRegistrar = $componentRegistrar;
         $this->phpReadinessCheck = $phpReadinessCheck;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -764,7 +773,9 @@ class Installer
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
+        $this->eventManager->dispatch('before_setup_upgrade_schema');
         $this->handleDBSchemaData($setup, 'schema');
+        $this->eventManager->dispatch('after_setup_upgrade_schema');
     }
 
     /**
@@ -780,7 +791,9 @@ class Installer
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
+        $this->eventManager->dispatch('before_setup_upgrade_data');
         $this->handleDBSchemaData($setup, 'data');
+        $this->eventManager->dispatch('after_setup_upgrade_data');
     }
 
     /**
