@@ -23,14 +23,22 @@ class NewAction extends \Magento\Backend\App\Action
     protected $shipmentLoader;
 
     /**
+     * @var \Magento\Shipping\Model\ShipmentProviderInterface
+     */
+    private $shipmentProvider;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+     * @param \Magento\Shipping\Model\ShipmentProviderInterface $shipmentProvider
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
+        \Magento\Shipping\Model\ShipmentProviderInterface $shipmentProvider
     ) {
         $this->shipmentLoader = $shipmentLoader;
+        $this->shipmentProvider = $shipmentProvider;
         parent::__construct($context);
     }
 
@@ -43,7 +51,7 @@ class NewAction extends \Magento\Backend\App\Action
     {
         $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
-        $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
+        $this->shipmentLoader->setShipment($this->shipmentProvider->getShipment());
         $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
         $shipment = $this->shipmentLoader->load();
         if ($shipment) {
