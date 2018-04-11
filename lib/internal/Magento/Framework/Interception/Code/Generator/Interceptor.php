@@ -102,18 +102,24 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
+        $returnType = $method->getReturnType();
+        $returnTypeValue = $returnType
+            ? ($returnType->allowsNull() ? '?' : '') .$returnType->getName()
+            : null;
         $methodInfo = [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,
             'body' => "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
                 "if (!\$pluginInfo) {\n" .
-                "    return parent::{$method->getName()}({$this->_getParameterList(
+                "    " .($returnTypeValue === 'void' ? '' : 'return')
+                ." parent::{$method->getName()}({$this->_getParameterList(
                 $parameters
             )});\n" .
             "} else {\n" .
-            "    return \$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
+            "    " .($returnTypeValue === 'void' ? '' : 'return')
+            ." \$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
             "}",
-            'returnType' => $method->getReturnType(),
+            'returnType' => $returnTypeValue,
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
 

@@ -110,4 +110,16 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     final public function publicChildFinal()
     {
     }
+
+    public function public71(
+        $arg1,
+        string $arg2,
+        ?int $arg3,
+        ?int $arg4 = null
+    ): void {
+    }
+
+    public function public71Another(?\DateTime $arg1, $arg2 = null): ?string
+    {
+    }
 }

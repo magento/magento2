@@ -313,7 +313,8 @@ abstract class EntityAbstract
         $parameterInfo = [
             'name' => $parameter->getName(),
             'passedByReference' => $parameter->isPassedByReference(),
-            'type' => $parameter->getType(),
+            'type' => $parameter->hasType()
+                ? $parameter->getType()->getName() : null,
             'variadic' => $parameter->isVariadic()
         ];
 
@@ -334,6 +335,10 @@ abstract class EntityAbstract
             } else {
                 $parameterInfo['defaultValue'] = $defaultValue;
             }
+        }
+
+        if ($parameter->allowsNull() && $parameterInfo['type']) {
+            $parameterInfo['type'] = '?' .$parameterInfo['type'];
         }
 
         return $parameterInfo;
