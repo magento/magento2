@@ -96,7 +96,7 @@ class CliCommand
     {
         $initParams = $this->parametersHolder->getInitParams();
         $disableModuleCommand = 'php -f ' . BP . '/bin/magento module:disable '. $moduleName
-            . ' -vvv --magento-init-params=' . $initParams['magento-init-params'];
+            . ' -vvv --magento-init-params="' . $initParams['magento-init-params'] . '"';
         return $this->shell->execute($disableModuleCommand);
     }
 
@@ -113,8 +113,8 @@ class CliCommand
         );
         $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-quote ' .
             implode(" ", array_keys($installParams)) .
-            ' -vvv --magento-init-params=' .
-            $initParams['magento-init-params'];
+            ' -vvv --magento-init-params="' .
+            $initParams['magento-init-params'] . '"';
 
         $this->shell->execute($command, array_values($installParams));
     }
@@ -132,8 +132,8 @@ class CliCommand
         );
         $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-sales ' .
             implode(" ", array_keys($installParams)) .
-            ' -vvv --magento-init-params=' .
-            $initParams['magento-init-params'];
+            ' -vvv --magento-init-params="' .
+            $initParams['magento-init-params'] . '"';
 
         $this->shell->execute($command, array_values($installParams));
     }
