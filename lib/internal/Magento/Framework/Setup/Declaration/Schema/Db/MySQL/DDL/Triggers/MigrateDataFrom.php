@@ -11,6 +11,7 @@ use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Setup\Declaration\Schema\Db\DDLTriggerInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
+use Magento\Framework\Setup\Declaration\Schema\ElementHistory;
 
 /**
  * Used to migrate data from one column to another in scope of one table.
@@ -47,11 +48,12 @@ class MigrateDataFrom implements DDLTriggerInterface
     }
 
     /**
-     * @param Column $column
      * @inheritdoc
      */
-    public function getCallback(ElementInterface $column)
+    public function getCallback(ElementHistory $columnHistory)
     {
+        /** @var Column $column */
+        $column = $columnHistory->getNew();
         preg_match(self::MATCH_PATTERN, $column->getOnCreate(), $matches);
         return function () use ($column, $matches) {
             $tableName = $column->getTable()->getName();

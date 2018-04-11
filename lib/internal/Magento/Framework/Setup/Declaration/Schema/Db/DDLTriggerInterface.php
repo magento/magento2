@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db;
 
-use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
+use Magento\Framework\Setup\Declaration\Schema\ElementHistory;
 
 /**
  * DDL triggers is events that can be fired:
@@ -30,8 +30,8 @@ interface DDLTriggerInterface
     /**
      * Setup callback to current statement, can generate new statements.
      *
-     * @param ElementInterface $element
+     * @param ElementHistory $elementHistory
      * @return callable
      */
-    public function getCallback(ElementInterface $element);
+    public function getCallback(ElementHistory $elementHistory);
 }

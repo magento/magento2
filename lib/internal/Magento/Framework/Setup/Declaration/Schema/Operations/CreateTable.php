@@ -15,6 +15,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\ElementHistory;
+use Magento\Framework\Setup\Declaration\Schema\ElementHistoryFactory;
 use Magento\Framework\Setup\Declaration\Schema\OperationInterface;
 
 /**
@@ -43,20 +44,28 @@ class CreateTable implements OperationInterface
     private $triggers;
 
     /**
+     * @var ElementHistoryFactory
+     */
+    private $elementHistoryFactory;
+
+    /**
      * Constructor.
      *
      * @param DbSchemaWriterInterface $dbSchemaWriter
      * @param DefinitionAggregator $definitionAggregator
+     * @param ElementHistoryFactory $elementHistoryFactory
      * @param array $triggers
      */
     public function __construct(
         DbSchemaWriterInterface $dbSchemaWriter,
         DefinitionAggregator $definitionAggregator,
+        ElementHistoryFactory $elementHistoryFactory,
         array $triggers = []
     ) {
         $this->dbSchemaWriter = $dbSchemaWriter;
         $this->definitionAggregator = $definitionAggregator;
         $this->triggers = $triggers;
+        $this->elementHistoryFactory = $elementHistoryFactory;
     }
 
     /**
@@ -76,12 +85,27 @@ class CreateTable implements OperationInterface
     }
 
     /**
+     * In some cases according to backward compatibility we want to use old table,
+     * for example in case of table recreation or table renaming
+     *
+     * We need to use definition of old table in order to prevent removal of 3-rd party columns, indexes, etc..
+     * added not with declarative schema
+     *
+     * @param ElementHistory $elementHistory
+     * @return ElementInterface
+     */
+    private function prepareTable(ElementHistory $elementHistory) : ElementInterface
+    {
+        return $elementHistory->getOld() ? $elementHistory->getOld() : $elementHistory->getNew();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function doOperation(ElementHistory $elementHistory)
     {
         /** @var Table $table */
-        $table = $elementHistory->getNew();
+        $table = $this->prepareTable($elementHistory);
         $definition = [];
         $data = [
             Column::TYPE => $table->getColumns(),
@@ -102,7 +126,7 @@ class CreateTable implements OperationInterface
         $createTableStatement = $this->dbSchemaWriter
             ->createTable(
                 $table->getName(),
-                $table->getResource(),
+                $elementHistory->getNew()->getResource(),
                 $definition,
                 ['engine' => $table->getEngine(), 'comment' => $table->getComment()]
             );
@@ -111,8 +135,12 @@ class CreateTable implements OperationInterface
         foreach ($table->getColumns() as $column) {
             foreach ($this->triggers as $trigger) {
                 if ($trigger->isApplicable($column->getOnCreate())) {
+                    $elementHistory = $this->elementHistoryFactory->create([
+                        'new' => $column,
+                        'old' => $column
+                    ]);
                     $createTableStatement->addTrigger(
-                        $trigger->getCallback($column)
+                        $trigger->getCallback($elementHistory)
                     );
                 }
             }

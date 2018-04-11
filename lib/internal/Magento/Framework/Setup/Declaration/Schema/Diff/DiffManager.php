@@ -171,19 +171,28 @@ class DiffManager
      */
     public function registerTableModification(Table $declaredTable, Table $generatedTable, Diff $diff)
     {
-        if ($declaredTable->getResource() !== $generatedTable->getResource()) {
-            $diff->register(
-                $declaredTable,
-                ReCreateTable::OPERATION_NAME,
-                $generatedTable
-            );
-        } else {
-            $diff->register(
-                $declaredTable,
-                ModifyTable::OPERATION_NAME,
-                $generatedTable
-            );
-        }
+        $diff->register(
+            $declaredTable,
+            ModifyTable::OPERATION_NAME,
+            $generatedTable
+        );
+    }
+
+    /**
+     * Register recreation of table, in case for example, when we need to move table from one shard to another
+     *
+     * @param Table $declaredTable
+     * @param Table $generatedTable
+     * @param Diff $diff
+     * @return void
+     */
+    public function registerRecreation(Table $declaredTable, Table $generatedTable, Diff $diff)
+    {
+        $diff->register(
+            $declaredTable,
+            ReCreateTable::OPERATION_NAME,
+            $generatedTable
+        );
     }
 
     /**

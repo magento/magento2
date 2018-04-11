@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Setup\Declaration\Schema\Operations;
 
+use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DDL\Triggers\MigrateDataBetweenShards;
+use Magento\Framework\Setup\Declaration\Schema\Db\Statement;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\ElementHistory;
 use Magento\Framework\Setup\Declaration\Schema\OperationInterface;
 
@@ -31,15 +34,25 @@ class ReCreateTable implements OperationInterface
     private $dropTable;
 
     /**
+     * @var MigrateDataBetweenShards
+     */
+    private $migrateDataBetweenShards;
+
+    /**
      * Constructor.
      *
      * @param CreateTable $createTable
      * @param DropTable $dropTable
+     * @param MigrateDataBetweenShards $migrateDataBetweenShards
      */
-    public function __construct(CreateTable $createTable, DropTable $dropTable)
-    {
+    public function __construct(
+        CreateTable $createTable,
+        DropTable $dropTable,
+        MigrateDataBetweenShards $migrateDataBetweenShards
+    ) {
         $this->createTable = $createTable;
         $this->dropTable = $dropTable;
+        $this->migrateDataBetweenShards = $migrateDataBetweenShards;
     }
 
     /**
@@ -63,7 +76,16 @@ class ReCreateTable implements OperationInterface
      */
     public function doOperation(ElementHistory $elementHistory)
     {
-        $statement = $this->dropTable->doOperation($elementHistory);
-        return array_merge($statement, $this->createTable->doOperation($elementHistory));
+        /** @var Table $table */
+        $table = $elementHistory->getNew();
+        $statements = $this->createTable->doOperation($elementHistory);
+        /** @var Statement $statement */
+        foreach ($statements as $statement) {
+            if ($this->migrateDataBetweenShards->isApplicable($table->getOnCreate())) {
+                $statement->addTrigger($this->migrateDataBetweenShards->getCallback($elementHistory));
+            }
+        }
+
+        return array_merge($statements, $this->dropTable->doOperation($elementHistory));
     }
 }

@@ -65,15 +65,21 @@ class Table extends GenericElement implements
     private $comment;
 
     /**
+     * @var string
+     */
+    private $onCreate;
+
+    /**
      * @param string $name
-     * @param string $nameWithoutPrefix
      * @param string $type
+     * @param string $nameWithoutPrefix
      * @param string $resource
      * @param string $engine
      * @param string|null $comment
      * @param array $columns
      * @param array $indexes
      * @param array $constraints
+     * @param string $onCreate
      * @internal param string $nameWithPrefix
      */
     public function __construct(
@@ -85,7 +91,8 @@ class Table extends GenericElement implements
         string $comment = null,
         array $columns = [],
         array $indexes = [],
-        array $constraints = []
+        array $constraints = [],
+        string $onCreate = ''
     ) {
         parent::__construct($name, $type);
         $this->columns = $columns;
@@ -95,6 +102,7 @@ class Table extends GenericElement implements
         $this->engine = $engine;
         $this->nameWithoutPrefix = $nameWithoutPrefix;
         $this->comment = $comment;
+        $this->onCreate = $onCreate;
     }
 
     /**
@@ -210,6 +218,16 @@ class Table extends GenericElement implements
     public function addColumns(array $columns)
     {
         $this->columns = array_replace($this->columns, $columns);
+    }
+
+    /**
+     * Retrieve information about trigger
+     *
+     * @return string
+     */
+    public function getOnCreate()
+    {
+        return $this->onCreate;
     }
 
     /**
