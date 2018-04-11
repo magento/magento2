@@ -461,10 +461,15 @@ class UpgradeData implements UpgradeDataInterface
                     $store['store_id']
                 );
 
+            $indexTable = $setup->getTable('catalog_category_product_index') .
+                '_' .
+                \Magento\Store\Model\Store::ENTITY .
+                $store['store_id'];
+
             $setup->getConnection()->query(
                 $setup->getConnection()->insertFromSelect(
                     $catalogCategoryProductIndexSelect,
-                    $setup->getTable('catalog_category_product_index') . '_store_' . $store['store_id'],
+                    $indexTable,
                     $catalogCategoryProductIndexColumns,
                     \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )

@@ -780,16 +780,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $storeSelect = $setup->getConnection()->select()->from($setup->getTable('store'))->where('store_id > 0');
         foreach ($setup->getConnection()->fetchAll($storeSelect) as $store) {
+            $indexTable = $setup->getTable('catalog_category_product_index') .
+                '_' .
+                \Magento\Store\Model\Store::ENTITY .
+                $store['store_id'];
+
             $setup->getConnection()->createTable(
                 $setup->getConnection()->createTableByDdl(
                     $setup->getTable('catalog_category_product_index'),
-                    $setup->getTable('catalog_category_product_index') . '_store_' . $store['store_id']
+                    $indexTable
                 )
             );
             $setup->getConnection()->createTable(
                 $setup->getConnection()->createTableByDdl(
                     $setup->getTable('catalog_category_product_index'),
-                    $setup->getTable('catalog_category_product_index') . '_store_' . $store['store_id'] . '_replica'
+                    $indexTable . '_replica'
                 )
             );
         }
