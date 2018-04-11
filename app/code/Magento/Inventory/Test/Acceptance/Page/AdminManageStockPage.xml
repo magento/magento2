@@ -8,7 +8,11 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="ManageStock" url="/inventory/stock/index/" area="admin" module="MultiSourceInventory">
-        <section name="AdminManageStockGrid"/>
+    <page name="AdminManageStockPage" url="/inventory/stock/index/" area="admin" module="Magento_Inventory">
+        <section name="AdminEditStockGeneralSection"/>
+        <section name="AdminEditStockSalesChannelsSection"/>
+        <section name="AdminEditStockSourcesSection"/>
+        <section name="AdminManageStockGridControls"/>
+        <section name="AdminManageStockGridFilterControls"/>
     </page>
 </pages>
