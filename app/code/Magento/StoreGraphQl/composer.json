@@ -1,20 +1,14 @@
 {
-    "name": "magento/module-catalog-graph-ql",
+    "name": "magento/module-store-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/module-eav": "*",
-        "magento/module-catalog": "*",
-        "magento/module-catalog-inventory": "*",
-        "magento/module-search": "*",
-        "magento/module-store": "*",
-        "magento/module-eav-graph-ql": "*",
         "magento/framework": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*",
-        "magento/module-store-graph-ql": "*"
+        "magento/module-catalog-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",
@@ -25,7 +19,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\CatalogGraphQl\\": ""
+            "Magento\\StoreGraphQl\\": ""
         }
     }
 }

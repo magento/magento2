@@ -44,9 +44,6 @@ class ProductViewTest extends GraphQlAbstract
             attribute_set_id
             country_of_manufacture
             created_at
-            custom_design
-            custom_design_from
-            custom_design_to
             custom_layout
             custom_layout_update
             description
@@ -157,7 +154,6 @@ class ProductViewTest extends GraphQlAbstract
                   }
               }
             }
-            page_layout
             price {
               minimalPrice {
                 amount {
@@ -234,7 +230,7 @@ class ProductViewTest extends GraphQlAbstract
             updated_at
             url_key
             url_path
-            website_ids
+            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }
@@ -269,6 +265,8 @@ QUERY;
         $this->assertEavAttributes($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
         $this->assertTierPrices($product, $response['products']['items'][0]);
+        $this->assertArrayHasKey('websites', $response['products']['items'][0]);
+        $this->assertWebsites($product, $response['products']['items'][0]['websites']);
         self::assertEquals(
             'Movable Position 2',
             $responseObject->getData('products/items/0/categories/1/name')
@@ -301,9 +299,6 @@ QUERY;
             }
             country_of_manufacture
             created_at
-            custom_design
-            custom_design_from
-            custom_design_to
             custom_layout
             custom_layout_update
             description
@@ -405,7 +400,6 @@ QUERY;
                   }
               }
             }
-            page_layout
             price {
               minimalPrice {
                 amount {
@@ -482,7 +476,7 @@ QUERY;
             updated_at
             url_key
             url_path
-            website_ids
+            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }
@@ -503,6 +497,8 @@ QUERY;
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
+        $this->assertArrayHasKey('websites', $response['products']['items'][0]);
+        $this->assertWebsites($product, $response['products']['items'][0]['websites']);
     }
 
     /**
@@ -872,6 +868,26 @@ QUERY;
         ];
 
         $this->assertResponseFields($actualResponse, $assertionMap);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $actualResponse
+     */
+    private function assertWebsites($product, $actualResponse)
+    {
+        $assertionMap = [
+            [
+                'id' => current($product->getExtensionAttributes()->getWebsiteIds()),
+                'name' => 'Main Website',
+                'code' => 'base',
+                'sort_order' => 0,
+                'default_group_id' => '1',
+                'is_default' => true,
+            ]
+        ];
+
+        $this->assertEquals($actualResponse, $assertionMap);
     }
 
     /**
