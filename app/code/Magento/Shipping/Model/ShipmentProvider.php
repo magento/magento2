@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Shipping\Model;
 
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * @inheritdoc
+ */
 class ShipmentProvider implements ShipmentProviderInterface
 {
     /**
@@ -18,19 +22,16 @@ class ShipmentProvider implements ShipmentProviderInterface
     /**
      * @param RequestInterface $request
      */
-    public function __construct(
-        RequestInterface $request
-    ) {
+    public function __construct(RequestInterface $request)
+    {
         $this->request = $request;
     }
 
     /**
-     * Retrieve shipment items from request
-     *
-     * @return array|null
+     * @inheritdoc
      */
-    public function getShipment()
+    public function getShipment(): array
     {
-        return $this->request->getParam('shipment');
+        return $this->request->getParam('shipment', []);
     }
 }

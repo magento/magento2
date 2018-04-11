@@ -6,8 +6,6 @@
 
 namespace Magento\Sales\Model\Order;
 
-use Magento\TestFramework\Helper\Bootstrap;
-
 /**
  * Class ShipmentTest
  * @magentoAppIsolation enabled

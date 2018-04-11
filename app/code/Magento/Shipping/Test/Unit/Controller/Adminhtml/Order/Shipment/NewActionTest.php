@@ -133,6 +133,10 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Model\Session::class,
             ['setIsUrlNotice', 'getCommentText']
         );
+        $this->shipmentProviderMock = $this->getMockBuilder(\Magento\Shipping\Model\ShipmentProviderInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getShipment'])
+            ->getMockForAbstractClass();
         $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
         $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
@@ -167,9 +171,6 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             ->method('getHelper')
             ->will($this->returnValue($this->helper));
         $this->context->expects($this->once())->method('getView')->will($this->returnValue($this->view));
-        $this->shipmentProviderMock = $this->getMockBuilder(\Magento\Shipping\Model\ShipmentProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->newAction = $objectManagerHelper->getObject(
             \Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction::class,
             [
@@ -200,9 +201,6 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             );
-        $this->shipmentProviderMock->expects($this->once())
-            ->method('getShipment')
-            ->will($this->returnValue($shipmentData));
         $this->shipmentLoader->expects($this->any())
             ->method('setShipmentId')
             ->with($shipmentId);
@@ -271,6 +269,9 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             ->method('getBlock')
             ->with('menu')
             ->will($this->returnValue($menuBlock));
+        $this->shipmentProviderMock->expects($this->once())
+            ->method('getShipment')
+            ->willReturn($shipmentData);
 
         $this->assertNull($this->newAction->execute());
     }

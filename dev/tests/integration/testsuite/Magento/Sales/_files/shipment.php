@@ -11,9 +11,7 @@ require 'default_rollback.php';
 require __DIR__ . '/../../../Magento/Sales/_files/order.php';
 
 $payment = $order->getPayment();
-$paymentInfoBlock = Bootstrap::getObjectManager()
-    ->get(\Magento\Payment\Helper\Data::class)
-    ->getInfoBlock($payment);
+$paymentInfoBlock = Bootstrap::getObjectManager()->get(\Magento\Payment\Helper\Data::class)->getInfoBlock($payment);
 $payment->setBlockMock($paymentInfoBlock);
 
 $items = [];
