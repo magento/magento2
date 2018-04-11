@@ -87,6 +87,11 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
     protected $pageTitleMock;
 
     /**
+     * @var \Magento\Shipping\Model\ShipmentProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shipmentProviderMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -162,11 +167,14 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             ->method('getHelper')
             ->will($this->returnValue($this->helper));
         $this->context->expects($this->once())->method('getView')->will($this->returnValue($this->view));
+        $this->shipmentProviderMock = $this->getMockBuilder(\Magento\Shipping\Model\ShipmentProviderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->newAction = $objectManagerHelper->getObject(
             \Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction::class,
             [
                 'context' => $this->context, 'shipmentLoader' => $this->shipmentLoader, 'request' => $this->request,
-                'response' => $this->response, 'view' => $this->view
+                'response' => $this->response, 'view' => $this->view, 'shipmentProvider' => $this->shipmentProviderMock
             ]
         );
     }
@@ -188,11 +196,13 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
                     [
                         ['order_id', null, $orderId],
                         ['shipment_id', null, $shipmentId],
-                        ['shipment', null, $shipmentData],
                         ['tracking', null, $tracking],
                     ]
                 )
             );
+        $this->shipmentProviderMock->expects($this->once())
+            ->method('getShipment')
+            ->will($this->returnValue($shipmentData));
         $this->shipmentLoader->expects($this->any())
             ->method('setShipmentId')
             ->with($shipmentId);
