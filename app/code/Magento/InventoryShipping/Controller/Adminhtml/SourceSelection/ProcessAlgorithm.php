@@ -113,25 +113,21 @@ class ProcessAlgorithm extends Action
             $result = $requestItems = [];
             foreach ($requestData as $data) {
                 $requestItems[] = $this->itemRequestFactory->create([
-                        'sku' => $data['sku'],
-                        'qty' => $data['qty']
-                    ]);
-            }
-
-            $inventoryRequest = $this->inventoryRequestFactory->create([
-                    'stockId' => $stockId,
-                    'items'   => $requestItems
+                    'sku' => $data['sku'],
+                    'qty' => $data['qty']
                 ]);
+            }
+            $inventoryRequest = $this->inventoryRequestFactory->create([
+                'stockId' => $stockId,
+                'items'   => $requestItems
+            ]);
 
-            $sourceSelectionResult = $this->sourceSelectionService->execute(
-                $inventoryRequest,
-                $algorithmCode
-            );
+            $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest, $algorithmCode);
 
             foreach ($requestData as $data) {
                 $orderItem = $data['orderItem'];
                 foreach ($sourceSelectionResult->getSourceSelectionItems() as $item) {
-                    if ($item->getSku() == $data['sku']) {
+                    if ($item->getSku() === $data['sku']) {
                         $result[$orderItem][] = [
                             'sourceName' => $this->getSourceName($item->getSourceCode()),
                             'sourceCode' => $item->getSourceCode(),
@@ -141,6 +137,7 @@ class ProcessAlgorithm extends Action
                     }
                 }
             }
+
             $resultJson->setData($result);
         }
 
