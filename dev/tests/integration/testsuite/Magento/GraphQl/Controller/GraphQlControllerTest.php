@@ -98,7 +98,7 @@ QUERY;
      *
      * @return void
      */
-    public function testOutputErrorsWithMessageCategoryAndTrace() : void
+    public function testError() : void
     {
         $query
             = <<<QUERY
