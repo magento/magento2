@@ -110,8 +110,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     private function preparePageMetadata(ResultPage $resultPage, $product)
     {
         $pageLayout = $resultPage->getLayout();
-        $pageLayout->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
-
         $pageConfig = $resultPage->getConfig();
 
         $title = $product->getMetaTitle();
