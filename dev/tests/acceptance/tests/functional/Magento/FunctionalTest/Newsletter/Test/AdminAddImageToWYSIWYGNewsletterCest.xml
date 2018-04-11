@@ -56,7 +56,6 @@
         <waitForPageLoad stepKey="waitForPageLoad9"/>
         <seeElement selector="{{StorefrontNewsletterSection.mediaDescription}}" stepKey="assertMediaDescription"/>
         <seeElementInDOM selector="{{StorefrontNewsletterSection.ImageSource(ImageUpload3.fileName,ImageUpload3.extension)}}" stepKey="assertMediaSource"/>
-        <closeTab stepKey="closeTab"/>
         <after>
             <closeTab stepKey="closeTab"/>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
