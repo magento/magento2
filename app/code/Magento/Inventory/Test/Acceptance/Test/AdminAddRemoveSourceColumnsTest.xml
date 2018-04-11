@@ -31,7 +31,7 @@
 
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton1"/>
         <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
-        <see selector="{{AdminManageSourcesGridColumnControls.dropDown}}" userInput="4 out of 16 visible" stepKey="seeAllColumnsAreActive1"/>
+        <see selector="{{AdminManageSourcesGridColumnControls.dropDown}}" userInput="4 out of 15 visible" stepKey="seeAllColumnsAreActive1"/>
 
         <see selector="{{AdminGridHeaders.headerByName('Code')}}" userInput="Code" stepKey="seeCodeHeader1"/>
         <see selector="{{AdminGridHeaders.headerByName('Is Enabled')}}" userInput="Is Enabled" stepKey="seeIsEnabledHeader1"/>

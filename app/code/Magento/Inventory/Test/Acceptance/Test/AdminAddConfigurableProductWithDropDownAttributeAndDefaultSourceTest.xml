@@ -45,7 +45,7 @@
         <waitForPageLoad stepKey="waitForPageLoad3"/>
 
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton1"/>
-        <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="10" stepKey="waitForGridPresent1"/>
+        <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30" stepKey="waitForGridPresent1"/>
 
         <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="clickOnTheColorAttribute1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>

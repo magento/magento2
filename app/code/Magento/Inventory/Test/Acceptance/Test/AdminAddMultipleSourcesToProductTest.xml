@@ -29,7 +29,6 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
-            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
             <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
                 <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
                 <argument name="value" value="SimpleProduct.sku"/>
@@ -45,7 +44,6 @@
         </after>
 
         <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources1"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters2"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="value" value="$$createSource1.source[source_code]$$"/>
@@ -54,7 +52,6 @@
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone1"/>
 
         <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources2"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters3"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="value" value="$$createSource2.source[source_code]$$"/>
