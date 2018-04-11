@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Mvc\Bootstrap;
 
 use Magento\Framework\App\Bootstrap as AppBootstrap;
@@ -17,7 +16,7 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\Application;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Router\Http\RouteMatch;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\RequestInterface;
@@ -93,7 +92,10 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         /**
          * Initialize ObjectManager
          */
-        $serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class)->get();
+        $serviceManager->setService(
+            \Magento\Framework\ObjectManagerInterface::class,
+            $serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class)->get()
+        );
 
         if (!($application->getRequest() instanceof Request)) {
             $eventManager = $application->getEventManager();
@@ -102,7 +104,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * Check if user login
+     * Check if user logged-in and has permissions
      *
      * @param \Zend\Mvc\MvcEvent $event
      * @return false|\Zend\Http\Response
@@ -121,7 +123,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
             if ($serviceManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
                 /** @var \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider */
                 $objectManagerProvider = $serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
-                $objectManagerProvider->reset();
                 /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
                 $objectManager = $objectManagerProvider->get();
                 /** @var \Magento\Framework\App\State $adminAppState */
@@ -139,12 +140,10 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                         'appState' => $adminAppState
                     ]
                 );
-
                 /** @var \Magento\Backend\Model\Auth $auth */
                 $authentication = $objectManager->get(\Magento\Backend\Model\Auth::class);
 
-                if (
-                    !$authentication->isLoggedIn() ||
+                if (!$authentication->isLoggedIn() ||
                     !$adminSession->isAllowed('Magento_Backend::setup_wizard')
                 ) {
                     $adminSession->destroy();

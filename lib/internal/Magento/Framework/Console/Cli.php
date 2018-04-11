@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Shell\ComplexParameter;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Console\CompilerPreparation;
 use \Magento\Framework\App\ProductMetadata;
 use Magento\Framework\App\State;
@@ -60,14 +60,9 @@ class Cli extends SymfonyApplication
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
-        $bootstrapParam = new ComplexParameter(self::INPUT_KEY_BOOTSTRAP);
-        $params = $bootstrapParam->mergeFromArgv($_SERVER, $_SERVER);
-        $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
-        $bootstrap = Bootstrap::create(BP, $params);
-        $this->objectManager = $bootstrap->getObjectManager();
-
         $this->serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
             ->getServiceManager();
+        $this->objectManager = $this->serviceManager->get(ObjectManagerInterface::class);
 
         if ($this->checkGenerationDirectoryAccess()) {
             $output = new ConsoleOutput();
