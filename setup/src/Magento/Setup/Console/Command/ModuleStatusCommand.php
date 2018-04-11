@@ -65,5 +65,6 @@ class ModuleStatusCommand extends AbstractSetupCommand
         } else {
             $output->writeln(join("\n", $disabledModules));
         }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
