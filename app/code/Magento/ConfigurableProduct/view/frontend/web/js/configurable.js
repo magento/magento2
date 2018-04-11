@@ -33,6 +33,7 @@ define([
             mediaGalleryInitial: null,
             slyOldPriceSelector: '.sly-old-price',
             normalPriceLabelSelector: '.normal-price .price-label',
+
             /**
              * Defines the mechanism of how images of a gallery should be
              * updated when user switches between configurations of a product.
