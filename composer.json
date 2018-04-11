@@ -203,6 +203,7 @@
         "magento/module-signifyd": "*",
         "magento/module-sitemap": "*",
         "magento/module-store": "*",
+        "magento/module-store-graph-ql": "*",
         "magento/module-swagger": "*",
         "magento/module-swagger-webapi": "*",
         "magento/module-swagger-webapi-async": "*",
