@@ -10,6 +10,7 @@ use Magento\Framework\Api\AbstractSimpleObject;
 use Magento\Framework\Api\FilterGroupInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Phrase;
 
 /**
  * Groups two or more filters together using 'OR' or 'AND' strategy
@@ -65,7 +66,7 @@ class CombinedFilterGroup extends AbstractSimpleObject implements FilterGroupInt
     {
         if ($mode !== self::COMBINED_WITH_AND && $mode !== self::COMBINED_WITH_OR) {
             throw new InputException(
-                __(sprintf('Invalid combination mode: %s', $mode))
+                new Phrase(sprintf('Invalid combination mode: %s', $mode))
             );
         }
 

@@ -15,6 +15,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProcessorBuilderInterface;
+use Magento\Framework\Phrase;
 
 /**
  * Class AdvancedFilterProcessor
@@ -107,7 +108,7 @@ class AdvancedFilterProcessor implements CollectionProcessorInterface
             }
 
             throw new InputException(
-                __(sprintf('Undefined filter group "%s" passed in.', get_class($filter)))
+                new Phrase(sprintf('Undefined filter group "%s" passed in.', get_class($filter)))
             );
         }
 

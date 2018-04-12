@@ -8,6 +8,7 @@ namespace Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProc
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
+use Magento\Framework\Phrase;
 
 /**
  * Class CustomConditionProcessorBuilder
@@ -42,7 +43,7 @@ class CustomConditionProcessorBuilder implements CustomConditionProcessorBuilder
     {
         if (!$this->hasProcessorForField($fieldName)) {
             throw new InputException(
-                __(sprintf('Custom processor for field "%s" is absent.', $fieldName))
+                new Phrase(sprintf('Custom processor for field "%s" is absent.', $fieldName))
             );
         }
 
@@ -50,7 +51,7 @@ class CustomConditionProcessorBuilder implements CustomConditionProcessorBuilder
 
         if (!$processor instanceof CustomConditionInterface) {
             throw new InputException(
-                __('Custom processor must implement CustomConditionInterface.')
+                new Phrase('Custom processor must implement CustomConditionInterface.')
             );
         }
 
