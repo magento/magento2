@@ -15,6 +15,7 @@ class NewShipmentLoadBefore implements ObserverInterface
     /**
      * @param EventObserver $observer
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(EventObserver $observer)
     {
