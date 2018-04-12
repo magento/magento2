@@ -29,7 +29,7 @@ class ShipmentProvider implements ShipmentProviderInterface
     /**
      * @inheritdoc
      */
-    public function getShipment()
+    public function getShipment(): array
     {
         $sourceCode = $this->request->getParam('sourceCode');
         $items = $this->request->getParam('items', []);
@@ -48,6 +48,6 @@ class ShipmentProvider implements ShipmentProviderInterface
             }
         }
 
-        return count($shipmentItems) > 0 ? $shipmentItems : null;
+        return count($shipmentItems) > 0 ? $shipmentItems : [];
     }
 }

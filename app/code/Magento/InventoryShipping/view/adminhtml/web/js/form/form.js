@@ -5,8 +5,9 @@
 define([
     'jquery',
     'Magento_Ui/js/form/form',
-    'mageUtils'
-], function ($, Form, utils) {
+    'mageUtils',
+    'underscore'
+], function ($, Form, utils, _) {
     'use strict';
 
     return Form.extend({
@@ -22,6 +23,7 @@ define([
          */
         processAlgorithm: function (redirect, data) {
             var formData = utils.filterFormData(this.source.get('data'));
+
             data.requestData = [];
 
             _.each(formData.items, function (item) {
@@ -48,12 +50,13 @@ define([
 
                 /**
                  * Success callback.
+                 *
                  * @param {Object} response
-                 * @returns {Boolean}
                  */
                 success: function (response) {
                     //TODO: also, need to update sourceCodes select
-                    var formData = this.source.get('data');
+                    formData = this.source.get('data');
+
                     _.each(formData.items, function (item) {
                         if (response[item.orderItemId]) {
                             //TODO: this feature doesn't work
