@@ -125,7 +125,7 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
-    public function public71Another(?\DateTime $arg1, $arg2 = null) : ?string
+    public function public71Another(?\DateTime $arg1, $arg2 = false) : ?string
     {
         return $this->_getSubject()->public71Another($arg1, $arg2);
     }

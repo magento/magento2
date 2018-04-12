@@ -72,7 +72,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     /**
      * {@inheritdoc}
      */
-    public function public71Another(?\DateTime $arg1, $arg2 = null) : ?string
+    public function public71Another(?\DateTime $arg1, $arg2 = false) : ?string
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'public71Another');
         if (!$pluginInfo) {
