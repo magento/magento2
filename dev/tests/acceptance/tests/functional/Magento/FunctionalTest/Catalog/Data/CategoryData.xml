@@ -19,10 +19,20 @@
         <data key="is_active">true</data>
         <data key="include_in_menu">true</data>
     </entity>
+    <entity name="NewRootCategory" type="category">
+        <data key="name" unique="suffix">NewRootCategory</data>
+        <data key="name_lwr" unique="suffix">newrootcategory</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <data key="parent_id">1</data>
+    </entity>
     <entity name="SubCategoryWithParent" type="category">
         <data key="name" unique="suffix">subCategory</data>
         <data key="name_lwr" unique="suffix">subCategory</data>
         <data key="is_active">true</data>
         <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <entity name="DefaultRootCategoryGetter" type="category">
+        <var key="category" entityKey="category" entityType="category"/>
     </entity>
 </entities>
