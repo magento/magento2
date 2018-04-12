@@ -19,6 +19,7 @@
             <xs:element ref="button" maxOccurs="unbounded"/>
             <xs:element ref="checkbox" maxOccurs="unbounded"/>
             <xs:element ref="checkboxset" maxOccurs="unbounded"/>
+            <xs:element ref="colorPicker" maxOccurs="unbounded"/>
             <xs:element ref="component" maxOccurs="unbounded"/>
             <xs:element ref="container" maxOccurs="unbounded"/>
             <xs:element ref="dataSource" maxOccurs="unbounded"/>
@@ -66,6 +67,7 @@
             <xs:element ref="button" maxOccurs="unbounded"/>
             <xs:element ref="checkbox" maxOccurs="unbounded"/>
             <xs:element ref="checkboxset" maxOccurs="unbounded"/>
+            <xs:element ref="colorPicker" maxOccurs="unbounded"/>
             <xs:element ref="column" maxOccurs="unbounded"/>
             <xs:element ref="columns" maxOccurs="unbounded"/>
             <xs:element ref="columnsControls" maxOccurs="unbounded"/>
@@ -158,6 +160,7 @@
             <xs:element ref="button" maxOccurs="unbounded"/>
             <xs:element ref="checkbox" maxOccurs="unbounded"/>
             <xs:element ref="checkboxset" maxOccurs="unbounded"/>
+            <xs:element ref="colorPicker" maxOccurs="unbounded"/>
             <xs:element ref="column" maxOccurs="unbounded"/>
             <xs:element ref="columns" maxOccurs="unbounded"/>
             <xs:element ref="columnsControls" maxOccurs="unbounded"/>
@@ -446,6 +449,14 @@
             <xs:documentation>
                 The Checkboxset component implements a group of selection elements type of which can be either
                 "checkbox" (default) or "radio".
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="colorPicker" type="componentColorPicker">
+        <xs:annotation>
+            <xs:documentation>
+                The ColorPicker component uses the Spectrum and tinycolor .js libraries to make it easier to choose and
+                implement color values.
             </xs:documentation>
         </xs:annotation>
     </xs:element>
