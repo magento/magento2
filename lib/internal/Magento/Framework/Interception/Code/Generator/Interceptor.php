@@ -117,10 +117,10 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
                 ],
                 [
                     $method->getName(),
-                    $returnTypeValue === 'void' ? '' : 'return',
+                    $returnTypeValue === 'void' ? '' : ' return',
                     $this->_getParameterList($parameters)
                 ],
-<<<'METHOD_BODY'
+                <<<'METHOD_BODY'
 $pluginInfo = $this->pluginList->getNext($this->subjectType, '%methodName%');
 if (!$pluginInfo) {
    %return% parent::%methodName%(%parameters%);
