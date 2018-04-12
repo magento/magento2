@@ -151,9 +151,12 @@ class RoboFile extends \Robo\Tasks
      */
     private function createTestConfiguration($tests, $opts)
     {
-        // set these globals as we only run this method during generation.
-        $GLOBALS['GENERATE_TESTS'] = true;
-        $GLOBALS['FORCE_PHP_GENERATE'] = $opts['force'];
+        // set our application configuration so we can references the user options in our framework
+        Magento\FunctionalTestingFramework\Config\MftfApplicationConfig::create(
+            $opts['force'],
+            Magento\FunctionalTestingFramework\Config\MftfApplicationConfig::GENERATION_PHASE,
+            $opts['verbose']
+        );
 
         $testConfiguration = [];
         $testConfiguration['tests'] = $tests;
