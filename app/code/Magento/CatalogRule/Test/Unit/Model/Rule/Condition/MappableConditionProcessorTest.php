@@ -42,9 +42,9 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->customConditionProcessorBuilderMock = $this->getMockBuilder(
             CustomConditionProcessorBuilderInterface::class
-            )->disableOriginalConstructor()
-            ->setMethods(['hasProcessorForField'])
-            ->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+        ->setMethods(['hasProcessorForField'])
+        ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -340,7 +340,8 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
                 $subCondition1,
                 $subCondition2
             ],
-            'any');
+            'any'
+        );
 
         $validSubCondition1 = $this->getMockForCombinedCondition(
             [
@@ -674,6 +675,8 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
      *              ]
      *      ]
      * ]
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testConditionV7()
     {
