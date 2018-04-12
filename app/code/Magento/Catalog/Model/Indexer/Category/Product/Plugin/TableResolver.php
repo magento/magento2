@@ -12,6 +12,9 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * Class that replace catalog_category_product_index table name  on  the table name segmented per store
+ */
 class TableResolver
 {
     /**
@@ -37,6 +40,8 @@ class TableResolver
     }
 
     /**
+     * replacing catalog_category_product_index table name on the table name segmented per store
+     *
      * @param ResourceConnection $subject
      * @param string $result
      * @param string|string[] $modelEntity
