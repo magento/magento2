@@ -56,7 +56,7 @@
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="value" value="$$createSource2.source[source_code]$$"/>
         </actionGroup>
-        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createSource1.source[source_code]$$)}}" stepKey="clickOnCheckbox2"/>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createSource2.source[source_code]$$)}}" stepKey="clickOnCheckbox2"/>
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone2"/>
 
         <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSourceIdInGrid1"/>
