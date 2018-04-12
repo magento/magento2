@@ -9,6 +9,9 @@ namespace Magento\CatalogRule\Model\ResourceModel\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogRule\Model\Rule\Condition\Combine;
 use Magento\Framework\Exception\InputException;
+use Magento\CatalogRule\Model\Rule\Condition\ConditionsToSearchCriteriaMapper;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\AdvancedFilterProcessor;
+use Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor;
 
 /**
  * Class ConditionsToCollectionMapper
@@ -19,29 +22,29 @@ use Magento\Framework\Exception\InputException;
 class ConditionsToCollectionApplier
 {
     /**
-     * @var \Magento\CatalogRule\Model\Rule\Condition\ConditionsToSearchCriteriaMapper
+     * @var ConditionsToSearchCriteriaMapper
      */
     private $conditionsToSearchCriteriaMapper;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessor\AdvancedFilterProcessor
+     * @var AdvancedFilterProcessor
      */
     private $searchCriteriaProcessor;
 
     /**
-     * @var \Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor
+     * @var MappableConditionsProcessor
      */
     private $mappableConditionsProcessor;
 
     /**
-     * @param \Magento\CatalogRule\Model\Rule\Condition\ConditionsToSearchCriteriaMapper $conditionsToSearchCriteriaMapper
-     * @param \Magento\Framework\Api\SearchCriteria\CollectionProcessor\AdvancedFilterProcessor $searchCriteriaProcessor
-     * @param \Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor $mappableConditionsProcessor
+     * @param ConditionsToSearchCriteriaMapper $conditionsToSearchCriteriaMapper
+     * @param AdvancedFilterProcessor $searchCriteriaProcessor
+     * @param MappableConditionsProcessor $mappableConditionsProcessor
      */
     public function __construct(
-        \Magento\CatalogRule\Model\Rule\Condition\ConditionsToSearchCriteriaMapper $conditionsToSearchCriteriaMapper,
-        \Magento\Framework\Api\SearchCriteria\CollectionProcessor\AdvancedFilterProcessor $searchCriteriaProcessor,
-        \Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor $mappableConditionsProcessor
+        ConditionsToSearchCriteriaMapper $conditionsToSearchCriteriaMapper,
+        AdvancedFilterProcessor $searchCriteriaProcessor,
+        MappableConditionsProcessor $mappableConditionsProcessor
     ) {
         $this->conditionsToSearchCriteriaMapper = $conditionsToSearchCriteriaMapper;
         $this->searchCriteriaProcessor = $searchCriteriaProcessor;

@@ -11,6 +11,7 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
 
 /**
  * Catalog Rule data model
@@ -137,9 +138,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     protected $ruleConditionConverter;
 
-
     /**
-     * @var \Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier
+     * @var ConditionsToCollectionApplier
      */
     protected $conditionsToCollectionApplier;
 
@@ -173,7 +173,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @param \Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier $conditionsToCollectionApplier
+     * @param ConditionsToCollectionApplier $conditionsToCollectionApplier
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -200,7 +200,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         ExtensionAttributesFactory $extensionFactory = null,
         AttributeValueFactory $customAttributeFactory = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        \Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier $conditionsToCollectionApplier = null
+        ConditionsToCollectionApplier $conditionsToCollectionApplier = null
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_storeManager = $storeManager;
@@ -216,8 +216,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $this->_ruleProductProcessor = $ruleProductProcessor;
 
         $this->conditionsToCollectionApplier = $conditionsToCollectionApplier
-            ?? ObjectManager::getInstance()
-                ->get(\Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier::class);
+            ?? ObjectManager::getInstance()->get(ConditionsToCollectionApplier::class);
 
         parent::__construct(
             $context,
@@ -348,8 +347,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $conditions = $this->getConditions();
 
         // No need to map products if there is no conditions in rule
-        if (!$conditions || !$conditions->getConditions())
-        {
+        if (!$conditions || !$conditions->getConditions()) {
             return false;
         }
 

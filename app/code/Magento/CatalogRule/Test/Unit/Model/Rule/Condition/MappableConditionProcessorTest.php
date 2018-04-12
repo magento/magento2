@@ -13,9 +13,24 @@ use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
 
 class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var MappableConditionsProcessor
+     */
     private $mappableConditionProcessor;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $eavConfigMock;
+
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
     private $objectManagerHelper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $customConditionProcessorBuilderMock;
 
     protected function setUp()
@@ -25,8 +40,9 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getAttribute'])
             ->getMock();
 
-        $this->customConditionProcessorBuilderMock = $this->getMockBuilder(CustomConditionProcessorBuilderInterface::class)
-            ->disableOriginalConstructor()
+        $this->customConditionProcessorBuilderMock = $this->getMockBuilder(
+            CustomConditionProcessorBuilderInterface::class
+            )->disableOriginalConstructor()
             ->setMethods(['hasProcessorForField'])
             ->getMockForAbstractClass();
 
@@ -72,7 +88,13 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $simpleCondition1 = $this->getMockForSimpleCondition($field1);
         $simpleCondition2 = $this->getMockForSimpleCondition($field2);
-        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition1, $simpleCondition2], 'any');
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'any'
+        );
 
         $validResult = $this->getMockForCombinedCondition([], 'any');
 
@@ -130,9 +152,20 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $simpleCondition1 = $this->getMockForSimpleCondition($field1);
         $simpleCondition2 = $this->getMockForSimpleCondition($field2);
-        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition1, $simpleCondition2], 'all');
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'all'
+        );
 
-        $validResult = $this->getMockForCombinedCondition([$simpleCondition1], 'all');
+        $validResult = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1
+            ],
+            'all'
+        );
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
@@ -185,7 +218,13 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $simpleCondition1 = $this->getMockForSimpleCondition($field1);
         $simpleCondition2 = $this->getMockForSimpleCondition($field2);
-        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition1, $simpleCondition2], 'all');
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'all'
+        );
 
         $validResult = $this->getMockForCombinedCondition([], 'all');
 
@@ -275,20 +314,54 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $simpleCondition1 = $this->getMockForSimpleCondition($field1);
         $simpleCondition2 = $this->getMockForSimpleCondition($field2);
-        $subCondition1 = $this->getMockForCombinedCondition([$simpleCondition1, $simpleCondition2], 'all');
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'all'
+        );
 
         $field3 = 'field-3';
         $field4 = 'field-4';
 
         $simpleCondition3 = $this->getMockForSimpleCondition($field3);
         $simpleCondition4 = $this->getMockForSimpleCondition($field4);
-        $subCondition2 = $this->getMockForCombinedCondition([$simpleCondition3, $simpleCondition4], 'any');
+        $subCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
 
-        $inputCondition = $this->getMockForCombinedCondition([$subCondition1, $subCondition2], 'any');
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $subCondition1,
+                $subCondition2
+            ],
+            'any');
 
-        $validSubCondition1 = $this->getMockForCombinedCondition([$simpleCondition2], 'all');
-        $validSubCondition2 = $this->getMockForCombinedCondition([$simpleCondition3, $simpleCondition4], 'any');
-        $validResult = $this->getMockForCombinedCondition([$validSubCondition1, $validSubCondition2], 'any');
+        $validSubCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition2
+            ],
+            'all'
+        );
+        $validSubCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
+        $validResult = $this->getMockForCombinedCondition(
+            [
+                $validSubCondition1,
+                $validSubCondition2
+            ],
+            'any'
+        );
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
@@ -370,19 +443,48 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $simpleCondition1 = $this->getMockForSimpleCondition($field1);
         $simpleCondition2 = $this->getMockForSimpleCondition($field2);
-        $subCondition1 = $this->getMockForCombinedCondition([$simpleCondition1, $simpleCondition2], 'any');
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'any'
+        );
 
         $field3 = 'field-3';
         $field4 = 'field-4';
 
         $simpleCondition3 = $this->getMockForSimpleCondition($field3);
         $simpleCondition4 = $this->getMockForSimpleCondition($field4);
-        $subCondition2 = $this->getMockForCombinedCondition([$simpleCondition3, $simpleCondition4], 'any');
+        $subCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
 
-        $inputCondition = $this->getMockForCombinedCondition([$subCondition1, $subCondition2], 'all');
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $subCondition1,
+                $subCondition2
+            ],
+            'all'
+        );
 
-        $validSubCondition2 = $this->getMockForCombinedCondition([$simpleCondition3, $simpleCondition4], 'any');
-        $validResult = $this->getMockForCombinedCondition([$validSubCondition2], 'all');
+        $validSubCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
+        $validResult = $this->getMockForCombinedCondition(
+            [
+                $validSubCondition2
+            ],
+            'all'
+        );
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
@@ -444,9 +546,22 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $simpleCondition3 = $this->getMockForSimpleCondition($field3);
         $simpleCondition4 = $this->getMockForSimpleCondition($field4);
-        $subCondition1 = $this->getMockForCombinedCondition([$simpleCondition3, $simpleCondition4], 'any');
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
 
-        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition1, $simpleCondition2, $subCondition1], 'all');
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2,
+                $subCondition1
+            ],
+            'all'
+        );
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
@@ -570,8 +685,20 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
         $simpleCondition2 = $this->getMockForSimpleCondition($field2);
         $simpleCondition3 = $this->getMockForSimpleCondition($field3);
 
-        $subCondition1 = $this->getMockForCombinedCondition([$simpleCondition2, $simpleCondition3], 'any');
-        $subCondition2 = $this->getMockForCombinedCondition([$simpleCondition1, $subCondition1], 'all');
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition2,
+                $simpleCondition3
+            ],
+            'any'
+        );
+        $subCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $subCondition1
+            ],
+            'all'
+        );
 
         $field4 = 'field-4';
         $field5 = 'field-5';
@@ -583,16 +710,56 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
         $simpleCondition6 = $this->getMockForSimpleCondition($field6);
         $simpleCondition7 = $this->getMockForSimpleCondition($field7);
 
-        $subCondition3 = $this->getMockForCombinedCondition([$simpleCondition4, $simpleCondition5], 'any');
-        $subCondition4 = $this->getMockForCombinedCondition([$simpleCondition6, $simpleCondition7], 'any');
-        $subCondition5 = $this->getMockForCombinedCondition([$subCondition3, $subCondition4], 'all');
+        $subCondition3 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition4,
+                $simpleCondition5
+            ],
+            'any'
+        );
+        $subCondition4 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition6,
+                $simpleCondition7
+            ],
+            'any'
+        );
+        $subCondition5 = $this->getMockForCombinedCondition(
+            [
+                $subCondition3,
+                $subCondition4
+            ],
+            'all'
+        );
 
-        $inputCondition = $this->getMockForCombinedCondition([$subCondition2, $subCondition5], 'any');
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $subCondition2,
+                $subCondition5
+            ],
+            'any'
+        );
 
-        $validSubCondition2 = $this->getMockForCombinedCondition([$simpleCondition1], 'all');
-        $validSubCondition4 = $this->getMockForCombinedCondition([$subCondition4], 'all');
+        $validSubCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1
+            ],
+            'all'
+        );
+        $validSubCondition4 = $this->getMockForCombinedCondition(
+            [
+                $subCondition4
+            ],
+            'all'
+        );
 
-        $validResult = $this->getMockForCombinedCondition([$validSubCondition2, $validSubCondition4], 'any');
+        $validResult = $this->getMockForCombinedCondition(
+            [
+                $validSubCondition2,
+                $validSubCondition4
+            ],
+            'any'
+        );
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
@@ -665,16 +832,34 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $simpleCondition1 = $this->getMockForSimpleCondition($field1);
         $simpleCondition2 = $this->getMockForSimpleCondition($field2);
-        $subCondition1 = $this->getMockForCombinedCondition([$simpleCondition1, $simpleCondition2], 'any');
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'any'
+        );
 
         $field3 = 'field-3';
         $field4 = 'field-4';
 
         $simpleCondition3 = $this->getMockForSimpleCondition($field3);
         $simpleCondition4 = $this->getMockForSimpleCondition($field4);
-        $subCondition2 = $this->getMockForCombinedCondition([$simpleCondition3, $simpleCondition4], 'any');
+        $subCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
 
-        $inputCondition = $this->getMockForCombinedCondition([$subCondition1, $subCondition2], 'any');
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $subCondition1,
+                $subCondition2
+            ],
+            'any'
+        );
 
         $validResult = $this->getMockForCombinedCondition([], 'any');
 
@@ -747,19 +932,38 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $simpleCondition1 = $this->getMockForSimpleCondition($field1);
         $simpleCondition2 = $this->getMockForSimpleCondition($field2);
-        $subCondition1 = $this->getMockForCombinedCondition([$simpleCondition1, $simpleCondition2], 'any');
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'any'
+        );
 
         $field3 = 'field-3';
         $field4 = 'field-4';
 
         $simpleCondition3 = $this->getMockForSimpleCondition($field3);
         $simpleCondition4 = $this->getMockForSimpleCondition($field4);
-        $subCondition2 = $this->getMockForCombinedCondition([$simpleCondition3, $simpleCondition4], 'any');
+        $subCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
 
         $field5 = 'field-5';
         $simpleCondition5 = $this->getMockForSimpleCondition($field5);
 
-        $inputCondition = $this->getMockForCombinedCondition([$subCondition1, $subCondition2, $simpleCondition5], 'any');
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $subCondition1,
+                $subCondition2,
+                $simpleCondition5
+            ],
+            'any'
+        );
 
         $validResult = $this->getMockForCombinedCondition([], 'any');
 
@@ -825,5 +1029,4 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         return $mock;
     }
-
 }

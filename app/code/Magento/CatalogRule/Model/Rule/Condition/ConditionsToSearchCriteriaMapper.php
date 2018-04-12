@@ -18,6 +18,7 @@ use Magento\Framework\Api\Filter;
  * Maps catalog price rule conditions to search criteria
  *
  * @package Magento\CatalogRule\Model\Rule\Condition
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConditionsToSearchCriteriaMapper
 {
@@ -164,6 +165,11 @@ class ConditionsToSearchCriteriaMapper
         );
     }
 
+    /**
+     * @param ConditionInterface $productCondition
+     * @return mixed
+     * @throws InputException
+     */
     private function processSimpleConditionWithArrayValue(ConditionInterface $productCondition)
     {
         $filters = [];
@@ -181,6 +187,10 @@ class ConditionsToSearchCriteriaMapper
         return $this->createCombinedFilterGroup($filters, $combinationMode);
     }
 
+    /**
+     * @param $operator
+     * @return string
+     */
     private function getGlueForArrayValues($operator)
     {
         if (in_array($operator, ['!=', '!{}', '!()'])) {
@@ -201,6 +211,12 @@ class ConditionsToSearchCriteriaMapper
         );
     }
 
+    /**
+     * @param $filters
+     * @param $combinationMode
+     * @return mixed
+     * @throws InputException
+     */
     private function createCombinedFilterGroup($filters, $combinationMode)
     {
         return $this->combinedFilterGroupFactory->create([
@@ -213,6 +229,13 @@ class ConditionsToSearchCriteriaMapper
         ]);
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @param $conditionType
+     * @return mixed
+     * @throws InputException
+     */
     private function createFilter($field, $value, $conditionType)
     {
         return $this->filterFactory->create([
