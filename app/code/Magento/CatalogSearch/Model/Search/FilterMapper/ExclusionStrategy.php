@@ -8,7 +8,9 @@ namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 
 /**
  * Strategy which processes exclusions from general rules
@@ -122,7 +124,18 @@ class ExclusionStrategy implements FilterStrategyInterface
         \Magento\Framework\DB\Select $select
     ) {
         $alias = $this->aliasResolver->getAlias($filter);
-        $tableName = $this->tableResolver->getMainTable($this->storeManager->getStore()->getId());
+
+        $catalogCategoryProductDimension = new Dimension(
+            \Magento\Store\Model\Store::ENTITY,
+            $this->storeManager->getStore()->getId()
+        );
+
+        $tableName = $this->tableResolver->resolve(
+            AbstractAction::MAIN_INDEX_TABLE,
+            [
+                $catalogCategoryProductDimension
+            ]
+        );
         $mainTableAlias = $this->extractTableAliasFromSelect($select);
 
         $select->joinInner(

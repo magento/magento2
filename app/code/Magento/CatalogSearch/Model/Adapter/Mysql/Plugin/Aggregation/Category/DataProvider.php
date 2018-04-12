@@ -13,8 +13,12 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
+use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataProvider
 {
     /**
@@ -79,9 +83,18 @@ class DataProvider
             $currentScopeId = $this->scopeResolver->getScope($dimensions['scope']->getValue())->getId();
             $currentCategory = $this->layer->getCurrentCategory();
 
+            $catalogCategoryProductDimension = new Dimension(\Magento\Store\Model\Store::ENTITY, $currentScopeId);
+
+            $catalogCategoryProductTableName = $this->tableResolver->resolve(
+                AbstractAction::MAIN_INDEX_TABLE,
+                [
+                    $catalogCategoryProductDimension
+                ]
+            );
+
             $derivedTable = $this->resource->getConnection()->select();
             $derivedTable->from(
-                ['main_table' => $this->tableResolver->getMainTable($currentScopeId)],
+                ['main_table' => $catalogCategoryProductTableName],
                 [
                     'value' => 'category_id'
                 ]
