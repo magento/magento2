@@ -11,6 +11,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -22,6 +23,7 @@ class AssertProductViewBreadcrumbsCategory extends AbstractConstraint
     /**
      * @param CatalogCategoryView $catalogCategoryView
      * @param CatalogProductView $catalogProductView
+     * @param CmsIndex $cmsIndex
      * @param BrowserInterface $browser
      * @param CatalogProductSimple $product
      * @return void
@@ -29,6 +31,7 @@ class AssertProductViewBreadcrumbsCategory extends AbstractConstraint
     public function processAssert(
         CatalogCategoryView $catalogCategoryView,
         CatalogProductView $catalogProductView,
+        CmsIndex $cmsIndex,
         BrowserInterface $browser,
         CatalogProductSimple $product
     ) {
@@ -40,7 +43,8 @@ class AssertProductViewBreadcrumbsCategory extends AbstractConstraint
 
             /** @var Category $category */
             foreach ($categories as $category) {
-                $browser->open($_ENV['app_frontend_url'] . $category->getUrlKey() . '.html');
+                $cmsIndex->open();
+                $cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
 
                 $productItem = $catalogCategoryView->getListProductBlock()->getProductItem($product);
                 \PHPUnit_Framework_Assert::assertTrue(
