@@ -84,7 +84,7 @@ class StockManagement implements StockManagementInterface, RegisterProductSaleIn
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function registerProductsSale($items, $websiteId = null)
+    public function registerProductsSale($items, $websiteId = null, $quoteId = null)
     {
         //if (!$websiteId) {
             $websiteId = $this->stockConfiguration->getDefaultScopeId();
