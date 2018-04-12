@@ -115,6 +115,8 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $title = $product->getMetaTitle();
         if ($title) {
             $pageConfig->getTitle()->set($title);
+        } else {
+            $pageConfig->getTitle()->set($product->getName());
         }
 
         $keyword = $product->getMetaKeyword();
