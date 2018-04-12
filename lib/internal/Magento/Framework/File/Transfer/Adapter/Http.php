@@ -40,19 +40,17 @@ class Http
      */
     public function send($options = null)
     {
-        if (is_string($options)) {
-            $filepath = $options;
-        } elseif (is_array($options) && isset($options['filepath'])) {
-            $filepath = $options['filepath'];
-        } else {
-            throw new \InvalidArgumentException("Filename is not set.");
-        }
+        $filepath = $this->getFilePath($options);
 
         if (!is_file($filepath) || !is_readable($filepath)) {
             throw new \InvalidArgumentException("File '{$filepath}' does not exists.");
         }
 
         $mimeType = $this->mime->getMimeType($filepath);
+
+        if (isset($options['headers']) && $options['headers'] instanceof \Zend\Http\Headers) {
+            $this->response->setHeaders($options['headers']);
+        }
 
         $this->response->setHeader('Content-length', filesize($filepath));
         $this->response->setHeader('Content-Type', $mimeType);
@@ -69,5 +67,27 @@ class Http
             }
             fclose($handle);
         }
+    }
+
+    /**
+     * Get filepath by provided parameter $options.
+     * If the $options is a string it assumes it's a file path. If the option is an array method will look for the
+     * 'filepath' key and return it's value.
+     *
+     * @param string|array|null $options
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    private function getFilePath($options = null)
+    {
+        if (is_string($options)) {
+            $filePath = $options;
+        } elseif (isset($options['filepath'])) {
+            $filePath = $options['filepath'];
+        } else {
+            throw new \InvalidArgumentException("Filename is not set.");
+        }
+
+        return $filePath;
     }
 }

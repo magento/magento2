@@ -196,7 +196,7 @@ define([
          */
         setSubTitle: function (subTitle) {
             this.options.subTitle = subTitle;
-            this.modal.find(this.options.modalSubTitle).html(subTitle);
+            this.modal.find(this.options.modalSubTitle).text(subTitle);
         },
 
         /**
