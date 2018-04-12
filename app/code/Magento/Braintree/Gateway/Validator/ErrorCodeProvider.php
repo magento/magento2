@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Gateway\Validator;
 
 use Braintree\Error\ErrorCollection;
@@ -13,32 +15,24 @@ use Braintree\Result\Successful;
 /**
  * Processes errors codes from Braintree response.
  */
-class ErrorCodeValidator
+class ErrorCodeProvider
 {
     /**
-     * Invokes validation.
+     * Retrieves list of error codes from Braintree response.
      *
      * @param Successful|Error $response
      * @return array
      */
-    public function __invoke($response)
-    {
-        if (!$response instanceof Error) {
-            return [true, [__('Transaction is successful.')]];
-        }
-
-        return [false, $this->getErrorCodes($response->errors)];
-    }
-
-    /**
-     * Retrieves list of error codes from Braintree response.
-     *
-     * @param ErrorCollection $collection
-     * @return array
-     */
-    private function getErrorCodes(ErrorCollection $collection)
+    public function getErrorCodes($response): array
     {
         $result = [];
+        if (!$response instanceof Error) {
+            return $result;
+        }
+
+        /** @var ErrorCollection $collection */
+        $collection = $response->errors;
+
         /** @var Validation $error */
         foreach ($collection->deepAll() as $error) {
             $result[] = $error->code;

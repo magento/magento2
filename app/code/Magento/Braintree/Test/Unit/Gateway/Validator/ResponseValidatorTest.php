@@ -8,7 +8,7 @@ namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\SubjectReader;
-use Magento\Braintree\Gateway\Validator\ErrorCodeValidator;
+use Magento\Braintree\Gateway\Validator\ErrorCodeProvider;
 use Magento\Braintree\Gateway\Validator\ResponseValidator;
 use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\Result;
@@ -46,7 +46,7 @@ class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
         $this->responseValidator = new ResponseValidator(
             $this->resultInterfaceFactory,
             new SubjectReader(),
-            new ErrorCodeValidator()
+            new ErrorCodeProvider()
         );
     }
 

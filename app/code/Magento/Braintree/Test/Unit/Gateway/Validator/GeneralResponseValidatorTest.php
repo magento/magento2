@@ -7,7 +7,7 @@ namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
 use Braintree\Result\Error;
 use Magento\Braintree\Gateway\SubjectReader;
-use Magento\Braintree\Gateway\Validator\ErrorCodeValidator;
+use Magento\Braintree\Gateway\Validator\ErrorCodeProvider;
 use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
 use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\Result;
@@ -41,7 +41,7 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
         $this->responseValidator = new GeneralResponseValidator(
             $this->resultInterfaceFactory,
             new SubjectReader(),
-            new ErrorCodeValidator()
+            new ErrorCodeProvider()
         );
     }
 
@@ -51,18 +51,20 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
      * @param array $validationSubject
      * @param bool $isValid
      * @param Phrase[] $messages
+     * @param array $errorCodes
      * @return void
      *
      * @dataProvider dataProviderTestValidate
      */
-    public function testValidate(array $validationSubject, bool $isValid, $messages)
+    public function testValidate(array $validationSubject, bool $isValid, $messages, array $errorCodes)
     {
         $result = new Result($isValid, $messages);
 
         $this->resultInterfaceFactory->method('create')
             ->with([
                 'isValid' => $isValid,
-                'failsDescription' => $messages
+                'failsDescription' => $messages,
+                'errorCodes' => $errorCodes
             ])
             ->willReturn($result);
 
@@ -104,7 +106,8 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 'isValid' => true,
-                []
+                [],
+                'errorCodes' => []
             ],
             [
                 'validationSubject' => [
@@ -115,7 +118,8 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
                 'isValid' => false,
                 [
                     __('Transaction was failed.')
-                ]
+                ],
+                'errorCodes' => []
             ],
             [
                 'validationSubject' => [
@@ -125,9 +129,9 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
                 ],
                 'isValid' => false,
                 [
-                    __('Braintree error response.'),
-                    81804
-                ]
+                    __('Braintree error response.')
+                ],
+                'errorCodes' => ['81804']
             ]
         ];
     }
