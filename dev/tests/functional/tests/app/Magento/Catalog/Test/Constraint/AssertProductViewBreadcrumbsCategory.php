@@ -47,7 +47,7 @@ class AssertProductViewBreadcrumbsCategory extends AbstractConstraint
                 $cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
 
                 $productItem = $catalogCategoryView->getListProductBlock()->getProductItem($product);
-                \PHPUnit_Framework_Assert::assertTrue(
+                \PHPUnit\Framework\Assert::assertTrue(
                     $productItem->isVisible(),
                     'Product is not present in category.'
                 );
@@ -58,7 +58,7 @@ class AssertProductViewBreadcrumbsCategory extends AbstractConstraint
 
                 $breadcrumbs = $catalogProductView->getBreadcrumbs()->getCrumbs();
 
-                \PHPUnit_Framework_Assert::assertContains(
+                \PHPUnit\Framework\Assert::assertContains(
                     $category->getName(),
                     $breadcrumbs,
                     'Product view page has incorrect breadcrumbs.'
