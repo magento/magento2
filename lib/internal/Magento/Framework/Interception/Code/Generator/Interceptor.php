@@ -109,16 +109,26 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         $methodInfo = [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,
-            'body' => "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
-                "if (!\$pluginInfo) {\n" .
-                "    " .($returnTypeValue === 'void' ? '' : 'return')
-                ." parent::{$method->getName()}({$this->_getParameterList(
-                $parameters
-            )});\n" .
-            "} else {\n" .
-            "    " .($returnTypeValue === 'void' ? '' : 'return')
-            ." \$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
-            "}",
+            'body' => str_replace(
+                [
+                    '%methodName%',
+                    '%return%',
+                    '%parameters%'
+                ],
+                [
+                    $method->getName(),
+                    $returnTypeValue === 'void' ? '' : 'return',
+                    $this->_getParameterList($parameters)
+                ],
+<<<'METHOD_BODY'
+$pluginInfo = $this->pluginList->getNext($this->subjectType, '%methodName%');
+if (!$pluginInfo) {
+   %return% parent::%methodName%(%parameters%);
+} else {
+   %return% $this->___callPlugins('%methodName%', func_get_args(), $pluginInfo);
+}
+METHOD_BODY
+            ),
             'returnType' => $returnTypeValue,
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
