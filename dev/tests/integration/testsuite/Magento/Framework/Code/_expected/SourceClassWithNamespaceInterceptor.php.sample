@@ -63,9 +63,9 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'public71');
         if (!$pluginInfo) {
-             parent::public71($arg1, $arg2, $arg3, $arg4);
+            parent::public71($arg1, $arg2, $arg3, $arg4);
         } else {
-             $this->___callPlugins('public71', func_get_args(), $pluginInfo);
+            $this->___callPlugins('public71', func_get_args(), $pluginInfo);
         }
     }
 
