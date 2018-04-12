@@ -39,7 +39,7 @@ class TableResolver
     /**
      * @param ResourceConnection $subject
      * @param string $result
-     * @param string $modelEntity
+     * @param string|string[] $modelEntity
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
@@ -48,9 +48,9 @@ class TableResolver
     public function afterGetTableName(
         \Magento\Framework\App\ResourceConnection $subject,
         string $result,
-        string $modelEntity
+        $modelEntity
     ) {
-        if ($modelEntity === AbstractAction::MAIN_INDEX_TABLE) {
+        if (!is_array($modelEntity) && $modelEntity === AbstractAction::MAIN_INDEX_TABLE) {
             $catalogCategoryProductDimension = new Dimension(
                 \Magento\Store\Model\Store::ENTITY,
                 $this->storeManager->getStore()->getId()
