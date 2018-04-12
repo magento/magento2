@@ -26,7 +26,7 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <amOnPage url="{{ManageStock.url}}" stepKey="amOnStockListPage1"/>
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnStockListPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAdd1"/>
 

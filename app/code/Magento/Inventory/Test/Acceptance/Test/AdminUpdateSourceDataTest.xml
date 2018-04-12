@@ -27,7 +27,7 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage1"/>
+        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPage1"/>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="searchForSource1">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
@@ -81,7 +81,7 @@
         <seeInField selector="{{AdminEditSourceAddressDataSection.street}}" userInput="{{FullSource2.street}}" stepKey="seeStreetInField1"/>
         <seeInField selector="{{AdminEditSourceAddressDataSection.postcode}}" userInput="{{FullSource2.postcode}}" stepKey="seePostcodeInField1"/>
 
-        <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage2"/>
+        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPage2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">

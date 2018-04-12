@@ -17,8 +17,8 @@
         <element name="longitude" type="input" selector="input[name='general[longitude]']"/>
     </section>
     <section name="AdminEditSourceContactInfoSection">
-        <element name="opened" type="wysiwyg" selector="div[data-index='contact_info'] .fieldset-wrapper-title[data-state-collapsible='open']"/>
-        <element name="closed" type="wysiwyg" selector="div[data-index='contact_info'] .fieldset-wrapper-title[data-state-collapsible='closed']"/>
+        <element name="opened" type="button" selector="div[data-index='contact_info'] .fieldset-wrapper-title[data-state-collapsible='open']"/>
+        <element name="closed" type="button" selector="div[data-index='contact_info'] .fieldset-wrapper-title[data-state-collapsible='closed']"/>
 
         <element name="contactName" type="input" selector="input[name='general[contact_name]']"/>
         <element name="email" type="input" selector="input[name='general[email]']"/>
@@ -26,8 +26,8 @@
         <element name="fax" type="input" selector="input[name='general[fax]']"/>
     </section>
     <section name="AdminEditSourceAddressDataSection">
-        <element name="opened" type="wysiwyg" selector="div[data-index='address'] .fieldset-wrapper-title[data-state-collapsible='open']"/>
-        <element name="closed" type="wysiwyg" selector="div[data-index='address'] .fieldset-wrapper-title[data-state-collapsible='closed']"/>
+        <element name="opened" type="button" selector="div[data-index='address'] .fieldset-wrapper-title[data-state-collapsible='open']"/>
+        <element name="closed" type="button" selector="div[data-index='address'] .fieldset-wrapper-title[data-state-collapsible='closed']"/>
 
         <element name="country" type="select" selector="select[name='general[country_id]']" timeout="10"/>
         <element name="province" type="input" selector="input[name='general[region]']"/>
@@ -37,8 +37,8 @@
         <element name="postcode" type="input" selector="input[name='general[postcode]']"/>
     </section>
     <section name="AdminEditSourceCarriersSection">
-        <element name="opened" type="wysiwyg" selector="div[data-index='carriers'] .fieldset-wrapper-title[data-state-collapsible='open']"/>
-        <element name="closed" type="wysiwyg" selector="div[data-index='carriers'] .fieldset-wrapper-title[data-state-collapsible='closed']"/>
+        <element name="opened" type="button" selector="div[data-index='carriers'] .fieldset-wrapper-title[data-state-collapsible='open']"/>
+        <element name="closed" type="button" selector="div[data-index='carriers'] .fieldset-wrapper-title[data-state-collapsible='closed']"/>
 
         <element name="useGlobalShippingConfiguration" type="radio" selector="input[name='general[use_default_carrier_config]']"/>
     </section>

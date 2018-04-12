@@ -22,7 +22,7 @@
         <before>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-            <amOnPage url="{{ManageSources.url}}" stepKey="amOnSourceListPage1"/>
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnSourceListPage1"/>
             <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         </before>
         <after>

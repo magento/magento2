@@ -28,7 +28,7 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage1"/>
+        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
         <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">

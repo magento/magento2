@@ -25,7 +25,7 @@
             <createData entity="BasicMsiStock1" stepKey="createStock3"/>
             <createData entity="BasicMsiStock2" stepKey="createStock4"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-            <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStocksListPage1"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksListPage1"/>
             <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         </before>
         <after>

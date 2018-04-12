@@ -36,7 +36,7 @@
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite1.code}}" stepKey="enterWebsiteCode1"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite1"/>
 
-        <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStockGridPage1"/>
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
 
         <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminManageSourcesGridFilterControls.dropDown}}" visible="true" stepKey="clearTheFiltersIfPresent1"/>

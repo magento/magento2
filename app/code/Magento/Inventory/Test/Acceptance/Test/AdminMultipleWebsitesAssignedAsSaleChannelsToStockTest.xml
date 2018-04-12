@@ -54,7 +54,7 @@
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite4.code}}" stepKey="enterWebsiteCode4"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite4"/>
 
-        <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStocksListPage1"/>
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksListPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
 
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>

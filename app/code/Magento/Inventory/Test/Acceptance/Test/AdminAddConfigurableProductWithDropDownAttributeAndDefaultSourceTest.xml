@@ -17,6 +17,9 @@
             <testCaseId value="745"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <!-- SKIPPING DUE TO BUG MQE-915 -->
+            <!-- https://jira.corp.magento.com/browse/MQE-914 -->
+            <group value="skip"/>
         </annotations>
 
         <before>
@@ -86,9 +89,9 @@
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeAttributeSku1InField"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeAttributeSku2InField"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute3.name}}" stepKey="seeAttributeSku3InField"/>
-        <see selector="{{AdminConfigurableProductFormSection.currentVariationsQuantityCells}}" userInput="100" stepKey="seeQuantityInField1"/>
-        <see selector="{{AdminConfigurableProductFormSection.currentVariationsQuantityCells}}" userInput="100" stepKey="seeQuantityInField2"/>
-        <see selector="{{AdminConfigurableProductFormSection.currentVariationsQuantityCells}}" userInput="100" stepKey="seeQuantityInField3"/>
+        <see selector="{{AdminConfigurableProductFormSection.rowByCode(ConfigurableMsiProduct.sku,colorProductAttribute1.name)}}" userInput="100" stepKey="seeQuantityInField1"/>
+        <see selector="{{AdminConfigurableProductFormSection.rowByCode(ConfigurableMsiProduct.sku,colorProductAttribute2.name)}}" userInput="100" stepKey="seeQuantityInField2"/>
+        <see selector="{{AdminConfigurableProductFormSection.rowByCode(ConfigurableMsiProduct.sku,colorProductAttribute3.name)}}" userInput="100" stepKey="seeQuantityInField3"/>
 
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$createPreReqCategory1$$"/>

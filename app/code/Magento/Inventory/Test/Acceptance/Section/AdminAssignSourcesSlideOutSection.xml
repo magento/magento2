@@ -16,5 +16,6 @@
     </section>
     <section name="AdminAssignSourcesSlideOutGridSection">
         <element name="checkboxByIndex" type="checkbox" selector=".admin__data-grid-outer-wrap .data-row[data-repeat-index='{{var1}}'] .admin__control-checkbox" parameterized="true"/>
+        <element name="checkboxByCode" type="checkbox" selector="//tr[td[contains(.,'{{var1}}')]]//input[@data-action='select-row']" parameterized="true"/>
     </section>
 </sections>

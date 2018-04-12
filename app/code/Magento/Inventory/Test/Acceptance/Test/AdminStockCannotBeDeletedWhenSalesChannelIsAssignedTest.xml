@@ -66,7 +66,7 @@
         <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiStoreView.name}}" stepKey="seeTheNewStoreView3"/>
         <!-- END OF COPY -->
 
-        <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStocksListPage1"/>
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksListPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>

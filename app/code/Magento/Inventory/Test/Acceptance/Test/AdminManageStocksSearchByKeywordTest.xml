@@ -30,7 +30,7 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStockListPage1"/>
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockListPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
         <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">
