@@ -14,7 +14,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Class Url
@@ -103,9 +103,9 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $metadataPool;
 
     /**
-     * @var TableResolver
+     * @var TableMaintainer
      */
-    private $tableResolver;
+    private $tableMaintainer;
 
     /**
      * Url constructor.
@@ -116,7 +116,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Psr\Log\LoggerInterface $logger
      * @param null $connectionName
-     * @param TableResolver|null $tableResolver
+     * @param TableMaintainer|null $tableMaintainer
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -126,7 +126,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Catalog\Model\Category $catalogCategory,
         \Psr\Log\LoggerInterface $logger,
         $connectionName = null,
-        TableResolver $tableResolver = null
+        TableMaintainer $tableMaintainer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
@@ -134,7 +134,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_catalogCategory = $catalogCategory;
         $this->_logger = $logger;
         parent::__construct($context, $connectionName);
-        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
+        $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
     }
 
     /**
@@ -671,7 +671,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         foreach ($storesProducts as $storeId => $productIds) {
             $select = $connection->select()->from(
-                ['i' => $this->tableResolver->getMainTable($storeId)],
+                ['i' => $this->tableMaintainer->getMainTable($storeId)],
                 ['product_id', 'store_id', 'visibility']
             )->joinLeft(
                 ['u' => $this->getMainTable()],

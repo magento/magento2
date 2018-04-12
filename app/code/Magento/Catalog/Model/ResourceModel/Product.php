@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Product entity resource model
@@ -85,9 +85,9 @@ class Product extends AbstractResource
     private $productCategoryLink;
 
     /**
-     * @var TableResolver
+     * @var TableMaintainer
      */
-    private $tableResolver;
+    private $tableMaintainer;
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
@@ -100,7 +100,7 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
-     * @param TableResolver|null $tableResolver
+     * @param TableMaintainer|null $tableMaintainer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -115,7 +115,7 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
         $data = [],
-        TableResolver $tableResolver = null
+        TableMaintainer $tableMaintainer = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -130,7 +130,7 @@ class Product extends AbstractResource
             $data
         );
         $this->connectionName  = 'catalog';
-        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
+        $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
     }
 
     /**
@@ -375,20 +375,40 @@ class Product extends AbstractResource
         // fetching all parent IDs, including those are higher on the tree
         $entityId = (int)$object->getEntityId();
         if (!isset($this->availableCategoryIdsCache[$entityId])) {
-            $this->availableCategoryIdsCache[$entityId] = $this->getConnection()->fetchCol(
-                $this->getConnection()->select()->distinct()->from(
-                    $this->tableResolver->getMainTable($object->getStoreId()),
-                    ['category_id']
-                )->where(
-                    'product_id = ? AND is_parent = 1',
-                    $entityId
-                )->where(
-                    'visibility != ?',
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
-                )
+            foreach ($this->_storeManager->getStores() as $store) {
+                $unionTables[] = $this->getAvailableInCategoriesSelect(
+                    $entityId,
+                    $this->tableMaintainer->getMainTable($store->getId())
+                );
+            }
+            $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
+                $unionTables,
+                \Magento\Framework\DB\Select::SQL_UNION_ALL
             );
+            $this->availableCategoryIdsCache[$entityId] = array_unique($this->getConnection()->fetchCol($unionSelect));
         }
         return $this->availableCategoryIdsCache[$entityId];
+    }
+
+    /**
+     * Returns DB select for available categories.
+     *
+     * @param int $entityId
+     * @param string $tableName
+     * @return \Magento\Framework\DB\Select
+     */
+    private function getAvailableInCategoriesSelect($entityId, $tableName)
+    {
+        return $this->getConnection()->select()->distinct()->from(
+            $tableName,
+            ['category_id']
+        )->where(
+            'product_id = ? AND is_parent = 1',
+            $entityId
+        )->where(
+            'visibility != ?',
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
+        );
     }
 
     /**
@@ -411,7 +431,7 @@ class Product extends AbstractResource
     public function canBeShowInCategory($product, $categoryId)
     {
         $select = $this->getConnection()->select()->from(
-            $this->tableResolver->getMainTable($product->getStoreId()),
+            $this->tableMaintainer->getMainTable($product->getStoreId()),
             'product_id'
         )->where(
             'product_id = ?',
