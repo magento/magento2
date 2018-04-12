@@ -26,8 +26,10 @@
     </type>
     <type name="Magento\CatalogInventory\Model\StockManagement">
         <plugin name="process_back_item_qty" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessBackItemQtyPlugin"/>
-        <plugin name="process_register_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin"/>
         <plugin name="process_revert_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRevertProductsSalePlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Api\RegisterProductSaleInterface">
+        <plugin name="process_register_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Api\StockStateInterface">
         <plugin name="check_quote_item_qty" type="Magento\InventorySales\Plugin\StockState\CheckQuoteItemQtyPlugin"/>

@@ -7,23 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\CatalogInventory\Model\StockManagement;
+use Magento\CatalogInventory\Api\RegisterProductSaleInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
+use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\RegisterSalesEventInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 
 /**
- * Class provides around Plugin on \Magento\CatalogInventory\Model\StockManagement::registerProductsSale
+ * Class provides around Plugin on RegisterProductSaleInterface::registerProductsSale
  */
 class ProcessRegisterProductsSalePlugin
 {
@@ -31,11 +29,6 @@ class ProcessRegisterProductsSalePlugin
      * @var GetSkusByProductIdsInterface
      */
     private $getSkusByProductIds;
-
-    /**
-     * @var StockByWebsiteIdResolver
-     */
-    private $stockByWebsiteIdResolver;
 
     /**
      * @var ReservationBuilderInterface
@@ -74,7 +67,6 @@ class ProcessRegisterProductsSalePlugin
 
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
         ReservationBuilderInterface $reservationBuilder,
         AppendReservationsInterface $appendReservations,
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
@@ -84,7 +76,6 @@ class ProcessRegisterProductsSalePlugin
         SalesEventInterfaceFactory $salesEventFactory
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
         $this->isProductSalableForRequestedQty = $isProductSalableForRequestedQty;
@@ -95,16 +86,16 @@ class ProcessRegisterProductsSalePlugin
     }
 
     /**
-     * @param StockManagement $subject
+     * @param RegisterProductSaleInterface $subject
      * @param callable $proceed
      * @param float[] $items
      * @param int|null $websiteId
-     * @return StockItemInterface[]
+     * @return []
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundRegisterProductsSale(
-        StockManagement $subject,
+        RegisterProductSaleInterface $subject,
         callable $proceed,
         $items,
         $websiteId = null,
