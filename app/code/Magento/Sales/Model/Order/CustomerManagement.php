@@ -16,6 +16,8 @@ use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Class CustomerManagement
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementInterface
 {
