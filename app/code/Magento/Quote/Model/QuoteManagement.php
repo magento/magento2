@@ -20,7 +20,6 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -227,14 +226,19 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     public function createEmptyCartForCustomer($customerId)
     {
-        $storeId = $this->storeManager->getStore()->getStoreId();
-        $quote = $this->createCustomerCart($customerId, $storeId);
-
         try {
+            $storeId  = $this->storeManager->getStore()->getStoreId();
+            $customer = $this->customerRepository->getById($customerId);
+            $quote    = $this->quoteFactory->create();
+            $quote->setStoreId($storeId);
+            $quote->setCustomer($customer);
+            $quote->setCustomerIsGuest(0);
             $this->quoteRepository->save($quote);
+
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Cannot create quote'));
         }
+
         return $quote->getId();
     }
 

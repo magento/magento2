@@ -6,9 +6,11 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use Magento\Framework\DataObject;
 use \Magento\Quote\Model\CustomerManagement;
 
 use \Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -297,52 +299,118 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($quoteId, $this->model->createEmptyCart());
     }
 
+    public function testCreateEmptyCartForCustomerUnableToSaveNewEmptyQuote()
+    {
+        $storeId = 345;
+        $userId = 567;
+
+        $storeMock = $this->getMockBuilder(DataObject::class)
+            ->setMethods(['getStoreId'])
+            ->getMock();
+
+        $this->storeManagerMock->expects($this->once())
+            ->method("getStore")
+            ->willReturn($storeMock);
+
+        $storeMock->expects($this->once())
+            ->method("getStoreId")
+            ->willReturn($storeId);
+
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+
+        $customerMock = $this->getMock('\Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $this->customerRepositoryMock
+            ->expects($this->once())
+            ->method("getById")
+            ->with($userId)
+            ->willReturn($customerMock);
+
+        $this->quoteFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($quoteMock);
+
+        $quoteMock->expects($this->once())
+            ->method("setStoreId")
+            ->with($storeId);
+
+        $quoteMock->expects($this->once())
+            ->method("setCustomer")
+            ->with($customerMock);
+
+        $quoteMock->expects($this->once())
+            ->method("setCustomerIsGuest")
+            ->with(0);
+
+        $exception = new \Exception("Cannot create quote");
+        $this->quoteRepositoryMock
+            ->expects($this->once())
+            ->method('save')
+            ->with($quoteMock)
+            ->willThrowException($exception);
+
+        try {
+            $this->model->createEmptyCartForCustomer($userId);
+        } catch (\Exception $e) {
+            $this->assertEquals(
+                $exception->getMessage(),
+                $e->getMessage()
+            );
+        }
+    }
+
     public function testCreateEmptyCartForCustomer()
     {
         $storeId = 345;
         $quoteId = 2311;
         $userId = 567;
 
+        $storeMock = $this->getMockBuilder(DataObject::class)
+            ->setMethods(['getStoreId'])
+            ->getMock();
+
+        $this->storeManagerMock->expects($this->once())
+            ->method("getStore")
+            ->willReturn($storeMock);
+
+        $storeMock->expects($this->once())
+            ->method("getStoreId")
+            ->willReturn($storeId);
+
         $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
 
-        $this->quoteRepositoryMock
+        $customerMock = $this->getMock('\Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $this->customerRepositoryMock
             ->expects($this->once())
-            ->method('getActiveForCustomer')
+            ->method("getById")
             ->with($userId)
-            ->willThrowException(new NoSuchEntityException());
+            ->willReturn($customerMock);
 
-        $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($quoteMock);
-        $quoteMock->expects($this->any())->method('setStoreId')->with($storeId);
-        $quoteMock->expects($this->any())->method('setCustomerIsGuest')->with(0);
-
-        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
-        $quoteMock->expects($this->once())->method('getId')->willReturn($quoteId);
-
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturnSelf();
-        $this->storeManagerMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
-
-        $this->assertEquals($quoteId, $this->model->createEmptyCartForCustomer($userId));
-    }
-
-    public function testCreateEmptyCartForCustomerReturnExistsQuote()
-    {
-        $storeId = 345;
-        $userId = 567;
-
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
-
-        $this->quoteRepositoryMock
+        $this->quoteFactoryMock
             ->expects($this->once())
-            ->method('getActiveForCustomer')
-            ->with($userId)->willReturn($quoteMock);
+            ->method('create')
+            ->willReturn($quoteMock);
 
-        $this->quoteFactoryMock->expects($this->never())->method('create')->willReturn($quoteMock);
-        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
+        $quoteMock->expects($this->once())
+            ->method("setStoreId")
+            ->with($storeId);
 
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturnSelf();
-        $this->storeManagerMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $quoteMock->expects($this->once())
+            ->method("setCustomer")
+            ->with($customerMock);
 
-        $this->model->createEmptyCartForCustomer($userId);
+        $quoteMock->expects($this->once())
+            ->method("setCustomerIsGuest")
+            ->with(0);
+
+        $quoteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($quoteId);
+
+        $this->assertEquals(
+            $quoteId,
+            $this->model->createEmptyCartForCustomer($userId)
+        );
     }
 
     /**
