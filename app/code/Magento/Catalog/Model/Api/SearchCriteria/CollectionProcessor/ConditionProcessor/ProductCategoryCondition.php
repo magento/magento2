@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
@@ -52,7 +54,7 @@ class ProductCategoryCondition implements CustomConditionInterface
      * @param Filter $filter
      * @return string
      */
-    public function build(Filter $filter)
+    public function build(Filter $filter): string
     {
         $categorySelect = $this->resourceConnection->getConnection()->select()
             ->from(
@@ -81,7 +83,7 @@ class ProductCategoryCondition implements CustomConditionInterface
      * @param Filter $filter
      * @return array
      */
-    private function getCategoryIds(Filter $filter)
+    private function getCategoryIds(Filter $filter): array
     {
         $categoryIds = explode(',', $filter->getValue());
         $childCategoryIds = [];
@@ -112,7 +114,7 @@ class ProductCategoryCondition implements CustomConditionInterface
      * @param string $conditionType
      * @return mixed
      */
-    private function mapConditionType($conditionType)
+    private function mapConditionType(string $conditionType): string
     {
         $conditionsMap = [
             'eq'    => 'in',

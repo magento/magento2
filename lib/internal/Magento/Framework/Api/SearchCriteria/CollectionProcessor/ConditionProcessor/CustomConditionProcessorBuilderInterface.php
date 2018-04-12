@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor;
 
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 
 /**
  * Interface CustomConditionProcessorBuilderInterface
@@ -20,10 +22,10 @@ interface CustomConditionProcessorBuilderInterface
      * Get custom processor by field name
      *
      * @param $fieldName
-     * @return \Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface
+     * @return CustomConditionInterface
      * @throws InputException
      */
-    public function getProcessorByField($fieldName);
+    public function getProcessorByField(string $fieldName): CustomConditionInterface;
 
     /**
      * Check if collection has custom processor for given field name
@@ -31,5 +33,5 @@ interface CustomConditionProcessorBuilderInterface
      * @param $fieldName
      * @return bool
      */
-    public function hasProcessorForField($fieldName);
+    public function hasProcessorForField(string $fieldName): bool;
 }

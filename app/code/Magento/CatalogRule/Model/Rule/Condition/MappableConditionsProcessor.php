@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
@@ -49,7 +50,7 @@ class MappableConditionsProcessor
      * @param Combine $conditions
      * @return Combine
      */
-    public function rebuildConditionsTree(CombinedCondition $conditions)
+    public function rebuildConditionsTree(CombinedCondition $conditions): CombinedCondition
     {
         return $this->rebuildCombinedCondition($conditions);
     }
@@ -59,7 +60,7 @@ class MappableConditionsProcessor
      * @return Combine
      * @throws InputException
      */
-    private function rebuildCombinedCondition(CombinedCondition $originalConditions)
+    private function rebuildCombinedCondition(CombinedCondition $originalConditions): CombinedCondition
     {
         $validConditions = [];
         $invalidConditions = [];
@@ -107,7 +108,7 @@ class MappableConditionsProcessor
      * @param Product $originalConditions
      * @return bool
      */
-    private function validateSimpleCondition(SimpleCondition $originalConditions)
+    private function validateSimpleCondition(SimpleCondition $originalConditions): bool
     {
         return $this->canUseFieldForMapping($originalConditions->getAttribute());
     }
@@ -118,7 +119,7 @@ class MappableConditionsProcessor
      * @param $fieldName
      * @return bool
      */
-    private function canUseFieldForMapping($fieldName)
+    private function canUseFieldForMapping(string $fieldName): bool
     {
         // We can map field to search criteria if we have custom processor for it
         if ($this->customConditionProcessorBuilder->hasProcessorForField($fieldName)) {

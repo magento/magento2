@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Api;
 
@@ -44,7 +45,7 @@ class CombinedFilterGroup extends AbstractSimpleObject implements FilterGroupInt
      * @return $this
      * @codeCoverageIgnore
      */
-    public function setFilters(array $filters = null)
+    public function setFilters(array $filters = null): self
     {
         return $this->setData(self::FILTERS, $filters);
     }
@@ -62,7 +63,7 @@ class CombinedFilterGroup extends AbstractSimpleObject implements FilterGroupInt
      * @return $this
      * @throws InputException
      */
-    public function setCombinationMode($mode)
+    public function setCombinationMode(string $mode): self
     {
         if ($mode !== self::COMBINED_WITH_AND && $mode !== self::COMBINED_WITH_OR) {
             throw new InputException(

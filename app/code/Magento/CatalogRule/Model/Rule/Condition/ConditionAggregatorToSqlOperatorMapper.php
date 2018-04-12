@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
@@ -29,10 +30,10 @@ class ConditionAggregatorToSqlOperatorMapper
      * Maps catalog price rule operators to their corresponding operators in SQL
      *
      * @param $ruleAggregator
-     * @return mixed
+     * @return string
      * @throws InputException
      */
-    public function mapConditionAggregatorToSQL($ruleAggregator)
+    public function mapConditionAggregatorToSQL(string $ruleAggregator): string
     {
         if (!array_key_exists(strtolower($ruleAggregator), $this->operatorsMap)) {
             throw new InputException(

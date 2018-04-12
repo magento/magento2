@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
@@ -40,7 +41,7 @@ class ReverseSqlOperator
      * @return mixed
      * @throws InputException
      */
-    public function reverseOperator($operator)
+    public function reverseOperator(string $operator): string
     {
         if (!array_key_exists($operator, $this->operatorsMap)) {
             throw new InputException(

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor;
 
@@ -36,10 +37,10 @@ class CustomConditionProcessorBuilder implements CustomConditionProcessorBuilder
      * Get custom processor by field name
      *
      * @param $fieldName
-     * @return \Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface
+     * @return CustomConditionInterface
      * @throws InputException
      */
-    public function getProcessorByField($fieldName)
+    public function getProcessorByField(string $fieldName): CustomConditionInterface
     {
         if (!$this->hasProcessorForField($fieldName)) {
             throw new InputException(
@@ -64,7 +65,7 @@ class CustomConditionProcessorBuilder implements CustomConditionProcessorBuilder
      * @param $fieldName
      * @return bool
      */
-    public function hasProcessorForField($fieldName)
+    public function hasProcessorForField(string $fieldName): bool
     {
         return array_key_exists($fieldName, $this->customConditionProcessor);
     }

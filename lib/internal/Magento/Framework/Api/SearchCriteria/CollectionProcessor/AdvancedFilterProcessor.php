@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Api\SearchCriteria\CollectionProcessor;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -92,7 +94,7 @@ class AdvancedFilterProcessor implements CollectionProcessorInterface
      * @return string
      * @throws InputException
      */
-    private function getConditionsFromFilterGroup(FilterGroupInterface $filterGroup, AbstractDb $collection)
+    private function getConditionsFromFilterGroup(FilterGroupInterface $filterGroup, AbstractDb $collection): string
     {
         $conditions = [];
 
@@ -119,9 +121,9 @@ class AdvancedFilterProcessor implements CollectionProcessorInterface
 
     /**
      * @param Filter $filter
-     * @return mixed
+     * @return string
      */
-    private function getConditionsFromFilter(Filter $filter)
+    private function getConditionsFromFilter(Filter $filter): string
     {
         if ($this->customConditionProcessorBuilder->hasProcessorForField($filter->getField())) {
             $customProcessor = $this->customConditionProcessorBuilder->getProcessorByField($filter->getField());

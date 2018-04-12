@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -39,7 +41,7 @@ class NativeAttributeCondition implements CustomConditionInterface
      * @return string
      * @throws \DomainException
      */
-    public function build(Filter $filter)
+    public function build(Filter $filter): string
     {
         $conditionType = $this->mapConditionType($filter->getConditionType(), $filter->getField());
         $conditionValue = $this->mapConditionValue($conditionType, $filter->getValue());
@@ -61,7 +63,7 @@ class NativeAttributeCondition implements CustomConditionInterface
      * @param string $field
      * @return mixed
      */
-    private function mapConditionType($conditionType, $field)
+    private function mapConditionType(string $conditionType, string $field): string
     {
         if (strtolower($field) === ProductInterface::SKU) {
             $conditionsMap = [
@@ -85,7 +87,7 @@ class NativeAttributeCondition implements CustomConditionInterface
      * @param $conditionValue
      * @return string
      */
-    private function mapConditionValue($conditionType, $conditionValue)
+    private function mapConditionValue(string $conditionType, string $conditionValue): string
     {
         $conditionsMap = ['like', 'nlike'];
 

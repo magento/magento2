@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
@@ -12,6 +13,7 @@ use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
 use Magento\Framework\Api\CombinedFilterGroup as FilterGroup;
 use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\SearchCriteria;
 
 /**
  * Class ConditionsToSearchCriteriaMapper
@@ -80,10 +82,10 @@ class ConditionsToSearchCriteriaMapper
      * Maps catalog price rule conditions to search criteria
      *
      * @param CombinedCondition $conditions
-     * @return \Magento\Framework\Api\SearchCriteria
+     * @return SearchCriteria
      * @throws InputException
      */
-    public function mapConditionsToSearchCriteria(CombinedCondition $conditions)
+    public function mapConditionsToSearchCriteria(CombinedCondition $conditions): SearchCriteria
     {
         $filterGroup = $this->mapCombinedConditionToFilterGroup($conditions);
 
@@ -149,7 +151,7 @@ class ConditionsToSearchCriteriaMapper
 
     /**
      * @param ConditionInterface $productCondition
-     * @return mixed
+     * @return CombinedCondition|SimpleCondition
      * @throws InputException
      */
     private function mapSimpleConditionToFilterGroup(ConditionInterface $productCondition)
@@ -160,24 +162,24 @@ class ConditionsToSearchCriteriaMapper
 
         return $this->createFilter(
             $productCondition->getAttribute(),
-            $productCondition->getValue(),
+            (string) $productCondition->getValue(),
             $productCondition->getOperator()
         );
     }
 
     /**
      * @param ConditionInterface $productCondition
-     * @return mixed
+     * @return CombinedCondition
      * @throws InputException
      */
-    private function processSimpleConditionWithArrayValue(ConditionInterface $productCondition)
+    private function processSimpleConditionWithArrayValue(ConditionInterface $productCondition): CombinedCondition
     {
         $filters = [];
 
         foreach ($productCondition->getValue() as $subValue) {
             $filters[] = $this->createFilter(
                 $productCondition->getAttribute(),
-                $subValue,
+                (string) $subValue,
                 $productCondition->getOperator()
             );
         }
@@ -191,7 +193,7 @@ class ConditionsToSearchCriteriaMapper
      * @param $operator
      * @return string
      */
-    private function getGlueForArrayValues($operator)
+    private function getGlueForArrayValues(string $operator): string
     {
         if (in_array($operator, ['!=', '!{}', '!()'])) {
             return 'all';
@@ -202,6 +204,7 @@ class ConditionsToSearchCriteriaMapper
 
     /**
      * @param Filter $filter
+     * @return void
      * @throws InputException
      */
     private function reverseSqlOperatorInFilter(Filter $filter)
@@ -214,10 +217,10 @@ class ConditionsToSearchCriteriaMapper
     /**
      * @param $filters
      * @param $combinationMode
-     * @return mixed
+     * @return CombinedCondition
      * @throws InputException
      */
-    private function createCombinedFilterGroup($filters, $combinationMode)
+    private function createCombinedFilterGroup(array $filters, string $combinationMode): CombinedCondition
     {
         return $this->combinedFilterGroupFactory->create([
             'data' => [
@@ -233,10 +236,10 @@ class ConditionsToSearchCriteriaMapper
      * @param $field
      * @param $value
      * @param $conditionType
-     * @return mixed
+     * @return SimpleCondition
      * @throws InputException
      */
-    private function createFilter($field, $value, $conditionType)
+    private function createFilter(string $field, string $value, string $conditionType): SimpleCondition
     {
         return $this->filterFactory->create([
             'data' => [

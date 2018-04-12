@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 use Magento\Framework\Api\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 /**
  * Class EavAttributeCondition
@@ -47,7 +50,7 @@ class EavAttributeCondition implements CustomConditionInterface
      * @throws \DomainException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function build(Filter $filter)
+    public function build(Filter $filter): string
     {
         $attribute = $this->getAttributeByCode($filter->getField());
         $tableAlias = 'ca_' . $attribute->getAttributeCode();
@@ -85,10 +88,10 @@ class EavAttributeCondition implements CustomConditionInterface
 
     /**
      * @param string $field
-     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
+     * @return Attribute
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getAttributeByCode($field)
+    private function getAttributeByCode(string $field): Attribute
     {
         return $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field);
     }
@@ -99,7 +102,7 @@ class EavAttributeCondition implements CustomConditionInterface
      * @param string $conditionType
      * @return mixed
      */
-    private function mapConditionType($conditionType)
+    private function mapConditionType(string $conditionType): string
     {
         $conditionsMap = [
             'eq' => 'in',
@@ -116,7 +119,7 @@ class EavAttributeCondition implements CustomConditionInterface
      * @param $conditionValue
      * @return string
      */
-    private function mapConditionValue($conditionType, $conditionValue)
+    private function mapConditionValue(string $conditionType, string $conditionValue): string
     {
         $conditionsMap = ['like', 'nlike'];
 
