@@ -53,7 +53,7 @@ class NewAction extends \Magento\Backend\App\Action
     {
         $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
-        $this->shipmentLoader->setShipment($this->shipmentProvider->getShipment());
+        $this->shipmentLoader->setShipment($this->shipmentProvider->getShipmentData());
         $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
         $shipment = $this->shipmentLoader->load();
         if ($shipment) {
