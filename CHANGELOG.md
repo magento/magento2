@@ -1,3 +1,60 @@
+2.1.14
+=============
+* GitHub issues:
+    * [#7723](https://github.com/magento/magento2/issues/7723) -- Catalog rule contains-condition not saving multiple selection in 2.1.2 (fixed in [magento/magento2#13546](https://github.com/magento/magento2/pull/13546))
+    * [#13214](https://github.com/magento/magento2/issues/13214) -- Not a correct displaying for Robots.txt (fixed in [magento/magento2#13550](https://github.com/magento/magento2/pull/13550))
+    * [#13315](https://github.com/magento/magento2/issues/13315) -- Mobile "Payment Methods" step looks bad on mobile (fixed in [magento/magento2#13980](https://github.com/magento/magento2/pull/13980))
+    * [#13474](https://github.com/magento/magento2/issues/13474) -- [2.1.10] Swagger not working for multistore installs?  (fixed in [magento/magento2#13486](https://github.com/magento/magento2/pull/13486))
+    * [#4173](https://github.com/magento/magento2/issues/4173) -- Cron schedule bug (fixed in [magento/magento2#14096](https://github.com/magento/magento2/pull/14096))
+    * [#5808](https://github.com/magento/magento2/issues/5808) -- [2.1.0] Problem on mobile when catalog gallery allowfullscreen is false (fixed in [magento/magento2#14098](https://github.com/magento/magento2/pull/14098))
+    * [#6694](https://github.com/magento/magento2/issues/6694) -- Override zip_codes.xml (fixed in [magento/magento2#14117](https://github.com/magento/magento2/pull/14117))
+    * [#10559](https://github.com/magento/magento2/issues/10559) -- Extending swatch functionality using javascript mixins does not work in Safari and MS Edge (fixed in [magento/magento2#12928](https://github.com/magento/magento2/pull/12928))
+    * [#3489](https://github.com/magento/magento2/issues/3489) -- CURL Json POST (fixed in [magento/magento2#14151](https://github.com/magento/magento2/pull/14151))
+    * [#5463](https://github.com/magento/magento2/issues/5463) -- The ability to store passwords using different hashing algorithms is limited (fixed in [magento/magento2#13886](https://github.com/magento/magento2/pull/13886))
+    * [#3882](https://github.com/magento/magento2/issues/3882) -- An XML comment node as parameter in widget.xml fails with fatal error (fixed in [magento/magento2#14219](https://github.com/magento/magento2/pull/14219))
+    * [#1931](https://github.com/magento/magento2/issues/1931) -- Can't cancel removal of a block or container in layout by setting remove attribute value to false (fixed in [magento/magento2#14198](https://github.com/magento/magento2/pull/14198))
+    * [#7403](https://github.com/magento/magento2/issues/7403) -- JS Translation Regex leads to unexpected results and untranslatable strings (fixed in [magento/magento2#14349](https://github.com/magento/magento2/pull/14349))
+    * [#7816](https://github.com/magento/magento2/issues/7816) -- Customer_account.xml file abused (fixed in [magento/magento2#14323](https://github.com/magento/magento2/pull/14323))
+    * [#10700](https://github.com/magento/magento2/issues/10700) -- Magento 2 Admin panel show loading on each page (fixed in [magento/magento2#14417](https://github.com/magento/magento2/pull/14417))
+    * [#11930](https://github.com/magento/magento2/issues/11930) -- setup:di:compile's generated cache files inaccessible by the web-server user (fixed in [magento/magento2#14417](https://github.com/magento/magento2/pull/14417))
+    * [#14572](https://github.com/magento/magento2/issues/14572) -- Specify the table when adding field to filter for the collection Eav/Model/ResourceModel/Entity/Attribute/Option/Collection.php (fixed in [magento/magento2#14596](https://github.com/magento/magento2/pull/14596))
+* GitHub pull requests:
+    * [magento/magento2#13949](https://github.com/magento/magento2/pull/13949) -- Fix misnamed namespace (by @Ethan3600)
+    * [magento/magento2#13545](https://github.com/magento/magento2/pull/13545) -- Backport of PR-5028 for Magento 2.1: Load jquery using requirejs to p (by @hostep)
+    * [magento/magento2#13546](https://github.com/magento/magento2/pull/13546) -- Backport of PR-8246 for Magento 2.1: Fixes #7723 - saving multi selec (by @hostep)
+    * [magento/magento2#13550](https://github.com/magento/magento2/pull/13550) -- Backport of MAGETWO-84006 for Magento 2.1: Fix robots.txt content typ (by @hostep)
+    * [magento/magento2#13896](https://github.com/magento/magento2/pull/13896) -- MAGETWO-59112 Backport 2.1.x  (by @Ctucker9233)
+    * [magento/magento2#13812](https://github.com/magento/magento2/pull/13812) -- [Backport 2.1] Add RewriteBase directive template in .htaccess file into pub/static folder (by @ccasciotti)
+    * [magento/magento2#13658](https://github.com/magento/magento2/pull/13658) -- [Backport 2.1-develop] Show redirect_to_base config in store scope (by @JeroenVanLeusden)
+    * [magento/magento2#13980](https://github.com/magento/magento2/pull/13980) -- Backport of PR-13777. Mobile 'Payments methods' step looks bad on mobile (by @Frodigo)
+    * [magento/magento2#13987](https://github.com/magento/magento2/pull/13987) -- Backport of PR-13750 for Magento 2.1: Less clean up (by @Karlasa)
+    * [magento/magento2#14022](https://github.com/magento/magento2/pull/14022) -- fix catalog_rule_promo_catalog_edit.xml layout (by @Karlasa)
+    * [magento/magento2#13806](https://github.com/magento/magento2/pull/13806) -- [Backport 2.1] Add quoting for base path in DI compile command (by @simpleadm)
+    * [magento/magento2#13486](https://github.com/magento/magento2/pull/13486) -- [Backport 2.1-develop] Change the store code in Swagger based on a param (by @JeroenVanLeusden)
+    * [magento/magento2#14096](https://github.com/magento/magento2/pull/14096) -- [Backport 2.1] Schedule generation was broken (by @simpleadm)
+    * [magento/magento2#14098](https://github.com/magento/magento2/pull/14098) -- [Backport 2.1] MAGETWO-64250 Problem on mobile when catalog gallery allowfullscreen is false (by @simpleadm)
+    * [magento/magento2#14115](https://github.com/magento/magento2/pull/14115) -- [Backport 2.1] MAGETWO-71697: Fix possible bug when saving address with empty street line (by @simpleadm)
+    * [magento/magento2#14117](https://github.com/magento/magento2/pull/14117) -- [Backport 2.1]  MAGETWO-59258: Override module-directory/etc/zip_codes.xml only the last code of a country gets include (by @simpleadm)
+    * [magento/magento2#12928](https://github.com/magento/magento2/pull/12928) -- Issues #10559 - Extend swatch using mixins (M2.1) (by @srenon)
+    * [magento/magento2#14151](https://github.com/magento/magento2/pull/14151) -- [Backport 2.1] 8373: Fix CURL Json POST (by @simpleadm)
+    * [magento/magento2#13886](https://github.com/magento/magento2/pull/13886) -- #5463 - Use specified hashing algo in \Magento\Framework\Encryption\Encryptor::getHash (by @k4emic)
+    * [magento/magento2#14168](https://github.com/magento/magento2/pull/14168) -- [Backport 2.1] Added mage/translate component to customers's ajax login (by @ccasciotti)
+    * [magento/magento2#13654](https://github.com/magento/magento2/pull/13654) -- [Backport 2.1-develop] Update Store getConfig() to respect valid false return value (by @JeroenVanLeusden)
+    * [magento/magento2#14219](https://github.com/magento/magento2/pull/14219) -- Backport of PR-8772 for Magento 2.1: magento/magento2#3882 (by @hostep)
+    * [magento/magento2#14198](https://github.com/magento/magento2/pull/14198) -- [Backport] Can't cancel removal of a block or container in layout by setting remove attribute value to false (by @quisse)
+    * [magento/magento2#14349](https://github.com/magento/magento2/pull/14349) -- Backport of PR-10445 for Magento 2.1: Fix JS translation search (by @hostep)
+    * [magento/magento2#14332](https://github.com/magento/magento2/pull/14332) -- Backport: Fix for broken navigation menu on IE11 #14230 (by @sergiy-v)
+    * [magento/magento2#14323](https://github.com/magento/magento2/pull/14323) -- #7816: Customer_account.xml file abused (2.1) (by @mikewhitby)
+    * [magento/magento2#14417](https://github.com/magento/magento2/pull/14417) -- [BACKPORT 2.1] Removed cache backend option which explicitly set file permissions (by @xtremeperf)
+    * [magento/magento2#14436](https://github.com/magento/magento2/pull/14436) -- Fix HTML tags in meta description (by @vseager)
+    * [magento/magento2#14480](https://github.com/magento/magento2/pull/14480) -- [Backport 2.1] Return status in console commands (by @simpleadm)
+    * [magento/magento2#14497](https://github.com/magento/magento2/pull/14497) -- [backport] fix for button color in email template  (by @Karlasa)
+    * [magento/magento2#14348](https://github.com/magento/magento2/pull/14348) -- [Backport 2.1] Add json and xml support to the post method in socket client (by @simpleadm)
+    * [magento/magento2#14479](https://github.com/magento/magento2/pull/14479) -- [Backport 2.1] Configurable product price options by store (by @simpleadm)
+    * [magento/magento2#14505](https://github.com/magento/magento2/pull/14505) -- [Backport] Check if store id is not null instead of empty (by @quisse)
+    * [magento/magento2#14524](https://github.com/magento/magento2/pull/14524) -- [backport] fix translation issue with rating stars (by @Karlasa)
+    * [magento/magento2#14596](https://github.com/magento/magento2/pull/14596) -- Specify the table when adding field to filter (by @PierreLeMaguer)
+
 2.1.13
 =============
 * GitHub issues:
