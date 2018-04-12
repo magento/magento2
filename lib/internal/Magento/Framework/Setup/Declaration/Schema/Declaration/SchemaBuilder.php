@@ -227,7 +227,8 @@ class SchemaBuilder
                 'name' => $tableData['name'],
                 'resource' => $resource,
                 'engine' => $tableData['engine'] ?? null,
-                'comment' => $tableData['comment'] ?? null
+                'comment' => $tableData['comment'] ?? null,
+                'onCreate' => $tableData['onCreate'] ?? ''
             ];
             /** @var Table $table */
             $table = $this->elementFactory->create('table', $tableParams);

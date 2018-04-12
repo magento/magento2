@@ -16,6 +16,13 @@ use Magento\Framework\Setup\Declaration\Schema\ElementHistory;
  *
  * Trigger is used to make changes in data not in schema, e.g migrate data from column of one table to
  * column of another table.
+ *
+ * Please note: triggers are used to serve needs of some operations, that can`t be described with declarative schema,
+ * for example: renaming. Renaming implemented with removal column with old name and creating with new one.
+ * Question with data is solved with help of triggers, that allows to migrate data.
+ * This approach is correct from prospective of declaration but is not so fast as ALTER TABLE is.
+ * So if you need to perform some renaming operations quickly, please use raw SQL dump instead, that can be taken with
+ * help of --dry-run mode
  */
 interface DDLTriggerInterface
 {
