@@ -20,6 +20,7 @@ use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\RegisterSalesEventInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 
 /**
  * Class provides around Plugin on \Magento\CatalogInventory\Model\StockManagement::registerProductsSale
@@ -79,7 +80,8 @@ class ProcessRegisterProductsSalePlugin
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
         RegisterSalesEventInterface $registerSalesEvent,
         SalesChannelInterfaceFactory $salesChannelFactory,
-        WebsiteRepositoryInterface $websiteRepository
+        WebsiteRepositoryInterface $websiteRepository,
+        SalesEventInterfaceFactory $salesEventFactory
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
@@ -89,6 +91,7 @@ class ProcessRegisterProductsSalePlugin
         $this->registerSalesEvent = $registerSalesEvent;
         $this->salesChannelFactory = $salesChannelFactory;
         $this->websiteRepository = $websiteRepository;
+        $this->salesEventFactory = $salesEventFactory;
     }
 
     /**
@@ -129,6 +132,7 @@ class ProcessRegisterProductsSalePlugin
         $salesChannel->setCode($websiteCode);
         $salesChannel->setType(SalesChannelInterface::TYPE_WEBSITE);
 
+        /** @var SalesEventInterface $salesEvent */
         $salesEvent = $this->salesEventFactory->create([
             'type' => SalesEventInterface::TYPE_QUOTE,
             'objectId' => $quoteId
