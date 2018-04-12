@@ -144,6 +144,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     protected $conditionsToCollectionApplier;
 
     /**
+     * @var array
+     */
+    private $websitesMap;
+
+    /**
      * Rule constructor
      *
      * @param \Magento\Framework\Model\Context $context
@@ -379,18 +384,19 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     protected function _getWebsitesMap()
     {
-        // TODO: add internal cache
-
-        $map = [];
-        $websites = $this->_storeManager->getWebsites();
-        foreach ($websites as $website) {
-            // Continue if website has no store to be able to create catalog rule for website without store
-            if ($website->getDefaultStore() === null) {
-                continue;
+        if ($this->websitesMap === null) {
+            $this->websitesMap = [];
+            $websites = $this->_storeManager->getWebsites();
+            foreach ($websites as $website) {
+                // Continue if website has no store to be able to create catalog rule for website without store
+                if ($website->getDefaultStore() === null) {
+                    continue;
+                }
+                $this->websitesMap[$website->getId()] = $website->getDefaultStore()->getId();
             }
-            $map[$website->getId()] = $website->getDefaultStore()->getId();
         }
-        return $map;
+
+        return $this->websitesMap;
     }
 
     /**
