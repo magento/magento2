@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
@@ -53,6 +54,11 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
      */
     private $isSourceItemsAllowedForProductType;
 
+    /*
+     * @var GetProductTypesBySkusInterface
+     */
+    private $getProductTypesBySkus;
+
     /**
      * @var StockResolverInterface
      */
@@ -65,7 +71,8 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
         AppendReservationsInterface $appendReservations,
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
         StockResolverInterface $stockResolver,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        GetProductTypesBySkusInterface $getProductTypesBySkus
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
@@ -74,12 +81,13 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
         $this->isProductSalableForRequestedQty = $isProductSalableForRequestedQty;
         $this->stockResolver = $stockResolver;
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->getProductTypesBySkus = $getProductTypesBySkus;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(array $items, array $productTypes, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent)
+    public function execute(array $items, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent)
     {
         if (empty($items)) {
             return;
@@ -92,6 +100,7 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
         // TODO typecast needed because StockInterface::getStockId() returns string => fix StockInterface::getStockId?
         $stockId = (int)$this->stockResolver->get($salesChannel->getType(), $salesChannel->getCode())->getStockId();
 
+        $productTypes = $this->getProductTypesBySkus->execute(array_keys($items));
         $this->checkItemsQuantity($items, $productTypes, $stockId);
         $reservations = [];
         foreach ($items as $sku => $qty) {

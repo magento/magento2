@@ -10,7 +10,6 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
@@ -72,19 +71,6 @@ class ProcessRegisterProductsSalePlugin
      */
     private $salesEventFactory;
 
-    /*
-     * @var GetProductTypesBySkusInterface
-     */
-    private $getProductTypesBySkus;
-
-    /**
-     * @param GetSkusByProductIdsInterface $getSkusByProductIds
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
-     * @param ReservationBuilderInterface $reservationBuilder
-     * @param AppendReservationsInterface $appendReservations
-     * @param IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
-     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
-     */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
         StockByWebsiteIdResolver $stockByWebsiteIdResolver,
@@ -93,8 +79,7 @@ class ProcessRegisterProductsSalePlugin
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
         RegisterSalesEventInterface $registerSalesEvent,
         SalesChannelInterfaceFactory $salesChannelFactory,
-        WebsiteRepositoryInterface $websiteRepository,
-        GetProductTypesBySkusInterface $getProductTypesBySkus
+        WebsiteRepositoryInterface $websiteRepository
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
@@ -104,7 +89,6 @@ class ProcessRegisterProductsSalePlugin
         $this->registerSalesEvent = $registerSalesEvent;
         $this->salesChannelFactory = $salesChannelFactory;
         $this->websiteRepository = $websiteRepository;
-        $this->getProductTypesBySkus = $getProductTypesBySkus;
     }
 
     /**
@@ -135,7 +119,6 @@ class ProcessRegisterProductsSalePlugin
 
         // TODO use array functions to initialize $itemsBySku
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
-        $productTypes = $this->getProductTypesBySkus->execute(array_values($productSkus));
         $itemsBySku = [];
         foreach ($productSkus as $productId => $sku) {
             $itemsBySku[$sku] = $items[$productId];
@@ -151,7 +134,7 @@ class ProcessRegisterProductsSalePlugin
             'objectId' => $quoteId
         ]);
 
-        $this->registerSalesEvent->execute($itemsBySku, $productTypes, $salesChannel, $salesEvent);
+        $this->registerSalesEvent->execute($itemsBySku, $salesChannel, $salesEvent);
 
         return [];
     }

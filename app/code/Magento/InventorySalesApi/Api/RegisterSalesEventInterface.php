@@ -26,5 +26,5 @@ interface RegisterSalesEventInterface
      * @return void
      * @throws LocalizedException
      */
-    public function execute(array $items, array $productTypes, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent);
+    public function execute(array $items, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent);
 }
