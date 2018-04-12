@@ -23,18 +23,25 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
     /**
      * @var OrderManagementInterface
      */
-    protected $orderManagement;
+    private $orderManagement;
 
     /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
-     * @param OrderManagementInterface $orderManagement
+     * @param OrderManagementInterface|null $orderManagement
      */
-    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory, OrderManagementInterface $orderManagement)
-    {
+    public function __construct(
+        Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+        OrderManagementInterface $orderManagement = null
+    ) {
         parent::__construct($context, $filter);
         $this->collectionFactory = $collectionFactory;
+        $this->orderManagement = $orderManagement ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Sales\Api\OrderManagementInterface::class
+        );
         $this->orderManagement = $orderManagement;
     }
 
@@ -62,7 +69,8 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
     {
         $countCancelOrder = 0;
         foreach ($collection->getItems() as $order) {
-            if (!$order->canCancel()) {
+            $isCanceled = $this->orderManagement->cancel($order->getEntityId());
+            if ($isCanceled === false) {
                 continue;
             }
             $this->orderManagement->cancel($order->getEntityId());
