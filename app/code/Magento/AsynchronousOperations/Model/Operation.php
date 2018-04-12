@@ -12,7 +12,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Class Operation
  */
-class Operation extends DataObject implements DetailedOperationStatusInterface, ExtensibleDataInterface
+class Operation extends DataObject implements DetailedOperationStatusInterface
 {
     /**
      * @inheritDoc
