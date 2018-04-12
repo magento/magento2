@@ -40,9 +40,9 @@
                                 <label
                                     class="rating-<?= $block->escapeHtmlAttr($iterator) ?>"
                                     for="<?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>"
-                                    title="<?= $block->escapeHtmlAttr(__('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star')) ?>"
+                                    title="<?= $block->escapeHtmlAttr(__('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))) ?>"
                                     id="<?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label">
-                                    <span><?= $block->escapeHtml(__('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star')) ?></span>
+                                    <span><?= $block->escapeHtml(__('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))) ?></span>
                                 </label>
                             <?php $iterator++; ?>
                             <?php endforeach; ?>

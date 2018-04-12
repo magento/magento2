@@ -51,6 +51,21 @@
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
-        <data key="file">logo.png</data>
+        <data key="file">magento-logo.png</data>
+    </entity>
+    <entity name="productWithDescription" type="product">
+        <data key="sku" unique="suffix">testProductWithDescriptionSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">testProductWithDescriptionName</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">testproductwithdescriptionurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
     </entity>
 </entities>
