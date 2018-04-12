@@ -30,21 +30,26 @@
             <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
         </arguments>
     </type>
+    <!-- Source Item -->
     <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
         <plugin name="reindex_after_source_items_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterSourceItemsSavePlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
         <plugin name="reindex_after_source_items_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterSourceItemsDeletePlugin"/>
     </type>
+    <!-- Source -->
+    <type name="Magento\InventoryApi\Api\SourceRepositoryInterface">
+        <plugin name="invalidate_after_enabling_or_disabling_source" type="Magento\InventoryIndexer\Plugin\InventoryApi\InvalidateAfterEnablingOrDisablingSourcePlugin"/>
+    </type>
     <!-- StockSourceLink -->
     <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
-        <plugin name="reindex_after_stock_source_links_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterStockSourceLinksSavePlugin"/>
+        <plugin name="invalidate_after_stock_source_links_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\InvalidateAfterStockSourceLinksSavePlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface">
-        <plugin name="reindex_after_stock_source_links_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterStockSourceLinksDeletePlugin"/>
+        <plugin name="invalidate_after_stock_source_links_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\InvalidateAfterStockSourceLinksDeletePlugin"/>
     </type>
-    <!-- Stock -->
-    <preference for="Magento\InventorySales\Model\GetStockItemDataInterface" type="Magento\InventoryIndexer\Model\GetStockItemData"/>
+    <!-- Stock Item -->
+    <preference for="Magento\InventorySales\Model\GetStockItemDataInterface" type="Magento\InventoryIndexer\Model\ResourceModel\GetStockItemData"/>
     <preference for="Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface" type="Magento\InventoryIndexer\Model\StockIndexTableNameResolver"/>
     <type name="Magento\InventoryIndexer\Model\StockIndexTableNameResolver">
         <arguments>

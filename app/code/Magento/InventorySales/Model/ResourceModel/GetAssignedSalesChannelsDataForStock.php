@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 
 /**
  * Provides linked sales channels by given stock id
@@ -38,11 +37,11 @@ class GetAssignedSalesChannelsDataForStock
     public function execute(int $stockId): array
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName(CreateSalesChannelTable::TABLE_NAME_SALES_CHANNEL);
+        $tableName = $this->resourceConnection->getTableName('inventory_stock_sales_channel');
 
         $select = $connection->select()
             ->from($tableName)
-            ->where(CreateSalesChannelTable::STOCK_ID . ' = ?', $stockId);
+            ->where('stock_id = ?', $stockId);
 
         return $connection->fetchAll($select);
     }

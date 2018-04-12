@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\TestFramework\Helper\Bootstrap;
 
-/** @var IndexerInterface $indexer */
-$indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-$indexer->load(InventoryIndexer::INDEXER_ID);
+/** @var IndexerRegistry $indexerRegistry */
+$indexerRegistry = Bootstrap::getObjectManager()->get(IndexerRegistry::class);
+$indexer = $indexerRegistry->get(InventoryIndexer::INDEXER_ID);
 $indexer->reindexAll();

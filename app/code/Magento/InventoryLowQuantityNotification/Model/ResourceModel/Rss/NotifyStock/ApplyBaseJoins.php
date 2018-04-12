@@ -11,11 +11,11 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Inventory\Model\ResourceModel\Source;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 
 class ApplyBaseJoins
@@ -41,7 +41,7 @@ class ApplyBaseJoins
      */
     public function execute(Select $select)
     {
-        $sourceItemConfigurationTable = CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION;
+        $sourceItemConfigurationTable = 'inventory_low_stock_notification_configuration';
         $configurationJoinCondition =
             'source_item_config.' . SourceItemConfigurationInterface::SKU . ' = product.' . ProductInterface::SKU . ' '
             . Select::SQL_AND
@@ -67,15 +67,6 @@ class ApplyBaseJoins
                 'invtr.' . StockItemInterface::LOW_STOCK_DATE,
                 'use_config' => 'invtr.' . StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY
             ]
-        )->join(
-            ['product_varchar' => $this->resourceConnection->getTableName('catalog_product_entity_varchar')],
-            'product_varchar.entity_id = product.entity_id',
-            ['name' => 'product_varchar.value']
-        )->join(
-            ['product_int' => $this->resourceConnection->getTableName('catalog_product_entity_int')],
-            'product_int.entity_id = product.entity_id',
-            ['status' => 'product_int.value']
-        )
-            ->group('main_table.' . SourceItem::ID_FIELD_NAME);
+        )->group('main_table.' . SourceItem::ID_FIELD_NAME);
     }
 }

@@ -9,6 +9,7 @@ namespace Magento\InventorySales\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
@@ -48,6 +49,11 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
     private $isProductSalableForRequestedQty;
 
     /**
+     * @var IsSourceItemsAllowedForProductTypeInterface
+     */
+    private $isSourceItemsAllowedForProductType;
+
+    /**
      * @var StockResolverInterface
      */
     private $stockResolver;
@@ -58,7 +64,8 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
         ReservationBuilderInterface $reservationBuilder,
         AppendReservationsInterface $appendReservations,
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
-        StockResolverInterface $stockResolver
+        StockResolverInterface $stockResolver,
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
@@ -66,12 +73,13 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
         $this->appendReservations = $appendReservations;
         $this->isProductSalableForRequestedQty = $isProductSalableForRequestedQty;
         $this->stockResolver = $stockResolver;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(array $items, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent)
+    public function execute(array $items, array $productTypes, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent)
     {
         if (empty($items)) {
             return;
@@ -81,10 +89,10 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
             throw new LocalizedException(__('$salesChannel parameter is required'));
         }
 
-        // TODO typecast needed because StockInterface::getStockId() is supposed to return int but actually doesn't
+        // TODO typecast needed because StockInterface::getStockId() returns string => fix StockInterface::getStockId?
         $stockId = (int)$this->stockResolver->get($salesChannel->getType(), $salesChannel->getCode())->getStockId();
 
-        $this->checkItemsQuantity($items, $stockId);
+        $this->checkItemsQuantity($items, $productTypes, $stockId);
         $reservations = [];
         foreach ($items as $sku => $qty) {
             $reservations[] = $this->reservationBuilder
@@ -103,11 +111,14 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
      * @return void
      * @throws LocalizedException
      */
-    private function checkItemsQuantity(array $items, int $stockId)
+    private function checkItemsQuantity(array $items, array $productTypes, int $stockId)
     {
         foreach ($items as $sku => $qty) {
+            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
+                continue;
+            }
             $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable();
-            if (!$isSalable) {
+            if (false === $isSalable) {
                 throw new LocalizedException(
                     __('Not all of your products are available in the requested quantity.')
                 );

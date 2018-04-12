@@ -33,4 +33,18 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="quantity" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventoryCatalog\Ui\DataProvider\Product\Listing\Modifier\Quantity</item>
+                    <item name="sortOrder" xsi:type="number">100</item>
+                </item>
+                <item name="quantity_per_source" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventoryCatalog\Ui\DataProvider\Product\Listing\Modifier\QuantityPerSource</item>
+                    <item name="sortOrder" xsi:type="number">300</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

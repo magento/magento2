@@ -13,6 +13,7 @@ use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcherInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**
@@ -24,9 +25,9 @@ use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 class StockIndexer
 {
     /**
-     * @var GetAllAssignedStockIds
+     * @var GetAllStockIds
      */
-    private $getAllAssignedStockIds;
+    private $getAllStockIds;
 
     /**
      * @var IndexStructureInterface
@@ -54,29 +55,37 @@ class StockIndexer
     private $indexTableSwitcher;
 
     /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
      * $indexStructure is reserved name for construct variable in index internal mechanism
      *
-     * @param GetAllAssignedStockIds $getAllAssignedStockIds
+     * @param GetAllStockIds $getAllStockIds
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
      * @param IndexNameBuilder $indexNameBuilder
      * @param IndexDataProviderByStockId $indexDataProviderByStockId
      * @param IndexTableSwitcherInterface $indexTableSwitcher
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
-        GetAllAssignedStockIds $getAllAssignedStockIds,
+        GetAllStockIds $getAllStockIds,
         IndexStructureInterface $indexStructureHandler,
         IndexHandlerInterface $indexHandler,
         IndexNameBuilder $indexNameBuilder,
         IndexDataProviderByStockId $indexDataProviderByStockId,
-        IndexTableSwitcherInterface $indexTableSwitcher
+        IndexTableSwitcherInterface $indexTableSwitcher,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
-        $this->getAllAssignedStockIds = $getAllAssignedStockIds;
+        $this->getAllStockIds = $getAllStockIds;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
         $this->indexNameBuilder = $indexNameBuilder;
         $this->indexDataProviderByStockId = $indexDataProviderByStockId;
         $this->indexTableSwitcher = $indexTableSwitcher;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -84,7 +93,7 @@ class StockIndexer
      */
     public function executeFull()
     {
-        $stockIds = $this->getAllAssignedStockIds->execute();
+        $stockIds = $this->getAllStockIds->execute();
         $this->executeList($stockIds);
     }
 
@@ -104,6 +113,10 @@ class StockIndexer
     public function executeList(array $stockIds)
     {
         foreach ($stockIds as $stockId) {
+            if ($this->defaultStockProvider->getId() === (int)$stockId) {
+                continue;
+            }
+
             $replicaIndexName = $this->indexNameBuilder
                 ->setIndexId(InventoryIndexer::INDEXER_ID)
                 ->addDimension('stock_', (string)$stockId)

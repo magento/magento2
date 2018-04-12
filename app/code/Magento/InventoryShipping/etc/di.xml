@@ -14,6 +14,9 @@
     <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface" type="Magento\InventoryShipping\Model\SourceSelection\Result\SourceSelectionResult"/>
     <preference for="Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface" type="Magento\InventoryShipping\Model\SourceSelection\SourceSelectionService"/>
     <preference for="Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface" type="Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCode"/>
+    <preference for="Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterface" type="Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeduct"/>
+    <preference for="Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface" type="Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequest"/>
+    <preference for="Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface" type="Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionService"/>
     <type name="Magento\InventoryShipping\Model\SourceSelection\SourceSelectionService">
         <arguments>
             <argument name="sourceSelectionMethods" xsi:type="array">
@@ -21,7 +24,6 @@
             </argument>
         </arguments>
     </type>
-
     <type name="Magento\InventoryShipping\Model\SourceSelection\GetSourceSelectionAlgorithmList">
         <arguments>
             <argument name="availableAlgorithms" xsi:type="array">
@@ -33,6 +35,14 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Model\Order\ShipmentFactory">
-        <plugin name="collect_sources_for_shipment_items" type="Magento\InventoryShipping\Plugin\Sales\CollectSourcesForShipmentItems"/>
+        <plugin name="assign_source_code_to_shipment" type="Magento\InventoryShipping\Plugin\Sales\Shipment\AssignSourceCodeToShipmentPlugin"/>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Shipment">
+        <plugin name="SaveSourceForShipment" type="Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment\SaveSourceForShipmentPlugin"/>
+        <plugin name="LoadSourceForShipment" type="Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment\LoadSourceForShipmentPlugin"/>
+        <plugin name="DeleteSourceForShipment" type="Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment\DeleteSourceForShipmentPlugin"/>
+    </type>
+    <type name="Magento\Shipping\Block\Adminhtml\Create\Form">
+        <plugin name="assign_source_codde_to_shipment" type="Magento\InventoryShipping\Plugin\Sales\Shipment\Block\Adminhtml\Create\AddInventoryBlockRenderPlugin"/>
     </type>
 </config>

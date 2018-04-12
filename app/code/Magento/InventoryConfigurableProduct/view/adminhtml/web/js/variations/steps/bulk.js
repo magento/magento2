@@ -6,13 +6,15 @@
 define([
     'Magento_ConfigurableProduct/js/variations/steps/bulk',
     'jquery',
+    'ko',
     'underscore'
-], function (Bulk, $, _) {
+], function (Bulk, $, ko, _) {
     'use strict';
 
     return Bulk.extend({
         defaults: {
             quantityModuleName: '',
+            quantityPerSource: '',
             exports: {
                 attribute: '${$.provider}:data.inventoryAttribute',
                 type: '${$.provider}:data.inventoryType'
@@ -24,7 +26,30 @@ define([
 
         /** @inheritdoc */
         initialize: function () {
+            var sections;
+
             this._super();
+
+            sections = this.sections();
+            sections.quantityPerSource = {
+                label: 'Quantity Per Source',
+                type: ko.observable('none'),
+                value: ko.observable(),
+                attribute: ko.observable()
+            };
+            this.sections(sections);
+
+            /**
+             * Make options sections.
+             */
+            this.makeOptionSections = function () {
+                return {
+                    images: new this.makeImages(null),
+                    price: this.price,
+                    quantityPerSource: this.quantityPerSource
+                };
+            }.bind(this);
+
             this.initAttributeListener();
 
             return this;
@@ -34,13 +59,13 @@ define([
          * Inits listeners for attribute change.
          */
         initAttributeListener: function () {
-            var quantity = this.sections().quantity;
+            var quantityPerSource = this.sections().quantityPerSource;
 
-            quantity.attribute.subscribe(function (data) {
+            quantityPerSource.attribute.subscribe(function (data) {
                 this.attribute(data);
             }.bind(this));
 
-            quantity.type.subscribe(function (data) {
+            quantityPerSource.type.subscribe(function (data) {
                 this.type(data);
             }.bind(this));
         },
@@ -81,30 +106,30 @@ define([
                 data = module.dynamicRowsCollection[this.attribute().code];
 
                 _.each(this.attribute().chosen, function (item) {
-                    item.sections().quantity = data[item.label];
+                    item.sections().quantityPerSource = data[item.label];
                 });
             } else if (this.type() === 'single') {
                 data = module.dynamicRowsCollection[module.dynamicRowsName];
-                this.sections().quantity.value(data);
+                this.sections().quantityPerSource.value(data);
             }
         },
 
         /** @inheritdoc */
         validate: function () {
             var valid = true,
-                quantity = this.quantityResolver();
+                quantityPerSource = this.quantityResolver();
 
             this._super();
 
             if (this.type() && this.type() !== 'none') {
-                quantity.valid = true;
+                quantityPerSource.valid = true;
 
-                quantity.elems().forEach(function (item) {
-                    quantity.validate.call(quantity, item);
+                quantityPerSource.elems().forEach(function (item) {
+                    quantityPerSource.validate.call(quantityPerSource, item);
                     valid = valid && item.elems()[1].elems().length;
                 });
 
-                if (!quantity.valid || !valid) {
+                if (!quantityPerSource.valid || !valid) {
                     throw new Error($.mage.__('Please fill-in correct values.'));
                 }
             }

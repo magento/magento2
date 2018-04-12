@@ -51,6 +51,14 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
      */
     private $defaultStockProvider;
 
+    /**
+     * @param GetStockItemDataInterface $getStockItemData
+     * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory
+     * @param StockItemRepositoryInterface $legacyStockItemRepository
+     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
+     * @param StockItemConfigurationFactory $stockItemConfigurationFactory
+     * @param DefaultStockProviderInterface $defaultStockProvider
+     */
     public function __construct(
         GetStockItemDataInterface $getStockItemData,
         StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory,

@@ -22,7 +22,7 @@ interface IsProductSalableForRequestedQtyInterface
      * @param string $sku
      * @param int $stockId
      * @param float $requestedQty
-     * @return bool
+     * @return ProductSalableResultInterface
      */
     public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface;
 }

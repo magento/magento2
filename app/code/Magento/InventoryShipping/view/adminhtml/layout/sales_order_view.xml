@@ -7,6 +7,9 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceContainer name="content">
+            <block class="Magento\InventoryShipping\Block\Adminhtml\Order\View\ShipButton" name="sales_order_view_ship_button"/>
+        </referenceContainer>
         <referenceBlock name="sales_order_tabs">
             <block class="Magento\InventoryShipping\Block\Adminhtml\Order\View\Tab\SourceSelection" name="order_tab_source_selection" template="Magento_InventoryShipping::order/view/tab/source_selection.phtml"/>
             <action method="addTab">

@@ -12,7 +12,10 @@
         "magento/module-inventory-source-selection-api": "100.0.*",
         "magento/module-inventory-reservations-api": "100.0.*",
         "magento/module-inventory-reservations": "100.0.*",
-        "magento/module-sales": "100.3.*"
+        "magento/module-sales": "100.3.*",
+        "magento/module-shipping": "100.3.*",
+        "magento/module-ui": "100.3.*",
+        "magento/module-inventory-configuration-api": "100.0.*"
     },
     "type": "magento2-module",
     "version": "100.0.0-dev",
