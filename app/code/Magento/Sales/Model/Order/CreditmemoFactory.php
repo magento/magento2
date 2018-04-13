@@ -14,7 +14,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 class CreditmemoFactory
 {
     /**
-     * Order convert object
+     * Order convert object.
      *
      * @var \Magento\Sales\Model\Convert\Order
      */
@@ -214,7 +214,7 @@ class CreditmemoFactory
      * @param int $parentQty
      * @return int
      */
-    private function calculateProductOptions(Item $orderItem, $parentQty)
+    private function calculateProductOptions(Item $orderItem, int $parentQty): int
     {
         $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();

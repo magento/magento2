@@ -28,7 +28,7 @@ $orderItems = [
         OrderItemInterface::ROW_TOTAL => 102,
         OrderItemInterface::PRODUCT_TYPE => 'bundle',
         'product_options' => [
-            'product_calculations' => 0
+            'product_calculations' => 0,
         ],
         'children' => [
             [
@@ -42,7 +42,7 @@ $orderItems = [
                 OrderItemInterface::PRODUCT_TYPE => 'simple',
                 'product_options' => [
                     'bundle_selection_attributes' => [
-                        'qty' => 2
+                        'qty' => 2,
                     ],
                 ],
             ],

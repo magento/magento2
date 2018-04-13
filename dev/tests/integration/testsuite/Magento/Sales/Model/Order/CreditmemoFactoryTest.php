@@ -60,7 +60,7 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function createByOrderDataProvider()
+    public function createByOrderDataProvider(): array
     {
         return [
             [
@@ -89,6 +89,8 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
      * Checks a case when creditmemo created from the invoice.
      *
      * @magentoDataFixture Magento/Sales/_files/invoice_with_bundle.php
+     *
+     * @return void
      */
     public function testCreateByInvoice()
     {
@@ -104,7 +106,7 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
      * @param array $creditmemoData
      * @return array
      */
-    private function prepareCreditMemoData(Order $order, array $creditmemoData)
+    private function prepareCreditMemoData(Order $order, array $creditmemoData): array
     {
         $result = [];
         $orderItems = $order->getAllItems();
