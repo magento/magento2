@@ -19,6 +19,6 @@
         <element name="priority" type="input" selector=".admin__data-grid-filters-wrap input[name='priority']"/>
     </section>
     <section name="AdminManageSourcesGridColumnControls">
-        <element name="dropDown" type="block" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu"/>
+        <element name="dropDown" type="textarea" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu"/>
     </section>
 </sections>
