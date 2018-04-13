@@ -392,6 +392,7 @@
             </field>
             <field name="category_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_subcategory</item>
+                <item name="dataset" xsi:type="string">default_category</item>
             </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="array">
