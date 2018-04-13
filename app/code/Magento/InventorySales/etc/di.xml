@@ -39,8 +39,9 @@
         <plugin name="prevent_append_reservation_on_not_manage_items_in_stock" type="Magento\InventorySales\Plugin\InventoryReservationsApi\PreventAppendReservationOnNotManageItemsInStockPlugin"/>
     </type>
     <!-- Sales Event -->
-    <preference for="Magento\InventorySalesApi\Api\RegisterSalesEventInterface" type="Magento\InventorySales\Model\RegisterSalesEvent"/>
+    <preference for="Magento\InventorySalesApi\Api\Data\ItemToSellInterface" type="Magento\InventorySales\Model\ItemToSell"/>
     <preference for="Magento\InventorySalesApi\Api\Data\SalesEventInterface" type="Magento\InventorySales\Model\SalesEvent"/>
+    <preference for="Magento\InventorySalesApi\Api\RegisterSalesEventInterface" type="Magento\InventorySales\Model\RegisterSalesEvent"/>
     <!-- Query interfaces -->
     <preference for="Magento\InventorySalesApi\Api\GetProductSalableQtyInterface" type="Magento\InventorySales\Model\GetProductSalableQty"/>
     <!-- StockItem -->

@@ -12,6 +12,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
@@ -65,6 +67,11 @@ class ProcessRegisterProductsSalePlugin
      */
     private $salesEventFactory;
 
+    /**
+     * @var ItemToSellInterfaceFactory
+     */
+    private $itemToSellFactory;
+
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
         ReservationBuilderInterface $reservationBuilder,
@@ -73,7 +80,8 @@ class ProcessRegisterProductsSalePlugin
         RegisterSalesEventInterface $registerSalesEvent,
         SalesChannelInterfaceFactory $salesChannelFactory,
         WebsiteRepositoryInterface $websiteRepository,
-        SalesEventInterfaceFactory $salesEventFactory
+        SalesEventInterfaceFactory $salesEventFactory,
+        ItemToSellInterfaceFactory $itemToSellFactory
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->reservationBuilder = $reservationBuilder;
@@ -83,6 +91,7 @@ class ProcessRegisterProductsSalePlugin
         $this->salesChannelFactory = $salesChannelFactory;
         $this->websiteRepository = $websiteRepository;
         $this->salesEventFactory = $salesEventFactory;
+        $this->itemToSellFactory = $itemToSellFactory;
     }
 
     /**
@@ -108,23 +117,26 @@ class ProcessRegisterProductsSalePlugin
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
 
-        $salesEventObjectType = SalesEventInterface::TYPE_QUOTE;
+        $salesEventType = SalesEventInterface::TYPE_ORDER_PLACED;
+        $salesEventObjectType = SalesEventInterface::OBJECT_TYPE_QUOTE;
         $salesEventObjectId = $quoteId;
         if (null === $quoteId) {
+            $salesEventType = 'none';
             $salesEventObjectType = 'none';
             $salesEventObjectId = 'none';
         }
         /** @var SalesEventInterface $salesEvent */
         $salesEvent = $this->salesEventFactory->create([
-            'type' => $salesEventObjectType,
+            'type' => $salesEventType,
+            'objectType' => $salesEventObjectType,
             'objectId' => $salesEventObjectId
         ]);
 
-        // TODO use array functions to initialize $itemsBySku
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
-        $itemsBySku = [];
+        /** @var ItemToSellInterface[] $itemsToSell */
+        $itemsToSell = [];
         foreach ($productSkus as $productId => $sku) {
-            $itemsBySku[$sku] = $items[$productId];
+            $itemsToSell[] = $this->itemToSellFactory->create(['sku' => $sku, 'qty' => $items[$productId]]);
         }
 
         $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
@@ -132,7 +144,7 @@ class ProcessRegisterProductsSalePlugin
         $salesChannel->setCode($websiteCode);
         $salesChannel->setType(SalesChannelInterface::TYPE_WEBSITE);
 
-        $this->registerSalesEvent->execute($itemsBySku, $salesChannel, $salesEvent);
+        $this->registerSalesEvent->execute($itemsToSell, $salesChannel, $salesEvent);
 
         return [];
     }

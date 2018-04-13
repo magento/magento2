@@ -13,6 +13,7 @@ use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
@@ -102,15 +103,17 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
         // TODO typecast needed because StockInterface::getStockId() returns string => fix StockInterface::getStockId?
         $stockId = (int)$this->stockResolver->get($salesChannel->getType(), $salesChannel->getCode())->getStockId();
 
-        $productTypes = $this->getProductTypesBySkus->execute(array_keys($items));
+        $skus = array_map(function (ItemToSellInterface $item) { return $item->getSku(); }, $items);
+        $productTypes = $this->getProductTypesBySkus->execute($skus);
         $this->checkItemsQuantity($items, $productTypes, $stockId);
         $reservations = [];
-        foreach ($items as $sku => $qty) {
+        /** @var ItemToSellInterface $item */
+        foreach ($items as $item) {
             $reservations[] = $this->reservationBuilder
-                ->setSku($sku)
-                ->setQuantity(-(float) $qty)
+                ->setSku($item->getSku())
+                ->setQuantity(-$item->getQuantity())
                 ->setStockId($stockId)
-                ->setMetadata(sprintf('%s:%s', $salesEvent->getType(), $salesEvent->getObjectId()))
+                ->setMetadata(sprintf('%s:%s:%s', $salesEvent->getType(), $salesEvent->getObjectType(), $salesEvent->getObjectId()))
                 ->build();
         }
         $this->appendReservations->execute($reservations);
@@ -124,12 +127,13 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
      */
     private function checkItemsQuantity(array $items, array $productTypes, int $stockId)
     {
-        foreach ($items as $sku => $qty) {
-            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
+        /** @var ItemToSellInterface $item */
+        foreach ($items as $item) {
+            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$item->getSku()])) {
                 continue;
             }
             /** @var ProductSalableResultInterface $isSalable */
-            $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty);
+            $isSalable = $this->isProductSalableForRequestedQty->execute($item->getSku(), $stockId, $item->getQuantity());
             if (false === $isSalable->isSalable()) {
                 $errors = $isSalable->getErrors();
                 /** @var ProductSalabilityErrorInterface $errorMessage */

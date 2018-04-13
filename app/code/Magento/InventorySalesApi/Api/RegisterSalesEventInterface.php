@@ -10,6 +10,7 @@ namespace Magento\InventorySalesApi\Api;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 
@@ -21,7 +22,7 @@ use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 interface RegisterSalesEventInterface
 {
     /**
-     * @param string[] $items
+     * @param ItemToSellInterface[] $items
      * @param SalesChannelInterface $salesChannel
      * @param SalesEventInterface $salesEvent
      * @return void

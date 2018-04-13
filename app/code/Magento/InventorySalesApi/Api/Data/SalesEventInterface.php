@@ -14,9 +14,21 @@ namespace Magento\InventorySalesApi\Api\Data;
  */
 interface SalesEventInterface
 {
-    const TYPE_QUOTE = 'quote';
+    /**#@+
+     * Constants for event types
+     */
+    const TYPE_ORDER_PLACED = 'order_placed';
+    /**#@-*/
+
+    /**#@+
+     * Constants for event object types
+     */
+    const OBJECT_TYPE_QUOTE = 'quote';
+    /**#@-*/
 
     public function getType(): string;
+
+    public function getObjectType(): string;
 
     public function getObjectId(): string;
 }
