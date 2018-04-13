@@ -38,7 +38,6 @@ class CategoryTest extends GraphQlAbstract
       level
       is_active
       description
-      all_children
       path
       path_in_store
       product_count

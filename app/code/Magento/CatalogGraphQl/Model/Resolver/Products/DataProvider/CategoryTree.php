@@ -133,7 +133,6 @@ class CategoryTree
         $categoryData = $this->dataObjectProcessor->buildOutputDataArray($category, CategoryInterface::class);
         $categoryData['id'] = $category->getId();
         $categoryData['product_count'] = $category->getProductCount();
-        $categoryData['all_children'] = $category->getAllChildren();
         $categoryData['children'] = [];
         $categoryData['available_sort_by'] = $category->getAvailableSortBy();
         return $this->customAttributesFlattener->flaternize($categoryData);
