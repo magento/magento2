@@ -80,7 +80,7 @@ class AdvancedFilterProcessor implements CollectionProcessorInterface
     public function process(SearchCriteriaInterface $searchCriteria, AbstractDb $collection)
     {
         foreach ($searchCriteria->getFilterGroups() as $group) {
-            $conditions = $this->getConditionsFromFilterGroup($group, $collection);
+            $conditions = $this->getConditionsFromFilterGroup($group);
             $collection->getSelect()->where($conditions);
         }
     }
@@ -89,17 +89,16 @@ class AdvancedFilterProcessor implements CollectionProcessorInterface
      * Add FilterGroup to the collection
      *
      * @param CombinedFilterGroup $filterGroup
-     * @param AbstractDb $collection
      * @return string
      * @throws InputException
      */
-    private function getConditionsFromFilterGroup(CombinedFilterGroup $filterGroup, AbstractDb $collection): string
+    private function getConditionsFromFilterGroup(CombinedFilterGroup $filterGroup): string
     {
         $conditions = [];
 
         foreach ($filterGroup->getFilters() as $filter) {
             if ($filter instanceof CombinedFilterGroup) {
-                $conditions[] = $this->getConditionsFromFilterGroup($filter, $collection);
+                $conditions[] = $this->getConditionsFromFilterGroup($filter);
                 continue;
             }
 
