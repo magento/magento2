@@ -132,7 +132,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     public function testPlaceOrderWithOutOffStockProduct()
     {
         $sku = 'SKU-1';
-        $quoteItemQty = 8;
+        $quoteItemQty = 8.5;
 
         $cart = $this->getCart();
         $product = $this->productRepository->get($sku);
@@ -156,7 +156,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     public function testPlaceOrderWithOutOffStockProductAndBackOrdersTurnedOn()
     {
         $sku = 'SKU-1';
-        $quoteItemQty = 8;
+        $quoteItemQty = 8.5;
 
         $cart = $this->getCart();
         $product = $this->productRepository->get($sku);
