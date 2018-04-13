@@ -10,6 +10,7 @@
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
+        "magento/module-bundle": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-checkout": "*",
         "magento/module-config": "*",
