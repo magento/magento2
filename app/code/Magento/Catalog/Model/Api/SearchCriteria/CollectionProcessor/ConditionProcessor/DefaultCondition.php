@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\Condition
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 use Magento\Framework\Api\Filter;
-use Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\ConditionBuilderFactory;
+use Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\Factory;
 
 /**
  * Class DefaultCondition
@@ -20,15 +20,15 @@ use Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProces
 class DefaultCondition implements CustomConditionInterface
 {
     /**
-     * @var ConditionBuilderFactory
+     * @var Factory
      */
     private $conditionBuilderFactory;
 
     /**
-     * @param ConditionBuilderFactory $conditionBuilderFactory
+     * @param Factory $conditionBuilderFactory
      */
     public function __construct(
-        ConditionBuilderFactory $conditionBuilderFactory
+        Factory $conditionBuilderFactory
     ) {
         $this->conditionBuilderFactory = $conditionBuilderFactory;
     }

@@ -12,14 +12,14 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 /**
- * Class ConditionBuilderFactory
+ * Class Factory
  * Creates appropriate condition builder based on filter field
  * - native attribute condition builder if filter field is native attribute in product
  * - eav condition builder if filter field is eav attribute
  *
  * @package Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder
  */
-class ConditionBuilderFactory
+class Factory
 {
     /**
      * @var \Magento\Eav\Model\Config
