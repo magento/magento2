@@ -121,7 +121,15 @@ class Changelog implements ChangelogInterface
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
-        $this->connection->delete($changelogTableName, ['version_id <= ?' => (int)$versionId]);
+        // It's important we don't clear the latest value in the table.
+        // On restart, common versions of MySQL will reset the increment_id.
+        // This can be removed once the minimum requirements are raised to:
+        //  * MySQL/Percona 8.0
+        //  * MariaDB 10.2.3
+        $latestVersionId = $this->getVersion();
+        $deleteVersionId = $versionId >= $latestVersionId ? $latestVersionId - 1 : $versionId;
+
+        $this->connection->delete($changelogTableName, ['version_id <= ?' => (int)$deleteVersionId]);
 
         return true;
     }
