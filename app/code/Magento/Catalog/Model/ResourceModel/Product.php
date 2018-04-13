@@ -375,20 +375,40 @@ class Product extends AbstractResource
         // fetching all parent IDs, including those are higher on the tree
         $entityId = (int)$object->getEntityId();
         if (!isset($this->availableCategoryIdsCache[$entityId])) {
-            $this->availableCategoryIdsCache[$entityId] = $this->getConnection()->fetchCol(
-                $this->getConnection()->select()->distinct()->from(
-                    $this->tableMaintainer->getMainTable($object->getStoreId()),
-                    ['category_id']
-                )->where(
-                    'product_id = ? AND is_parent = 1',
-                    $entityId
-                )->where(
-                    'visibility != ?',
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
-                )
+            foreach ($this->_storeManager->getStores() as $store) {
+                $unionTables[] = $this->getAvailableInCategoriesSelect(
+                    $entityId,
+                    $this->tableMaintainer->getMainTable($store->getId())
+                );
+            }
+            $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
+                $unionTables,
+                \Magento\Framework\DB\Select::SQL_UNION_ALL
             );
+            $this->availableCategoryIdsCache[$entityId] = array_unique($this->getConnection()->fetchCol($unionSelect));
         }
         return $this->availableCategoryIdsCache[$entityId];
+    }
+
+    /**
+     * Returns DB select for available categories.
+     *
+     * @param int $entityId
+     * @param string $tableName
+     * @return \Magento\Framework\DB\Select
+     */
+    private function getAvailableInCategoriesSelect($entityId, $tableName)
+    {
+        return $this->getConnection()->select()->distinct()->from(
+            $tableName,
+            ['category_id']
+        )->where(
+            'product_id = ? AND is_parent = 1',
+            $entityId
+        )->where(
+            'visibility != ?',
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
+        );
     }
 
     /**
