@@ -83,7 +83,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
                 'cartManagement' => $this->cartManagementMock,
                 'cartRepository' => $this->cartRepositoryMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
-                'connectionPull' => $this->resourceConnectionMock,
+                'connectionPool' => $this->resourceConnectionMock,
             ]
         );
         $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
