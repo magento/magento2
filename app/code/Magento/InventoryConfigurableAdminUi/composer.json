@@ -9,6 +9,7 @@
         "magento/module-ui": "*",
         "magento/module-inventory-api": "*",
         "magento/module-inventory-catalog": "*",
+        "magento/module-inventory-catalog-admin-ui": "*",
         "magento/module-inventory-configurable-product": "*"
     },
     "type": "magento2-module",
