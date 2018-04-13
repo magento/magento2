@@ -53,8 +53,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             [
                 'eavConfig' => $this->eavConfigMock,
                 'productResource' => $this->productResourceMock,
-                'eavAttrConditionBuilder' => $this->eavAttrConditionBuilderMock,
-                'nativeAttrConditionBuilder' => $this->nativeAttrConditionBuilderMock,
+                'eavAttributeConditionBuilder' => $this->eavAttrConditionBuilderMock,
+                'nativeAttributeConditionBuilder' => $this->nativeAttrConditionBuilderMock,
             ]
         );
     }

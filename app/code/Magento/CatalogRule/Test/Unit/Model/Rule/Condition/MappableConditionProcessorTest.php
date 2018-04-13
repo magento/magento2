@@ -51,7 +51,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
         $this->mappableConditionProcessor = $this->objectManagerHelper->getObject(
             MappableConditionsProcessor::class,
             [
-                'customConditionProcessorBuilder' => $this->customConditionProcessorBuilderMock,
+                'customConditionProvider' => $this->customConditionProcessorBuilderMock,
                 'eavConfig' => $this->eavConfigMock,
             ]
         );
