@@ -71,7 +71,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         }
         if (!$this->_isSingleSelection()) {
             $valuesCollection = $option->getOptionValuesByOptionId($value, $this->getProduct()->getStoreId())->load();
-            if ($valuesCollection->count() != count($value)) {
+            $valueCount = is_array($value) ? count($value) : 1;
+            if ($valuesCollection->count() != $valueCount) {
                 $this->setIsValid(false);
                 throw new LocalizedException(
                     __(
