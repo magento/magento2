@@ -515,7 +515,7 @@ class Data
      */
     public function isProductHasSwatch(Product $product)
     {
-        $swatchAttributes = $this->getSwatchAttributes($product);
+        $swatchAttributes = $this->getSwatchAttributes($product) ?: [];
         return count($swatchAttributes) > 0;
     }
 
