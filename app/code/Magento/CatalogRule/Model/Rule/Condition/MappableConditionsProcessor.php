@@ -27,7 +27,7 @@ class MappableConditionsProcessor
     /**
      * @var CustomConditionProviderInterface
      */
-    private $customConditionProcessorBuilder;
+    private $customConditionProvider;
 
     /**
      * @var \Magento\Eav\Model\Config
@@ -35,14 +35,14 @@ class MappableConditionsProcessor
     private $eavConfig;
 
     /**
-     * @param CustomConditionProviderInterface $customConditionProcessorBuilder
+     * @param CustomConditionProviderInterface $customConditionProvider
      * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
-        CustomConditionProviderInterface $customConditionProcessorBuilder,
+        CustomConditionProviderInterface $customConditionProvider,
         \Magento\Eav\Model\Config $eavConfig
     ) {
-        $this->customConditionProcessorBuilder = $customConditionProcessorBuilder;
+        $this->customConditionProvider = $customConditionProvider;
         $this->eavConfig = $eavConfig;
     }
 
@@ -122,7 +122,7 @@ class MappableConditionsProcessor
     private function canUseFieldForMapping(string $fieldName): bool
     {
         // We can map field to search criteria if we have custom processor for it
-        if ($this->customConditionProcessorBuilder->hasProcessorForField($fieldName)) {
+        if ($this->customConditionProvider->hasProcessorForField($fieldName)) {
             return true;
         }
 

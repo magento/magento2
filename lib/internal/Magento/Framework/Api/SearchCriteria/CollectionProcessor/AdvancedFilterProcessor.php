@@ -11,7 +11,6 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Api\CombinedFilterGroup;
-use Magento\Framework\Api\FilterGroupInterface;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 use Magento\Framework\Exception\InputException;
@@ -44,7 +43,7 @@ class AdvancedFilterProcessor implements CollectionProcessorInterface
     /**
      * @var CustomConditionProviderInterface
      */
-    private $customConditionProcessorBuilder;
+    private $customConditionProvider;
 
     /**
      * @var CustomConditionInterface
@@ -59,16 +58,16 @@ class AdvancedFilterProcessor implements CollectionProcessorInterface
     /**
      * @param CustomConditionInterface $defaultConditionProcessor
      * @param ConditionManager $conditionManager
-     * @param CustomConditionProviderInterface $customConditionProcessorBuilder
+     * @param CustomConditionProviderInterface $customConditionProvider
      */
     public function __construct(
         CustomConditionInterface $defaultConditionProcessor,
         ConditionManager $conditionManager,
-        CustomConditionProviderInterface $customConditionProcessorBuilder
+        CustomConditionProviderInterface $customConditionProvider
     ) {
         $this->defaultConditionProcessor = $defaultConditionProcessor;
         $this->conditionManager = $conditionManager;
-        $this->customConditionProcessorBuilder = $customConditionProcessorBuilder;
+        $this->customConditionProvider = $customConditionProvider;
     }
 
     /**
@@ -89,12 +88,12 @@ class AdvancedFilterProcessor implements CollectionProcessorInterface
     /**
      * Add FilterGroup to the collection
      *
-     * @param FilterGroupInterface $filterGroup
+     * @param CombinedFilterGroup $filterGroup
      * @param AbstractDb $collection
      * @return string
      * @throws InputException
      */
-    private function getConditionsFromFilterGroup(FilterGroupInterface $filterGroup, AbstractDb $collection): string
+    private function getConditionsFromFilterGroup(CombinedFilterGroup $filterGroup, AbstractDb $collection): string
     {
         $conditions = [];
 
@@ -122,11 +121,12 @@ class AdvancedFilterProcessor implements CollectionProcessorInterface
     /**
      * @param Filter $filter
      * @return string
+     * @throws InputException
      */
     private function getConditionsFromFilter(Filter $filter): string
     {
-        if ($this->customConditionProcessorBuilder->hasProcessorForField($filter->getField())) {
-            $customProcessor = $this->customConditionProcessorBuilder->getProcessorByField($filter->getField());
+        if ($this->customConditionProvider->hasProcessorForField($filter->getField())) {
+            $customProcessor = $this->customConditionProvider->getProcessorByField($filter->getField());
             return $customProcessor->build($filter);
         }
 

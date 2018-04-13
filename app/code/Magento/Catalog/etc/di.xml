@@ -1069,8 +1069,8 @@
     </type>
     <type name="Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\ConditionBuilderFactory">
         <arguments>
-            <argument name="eavAttrConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\EavAttributeCondition</argument>
-            <argument name="nativeAttrConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\NativeAttributeCondition</argument>
+            <argument name="eavAttributeConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\EavAttributeCondition</argument>
+            <argument name="nativeAttributeConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\NativeAttributeCondition</argument>
         </arguments>
     </type>
 </config>
