@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
@@ -145,8 +146,8 @@ QUERY;
             'catalog_product'
         ];
         $attributeTypes = [
-            'EavDataAttributeOptionInterface',
-            'EavDataAttributeOptionInterface',
+            'String[]',
+            'String[]',
             'Int',
             'CatalogInventoryDataStockItemInterface[]',
             'CustomerDataAddressInterface',
