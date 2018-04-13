@@ -236,7 +236,7 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function productsWithCorrectQtyDataProvider()
+    public function productsWithCorrectQtyDataProvider(): array
     {
         return [
             [
@@ -276,7 +276,7 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function productsWithIncorrectQtyDataProvider()
+    public function productsWithIncorrectQtyDataProvider(): array
     {
         return [
             [

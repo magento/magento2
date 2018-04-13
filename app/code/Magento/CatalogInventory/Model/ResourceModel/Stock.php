@@ -119,7 +119,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * @param int $websiteId
      * @return array
      */
-    public function lockProductsStock(array $productIds, $websiteId)
+    public function lockProductsStock(array $productIds, int $websiteId)
     {
         if (empty($productIds)) {
             return [];
