@@ -17,6 +17,7 @@ use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 class PlaceReservationsOnQuoteSubmitSuccess implements ObserverInterface
 {
