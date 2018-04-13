@@ -124,9 +124,11 @@ class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->bookmarkMock, $notExistsBookmarkId)
             ->willReturn($this->bookmarkMock);
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage(
-            __('The bookmark with "%1" ID doesn\'t exist. Verify your information and try again.', $notExistsBookmarkId)
+        $exceptionMessage = (string)__(
+            'The bookmark with "%1" ID doesn\'t exist. Verify your information and try again.',
+            $notExistsBookmarkId
         );
+        $this->expectExceptionMessage($exceptionMessage);
         $this->bookmarkRepository->getById($notExistsBookmarkId);
     }
 
@@ -146,7 +148,7 @@ class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->bookmarkMock)
             ->willThrowException(new \Exception($exceptionMessage));
         $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
-        $this->expectExceptionMessage(__($exceptionMessage));
+        $this->expectExceptionMessage((string)__($exceptionMessage));
         $this->expectExceptionMessage($exceptionMessage);
         $this->assertTrue($this->bookmarkRepository->delete($this->bookmarkMock));
     }

@@ -79,8 +79,10 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
     public function testLargeSizeFile()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $exceptionMessage = 'The file was too big and couldn\'t be uploaded. Use a file smaller than %s MBs and try ' .
+            'to upload again.';
         $this->expectExceptionMessage(
-            sprintf('The file you uploaded is larger than %s Megabytes allowed by server', $this->maxFileSizeInMb)
+            sprintf($exceptionMessage, $this->maxFileSizeInMb)
         );
         $this->prepareEnv();
         $_SERVER['CONTENT_LENGTH'] = $this->maxFileSize + 1;
