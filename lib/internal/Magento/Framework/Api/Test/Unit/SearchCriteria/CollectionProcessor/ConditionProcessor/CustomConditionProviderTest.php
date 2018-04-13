@@ -8,7 +8,7 @@ namespace Magento\Framework\Api\Test\Unit\SearchCriteria\CollectionProcessor\Con
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProvider;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 
-class CustomConditionProcessorBuilderTest extends \PHPUnit\Framework\TestCase
+class CustomConditionProviderTest extends \PHPUnit\Framework\TestCase
 {
     private $customConditionProcessorBuilder;
     private $customConditionMock;
@@ -25,9 +25,8 @@ class CustomConditionProcessorBuilderTest extends \PHPUnit\Framework\TestCase
             ->getObject(
                 CustomConditionProvider::class,
                 [
-                    'customConditionProcessor' => [
+                    'customConditionProcessors' => [
                         'my-valid-field' => $this->customConditionMock,
-                        'my-invalid-field' => 'olo-lo'
                     ]
                 ]
             );
@@ -73,11 +72,20 @@ class CustomConditionProcessorBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Custom processor must implement CustomConditionInterface.
+     * @expectedExceptionMessage Custom processor must implement "Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface".
      */
     public function testNegativeGetProcessorByFieldExceptionWrongClass()
     {
-        $testField = 'my-invalid-field';
-        $this->customConditionProcessorBuilder->getProcessorByField($testField);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->customConditionProcessorBuilder = $objectManagerHelper
+            ->getObject(
+                CustomConditionProvider::class,
+                [
+                    'customConditionProcessors' => [
+                        'my-valid-field' => $this->customConditionMock,
+                        'my-invalid-field' => 'olo-lo'
+                    ]
+                ]
+            );
     }
 }
