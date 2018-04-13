@@ -143,7 +143,7 @@ class Plugin
             $summaryReport .= __(
                 '%1 item(s) have been successfully updated.',
                 $operationDetails['operations_successful']
-            ) ;
+            );
         }
 
         if ($operationDetails['operations_failed'] > 0) {

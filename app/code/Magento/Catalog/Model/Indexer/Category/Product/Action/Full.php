@@ -116,47 +116,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     }
 
     /**
-     * Return select for remove unnecessary data
-     *
-     * @return \Magento\Framework\DB\Select
-     *
-     * @deprecated Not used anymore.
-     * @see clearCurrentTable()
-     */
-    protected function getSelectUnnecessaryData()
-    {
-        return $this->connection->select()->from(
-            $this->getMainTable(),
-            []
-        )->joinLeft(
-            ['t' => $this->getMainTable()],
-            $this->getMainTable() .
-            '.category_id = t.category_id AND ' .
-            $this->getMainTable() .
-            '.store_id = t.store_id AND ' .
-            $this->getMainTable() .
-            '.product_id = t.product_id',
-            []
-        )->where(
-            't.category_id IS NULL'
-        );
-    }
-
-    /**
-     * Remove unnecessary data
-     *
-     * @return void
-     *
-     * @deprecated Not used anymore.
-     * @see clearCurrentTable()
-     */
-    protected function removeUnnecessaryData()
-    {
-        //Called for backward compatibility.
-        $this->getSelectUnnecessaryData();
-    }
-
-    /**
      * Publish data from tmp to index
      *
      * @return void
@@ -254,8 +213,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                 )
             );
             $this->publishData();
-            //Called for backward compatibility.
-            $this->removeUnnecessaryData();
         }
     }
 }
