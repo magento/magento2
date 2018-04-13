@@ -57,8 +57,12 @@ class AssertCatalogPriceRuleAppliedProductPage extends AbstractConstraint
             if ($productPrice[$key]['regular'] !== 'No') {
                 $actualPrice['regular'] = $productPriceBlock->getOldPrice();
                 $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
+                $actualPrice['price_from'] = $productPriceBlock->getPriceFrom();
+                $actualPrice['price_to'] = $productPriceBlock->getPriceTo();
+                $actualPrice['old_price_from'] = $productPriceBlock->getOldPriceFrom();
+                $actualPrice['old_price_to'] = $productPriceBlock->getOldPriceTo();
             }
-            $diff = $this->verifyData($actualPrice, $productPrice[$key]);
+            $diff = $this->verifyData($productPrice[$key], $actualPrice);
             \PHPUnit\Framework\Assert::assertTrue(
                 empty($diff),
                 implode(' ', $diff)
@@ -69,18 +73,18 @@ class AssertCatalogPriceRuleAppliedProductPage extends AbstractConstraint
     /**
      * Check if arrays have equal values.
      *
-     * @param array $formData
      * @param array $fixtureData
+     * @param array $formData
      * @return array
      */
-    protected function verifyData(array $formData, array $fixtureData)
+    protected function verifyData(array $fixtureData, array $formData)
     {
         $errorMessage = [];
-        foreach ($formData as $key => $value) {
-            if ($value != $fixtureData[$key]) {
-                $errorMessage[] = "Data not equal."
+        foreach ($fixtureData as $key => $value) {
+            if (isset($formData[$key]) && (float)$value !== (float)$formData[$key]) {
+                $errorMessage[] = "Value " . $key . " is not equal."
                     . "\nExpected: " . $fixtureData[$key]
-                    . "\nActual: " . $value;
+                    . "\nActual: " . $value . "\n";
             }
         }
         return $errorMessage;
