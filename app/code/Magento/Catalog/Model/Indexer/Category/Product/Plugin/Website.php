@@ -7,23 +7,22 @@ namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 class Website
 {
     /**
-     * @var TableResolver
+     * @var TableMaintainer
      */
-    private $tableResolver;
+    private $tableMaintainer;
 
     /**
-     * @param TableResolver $tableResolver
+     * @param TableMaintainer $tableMaintainer
      */
     public function __construct(
-        TableResolver $tableResolver = null
+        TableMaintainer $tableMaintainer
     ) {
-        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
+        $this->tableMaintainer = $tableMaintainer;
     }
 
     /**
@@ -39,7 +38,7 @@ class Website
     public function afterDelete(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $website)
     {
         foreach ($website->getStoreIds() as $storeId) {
-            $this->tableResolver->dropTablesForStore($storeId);
+            $this->tableMaintainer->dropTablesForStore($storeId);
         }
         return $objectResource;
     }

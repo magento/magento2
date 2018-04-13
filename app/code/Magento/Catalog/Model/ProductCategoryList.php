@@ -10,7 +10,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\UnionExpression;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Model\Indexer\Category\Product\TableResolver;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Provides info about product categories.
@@ -38,25 +38,25 @@ class ProductCategoryList
     private $storeManager;
 
     /**
-     * @var TableResolver
+     * @var TableMaintainer
      */
-    private $tableResolver;
+    private $tableMaintainer;
 
     /**
      * @param ResourceModel\Product $productResource
      * @param ResourceModel\Category $category
      * @param StoreManagerInterface $storeManager
-     * @param TableResolver|null $tableResolver
+     * @param TableMaintainer|null $tableMaintainer
      */
     public function __construct(
         ResourceModel\Product $productResource,
         ResourceModel\Category $category,
         StoreManagerInterface $storeManager = null,
-        TableResolver $tableResolver = null
+        TableMaintainer $tableMaintainer = null
     ) {
         $this->productResource = $productResource;
         $this->category = $category;
-        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
+        $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
@@ -73,7 +73,7 @@ class ProductCategoryList
             foreach ($this->storeManager->getStores() as $store) {
                 $unionTables[] = $this->getCategorySelect(
                     $productId,
-                    $this->tableResolver->getMainTable($store->getId())
+                    $this->tableMaintainer->getMainTable($store->getId())
                 );
             }
             $unionSelect = new UnionExpression(
