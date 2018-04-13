@@ -114,6 +114,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
     public function testSubscribe()
     {
         $email = 'subscriber_email@magento.com';
+        $storeId = 1;
         $this->resource->expects($this->any())->method('loadByEmail')->willReturn(
             [
                 'subscriber_status' => 3,
@@ -133,12 +134,13 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->sendEmailCheck();
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
 
-        $this->assertEquals(1, $this->subscriber->subscribe($email));
+        $this->assertEquals(1, $this->subscriber->subscribe($email,$storeId));
     }
 
     public function testSubscribeNotLoggedIn()
     {
         $email = 'subscriber_email@magento.com';
+        $storeId = 1;
         $this->resource->expects($this->any())->method('loadByEmail')->willReturn(
             [
                 'subscriber_status' => 3,
@@ -158,7 +160,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->sendEmailCheck();
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
 
-        $this->assertEquals(2, $this->subscriber->subscribe($email));
+        $this->assertEquals(2, $this->subscriber->subscribe($email,$storeId));
     }
 
     public function testUpdateSubscription()
