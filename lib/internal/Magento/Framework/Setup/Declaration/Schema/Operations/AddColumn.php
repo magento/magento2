@@ -157,7 +157,7 @@ class AddColumn implements OperationInterface
         $column = $elementHistory->getNew();
         //Add triggers to column
         foreach ($this->triggers as $ddlTrigger) {
-            if ($ddlTrigger->isApplicable($column->getOnCreate())) {
+            if ($ddlTrigger->isApplicable((string) $column->getOnCreate())) {
                 $statement->addTrigger($ddlTrigger->getCallback($elementHistory));
             }
         }

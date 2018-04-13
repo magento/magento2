@@ -81,7 +81,7 @@ class ReCreateTable implements OperationInterface
         $statements = $this->createTable->doOperation($elementHistory);
         /** @var Statement $statement */
         foreach ($statements as $statement) {
-            if ($this->migrateDataBetweenShards->isApplicable($table->getOnCreate())) {
+            if ($this->migrateDataBetweenShards->isApplicable((string) $table->getOnCreate())) {
                 $statement->addTrigger($this->migrateDataBetweenShards->getCallback($elementHistory));
             }
         }

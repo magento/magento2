@@ -117,7 +117,7 @@ class CreateTable implements OperationInterface
     {
         foreach ($columns as $column) {
             foreach ($this->columnTriggers as $trigger) {
-                if ($trigger->isApplicable($column->getOnCreate())) {
+                if ($trigger->isApplicable((string) $column->getOnCreate())) {
                     $elementHistory = $this->elementHistoryFactory->create([
                         'new' => $column,
                         'old' => $column
@@ -140,7 +140,7 @@ class CreateTable implements OperationInterface
     private function setupTableTriggers(Table $table, Statement $createTableStatement)
     {
         foreach ($this->triggers as $trigger) {
-            if ($trigger->isApplicable($table->getOnCreate())) {
+            if ($trigger->isApplicable((string) $table->getOnCreate())) {
                 $elementHistory = $this->elementHistoryFactory->create([
                     'new' => $table,
                     'old' => $table
