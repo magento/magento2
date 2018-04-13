@@ -107,9 +107,18 @@ class ProcessRegisterProductsSalePlugin
         if (null === $websiteId) {
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
+
+        $salesEventObjectType = SalesEventInterface::TYPE_QUOTE;
+        $salesEventObjectId = $quoteId;
         if (null === $quoteId) {
-            //TODO: Do we need to throw exception?
+            $salesEventObjectType = 'none';
+            $salesEventObjectId = 'none';
         }
+        /** @var SalesEventInterface $salesEvent */
+        $salesEvent = $this->salesEventFactory->create([
+            'type' => $salesEventObjectType,
+            'objectId' => $salesEventObjectId
+        ]);
 
         // TODO use array functions to initialize $itemsBySku
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
@@ -122,12 +131,6 @@ class ProcessRegisterProductsSalePlugin
         $salesChannel = $this->salesChannelFactory->create();
         $salesChannel->setCode($websiteCode);
         $salesChannel->setType(SalesChannelInterface::TYPE_WEBSITE);
-
-        /** @var SalesEventInterface $salesEvent */
-        $salesEvent = $this->salesEventFactory->create([
-            'type' => SalesEventInterface::TYPE_QUOTE,
-            'objectId' => $quoteId
-        ]);
 
         $this->registerSalesEvent->execute($itemsBySku, $salesChannel, $salesEvent);
 

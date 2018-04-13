@@ -24,7 +24,7 @@ class SalesEvent implements SalesEventInterface
      */
     private $objectId;
 
-    public function __construct(string $type, int $objectId)
+    public function __construct(string $type, string $objectId)
     {
         $this->type = $type;
         $this->objectId = $objectId;
@@ -41,7 +41,7 @@ class SalesEvent implements SalesEventInterface
     /**
      * @inheritdoc
      */
-    public function getObjectId(): int
+    public function getObjectId(): string
     {
         return $this->objectId;
     }

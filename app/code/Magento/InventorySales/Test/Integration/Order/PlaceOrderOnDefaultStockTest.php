@@ -106,7 +106,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     public function testPlaceOrderWithInStockProduct()
     {
         $sku = 'SKU-1';
-        $quoteItemQty = 3.8;
+        $quoteItemQty = 4;
 
         $cart = $this->getCart();
         $product = $this->productRepository->get($sku);
@@ -127,11 +127,12 @@ class PlaceOrderOnDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @magentoConfigFixture current_store cataloginventory/item_options/qty_increments 0.1
      */
     public function testPlaceOrderWithOutOffStockProduct()
     {
         $sku = 'SKU-1';
-        $quoteItemQty = 8.7;
+        $quoteItemQty = 8;
 
         $cart = $this->getCart();
         $product = $this->productRepository->get($sku);
@@ -155,7 +156,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     public function testPlaceOrderWithOutOffStockProductAndBackOrdersTurnedOn()
     {
         $sku = 'SKU-1';
-        $quoteItemQty = 8.7;
+        $quoteItemQty = 8;
 
         $cart = $this->getCart();
         $product = $this->productRepository->get($sku);
@@ -181,7 +182,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     public function testPlaceOrderWithOutOffStockProductAndManageStockTurnedOff()
     {
         $sku = 'SKU-1';
-        $quoteItemQty = 8.7;
+        $quoteItemQty = 8;
 
         $cart = $this->getCart();
         $product = $this->productRepository->get($sku);

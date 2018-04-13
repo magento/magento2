@@ -18,5 +18,5 @@ interface SalesEventInterface
 
     public function getType(): string;
 
-    public function getObjectId(): int;
+    public function getObjectId(): string;
 }

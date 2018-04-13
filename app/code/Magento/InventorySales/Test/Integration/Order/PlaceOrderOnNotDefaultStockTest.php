@@ -126,7 +126,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
     {
         $sku = 'SKU-2';
         $stockId = 30;
-        $quoteItemQty = 2.2;
+        $quoteItemQty = 2;
 
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
@@ -185,7 +185,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
     {
         $sku = 'SKU-2';
         $stockId = 30;
-        $quoteItemQty = 6.2;
+        $quoteItemQty = 6;
 
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
@@ -217,7 +217,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
     {
         $sku = 'SKU-2';
         $stockId = 30;
-        $quoteItemQty = 6.2;
+        $quoteItemQty = 6;
 
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);

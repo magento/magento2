@@ -18,6 +18,8 @@ use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\RegisterSalesEventInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
+use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface;
 
 /**
  * @inheritdoc
@@ -108,7 +110,7 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
                 ->setSku($sku)
                 ->setQuantity(-(float) $qty)
                 ->setStockId($stockId)
-                ->setMetadata(sprintf('%s:%d', $salesEvent->getType(), $salesEvent->getObjectId()))
+                ->setMetadata(sprintf('%s:%s', $salesEvent->getType(), $salesEvent->getObjectId()))
                 ->build();
         }
         $this->appendReservations->execute($reservations);
@@ -126,11 +128,13 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
             if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
                 continue;
             }
-            $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable();
-            if (false === $isSalable) {
-                throw new LocalizedException(
-                    __('Not all of your products are available in the requested quantity.')
-                );
+            /** @var ProductSalableResultInterface $isSalable */
+            $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty);
+            if (false === $isSalable->isSalable()) {
+                $errors = $isSalable->getErrors();
+                /** @var ProductSalabilityErrorInterface $errorMessage */
+                $errorMessage = array_pop($errors);
+                throw new LocalizedException(__($errorMessage->getMessage()));
             }
         }
     }
