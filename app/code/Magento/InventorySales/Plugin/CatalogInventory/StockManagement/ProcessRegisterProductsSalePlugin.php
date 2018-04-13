@@ -10,15 +10,12 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 use Magento\CatalogInventory\Api\RegisterProductSaleInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventoryReservations\Model\ReservationBuilderInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
-use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
-use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
-use Magento\InventorySalesApi\Api\RegisterSalesEventInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Class provides around Plugin on RegisterProductSaleInterface::registerProductsSale
@@ -31,29 +28,9 @@ class ProcessRegisterProductsSalePlugin
     private $getSkusByProductIds;
 
     /**
-     * @var ReservationBuilderInterface
-     */
-    private $reservationBuilder;
-
-    /**
-     * @var AppendReservationsInterface
-     */
-    private $appendReservations;
-
-    /**
      * @var IsProductSalableForRequestedQtyInterface
      */
     private $isProductSalableForRequestedQty;
-
-    /**
-     * @var RegisterSalesEventInterface
-     */
-    private $registerSalesEvent;
-
-    /**
-     * @var SalesChannelInterfaceFactory
-     */
-    private $salesChannelFactory;
 
     /**
      * @var WebsiteRepositoryInterface
@@ -61,28 +38,34 @@ class ProcessRegisterProductsSalePlugin
     private $websiteRepository;
 
     /**
-     * @var SalesEventInterfaceFactory
+     * @var StockResolverInterface
      */
-    private $salesEventFactory;
+    private $stockResolver;
+
+    /*
+     * @var GetProductTypesBySkusInterface
+     */
+    private $getProductTypesBySkus;
+
+    /**
+     * @var IsSourceItemsAllowedForProductTypeInterface
+     */
+    private $isSourceItemsAllowedForProductType;
 
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
-        ReservationBuilderInterface $reservationBuilder,
-        AppendReservationsInterface $appendReservations,
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
-        RegisterSalesEventInterface $registerSalesEvent,
-        SalesChannelInterfaceFactory $salesChannelFactory,
         WebsiteRepositoryInterface $websiteRepository,
-        SalesEventInterfaceFactory $salesEventFactory
+        StockResolverInterface $stockResolver,
+        GetProductTypesBySkusInterface $getProductTypesBySkus,
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
-        $this->reservationBuilder = $reservationBuilder;
-        $this->appendReservations = $appendReservations;
         $this->isProductSalableForRequestedQty = $isProductSalableForRequestedQty;
-        $this->registerSalesEvent = $registerSalesEvent;
-        $this->salesChannelFactory = $salesChannelFactory;
         $this->websiteRepository = $websiteRepository;
-        $this->salesEventFactory = $salesEventFactory;
+        $this->stockResolver = $stockResolver;
+        $this->getProductTypesBySkus = $getProductTypesBySkus;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
     }
 
     /**
@@ -90,6 +73,7 @@ class ProcessRegisterProductsSalePlugin
      * @param callable $proceed
      * @param float[] $items
      * @param int|null $websiteId
+     *
      * @return []
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -98,8 +82,7 @@ class ProcessRegisterProductsSalePlugin
         RegisterProductSaleInterface $subject,
         callable $proceed,
         $items,
-        $websiteId = null,
-        $quoteId = null
+        $websiteId = null
     ) {
         if (empty($items)) {
             return [];
@@ -108,19 +91,6 @@ class ProcessRegisterProductsSalePlugin
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
 
-        $salesEventObjectType = SalesEventInterface::TYPE_QUOTE;
-        $salesEventObjectId = $quoteId;
-        if (null === $quoteId) {
-            $salesEventObjectType = 'none';
-            $salesEventObjectId = 'none';
-        }
-        /** @var SalesEventInterface $salesEvent */
-        $salesEvent = $this->salesEventFactory->create([
-            'type' => $salesEventObjectType,
-            'objectId' => $salesEventObjectId
-        ]);
-
-        // TODO use array functions to initialize $itemsBySku
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
         $itemsBySku = [];
         foreach ($productSkus as $productId => $sku) {
@@ -128,12 +98,33 @@ class ProcessRegisterProductsSalePlugin
         }
 
         $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
-        $salesChannel = $this->salesChannelFactory->create();
-        $salesChannel->setCode($websiteCode);
-        $salesChannel->setType(SalesChannelInterface::TYPE_WEBSITE);
-
-        $this->registerSalesEvent->execute($itemsBySku, $salesChannel, $salesEvent);
+        $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
+        $productTypes = $this->getProductTypesBySkus->execute(array_keys($itemsBySku));
+        $this->checkItemsQuantity($itemsBySku, $productTypes, $stockId);
 
         return [];
+    }
+
+    /**
+     * Check whether all items salable
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    private function checkItemsQuantity(array $items, array $productTypes, int $stockId)
+    {
+        foreach ($items as $sku => $qty) {
+            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
+                continue;
+            }
+            /** @var ProductSalableResultInterface $isSalable */
+            $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty);
+            if (false === $isSalable->isSalable()) {
+                $errors = $isSalable->getErrors();
+                /** @var ProductSalabilityErrorInterface $errorMessage */
+                $errorMessage = array_pop($errors);
+                throw new LocalizedException(__($errorMessage->getMessage()));
+            }
+        }
     }
 }
