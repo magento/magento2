@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Observer\Stock;
+namespace Magento\InventorySales\Observer\Quote;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
