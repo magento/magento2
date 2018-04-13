@@ -15,7 +15,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Console\CommandListInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Application;
-use Magento\Framework\App\Bootstrap as AppBootstrap;
 
 /**
  * Class ObjectManagerProviderTest
@@ -47,10 +46,7 @@ class ObjectManagerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $initParams = [
-            'param' => 'value',
-            AppBootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => 'some_dir'
-        ];
+        $initParams = ['param' => 'value'];
 
         $this->serviceLocatorMock
             ->expects($this->atLeastOnce())
@@ -76,11 +72,7 @@ class ObjectManagerProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $objectManagerFactoryMock->expects($this->once())
             ->method('create')
-            ->with($this->callback(function ($value) {
-
-                return array_key_exists(AppBootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS, $value)
-                    && !array_key_exists('param', $value);
-            }))
+            ->with($initParams)
             ->willReturn($objectManagerMock);
 
         $this->bootstrapMock

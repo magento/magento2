@@ -89,14 +89,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         $serviceManager->setService('Magento\Framework\App\Filesystem\DirectoryList', $directoryList);
         $serviceManager->setService('Magento\Framework\Filesystem', $this->createFilesystem($directoryList));
 
-        /**
-         * Initialize ObjectManager
-         */
-        $serviceManager->setService(
-            \Magento\Framework\ObjectManagerInterface::class,
-            $serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class)->get()
-        );
-
         if (!($application->getRequest() instanceof Request)) {
             $eventManager = $application->getEventManager();
             $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$this, 'authPreDispatch'], 100);
@@ -104,7 +96,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * Check if user logged-in and has permissions
+     * Check if user login
      *
      * @param \Zend\Mvc\MvcEvent $event
      * @return false|\Zend\Http\Response
@@ -140,6 +132,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                         'appState' => $adminAppState
                     ]
                 );
+
                 /** @var \Magento\Backend\Model\Auth $auth */
                 $authentication = $objectManager->get(\Magento\Backend\Model\Auth::class);
 
