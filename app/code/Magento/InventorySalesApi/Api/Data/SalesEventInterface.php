@@ -14,7 +14,7 @@ namespace Magento\InventorySalesApi\Api\Data;
  */
 interface SalesEventInterface
 {
-    const TYPE_QUOTE = 'quote';
+    const TYPE_ORDER = 'order';
 
     public function getType(): string;
 
