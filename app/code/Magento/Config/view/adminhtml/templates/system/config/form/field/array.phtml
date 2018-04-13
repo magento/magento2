@@ -21,7 +21,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                 <?php foreach ($block->getColumns() as $columnName => $column): ?>
                     <th><?= /* @escapeNotVerified */ $column['label'] ?></th>
                 <?php endforeach;?>
-                <th class="col-actions" colspan="<?= /* @escapeNotVerified */ $_colspan ?>">Action</th>
+                <th class="col-actions" colspan="<?= /* @escapeNotVerified */ $_colspan ?>"><?= /* @escapeNotVerified */ __('Action') ?></th>
             </tr>
             </thead>
             <tfoot>
