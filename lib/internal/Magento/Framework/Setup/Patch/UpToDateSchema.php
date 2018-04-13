@@ -70,8 +70,7 @@ class UpToDateSchema implements UpToDateValidatorInterface
         foreach ($this->moduleList->getNames() as $moduleName) {
             foreach ($this->patchReader->read($moduleName) as $patchName) {
                 if (!$this->patchBackwardCompatability->isSkipableBySchemaSetupVersion($patchName, $moduleName) &&
-                    !$this->patchHistory->isApplied($patchName))
-                {
+                    !$this->patchHistory->isApplied($patchName)) {
                     return false;
                 }
             }

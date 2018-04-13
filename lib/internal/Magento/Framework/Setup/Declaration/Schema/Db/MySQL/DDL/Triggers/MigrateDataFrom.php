@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DDL\Triggers;
 
@@ -10,7 +11,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Setup\Declaration\Schema\Db\DDLTriggerInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
-use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 use Magento\Framework\Setup\Declaration\Schema\ElementHistory;
 
 /**
@@ -42,15 +42,15 @@ class MigrateDataFrom implements DDLTriggerInterface
     /**
      * @inheritdoc
      */
-    public function isApplicable($statement)
+    public function isApplicable(string $statement) : bool
     {
-        return preg_match(self::MATCH_PATTERN, $statement);
+        return (bool) preg_match(self::MATCH_PATTERN, $statement);
     }
 
     /**
      * @inheritdoc
      */
-    public function getCallback(ElementHistory $columnHistory)
+    public function getCallback(ElementHistory $columnHistory) : Callable
     {
         /** @var Column $column */
         $column = $columnHistory->getNew();

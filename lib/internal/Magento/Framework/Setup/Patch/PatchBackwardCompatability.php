@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Patch;
 
 use Magento\Framework\Module\ModuleResource;
@@ -35,7 +37,7 @@ class PatchBackwardCompatability
      * @param string $moduleName
      * @return bool
      */
-    public function isSkipableByDataSetupVersion(string $patchClassName, $moduleName)
+    public function isSkipableByDataSetupVersion(string $patchClassName, string $moduleName) : bool
     {
         $dbVersion = $this->moduleResource->getDataVersion($moduleName);
         return in_array(PatchVersionInterface::class, class_implements($patchClassName)) &&
@@ -49,7 +51,7 @@ class PatchBackwardCompatability
      * @param string $moduleName
      * @return bool
      */
-    public function isSkipableBySchemaSetupVersion(string $patchClassName, $moduleName)
+    public function isSkipableBySchemaSetupVersion(string $patchClassName, string $moduleName) : bool
     {
         $dbVersion = $this->moduleResource->getDbVersion($moduleName);
         return in_array(PatchVersionInterface::class, class_implements($patchClassName)) &&

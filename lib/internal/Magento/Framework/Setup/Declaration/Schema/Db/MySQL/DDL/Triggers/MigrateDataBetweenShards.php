@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DDL\Triggers;
 
 use Magento\Framework\App\ResourceConnection;
@@ -52,7 +54,7 @@ class MigrateDataBetweenShards implements DDLTriggerInterface
      *
      * @inheritdoc
      */
-    public function isApplicable($statement)
+    public function isApplicable(string $statement) : bool
     {
         return $statement !== self::SKIP_MIGRATION_DATA_FLAG;
     }
@@ -60,7 +62,7 @@ class MigrateDataBetweenShards implements DDLTriggerInterface
     /**
      * @inheritdoc
      */
-    public function getCallback(ElementHistory $elementHistory)
+    public function getCallback(ElementHistory $elementHistory) : Callable
     {
         /** @var Table $newTable */
         $newTable = $elementHistory->getNew();

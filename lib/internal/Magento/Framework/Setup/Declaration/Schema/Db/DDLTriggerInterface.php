@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Declaration\Schema\Db;
 
 use Magento\Framework\Setup\Declaration\Schema\ElementHistory;
@@ -32,7 +34,7 @@ interface DDLTriggerInterface
      * @param string $statement
      * @return bool
      */
-    public function isApplicable($statement);
+    public function isApplicable(string $statement) : bool ;
 
     /**
      * Setup callback to current statement, can generate new statements.
@@ -40,5 +42,5 @@ interface DDLTriggerInterface
      * @param ElementHistory $elementHistory
      * @return callable
      */
-    public function getCallback(ElementHistory $elementHistory);
+    public function getCallback(ElementHistory $elementHistory) : Callable;
 }

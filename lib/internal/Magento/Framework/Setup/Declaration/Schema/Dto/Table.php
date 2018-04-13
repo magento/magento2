@@ -80,7 +80,7 @@ class Table extends GenericElement implements
      * @param array $indexes
      * @param array $constraints
      * @param string $onCreate
-     * @internal param string $nameWithPrefix
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $name,

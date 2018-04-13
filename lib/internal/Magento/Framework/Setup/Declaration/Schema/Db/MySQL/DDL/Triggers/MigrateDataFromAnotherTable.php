@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DDL\Triggers;
 
 use Magento\Framework\App\ResourceConnection;
@@ -39,15 +41,15 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
     /**
      * @inheritdoc
      */
-    public function isApplicable($statement)
+    public function isApplicable(string $statement) : bool
     {
-        return preg_match(self::MATCH_PATTERN, $statement);
+        return (bool) preg_match(self::MATCH_PATTERN, $statement);
     }
 
     /**
      * @inheritdoc
      */
-    public function getCallback(ElementHistory $tableHistory)
+    public function getCallback(ElementHistory $tableHistory) : Callable
     {
         /** @var Table $table */
         $table = $tableHistory->getNew();
