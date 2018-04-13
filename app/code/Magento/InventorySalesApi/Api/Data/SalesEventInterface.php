@@ -18,12 +18,14 @@ interface SalesEventInterface
      * Constants for event types
      */
     const TYPE_ORDER_PLACED = 'order_placed';
+    const TYPE_SHIPMENT_CREATED = 'shipment_created';
     /**#@-*/
 
     /**#@+
      * Constants for event object types
      */
     const OBJECT_TYPE_QUOTE = 'quote';
+    const OBJECT_TYPE_ORDER = 'order';
     /**#@-*/
 
     public function getType(): string;

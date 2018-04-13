@@ -11,6 +11,8 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
+use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterfaceFactory;
 use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterfaceFactory;
 use Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface;
@@ -60,6 +62,11 @@ class SourceDeductionProcessor implements ObserverInterface
     private $defaultSourceProvider;
 
     /**
+     * @var SalesEventInterfaceFactory
+     */
+    private $salesEventFactory;
+
+    /**
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param Json $jsonSerializer
@@ -75,7 +82,8 @@ class SourceDeductionProcessor implements ObserverInterface
         ItemToDeductInterfaceFactory $itemToDeduct,
         SourceDeductionRequestInterfaceFactory $sourceDeductionRequestInterface,
         SourceDeductionServiceInterface $sourceDeductionService,
-        DefaultSourceProvider $defaultSourceProvider
+        DefaultSourceProvider $defaultSourceProvider,
+        SalesEventInterfaceFactory $salesEventFactory
     ) {
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getSkusByProductIds = $getSkusByProductIds;
@@ -84,6 +92,7 @@ class SourceDeductionProcessor implements ObserverInterface
         $this->sourceDeductionRequestInterface = $sourceDeductionRequestInterface;
         $this->sourceDeductionService = $sourceDeductionService;
         $this->defaultSourceProvider = $defaultSourceProvider;
+        $this->salesEventFactory = $salesEventFactory;
     }
 
     /**
@@ -157,10 +166,17 @@ class SourceDeductionProcessor implements ObserverInterface
             ]);
         }
 
+        $salesEvent = $this->salesEventFactory->create([
+            'type' => SalesEventInterface::TYPE_SHIPMENT_CREATED,
+            'objectType' => SalesEventInterface::OBJECT_TYPE_ORDER,
+            'objectId' => $shipment->getOrderId()
+        ]);
+
         $sourceDeductionRequest = $this->sourceDeductionRequestInterface->create([
             'stockId' => $stockId,
             'sourceCode' => $sourceCode,
-            'items' => $itemsToShip
+            'items' => $itemsToShip,
+            'salesEvent' => $salesEvent
         ]);
 
         $this->sourceDeductionService->execute($sourceDeductionRequest);
