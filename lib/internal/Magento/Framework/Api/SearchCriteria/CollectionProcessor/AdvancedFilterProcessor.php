@@ -16,7 +16,7 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProcessorBuilderInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProviderInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -42,7 +42,7 @@ use Magento\Framework\Phrase;
 class AdvancedFilterProcessor implements CollectionProcessorInterface
 {
     /**
-     * @var CustomConditionProcessorBuilderInterface
+     * @var CustomConditionProviderInterface
      */
     private $customConditionProcessorBuilder;
 
@@ -59,12 +59,12 @@ class AdvancedFilterProcessor implements CollectionProcessorInterface
     /**
      * @param CustomConditionInterface $defaultConditionProcessor
      * @param ConditionManager $conditionManager
-     * @param CustomConditionProcessorBuilderInterface $customConditionProcessorBuilder
+     * @param CustomConditionProviderInterface $customConditionProcessorBuilder
      */
     public function __construct(
         CustomConditionInterface $defaultConditionProcessor,
         ConditionManager $conditionManager,
-        CustomConditionProcessorBuilderInterface $customConditionProcessorBuilder
+        CustomConditionProviderInterface $customConditionProcessorBuilder
     ) {
         $this->defaultConditionProcessor = $defaultConditionProcessor;
         $this->conditionManager = $conditionManager;

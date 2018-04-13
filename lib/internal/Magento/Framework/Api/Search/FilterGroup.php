@@ -12,7 +12,7 @@ use Magento\Framework\Api\FilterGroupInterface;
 /**
  * Groups two or more filters together using a logical OR
  */
-class FilterGroup extends AbstractSimpleObject implements FilterGroupInterface
+class FilterGroup extends AbstractSimpleObject
 {
     const FILTERS = 'filters';
 

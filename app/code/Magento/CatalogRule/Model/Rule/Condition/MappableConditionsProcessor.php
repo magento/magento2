@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProcessorBuilderInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProviderInterface;
 use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
 
@@ -25,7 +25,7 @@ use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
 class MappableConditionsProcessor
 {
     /**
-     * @var CustomConditionProcessorBuilderInterface
+     * @var CustomConditionProviderInterface
      */
     private $customConditionProcessorBuilder;
 
@@ -35,11 +35,11 @@ class MappableConditionsProcessor
     private $eavConfig;
 
     /**
-     * @param CustomConditionProcessorBuilderInterface $customConditionProcessorBuilder
+     * @param CustomConditionProviderInterface $customConditionProcessorBuilder
      * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
-        CustomConditionProcessorBuilderInterface $customConditionProcessorBuilder,
+        CustomConditionProviderInterface $customConditionProcessorBuilder,
         \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->customConditionProcessorBuilder = $customConditionProcessorBuilder;
@@ -89,7 +89,7 @@ class MappableConditionsProcessor
             }
 
             throw new InputException(
-                __(sprintf('Undefined condition type "%s" passed in.', $condition->getType()))
+                __('Undefined condition type "%1" passed in.', [$condition->getType()])
             );
         }
 

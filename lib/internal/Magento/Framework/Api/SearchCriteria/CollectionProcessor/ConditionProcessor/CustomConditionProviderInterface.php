@@ -11,12 +11,12 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 
 /**
- * Interface CustomConditionProcessorBuilderInterface
+ * Interface CustomConditionProviderInterface
  * Interface to build collections of all custom condition processors
  *
  * @package Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor
  */
-interface CustomConditionProcessorBuilderInterface
+interface CustomConditionProviderInterface
 {
     /**
      * Get custom processor by field name

@@ -12,7 +12,7 @@ use Magento\Framework\Api\Filter;
 /**
  * Interface CustomConditionInterface
  * Interface to build classes that can produce SQL conditions
- * that can be applied to entity collections to filter them by Filter
+ * that can be applied to entity collections to filter them by Magento\Framework\Api\Filter
  *
  * @package Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor
  */

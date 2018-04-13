@@ -20,7 +20,6 @@ use Magento\Framework\Api\SearchCriteria;
  * Maps catalog price rule conditions to search criteria
  *
  * @package Magento\CatalogRule\Model\Rule\Condition
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConditionsToSearchCriteriaMapper
 {
@@ -40,42 +39,18 @@ class ConditionsToSearchCriteriaMapper
     private $filterFactory;
 
     /**
-     * @var ConditionAggregatorToSqlOperatorMapper
-     */
-    private $aggregatorNameToSql;
-
-    /**
-     * @var ConditionOperatorToSqlOperatorMapper
-     */
-    private $operatorTypeToSql;
-
-    /**
-     * @var ReverseSqlOperator
-     */
-    private $reverseSqlOperator;
-
-    /**
      * @param \Magento\Framework\Api\SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
      * @param \Magento\Framework\Api\CombinedFilterGroupFactory $combinedFilterGroupFactory
      * @param \Magento\Framework\Api\FilterFactory $filterFactory
-     * @param ConditionAggregatorToSqlOperatorMapper $aggregatorNameToSql
-     * @param ConditionOperatorToSqlOperatorMapper $operatorTypeToSql
-     * @param ReverseSqlOperator $reverseSqlOperator
      */
     public function __construct(
         \Magento\Framework\Api\SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         \Magento\Framework\Api\CombinedFilterGroupFactory $combinedFilterGroupFactory,
-        \Magento\Framework\Api\FilterFactory $filterFactory,
-        \Magento\CatalogRule\Model\Rule\Condition\ConditionAggregatorToSqlOperatorMapper $aggregatorNameToSql,
-        \Magento\CatalogRule\Model\Rule\Condition\ConditionOperatorToSqlOperatorMapper $operatorTypeToSql,
-        \Magento\CatalogRule\Model\Rule\Condition\ReverseSqlOperator $reverseSqlOperator
+        \Magento\Framework\Api\FilterFactory $filterFactory
     ) {
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         $this->combinedFilterGroupFactory = $combinedFilterGroupFactory;
         $this->filterFactory = $filterFactory;
-        $this->aggregatorNameToSql = $aggregatorNameToSql;
-        $this->operatorTypeToSql = $operatorTypeToSql;
-        $this->reverseSqlOperator = $reverseSqlOperator;
     }
 
     /**
@@ -112,7 +87,7 @@ class ConditionsToSearchCriteriaMapper
         }
 
         throw new InputException(
-            __(sprintf('Undefined condition type "%s" passed in.', $condition->getType()))
+            __('Undefined condition type "%1" passed in.', [$condition->getType()])
         );
     }
 
@@ -133,8 +108,7 @@ class ConditionsToSearchCriteriaMapper
             }
 
             // This required to solve cases when condition is configured like:
-            // "If ALL/ANY of these conditions are FALSE"
-            // - we need to reverse SQL operator for this "FALSE"
+            // "If ALL/ANY of these conditions are FALSE" - we need to reverse SQL operator for this "FALSE"
             if ((bool)$combinedCondition->getValue() === false) {
                 $this->reverseSqlOperatorInFilter($filter);
             }
@@ -151,7 +125,7 @@ class ConditionsToSearchCriteriaMapper
 
     /**
      * @param ConditionInterface $productCondition
-     * @return CombinedCondition|SimpleCondition
+     * @return FilterGroup|Filter
      * @throws InputException
      */
     private function mapSimpleConditionToFilterGroup(ConditionInterface $productCondition)
@@ -169,10 +143,10 @@ class ConditionsToSearchCriteriaMapper
 
     /**
      * @param ConditionInterface $productCondition
-     * @return CombinedCondition
+     * @return FilterGroup
      * @throws InputException
      */
-    private function processSimpleConditionWithArrayValue(ConditionInterface $productCondition): CombinedCondition
+    private function processSimpleConditionWithArrayValue(ConditionInterface $productCondition): FilterGroup
     {
         $filters = [];
 
@@ -195,7 +169,7 @@ class ConditionsToSearchCriteriaMapper
      */
     private function getGlueForArrayValues(string $operator): string
     {
-        if (in_array($operator, ['!=', '!{}', '!()'])) {
+        if (in_array($operator, ['!=', '!{}', '!()'], true)) {
             return 'all';
         }
 
@@ -209,25 +183,42 @@ class ConditionsToSearchCriteriaMapper
      */
     private function reverseSqlOperatorInFilter(Filter $filter)
     {
+        $operatorsMap = [
+            'eq'    => 'neq',
+            'neq'   => 'eq',
+            'gteq'  => 'lt',
+            'lteq'  => 'gt',
+            'gt'    => 'lteq',
+            'lt'    => 'gteq',
+            'like'  => 'nlike',
+            'nlike' => 'like',
+            'in'    => 'nin',
+            'nin'   => 'in',
+        ];
+
+        if (!array_key_exists($filter->getConditionType(), $operatorsMap)) {
+            throw new InputException(
+                __('Undefined SQL operator "%1" passed in.', [$filter->getConditionType()])
+            );
+        }
+
         $filter->setConditionType(
-            $this->reverseSqlOperator->reverseOperator($filter->getConditionType())
+            $operatorsMap[$filter->getConditionType()]
         );
     }
 
     /**
      * @param $filters
      * @param $combinationMode
-     * @return CombinedCondition
+     * @return FilterGroup
      * @throws InputException
      */
-    private function createCombinedFilterGroup(array $filters, string $combinationMode): CombinedCondition
+    private function createCombinedFilterGroup(array $filters, string $combinationMode): FilterGroup
     {
         return $this->combinedFilterGroupFactory->create([
             'data' => [
                 FilterGroup::FILTERS => $filters,
-                FilterGroup::COMBINATION_MODE => $this->aggregatorNameToSql->mapConditionAggregatorToSQL(
-                    $combinationMode
-                )
+                FilterGroup::COMBINATION_MODE => $this->mapRuleAggregatorToSQLAggregator($combinationMode)
             ]
         ]);
     }
@@ -236,19 +227,64 @@ class ConditionsToSearchCriteriaMapper
      * @param $field
      * @param $value
      * @param $conditionType
-     * @return SimpleCondition
+     * @return Filter
      * @throws InputException
      */
-    private function createFilter(string $field, string $value, string $conditionType): SimpleCondition
+    private function createFilter(string $field, string $value, string $conditionType): Filter
     {
         return $this->filterFactory->create([
             'data' => [
                 Filter::KEY_FIELD => $field,
                 Filter::KEY_VALUE => $value,
-                Filter::KEY_CONDITION_TYPE => $this->operatorTypeToSql->mapConditionOperatorToSQL(
-                    $conditionType
-                )
+                Filter::KEY_CONDITION_TYPE => $this->mapRuleOperatorToSQLCondition($conditionType)
             ]
         ]);
+    }
+
+    /**
+     * Maps catalog price rule operators to their corresponding operators in SQL
+     *
+     * @param $ruleOperator
+     * @return string
+     * @throws InputException
+     */
+    private function mapRuleOperatorToSQLCondition(string $ruleOperator): string
+    {
+        $operatorsMap = [
+            '=='    => 'eq',    // is
+            '!='    => 'neq',   // is not
+            '>='    => 'gteq',  // equals or greater than
+            '<='    => 'lteq',  // equals or less than
+            '>'     => 'gt',    // greater than
+            '<'     => 'lt',    // less than
+            '{}'    => 'like',  // contains
+            '!{}'   => 'nlike', // does not contains
+            '()'    => 'in',    // is one of
+            '!()'   => 'nin',   // is not one of
+        ];
+
+        if (!array_key_exists($ruleOperator, $operatorsMap)) {
+            throw new InputException(
+                __('Undefined rule operator "%1" passed in.', [$ruleOperator])
+            );
+        }
+
+        return $operatorsMap[$ruleOperator];
+    }
+
+    private function mapRuleAggregatorToSQLAggregator(string $ruleAggregator): string
+    {
+        $operatorsMap = [
+            'all'    => 'AND',
+            'any'    => 'OR',
+        ];
+
+        if (!array_key_exists(strtolower($ruleAggregator), $operatorsMap)) {
+            throw new InputException(
+                __('Undefined rule aggregator "%1" passed in.', [$ruleAggregator])
+            );
+        }
+
+        return $operatorsMap[$ruleAggregator];
     }
 }

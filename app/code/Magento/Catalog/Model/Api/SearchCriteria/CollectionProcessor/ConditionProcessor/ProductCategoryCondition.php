@@ -95,7 +95,7 @@ class ProductCategoryCondition implements CustomConditionInterface
                 continue;
             }
 
-            if ((int)$category->getIsAnchor() === 1) {
+            if ($category->getIsAnchor()) {
                 $childCategoryIds[] = $category->getAllChildren(true);
             }
 
@@ -122,6 +122,6 @@ class ProductCategoryCondition implements CustomConditionInterface
             'like'  => 'in',
             'nlike' => 'nin',
         ];
-        return isset($conditionsMap[$conditionType]) ? $conditionsMap[$conditionType] : $conditionType;
+        return $conditionsMap[$conditionType] ?? $conditionType;
     }
 }

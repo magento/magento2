@@ -14,8 +14,8 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 /**
  * Class ConditionBuilderFactory
  * Creates appropriate condition builder based on filter field
- * - native attribute condition builder if filer field is native attribute in product
- * - eav condition builder if filer field is eav attribute
+ * - native attribute condition builder if filter field is native attribute in product
+ * - eav condition builder if filter field is eav attribute
  *
  * @package Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder
  */
@@ -34,29 +34,29 @@ class ConditionBuilderFactory
     /**
      * @var CustomConditionInterface
      */
-    private $eavAttrConditionBuilder;
+    private $eavAttributeConditionBuilder;
 
     /**
      * @var CustomConditionInterface
      */
-    private $nativeAttrConditionBuilder;
+    private $nativeAttributeConditionBuilder;
 
     /**
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
-     * @param CustomConditionInterface $eavAttrConditionBuilder
-     * @param CustomConditionInterface $nativeAttrConditionBuilder
+     * @param CustomConditionInterface $eavAttributeConditionBuilder
+     * @param CustomConditionInterface $nativeAttributeConditionBuilder
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
-        CustomConditionInterface $eavAttrConditionBuilder,
-        CustomConditionInterface $nativeAttrConditionBuilder
+        CustomConditionInterface $eavAttributeConditionBuilder,
+        CustomConditionInterface $nativeAttributeConditionBuilder
     ) {
         $this->eavConfig = $eavConfig;
         $this->productResource = $productResource;
-        $this->eavAttrConditionBuilder = $eavAttrConditionBuilder;
-        $this->nativeAttrConditionBuilder = $nativeAttrConditionBuilder;
+        $this->eavAttributeConditionBuilder = $eavAttributeConditionBuilder;
+        $this->nativeAttributeConditionBuilder = $nativeAttributeConditionBuilder;
     }
 
     /**
@@ -69,10 +69,10 @@ class ConditionBuilderFactory
         $attribute = $this->getAttributeByCode($filter->getField());
 
         if ($attribute->getBackendTable() === $this->productResource->getEntityTable()) {
-            return $this->nativeAttrConditionBuilder;
+            return $this->nativeAttributeConditionBuilder;
         }
 
-        return $this->eavAttrConditionBuilder;
+        return $this->eavAttributeConditionBuilder;
     }
 
     /**

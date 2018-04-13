@@ -12,25 +12,34 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\
 use Magento\Framework\Phrase;
 
 /**
- * Class CustomConditionProcessorBuilder
+ * Class CustomConditionProvider
  * Collection of all custom condition processors
  *
  * @package Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor
  */
-class CustomConditionProcessorBuilder implements CustomConditionProcessorBuilderInterface
+class CustomConditionProvider implements CustomConditionProviderInterface
 {
     /**
      * @var CustomConditionInterface[]
      */
-    private $customConditionProcessor;
+    private $customConditionProcessors;
 
     /**
-     * CustomConditionProcessorBuilder constructor.
-     * @param array $customConditionProcessor
+     * CustomConditionProvider constructor.
+     * @param array $customConditionProcessors
+     * @throws InputException
      */
-    public function __construct(array $customConditionProcessor = [])
+    public function __construct(array $customConditionProcessors = [])
     {
-        $this->customConditionProcessor = $customConditionProcessor;
+        foreach ($customConditionProcessors as $processor) {
+            if (!$processor instanceof CustomConditionInterface) {
+                throw new InputException(
+                    new Phrase('Custom processor must implement "%1".', [CustomConditionInterface::class])
+                );
+            }
+        }
+
+        $this->customConditionProcessors = $customConditionProcessors;
     }
 
     /**
@@ -44,19 +53,11 @@ class CustomConditionProcessorBuilder implements CustomConditionProcessorBuilder
     {
         if (!$this->hasProcessorForField($fieldName)) {
             throw new InputException(
-                new Phrase(sprintf('Custom processor for field "%s" is absent.', $fieldName))
+                new Phrase('Custom processor for field "%1" is absent.', [$fieldName])
             );
         }
 
-        $processor = $this->customConditionProcessor[$fieldName];
-
-        if (!$processor instanceof CustomConditionInterface) {
-            throw new InputException(
-                new Phrase('Custom processor must implement CustomConditionInterface.')
-            );
-        }
-
-        return $processor;
+        return $this->customConditionProcessors[$fieldName];
     }
 
     /**
@@ -67,6 +68,6 @@ class CustomConditionProcessorBuilder implements CustomConditionProcessorBuilder
      */
     public function hasProcessorForField(string $fieldName): bool
     {
-        return array_key_exists($fieldName, $this->customConditionProcessor);
+        return array_key_exists($fieldName, $this->customConditionProcessors);
     }
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Api\Test\Unit\SearchCriteria\CollectionProcessor\ConditionProcessor;
 
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProcessorBuilder;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProvider;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 
 class CustomConditionProcessorBuilderTest extends \PHPUnit\Framework\TestCase
@@ -23,7 +23,7 @@ class CustomConditionProcessorBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->customConditionProcessorBuilder = $objectManagerHelper
             ->getObject(
-                CustomConditionProcessorBuilder::class,
+                CustomConditionProvider::class,
                 [
                     'customConditionProcessor' => [
                         'my-valid-field' => $this->customConditionMock,

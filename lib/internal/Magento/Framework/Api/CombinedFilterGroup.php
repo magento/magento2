@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Framework\Api;
 
 use Magento\Framework\Api\AbstractSimpleObject;
-use Magento\Framework\Api\FilterGroupInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
@@ -16,16 +15,19 @@ use Magento\Framework\Phrase;
 /**
  * Groups two or more filters together using 'OR' or 'AND' strategy
  */
-class CombinedFilterGroup extends AbstractSimpleObject implements FilterGroupInterface
+class CombinedFilterGroup extends AbstractSimpleObject
 {
+    /**
+     * Constants defined for keys of  data array
+     */
     const FILTERS = 'filters';
     const COMBINATION_MODE = 'combination_mode';
 
     /**
      * Possible aggregation strategies for filters
      */
-    const COMBINED_WITH_AND = Select::SQL_AND;
-    const COMBINED_WITH_OR = Select::SQL_OR;
+    const COMBINED_WITH_AND = 'AND';
+    const COMBINED_WITH_OR = 'OR';
 
     /**
      * Returns a list of filters in this group
@@ -67,7 +69,7 @@ class CombinedFilterGroup extends AbstractSimpleObject implements FilterGroupInt
     {
         if ($mode !== self::COMBINED_WITH_AND && $mode !== self::COMBINED_WITH_OR) {
             throw new InputException(
-                new Phrase(sprintf('Invalid combination mode: %s', $mode))
+                new Phrase('Invalid combination mode: %1', [$mode])
             );
         }
 

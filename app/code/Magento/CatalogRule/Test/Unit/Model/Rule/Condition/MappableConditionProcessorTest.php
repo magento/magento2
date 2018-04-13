@@ -7,7 +7,7 @@ namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProcessorBuilderInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProviderInterface;
 use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
 
@@ -41,7 +41,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->customConditionProcessorBuilderMock = $this->getMockBuilder(
-            CustomConditionProcessorBuilderInterface::class
+            CustomConditionProviderInterface::class
         )->disableOriginalConstructor()
         ->setMethods(['hasProcessorForField'])
         ->getMockForAbstractClass();
