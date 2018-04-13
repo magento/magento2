@@ -25,7 +25,6 @@ class CustomConditionProvider implements CustomConditionProviderInterface
     private $customConditionProcessors;
 
     /**
-     * CustomConditionProvider constructor.
      * @param array $customConditionProcessors
      * @throws InputException
      */

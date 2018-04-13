@@ -109,7 +109,7 @@ class AdvancedFilterProcessor implements CollectionProcessorInterface
             }
 
             throw new InputException(
-                new Phrase(sprintf('Undefined filter group "%s" passed in.', get_class($filter)))
+                new Phrase('Undefined filter group "%1" passed in.', [get_class($filter)])
             );
         }
 

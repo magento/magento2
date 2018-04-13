@@ -12,7 +12,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\
 
 /**
  * Interface CustomConditionProviderInterface
- * Interface to build collections of all custom condition processors
+ * Interface to create collections of all custom condition processors
  *
  * @package Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor
  */
