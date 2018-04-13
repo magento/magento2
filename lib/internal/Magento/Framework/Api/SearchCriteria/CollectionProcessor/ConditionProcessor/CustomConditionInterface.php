@@ -10,9 +10,21 @@ namespace Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProc
 use Magento\Framework\Api\Filter;
 
 /**
- * Interface CustomConditionInterface
- * Interface to build classes that can produce SQL conditions
- * that can be applied to entity collections to filter them by Magento\Framework\Api\Filter
+ * CustomConditionInterface
+ *
+ * Implement it to build SQL conditions from Magento\Framework\Api\Filter
+ *
+ * Multiple conditions can be combined into groups with AND or OR combination
+ * and applied to select queries as WHERE parts to filter entity collections
+ *
+ * For example:
+ *      Select *
+ *      FROM `catalog_product_entity`
+ *      WHERE
+ *          CustomCondition_1
+ *          AND
+ *          (CustomCondition_2 OR CustomCondition_3)
+ *
  *
  * @package Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor
  */
