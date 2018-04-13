@@ -35,12 +35,11 @@ class AssertProductViewBreadcrumbsCategory extends AbstractConstraint
         BrowserInterface $browser,
         CatalogProductSimple $product
     ) {
-        $categories = is_object($product->getDataFieldConfig('category_ids')['source']) ?
-            $product->getDataFieldConfig('category_ids')['source']->getCategories()
+        $categories = is_object($product->getDataFieldConfig('category_ids')['source'])
+            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
             : [];
 
         if (!empty($categories)) {
-
             /** @var Category $category */
             foreach ($categories as $category) {
                 $cmsIndex->open();

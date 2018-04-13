@@ -88,13 +88,9 @@ define([
              * @private
              */
             _getCategoryCrumb: function (menuItem) {
-                var categoryId,
-                    categoryName,
-                    categoryUrl;
-
-                categoryId = /(\d+)/i.exec(menuItem.attr('id'))[0];
-                categoryName = menuItem.text();
-                categoryUrl = menuItem.attr('href');
+                var categoryId = /(\d+)/i.exec(menuItem.attr('id'))[0],
+                    categoryName = menuItem.text(),
+                    categoryUrl = menuItem.attr('href');
 
                 return {
                     'name': 'category' + categoryId,

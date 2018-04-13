@@ -95,7 +95,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedName
      * @return void
      */
-    public function testGetProductName($product, $expectedName)
+    public function testGetProductName($product, string $expectedName)
     {
         $this->catalogHelper->expects($this->atLeastOnce())
             ->method('getProduct')
