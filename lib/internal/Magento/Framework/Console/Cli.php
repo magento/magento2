@@ -63,6 +63,15 @@ class Cli extends SymfonyApplication
         $this->serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
             ->getServiceManager();
 
+        /**
+         * Temporary workaround until the compiler is able to clear the generation directory
+         * @todo remove after MAGETWO-44493 resolved
+         */
+        if (class_exists(CompilerPreparation::class)) {
+            $compilerPreparation = new CompilerPreparation($this->serviceManager, new ArgvInput(), new File());
+            $compilerPreparation->handleCompilerEnvironment();
+        }
+
         $bootstrapParam = new ComplexParameter(self::INPUT_KEY_BOOTSTRAP);
         $params = $bootstrapParam->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
@@ -76,14 +85,6 @@ class Cli extends SymfonyApplication
                 . ' address this issue before using Magento command line.</error>'
             );
             exit(0);
-        }
-        /**
-         * Temporary workaround until the compiler is able to clear the generation directory
-         * @todo remove after MAGETWO-44493 resolved
-         */
-        if (class_exists(CompilerPreparation::class)) {
-            $compilerPreparation = new CompilerPreparation($this->serviceManager, new ArgvInput(), new File());
-            $compilerPreparation->handleCompilerEnvironment();
         }
 
         if ($version == 'UNKNOWN') {
