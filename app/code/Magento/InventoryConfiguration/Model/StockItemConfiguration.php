@@ -248,7 +248,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     {
         $qtyIncrements = $this->stockItem->getQtyIncrements();
         if (false === $qtyIncrements) {
-            return 1;
+            return 0;
         }
         return $qtyIncrements;
     }
