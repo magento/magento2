@@ -130,4 +130,8 @@
             <argument name="isProductSalableForRequestedQty" xsi:type="object">IsProductSalableForRequestedQtyConditionChainOnPlaceOrder</argument>
         </arguments>
     </type>
+    <!-- Append Reservations when Order Is Placed  -->
+    <type name="Magento\Sales\Api\OrderManagementInterface">
+        <plugin name="inventory_reservations_placement" type="Magento\InventorySales\Plugin\Sales\OrderManagement\AppendReservationsAfterOrderPlacement"/>
+    </type>
 </config>

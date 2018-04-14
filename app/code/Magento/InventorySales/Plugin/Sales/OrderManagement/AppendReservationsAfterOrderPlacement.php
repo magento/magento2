@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Observer\Quote;
+namespace Magento\InventorySales\Plugin\Sales\OrderManagement;
 
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\InventorySalesApi\Api\RegisterSalesEventInterface;
-use Magento\CatalogInventory\Observer\ProductQty;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
@@ -19,17 +19,12 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
-class PlaceReservationsOnQuoteSubmitSuccess implements ObserverInterface
+class AppendReservationsAfterOrderPlacement
 {
     /**
      * @var RegisterSalesEventInterface
      */
     private $registerSalesEvent;
-
-    /**
-     * @var ProductQty
-     */
-    private $productQty;
 
     /**
      * @var GetSkusByProductIdsInterface
@@ -52,43 +47,42 @@ class PlaceReservationsOnQuoteSubmitSuccess implements ObserverInterface
     private $salesEventFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param RegisterSalesEventInterface $registerSalesEvent
      * @param ProductQty $productQty
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param SalesChannelInterfaceFactory $salesChannelFactory
      * @param SalesEventInterfaceFactory $salesEventFactory
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         RegisterSalesEventInterface $registerSalesEvent,
-        ProductQty $productQty,
         GetSkusByProductIdsInterface $getSkusByProductIds,
         WebsiteRepositoryInterface $websiteRepository,
         SalesChannelInterfaceFactory $salesChannelFactory,
-        SalesEventInterfaceFactory $salesEventFactory
+        SalesEventInterfaceFactory $salesEventFactory,
+        StoreManagerInterface $storeManager
     ) {
         $this->registerSalesEvent = $registerSalesEvent;
-        $this->productQty = $productQty;
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->websiteRepository = $websiteRepository;
         $this->salesChannelFactory = $salesChannelFactory;
         $this->salesEventFactory = $salesEventFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
-     * @param Observer $observer
-     * return void
+     * @param OrderManagementInterface $subject
+     * @param OrderInterface $order
+     * @return OrderInterface
      */
-    public function execute(Observer $observer)
+    public function afterPlace(OrderManagementInterface $subject, OrderInterface $order) : OrderInterface
     {
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $observer->getEvent()->getQuote();
-        $items = $this->productQty->getProductQty($quote->getAllItems());
-        $websiteId = $quote->getStore()->getWebsiteId();
-
-        /** @var \Magento\Sales\Api\Data\OrderInterface $order */
-        $order = $observer->getEvent()->getOrder();
-
         $salesEventObjectType = SalesEventInterface::TYPE_ORDER;
         $salesEventObjectId = (string)$order->getEntityId();
         /** @var SalesEventInterface $salesEvent */
@@ -97,17 +91,24 @@ class PlaceReservationsOnQuoteSubmitSuccess implements ObserverInterface
             'objectId' => $salesEventObjectId
         ]);
 
-        $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
+        $itemsById = [];
+        /** @var OrderItemInterface $item **/
+        foreach ($order->getItems() as $item) {
+            $itemsById[$item->getProductId()] = $item->getQtyOrdered();
+        }
+        $productSkus = $this->getSkusByProductIds->execute(array_keys($itemsById));
         $itemsBySku = [];
         foreach ($productSkus as $productId => $sku) {
-            $itemsBySku[$sku] = $items[$productId];
+            $itemsBySku[$sku] = $itemsById[$productId];
         }
+
+        $websiteId = $this->storeManager->getStore($order->getStoreId())->getWebsiteId();
         $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
         $salesChannel = $this->salesChannelFactory->create();
         $salesChannel->setCode($websiteCode);
         $salesChannel->setType(SalesChannelInterface::TYPE_WEBSITE);
 
         $this->registerSalesEvent->execute($itemsBySku, $salesChannel, $salesEvent);
-        return;
+        return $order;
     }
 }

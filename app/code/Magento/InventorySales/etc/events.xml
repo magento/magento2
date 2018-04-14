@@ -12,7 +12,4 @@
     <event name="website_delete_after">
         <observer name="delete_website_to_stock_link" instance="Magento\InventorySales\Observer\Website\DeleteWebsiteToStockLink"/>
     </event>
-    <event name="sales_model_service_quote_submit_success">
-        <observer name="inventory_reservations_placement" instance="Magento\InventorySales\Observer\Quote\PlaceReservationsOnQuoteSubmitSuccess"/>
-    </event>
 </config>
