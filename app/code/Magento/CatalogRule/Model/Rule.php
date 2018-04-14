@@ -8,8 +8,10 @@ namespace Magento\CatalogRule\Model;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\CatalogRule\Api\Data\RuleExtensionInterface;
 use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\CatalogRule\Helper\Data;
+use Magento\CatalogRule\Model\Data\Condition\Converter;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\CatalogRule\Model\ResourceModel\Rule as RuleResourceModel;
 use Magento\CatalogRule\Model\Rule\Action\CollectionFactory as RuleCollectionFactory;
@@ -18,8 +20,10 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -226,7 +230,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $this->dateTime = $dateTime;
         $this->_ruleProductProcessor = $ruleProductProcessor;
         $this->ruleResourceModel = $ruleResourceModel ? $ruleResourceModel :
-            \Magento\Framework\App\ObjectManager::getInstance()
+            ObjectManager::getInstance()
                 ->get(RuleResourceModel::class);
 
         parent::__construct(
@@ -391,7 +395,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     /**
      * {@inheritdoc}
      */
-    public function validateData(\Magento\Framework\DataObject $dataObject)
+    public function validateData(DataObject $dataObject)
     {
         $result = parent::validateData($dataObject);
         if ($result === true) {
@@ -806,7 +810,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param \Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(RuleExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
@@ -818,8 +822,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     private function getRuleConditionConverter()
     {
         if (null === $this->ruleConditionConverter) {
-            $this->ruleConditionConverter = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\CatalogRule\Model\Data\Condition\Converter::class);
+            $this->ruleConditionConverter = ObjectManager::getInstance()
+                ->get(Converter::class);
         }
         return $this->ruleConditionConverter;
     }
