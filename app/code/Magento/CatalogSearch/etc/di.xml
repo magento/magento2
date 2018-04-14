@@ -309,4 +309,11 @@
             <argument name="scopeConfig" xsi:type="null"/>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <arguments>
+            <argument name="dimensionProvider" xsi:type="object" shared="false">
+                Magento\Store\Model\StoreDimensionProvider
+            </argument>
+        </arguments>
+    </type>
 </config>

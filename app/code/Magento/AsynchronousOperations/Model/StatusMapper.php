@@ -25,6 +25,7 @@ class StatusMapper
         $statusMapping = [
             OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED => BulkSummaryInterface::FINISHED_WITH_FAILURE,
             OperationInterface::STATUS_TYPE_RETRIABLY_FAILED => BulkSummaryInterface::FINISHED_WITH_FAILURE,
+            OperationInterface::STATUS_TYPE_REJECTED => BulkSummaryInterface::FINISHED_WITH_FAILURE,
             OperationInterface::STATUS_TYPE_COMPLETE => BulkSummaryInterface::FINISHED_SUCCESSFULLY,
             OperationInterface::STATUS_TYPE_OPEN => BulkSummaryInterface::IN_PROGRESS,
             BulkSummaryInterface::NOT_STARTED => BulkSummaryInterface::NOT_STARTED
@@ -47,7 +48,8 @@ class StatusMapper
         $statusMapping = [
             BulkSummaryInterface::FINISHED_WITH_FAILURE => [
                 OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED,
-                OperationInterface::STATUS_TYPE_RETRIABLY_FAILED
+                OperationInterface::STATUS_TYPE_RETRIABLY_FAILED,
+                OperationInterface::STATUS_TYPE_REJECTED
             ],
             BulkSummaryInterface::FINISHED_SUCCESSFULLY => OperationInterface::STATUS_TYPE_COMPLETE,
             BulkSummaryInterface::IN_PROGRESS => OperationInterface::STATUS_TYPE_OPEN,

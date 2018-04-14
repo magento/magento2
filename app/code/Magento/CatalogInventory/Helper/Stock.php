@@ -17,6 +17,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class Stock
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Stock
 {
