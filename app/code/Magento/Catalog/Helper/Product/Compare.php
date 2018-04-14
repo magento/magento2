@@ -295,7 +295,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
             $this->_itemCollection->addAttributeToSelect('name')->addUrlRewrite()->load();
 
             /* update compare items count */
-            $this->_catalogSession->setCatalogCompareItemsCount(count($this->_itemCollection));
+            $this->_catalogSession->setCatalogCompareItemsCount(count($this->_itemCollection->getItems()));
         }
 
         return $this->_itemCollection;
@@ -324,8 +324,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
         $collection->addPriceData()
             ->setVisibility($this->_catalogProductVisibility->getVisibleInSiteIds());
 
-        $count = $collection->getSize();
-        $this->_catalogSession->setCatalogCompareItemsCount($count);
+        $this->_catalogSession->setCatalogCompareItemsCount(count($collection->getItems()));
 
         return $this;
     }
