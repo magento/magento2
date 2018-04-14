@@ -14,9 +14,22 @@ namespace Magento\InventorySalesApi\Api\Data;
  */
 interface SalesEventInterface
 {
-    const TYPE_ORDER = 'order';
+    /**#@+
+     * Constants for event types
+     */
+    const EVENT_ORDER_PLACED = 'order_placed';
+    const EVENT_SHIPMENT_CREATED = 'shipment_created';
+    /**#@-*/
+
+    /**#@+
+     * Constants for event object types
+     */
+    const OBJECT_TYPE_ORDER = 'order';
+    /**#@-*/
 
     public function getType(): string;
+
+    public function getObjectType(): string;
 
     public function getObjectId(): string;
 }

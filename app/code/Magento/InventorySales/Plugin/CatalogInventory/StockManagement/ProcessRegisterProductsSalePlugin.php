@@ -10,12 +10,14 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 use Magento\CatalogInventory\Api\RegisterProductSaleInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface;
+use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 
 /**
  * Class provides around Plugin on RegisterProductSaleInterface::registerProductsSale
@@ -90,18 +92,15 @@ class ProcessRegisterProductsSalePlugin
         if (null === $websiteId) {
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
-
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
         $itemsBySku = [];
         foreach ($productSkus as $productId => $sku) {
             $itemsBySku[$sku] = $items[$productId];
         }
-
         $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
         $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
         $productTypes = $this->getProductTypesBySkus->execute(array_keys($itemsBySku));
         $this->checkItemsQuantity($itemsBySku, $productTypes, $stockId);
-
         return [];
     }
 

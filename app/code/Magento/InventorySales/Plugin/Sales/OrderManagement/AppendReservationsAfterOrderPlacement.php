@@ -18,6 +18,8 @@ use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
 
 class AppendReservationsAfterOrderPlacement
 {
@@ -52,13 +54,18 @@ class AppendReservationsAfterOrderPlacement
     private $storeManager;
 
     /**
+     * @var ItemToSellInterfaceFactory
+     */
+    private $itemsToSellFactory;
+
+    /**
      * @param RegisterSalesEventInterface $registerSalesEvent
-     * @param ProductQty $productQty
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param SalesChannelInterfaceFactory $salesChannelFactory
      * @param SalesEventInterfaceFactory $salesEventFactory
      * @param StoreManagerInterface $storeManager
+     * @param ItemToSellInterfaceFactory $itemsToSellFactory
      */
     public function __construct(
         RegisterSalesEventInterface $registerSalesEvent,
@@ -66,7 +73,8 @@ class AppendReservationsAfterOrderPlacement
         WebsiteRepositoryInterface $websiteRepository,
         SalesChannelInterfaceFactory $salesChannelFactory,
         SalesEventInterfaceFactory $salesEventFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ItemToSellInterfaceFactory $itemsToSellFactory
     ) {
         $this->registerSalesEvent = $registerSalesEvent;
         $this->getSkusByProductIds = $getSkusByProductIds;
@@ -74,6 +82,7 @@ class AppendReservationsAfterOrderPlacement
         $this->salesChannelFactory = $salesChannelFactory;
         $this->salesEventFactory = $salesEventFactory;
         $this->storeManager = $storeManager;
+        $this->itemsToSellFactory = $itemsToSellFactory;
     }
 
     /**
@@ -83,12 +92,11 @@ class AppendReservationsAfterOrderPlacement
      */
     public function afterPlace(OrderManagementInterface $subject, OrderInterface $order) : OrderInterface
     {
-        $salesEventObjectType = SalesEventInterface::TYPE_ORDER;
-        $salesEventObjectId = (string)$order->getEntityId();
         /** @var SalesEventInterface $salesEvent */
         $salesEvent = $this->salesEventFactory->create([
-            'type' => $salesEventObjectType,
-            'objectId' => $salesEventObjectId
+            'type' => SalesEventInterface::EVENT_ORDER_PLACED,
+            'objectType' => SalesEventInterface::OBJECT_TYPE_ORDER,
+            'objectId' => (string)$order->getEntityId()
         ]);
 
         $itemsById = [];
@@ -97,18 +105,22 @@ class AppendReservationsAfterOrderPlacement
             $itemsById[$item->getProductId()] = $item->getQtyOrdered();
         }
         $productSkus = $this->getSkusByProductIds->execute(array_keys($itemsById));
-        $itemsBySku = [];
+        /** @var ItemToSellInterface[] $itemsToSell */
+        $itemsToSell = [];
         foreach ($productSkus as $productId => $sku) {
-            $itemsBySku[$sku] = $itemsById[$productId];
+            $itemsToSell[] = $this->itemToSellFactory->create(['sku' => $sku, 'qty' => $itemsById[$productId]]);
         }
 
         $websiteId = $this->storeManager->getStore($order->getStoreId())->getWebsiteId();
         $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
-        $salesChannel = $this->salesChannelFactory->create();
-        $salesChannel->setCode($websiteCode);
-        $salesChannel->setType(SalesChannelInterface::TYPE_WEBSITE);
+        $salesChannel = $this->salesChannelFactory->create([
+            'data' => [
+                'type' => SalesChannelInterface::TYPE_WEBSITE,
+                'code' => $websiteCode
+            ]
+        ]);
 
-        $this->registerSalesEvent->execute($itemsBySku, $salesChannel, $salesEvent);
+        $this->registerSalesEvent->execute($itemsToSell, $salesChannel, $salesEvent);
         return $order;
     }
 }
