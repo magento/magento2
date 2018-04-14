@@ -283,6 +283,24 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         return $qty;
     }
 
+    public function getProductMinQty($product = null)
+    {
+        if (!$product) {
+            $product = $this->getProduct();
+        }
+
+        return $this->getMinimalQty($product);;
+    }
+
+    public function getProductMaxQty($product = null)
+    {
+        if (!$product) {
+            $product = $this->getProduct();
+        }
+
+        return $this->getMaximalQty($product);
+    }
+
     /**
      * Get container name, where product options should be displayed
      *

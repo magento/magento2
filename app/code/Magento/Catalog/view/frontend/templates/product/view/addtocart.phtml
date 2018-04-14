@@ -24,6 +24,9 @@
                        title="<?= /* @escapeNotVerified */ __('Qty') ?>"
                        class="input-text qty"
                        data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                       <?php if ($minimalQty = $block->getProductMinQty()) { ?>min="<?= $minimalQty ?>" <?php } ?>
+                       <?php if ($maximalQty = $block->getProductMaxQty()) { ?>max="<?= $maximalQty ?>" <?php } ?>
+                       <?php if ($qtyIncrements = $block->getProductQtyIncrements()) { ?>step="<?= $qtyIncrements ?>" <?php } ?>
                        />
             </div>
         </div>

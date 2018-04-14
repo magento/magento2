@@ -205,6 +205,29 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Gets maximal sales quantity
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return int|null
+     */
+    public function getMaximalQty($product)
+    {
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
+        $maxSaleQty = $stockItem->getMaxSaleQty();
+        return $maxSaleQty > 0 ? $maxSaleQty : null;
+    }
+
+    /**
+     * @return false|float
+     */
+    public function getQtyIncrements($product)
+    {
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
+
+        return $stockItem->getQtyIncrements();
+    }
+
+    /**
      * Get product reviews summary
      *
      * @param \Magento\Catalog\Model\Product $product
