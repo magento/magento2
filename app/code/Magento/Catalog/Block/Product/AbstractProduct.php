@@ -218,6 +218,8 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get product qty increments.
+     *
      * @return false|float
      */
     public function getQtyIncrements($product)

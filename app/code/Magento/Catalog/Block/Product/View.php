@@ -283,6 +283,12 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         return $qty;
     }
 
+    /**
+     * Get minimal product sale qty.
+     *
+     * @param null $product
+     * @return int|null
+     */
     public function getProductMinQty($product = null)
     {
         if (!$product) {
@@ -292,6 +298,12 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         return $this->getMinimalQty($product);;
     }
 
+    /**
+     * Get maximal produc sale qty.
+     *
+     * @param null $product
+     * @return int|null
+     */
     public function getProductMaxQty($product = null)
     {
         if (!$product) {
@@ -299,6 +311,21 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         }
 
         return $this->getMaximalQty($product);
+    }
+
+    /**
+     * Get product qty
+     *
+     * @param null $product
+     * @return false|float
+     */
+    public function getProductQtyIncrements($product = null)
+    {
+        if (!$product) {
+            $product = $this->getProduct();
+        }
+
+        return $this->getQtyIncrements($product);
     }
 
     /**
