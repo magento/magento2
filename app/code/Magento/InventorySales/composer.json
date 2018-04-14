@@ -15,6 +15,7 @@
         "magento/module-inventory-reservations-api": "100.0.*",
         "magento/module-inventory-sales-api": "100.0.*",
         "magento/module-store": "100.3.*",
+        "magento/module-sales": "100.3.*",
         "magento/module-ui": "100.3.*"
     },
     "require-dev": {
