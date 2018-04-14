@@ -29,6 +29,11 @@ class SalesEvent implements SalesEventInterface
      */
     private $objectId;
 
+    /**
+     * @param string $type
+     * @param string $objectType
+     * @param string $objectId
+     */
     public function __construct(string $type, string $objectType, string $objectId)
     {
         $this->type = $type;

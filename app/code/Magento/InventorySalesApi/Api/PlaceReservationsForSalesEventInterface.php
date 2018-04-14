@@ -19,7 +19,7 @@ use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
  *
  * @api
  */
-interface RegisterSalesEventInterface
+interface PlaceReservationsForSalesEventInterface
 {
     /**
      * @param ItemToSellInterface[] $items

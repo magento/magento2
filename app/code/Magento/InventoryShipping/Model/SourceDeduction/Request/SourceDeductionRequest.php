@@ -38,6 +38,7 @@ class SourceDeductionRequest implements SourceDeductionRequestInterface
      * @param int $stockId
      * @param string $sourceCode
      * @param array $items
+     * @param SalesEventInterface $salesEvent
      */
     public function __construct(int $stockId, string $sourceCode, array $items, SalesEventInterface $salesEvent)
     {

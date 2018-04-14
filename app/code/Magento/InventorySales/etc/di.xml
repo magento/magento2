@@ -24,13 +24,6 @@
     <type name="Magento\Inventory\Ui\DataProvider\StockDataProvider">
         <plugin name="sales_channel_data" type="Magento\InventorySales\Plugin\Inventory\Ui\StockDataProvider\SalesChannels" />
     </type>
-    <type name="Magento\CatalogInventory\Model\StockManagement">
-        <plugin name="process_back_item_qty" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessBackItemQtyPlugin"/>
-        <plugin name="process_revert_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRevertProductsSalePlugin"/>
-    </type>
-    <type name="Magento\CatalogInventory\Api\RegisterProductSaleInterface">
-        <plugin name="process_register_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin"/>
-    </type>
     <type name="Magento\CatalogInventory\Api\StockStateInterface">
         <plugin name="check_quote_item_qty" type="Magento\InventorySales\Plugin\StockState\CheckQuoteItemQtyPlugin"/>
         <plugin name="suggest_qty" type="Magento\InventorySales\Plugin\StockState\SuggestQtyPlugin"/>
@@ -41,7 +34,7 @@
     <!-- Sales Event -->
     <preference for="Magento\InventorySalesApi\Api\Data\ItemToSellInterface" type="Magento\InventorySales\Model\ItemToSell"/>
     <preference for="Magento\InventorySalesApi\Api\Data\SalesEventInterface" type="Magento\InventorySales\Model\SalesEvent"/>
-    <preference for="Magento\InventorySalesApi\Api\RegisterSalesEventInterface" type="Magento\InventorySales\Model\RegisterSalesEvent"/>
+    <preference for="Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface" type="Magento\InventorySales\Model\PlaceReservationsForSalesEvent"/>
     <!-- Query interfaces -->
     <preference for="Magento\InventorySalesApi\Api\GetProductSalableQtyInterface" type="Magento\InventorySales\Model\GetProductSalableQty"/>
     <!-- StockItem -->
@@ -131,8 +124,15 @@
             <argument name="isProductSalableForRequestedQty" xsi:type="object">IsProductSalableForRequestedQtyConditionChainOnPlaceOrder</argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogInventory\Model\StockManagement">
+        <plugin name="process_back_item_qty" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessBackItemQtyPlugin"/>
+        <plugin name="process_revert_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRevertProductsSalePlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Api\RegisterProductSaleInterface">
+        <plugin name="process_register_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin"/>
+    </type>
     <!-- Append Reservations when Order Is Placed  -->
     <type name="Magento\Sales\Api\OrderManagementInterface">
-        <plugin name="inventory_reservations_placement" type="Magento\InventorySales\Plugin\Sales\OrderManagement\AppendReservationsAfterOrderPlacement"/>
+        <plugin name="inventory_reservations_placement" type="Magento\InventorySales\Plugin\Sales\OrderManagement\AppendReservationsAfterOrderPlacementPlugin"/>
     </type>
 </config>

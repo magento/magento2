@@ -11,7 +11,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\InventorySalesApi\Api\RegisterSalesEventInterface;
+use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
@@ -21,12 +21,12 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
 
-class AppendReservationsAfterOrderPlacement
+class AppendReservationsAfterOrderPlacementPlugin
 {
     /**
-     * @var RegisterSalesEventInterface
+     * @var PlaceReservationsForSalesEventInterface
      */
-    private $registerSalesEvent;
+    private $placeReservationsForSalesEvent;
 
     /**
      * @var GetSkusByProductIdsInterface
@@ -59,7 +59,7 @@ class AppendReservationsAfterOrderPlacement
     private $itemsToSellFactory;
 
     /**
-     * @param RegisterSalesEventInterface $registerSalesEvent
+     * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param SalesChannelInterfaceFactory $salesChannelFactory
@@ -68,7 +68,7 @@ class AppendReservationsAfterOrderPlacement
      * @param ItemToSellInterfaceFactory $itemsToSellFactory
      */
     public function __construct(
-        RegisterSalesEventInterface $registerSalesEvent,
+        PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent,
         GetSkusByProductIdsInterface $getSkusByProductIds,
         WebsiteRepositoryInterface $websiteRepository,
         SalesChannelInterfaceFactory $salesChannelFactory,
@@ -76,7 +76,7 @@ class AppendReservationsAfterOrderPlacement
         StoreManagerInterface $storeManager,
         ItemToSellInterfaceFactory $itemsToSellFactory
     ) {
-        $this->registerSalesEvent = $registerSalesEvent;
+        $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->websiteRepository = $websiteRepository;
         $this->salesChannelFactory = $salesChannelFactory;
@@ -120,7 +120,7 @@ class AppendReservationsAfterOrderPlacement
             ]
         ]);
 
-        $this->registerSalesEvent->execute($itemsToSell, $salesChannel, $salesEvent);
+        $this->placeReservationsForSalesEvent->execute($itemsToSell, $salesChannel, $salesEvent);
         return $order;
     }
 }

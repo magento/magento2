@@ -17,7 +17,7 @@ use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
-use Magento\InventorySalesApi\Api\RegisterSalesEventInterface;
+use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface;
@@ -25,7 +25,7 @@ use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface;
 /**
  * @inheritdoc
  */
-class RegisterSalesEvent implements RegisterSalesEventInterface
+class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventInterface
 {
     /**
      * @var GetSkusByProductIdsInterface

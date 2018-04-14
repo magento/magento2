@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventorySalesApi\Api\Data;
 
 /**
- * DTO used as the type for values of `$items` array passed to RegisterSalesEventInterface::execute()
- * @see \Magento\InventorySalesApi\Api\RegisterSalesEventInterface
+ * DTO used as the type for values of `$items` array passed to PlaceReservationsForSalesEventInterface::execute()
+ * @see \Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface
  *
  * @api
  */

@@ -24,6 +24,10 @@ class ItemToSell implements ItemToSellInterface
      */
     private $qty;
 
+    /**
+     * @param string $sku
+     * @param float $qty
+     */
     public function __construct(string $sku, float $qty)
     {
         $this->sku = $sku;

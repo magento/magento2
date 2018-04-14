@@ -127,7 +127,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     * @magentoConfigFixture current_store cataloginventory/item_options/qty_increments 0.1
      */
     public function testPlaceOrderWithOutOffStockProduct()
     {
