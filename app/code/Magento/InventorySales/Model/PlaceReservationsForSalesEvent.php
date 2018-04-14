@@ -106,7 +106,8 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
         $skus = array_map(
             function (ItemToSellInterface $item) {
                 return $item->getSku();
-            }, $items
+            },
+            $items
         );
         $productTypes = $this->getProductTypesBySkus->execute($skus);
         $this->checkItemsQuantity($items, $productTypes, $stockId);
