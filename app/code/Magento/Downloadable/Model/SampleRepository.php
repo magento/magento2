@@ -309,7 +309,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         }
 
         if ($sample->getSampleType() === 'file' && $sample->getSampleFileContent() === null) {
-            $sample->setSampleFile($existingSample->getSampleFile());
+            $existingSample->setSampleFile($sample->getSampleFile());
         }
         $this->saveSample($product, $sample, $isGlobalScopeContent);
         return $existingSample->getId();
