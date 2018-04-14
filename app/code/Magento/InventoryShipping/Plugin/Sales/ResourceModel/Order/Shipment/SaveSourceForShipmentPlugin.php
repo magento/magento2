@@ -10,7 +10,7 @@ namespace Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment;
 use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryShipping\Model\ResourceModel\ShipmentSource\SaveShipmentSource;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
-use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface;
+use Magento\InventoryCatalog\Model\DefaultSourceProvider;
 
 class SaveSourceForShipmentPlugin
 {
@@ -20,20 +20,20 @@ class SaveSourceForShipmentPlugin
     private $saveShipmentSource;
 
     /**
-     * @var GetDefaultSourceSelectionAlgorithmCodeInterface
+     * @var DefaultSourceProvider
      */
-    private $getDefaultSourceSelectionAlgorithmCode;
+    private $defaultSourceProvider;
 
     /**
      * @param SaveShipmentSource $saveShipmentSource
-     * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+     * @param DefaultSourceProvider $defaultSourceProvider
      */
     public function __construct(
         SaveShipmentSource $saveShipmentSource,
-        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+        DefaultSourceProvider $defaultSourceProvider
     ) {
         $this->saveShipmentSource = $saveShipmentSource;
-        $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
+        $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**
@@ -52,7 +52,7 @@ class SaveSourceForShipmentPlugin
             && $shipment->getExtensionAttributes()->getSourceCode()) {
             $sourceCode = $shipment->getExtensionAttributes()->getSourceCode();
         } else {
-            $sourceCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
+            $sourceCode = $this->defaultSourceProvider->getCode();
         }
         $this->saveShipmentSource->execute((int)$shipment->getId(), $sourceCode);
 

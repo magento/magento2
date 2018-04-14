@@ -17,8 +17,8 @@ class GetSourceCodeByShipmentId
     /**
      * Constant for fields in data array
      */
-    private const SHIPMENT_ID = 'shipment_id';
-    private const SOURCE_CODE = 'source_code';
+    const SHIPMENT_ID = 'shipment_id';
+    const SOURCE_CODE = 'source_code';
     
     /**
      * @var ResourceConnection

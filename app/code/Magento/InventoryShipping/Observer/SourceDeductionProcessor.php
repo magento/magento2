@@ -9,46 +9,25 @@ namespace Magento\InventoryShipping\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\InventoryReservations\Model\ReservationBuilderInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterfaceFactory;
+use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterfaceFactory;
+use Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface;
 use Magento\Sales\Model\Order\Item;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryCatalog\Model\DefaultSourceProvider;
 
 /**
- * Class SourceDeductionProcessor | Probably need to divide on services
+ * Class SourceDeductionProcessor
  */
 class SourceDeductionProcessor implements ObserverInterface
 {
     /**
-     * @var ReservationBuilderInterface
-     */
-    private $reservationBuilder;
-
-    /**
-     * @var AppendReservationsInterface
-     */
-    private $appendReservations;
-
-    /**
-     * @var SourceItemsSaveInterface
-     */
-    private $sourceItemsSave;
-
-    /**
      * @var StockByWebsiteIdResolver
      */
     private $stockByWebsiteIdResolver;
-
-    /**
-     * @var GetSourceItemBySourceCodeAndSku
-     */
-    private $getSourceItemBySourceCodeAndSku;
 
     /**
      * @var GetSkusByProductIdsInterface
@@ -56,168 +35,135 @@ class SourceDeductionProcessor implements ObserverInterface
     private $getSkusByProductIds;
 
     /**
-     * @var GetStockItemConfigurationInterface
-     */
-    private $getStockItemConfiguration;
-
-    /**
      * @var Json
      */
     private $jsonSerializer;
 
     /**
-     * @param ReservationBuilderInterface $reservationBuilder
-     * @param AppendReservationsInterface $appendReservations
-     * @param SourceItemsSaveInterface $sourceItemsSave
+     * @var ItemToDeductInterfaceFactory
+     */
+    private $itemToDeduct;
+
+    /**
+     * @var SourceDeductionRequestInterfaceFactory
+     */
+    private $sourceDeductionRequestInterface;
+
+    /**
+     * @var SourceDeductionServiceInterface
+     */
+    private $sourceDeductionService;
+
+    /**
+     * @var DefaultSourceProvider
+     */
+    private $defaultSourceProvider;
+
+    /**
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
-     * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
-     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param Json $jsonSerializer
+     * @param ItemToDeductInterfaceFactory $itemToDeduct
+     * @param SourceDeductionRequestInterfaceFactory $sourceDeductionRequestInterface
+     * @param SourceDeductionServiceInterface $sourceDeductionService
+     * @param DefaultSourceProvider $defaultSourceProvider
      */
     public function __construct(
-        ReservationBuilderInterface $reservationBuilder,
-        AppendReservationsInterface $appendReservations,
-        SourceItemsSaveInterface $sourceItemsSave,
         StockByWebsiteIdResolver $stockByWebsiteIdResolver,
-        GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku,
         GetSkusByProductIdsInterface $getSkusByProductIds,
-        GetStockItemConfigurationInterface $getStockItemConfiguration,
-        Json $jsonSerializer
+        Json $jsonSerializer,
+        ItemToDeductInterfaceFactory $itemToDeduct,
+        SourceDeductionRequestInterfaceFactory $sourceDeductionRequestInterface,
+        SourceDeductionServiceInterface $sourceDeductionService,
+        DefaultSourceProvider $defaultSourceProvider
     ) {
-        $this->reservationBuilder = $reservationBuilder;
-        $this->appendReservations = $appendReservations;
-        $this->sourceItemsSave = $sourceItemsSave;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
-        $this->getSourceItemBySourceCodeAndSku = $getSourceItemBySourceCodeAndSku;
         $this->getSkusByProductIds = $getSkusByProductIds;
-        $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->jsonSerializer = $jsonSerializer;
+        $this->itemToDeduct = $itemToDeduct;
+        $this->sourceDeductionRequestInterface = $sourceDeductionRequestInterface;
+        $this->sourceDeductionService = $sourceDeductionService;
+        $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**
      * @param EventObserver $observer
      * @return void
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(EventObserver $observer)
     {
-        /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipment = $observer->getEvent()->getShipment();
+        /** @var \Magento\Sales\Model\Order\Shipment\Item $shipmentItem */
+        $shipmentItem = $observer->getShipmentItem();
 
-        if ($shipment->getOrigData('entity_id')) {
+        if ($shipmentItem->getOrigData('entity_id')) {
             return;
         }
 
+        $shipment = $shipmentItem->getShipment();
+
+        //TODO: I'm not sure that is good idea (with default source code)...
         if (empty($shipment->getExtensionAttributes())
             || !$shipment->getExtensionAttributes()->getSourceCode()) {
-            throw new LocalizedException(__('Source not specified.'));
+            $sourceCode = $this->defaultSourceProvider->getCode();
+        } else {
+            $sourceCode = $shipment->getExtensionAttributes()->getSourceCode();
         }
 
-        $sourceCode = $shipment->getExtensionAttributes()->getSourceCode();
-        $order = $shipment->getOrder();
-
-        $websiteId = $order->getStore()->getWebsiteId();
+        $websiteId = $shipment->getOrder()->getStore()->getWebsiteId();
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
 
-        foreach ($shipment->getItems() as $shipmentItem) {
-            $orderItem = $shipmentItem->getOrderItem();
-            $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(
-                [$shipmentItem->getProductId()]
-            )[$shipmentItem->getProductId()];
-            $qty = $this->castQty($orderItem, $shipmentItem->getQty());
-            $itemsToShip = [];
-            if ($orderItem->getHasChildren()) {
-                if (!$orderItem->isDummy(true)) {
-                    foreach ($orderItem->getChildrenItems() as $item) {
-                        if ($item->getIsVirtual() || $item->getLockedDoShip()) {
-                            continue;
-                        }
-                        $productOptions = $item->getProductOptions();
-                        if (isset($productOptions['bundle_selection_attributes'])) {
-                            $bundleSelectionAttributes = $this->jsonSerializer->unserialize(
-                                $productOptions['bundle_selection_attributes']
-                            );
-                            if ($bundleSelectionAttributes) {
-                                $qty = $bundleSelectionAttributes['qty'] * $shipmentItem->getQty();
-                                $qty = $this->castQty($item, $qty);
-                                $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
-                                    [$item->getProductId()]
-                                )[$item->getProductId()];
-                                $itemsToShip[] = [
-                                    'sku' => $itemSku,
-                                    'qty' => $qty
-                                ];
-                                continue;
-                            }
-                        } else {
-                            // configurable product
-                            $itemsToShip[] = [
-                                'sku' => $itemSku,
-                                'qty' => $qty
-                            ];
-                        }
-                    }
+        $orderItem = $shipmentItem->getOrderItem();
+        $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(
+            [$shipmentItem->getProductId()]
+        )[$shipmentItem->getProductId()];
+        $qty = $this->castQty($orderItem, $shipmentItem->getQty());
+        $itemsToShip = [];
+        if ($orderItem->getHasChildren() && !$orderItem->isDummy(true)) {
+            foreach ($orderItem->getChildrenItems() as $item) {
+                if ($item->getIsVirtual() || $item->getLockedDoShip()) {
+                    continue;
                 }
-            } else {
-                $itemsToShip[] = [
-                    'sku' => $itemSku,
-                    'qty' => $qty
-                ];
+                $productOptions = $item->getProductOptions();
+                if (isset($productOptions['bundle_selection_attributes'])) {
+                    $bundleSelectionAttributes = $this->jsonSerializer->unserialize(
+                        $productOptions['bundle_selection_attributes']
+                    );
+                    if ($bundleSelectionAttributes) {
+                        $qty = $bundleSelectionAttributes['qty'] * $shipmentItem->getQty();
+                        $qty = $this->castQty($item, $qty);
+                        $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
+                            [$item->getProductId()]
+                        )[$item->getProductId()];
+                        $itemsToShip[] = $this->itemToDeduct->create([
+                            'sku' => $itemSku,
+                            'qty' => $qty
+                        ]);
+                        continue;
+                    }
+                } else {
+                    // configurable product
+                    $itemsToShip[] = $this->itemToDeduct->create([
+                        'sku' => $itemSku,
+                        'qty' => $qty
+                    ]);
+                }
             }
-
-            $this->processItems($stockId, $sourceCode, $itemsToShip);
+        } else {
+            $itemsToShip[] = $this->itemToDeduct->create([
+                'sku' => $itemSku,
+                'qty' => $qty
+            ]);
         }
 
-        return;
-    }
+        $sourceDeductionRequest = $this->sourceDeductionRequestInterface->create([
+            'stockId' => $stockId,
+            'sourceCode' => $sourceCode,
+            'items' => $itemsToShip
+        ]);
 
-    /**
-     * @param $stockId
-     * @param $sourceCode
-     * @param $itemsToShip
-     * @throws LocalizedException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Validation\ValidationException
-     */
-    private function processItems($stockId, $sourceCode, $itemsToShip)
-    {
-        $sourceItemToSave = [];
-        $reservationsToBuild = [];
-
-        foreach ($itemsToShip as $item) {
-            $itemSku = $item['sku'];
-            $qty = $item['qty'];
-            $stockItemConfiguration = $this->getStockItemConfiguration->execute(
-                $itemSku,
-                $stockId
-            );
-            if (!$stockItemConfiguration->isManageStock()) {
-                continue;
-            }
-            $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute($sourceCode, $itemSku);
-            if (($sourceItem->getQuantity() - $qty) >= 0) {
-                $sourceItem->setQuantity($sourceItem->getQuantity() - $qty);
-                $sourceItemToSave[] = $sourceItem;
-                $reservationsToBuild[$itemSku] = ($reservationsToBuild[$itemSku] ?? 0) + $qty;
-            } else {
-                throw new LocalizedException(
-                    __('Not all of your products are available in the requested quantity.')
-                );
-            }
-        }
-
-        $reservationToSave = [];
-        foreach ($reservationsToBuild as $sku => $reservationQty) {
-            $reservationToSave[] = $this->reservationBuilder
-                ->setSku($sku)
-                ->setQuantity($reservationQty)
-                ->setStockId($stockId)
-                ->build();
-        }
-        $this->sourceItemsSave->execute($sourceItemToSave);
-        $this->appendReservations->execute($reservationToSave);
+        $this->sourceDeductionService->execute($sourceDeductionRequest);
     }
 
     /**

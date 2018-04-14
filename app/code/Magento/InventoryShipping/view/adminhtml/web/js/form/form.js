@@ -6,8 +6,8 @@ define([
     'jquery',
     'Magento_Ui/js/form/form',
     'mageUtils',
-    'uiRegistry'
-], function ($, Form, utils, registry) {
+    'underscore'
+], function ($, Form, utils, _) {
     'use strict';
 
     return Form.extend({
@@ -16,19 +16,18 @@ define([
         },
 
         /**
-         * Validate and save form.
+         * Process source selection algorithm
          *
          * @param {String} redirect
          * @param {Object} data
          */
         processAlgorithm: function (redirect, data) {
-            var process = $.Deferred(),
-                self = this,
-                formData = utils.filterFormData(this.source.get('data')),
-                requestData = [];
+            var formData = utils.filterFormData(this.source.get('data'));
+
+            data.requestData = [];
 
             _.each(formData.items, function (item) {
-                requestData.push({
+                data.requestData.push({
                     orderItem: item.orderItemId,
                     sku: item.sku,
                     qty: item.qtyToShip
@@ -36,12 +35,11 @@ define([
             });
 
             data.websiteId = formData.websiteId;
-            data.requestData = requestData;
             data = utils.serialize(utils.filterFormData(data));
             data['form_key'] = window.FORM_KEY;
 
             if (!this.sourceSelectionUrl || this.sourceSelectionUrl === 'undefined') {
-                return process.resolve();
+                return $.Deferred.resolve();
             }
 
             $('body').trigger('processStart');
@@ -52,44 +50,21 @@ define([
 
                 /**
                  * Success callback.
-                 * @param {Object} resp
-                 * @returns {Boolean}
+                 *
+                 * @param {Object} response
                  */
-                success: function (resp) {
-                    if (!resp.error) {
-                        //TODO: also, need to update sourceCodes select
-                        var formData = self.source.get('data');
-                        _.each(formData.items, function (item) {
-                            if (resp.items[item.orderItemId]) {
-                                //TODO: this feature doesn't work
-                                self.source.set('data.items.' + item['record_id'] + '.sources', resp.items[item.orderItemId]);
-                            }
-                        });
+                success: function (response) {
+                    //TODO: also, need to update sourceCodes select
+                    formData = this.source.get('data');
 
-                        process.resolve();
-
-                        return true;
-                    }
-
-                    $('body').notification('clear');
-                    $.each(resp.messages || [resp.message] || [], function (key, message) {
-                        $('body').notification('add', {
-                            error: resp.error,
-                            message: message,
-
-                            /**
-                             * Insert method.
-                             *
-                             * @param {String} msg
-                             */
-                            insertMethod: function (msg) {
-                                var $wrapper = $('<div/>').addClass(messagesClass).html(msg);
-
-                                $('.page-main-actions', selectorPrefix).after($wrapper);
-                            }
-                        });
-                    });
-                },
+                    _.each(formData.items, function (item) {
+                        if (response[item.orderItemId]) {
+                            //TODO: this feature doesn't work
+                            //TODO: rebuild select field sourceCode
+                            this.source.set('data.items.' + item['record_id'] + '.sources', response[item.orderItemId]);
+                        }
+                    }.bind(this));
+                }.bind(this),
 
                 /**
                  * Complete callback.
@@ -98,8 +73,6 @@ define([
                     $('body').trigger('processStop');
                 }
             });
-
-            return process.promise();
         }
     });
 });

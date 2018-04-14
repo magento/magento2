@@ -15,6 +15,10 @@
     <type name="Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Form">
         <plugin name="disallow_create_shipment_in_multi_source_mode" type="Magento\InventoryShipping\Plugin\Sales\Block\Order\Invoice\Create\DisallowCreateShipmentPlugin"/>
     </type>
-    <preference for="Magento\Shipping\Controller\Adminhtml\Order\ShipmentProvider" type="Magento\InventoryShipping\Controller\Adminhtml\SourceSelection\ShipmentProvider"/>
 
+    <type name="Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction">
+        <arguments>
+            <argument name="shipmentProvider" xsi:type="object">Magento\InventoryShipping\Model\ShipmentProvider</argument>
+        </arguments>
+    </type>
 </config>

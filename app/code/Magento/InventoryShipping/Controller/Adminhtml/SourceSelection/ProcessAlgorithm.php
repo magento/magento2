@@ -65,7 +65,6 @@ class ProcessAlgorithm extends Action
     private $sources = [];
 
     /**
-     * GetSources constructor.
      * @param Context $context
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      * @param ItemRequestInterfaceFactory $itemRequestFactory
@@ -107,40 +106,41 @@ class ProcessAlgorithm extends Action
             $defaultCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
             $algorithmCode = !empty($postRequest['algorithmCode']) ? $postRequest['algorithmCode'] : $defaultCode;
 
+            //TODO: maybe need to add exception when websiteId empty
             $websiteId = $postRequest['websiteId'] ?? 1;
             $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
 
-            $result = [];
+            $result = $requestItems = [];
             foreach ($requestData as $data) {
-                $orderItem = $data['orderItem'];
-                $requestItem = $this->itemRequestFactory->create([
+                $requestItems[] = $this->itemRequestFactory->create([
                     'sku' => $data['sku'],
                     'qty' => $data['qty']
                 ]);
-                $inventoryRequest = $this->inventoryRequestFactory->create([
-                    'stockId' => $stockId,
-                    'items' => [$requestItem]
-                ]);
-                $sourceSelectionResult = $this->sourceSelectionService->execute(
-                    $inventoryRequest,
-                    $algorithmCode
-                );
-                foreach ($sourceSelectionResult->getSourceSelectionItems() as $item) {
-                    $sourceCode = $item->getSourceCode();
-                    if (!isset($this->sources[$sourceCode])) {
-                        $this->sources[$sourceCode] = $this->getSourceName($sourceCode);
-                    }
-                    $result['items'][$orderItem][] = [
-                        'sourceName' => $this->sources[$sourceCode],
-                        'sourceCode' => $item->getSourceCode(),
-                        'qtyAvailable' => $item->getQtyAvailable(),
-                        'qtyToDeduct' => $item->getQtyToDeduct()
-                    ];
-                }
-                $result['sourceCodes'] = $this->sources;
             }
+            $inventoryRequest = $this->inventoryRequestFactory->create([
+                'stockId' => $stockId,
+                'items'   => $requestItems
+            ]);
+
+            $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest, $algorithmCode);
+
+            foreach ($requestData as $data) {
+                $orderItem = $data['orderItem'];
+                foreach ($sourceSelectionResult->getSourceSelectionItems() as $item) {
+                    if ($item->getSku() === $data['sku']) {
+                        $result[$orderItem][] = [
+                            'sourceName' => $this->getSourceName($item->getSourceCode()),
+                            'sourceCode' => $item->getSourceCode(),
+                            'qtyAvailable' => $item->getQtyAvailable(),
+                            'qtyToDeduct' => $item->getQtyToDeduct()
+                        ];
+                    }
+                }
+            }
+
             $resultJson->setData($result);
         }
+
         return $resultJson;
     }
 
@@ -153,6 +153,10 @@ class ProcessAlgorithm extends Action
      */
     public function getSourceName(string $sourceCode): string
     {
-        return $this->sourceRepository->get($sourceCode)->getName();
+        if (!isset($this->sources[$sourceCode])) {
+            $this->sources[$sourceCode] = $this->sourceRepository->get($sourceCode)->getName();
+        }
+
+        return $this->sources[$sourceCode];
     }
 }
