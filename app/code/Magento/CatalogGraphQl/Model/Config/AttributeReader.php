@@ -8,11 +8,10 @@ namespace Magento\CatalogGraphQl\Model\Config;
 
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Type\Entity\MapperInterface;
+use Magento\Framework\GraphQl\Schema\Type\Entity\MapperInterface;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection;
 
 /**
  * Adds custom/eav attribute to Catalog product types in the GraphQL config.
@@ -30,23 +29,23 @@ class AttributeReader implements ReaderInterface
     private $typeLocator;
 
     /**
-     * @var CollectionFactory
+     * @var Collection
      */
-    private $collectionFactory;
+    private $collection;
 
     /**
      * @param MapperInterface $mapper
      * @param Type $typeLocator
-     * @param CollectionFactory $collectionFactory
+     * @param Collection $collection
      */
     public function __construct(
         MapperInterface $mapper,
         Type $typeLocator,
-        CollectionFactory $collectionFactory
+        Collection $collection
     ) {
         $this->mapper = $mapper;
         $this->typeLocator = $typeLocator;
-        $this->collectionFactory = $collectionFactory;
+        $this->collection = $collection;
     }
 
     /**
@@ -57,24 +56,20 @@ class AttributeReader implements ReaderInterface
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function read($scope = null)
+    public function read($scope = null) : array
     {
-        $targetStructures = $this->mapper->getMappedTypes(\Magento\Catalog\Model\Product::ENTITY);
+        $typeNames = $this->mapper->getMappedTypes(\Magento\Catalog\Model\Product::ENTITY);
         $config =[];
-        /** @var Collection $collection */
-        $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter('is_user_defined', '1');
-        $collection->addFieldToFilter('attribute_code', ['neq' => 'cost']);
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-        foreach ($collection as $attribute) {
+        foreach ($this->collection->getAttributes() as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
             $locatedType = $this->typeLocator->getType(
                 $attributeCode,
                 \Magento\Catalog\Model\Product::ENTITY
             ) ?: 'String';
             $locatedType = $locatedType === TypeProcessor::NORMALIZED_ANY_TYPE ? 'String' : ucfirst($locatedType);
-            foreach ($targetStructures as $structure) {
-                $config[$structure]['fields'][$attributeCode] = [
+            foreach ($typeNames as $typeName) {
+                $config[$typeName]['fields'][$attributeCode] = [
                     'name' => $attributeCode,
                     'type' => $locatedType,
                     'arguments' => []

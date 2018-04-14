@@ -13,7 +13,10 @@
         <arguments>
             <argument name="keyword"/>
         </arguments>
+
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="5"/>
+
         <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{keyword}}" stepKey="fillKeywordSearchField"/>
         <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch"/>
     </actionGroup>
