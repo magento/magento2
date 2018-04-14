@@ -2,27 +2,26 @@
     "name": "magento/module-inventory-sales",
     "description": "N/A",
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/framework": "100.3.*",
-        "magento/module-backend": "100.0.*",
-        "magento/module-catalog-inventory": "100.0.*",
-        "magento/module-inventory": "100.0.*",
-        "magento/module-inventory-api": "100.0.*",
-        "magento/module-inventory-catalog": "100.0.*",
-        "magento/module-inventory-configuration": "100.0.*",
-        "magento/module-inventory-configuration-api": "100.0.*",
-        "magento/module-inventory-reservations": "100.0.*",
-        "magento/module-inventory-reservations-api": "100.0.*",
-        "magento/module-inventory-sales-api": "100.0.*",
-        "magento/module-store": "100.3.*",
-        "magento/module-ui": "100.3.*"
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog-inventory": "*",
+        "magento/module-inventory": "*",
+        "magento/module-inventory-api": "*",
+        "magento/module-inventory-catalog": "*",
+        "magento/module-inventory-configuration": "*",
+        "magento/module-inventory-configuration-api": "*",
+        "magento/module-inventory-reservations": "*",
+        "magento/module-inventory-reservations-api": "*",
+        "magento/module-inventory-sales-api": "*",
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "require-dev": {
-        "magento/module-catalog": "100.3.*",
-        "magento/module-inventory-indexer": "100.0.*"
+        "magento/module-catalog": "*",
+        "magento/module-inventory-indexer": "*"
     },
     "type": "magento2-module",
-    "version": "100.0.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

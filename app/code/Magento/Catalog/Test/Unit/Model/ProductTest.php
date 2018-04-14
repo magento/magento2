@@ -330,9 +330,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $this->mediaGalleryEntryFactoryMock =
             $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
 
         $this->metadataServiceMock = $this->createMock(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
         $this->attributeValueFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
@@ -1171,19 +1171,19 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         ];
 
         $entryMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class)
-                          ->setMethods(
-                              [
-                                  'getId',
-                                  'getFile',
-                                  'getLabel',
-                                  'getPosition',
-                                  'isDisabled',
-                                  'types',
-                                  'getContent',
-                                  'getMediaType'
-                              ]
-                          )
-                          ->getMockForAbstractClass();
+            ->setMethods(
+                [
+                    'getId',
+                    'getFile',
+                    'getLabel',
+                    'getPosition',
+                    'isDisabled',
+                    'types',
+                    'getContent',
+                    'getMediaType'
+                ]
+            )
+            ->getMockForAbstractClass();
 
         $result = [
             'value_id' => 1,
@@ -1407,7 +1407,20 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $qty = 1;
         $this->model->setQty($qty);
         $this->model->setFinalPrice($finalPrice);
-        $this->productTypeInstanceMock->expects($this->never())->method('priceFactory');
+        $productTypePriceMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Type\Price::class,
+            ['getFinalPrice']
+        );
+        $productTypePriceMock->expects($this->any())
+            ->method('getFinalPrice')
+            ->with($qty, $this->model)
+            ->willReturn($finalPrice);
+
+        $this->productTypeInstanceMock->expects($this->any())
+            ->method('priceFactory')
+            ->with($this->model->getTypeId())
+            ->willReturn($productTypePriceMock);
+
         $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
     }
 
