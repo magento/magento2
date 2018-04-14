@@ -16,7 +16,6 @@ define(
 
         return function (serviceUrl, payload, messageContainer) {
             fullScreenLoader.startLoader();
-
             return storage.post(
                 serviceUrl, JSON.stringify(payload)
             ).fail(
