@@ -19,8 +19,6 @@ use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
-use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
-use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface;
 
 /**
  * @inheritdoc
@@ -96,11 +94,6 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
             return;
         }
 
-        if (null === $salesChannel) {
-            throw new LocalizedException(__('$salesChannel parameter is required'));
-        }
-
-        // TODO typecast needed because StockInterface::getStockId() returns string => fix StockInterface::getStockId?
         $stockId = (int)$this->stockResolver->get($salesChannel->getType(), $salesChannel->getCode())->getStockId();
 
         $skus = array_map(
@@ -142,7 +135,6 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
             if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$item->getSku()])) {
                 continue;
             }
-            /** @var ProductSalableResultInterface $isSalable */
             $isSalable = $this->isProductSalableForRequestedQty->execute(
                 $item->getSku(),
                 $stockId,
@@ -150,7 +142,6 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
             );
             if (false === $isSalable->isSalable()) {
                 $errors = $isSalable->getErrors();
-                /** @var ProductSalabilityErrorInterface $errorMessage */
                 $errorMessage = array_pop($errors);
                 throw new LocalizedException(__($errorMessage->getMessage()));
             }
