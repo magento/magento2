@@ -9,4 +9,7 @@
     <event name="sales_order_shipment_save_after">
         <observer name="inventory_sales_source_deduction_processor" instance="Magento\InventoryShipping\Observer\SourceDeductionProcessor"/>
     </event>
+    <event name="sales_order_invoice_save_after">
+        <observer name="inventory_sales_virtual_source_deduction_processor" instance="Magento\InventoryShipping\Observer\VirtualSourceDeductionProcessor"/>
+    </event>
 </config>
