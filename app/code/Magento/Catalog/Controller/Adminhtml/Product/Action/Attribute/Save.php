@@ -50,14 +50,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Product\TypeTransitionManager
+     * @var \Magento\Catalog\Model\Product\Attribute\Backend\WeightResolver
      */
-    private $productTypeManager;
+    private $weightResolver;
 
-    /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     */
-    private $productRepository;
+
     
     /**
      * @param Action\Context $context
@@ -78,16 +75,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
+        \Magento\Catalog\Model\Product\Attribute\Backend\WeightResolver $weightResolver
     ) {
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->_stockIndexerProcessor = $stockIndexerProcessor;
         $this->_catalogProduct = $catalogProduct;
         $this->stockItemFactory = $stockItemFactory;
-        $this->productRepository = $productRepository;
-        $this->productTypeManager = $productTypeManager;
+        $this->weightResolver = $weightResolver;
         parent::__construct($context, $attributeHelper);
         $this->dataObjectHelper = $dataObjectHelper;
     }
@@ -129,18 +124,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
 
 
                 foreach ($attributesData as $attributeCode => $value) {
-                    if ($attributeCode == ProductAttributeInterface::CODE_HAS_WEIGHT) {
-                        foreach ($this->attributeHelper->getProductIds() as $productId) {
-                            $product = $this->productRepository->getById($productId, false, $storeId);
-                            $product->setData(
-                                ProductAttributeInterface::CODE_HAS_WEIGHT,
-                                $value
-                            );
-                            $this->productTypeManager->processProduct($product);
-                            $this->productRepository->save($product);
-                        }
-                    }
 
+                    if ($attributeCode == ProductAttributeInterface::CODE_HAS_WEIGHT) {
+                        $this->weightResolver->resolve($this->attributeHelper->getProductIds(), $value, $storeId);
+                    }
 
                     $attribute = $this->_objectManager->get(\Magento\Eav\Model\Config::class)
                         ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
