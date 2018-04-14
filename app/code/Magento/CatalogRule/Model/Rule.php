@@ -162,7 +162,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     /**
      * @var RuleResourceModel
      */
-    protected $ruleResourceModel;
+    private $ruleResourceModel;
 
     /**
      * Rule constructor
@@ -189,7 +189,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @param \Magento\CatalogRule\Model\ResourceModel\RuleResourceModel $ruleResourceModel
+     * @param \Magento\CatalogRule\Model\ResourceModel\RuleResourceModel|null $ruleResourceModel
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -229,9 +229,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $this->_relatedCacheTypes = $relatedCacheTypes;
         $this->dateTime = $dateTime;
         $this->_ruleProductProcessor = $ruleProductProcessor;
-        $this->ruleResourceModel = $ruleResourceModel ? $ruleResourceModel :
-            ObjectManager::getInstance()
-                ->get(RuleResourceModel::class);
+        $this->ruleResourceModel = $ruleResourceModel ?: ObjectManager::getInstance()->get(RuleResourceModel::class);
 
         parent::__construct(
             $context,
