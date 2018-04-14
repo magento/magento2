@@ -113,7 +113,9 @@ class RegisterSalesEvent implements RegisterSalesEventInterface
                 ->setSku($item->getSku())
                 ->setQuantity(-$item->getQuantity())
                 ->setStockId($stockId)
-                ->setMetadata(sprintf('%s:%s:%s', $salesEvent->getType(), $salesEvent->getObjectType(), $salesEvent->getObjectId()))
+                ->setMetadata(sprintf(
+                    '%s:%s:%s', $salesEvent->getType(), $salesEvent->getObjectType(), $salesEvent->getObjectId()
+                ))
                 ->build();
         }
         $this->appendReservations->execute($reservations);
