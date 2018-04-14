@@ -83,7 +83,8 @@ class InventoryConfigurablePanel extends AbstractModifier
                 'data' => [
                     'config' => [
                         'componentType' => 'text',
-                        'component' => 'Magento_InventoryConfigurableProductAdminUi/js/form/element/quantity-per-source',
+                        'component' =>
+                            'Magento_InventoryConfigurableProductAdminUi/js/form/element/quantity-per-source',
                         'template' => 'ui/form/field',
                         'dataScope' => 'quantity_per_source',
                         'label' => __('Quantity Per Source'),
