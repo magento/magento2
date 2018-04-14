@@ -15,11 +15,25 @@ namespace Magento\InventorySalesApi\Api\Data;
  */
 interface ItemToSellInterface
 {
+    /**
+     * @return string
+     */
     public function getSku(): string;
 
+    /**
+     * @return float
+     */
     public function getQuantity(): float;
 
+    /**
+     * @param string $sku
+     * @return void
+     */
     public function setSku(string $sku);
 
+    /**
+     * @param float $qty
+     * @return void
+     */
     public function setQuantity(float $qty);
 }

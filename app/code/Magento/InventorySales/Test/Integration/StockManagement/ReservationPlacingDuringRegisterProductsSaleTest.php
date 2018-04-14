@@ -92,6 +92,7 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
      */
     public function testRegisterProductsSale()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/918');
         self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
 
         $product = $this->productRepository->get('SKU-1');

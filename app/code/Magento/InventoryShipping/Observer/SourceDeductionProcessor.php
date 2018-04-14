@@ -49,7 +49,7 @@ class SourceDeductionProcessor implements ObserverInterface
     /**
      * @var SourceDeductionRequestInterfaceFactory
      */
-    private $sourceDeductionRequestInterface;
+    private $sourceDeductionRequestFactory;
 
     /**
      * @var SourceDeductionServiceInterface
@@ -80,7 +80,7 @@ class SourceDeductionProcessor implements ObserverInterface
         GetSkusByProductIdsInterface $getSkusByProductIds,
         Json $jsonSerializer,
         ItemToDeductInterfaceFactory $itemToDeduct,
-        SourceDeductionRequestInterfaceFactory $sourceDeductionRequestInterface,
+        SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory,
         SourceDeductionServiceInterface $sourceDeductionService,
         DefaultSourceProvider $defaultSourceProvider,
         SalesEventInterfaceFactory $salesEventFactory
@@ -89,7 +89,7 @@ class SourceDeductionProcessor implements ObserverInterface
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->jsonSerializer = $jsonSerializer;
         $this->itemToDeduct = $itemToDeduct;
-        $this->sourceDeductionRequestInterface = $sourceDeductionRequestInterface;
+        $this->sourceDeductionRequestFactory = $sourceDeductionRequestFactory;
         $this->sourceDeductionService = $sourceDeductionService;
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->salesEventFactory = $salesEventFactory;
@@ -167,18 +167,17 @@ class SourceDeductionProcessor implements ObserverInterface
         }
 
         $salesEvent = $this->salesEventFactory->create([
-            'type' => SalesEventInterface::TYPE_SHIPMENT_CREATED,
+            'type' => SalesEventInterface::EVENT_SHIPMENT_CREATED,
             'objectType' => SalesEventInterface::OBJECT_TYPE_ORDER,
             'objectId' => $shipment->getOrderId()
         ]);
 
-        $sourceDeductionRequest = $this->sourceDeductionRequestInterface->create([
+        $sourceDeductionRequest = $this->sourceDeductionRequestFactory->create([
             'stockId' => $stockId,
             'sourceCode' => $sourceCode,
             'items' => $itemsToShip,
             'salesEvent' => $salesEvent
         ]);
-
         $this->sourceDeductionService->execute($sourceDeductionRequest);
     }
 

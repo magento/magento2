@@ -72,8 +72,7 @@ class SubtractQuoteInventoryObserver implements ObserverInterface
          */
         $itemsForReindex = $this->stockManagement->registerProductsSale(
             $items,
-            $quote->getStore()->getWebsiteId(),
-            $quote->getId()
+            $quote->getStore()->getWebsiteId()
         );
         if (count($itemsForReindex)) {
             $this->itemsForReindex->setItems($itemsForReindex);

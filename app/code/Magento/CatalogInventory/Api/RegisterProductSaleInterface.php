@@ -26,5 +26,5 @@ interface RegisterProductSaleInterface
      * @return StockItemInterface[]
      * @throws LocalizedException
      */
-    public function registerProductsSale($items, $websiteId = null, $quoteId = null);
+    public function registerProductsSale($items, $websiteId = null);
 }
