@@ -103,7 +103,11 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
         // TODO typecast needed because StockInterface::getStockId() returns string => fix StockInterface::getStockId?
         $stockId = (int)$this->stockResolver->get($salesChannel->getType(), $salesChannel->getCode())->getStockId();
 
-        $skus = array_map(function (ItemToSellInterface $item) { return $item->getSku(); }, $items);
+        $skus = array_map(
+            function (ItemToSellInterface $item) {
+                return $item->getSku();
+            }, $items
+        );
         $productTypes = $this->getProductTypesBySkus->execute($skus);
         $this->checkItemsQuantity($items, $productTypes, $stockId);
         $reservations = [];
@@ -114,7 +118,10 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
                 ->setQuantity(-$item->getQuantity())
                 ->setStockId($stockId)
                 ->setMetadata(sprintf(
-                    '%s:%s:%s', $salesEvent->getType(), $salesEvent->getObjectType(), $salesEvent->getObjectId()
+                    '%s:%s:%s',
+                    $salesEvent->getType(),
+                    $salesEvent->getObjectType(),
+                    $salesEvent->getObjectId()
                 ))
                 ->build();
         }
@@ -135,7 +142,11 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
                 continue;
             }
             /** @var ProductSalableResultInterface $isSalable */
-            $isSalable = $this->isProductSalableForRequestedQty->execute($item->getSku(), $stockId, $item->getQuantity());
+            $isSalable = $this->isProductSalableForRequestedQty->execute(
+                $item->getSku(),
+                $stockId,
+                $item->getQuantity()
+            );
             if (false === $isSalable->isSalable()) {
                 $errors = $isSalable->getErrors();
                 /** @var ProductSalabilityErrorInterface $errorMessage */

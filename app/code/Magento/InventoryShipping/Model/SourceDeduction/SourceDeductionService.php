@@ -107,7 +107,12 @@ class SourceDeductionService implements SourceDeductionServiceInterface
                 ->setSku($sku)
                 ->setQuantity($reservationQty)
                 ->setStockId($stockId)
-                ->setMetadata(sprintf('%s:%s:%s', $salesEvent->getType(), $salesEvent->getObjectType(), $salesEvent->getObjectId()))
+                ->setMetadata(sprintf(
+                    '%s:%s:%s',
+                    $salesEvent->getType(),
+                    $salesEvent->getObjectType(),
+                    $salesEvent->getObjectId()
+                ))
                 ->build();
         }
         $this->sourceItemsSave->execute($sourceItemToSave);
