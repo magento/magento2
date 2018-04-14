@@ -108,7 +108,7 @@ class AppendReservationsAfterOrderPlacement
         /** @var ItemToSellInterface[] $itemsToSell */
         $itemsToSell = [];
         foreach ($productSkus as $productId => $sku) {
-            $itemsToSell[] = $this->itemToSellFactory->create(['sku' => $sku, 'qty' => $itemsById[$productId]]);
+            $itemsToSell[] = $this->itemsToSellFactory->create(['sku' => $sku, 'qty' => $itemsById[$productId]]);
         }
 
         $websiteId = $this->storeManager->getStore($order->getStoreId())->getWebsiteId();
