@@ -12,6 +12,7 @@ use Magento\CatalogInventory\Api\StockItemRepositoryInterface as StockItemReposi
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -293,11 +294,28 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
-     * Retrieve Minimum Qty Allowed in Shopping Cart or NULL when there is no limitation
+     * Retrieve Minimum Qty Allowed in Shopping Cart (adjusted by Qty Increments) or NULL when there is no limitation.
+     *
+     * @return float
+     * @throws LocalizedException
+     */
+    public function getMinSaleQty()
+    {
+        $rawMinSaleQty = $this->getRawMinSaleQty();
+
+        $minSaleQty = $this->getEnableQtyIncrements()
+            ? $this->getAdjustedByQtyIncrementsMinSaleQty($rawMinSaleQty)
+            : $rawMinSaleQty;
+
+        return $minSaleQty;
+    }
+
+    /**
+     * Retrieve Minimum Qty Allowed in Shopping Cart or NULL form entity data or configuration.
      *
      * @return float
      */
-    public function getMinSaleQty()
+    private function getRawMinSaleQty()
     {
         if ($this->getUseConfigMinSaleQty()) {
             $customerGroupId = $this->getCustomerGroupId();
@@ -305,6 +323,26 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
         } else {
             $minSaleQty = (float) $this->getData(static::MIN_SALE_QTY);
         }
+
+        return $minSaleQty;
+    }
+
+    /**
+     * @param float $rawMinSaleQty
+     * @return float
+     * @throws LocalizedException
+     */
+    private function getAdjustedByQtyIncrementsMinSaleQty($rawMinSaleQty)
+    {
+        $qtyIncrements = $this->getQtyIncrements();
+
+        if (!$qtyIncrements) {
+            throw new LocalizedException(__('The qtyIncrements value must not be zero.'));
+        }
+
+        $factor = ceil($rawMinSaleQty / $qtyIncrements);
+        $minSaleQty = $qtyIncrements * $factor;
+
         return $minSaleQty;
     }
 
@@ -318,11 +356,28 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
-     * Retrieve Maximum Qty Allowed in Shopping Cart data wrapper
+     * Retrieve Maximum Qty Allowed in Shopping Cart (adjusted by Qty Increments).
+     *
+     * @return float
+     * @throws LocalizedException
+     */
+    public function getMaxSaleQty()
+    {
+        $rawMaxSaleQty = $this->getRawMaxSaleQty();
+
+        $maxSaleQty = $this->getEnableQtyIncrements()
+            ? $this->getAdjustedByQtyIncrementsMaxSaleQty($rawMaxSaleQty)
+            : $rawMaxSaleQty;
+
+        return $maxSaleQty;
+    }
+
+    /**
+     * Retrieve Maximum Qty Allowed in Shopping Cart from item data or config.
      *
      * @return float
      */
-    public function getMaxSaleQty()
+    private function getRawMaxSaleQty()
     {
         if ($this->getUseConfigMaxSaleQty()) {
             $customerGroupId = $this->getCustomerGroupId();
@@ -331,6 +386,27 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
             $maxSaleQty = (float) $this->getData(static::MAX_SALE_QTY);
         }
         return $maxSaleQty;
+    }
+
+    /**
+     * Adjust Maximum Qty Allowed by Qty Increments value.
+     *
+     * @param float $rawMaxSaleQty
+     * @return float
+     * @throws LocalizedException
+     */
+    private function getAdjustedByQtyIncrementsMaxSaleQty($rawMaxSaleQty)
+    {
+        $qtyIncrements = $this->getQtyIncrements();
+
+        if (!$qtyIncrements) {
+            throw new LocalizedException(__('The qtyIncrements value must not be zero.'));
+        }
+
+        $factor = floor($rawMaxSaleQty / $qtyIncrements);
+        $minSaleQty = $qtyIncrements * $factor;
+
+        return $minSaleQty;
     }
 
     /**
