@@ -78,12 +78,11 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
         }
 
         $stockId = (int)$this->stockResolver->get($salesChannel->getType(), $salesChannel->getCode())->getStockId();
-        $itemsBySku = array_map(
-            function (ItemToSellInterface $item) {
-                return [$item->getSku() => $item->getQuantity()];
-            },
-            $items
-        );
+        $itemsBySku = [];
+        /** @var ItemToSellInterface $item */
+        foreach ($items as $item) {
+            $itemsBySku[$item->getSku()] = $item->getQuantity();
+        }
         $skus = array_keys($itemsBySku);
         $productTypes = $this->getProductTypesBySkus->execute($skus);
         $this->checkItemsQuantity->execute($itemsBySku, $productTypes, $stockId);
