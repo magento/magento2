@@ -187,6 +187,7 @@
         "magento/module-inventory-sales-api": "*",
         "magento/module-inventory-shipping": "*",
         "magento/module-inventory-source-selection-api": "*",
+        "magento/module-inventory-source-selection": "*",
         "magento/module-layered-navigation": "*",
         "magento/module-media-storage": "*",
         "magento/module-message-queue": "*",

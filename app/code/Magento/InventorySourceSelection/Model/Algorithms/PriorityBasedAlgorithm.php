@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model\SourceSelection\Algorithms;
+namespace Magento\InventorySourceSelection\Model\Algorithms;
 
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
@@ -13,8 +13,10 @@ use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterfaceFactory;
-use Magento\InventoryShipping\Model\SourceSelection\SourceSelectionInterface;
-use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
+use Magento\InventorySourceSelection\Model\SourceSelectionInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 
 /**
  * {@inheritdoc}
@@ -38,27 +40,34 @@ class PriorityBasedAlgorithm implements SourceSelectionInterface
     private $sourceSelectionResultFactory;
 
     /**
-     * @var GetSourceItemBySourceCodeAndSku
+     * @var SearchCriteriaBuilder
      */
-    private $getSourceItemBySourceCodeAndSku;
+    private $searchCriteriaBuilder;
 
     /**
-     * PrioritySourceSelectionAlgorithm constructor.
+     * @var SourceItemRepositoryInterface
+     */
+    private $sourceItemRepository;
+
+    /**
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      * @param SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory
      * @param SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory
-     * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SourceItemRepositoryInterface $sourceItemRepository
      */
     public function __construct(
         GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
         SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory,
         SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory,
-        GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SourceItemRepositoryInterface $sourceItemRepository
     ) {
         $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
         $this->sourceSelectionItemFactory = $sourceSelectionItemFactory;
         $this->sourceSelectionResultFactory = $sourceSelectionResultFactory;
-        $this->getSourceItemBySourceCodeAndSku = $getSourceItemBySourceCodeAndSku;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->sourceItemRepository = $sourceItemRepository;
     }
 
     /**
@@ -76,7 +85,7 @@ class PriorityBasedAlgorithm implements SourceSelectionInterface
             $itemSku = $item->getSku();
             $qtyToDeliver = $item->getQty();
             foreach ($sources as $source) {
-                $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute($source->getSourceCode(), $itemSku);
+                $sourceItem = $this->getSourceItemBySourceCodeAndSku($source->getSourceCode(), $itemSku);
                 if (null === $sourceItem) {
                     continue;
                 }
@@ -140,5 +149,23 @@ class PriorityBasedAlgorithm implements SourceSelectionInterface
             return $source->isEnabled();
         });
         return $sources;
+    }
+
+    /**
+     * Returns source item from specific source by given SKU. Return null if source item is not found
+     *
+     * @param string $sourceCode
+     * @param string $sku
+     * @return SourceItemInterface|null
+     */
+    public function getSourceItemBySourceCodeAndSku(string $sourceCode, string $sku)
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)
+            ->addFilter(SourceItemInterface::SKU, $sku)
+            ->create();
+        $sourceItemsResult = $this->sourceItemRepository->getList($searchCriteria);
+
+        return $sourceItemsResult->getTotalCount() > 0 ? current($sourceItemsResult->getItems()) : null;
     }
 }
