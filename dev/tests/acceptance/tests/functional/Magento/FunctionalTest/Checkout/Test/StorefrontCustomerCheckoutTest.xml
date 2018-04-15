@@ -80,7 +80,6 @@
         <click stepKey="s100" selector="{{AdminCustomerFiltersSection.apply}}"/>
         <click stepKey="s101" selector="{{AdminCustomerGridSection.firstRowEditLink}}"/>
         <click stepKey="s102" selector="{{AdminEditCustomerInformationSection.orders}}"/>
-        <see stepKey="s103" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" variable="orderNumber" />
-        <see stepKey="s104" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$simpleuscustomer.firstname$$ $$simpleuscustomer.lastname$$" />
+        <see stepKey="s103" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$simpleuscustomer.firstname$$ $$simpleuscustomer.lastname$$" />
     </test>
 </tests>
