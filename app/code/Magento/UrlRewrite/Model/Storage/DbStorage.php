@@ -7,6 +7,7 @@ namespace Magento\UrlRewrite\Model\Storage;
 
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
@@ -141,14 +142,60 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * @param UrlRewrite[] $urls
+     *
+     * @return void
+     */
+    private function deleteOldUrls(array $urls)
+    {
+        $oldUrlsSelect = $this->connection->select();
+        $oldUrlsSelect->from(
+            $this->resource->getTableName(self::TABLE_NAME)
+        );
+        /** @var UrlRewrite $url */
+        foreach ($urls as $url) {
+            $oldUrlsSelect->orWhere(
+                $this->connection->quoteIdentifier(
+                    UrlRewrite::ENTITY_TYPE
+                ) . ' = ?',
+                $url->getEntityType()
+            );
+            $oldUrlsSelect->where(
+                $this->connection->quoteIdentifier(
+                    UrlRewrite::ENTITY_ID
+                ) . ' = ?',
+                $url->getEntityId()
+            );
+            $oldUrlsSelect->where(
+                $this->connection->quoteIdentifier(
+                    UrlRewrite::STORE_ID
+                ) . ' = ?',
+                $url->getStoreId()
+            );
+        }
+
+        // prevent query locking in a case when nothing to delete
+        $checkOldUrlsSelect = clone $oldUrlsSelect;
+        $checkOldUrlsSelect->reset(Select::COLUMNS);
+        $checkOldUrlsSelect->columns('count(*)');
+        $hasOldUrls = (bool)$this->connection->fetchOne($checkOldUrlsSelect);
+
+        if ($hasOldUrls) {
+            $this->connection->query(
+                $oldUrlsSelect->deleteFromSelect(
+                    $this->resource->getTableName(self::TABLE_NAME)
+                )
+            );
+        }
+    }
+
+    /**
+     * @inheritDoc
      */
     protected function doReplace(array $urls)
     {
-        foreach ($this->createFilterDataBasedOnUrls($urls) as $type => $urlData) {
-            $urlData[UrlRewrite::ENTITY_TYPE] = $type;
-            $this->deleteByData($urlData);
-        }
+        $this->deleteOldUrls($urls);
+
         $data = [];
         foreach ($urls as $url) {
             $data[] = $url->toArray();
@@ -162,7 +209,7 @@ class DbStorage extends AbstractStorage
                 $urlFound = $this->doFindOneByData(
                     [
                         UrlRewriteData::REQUEST_PATH => $url->getRequestPath(),
-                        UrlRewriteData::STORE_ID => $url->getStoreId()
+                        UrlRewriteData::STORE_ID => $url->getStoreId(),
                     ]
                 );
                 if (isset($urlFound[UrlRewriteData::URL_REWRITE_ID])) {
@@ -214,6 +261,7 @@ class DbStorage extends AbstractStorage
      *
      * @param UrlRewrite[] $urls
      * @return array
+     * @deprecated Not used anymore.
      */
     protected function createFilterDataBasedOnUrls($urls)
     {

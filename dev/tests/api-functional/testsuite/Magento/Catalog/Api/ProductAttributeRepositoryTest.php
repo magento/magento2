@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\TestFramework\Helper\Bootstrap;
 
 class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -192,6 +191,36 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         //New option set as default
         $this->assertEquals($result['options'][3]['value'], $result['default_value']);
         $this->assertEquals("Default Blue Updated", $result['options'][1]['label']);
+    }
+
+    /**
+     * Test source model and backend type can not be changed to custom, as they depends on attribute frontend type.
+     *
+     * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
+     */
+    public function testUpdateAttributeSourceAndType()
+    {
+        $attributeCode = uniqid('label_attr_code');
+        $attribute = $this->createAttribute($attributeCode);
+        $attributeData = [
+            'attribute' => [
+                'attribute_id' => $attribute['attribute_id'],
+                'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
+                'is_required' => false,
+                'frontend_input' => 'select',
+                'source_model' => "Some/Custom/Source/Model",
+                'backend_type' => 'varchar',
+                'frontend_labels' => [
+                    ['store_id' => 1, 'label' => 'front_lbl_new'],
+                ],
+            ],
+        ];
+
+        $result = $this->updateAttribute($attributeCode, $attributeData);
+        $this->assertEquals(\Magento\Eav\Model\Entity\Attribute\Source\Table::class, $result['source_model']);
+        $this->assertEquals('int', $result['backend_type']);
     }
 
     /**

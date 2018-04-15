@@ -5,9 +5,11 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Image as MagentoImage;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * @method string getFile()
@@ -172,6 +174,16 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private $imageAsset;
 
     /**
+     * @var string
+     */
+    private $cachePrefix = 'IMG_INFO';
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\Context $context
@@ -189,6 +201,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param array $data
      * @param \Magento\Catalog\Model\View\Asset\ImageFactory|null $viewAssetImageFactory
      * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory|null $viewAssetPlaceholderFactory
+     * @param SerializerInterface|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -207,7 +220,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         \Magento\Catalog\Model\View\Asset\ImageFactory $viewAssetImageFactory = null,
-        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $viewAssetPlaceholderFactory = null
+        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $viewAssetPlaceholderFactory = null,
+        SerializerInterface $serializer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
@@ -222,6 +236,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             ->get(\Magento\Catalog\Model\View\Asset\ImageFactory::class);
         $this->viewAssetPlaceholderFactory = $viewAssetPlaceholderFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -356,86 +371,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @param string|null $file
-     * @return bool
-     */
-    protected function _checkMemory($file = null)
-    {
-        return $this->_getMemoryLimit() > $this->_getMemoryUsage() + $this->_getNeedMemoryForFile(
-            $file
-        )
-        || $this->_getMemoryLimit() == -1;
-    }
-
-    /**
-     * @return string
-     */
-    protected function _getMemoryLimit()
-    {
-        $memoryLimit = trim(strtoupper(ini_get('memory_limit')));
-
-        if (!isset($memoryLimit[0])) {
-            $memoryLimit = "128M";
-        }
-
-        if (substr($memoryLimit, -1) == 'K') {
-            return substr($memoryLimit, 0, -1) * 1024;
-        }
-        if (substr($memoryLimit, -1) == 'M') {
-            return substr($memoryLimit, 0, -1) * 1024 * 1024;
-        }
-        if (substr($memoryLimit, -1) == 'G') {
-            return substr($memoryLimit, 0, -1) * 1024 * 1024 * 1024;
-        }
-        return $memoryLimit;
-    }
-
-    /**
-     * @return int
-     */
-    protected function _getMemoryUsage()
-    {
-        if (function_exists('memory_get_usage')) {
-            return memory_get_usage();
-        }
-        return 0;
-    }
-
-    /**
-     * @param string|null $file
-     * @return float|int
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function _getNeedMemoryForFile($file = null)
-    {
-        $file = $file === null ? $this->getBaseFile() : $file;
-        if (!$file) {
-            return 0;
-        }
-
-        if (!$this->_mediaDirectory->isExist($file)) {
-            return 0;
-        }
-
-        $imageInfo = getimagesize($this->_mediaDirectory->getAbsolutePath($file));
-
-        if (!isset($imageInfo[0]) || !isset($imageInfo[1])) {
-            return 0;
-        }
-        if (!isset($imageInfo['channels'])) {
-            // if there is no info about this parameter lets set it for maximum
-            $imageInfo['channels'] = 4;
-        }
-        if (!isset($imageInfo['bits'])) {
-            // if there is no info about this parameter lets set it for maximum
-            $imageInfo['bits'] = 8;
-        }
-        return round(
-            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + Pow(2, 16)) * 1.65
-        );
-    }
-
-    /**
      * Convert array of 3 items (decimal r, g, b) to string of their hex values
      *
      * @param int[] $rgbArray
@@ -471,9 +406,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
                 'filePath' => $file,
             ]
         );
-        if ($file == 'no_selection' || !$this->_fileExists($this->imageAsset->getSourceFile())
-            || !$this->_checkMemory($this->imageAsset->getSourceFile())
-        ) {
+        if ($file == 'no_selection' || !$this->_fileExists($this->imageAsset->getSourceFile())) {
             $this->_isBaseFilePlaceholder = true;
             $this->imageAsset = $this->viewAssetPlaceholderFactory->create(
                 [
@@ -681,11 +614,14 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return bool|void
+     * @return bool
      */
     public function isCached()
     {
-        return file_exists($this->imageAsset->getPath());
+        return (
+            is_array($this->loadImageInfoFromCache($this->imageAsset->getPath())) ||
+            file_exists($this->imageAsset->getPath())
+        );
     }
 
     /**
@@ -855,6 +791,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->_mediaDirectory->delete($directory);
 
         $this->_coreFileStorageDatabase->deleteFolder($this->_mediaDirectory->getAbsolutePath($directory));
+        $this->clearImageInfoFromCache();
     }
 
     /**
@@ -877,17 +814,26 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Return resized product image information
-     *
      * @return array
+     * @throws NotLoadInfoImageException
      */
     public function getResizedImageInfo()
     {
-        if ($this->isBaseFilePlaceholder() == true) {
-            $image = $this->imageAsset->getSourceFile();
-        } else {
-            $image = $this->imageAsset->getPath();
+        try {
+            if ($this->isBaseFilePlaceholder() == true) {
+                $image = $this->imageAsset->getSourceFile();
+            } else {
+                $image = $this->imageAsset->getPath();
+            }
+
+            $imageProperties = $this->getimagesize($image);
+
+            return $imageProperties;
+        } finally {
+            if (empty($imageProperties)) {
+                throw new NotLoadInfoImageException(__('Can\'t get information about the picture: %1', $image));
+            }
         }
-        return getimagesize($image);
     }
 
     /**
@@ -921,5 +867,67 @@ class Image extends \Magento\Framework\Model\AbstractModel
         }
 
         return $miscParams;
+    }
+
+    /**
+     * Get image size
+     *
+     * @param string $imagePath
+     * @return array
+     */
+    private function getImageSize($imagePath)
+    {
+        $imageInfo = $this->loadImageInfoFromCache($imagePath);
+        if (!isset($imageInfo['size'])) {
+            $imageSize = getimagesize($imagePath);
+            $this->saveImageInfoToCache(['size' => $imageSize], $imagePath);
+            return $imageSize;
+        } else {
+            return $imageInfo['size'];
+        }
+    }
+
+    /**
+     * Save image data to cache
+     *
+     * @param array $imageInfo
+     * @param string $imagePath
+     * @return void
+     */
+    private function saveImageInfoToCache(array $imageInfo, string $imagePath)
+    {
+        $imagePath = $this->cachePrefix  . $imagePath;
+        $this->_cacheManager->save(
+            $this->serializer->serialize($imageInfo),
+            $imagePath,
+            [$this->cachePrefix]
+        );
+    }
+
+    /**
+     * Load image data from cache
+     *
+     * @param string $imagePath
+     * @return array|false
+     */
+    private function loadImageInfoFromCache(string $imagePath)
+    {
+        $imagePath = $this->cachePrefix  . $imagePath;
+        $cacheData = $this->_cacheManager->load($imagePath);
+        if (!$cacheData) {
+            return false;
+        } else {
+            return $this->serializer->unserialize($cacheData);
+        }
+    }
+
+    /**
+     * Clear image data from cache
+     *
+     * @return void
+     */
+    private function clearImageInfoFromCache()
+    {
+        $this->_cacheManager->clean([$this->cachePrefix]);
     }
 }

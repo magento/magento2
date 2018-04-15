@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SampleBraintreeConfig" type="braintree_config_state">
+        <requiredEntity type="title">SampleTitle</requiredEntity>
+        <requiredEntity type="payment_action">SamplePaymentAction</requiredEntity>
+        <requiredEntity type="environment">SampleEnvironment</requiredEntity>
+        <requiredEntity type="merchant_id">SampleMerchantId</requiredEntity>
+        <requiredEntity type="public_key">SamplePublicKey</requiredEntity>
+        <requiredEntity type="private_key">SamplePrivateKey</requiredEntity>
+    </entity>
+    <entity name="SampleTitle" type="title">
+        <data key="value">Sample Braintree Config</data>
+    </entity>
+    <entity name="SamplePaymentAction" type="payment_action">
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="SampleEnvironment" type="environment">
+        <data key="value">sandbox</data>
+    </entity>
+    <entity name="SampleMerchantId" type="merchant_id">
+        <data key="value">someMerchantId</data>
+    </entity>
+    <entity name="SamplePublicKey" type="public_key">
+        <data key="value">somePublicKey</data>
+    </entity>
+    <entity name="SamplePrivateKey" type="private_key">
+        <data key="value">somePrivateKey</data>
+    </entity>
+
+    <!-- default configuration used to restore Magento config -->
+    <entity name="DefaultBraintreeConfig" type="braintree_config_state">
+        <requiredEntity type="title">DefaultTitle</requiredEntity>
+        <requiredEntity type="payment_action">DefaultPaymentAction</requiredEntity>
+        <requiredEntity type="environment">DefaultEnvironment</requiredEntity>
+        <requiredEntity type="merchant_id">DefaultMerchantId</requiredEntity>
+        <requiredEntity type="public_key">DefaultPublicKey</requiredEntity>
+        <requiredEntity type="private_key">DefaultPrivateKey</requiredEntity>
+    </entity>
+    <entity name="DefaultTitle" type="title">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPaymentAction" type="payment_action">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultEnvironment" type="environment">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultMerchantId" type="merchant_id">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPublicKey" type="public_key">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPrivateKey" type="private_key">
+        <data key="value"/>
+    </entity>
+</entities>
