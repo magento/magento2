@@ -14,7 +14,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventoryCatalog\Observer\SourceItemsProcessor;
+use Magento\InventoryCatalogAdminUi\Observer\SourceItemsProcessor;
 
 /**
  * Process source items for configurable children products during product saving via controller.

@@ -168,6 +168,7 @@
         "magento/module-inventory-api": "*",
         "magento/module-inventory-bundle": "*",
         "magento/module-inventory-catalog": "*",
+        "magento/module-inventory-catalog-admin-ui": "*",
         "magento/module-inventory-catalog-search": "*",
         "magento/module-inventory-configurable-product": "*",
         "magento/module-inventory-configurable-product-admin-ui": "*",

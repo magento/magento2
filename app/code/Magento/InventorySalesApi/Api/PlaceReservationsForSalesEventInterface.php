@@ -26,6 +26,7 @@ interface PlaceReservationsForSalesEventInterface
      * @param SalesChannelInterface $salesChannel
      * @param SalesEventInterface $salesEvent
      * @return void
+     *
      * @throws LocalizedException
      * @throws InputException
      * @throws CouldNotSaveException
