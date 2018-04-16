@@ -61,7 +61,7 @@ class CombinedFilterGroup extends AbstractSimpleObject
     }
 
     /**
-     * @param $mode
+     * @param string $mode
      * @return $this
      * @throws InputException
      */

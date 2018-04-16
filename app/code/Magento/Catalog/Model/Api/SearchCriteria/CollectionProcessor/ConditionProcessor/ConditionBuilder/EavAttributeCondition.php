@@ -115,8 +115,8 @@ class EavAttributeCondition implements CustomConditionInterface
     /**
      * Wraps value with '%' if condition type is 'like' or 'not like'
      *
-     * @param $conditionType
-     * @param $conditionValue
+     * @param string $conditionType
+     * @param string $conditionValue
      * @return string
      */
     private function mapConditionValue(string $conditionType, string $conditionValue): string

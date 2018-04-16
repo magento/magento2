@@ -116,7 +116,7 @@ class MappableConditionsProcessor
     /**
      * Checks if condition field is mappable
      *
-     * @param $fieldName
+     * @param string $fieldName
      * @return bool
      */
     private function canUseFieldForMapping(string $fieldName): bool

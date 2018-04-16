@@ -21,7 +21,7 @@ interface CustomConditionProviderInterface
     /**
      * Get custom processor by field name
      *
-     * @param $fieldName
+     * @param string $fieldName
      * @return CustomConditionInterface
      * @throws InputException
      */
@@ -30,7 +30,7 @@ interface CustomConditionProviderInterface
     /**
      * Check if collection has custom processor for given field name
      *
-     * @param $fieldName
+     * @param string $fieldName
      * @return bool
      */
     public function hasProcessorForField(string $fieldName): bool;

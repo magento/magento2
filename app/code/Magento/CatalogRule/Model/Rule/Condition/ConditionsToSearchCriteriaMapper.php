@@ -164,7 +164,7 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
-     * @param $operator
+     * @param string $operator
      * @return string
      */
     private function getGlueForArrayValues(string $operator): string
@@ -177,6 +177,8 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
+     * Reverse sql conditions to their corresponding negative analog
+     *
      * @param Filter $filter
      * @return void
      * @throws InputException
@@ -208,8 +210,8 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
-     * @param $filters
-     * @param $combinationMode
+     * @param array $filters
+     * @param string $combinationMode
      * @return FilterGroup
      * @throws InputException
      */
@@ -224,9 +226,9 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
-     * @param $field
-     * @param $value
-     * @param $conditionType
+     * @param string $field
+     * @param string $value
+     * @param string $conditionType
      * @return Filter
      * @throws InputException
      */
@@ -244,7 +246,7 @@ class ConditionsToSearchCriteriaMapper
     /**
      * Maps catalog price rule operators to their corresponding operators in SQL
      *
-     * @param $ruleOperator
+     * @param string $ruleOperator
      * @return string
      * @throws InputException
      */
@@ -272,6 +274,13 @@ class ConditionsToSearchCriteriaMapper
         return $operatorsMap[$ruleOperator];
     }
 
+    /**
+     * Map rule combine aggregations to corresponding SQL operator
+     *
+     * @param string $ruleAggregator
+     * @return string
+     * @throws InputException
+     */
     private function mapRuleAggregatorToSQLAggregator(string $ruleAggregator): string
     {
         $operatorsMap = [
