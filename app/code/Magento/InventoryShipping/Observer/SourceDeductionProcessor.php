@@ -20,6 +20,8 @@ use Magento\Sales\Model\Order\Item;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\DefaultSourceProvider;
+use Magento\Sales\Model\Order\Shipment\Item as ShipmentItem;
+use Magento\Catalog\Model\Product\Type;
 
 /**
  * Class SourceDeductionProcessor
@@ -106,7 +108,7 @@ class SourceDeductionProcessor implements ObserverInterface
         /** @var \Magento\Sales\Model\Order\Shipment\Item $shipmentItem */
         $shipmentItem = $observer->getShipmentItem();
 
-        if ($shipmentItem->getOrigData('entity_id')) {
+        if ($shipmentItem->getOrigData('entity_id') || !$this->isDeductionNeeded($shipmentItem)) {
             return;
         }
 
@@ -179,6 +181,21 @@ class SourceDeductionProcessor implements ObserverInterface
             'salesEvent' => $salesEvent
         ]);
         $this->sourceDeductionService->execute($sourceDeductionRequest);
+    }
+
+    /**
+     * Check if deduction process needed for shipment item
+     *
+     * @param ShipmentItem $item
+     * @return bool
+     */
+    private function isDeductionNeeded(ShipmentItem $item): bool
+    {
+        $orderItem = $item->getOrderItem();
+        if ($orderItem->getProductType() == Type::TYPE_BUNDLE && $orderItem->isDummy(true)) {
+            return false;
+        }
+        return true;
     }
 
     /**
