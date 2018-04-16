@@ -225,4 +225,35 @@ class DeclarativeInstallerTest extends SetupTestCase
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
         self::assertEquals($this->getData(), $shardData);
     }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule1
+     * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/rollback.php
+     */
+    public function testInstallWithCodeBaseRollback()
+    {
+        //Move db_schema.xml file and tried to install
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'before_rollback',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->cliCommad->install(
+            ['Magento_TestSetupDeclarationModule1']
+        );
+        $beforeRollback = $this->describeTable->describeShard('default');
+        self::assertEquals($this->getData()['before'], $beforeRollback);
+        //Move db_schema.xml file and tried to install
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'after_rollback',
+            'db_schema.xml',
+            'etc'
+        );
+
+        $this->cliCommad->upgrade();
+        $afterRollback = $this->describeTable->describeShard('default');
+        self::assertEquals($this->getData()['after'], $afterRollback);
+    }
 }

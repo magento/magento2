@@ -13,6 +13,9 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 
+/**
+ * Test diff manager methods
+ */
 class DiffManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -148,7 +151,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff->expects(self::once())
             ->method('register')
             ->with($table, 'recreate_table', $generateTable);
-        $this->model->registerTableModification($table, $generateTable, $diff);
+        $this->model->registerRecreation($table, $generateTable, $diff);
     }
 
     public function testRegisterTableModificationWhenChangeEngine()

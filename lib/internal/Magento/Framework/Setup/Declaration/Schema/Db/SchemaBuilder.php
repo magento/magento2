@@ -136,6 +136,9 @@ class SchemaBuilder
     {
         foreach ($tables as $table) {
             $tableName = $table->getName();
+            if (!$schema->getTableByName($tableName)) {
+                continue;
+            }
             $referencesData = $this->dbSchemaReader->readReferences($tableName, $table->getResource());
             $references = [];
 
@@ -150,9 +153,10 @@ class SchemaBuilder
                 );
 
                 $references[$referenceData['name']] = $this->elementFactory->create('foreign', $referenceData);
-
-                if (!$schema->getTableByName($referenceTableName) && $referenceTableName !== $tableName) {
-                    $this->processReferenceKeys([$referenceData['referenceTable']], $schema);
+                //We need to instantiate tables in order of references tree
+                if (isset($tables[$referenceTableName]) && $referenceTableName !== $tableName) {
+                    $this->processReferenceKeys([$referenceTableName => $tables[$referenceTableName]], $schema);
+                    unset($tables[$referenceTableName]);
                 }
             }
 

@@ -325,7 +325,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                         'name' =>'first_table',
                         'resource' => 'default',
                         'engine' => 'innodb',
-                        'comment' => null
+                        'comment' => null,
+                        'onCreate' => ''
                     ]
                 ],
                 [
@@ -368,7 +369,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                         'name' =>'second_table',
                         'resource' => 'default',
                         'engine' => 'innodb',
-                        'comment' => null
+                        'comment' => null,
+                        'onCreate' => ''
                     ]
                 ],
                 [

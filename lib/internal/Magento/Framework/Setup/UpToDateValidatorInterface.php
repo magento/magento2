@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Setup;
 
-use Magento\Framework\Phrase;
-
 /**
  * Allows to check whether specific component of database is up to date.
  *

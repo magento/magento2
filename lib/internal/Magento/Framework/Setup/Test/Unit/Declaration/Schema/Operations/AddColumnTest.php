@@ -158,7 +158,7 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $this->migrateDataTrigger->expects(self::once())
             ->method('getCallback')
-            ->with($column)
+            ->with($elementHistory)
             ->willReturn($callback);
         $statement = $this->getMockBuilder(Statement::class)
             ->disableOriginalConstructor()
