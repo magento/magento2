@@ -79,6 +79,64 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Undefined rule operator "====" passed in. Valid operators are: ==,!=,>=,<=,>,<,{},!{},(),!()
+     *
+     * @magentoDbIsolation disabled
+     */
+    public function testExceptionUndefinedRuleOperator()
+    {
+        $conditions = [
+            'type' => \Magento\CatalogRule\Model\Rule\Condition\Combine::class,
+            'aggregator' => 'all',
+            'value' => 0,
+            'conditions' => [
+                [
+                    'type' => \Magento\CatalogRule\Model\Rule\Condition\Product::class,
+                    'operator' => '====',
+                    'value' => 42,
+                    'attribute' => 'attribute_set_id'
+                ]
+            ]
+        ];
+
+        $combineCondition = $this->getCombineConditionFromArray($conditions);
+
+        $productCollection = $this->productCollectionFactory->create();
+        $resultCollection = $this->conditionsToCollectionApplier
+            ->applyConditionsToCollection($combineCondition, $productCollection);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Undefined rule aggregator "olo-lo" passed in. Valid operators are: all,any
+     *
+     * @magentoDbIsolation disabled
+     */
+    public function testExceptionUndefinedRuleAggregator()
+    {
+        $conditions = [
+            'type' => \Magento\CatalogRule\Model\Rule\Condition\Combine::class,
+            'aggregator' => 'olo-lo',
+            'value' => 0,
+            'conditions' => [
+                [
+                    'type' => \Magento\CatalogRule\Model\Rule\Condition\Product::class,
+                    'operator' => '==',
+                    'value' => 42,
+                    'attribute' => 'attribute_set_id'
+                ]
+            ]
+        ];
+
+        $combineCondition = $this->getCombineConditionFromArray($conditions);
+
+        $productCollection = $this->productCollectionFactory->create();
+        $resultCollection = $this->conditionsToCollectionApplier
+            ->applyConditionsToCollection($combineCondition, $productCollection);
+    }
+
+    /**
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

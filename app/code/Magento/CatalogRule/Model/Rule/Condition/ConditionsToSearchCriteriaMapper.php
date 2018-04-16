@@ -84,7 +84,7 @@ class ConditionsToSearchCriteriaMapper
         }
 
         throw new InputException(
-            __('Undefined condition type "%1" passed in.', [$condition->getType()])
+            __('Undefined condition type "%1" passed in.', $condition->getType())
         );
     }
 
@@ -197,7 +197,11 @@ class ConditionsToSearchCriteriaMapper
 
         if (!array_key_exists($filter->getConditionType(), $operatorsMap)) {
             throw new InputException(
-                __('Undefined SQL operator "%1" passed in.', [$filter->getConditionType()])
+                __(
+                    'Undefined SQL operator "%1" passed in. Valid operators are: %2',
+                    $filter->getConditionType(),
+                    implode(',', array_keys($operatorsMap))
+                )
             );
         }
 
@@ -264,7 +268,11 @@ class ConditionsToSearchCriteriaMapper
 
         if (!array_key_exists($ruleOperator, $operatorsMap)) {
             throw new InputException(
-                __('Undefined rule operator "%1" passed in.', [$ruleOperator])
+                __(
+                    'Undefined rule operator "%1" passed in. Valid operators are: %2',
+                    $ruleOperator,
+                    implode(',', array_keys($operatorsMap))
+                )
             );
         }
 
@@ -287,7 +295,11 @@ class ConditionsToSearchCriteriaMapper
 
         if (!array_key_exists(strtolower($ruleAggregator), $operatorsMap)) {
             throw new InputException(
-                __('Undefined rule aggregator "%1" passed in.', [$ruleAggregator])
+                __(
+                    'Undefined rule aggregator "%1" passed in. Valid operators are: %2',
+                    $ruleAggregator,
+                    implode(',', array_keys($operatorsMap))
+                )
             );
         }
 

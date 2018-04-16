@@ -86,7 +86,7 @@ class MappableConditionsProcessor
             }
 
             throw new InputException(
-                __('Undefined condition type "%1" passed in.', [$condition->getType()])
+                __('Undefined condition type "%1" passed in.', $condition->getType())
             );
         }
 
