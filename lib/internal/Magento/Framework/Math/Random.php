@@ -78,6 +78,6 @@ class Random
      */
     public function getUniqueHash($prefix = '')
     {
-        return $prefix . $this->getRandomString(64);
+        return $prefix . $this->getRandomString(32);
     }
 }
