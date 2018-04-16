@@ -388,13 +388,17 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $transportBuilderMock = $this->prepareEmailMock(
             2,
             'change_email_template',
-            'support',
+            [
+                'name' => 'CustomerSupport',
+                'email' => 'support@example.com',
+            ],
             $customerId,
             $newEmail
         );
         $this->addEmailMockToClass($transportBuilderMock, EmailNotification::class);
         $post = [
-            'customer' => ['entity_id' => $customerId,
+            'customer' => [
+                'entity_id' => $customerId,
                 'middlename' => 'test middlename',
                 'group_id' => 1,
                 'website_id' => 1,
@@ -434,7 +438,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $transportBuilderMock = $this->prepareEmailMock(
             2,
             'change_email_template',
-            'support',
+            [
+                'name' => 'CustomerSupport',
+                'email' => 'support@example.com',
+            ],
             $customerId,
             $newEmail
         );
@@ -747,18 +754,23 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
-     * Prepare email mock to test emails
+     * Prepare email mock to test emails.
      *
      * @param int $occurrenceNumber
      * @param string $templateId
-     * @param string $sender
+     * @param array $sender
      * @param int $customerId
      * @param string|null $newEmail
      * @return \PHPUnit_Framework_MockObject_MockObject
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
-    protected function prepareEmailMock($occurrenceNumber, $templateId, $sender, $customerId, $newEmail = null)
-    {
+    protected function prepareEmailMock(
+        int $occurrenceNumber,
+        string $templateId,
+        array $sender,
+        int $customerId,
+        $newEmail = null
+    ) : \PHPUnit_Framework_MockObject_MockObject {
         $area = \Magento\Framework\App\Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();
@@ -778,7 +790,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                     'setTemplateIdentifier',
                     'setTemplateVars',
                     'setTemplateOptions',
-                    'getTransport'
+                    'getTransport',
                 ]
             )
             ->getMock();
