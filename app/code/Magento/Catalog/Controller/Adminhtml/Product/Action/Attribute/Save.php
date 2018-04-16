@@ -100,7 +100,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         }
 
         /* Collect Data */
-        $inventoryData = $this->getRequest()->getParam('inventory', []); 
+        $inventoryData = $this->getRequest()->getParam('inventory', []);
         $attributesData = $this->getRequest()->getParam('attributes', []);
         $websiteRemoveData = $this->getRequest()->getParam('remove_website_ids', []);
         $websiteAddData = $this->getRequest()->getParam('add_website_ids', []);
