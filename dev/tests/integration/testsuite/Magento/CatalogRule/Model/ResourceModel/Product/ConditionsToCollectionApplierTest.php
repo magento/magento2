@@ -78,6 +78,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    //@codeCoverageIgnoreStart
+
     /**
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Undefined rule operator "====" passed in. Valid operators are: ==,!=,>=,<=,>,<,{},!{},(),!()
@@ -106,6 +108,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
         $this->conditionsToCollectionApplier
             ->applyConditionsToCollection($combineCondition, $productCollection);
     }
+
+    //@codeCoverageIgnoreEnd
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
