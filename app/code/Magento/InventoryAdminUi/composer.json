@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-inventory",
+    "name": "magento/module-inventory-admin-ui",
     "description": "N/A",
     "require": {
         "php": "~7.1.3||~7.2.0",
@@ -8,6 +8,8 @@
         "magento/module-backend": "*",
         "magento/module-directory": "*",
         "magento/module-shipping": "*",
+        "magento/module-ui": "*",
+        "magento/inventory": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -19,7 +21,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\Inventory\\": ""
+            "Magento\\InventoryAdminUi\\": ""
         }
     }
 }

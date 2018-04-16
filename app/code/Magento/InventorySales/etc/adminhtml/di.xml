@@ -9,7 +9,7 @@
     <!-- Stock delete button -->
     <type name="Magento\InventorySales\Ui\Component\Control\Stock\DeleteButton">
         <arguments>
-            <argument name="deleteButton" xsi:type="object">Magento\Inventory\Ui\Component\Control\Stock\DeleteButton</argument>
+            <argument name="deleteButton" xsi:type="object">Magento\InventoryAdminUi\Ui\Component\Control\Stock\DeleteButton</argument>
         </arguments>
     </type>
 </config>
