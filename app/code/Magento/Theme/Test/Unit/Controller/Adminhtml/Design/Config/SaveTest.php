@@ -71,15 +71,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->request = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getFiles', 'getParam', 'getParams']
-        );
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->request->expects($this->atLeastOnce())
+            ->method('isPost')
+            ->willReturn(true);
+
         $this->context = $objectManager->getObject(
             'Magento\Backend\App\Action\Context',
             [
@@ -147,7 +145,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->designConfig);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the configuration.'));
         $this->dataPersistor->expects($this->once())
             ->method('clear')
@@ -203,7 +201,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($this->designConfig)
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('Exception message')));
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Exception message')->render());
 
         $this->dataPersistor->expects($this->once())
@@ -258,7 +256,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($this->designConfig)
             ->willThrowException($exception);
         $this->messageManager->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, 'Something went wrong while saving this configuration: Exception message');
 
         $this->dataPersistor->expects($this->once())
