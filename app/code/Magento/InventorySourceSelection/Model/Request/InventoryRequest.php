@@ -27,7 +27,7 @@ class InventoryRequest implements InventoryRequestInterface
 
     /**
      * @param int $stockId
-     * @param array $items
+     * @param ItemRequestInterface[] $items
      */
     public function __construct(int $stockId, array $items)
     {
