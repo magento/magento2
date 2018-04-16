@@ -170,6 +170,13 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
             ['isValid', 'getErrors', 'getFileInfo', 'isUploaded']
         );
         $httpAdapterMock->expects($this->once())
+            ->method('getFileInfo')
+            ->willReturn([
+                'options_1_file' => [
+                    'name' => 'test.jpg'
+                ]
+            ]);
+        $httpAdapterMock->expects($this->once())
             ->method('isValid')
             ->willReturn(false);
         $httpAdapterMock->expects($this->exactly(2))
