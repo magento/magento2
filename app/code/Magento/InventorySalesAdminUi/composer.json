@@ -14,10 +14,6 @@
         "magento/module-store": "*",
         "magento/module-ui": "*"
     },
-    "require-dev": {
-        "magento/module-catalog": "*",
-        "magento/module-inventory-indexer": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
