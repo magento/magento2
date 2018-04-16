@@ -103,7 +103,7 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
         $combineCondition = $this->getCombineConditionFromArray($conditions);
 
         $productCollection = $this->productCollectionFactory->create();
-        $resultCollection = $this->conditionsToCollectionApplier
+        $this->conditionsToCollectionApplier
             ->applyConditionsToCollection($combineCondition, $productCollection);
     }
 
@@ -132,7 +132,7 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
         $combineCondition = $this->getCombineConditionFromArray($conditions);
 
         $productCollection = $this->productCollectionFactory->create();
-        $resultCollection = $this->conditionsToCollectionApplier
+        $this->conditionsToCollectionApplier
             ->applyConditionsToCollection($combineCondition, $productCollection);
     }
 
