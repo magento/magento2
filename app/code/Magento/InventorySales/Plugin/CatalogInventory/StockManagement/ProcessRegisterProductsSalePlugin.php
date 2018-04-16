@@ -36,7 +36,7 @@ class ProcessRegisterProductsSalePlugin
      */
     private $stockResolver;
 
-    /*
+    /**
      * @var GetProductTypesBySkusInterface
      */
     private $getProductTypesBySkus;
@@ -73,7 +73,7 @@ class ProcessRegisterProductsSalePlugin
      * @param float[] $items
      * @param int|null $websiteId
      *
-     * @return []
+     * @return array
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

@@ -10,13 +10,13 @@ namespace Magento\InventoryBundle\Test\Integration\StockManagement;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
-use Magento\InventoryReservations\Model\CleanupReservationsInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
+class RegisterProductsSaleTest extends TestCase
 {
     /**
      * @var GetProductSalableQtyInterface
@@ -34,11 +34,6 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
     private $websiteRepository;
 
     /**
-     * @var CleanupReservationsInterface
-     */
-    private $cleanupReservations;
-
-    /**
      * @var StockManagement
      */
     private $stockManagement;
@@ -49,6 +44,11 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
     private $defaultStockProvider;
 
     /**
+     * @var IsProductSalableInterface
+     */
+    private $isProductSalable;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -56,21 +56,14 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
         $this->getProductSalableQty = Bootstrap::getObjectManager()->get(GetProductSalableQtyInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepositoryInterface::class);
-        $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->stockManagement = Bootstrap::getObjectManager()->get(StockManagement::class);
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
+        $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
     }
 
     /**
-     * We broke transaction during indexation so we need to clean db state manually
-     */
-    protected function tearDown()
-    {
-        $this->cleanupReservations->execute();
-    }
-
-    /**
-     * Test reservations will be created only for bundle product options, but not for bundle itself.
+     * Test reservations will not be created and qty won't be subtracted during registration product sale
+     * for bundle product.
      *
      * @magentoDataFixture ../../../../dev/tests/integration/testsuite/Magento/Bundle/_files/product.php
      * @return void
@@ -86,9 +79,6 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
             $this->getProductSalableQty->execute('custom-design-simple-product', $this->defaultStockProvider->getId())
         );
         $bundleProduct = $this->productRepository->get('bundle-product');
-        //Currently IsProductSalableInterface doesn't support complex product types.
-        self::assertTrue($bundleProduct->getIsSalable());
-        self::assertEquals(0, $bundleProduct->getQty());
         $bundleOptionProduct1 = $this->productRepository->get('simple');
         $bundleOptionProduct2 = $this->productRepository->get('custom-design-simple-product');
         $website = $this->websiteRepository->get('base');
@@ -101,16 +91,12 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
             ],
             $website->getId()
         );
-        $bundleProduct = $this->productRepository->get('bundle-product', false, null, true);
-        //Currently IsProductSalableInterface doesn't support complex product types.
-        self::assertTrue($bundleProduct->getIsSalable());
-        self::assertEquals(0, $bundleProduct->getQty());
         self::assertEquals(
-            12,
+            22,
             $this->getProductSalableQty->execute('simple', $this->defaultStockProvider->getId())
         );
         self::assertEquals(
-            14,
+            24,
             $this->getProductSalableQty->execute('custom-design-simple-product', $this->defaultStockProvider->getId())
         );
     }
