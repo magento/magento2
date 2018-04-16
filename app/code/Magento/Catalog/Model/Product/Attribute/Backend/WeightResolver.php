@@ -41,7 +41,7 @@ class WeightResolver
     public function resolve(array $productIds, $hasWeightValue, $storeId = null)
     {
         foreach ($productIds as $productId) {
-            $product = $this->productRepository->getById($productId, false, $storeId);
+            $product = $this->productRepository->getById($productId, false, $storeId); 
             $product->setData(
                 ProductAttributeInterface::CODE_HAS_WEIGHT,
                 $hasWeightValue

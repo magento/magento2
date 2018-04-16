@@ -44,7 +44,7 @@ class TypeTransitionManager
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
-     */
+     */ 
     public function processProduct(Product $product)
     {
         if (in_array($product->getTypeId(), $this->compatibleTypes) && empty($product->getConfigurableAttributesData())) {
