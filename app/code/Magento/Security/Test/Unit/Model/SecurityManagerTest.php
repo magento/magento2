@@ -128,7 +128,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage(
-            __('Incorrect Security Checker class. It has to implement SecurityCheckerInterface')
+            (string)__('Incorrect Security Checker class. It has to implement SecurityCheckerInterface')
         );
 
         $this->model->__construct(

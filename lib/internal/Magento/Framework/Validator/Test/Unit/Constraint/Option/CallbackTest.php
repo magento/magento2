@@ -9,6 +9,9 @@ namespace Magento\Framework\Validator\Test\Unit\Constraint\Option;
 use Magento\Framework\Validator\Constraint\Option\Callback;
 use Magento\Framework\Validator\Test\Unit\Test\Callback as TestCallback;
 
+/**
+ * Test case for \Magento\Framework\Validator\Constraint\Option\Callback
+ */
 class CallbackTest extends \PHPUnit\Framework\TestCase
 {
     /**

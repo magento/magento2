@@ -153,7 +153,9 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     public function testPrepareDataWithoutName()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage(__('The "" UI component element name is invalid. Verify the name and try again.'));
+        $this->expectExceptionMessage(
+            (string)__('The "" UI component element name is invalid. Verify the name and try again.')
+        );
         $this->manager->prepareData(null);
     }
 
