@@ -106,7 +106,7 @@ class ApplyNameAttributeJoin
 
         return implode(
             [
-                $alias . '.entity_id = product.' . $linkField,
+                $alias . '.' . $linkField . ' = product.' . $linkField,
                 $connection->prepareSqlCondition($alias . '.store_id', $storeId),
                 $connection->prepareSqlCondition($alias . '.attribute_id', $attributeId),
             ],

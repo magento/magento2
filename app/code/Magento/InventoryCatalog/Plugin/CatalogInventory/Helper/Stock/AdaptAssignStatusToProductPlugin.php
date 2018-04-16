@@ -10,8 +10,8 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Helper\Stock;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
-use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
  * Adapt assignStatusToProduct for multi stocks.
@@ -67,11 +67,11 @@ class AdaptAssignStatusToProductPlugin
             return;
         }
 
-        $stockId = $this->getStockIdForCurrentWebsite->execute();
-
-        if ($this->defaultStockProvider->getId() !== $stockId && null === $status) {
+        if (null === $status) {
+            $stockId = $this->getStockIdForCurrentWebsite->execute();
             $status = (int)$this->isProductSalable->execute($product->getSku(), $stockId);
         }
+
         $proceed($product, $status);
     }
 }
