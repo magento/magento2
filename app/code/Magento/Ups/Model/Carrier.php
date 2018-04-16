@@ -485,7 +485,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
 
                 $debugData['result'] = $responseBody;
                 $this->_setCachedQuotes($params, $responseBody);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $responseBody = '';
             }
@@ -745,7 +745,7 @@ XMLRequest;
                 $xmlResponse = $client->getBody();
                 $debugData['result'] = $xmlResponse;
                 $this->_setCachedQuotes($xmlRequest, $xmlResponse);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $xmlResponse = '';
             }
@@ -1033,7 +1033,7 @@ XMLAuth;
                 $client->post($url, $this->_xmlAccessRequest . $xmlRequest);
                 $xmlResponse = $client->getBody();
                 $debugData['result'] = $xmlResponse;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $xmlResponse = '';
             }
@@ -1445,14 +1445,14 @@ XMLAuth;
             $xmlResponse = $client->getBody();
             $debugData['result'] = $xmlResponse;
             $this->_setCachedQuotes($xmlRequest, $xmlResponse);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
             $xmlResponse = '';
         }
 
         try {
             $response = $this->_xmlElFactory->create(['data' => $xmlResponse]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
         }
 
@@ -1493,7 +1493,6 @@ XMLAuth;
      *
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
-     * @throws \Exception
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1513,14 +1512,14 @@ XMLAuth;
                 $xmlResponse = $client->getBody();
                 $debugData['result'] = $xmlResponse;
                 $this->_setCachedQuotes($xmlRequest, $xmlResponse);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $debugData['result'] = ['code' => $e->getCode(), 'error' => $e->getMessage()];
             }
         }
 
         try {
             $response = $this->_xmlElFactory->create(['data' => $xmlResponse]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
             $result->setErrors($e->getMessage());
         }

@@ -160,10 +160,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * Callback function, emulates getValue function.
      *
-     * @param $path
+     * @param string $path
      * @return null|string
      */
-    public function scopeConfigGetValue($path)
+    public function scopeConfigGetValue(string $path)
     {
         $pathMap = [
             'carriers/ups/free_method' => 'free_method',
@@ -384,6 +384,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Checks a case when UPS processes request to create shipment.
+     *
+     * @return void
      */
     public function testRequestToShipment()
     {
