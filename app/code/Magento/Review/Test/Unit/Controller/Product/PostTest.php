@@ -170,7 +170,13 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $ratingFactory->expects($this->once())->method('create')->willReturn($this->rating);
         $this->messageManager = $this->getMock('\Magento\Framework\Message\ManagerInterface');
 
-        $this->store = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
+        $this->store = $this->getMock(
+            '\Magento\Store\Model\Store',
+            ['getId', 'getWebsiteId'],
+            [],
+            '',
+            false
+        );
         $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
 
@@ -242,7 +248,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
         $product = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['__wakeup', 'isVisibleInCatalog', 'isVisibleInSiteVisibility', 'getId'],
+            ['__wakeup', 'isVisibleInCatalog', 'isVisibleInSiteVisibility', 'getId', 'getWebsiteIds'],
             [],
             '',
             false
@@ -253,6 +259,10 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->once())
             ->method('isVisibleInSiteVisibility')
             ->willReturn(true);
+        $product->expects($this->once())
+            ->method('getWebsiteIds')
+            ->willReturn([1]);
+
         $this->productRepository->expects($this->any())->method('getById')
             ->with(1)
             ->willReturn($product);
@@ -288,6 +298,8 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->review->expects($this->once())->method('setCustomerId')->with($customerId)->willReturnSelf();
         $this->store->expects($this->exactly(2))->method('getId')
             ->willReturn($storeId);
+        $this->store->expects($this->once())->method('getWebsiteId')
+            ->willReturn(1);
         $this->review->expects($this->once())->method('setStoreId')
             ->with($storeId)
             ->willReturnSelf();
