@@ -12,7 +12,7 @@ use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**
- * Invalidate InventoryIndexer
+ * Invalidate index after source links have been saved.
  */
 class InvalidateAfterStockSourceLinksSavePlugin
 {
@@ -31,8 +31,6 @@ class InvalidateAfterStockSourceLinksSavePlugin
     }
 
     /**
-     * Invalidate index source links have been saved.
-     *
      * @param StockSourceLinksSaveInterface $subject
      * @param void $result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

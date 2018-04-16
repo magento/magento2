@@ -9,11 +9,10 @@ namespace Magento\InventoryIndexer\Plugin\InventoryApi;
 
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**
- * Invalidate InventoryIndexer
+ * Invalidate index after source links have been deleted.
  */
 class InvalidateAfterStockSourceLinksDeletePlugin
 {
@@ -23,25 +22,15 @@ class InvalidateAfterStockSourceLinksDeletePlugin
     private $indexerRegistry;
 
     /**
-     * @var DefaultStockProviderInterface
-     */
-    private $defaultStockProvider;
-
-    /**
      * @param IndexerRegistry $indexerRegistry
-     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
-        IndexerRegistry $indexerRegistry,
-        DefaultStockProviderInterface $defaultStockProvider
+        IndexerRegistry $indexerRegistry
     ) {
         $this->indexerRegistry = $indexerRegistry;
-        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
-     * Invalidate index after source links have been deleted.
-     *
      * @param StockSourceLinksDeleteInterface $subject
      * @param void $result
      * @return void

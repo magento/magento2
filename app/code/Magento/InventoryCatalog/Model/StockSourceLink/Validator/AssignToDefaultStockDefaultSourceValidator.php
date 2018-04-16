@@ -54,7 +54,7 @@ class AssignToDefaultStockDefaultSourceValidator implements StockSourceLinkValid
         $errors = [];
         if ($link->getStockId() === $this->defaultStockProvider->getId()
         || $link->getSourceCode() === $this->defaultSourceProvider->getCode()) {
-            $errors[] = __('Default Source can be assigned only to Default Stock');
+            $errors[] = __('Can not save link related to Default Source or Default Stock');
         }
 
         return $this->validationResultFactory->create(['errors' => $errors]);
