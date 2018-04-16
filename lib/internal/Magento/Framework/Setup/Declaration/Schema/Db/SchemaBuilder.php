@@ -136,7 +136,7 @@ class SchemaBuilder
     {
         foreach ($tables as $table) {
             $tableName = $table->getName();
-            if (!$schema->getTableByName($tableName)) {
+            if ($schema->getTableByName($tableName) instanceof Table) {
                 continue;
             }
             $referencesData = $this->dbSchemaReader->readReferences($tableName, $table->getResource());
