@@ -77,7 +77,6 @@ class UpdateUrlPath
         if ($category->isObjectNew()
             && !$category->isInRootCategoryList()
             && !empty($parentCategoryId)) {
-
             foreach ($category->getStoreIds() as $storeId) {
                 if (!$this->isGlobalScope((int)$storeId)
                     && $this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
@@ -91,7 +90,6 @@ class UpdateUrlPath
                     $this->urlPersist->replace($this->categoryUrlRewriteGenerator->generate($category));
                 }
             }
-
         }
 
         return $result;
