@@ -273,6 +273,9 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
         $resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $resourceConnectionMock->expects(self::any())
+            ->method('getTableName')
+            ->willReturnArgument(0);
         /** @var Schema $schema */
         $schema = $this->objectManagerHelper->getObject(
             Schema::class,
