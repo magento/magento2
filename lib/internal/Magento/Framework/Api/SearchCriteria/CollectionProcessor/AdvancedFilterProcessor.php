@@ -19,7 +19,6 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\
 use Magento\Framework\Phrase;
 
 /**
- * Class AdvancedFilterProcessor
  * Collection processor that adds filters to collection based on passed search criteria
  *
  * Difference between FilterProcessor is that AdvancedFilterProcessor gives ability
@@ -35,8 +34,6 @@ use Magento\Framework\Phrase;
  *      OR
  *      field_3 like '%banana%'
  *  )
- *
- * @package Magento\Framework\Api\SearchCriteria\CollectionProcessor
  */
 class AdvancedFilterProcessor implements CollectionProcessorInterface
 {

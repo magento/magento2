@@ -10,8 +10,6 @@ namespace Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProc
 use Magento\Framework\Api\Filter;
 
 /**
- * CustomConditionInterface
- *
  * Implement it to build SQL conditions from Magento\Framework\Api\Filter
  *
  * Multiple conditions can be combined into groups with AND or OR combination
@@ -25,8 +23,6 @@ use Magento\Framework\Api\Filter;
  *          AND
  *          (CustomCondition_2 OR CustomCondition_3)
  *
- *
- * @package Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor
  */
 interface CustomConditionInterface
 {

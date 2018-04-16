@@ -14,12 +14,9 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\NoSuchEntityException as CategoryDoesNotExistException;
 
 /**
- * Class ProductCategoryCondition
  * Based on Magento\Framework\Api\Filter builds condition
  * that can be applied to Catalog\Model\ResourceModel\Product\Collection
  * to filter products by specific categories
- *
- * @package Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor
  */
 class ProductCategoryCondition implements CustomConditionInterface
 {

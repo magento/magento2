@@ -12,10 +12,7 @@ use Magento\Framework\Api\Filter;
 use Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\Factory;
 
 /**
- * Class DefaultCondition
  * Default condition builder for Catalog\Model\ResourceModel\Product\Collection
- *
- * @package Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor
  */
 class DefaultCondition implements CustomConditionInterface
 {

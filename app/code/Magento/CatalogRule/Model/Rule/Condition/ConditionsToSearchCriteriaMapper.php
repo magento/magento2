@@ -16,10 +16,7 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria;
 
 /**
- * Class ConditionsToSearchCriteriaMapper
  * Maps catalog price rule conditions to search criteria
- *
- * @package Magento\CatalogRule\Model\Rule\Condition
  */
 class ConditionsToSearchCriteriaMapper
 {

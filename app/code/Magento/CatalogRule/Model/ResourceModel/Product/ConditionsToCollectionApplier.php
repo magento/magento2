@@ -15,10 +15,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\AdvancedFilterProce
 use Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor;
 
 /**
- * Class ConditionsToCollectionMapper
  * Applies catalog price rule conditions to product collection as filters
- *
- * @package Magento\CatalogRule\Model\ResourceModel\Product
  */
 class ConditionsToCollectionApplier
 {

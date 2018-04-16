@@ -13,14 +13,11 @@ use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
 
 /**
- * Class MappableConditionsProcessor
  * Rebuilds catalog price rule conditions tree
  * so only those conditions that can be mapped to search criteria are left
  *
  * Those conditions that can't be mapped are deleted from tree
  * If deleted condition is part of combined condition with OR aggregation all this group will be removed
- *
- * @package Magento\CatalogRule\Model\Rule\Condition
  */
 class MappableConditionsProcessor
 {

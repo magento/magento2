@@ -13,12 +13,9 @@ use Magento\Framework\Api\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
- * Class NativeAttributeCondition
  * Based on Magento\Framework\Api\Filter builds condition
  * that can be applied to Catalog\Model\ResourceModel\Product\Collection
  * to filter products that has specific value for their native attribute
- *
- * @package Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder
  */
 class NativeAttributeCondition implements CustomConditionInterface
 {

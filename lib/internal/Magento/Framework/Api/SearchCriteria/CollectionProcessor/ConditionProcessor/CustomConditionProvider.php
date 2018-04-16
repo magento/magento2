@@ -12,10 +12,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\
 use Magento\Framework\Phrase;
 
 /**
- * Class CustomConditionProvider
  * Collection of all custom condition processors
- *
- * @package Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor
  */
 class CustomConditionProvider implements CustomConditionProviderInterface
 {

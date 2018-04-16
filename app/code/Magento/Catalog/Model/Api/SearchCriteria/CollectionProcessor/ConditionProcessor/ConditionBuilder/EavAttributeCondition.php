@@ -13,12 +13,9 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 /**
- * Class EavAttributeCondition
  * Based on Magento\Framework\Api\Filter builds condition
  * that can be applied to Catalog\Model\ResourceModel\Product\Collection
  * to filter products that has specific value for EAV attribute
- *
- * @package Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder
  */
 class EavAttributeCondition implements CustomConditionInterface
 {
