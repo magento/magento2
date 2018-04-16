@@ -333,13 +333,23 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testLoadFirstVariationWithImageNoProduct()
     {
+        $this->swatchAttributesProvider
+            ->method('provide')
+            ->with($this->productMock)
+            ->willReturn([]);
         $result = $this->swatchHelperObject->loadVariationByFallback($this->productMock, ['color' => 31]);
+
         $this->assertFalse($result);
     }
 
     public function testLoadVariationByFallbackWithoutProduct()
     {
+        $this->swatchAttributesProvider
+            ->method('provide')
+            ->with($this->productMock)
+            ->willReturn([]);
         $result = $this->swatchHelperObject->loadFirstVariationWithImage($this->productMock, ['color' => 31]);
+
         $this->assertFalse($result);
     }
 
