@@ -58,7 +58,7 @@ class SourceSelectionServiceTest extends WebapiAbstract
             ]
         ];
 
-        $expectedItemsData = [
+        $expectedResultData = [
             'source_selection_items' => [
                 [
                     'source_code' => 'eu-1',
@@ -103,9 +103,8 @@ class SourceSelectionServiceTest extends WebapiAbstract
             ? $this->_webApiCall($serviceInfo, $requestData)
             : $this->_webApiCall($serviceInfo, $requestData);
 
-        print_r($sourceSelectionAlgorithmResult);
         self::assertInternalType('array', $sourceSelectionAlgorithmResult);
         self::assertNotEmpty($sourceSelectionAlgorithmResult);
-        AssertArrayContains::assert($expectedItemsData, $sourceSelectionAlgorithmResult);
+        AssertArrayContains::assert($expectedResultData, $sourceSelectionAlgorithmResult);
     }
 }
