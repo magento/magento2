@@ -20,30 +20,42 @@ $bulks = [
         'user_id' => 1,
         'description' => 'Bulk Description',
         'operation_count' => 1,
+        'start_time' => null,
     ],
     'in_progress_success' => [
         'uuid' => 'bulk-uuid-2',
         'user_id' => 1,
         'description' => 'Bulk Description',
         'operation_count' => 3,
+        'start_time' => null,
     ],
     'in_progress_failed' => [
         'uuid' => 'bulk-uuid-3',
         'user_id' => 1,
         'description' => 'Bulk Description',
         'operation_count' => 2,
+        'start_time' => null,
     ],
     'finish_success' => [
         'uuid' => 'bulk-uuid-4',
         'user_id' => 1,
         'description' => 'Bulk Description',
         'operation_count' => 1,
+        'start_time' => null,
     ],
     'finish_failed' => [
         'uuid' => 'bulk-uuid-5',
         'user_id' => 1,
         'description' => 'Bulk Description',
         'operation_count' => 2,
+        'start_time' => null,
+    ],
+    'started_searchable' => [
+        'uuid' => 'bulk-uuid-6',
+        'user_id' => 1,
+        'description' => 'Bulk Description',
+        'operation_count' => 3,
+        'start_time' => '2009-10-10 00:00:00'
     ]
 ];
 // Only processed operations are saved into database (i.e. operations that are not in 'open' state)
@@ -88,11 +100,35 @@ $operations = [
         'error_code' => 2222,
         'result_message' => 'Entity with ID=4 does not exist',
     ],
+    [
+        'bulk_uuid' => 'bulk-uuid-6',
+        'topic_name' => 'topic-5',
+        'serialized_data' => json_encode(['entity_id' => 5]),
+        'status' => OperationInterface::STATUS_TYPE_COMPLETE,
+        'error_code' => null,
+        'result_message' => null,
+    ],
+    [
+        'bulk_uuid' => 'bulk-uuid-6',
+        'topic_name' => 'topic-5',
+        'serialized_data' => json_encode(['entity_id' => 5, 'meta_information' => 'Test']),
+        'status' => OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED,
+        'error_code' => 1111,
+        'result_message' => 'Something went wrong during your request',
+    ],
+    [
+        'bulk_uuid' => 'bulk-uuid-6',
+        'topic_name' => 'topic-5',
+        'serialized_data' => json_encode(['entity_id' => 5]),
+        'status' => OperationInterface::STATUS_TYPE_RETRIABLY_FAILED,
+        'error_code' => 2222,
+        'result_message' => 'Entity with ID=4 does not exist',
+    ],
 
 ];
 
-$bulkQuery = "INSERT INTO {$bulkTable} (`uuid`, `user_id`, `description`, `operation_count`)"
-    . " VALUES (:uuid, :user_id, :description, :operation_count);";
+$bulkQuery = "INSERT INTO {$bulkTable} (`uuid`, `user_id`, `description`, `operation_count`, `start_time`)"
+    . " VALUES (:uuid, :user_id, :description, :operation_count, :start_time);";
 foreach ($bulks as $bulk) {
     $connection->query($bulkQuery, $bulk);
 }
