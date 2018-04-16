@@ -28,8 +28,7 @@ class WeightResolver
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
-    )
-    {
+    ) {
         $this->productRepository = $productRepository;
         $this->productTypeManager = $productTypeManager;
     }
@@ -51,5 +50,4 @@ class WeightResolver
             $this->productRepository->save($product);
         }
     }
-
 }

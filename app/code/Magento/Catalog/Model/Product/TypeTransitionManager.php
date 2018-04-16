@@ -47,7 +47,7 @@ class TypeTransitionManager
      */
     public function processProduct(Product $product)
     {
-        if (in_array($product->getTypeId(), $this->compatibleTypes)) {
+        if (in_array($product->getTypeId(), $this->compatibleTypes) && empty($product->getConfigurableAttributesData())) {
             $product->setTypeInstance(null);
             $productTypeId = $this->weightResolver->resolveProductHasWeight($product)
                 ? Type::TYPE_SIMPLE

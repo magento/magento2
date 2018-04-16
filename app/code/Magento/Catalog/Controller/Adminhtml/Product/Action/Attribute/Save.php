@@ -54,8 +54,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      */
     private $weightResolver;
 
-
-    
     /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
@@ -121,10 +119,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             if ($attributesData) {
                 $dateFormat = $this->_objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
                     ->getDateFormat(\IntlDateFormatter::SHORT);
-
-
+                
                 foreach ($attributesData as $attributeCode => $value) {
-
                     if ($attributeCode == ProductAttributeInterface::CODE_HAS_WEIGHT) {
                         $this->weightResolver->resolve($this->attributeHelper->getProductIds(), $value, $storeId);
                     }
