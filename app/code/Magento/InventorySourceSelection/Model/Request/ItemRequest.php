@@ -28,7 +28,7 @@ class ItemRequest implements ItemRequestInterface
      * @param string $sku
      * @param float $qty
      */
-    public function __construct(string $sku, float $qty)
+    public function __construct(string $sku = null, float $qty = null)
     {
         $this->sku = $sku;
         $this->qty = $qty;
@@ -48,5 +48,21 @@ class ItemRequest implements ItemRequestInterface
     public function getQty(): float
     {
         return $this->qty;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setSku($sku)
+    {
+        $this->sku = $sku;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setQty($qty)
+    {
+        $this->qty = $qty;
     }
 }

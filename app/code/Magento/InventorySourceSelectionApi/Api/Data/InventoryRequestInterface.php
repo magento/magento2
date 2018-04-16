@@ -15,12 +15,33 @@ namespace Magento\InventorySourceSelectionApi\Api\Data;
 interface InventoryRequestInterface
 {
     /**
+     * Get Stock Id
+     *
      * @return int
      */
     public function getStockId(): int;
 
     /**
+     * Get Items
+     *
      * @return \Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface[]
      */
     public function getItems(): array;
+
+
+    /**
+     * Set Stock Id
+     *
+     * @param int $stockId
+     * @return void
+     */
+    public function setStockId($stockId);
+
+    /**
+     * Set Items
+     *
+     * @param \Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface[] $items
+     * @return void
+     */
+    public function setItems($items);
 }

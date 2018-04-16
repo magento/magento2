@@ -12,7 +12,6 @@
             <resource ref="Magento_InventoryApi::source"/>
         </resources>
     </route>
-    <!-- TODO: Check method and cover with test -->
     <route url="/V1/inventory/source-selection-algorithm-result" method="POST">
         <service class="Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface" method="execute"/>
         <resources>

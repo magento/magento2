@@ -90,6 +90,10 @@ class PriorityBasedAlgorithm implements SourceSelectionInterface
                     continue;
                 }
 
+                if ($sourceItem->getStatus() != SourceItemInterface::STATUS_IN_STOCK) {
+                    continue;
+                }
+
                 $sourceItemQty = $sourceItem->getQuantity();
                 $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);
 

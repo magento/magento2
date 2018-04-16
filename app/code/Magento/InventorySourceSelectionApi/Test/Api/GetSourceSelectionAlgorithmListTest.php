@@ -12,8 +12,12 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class GetSourceSelectionAlgorithmListTest extends WebapiAbstract
 {
+    /**#@+
+     * Service constants
+     */
     const RESOURCE_PATH = '/V1/inventory/source-selection-algorithm-list';
     const SERVICE_NAME = 'InventorySourceSelectionApiGetSourceSelectionAlgorithmListV1';
+    /**#@-*/
 
     public function testGetSourceSelectionAlgorithmList()
     {
