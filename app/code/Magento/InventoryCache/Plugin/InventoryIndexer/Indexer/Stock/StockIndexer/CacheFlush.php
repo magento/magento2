@@ -7,53 +7,53 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCache\Plugin\InventoryIndexer\Indexer\Stock\StockIndexer;
 
-use Magento\InventoryCache\Model\FlushCacheByTags;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCache\Model\FlushCacheByProductIds;
+use Magento\InventoryCache\Model\ResourceModel\GetProductIdsForCacheFlush;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 
 /**
- * Clean cache after non default stock reindex.
+ * Clean cache for specific products after non default stock reindex.
  */
 class CacheFlush
 {
     /**
-     * @var FlushCacheByTags
+     * @var FlushCacheByProductIds
      */
-    private $flushCache;
+    private $flushCacheByProductIds;
 
     /**
-     * @var DefaultStockProviderInterface
+     * @var GetProductIdsForCacheFlush
      */
-    private $defaultStockProvider;
+    private $getProductIdsForCacheFlush;
 
     /**
-     * CacheInvalidate constructor.
-     *
-     * @param FlushCacheByTags $flushCache
-     * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param FlushCacheByProductIds $flushCacheByProductIds
+     * @param GetProductIdsForCacheFlush $getProductIdsForCacheFlush
      */
     public function __construct(
-        FlushCacheByTags $flushCache,
-        DefaultStockProviderInterface $defaultStockProvider
+        FlushCacheByProductIds $flushCacheByProductIds,
+        GetProductIdsForCacheFlush $getProductIdsForCacheFlush
     ) {
-        $this->flushCache = $flushCache;
-        $this->defaultStockProvider = $defaultStockProvider;
+        $this->flushCacheByProductIds = $flushCacheByProductIds;
+        $this->getProductIdsForCacheFlush = $getProductIdsForCacheFlush;
     }
 
     /**
      * Clean cache after non default stock reindex.
      *
      * @param StockIndexer $subject
-     * @param array $stockIds
-     * @param null $result
-     * @return void
+     * @param \Magento\Framework\MultiDimensionalIndexer\IndexName[] $indexNames
+     * @return \Magento\Framework\MultiDimensionalIndexer\IndexName[]
+     * @throws \Exception in case product entity type hasn't been initialize.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecuteList(StockIndexer $subject, $result, array $stockIds)
+    public function afterBuildIndex(StockIndexer $subject, array $indexNames)
     {
-        unset($stockIds[$this->defaultStockProvider->getId()]);
-        if ($stockIds) {
-            $this->flushCache->execute();
+        $productIds = $this->getProductIdsForCacheFlush->execute($indexNames);
+        if ($productIds) {
+            $this->flushCacheByProductIds->execute($productIds);
         }
+
+        return $indexNames;
     }
 }

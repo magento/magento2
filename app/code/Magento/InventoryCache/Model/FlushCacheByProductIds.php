@@ -10,6 +10,7 @@ namespace Magento\InventoryCache\Model;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Cache\Tag\Resolver;
 use Magento\Framework\Indexer\CacheContext;
+use Magento\InventoryCache\Model\FlushCacheByProductIds\PurgeVarnishCacheByTags;
 use Magento\PageCache\Model\Cache\Type;
 use Magento\PageCache\Model\Config;
 
@@ -18,6 +19,11 @@ use Magento\PageCache\Model\Config;
  */
 class FlushCacheByProductIds
 {
+    /**
+     * Number of product processed by cache management with single request.
+     */
+    private const CHUNK_SIZE = 1000;
+
     /**
      * @var Resolver
      */
@@ -44,8 +50,6 @@ class FlushCacheByProductIds
     private $purgeVarnishCacheByTags;
 
     /**
-     * FlushCacheByProductIds constructor.
-     *
      * @param Type $fullPageCache
      * @param PurgeVarnishCacheByTags $purgeVarnishCacheByTags
      * @param Config $cacheConfig
@@ -75,16 +79,21 @@ class FlushCacheByProductIds
     public function execute(array $productIds)
     {
         if ($this->cacheConfig->isEnabled()) {
-            $this->cacheContext->registerEntities(Product::CACHE_TAG, $productIds);
-            $tags = $this->tagResolver->getTags($this->cacheContext);
-            if ($tags) {
-                switch ($this->cacheConfig->getType()) {
-                    case Config::BUILT_IN:
-                        $this->fullPageCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array_unique($tags));
-                        break;
-                    case Config::VARNISH:
-                        $this->purgeVarnishCacheByTags->execute($tags);
-                        break;
+            $productIdsGrouped = array_chunk($productIds, self::CHUNK_SIZE);
+            foreach ($productIdsGrouped as $ids) {
+                $this->cacheContext->registerEntities(Product::CACHE_TAG, $ids);
+                $tags = $this->tagResolver->getTags($this->cacheContext);
+                if ($tags) {
+                    switch ($this->cacheConfig->getType()) {
+                        case Config::BUILT_IN:
+                            $this->fullPageCache->clean(
+                                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array_unique($tags)
+                            );
+                            break;
+                        case Config::VARNISH:
+                            $this->purgeVarnishCacheByTags->execute($tags);
+                            break;
+                    }
                 }
             }
         }

@@ -109,6 +109,7 @@ class StockIndexer
     /**
      * @param array $stockIds
      * @return void
+     * @throws \Magento\Framework\Exception\StateException in case replica index table already exists.
      */
     public function executeList(array $stockIds)
     {
@@ -116,33 +117,46 @@ class StockIndexer
             if ($this->defaultStockProvider->getId() === (int)$stockId) {
                 continue;
             }
-
-            $replicaIndexName = $this->indexNameBuilder
-                ->setIndexId(InventoryIndexer::INDEXER_ID)
-                ->addDimension('stock_', (string)$stockId)
-                ->setAlias(Alias::ALIAS_REPLICA)
-                ->build();
-
-            $mainIndexName = $this->indexNameBuilder
-                ->setIndexId(InventoryIndexer::INDEXER_ID)
-                ->addDimension('stock_', (string)$stockId)
-                ->setAlias(Alias::ALIAS_MAIN)
-                ->build();
-
-            $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
-            $this->indexStructure->create($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
-
-            if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
-                $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
-            }
-
-            $this->indexHandler->saveIndex(
-                $replicaIndexName,
-                $this->indexDataProviderByStockId->execute((int)$stockId),
-                ResourceConnection::DEFAULT_CONNECTION
-            );
+            list($mainIndexName, $replicaIndexName) = $this->buildIndex($stockId);
             $this->indexTableSwitcher->switch($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
             $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
         }
+    }
+
+    /**
+     * Build index for specified stock Id.
+     *
+     * @param $stockId
+     * @return \Magento\Framework\MultiDimensionalIndexer\IndexName[]
+     * @throws \Magento\Framework\Exception\StateException in case index replica table already exists.
+     */
+    public function buildIndex($stockId): array
+    {
+        $replicaIndexName = $this->indexNameBuilder
+            ->setIndexId(InventoryIndexer::INDEXER_ID)
+            ->addDimension('stock_', (string)$stockId)
+            ->setAlias(Alias::ALIAS_REPLICA)
+            ->build();
+
+        $mainIndexName = $this->indexNameBuilder
+            ->setIndexId(InventoryIndexer::INDEXER_ID)
+            ->addDimension('stock_', (string)$stockId)
+            ->setAlias(Alias::ALIAS_MAIN)
+            ->build();
+
+        $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
+        $this->indexStructure->create($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
+
+        if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
+            $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
+        }
+
+        $this->indexHandler->saveIndex(
+            $replicaIndexName,
+            $this->indexDataProviderByStockId->execute((int)$stockId),
+            ResourceConnection::DEFAULT_CONNECTION
+        );
+
+        return [$mainIndexName, $replicaIndexName];
     }
 }

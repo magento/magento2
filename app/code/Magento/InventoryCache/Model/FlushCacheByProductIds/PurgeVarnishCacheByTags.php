@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCache\Model;
+namespace Magento\InventoryCache\Model\FlushCacheByProductIds;
 
 use Magento\CacheInvalidate\Model\PurgeCache;
 
@@ -20,8 +20,6 @@ class PurgeVarnishCacheByTags
     private $varnishCache;
 
     /**
-     * PurgeVarnishCacheByTags constructor.
-     *
      * @param PurgeCache $varnishCache
      */
     public function __construct(PurgeCache $varnishCache)

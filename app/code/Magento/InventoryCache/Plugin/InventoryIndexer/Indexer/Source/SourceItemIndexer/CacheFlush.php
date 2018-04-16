@@ -27,8 +27,6 @@ class CacheFlush
     private $getProductIdsBySourceItemIds;
 
     /**
-     * ProductCacheFlush constructor.
-     *
      * @param FlushCacheByProductIds $flushCacheByIds
      * @param GetProductIdsBySourceItemIds $getProductIdsBySourceItemIds
      */
