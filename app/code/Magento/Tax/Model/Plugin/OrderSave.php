@@ -97,8 +97,12 @@ class OrderSave
                         } else {
                             $percentSum = 0;
                             foreach ($taxRates as $rate) {
-                                $realAmount = $rates['amount'] * $rate['percent'] / $rates['percent'];
-                                $realBaseAmount = $rates['base_amount'] * $rate['percent'] / $rates['percent'];
+                                $percentSum += $rate['percent'];
+                            }
+
+                            foreach ($taxRates as $rate) {
+                                $realAmount = $rates['amount'] * $rate['percent'] / $percentSum;
+                                $realBaseAmount = $rates['base_amount'] * $rate['percent'] / $percentSum;
                                 $ratesIdQuoteItemId[$rates['id']][] = [
                                     'id' => $taxesArray['item_id'],
                                     'percent' => $rate['percent'],
@@ -110,7 +114,6 @@ class OrderSave
                                     'real_amount' => $realAmount,
                                     'real_base_amount' => $realBaseAmount,
                                 ];
-                                $percentSum += $rate['percent'];
                             }
                         }
                     }
@@ -163,7 +166,9 @@ class OrderSave
                                     if (isset($quoteItemId['id'])) {
                                         //This is a product item
                                         $item = $order->getItemByQuoteItemId($quoteItemId['id']);
-                                        $itemId = $item->getId();
+                                        if ($item !== null && $item->getId()) {
+                                            $itemId = $item->getId();
+                                        }
                                     } elseif (isset($quoteItemId['associated_item_id'])) {
                                         //This item is associated with a product item
                                         $item = $order->getItemByQuoteItemId($quoteItemId['associated_item_id']);

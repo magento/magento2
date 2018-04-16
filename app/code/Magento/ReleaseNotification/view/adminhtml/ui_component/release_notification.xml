@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">release_notification.release_notification_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Release Notification</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <namespace>release_notification</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>release_notification.release_notification_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="release_notification_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="data" xsi:type="array">
+                        <item name="logAction" xsi:type="url" path="releaseNotification/notification/markUserNotified"/>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <dataProvider class="Magento\ReleaseNotification\Ui\DataProvider\DataProvider" name="release_notification_data_source"/>
+    </dataSource>
+    <modal name="release_notification_modal" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <state>true</state>
+            <options>
+                <option name="modalClass" xsi:type="string">release-notification-modal</option>
+                <option name="title" xsi:type="string" translate="true">What's new with Magento 2.2.2</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">true</option>
+            </options>
+        </settings>
+        <fieldset name="release_notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="release_notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>Magento 2.2.2 offers advanced new features, including:</p>
+                        <br />
+                        <div class="analytics-highlight">
+                        <h3>Advanced Reporting</h3>
+                        <p>Gain valuable insights through a dynamic suite of product, order, and customer reports,
+                        powered by Magento Business Intelligence.</p>
+                        </div>
+                        <div class="instant-purchase-highlight">
+                        <h3>Instant Purchase</h3>
+                        <p>Simplify ordering and boost conversion rates by allowing your customers to use stored
+                        payment and shipping information to skip tedious checkout steps.</p>
+                        </div>
+                        <div class="email-marketing-highlight">
+                        <h3>Email Marketing Automation</h3>
+                        <p>Send smarter, faster email campaigns with marketing automation from dotmailer, powered by
+                        your Magento store's live data.</p>
+                        </div>
+                        <p>Release notes and additional details can be found at
+                        <a href="http://devdocs.magento.com/" target="_blank">Magento DevDocs</a>.
+                        </p>]]>
+                        </item>
+                    </item>
+                </argument>
+            </container>
+            <container name="release_notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="release_notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = release_notification_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[Next >]]></title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+    <modal name="analytics_modal" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">analytics-subscription-modal</option>
+                <option name="title" xsi:type="string" translate="true">Advanced Reporting</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">false</option>
+            </options>
+        </settings>
+        <fieldset name="release_notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="release_notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>Advanced Reporting
+                        provides you with a dynamic suite of reports with rich insights about the health of your
+                        business.</p><br /><p>As part of the Advanced Reporting service, we may also use your customer
+                        data for such purposes as benchmarking, improving our products and services, and providing you
+                        with new and improved analytics.</p><br /><p>By using Magento 2.2.2, you agree to the Advanced
+                        Reporting <a href="https://magento.com/legal/terms/privacy" target="_blank">Privacy Policy</a>
+                        and <a href="https://magento.com/legal/terms/cloud-terms" target="_blank">Terms
+                        of Service</a>. You may opt out at any time from the Stores Configuration page.</p>]]>
+                        </item>
+                    </item>
+                </argument>
+            </container>
+            <container name="release_notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="release_notification_button_back" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = release_notification_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[< Back]]></title>
+                    </settings>
+                </button>
+                <button name="release_notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[Next >]]></title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+    <modal name="instant_purchase_modal" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">instant-purchase-modal</option>
+                <option name="title" xsi:type="string" translate="true">Instant Purchase</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">false</option>
+            </options>
+        </settings>
+        <fieldset name="release_notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="release_notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>Now you can deliver an Amazon-like experience with a new, streamlined checkout option.
+                        Logged-in customers can use previously-stored payment credentials and shipping information
+                        to skip steps, making the process faster and easier, especially for mobile shoppers. Key
+                        features include:
+                        </p>
+                        <ul>
+                        <li><span>Configurable “Instant Purchase” button to place orders.</span></li>
+                        <li><span>Support for all payment solutions using Braintree Vault, including Braintree Credit
+                        Card, Braintree PayPal, and PayPal Payflow Pro.</span></li>
+                        <li><span>Shipping to the customer’s default address using the lowest cost, available shipping
+                        method.</span></li>
+                        <li><span>Ability for developers to customize the Instant Purchase business logic to meet
+                        merchant needs.</span></li>
+                        </ul>]]>
+                        </item>
+                    </item>
+                </argument>
+            </container>
+            <container name="release_notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="release_notification_button_back" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[< Back]]></title>
+                    </settings>
+                </button>
+                <button name="release_notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[Next >]]></title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+    <modal name="email_marketing_modal" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">email-marketing-modal</option>
+                <option name="title" xsi:type="string" translate="true">Email Marketing Automation</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">false</option>
+            </options>
+        </settings>
+        <fieldset name="release_notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="release_notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>Unlock an unparalleled level of insight and control of your eCommerce marketing with
+                        dotmailer Email Marketing Automation. Included with Magento 2.2.2 for easy set-up, dotmailer
+                        ensures every customer’s journey is captured, segmented, and personalized, enabling you to
+                        deliver customer-centric campaigns that beat your results over and over again. Benefits include:
+                        </p>
+                        <ul>
+                        <li><span>No obligation 14-day trial.</span></li>
+                        <li><span>Automation campaigns using your live Magento store data that drive revenue,
+                        including abandoned cart, abandoned browse, product replenishment, and many more.</span></li>
+                        <li><span>Built-in solution for transactional emails.</span></li>
+                        <li><span>Telephone support and advice from marketing experts included.</span></li>
+                        </ul>]]>
+                        </item>
+                    </item>
+                </argument>
+            </container>
+            <container name="release_notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="release_notification_button_back" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[< Back]]></title>
+                    </settings>
+                </button>
+                <button name="release_notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
+                                    <item name="actionName" xsi:type="string">closeReleaseNotes</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title>Done</title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+</form>

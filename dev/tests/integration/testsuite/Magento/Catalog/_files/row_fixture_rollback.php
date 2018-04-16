@@ -10,18 +10,19 @@ $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Ma
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
-$product->loadByAttribute('sku', 'simple');
-if ($product->getId()) {
-    $product->delete();
-}
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
-$product->loadByAttribute('sku', '12345');
-if ($product->getId()) {
-    $product->delete();
+$productSkuList = ['simple', '12345'];
+foreach ($productSkuList as $sku) {
+    try {
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get($sku, true);
+        if ($product->getId()) {
+            $productRepository->delete($product);
+        }
+    } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        //Product already removed
+    }
 }
 
 /** @var $category \Magento\Catalog\Model\Category */

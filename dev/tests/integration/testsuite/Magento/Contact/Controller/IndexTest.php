@@ -24,7 +24,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertRedirect($this->stringContains('contact/index'));
         $this->assertSessionMessages(
             $this->contains(
-                "Thanks for contacting us with your comments and questions. We'll respond to you very soon."
+                "Thanks for contacting us with your comments and questions. We&#039;ll respond to you very soon."
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );

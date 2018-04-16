@@ -21,7 +21,8 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidate($config, $expectedError)
     {
-        $this->expectException('\InvalidArgumentException', $expectedError);
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage($expectedError);
         DirectoryList::validate($config);
     }
 
