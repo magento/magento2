@@ -153,7 +153,9 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         switch ($packageType) {
             case 'magento2-module':
                 $xml = simplexml_load_file("$dir/etc/module.xml");
-                $this->assertConsistentModuleName($xml, $json->name);
+                if ($this->isVendorMagento($json->name)) {
+                    $this->assertConsistentModuleName($xml, $json->name);
+                }
                 $this->assertDependsOnPhp($json->require);
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
@@ -187,6 +189,17 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->assertPackageVersions($json);
+    }
+
+    /**
+     * Checks if package vendor is Magento.
+     *
+     * @param string $packageName
+     * @return bool
+     */
+    private function isVendorMagento($packageName)
+    {
+        return strpos($packageName, 'magento/') === 0;
     }
 
     /**
@@ -276,12 +289,24 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertPhpVersionInSync($name, $phpVersion)
     {
         if (isset(self::$rootJson['require']['php'])) {
-            $this->assertEquals(
-                self::$rootJson['require']['php'],
-                $phpVersion,
-                "PHP version {$phpVersion} in component {$name} is inconsistent with version "
-                . self::$rootJson['require']['php'] . ' in root composer.json'
-            );
+            if ($this->isVendorMagento($name)) {
+                $this->assertEquals(
+                    self::$rootJson['require']['php'],
+                    $phpVersion,
+                    "PHP version {$phpVersion} in component {$name} is inconsistent with version "
+                    . self::$rootJson['require']['php'] . ' in root composer.json'
+                );
+            } else {
+                $composerVersionsPattern = '{\s*\|\|?\s*}';
+                $rootPhpVersions = preg_split($composerVersionsPattern, self::$rootJson['require']['php']);
+                $modulePhpVersions = preg_split($composerVersionsPattern, $phpVersion);
+
+                $this->assertEmpty(
+                    array_diff($rootPhpVersions, $modulePhpVersions),
+                    "PHP version {$phpVersion} in component {$name} is inconsistent with version "
+                    . self::$rootJson['require']['php'] . ' in root composer.json'
+                );
+            }
         }
     }
 

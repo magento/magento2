@@ -16,6 +16,7 @@
         <include>
             <module name="Catalog" />
             <group name="login" />
+            <test name="AdminCreateCustomerTest"/>
         </include>
         <exclude>
             <module name="Catalog" file="AdminCreateCategoryTest.xml" />

@@ -467,7 +467,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if (!$ignoreLinksFlag && $ignoreLinksFlag !== null) {
             $productLinks = $product->getProductLinks();
         }
-        $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
+        if (!isset($productDataArray['store_id'])) {
+            $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
+        }
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
@@ -617,7 +619,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $fields = [];
         $categoryFilter = [];
         foreach ($filterGroup->getFilters() as $filter) {
-            $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $conditionType = $filter->getConditionType() ?: 'eq';
 
             if ($filter->getField() == 'category_id') {
                 $categoryFilter[$conditionType][] = $filter->getValue();
