@@ -187,6 +187,10 @@ class VirtualSourceDeductionProcessor implements ObserverInterface
             ]);
         }
 
+        if (empty($selectionRequestItems)) {
+            return;
+        }
+
         $order = $invoice->getOrder();
         $websiteId = $order->getStore()->getWebsiteId();
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
