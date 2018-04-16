@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Validator\Test\Unit\Constraint\Option;
 
 use Magento\Framework\Validator\Constraint\Option\Callback;
 use Magento\Framework\Validator\Test\Unit\Test\Callback as TestCallback;
 
+/**
+ * Test case for \Magento\Framework\Validator\Constraint\Option\Callback
+ */
 class CallbackTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -132,7 +136,8 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
     public function testGetValueException($callback, $expectedMessage, $createInstance = false)
     {
         $option = new Callback($callback, null, $createInstance);
-        self::expectExceptionMessage($expectedMessage);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage($expectedMessage);
         $option->getValue();
     }
 

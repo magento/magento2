@@ -11,7 +11,8 @@ class DeserializerFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetLogicExceptionEmptyRequestAdapter()
     {
-        $this->expectException('LogicException', 'Request deserializer adapter is not set.');
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('Request deserializer adapter is not set.');
         $interpreterFactory = new \Magento\Framework\Webapi\Rest\Request\DeserializerFactory(
             $this->createMock(\Magento\Framework\ObjectManagerInterface::class),
             []
