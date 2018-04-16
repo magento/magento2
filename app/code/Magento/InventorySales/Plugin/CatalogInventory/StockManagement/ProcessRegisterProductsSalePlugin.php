@@ -7,19 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\CatalogInventory\Model\StockManagement;
+use Magento\CatalogInventory\Api\RegisterProductSaleInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
-use Magento\InventoryReservations\Model\ReservationBuilderInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
-use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySales\Model\CheckItemsQuantity;
 
 /**
- * Class provides around Plugin on \Magento\CatalogInventory\Model\StockManagement::registerProductsSale
+ * Class provides around Plugin on RegisterProductSaleInterface::registerProductsSale
  */
 class ProcessRegisterProductsSalePlugin
 {
@@ -29,126 +27,77 @@ class ProcessRegisterProductsSalePlugin
     private $getSkusByProductIds;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var WebsiteRepositoryInterface
      */
-    private $stockByWebsiteIdResolver;
+    private $websiteRepository;
 
     /**
-     * @var ReservationBuilderInterface
+     * @var StockResolverInterface
      */
-    private $reservationBuilder;
+    private $stockResolver;
 
-    /**
-     * @var AppendReservationsInterface
-     */
-    private $appendReservations;
-
-    /**
-     * @var IsProductSalableForRequestedQtyInterface
-     */
-    private $isProductSalableForRequestedQty;
-
-    /**
+    /*
      * @var GetProductTypesBySkusInterface
      */
     private $getProductTypesBySkus;
 
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
+     * @var CheckItemsQuantity
      */
-    private $isSourceItemsAllowedForProductType;
+    private $checkItemsQuantity;
 
     /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
-     * @param ReservationBuilderInterface $reservationBuilder
-     * @param AppendReservationsInterface $appendReservations
-     * @param IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
+     * @param WebsiteRepositoryInterface $websiteRepository
+     * @param StockResolverInterface $stockResolver
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param CheckItemsQuantity $checkItemsQuantity
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
-        ReservationBuilderInterface $reservationBuilder,
-        AppendReservationsInterface $appendReservations,
-        IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
+        WebsiteRepositoryInterface $websiteRepository,
+        StockResolverInterface $stockResolver,
         GetProductTypesBySkusInterface $getProductTypesBySkus,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+        CheckItemsQuantity $checkItemsQuantity
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
-        $this->reservationBuilder = $reservationBuilder;
-        $this->appendReservations = $appendReservations;
-        $this->isProductSalableForRequestedQty = $isProductSalableForRequestedQty;
+        $this->websiteRepository = $websiteRepository;
+        $this->stockResolver = $stockResolver;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->checkItemsQuantity = $checkItemsQuantity;
     }
 
     /**
-     * @param StockManagement $subject
+     * @param RegisterProductSaleInterface $subject
      * @param callable $proceed
      * @param float[] $items
      * @param int|null $websiteId
-     * @return StockItemInterface[]
+     *
+     * @return []
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundRegisterProductsSale(StockManagement $subject, callable $proceed, $items, $websiteId = null)
-    {
+    public function aroundRegisterProductsSale(
+        RegisterProductSaleInterface $subject,
+        callable $proceed,
+        $items,
+        $websiteId = null
+    ) {
         if (empty($items)) {
             return [];
         }
         if (null === $websiteId) {
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
-
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
-        $productTypes = $this->getProductTypesBySkus->execute(array_values($productSkus));
-        $this->checkItemsQuantity($items, $productSkus, $productTypes, $stockId);
-
-        $reservations = [];
+        $itemsBySku = [];
         foreach ($productSkus as $productId => $sku) {
-            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
-                continue;
-            }
-            $reservations[] = $this->reservationBuilder
-                ->setSku($sku)
-                ->setQuantity(-(float)$items[$productId])
-                ->setStockId($stockId)
-                ->build();
+            $itemsBySku[$sku] = $items[$productId];
         }
-
-        if (!empty($reservations)) {
-            $this->appendReservations->execute($reservations);
-        }
+        $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
+        $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
+        $productTypes = $this->getProductTypesBySkus->execute(array_keys($itemsBySku));
+        $this->checkItemsQuantity->execute($itemsBySku, $productTypes, $stockId);
         return [];
-    }
-
-    /**
-     * Check is all items salable
-     *
-     * @param array $items
-     * @param array $productSkus
-     * @param array $productTypes
-     * @param int $stockId
-     * @return void
-     * @throws LocalizedException
-     */
-    private function checkItemsQuantity(array $items, array $productSkus, array $productTypes, int $stockId)
-    {
-        foreach ($productSkus as $productId => $sku) {
-            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
-                continue;
-            }
-            $qty = (float)$items[$productId];
-            $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable();
-            if (false === $isSalable) {
-                throw new LocalizedException(
-                    __('Not all of your products are available in the requested quantity.')
-                );
-            }
-        }
     }
 }

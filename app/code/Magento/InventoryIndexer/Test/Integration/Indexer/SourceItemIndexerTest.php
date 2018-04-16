@@ -12,7 +12,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryIndexer\Indexer\SourceItem\GetSourceItemIds;
 use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
-use Magento\InventoryIndexer\Model\GetStockItemData;
+use Magento\InventoryIndexer\Model\ResourceModel\GetStockItemData;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
