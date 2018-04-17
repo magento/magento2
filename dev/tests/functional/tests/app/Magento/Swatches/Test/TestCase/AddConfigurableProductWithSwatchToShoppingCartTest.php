@@ -10,6 +10,7 @@ use Magento\Mtf\TestCase\Injectable;
 use Magento\Swatches\Test\TestStep\AddProductToCartFromCatalogCategoryPageStep as AddToCart;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 
 /**
  * Preconditions:

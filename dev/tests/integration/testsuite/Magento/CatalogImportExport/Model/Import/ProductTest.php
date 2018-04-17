@@ -279,9 +279,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @dataProvider getBehaviorDataProvider
      * @param string $importFile
      * @param string $sku
+     * @param int $expectedOptionsQty
      * @magentoAppIsolation enabled
      */
-    public function testSaveCustomOptions($importFile, $sku)
+    public function testSaveCustomOptions($importFile, $sku, $expectedOptionsQty)
     {
         $pathToFile = __DIR__ . '/_files/' . $importFile;
         $importModel = $this->createImportModel($pathToFile);
@@ -314,6 +315,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         // assert of options data
         $this->assertCount(count($expectedData['data']), $actualData['data']);
         $this->assertCount(count($expectedData['values']), $actualData['values']);
+        $this->assertCount($expectedOptionsQty, $actualData['options']);
         foreach ($expectedData['options'] as $expectedId => $expectedOption) {
             $elementExist = false;
             // find value in actual options and values
@@ -418,12 +420,19 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     {
         return [
             'Append behavior with existing product' => [
-                '$importFile' => 'product_with_custom_options.csv',
-                '$sku' => 'simple',
+                'importFile' => 'product_with_custom_options.csv',
+                'sku' => 'simple',
+                'expectedOptionsQty' => 6
+            ],
+            'Append behavior with existing product and without options in import file' => [
+                'importFile' => 'product_without_custom_options.csv',
+                'sku' => 'simple',
+                'expectedOptionsQty' => 0
             ],
             'Append behavior with new product' => [
-                '$importFile' => 'product_with_custom_options_new.csv',
-                '$sku' => 'simple_new',
+                'importFile' => 'product_with_custom_options_new.csv',
+                'sku' => 'simple_new',
+                'expectedOptionsQty' => 4
             ]
         ];
     }
@@ -574,6 +583,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 break;
             }
         }
+        if (!empty($productData['data'][$storeRowId]['custom_options'])) {
             foreach (explode('|', $productData['data'][$storeRowId]['custom_options']) as $optionData) {
                 $option = array_values(
                     array_map(
@@ -595,7 +605,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                         $expectedData[$expectedOptionId] = [];
                         foreach ($this->_assertOptions as $assertKey => $assertFieldName) {
                             if (array_key_exists($assertFieldName, $option)
-                            && !(($assertFieldName == 'price' || $assertFieldName == 'sku')
+                                && !(($assertFieldName == 'price' || $assertFieldName == 'sku')
                                     && in_array($option['type'], $this->specificTypes))
                             ) {
                                 $expectedData[$expectedOptionId][$assertKey] = $option[$assertFieldName];
@@ -613,6 +623,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                     $expectedValues[$expectedOptionId][] = $optionValue;
                 }
             }
+        }
         return [
             'id' => $expectedOptionId,
             'options' => $expectedOptions,
