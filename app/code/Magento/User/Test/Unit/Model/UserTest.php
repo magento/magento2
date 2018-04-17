@@ -782,7 +782,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
             $this->expectExceptionMessage((string)__('Your account is temporarily disabled. Please try again later.'));
         }
 
-        if (!$verifyIdentityResult) {
+        if (!$lockExpires && !$verifyIdentityResult) {
             $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
             $this->expectExceptionMessage(
                 (string)__('The password entered for the current user is invalid. Verify the password and try again.')
