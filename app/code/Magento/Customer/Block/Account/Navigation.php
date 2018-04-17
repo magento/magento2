@@ -46,6 +46,6 @@ class Navigation extends Links
      */
     private function compare(SortLinkInterface $firstLink, SortLinkInterface $secondLink)
     {
-        return ($firstLink->getSortOrder() < $secondLink->getSortOrder());
+        return ($firstLink->getSortOrder() < $secondLink->getSortOrder()) ? -1 : 1;
     }
 }
