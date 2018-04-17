@@ -87,7 +87,8 @@ class FlushCacheByProductIds
                     switch ($this->cacheConfig->getType()) {
                         case Config::BUILT_IN:
                             $this->fullPageCache->clean(
-                                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array_unique($tags)
+                                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                                array_unique($tags)
                             );
                             break;
                         case Config::VARNISH:

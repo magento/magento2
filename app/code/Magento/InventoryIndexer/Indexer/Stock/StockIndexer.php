@@ -109,7 +109,6 @@ class StockIndexer
     /**
      * @param array $stockIds
      * @return void
-     * @throws \Magento\Framework\Exception\StateException in case replica index table already exists.
      */
     public function executeList(array $stockIds)
     {
@@ -117,7 +116,7 @@ class StockIndexer
             if ($this->defaultStockProvider->getId() === (int)$stockId) {
                 continue;
             }
-            list($mainIndexName, $replicaIndexName) = $this->buildIndex($stockId);
+            list($mainIndexName, $replicaIndexName) = $this->buildIndex((int)$stockId);
             $this->indexTableSwitcher->switch($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
             $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
         }
@@ -126,11 +125,10 @@ class StockIndexer
     /**
      * Build index for specified stock Id.
      *
-     * @param $stockId
+     * @param int $stockId
      * @return \Magento\Framework\MultiDimensionalIndexer\IndexName[]
-     * @throws \Magento\Framework\Exception\StateException in case index replica table already exists.
      */
-    public function buildIndex($stockId): array
+    public function buildIndex(int $stockId): array
     {
         $replicaIndexName = $this->indexNameBuilder
             ->setIndexId(InventoryIndexer::INDEXER_ID)
