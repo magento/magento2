@@ -23,11 +23,7 @@
             <dep>inventory_shipping_source_selection_form.inventory_shipping_source_selection_form_data_source</dep>
         </deps>
         <buttons>
-            <button name="back">
-                <url path="sales/order/index"/>
-                <class>back</class>
-                <label translate="true">Back</label>
-            </button>
+            <button name="back" class="Magento\InventoryShipping\Ui\Component\Control\SourceSelection\BackButton"/>
             <button name="reset">
                 <class>reset</class>
                 <label translate="true">Reset</label>
