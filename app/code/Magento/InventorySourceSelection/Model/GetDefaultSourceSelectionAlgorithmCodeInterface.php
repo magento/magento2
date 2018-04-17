@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model\SourceSelection;
+namespace Magento\InventorySourceSelection\Model;
 
 /**
  * Service returns Default Source Selection Algorithm Code
