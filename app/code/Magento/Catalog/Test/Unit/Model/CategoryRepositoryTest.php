@@ -285,8 +285,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 true, \Magento\Framework\Exception\CouldNotSaveException::class,
-                'Could not save category: The "ValidateCategoryTest" attribute is required. Enter and try again.' .
-                'Enter and try again.',
+                'Could not save category: The "ValidateCategoryTest" attribute is required. Enter and try again.'
             ], [
                 'Something went wrong', \Magento\Framework\Exception\CouldNotSaveException::class,
                 'Could not save category: Something went wrong'
