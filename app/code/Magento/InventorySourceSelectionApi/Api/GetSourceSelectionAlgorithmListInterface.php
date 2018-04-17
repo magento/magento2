@@ -17,7 +17,7 @@ use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterfa
 interface GetSourceSelectionAlgorithmListInterface
 {
     /**
-     * @return SourceSelectionAlgorithmInterface[]
+     * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface[]
      */
     public function execute(): array;
 }

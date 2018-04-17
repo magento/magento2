@@ -100,12 +100,19 @@ class SourceDeductionService implements SourceDeductionServiceInterface
             }
         }
 
+        $salesEvent = $sourceDeductionRequest->getSalesEvent();
         $reservationToSave = [];
         foreach ($reservationsToBuild as $sku => $reservationQty) {
             $reservationToSave[] = $this->reservationBuilder
                 ->setSku($sku)
                 ->setQuantity($reservationQty)
                 ->setStockId($stockId)
+                ->setMetadata(sprintf(
+                    '%s:%s:%s',
+                    $salesEvent->getType(),
+                    $salesEvent->getObjectType(),
+                    $salesEvent->getObjectId()
+                ))
                 ->build();
         }
         $this->sourceItemsSave->execute($sourceItemToSave);
