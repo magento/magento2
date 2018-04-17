@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model\SourceSelection;
+namespace Magento\InventorySourceSelection\Model;
 
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterfaceFactory;
@@ -49,7 +49,8 @@ class GetSourceSelectionAlgorithmList implements GetSourceSelectionAlgorithmList
             $algorithmsList[] = $this->sourceSelectionAlgorithmFactory->create(
                 [
                     'code' => $data['code'],
-                    'title' => $data['title']
+                    'title' => $data['title'],
+                    'description' => $data['description']
                 ]
             );
         }
