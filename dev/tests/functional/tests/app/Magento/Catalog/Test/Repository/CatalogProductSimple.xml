@@ -392,7 +392,6 @@
             </field>
             <field name="category_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_subcategory</item>
-                <item name="dataset" xsi:type="string">default_category</item>
             </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="array">
@@ -1319,6 +1318,39 @@
             <field name="mtf_dataset_name" xsi:type="string">simple_with_category</field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
             <field name="store_code" xsi:type="string">all</field>
+        </dataset>
+
+        <dataset name="product_with_def_root_cat_and_subcat">
+            <field name="sku" xsi:type="string">simple_prod_with_def_root_cat_and_subcat_%isolation%</field>
+            <field name="name" xsi:type="string">Simple prod with def root cat and subcat %isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">777</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">100</item>
+                <item name="dataset" xsi:type="string" />
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default_category</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default_subcategory</item>
+                </item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="mtf_dataset_name" xsi:type="string">simple_with_category</field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
         </dataset>
     </repository>
 </config>
