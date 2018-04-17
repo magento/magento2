@@ -24,7 +24,8 @@ class RelativePathConverterTest extends \PHPUnit\Framework\TestCase
 
         $exceptionMessage = sprintf('Invalid relative path %s in %s node', $relativePath, $nodePath);
 
-        $this->expectException('InvalidArgumentException', $exceptionMessage);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage($exceptionMessage);
         $this->_sut->convert($nodePath, $relativePath);
     }
 
@@ -35,7 +36,8 @@ class RelativePathConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertWithInvalidArguments($nodePath, $relativePath)
     {
-        $this->expectException('InvalidArgumentException', 'Invalid arguments');
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid arguments');
         $this->_sut->convert($nodePath, $relativePath);
     }
 

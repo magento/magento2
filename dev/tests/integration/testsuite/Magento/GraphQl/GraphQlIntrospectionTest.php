@@ -80,17 +80,17 @@ QUERY;
         $this->assertEquals('Query', $output['queryType']['name']);
         $this->assertEquals($output['types'][0]['kind'], 'OBJECT');
         $expectedFragment =
-        [
-        'name' => 'Query',
-        'description' => 'Description at type level',
-        'kind' => 'OBJECT',
-        'fields' => [
-          [
-           'name' => 'a',
-          'args' => []
-          ]
-        ]
-         ];
+            [
+                'name' => 'Query',
+                'description' => 'Description at type level',
+                'kind' => 'OBJECT',
+                'fields' => [
+                    [
+                        'name' => 'a',
+                        'args' => []
+                    ]
+                ]
+            ];
         $this->assertContains($expectedFragment, $output['types']);
     }
 
@@ -102,27 +102,26 @@ QUERY;
     {
         $testInputObject = new InputObjectType(
             [
-               'name' => 'ProductFilterInput',
-               'fields' => [
-                   'attributeA' => [
-                       'type' => \GraphQL\Type\Definition\Type::nonNull(
-                           \GraphQL\Type\Definition\Type::string()
-                       ),
-                       'description' => 'testDescriptionForA'
-                   ],
-                   'attributeB' => [
-                       'type' => \GraphQL\Type\Definition\Type::listOf(
-                           \GraphQL\Type\Definition\Type::string()
-                       )
-                   ],
-                   'attributeC' => ['type' => \GraphQL\Type\Definition\Type::string(), 'defaultValue' => null],
-                   'attributeD' => [
-                       'type' => \GraphQL\Type\Definition\Type::string(),
-                       'defaultValue' => 'test',
-                       'description' => 'testDescriptionForD'
-                   ],
-
-               ]
+                'name' => 'ProductFilterInput',
+                'fields' => [
+                    'attributeA' => [
+                        'type' => \GraphQL\Type\Definition\Type::nonNull(
+                            \GraphQL\Type\Definition\Type::string()
+                        ),
+                        'description' => 'testDescriptionForA'
+                    ],
+                    'attributeB' => [
+                        'type' => \GraphQL\Type\Definition\Type::listOf(
+                            \GraphQL\Type\Definition\Type::string()
+                        )
+                    ],
+                    'attributeC' => ['type' => \GraphQL\Type\Definition\Type::string(), 'defaultValue' => null],
+                    'attributeD' => [
+                        'type' => \GraphQL\Type\Definition\Type::string(),
+                        'defaultValue' => 'test',
+                        'description' => 'testDescriptionForD'
+                    ],
+                ]
             ]
         );
         $TestType = new ObjectType([
