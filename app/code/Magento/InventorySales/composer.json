@@ -15,6 +15,7 @@
         "magento/module-inventory-reservations-api": "*",
         "magento/module-inventory-sales-api": "*",
         "magento/module-store": "*",
+        "magento/module-sales": "*",
         "magento/module-ui": "*"
     },
     "require-dev": {

@@ -178,11 +178,8 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
         float $requestedQty
     ) : bool {
         // Qty Increments
-        if ($this->mathDivision->getExactDivision($requestedQty, $this->configuration->getQtyIncrements()) !== 0
-            || $this->mathDivision->getExactDivision(
-                $requestedQty,
-                $stockItemConfiguration->getQtyIncrements()
-            ) !== 0) {
+        $qtyIncrements = $stockItemConfiguration->getQtyIncrements();
+        if ($qtyIncrements !== (float)0 && $this->mathDivision->getExactDivision($requestedQty, $qtyIncrements) !== 0) {
             return true;
         }
         return false;
