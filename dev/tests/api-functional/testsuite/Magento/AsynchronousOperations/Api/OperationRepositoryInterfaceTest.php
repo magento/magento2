@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Api;
 
 use Magento\Framework\Webapi\Rest\Request;
@@ -16,7 +18,7 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
     const SERVICE_NAME = 'asynchronousOperationsOperationRepositoryV1';
 
     /**
-     * @magentoApiDataFixture Magento/AsynchronousOperations/_files/bulk.php
+     * @magentoApiDataFixture Magento/AsynchronousOperations/_files/operation_searchable.php
      */
     public function testGetListByBulkStartTime()
     {
@@ -59,12 +61,12 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(3, count($response['items']));
 
         foreach ($response['items'] as $item) {
-            $this->assertEquals('bulk-uuid-6', $item['bulk_uuid']);
+            $this->assertEquals('bulk-uuid-searchable-6', $item['bulk_uuid']);
         }
     }
 
     /**
-     * @magentoApiDataFixture Magento/AsynchronousOperations/_files/bulk.php
+     * @magentoApiDataFixture Magento/AsynchronousOperations/_files/operation_searchable.php
      */
     public function testGetList()
     {
@@ -75,7 +77,7 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
                         'filters' => [
                             [
                                 'field' => 'bulk_uuid',
-                                'value' => 'bulk-uuid-6',
+                                'value' => 'bulk-uuid-searchable-6',
                                 'condition_type' => 'eq',
                             ],
                         ],
@@ -116,7 +118,7 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(1, count($response['items']));
 
         foreach ($response['items'] as $item) {
-            $this->assertEquals('bulk-uuid-6', $item['bulk_uuid']);
+            $this->assertEquals('bulk-uuid-searchable-6', $item['bulk_uuid']);
         }
     }
 }

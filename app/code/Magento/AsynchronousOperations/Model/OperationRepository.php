@@ -101,12 +101,10 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process($collection, \Magento\AsynchronousOperations\Api\Data\OperationInterface::class);
         $this->collectionProcessor->process($searchCriteria, $collection);
-
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setTotalCount($collection->getSize());
 
         $items = [];
-
         foreach ($collection->getItems() as $item) {
             $extensionAttributes = $item->getExtensionAttributes();
             if ($extensionAttributes == null) {
@@ -116,9 +114,7 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
             $item->setExtensionAttributes($extensionAttributes);
             $items[] = $item;
         }
-
         $searchResult->setItems($items);
-
 
         return $searchResult;
     }
