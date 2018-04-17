@@ -28,7 +28,6 @@ interface InventoryRequestInterface
      */
     public function getItems(): array;
 
-
     /**
      * Set Stock Id
      *
