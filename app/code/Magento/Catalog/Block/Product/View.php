@@ -295,7 +295,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
             $product = $this->getProduct();
         }
 
-        return $this->getMinimalQty($product);;
+        return $this->getMinimalQty($product);
     }
 
     /**
