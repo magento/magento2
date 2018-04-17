@@ -55,9 +55,8 @@ class CaptchaFactoryTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Magento\Captcha\Model\\' . ucfirst(
-                $captchaType
-            ) . ' does not implement \Magento\Captcha\Model\CaptchaInterface');
+        $this->expectExceptionMessage('Magento\Captcha\Model\\' . ucfirst($captchaType) .
+            ' does not implement \Magento\Captcha\Model\CaptchaInterface');
 
         $this->assertEquals($defaultCaptchaMock, $this->_model->create($captchaType, 'form_id'));
     }

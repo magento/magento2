@@ -27,7 +27,9 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->getObject(\Magento\Framework\View\Layout\ReaderFactory::class, ['objectManager' => $objectManager]);
 
         $this->expectException('\InvalidArgumentException');
-        $this->expectExceptionMessage($className . ' doesn\'t implement \Magento\Framework\View\Layout\ReaderInterface');
+        $this->expectExceptionMessage(
+            $className . ' doesn\'t implement \Magento\Framework\View\Layout\ReaderInterface'
+        );
         $factory->create($className, $data);
     }
 

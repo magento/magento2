@@ -118,7 +118,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testCreateValidatorInvalidConstraintClass()
     {
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Constraint class "stdClass" must implement \Magento\Framework\Validator\ValidatorInterface');
+        $this->expectExceptionMessage(
+            'Constraint class "stdClass" must implement \Magento\Framework\Validator\ValidatorInterface'
+        );
         $this->_initConfig([__DIR__ . '/_files/validation/negative/invalid_constraint.xml']);
         $this->_config->createValidator('test_entity', 'test_group');
     }

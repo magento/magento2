@@ -109,7 +109,9 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->expectException('LogicException');
-        $this->expectExceptionMessage('The renderer must implement "Magento\Framework\Webapi\Rest\Response\RendererInterface".');
+        $this->expectExceptionMessage(
+            'The renderer must implement "Magento\Framework\Webapi\Rest\Response\RendererInterface".'
+        );
         $this->_factory->get();
     }
 }

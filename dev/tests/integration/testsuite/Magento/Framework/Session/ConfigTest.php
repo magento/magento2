@@ -181,13 +181,6 @@ namespace Magento\Framework\Session {
             $model->setCookieLifetime('foobar_bogus');
             $this->assertEquals($preVal, $model->getCookieLifetime());
         }
-
-        public function testWrongMethodCall()
-        {
-            $this->expectException('\BadMethodCallException');
-            $this->expectExceptionMessage('Method "methodThatNotExist" does not exist in Magento\Framework\Session\Config');
-            $this->_model->methodThatNotExist();
-        }
       
         public function testSettingInvalidCookieLifetime2()
         {
