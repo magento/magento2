@@ -34,5 +34,4 @@ class AccessList extends Varnish
             );
         }
     }
-
 }
