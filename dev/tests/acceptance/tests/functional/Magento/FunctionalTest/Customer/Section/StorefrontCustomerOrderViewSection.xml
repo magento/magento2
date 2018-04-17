@@ -8,9 +8,10 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
-    <section name="AdminNewCustomerAccountInformationSection">
-        <element name="firstName" type="input" selector="input[name='customer[firstname]']"/>
-        <element name="lastName" type="input" selector="input[name='customer[lastname]']"/>
-        <element name="email" type="input" selector="input[name='customer[email]']"/>
+    <section name="StorefrontCustomerOrderViewSection">
+        <element name="orderTitle" type="text" selector=".page-title span"/>
+        <element name="myOrdersTable" type="text" selector="#my-orders-table"/>
+        <element name="subtotal" type="text" selector=".subtotal .amount"/>
+        <element name="paymentMethod" type="text" selector=".payment-method dt"/>
     </section>
 </sections>
