@@ -144,4 +144,22 @@
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{orderNumberMessage}}" stepKey="seeOrderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{emailYouMessage}}" stepKey="seeEmailYou"/>
     </actionGroup>
+
+    <!-- Guest checkout place order with virtual product  -->
+    <actionGroup name="GuestCheckoutFillingBillingNewAddressSectionActionGroup">
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
+        <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestStreet}}" userInput="{{customerAddressVar.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutPaymentSection.guestCity}}" userInput="{{customerAddressVar.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutPaymentSection.guestRegion}}" userInput="{{customerAddressVar.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutPaymentSection.guestPostcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutPaymentSection.guestTtelephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
+    </actionGroup>
+
 </actionGroups>

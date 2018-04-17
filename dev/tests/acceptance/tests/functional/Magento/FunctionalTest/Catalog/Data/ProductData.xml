@@ -101,6 +101,7 @@
         <data key="weight">0</data>
         <data key="status">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <!--<requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>-->
     </entity>
     <entity name="SimpleTwo" type="product2">
         <data key="sku" unique="suffix">SimpleTwo</data>
