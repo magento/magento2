@@ -6,7 +6,10 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductWebsiteLinkInterface;
+use Magento\Catalog\Api\Data\ProductWebsiteLinkInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -15,6 +18,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
@@ -23,8 +27,15 @@ $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->cleanCache();
+/** @var ProductWebsiteLinkRepositoryInterface $productWebsiteLinkRepository */
+$productWebsiteLinkRepository = $objectManager->get(ProductWebsiteLinkRepositoryInterface::class);
+/** @var ProductWebsiteLinkInterfaceFactory $productWebsiteLinkFactory */
+$productWebsiteLinkFactory = $objectManager->get(ProductWebsiteLinkInterfaceFactory::class);
+/** @var WebsiteRepositoryInterface $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
+$websites = $websiteRepository->getList();
 
-$stockData = [
+$productData = [
     'VIRT-1' => [
         'qty' => 33,
         'is_in_stock' => true,
@@ -47,16 +58,28 @@ $stockData = [
     ]
 ];
 
-for ($i = 1; $i <= 4; $i++) {
+foreach ($productData as $sku => $stockData) {
     $product = $productFactory->create();
     $product->setTypeId(Type::TYPE_VIRTUAL)
         ->setAttributeSetId(4)
-        ->setName('Virtual Product ' . $i)
-        ->setSku('VIRT-' . $i)
+        ->setName('Virtual Product ' . $sku)
+        ->setSku($sku)
         ->setPrice(10)
-        ->setStockData($stockData['VIRT-' . $i])
+        ->setStockData($stockData)
         ->setStatus(Status::STATUS_ENABLED);
     $productRepository->save($product);
+
+    foreach ($websites as $website) {
+        if ($website->getCode() === 'admin') {
+            continue;
+        }
+
+        /** @var ProductWebsiteLinkInterface $websiteLink */
+        $websiteLink = $productWebsiteLinkFactory->create();
+        $websiteLink->setSku($sku);
+        $websiteLink->setWebsiteId($website->getId());
+        $productWebsiteLinkRepository->save($websiteLink);
+    }
 }
 
 /** @var Manager $moduleManager */

@@ -10,6 +10,7 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\Data\CartItemInterfaceFactory;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
@@ -23,6 +24,8 @@ $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterfa
 $cartItemFactory = Bootstrap::getObjectManager()->get(CartItemInterfaceFactory::class);
 /** @var CartManagementInterface $cartManagement */
 $cartManagement = Bootstrap::getObjectManager()->get(CartManagementInterface::class);
+/** @var OrderRepositoryInterface $orderRepository */
+$orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
 
 $itemsToBuy = [
     'VIRT-1' => 5,
@@ -51,4 +54,6 @@ foreach ($itemsToBuy as $sku => $qty) {
 }
 
 $cartRepository->save($cart);
-$cartManagement->placeOrder($cart->getId());
+$orderId = $cartManagement->placeOrder($cart->getId());
+
+$order = $orderRepository->get($orderId);

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Test\Integration;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
@@ -15,6 +16,7 @@ use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Api\Data\InvoiceItemCreationInterfaceFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\InvoiceOrderInterface;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -51,6 +53,16 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
      */
     private $getReservationsQuantity;
 
+    /**
+     * @var InvoiceRepositoryInterface
+     */
+    private $invoiceRepository;
+
+    /**
+     * @var Registry
+     */
+    private $registry;
+
     protected function setUp()
     {
         $this->invoiceOrder = Bootstrap::getObjectManager()->get(InvoiceOrderInterface::class);
@@ -59,6 +71,8 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
         $this->invoiceItemCreationFactory = Bootstrap::getObjectManager()->get(InvoiceItemCreationInterfaceFactory::class);
         $this->getReservationsQuantity = Bootstrap::getObjectManager()->get(GetReservationsQuantityInterface::class);
+        $this->invoiceRepository = Bootstrap::getObjectManager()->get(InvoiceRepositoryInterface::class);
+        $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
     }
 
     /**
@@ -68,6 +82,7 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/products_virtual.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_virtual_on_default_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_virtual_on_multi_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_eu_website.php
@@ -90,7 +105,7 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
             $invoiceItems[] = $invoiceItemCreation;
         }
 
-        $this->invoiceOrder->execute($order->getEntityId(), false, $invoiceItems);
+        $invoiceId = $this->invoiceOrder->execute($order->getEntityId(), false, $invoiceItems);
 
         self::assertEquals(0, $this->getSourceItemQuantity('VIRT-1', 'eu-1'));
         self::assertEquals(9, $this->getSourceItemQuantity('VIRT-1', 'eu-2'));
@@ -100,6 +115,8 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
 
         self::assertEquals(9, $this->getReservationsQuantity('VIRT-1', 10));
         self::assertEquals(28, $this->getReservationsQuantity('VIRT-1', 10));
+
+        $this->deleteInvoice($invoiceId);
     }
 
     /**
@@ -109,6 +126,7 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/products_virtual.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_virtual_on_default_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_virtual_on_multi_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_eu_website.php
@@ -142,7 +160,7 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
         $invoiceItemCreation->setQty(3);
         $invoiceItems[] = $invoiceItemCreation;
 
-        $this->invoiceOrder->execute($order->getEntityId(), false, $invoiceItems);
+        $invoiceId = $this->invoiceOrder->execute($order->getEntityId(), false, $invoiceItems);
 
         self::assertEquals(0, $this->getSourceItemQuantity('VIRT-1', 'eu-1'));
         self::assertEquals(11, $this->getSourceItemQuantity('VIRT-1', 'eu-2'));
@@ -152,6 +170,22 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
 
         self::assertEquals(12, $this->getSalableQty('VIRT-1', 10));
         self::assertEquals(31, $this->getSalableQty('VIRT-1', 10));
+
+        $this->deleteInvoice($invoiceId);
+    }
+
+    /**
+     * @param int $invoiceId
+     */
+    private function deleteInvoice($invoiceId)
+    {
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+
+        $this->invoiceRepository->delete($this->invoiceRepository->get($invoiceId));
+
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
     }
 
     /**
