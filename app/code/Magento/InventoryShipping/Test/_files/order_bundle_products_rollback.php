@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
 /** @var OrderManagementInterface $orderManagement */
