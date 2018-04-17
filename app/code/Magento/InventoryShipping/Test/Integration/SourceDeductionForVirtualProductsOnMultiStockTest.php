@@ -10,19 +10,16 @@ namespace Magento\InventoryShipping\Test\Integration;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
 use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Api\Data\InvoiceItemCreationInterfaceFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\InvoiceOrderInterface;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
+class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
 {
     /**
      * @var InvoiceOrderInterface
@@ -50,24 +47,9 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
     private $invoiceItemCreationFactory;
 
     /**
-     * @var DefaultStockProviderInterface
-     */
-    private $defaultStockProvider;
-
-    /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
      * @var GetReservationsQuantityInterface
      */
     private $getReservationsQuantity;
-
-    /**
-     * @var InvoiceRepositoryInterface
-     */
-    private $invoiceRepository;
 
     protected function setUp()
     {
@@ -76,17 +58,19 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
         $this->invoiceItemCreationFactory = Bootstrap::getObjectManager()->get(InvoiceItemCreationInterfaceFactory::class);
-        $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
-        $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
         $this->getReservationsQuantity = Bootstrap::getObjectManager()->get(GetReservationsQuantityInterface::class);
-        $this->invoiceRepository = Bootstrap::getObjectManager()->get(InvoiceRepositoryInterface::class);
     }
 
     /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/products_virtual.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_virtual_on_default_source.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_virtual_on_multi_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_default_website.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_eu_website.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_virtual_products.php
      */
     public function testSourceDeductionWhileInvoicingWholeOrderedQty()
@@ -108,21 +92,26 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
 
         $this->invoiceOrder->execute($order->getEntityId(), false, $invoiceItems);
 
-        $defaultStockId = $this->defaultStockProvider->getId();
-        $defaultSourceCode = $this->defaultSourceProvider->getCode();
+        self::assertEquals(0, $this->getSourceItemQuantity('VIRT-1', 'eu-1'));
+        self::assertEquals(9, $this->getSourceItemQuantity('VIRT-1', 'eu-2'));
 
-        self::assertEquals(28, $this->getSourceItemQuantity('VIRT-1', $defaultSourceCode));
-        self::assertEquals(24, $this->getSourceItemQuantity('VIRT-2', $defaultSourceCode));
+        self::assertEquals(16, $this->getSourceItemQuantity('VIRT-2', 'eu-1'));
+        self::assertEquals(12, $this->getSourceItemQuantity('VIRT-2', 'eu-2'));
 
-        self::assertEquals(0, $this->getReservationsQuantity('VIRT-1', $defaultStockId));
-        self::assertEquals(0, $this->getReservationsQuantity('VIRT-2', $defaultStockId));
+        self::assertEquals(9, $this->getReservationsQuantity('VIRT-1', 10));
+        self::assertEquals(28, $this->getReservationsQuantity('VIRT-1', 10));
     }
 
     /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/products_virtual.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_virtual_on_default_source.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_virtual_on_multi_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_default_website.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_eu_website.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_virtual_products.php
      */
     public function testSourceDeductionWhileInvoicingPartialOrderedQty()
@@ -134,31 +123,35 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
         $order = current($this->orderRepository->getList($searchCriteria)->getItems());
 
         $invoiceItems = [];
-        $qtyToInvoice = [
-            'VIRT-1' => 3,
-            'VIRT-2' => 2,
-        ];
+        $orderItems = $order->getItems();
 
-        foreach ($order->getItems() as $orderItem) {
-            if (isset($qtyToInvoice[$orderItem->getSku()])) {
-                /** @var InvoiceItemCreationInterface $invoiceItemCreation */
-                $invoiceItemCreation = $this->invoiceItemCreationFactory->create();
-                $invoiceItemCreation->setOrderItemId($orderItem->getItemId());
-                $invoiceItemCreation->setQty($qtyToInvoice[$orderItem->getSku()]);
-                $invoiceItems[] = $invoiceItemCreation;
-            }
-        }
+        // pick first order item
+        $orderItem = current($orderItems);
+        /** @var InvoiceItemCreationInterface $invoiceItemCreation */
+        $invoiceItemCreation = $this->invoiceItemCreationFactory->create();
+        $invoiceItemCreation->setOrderItemId($orderItem->getItemId());
+        $invoiceItemCreation->setQty(3);
+        $invoiceItems[] = $invoiceItemCreation;
+
+        // pick second order item
+        next($orderItems);
+        $orderItem = current($orderItems);
+        /** @var InvoiceItemCreationInterface $invoiceItemCreation */
+        $invoiceItemCreation = $this->invoiceItemCreationFactory->create();
+        $invoiceItemCreation->setOrderItemId($orderItem->getItemId());
+        $invoiceItemCreation->setQty(3);
+        $invoiceItems[] = $invoiceItemCreation;
 
         $this->invoiceOrder->execute($order->getEntityId(), false, $invoiceItems);
 
-        $defaultStockId = $this->defaultStockProvider->getId();
-        $defaultSourceCode = $this->defaultSourceProvider->getCode();
+        self::assertEquals(0, $this->getSourceItemQuantity('VIRT-1', 'eu-1'));
+        self::assertEquals(11, $this->getSourceItemQuantity('VIRT-1', 'eu-2'));
 
-        self::assertEquals(30, $this->getSourceItemQuantity('VIRT-1', $defaultSourceCode));
-        self::assertEquals(28, $this->getSourceItemQuantity('VIRT-2', $defaultSourceCode));
+        self::assertEquals(16, $this->getSourceItemQuantity('VIRT-2', 'eu-1'));
+        self::assertEquals(12, $this->getSourceItemQuantity('VIRT-2', 'eu-2'));
 
-        self::assertEquals(-2, $this->getReservationsQuantity('VIRT-1', $defaultStockId));
-        self::assertEquals(-4, $this->getReservationsQuantity('VIRT-2', $defaultStockId));
+        self::assertEquals(12, $this->getSalableQty('VIRT-1', 10));
+        self::assertEquals(31, $this->getSalableQty('VIRT-1', 10));
     }
 
     /**

@@ -105,11 +105,6 @@ class VirtualSourceDeductionProcessor implements ObserverInterface
     private $getDefaultSourceSelectionAlgorithmCode;
 
     /**
-     * @var ReservationInterface[]
-     */
-    private $reservations = [];
-
-    /**
      * VirtualSourceDeductionProcessor constructor.
      * @param ReservationBuilderInterface $reservationBuilder
      * @param AppendReservationsInterface $appendReservations
@@ -233,6 +228,7 @@ class VirtualSourceDeductionProcessor implements ObserverInterface
      */
     private function deductSources(SourceSelectionResultInterface $sourceSelectionResult, int $stockId)
     {
+        $reservationsToSave = [];
         $sourceItemsToSave = [];
         foreach ($sourceSelectionResult->getSourceSelectionItems() as $sourceSelectionItem) {
             $deductQty = $sourceSelectionItem->getQtyToDeduct();
@@ -247,33 +243,15 @@ class VirtualSourceDeductionProcessor implements ObserverInterface
             $sourceItem->setQuantity($sourceItem->getQuantity() - $deductQty);
             $sourceItemsToSave[] = $sourceItem;
 
-            $this->buildReservation($stockId, $sourceSelectionItem);
+            $reservationsToSave[] = $this->reservationBuilder
+                ->setSku($sourceSelectionItem->getSku())
+                ->setStockId($stockId)
+                ->setQuantity($sourceSelectionItem->getQtyToDeduct())
+                ->build();
         }
 
         $this->sourceItemsSave->execute($sourceItemsToSave);
-        $this->appendReservations->execute($this->reservations);
-    }
-
-    /**
-     * @param int $stockId
-     * @param SourceSelectionItemInterface $sourceSelectionItem
-     * @throws ValidationException
-     */
-    private function buildReservation(int $stockId, SourceSelectionItemInterface $sourceSelectionItem)
-    {
-        $sku = $sourceSelectionItem->getSku();
-        $key = $sku . '_' . $stockId;
-        $qtyToDeduct = $sourceSelectionItem->getQtyToDeduct();
-
-        if (isset($this->reservations[$key])) {
-            $qtyToDeduct += $this->reservations[$key]->getQuantity();
-        }
-
-        $this->reservations[$key] = $this->reservationBuilder
-            ->setSku($sourceSelectionItem->getSku())
-            ->setStockId($stockId)
-            ->setQuantity($qtyToDeduct)
-            ->build();
+        $this->appendReservations->execute($reservationsToSave);
     }
 
     /**

@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -17,6 +18,8 @@ $orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::
 $orderManagement = Bootstrap::getObjectManager()->get(OrderManagementInterface::class);
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
 $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+/** @var ResourceConnection $resourceConnection */
+$resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
 
 $searchCriteria = $searchCriteriaBuilder
     ->addFilter('increment_id', 'test_order_virt_1')

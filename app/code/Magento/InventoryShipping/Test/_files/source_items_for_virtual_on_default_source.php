@@ -22,10 +22,12 @@ $sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::
 $defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
 
 /**
- * VIRT-1 - 33.5 qty
- * VIRT-2 - 30 qty
- * VIRT-3 - 2 qty
- * VIRT-2 - 6 qty (out of stock)
+ * | *Sku*  | *Source Code* | *Qty* | *Info*        |
+ * |--------|---------------|-------|---------------|
+ * | VIRT-1 | default       | 33    |               |
+ * | VIRT-2 | default       | 30    |               |
+ * | VIRT-3 | default       | 2     |               |
+ * | VIRT-4 | default       | 6     | out of stock  |
  */
 $sourcesItemsData = [
     [
