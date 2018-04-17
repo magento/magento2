@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Ui\DataProvider;
 
 use Magento\Framework\Api\Filter;
-use Magento\Framework\Registry;
+use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Model\Order\Item;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
@@ -17,13 +17,20 @@ use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactor
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelection\Model\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\Framework\App\RequestInterface;
 
 class SourceSelectionDataProvider extends AbstractDataProvider
 {
     /**
-     * @var Registry
+     * @var RequestInterface
      */
-    private $registry;
+    private $request;
+
+    /**
+     * @var OrderRepository
+     */
+    private $orderRepository;
 
     /**
      * @var StockByWebsiteIdResolver
@@ -56,6 +63,11 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     private $sourceRepository;
 
     /**
+     * @var GetStockItemConfigurationInterface
+     */
+    private $getStockItemConfiguration;
+
+    /**
      * @var array
      */
     private $sources = [];
@@ -64,13 +76,15 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param Registry $registry
+     * @param RequestInterface $request
+     * @param OrderRepository $orderRepository
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceRepositoryInterface $sourceRepository
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -79,24 +93,28 @@ class SourceSelectionDataProvider extends AbstractDataProvider
         $name,
         $primaryFieldName,
         $requestFieldName,
-        Registry $registry,
+        RequestInterface $request,
+        OrderRepository $orderRepository,
         StockByWebsiteIdResolver $stockByWebsiteIdResolver,
         ItemRequestInterfaceFactory $itemRequestFactory,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
         SourceSelectionServiceInterface $sourceSelectionService,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
         SourceRepositoryInterface $sourceRepository,
+        GetStockItemConfigurationInterface $getStockItemConfiguration,
         array $meta = [],
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->registry = $registry;
+        $this->request = $request;
+        $this->orderRepository = $orderRepository;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
         $this->sourceRepository = $sourceRepository;
+        $this->getStockItemConfiguration = $getStockItemConfiguration;
     }
 
     /**
@@ -117,10 +135,11 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     public function getData()
     {
         $data = [];
+        $orderId = $this->request->getParam('order_id');
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->registry->registry('current_order');
-        $orderId = $order->getId();
+        $order = $this->orderRepository->get($orderId);
         $websiteId = $order->getStore()->getWebsiteId();
+        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
 
         foreach ($order->getAllItems() as $orderItem) {
             if ($orderItem->getIsVirtual()
@@ -143,27 +162,48 @@ class SourceSelectionDataProvider extends AbstractDataProvider
                 'sku' => $sku,
                 'product' => $this->getProductName($orderItem),
                 'qtyToShip' => $qty,
-                'sources' => $this->getSources($websiteId, $sku, $qty),
+                'sources' => $this->getSources($stockId, $sku, $qty),
+                'isManageStock' => $this->isManageStock($sku, $stockId)
             ];
         }
         $data[$orderId]['websiteId'] = $websiteId;
         $data[$orderId]['order_id'] = $orderId;
-        $data[$orderId]['sourceCodes'] = $this->sources;
+        foreach ($this->sources as $value => $label) {
+            $data[$orderId]['sourceCodes'][] = [
+                'value' => $value,
+                'label' => $label
+            ];
+        }
 
         return $data;
     }
 
     /**
-     * @param $websiteId
+     * @param $itemSku
+     * @param $stockId
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function isManageStock($itemSku, $stockId)
+    {
+        $stockItemConfiguration = $this->getStockItemConfiguration->execute($itemSku, $stockId);
+        if (!empty($stockItemConfiguration)) {
+            return $stockItemConfiguration->isManageStock();
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $stockId
      * @param $sku
      * @param $qty
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getSources($websiteId, $sku, $qty)
+    protected function getSources($stockId, $sku, $qty)
     {
         $algorithmCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
 
         $requestItem = $this->itemRequestFactory->create([
             'sku' => $sku,
@@ -180,11 +220,8 @@ class SourceSelectionDataProvider extends AbstractDataProvider
         $result = [];
         foreach ($sourceSelectionResult->getSourceSelectionItems() as $item) {
             $sourceCode = $item->getSourceCode();
-            if (!isset($this->sources[$sourceCode])) {
-                $this->sources[$sourceCode] = $this->getSourceName($sourceCode);
-            }
             $result[] = [
-                'sourceName' => $this->sources[$sourceCode],
+                'sourceName' => $this->getSourceName($sourceCode),
                 'sourceCode' => $sourceCode,
                 'qtyAvailable' => $item->getQtyAvailable(),
                 'qtyToDeduct' => $item->getQtyToDeduct()
@@ -203,7 +240,11 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      */
     public function getSourceName(string $sourceCode): string
     {
-        return $this->sourceRepository->get($sourceCode)->getName();
+        if (!isset($this->sources[$sourceCode])) {
+            $this->sources[$sourceCode] = $this->sourceRepository->get($sourceCode)->getName();
+        }
+
+        return $this->sources[$sourceCode];
     }
 
     /**

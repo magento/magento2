@@ -9,6 +9,7 @@ namespace Magento\InventoryShipping\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Exception\InputException;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
@@ -20,6 +21,7 @@ use Magento\Sales\Model\Order\Item;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\DefaultSourceProvider;
+use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 
 /**
  * Class SourceDeductionProcessor
@@ -67,13 +69,20 @@ class SourceDeductionProcessor implements ObserverInterface
     private $salesEventFactory;
 
     /**
+     * @var IsSingleSourceModeInterface
+     */
+    private $isSingleSourceMode;
+
+    /**
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param Json $jsonSerializer
      * @param ItemToDeductInterfaceFactory $itemToDeduct
-     * @param SourceDeductionRequestInterfaceFactory $sourceDeductionRequestInterface
+     * @param SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory
      * @param SourceDeductionServiceInterface $sourceDeductionService
      * @param DefaultSourceProvider $defaultSourceProvider
+     * @param SalesEventInterfaceFactory $salesEventFactory
+     * @param IsSingleSourceModeInterface $isSingleSourceMode
      */
     public function __construct(
         StockByWebsiteIdResolver $stockByWebsiteIdResolver,
@@ -83,7 +92,8 @@ class SourceDeductionProcessor implements ObserverInterface
         SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory,
         SourceDeductionServiceInterface $sourceDeductionService,
         DefaultSourceProvider $defaultSourceProvider,
-        SalesEventInterfaceFactory $salesEventFactory
+        SalesEventInterfaceFactory $salesEventFactory,
+        IsSingleSourceModeInterface $isSingleSourceMode
     ) {
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getSkusByProductIds = $getSkusByProductIds;
@@ -93,13 +103,13 @@ class SourceDeductionProcessor implements ObserverInterface
         $this->sourceDeductionService = $sourceDeductionService;
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->salesEventFactory = $salesEventFactory;
+        $this->isSingleSourceMode = $isSingleSourceMode;
     }
 
     /**
      * @param EventObserver $observer
      * @return void
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(EventObserver $observer)
     {
@@ -113,16 +123,39 @@ class SourceDeductionProcessor implements ObserverInterface
         $shipment = $shipmentItem->getShipment();
 
         //TODO: I'm not sure that is good idea (with default source code)...
-        if (empty($shipment->getExtensionAttributes())
-            || !$shipment->getExtensionAttributes()->getSourceCode()) {
-            $sourceCode = $this->defaultSourceProvider->getCode();
-        } else {
+        if (!empty($shipment->getExtensionAttributes())
+            || $shipment->getExtensionAttributes()->getSourceCode()) {
             $sourceCode = $shipment->getExtensionAttributes()->getSourceCode();
+        } elseif ($this->isSingleSourceMode->execute()) {
+            $sourceCode = $this->defaultSourceProvider->getCode();
         }
 
         $websiteId = $shipment->getOrder()->getStore()->getWebsiteId();
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
 
+        $salesEvent = $this->salesEventFactory->create([
+            'type' => SalesEventInterface::EVENT_SHIPMENT_CREATED,
+            'objectType' => SalesEventInterface::OBJECT_TYPE_ORDER,
+            'objectId' => $shipment->getOrderId()
+        ]);
+
+        $sourceDeductionRequest = $this->sourceDeductionRequestFactory->create([
+            'stockId' => $stockId,
+            'sourceCode' => $sourceCode,
+            'items' => $this->getItemToShip($shipmentItem),
+            'salesEvent' => $salesEvent
+        ]);
+        $this->sourceDeductionService->execute($sourceDeductionRequest);
+    }
+
+    /**
+     * @param $shipmentItem
+     * @return array
+     * @throws InputException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function getItemToShip($shipmentItem)
+    {
         $orderItem = $shipmentItem->getOrderItem();
         $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(
             [$shipmentItem->getProductId()]
@@ -166,19 +199,7 @@ class SourceDeductionProcessor implements ObserverInterface
             ]);
         }
 
-        $salesEvent = $this->salesEventFactory->create([
-            'type' => SalesEventInterface::EVENT_SHIPMENT_CREATED,
-            'objectType' => SalesEventInterface::OBJECT_TYPE_ORDER,
-            'objectId' => $shipment->getOrderId()
-        ]);
-
-        $sourceDeductionRequest = $this->sourceDeductionRequestFactory->create([
-            'stockId' => $stockId,
-            'sourceCode' => $sourceCode,
-            'items' => $itemsToShip,
-            'salesEvent' => $salesEvent
-        ]);
-        $this->sourceDeductionService->execute($sourceDeductionRequest);
+        return $itemsToShip;
     }
 
     /**

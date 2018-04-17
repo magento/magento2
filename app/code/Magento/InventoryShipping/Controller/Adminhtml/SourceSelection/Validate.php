@@ -55,20 +55,32 @@ class Validate extends Action
         //TODO: 3. check total qty
         try {
             $itemsToShip = [];
+            $totalQty = 0;
             foreach ($items as $item) {
                 if (empty($item['sources'])) {
                     continue;
                 }
                 foreach ($item['sources'] as $source) {
                     if ($source['sourceCode'] == $sourceCode) {
-                        if ((float)$source['qtyToDeduct'] > (float)$source['qtyAvailable']) {
+                        if ($item['isManageStock']) {
+                            $qtyToCompare = (float)$source['qtyAvailable'];
+                        } else {
+                            $qtyToCompare = (float)$item['qtyToShip'];
+                        }
+                        if ((float)$source['qtyToDeduct'] > $qtyToCompare) {
                             throw new LocalizedException(
                                 __('Qty of %1 should be less or equal to %2', $item['sku'], $source['qtyAvailable'])
                             );
                         }
                         $itemsToShip[$item['sku']] = ($itemsToShip[$item['sku']] ?? 0) + $source['qtyToDeduct'];
+                        $totalQty += $itemsToShip[$item['sku']];
                     }
                 }
+            }
+            if ($totalQty == 0) {
+                throw new LocalizedException(
+                    __('You should select one or more items to ship.')
+                );
             }
         } catch (LocalizedException $e) {
             $response->setError(true);

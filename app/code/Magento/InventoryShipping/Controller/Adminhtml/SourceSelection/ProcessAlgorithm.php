@@ -138,6 +138,12 @@ class ProcessAlgorithm extends Action
                 }
             }
 
+            foreach ($this->sources as $value => $label) {
+                $result['sourceCodes'][] = [
+                    'value' => $value,
+                    'label' => $label
+                ];
+            }
             $resultJson->setData($result);
         }
 
