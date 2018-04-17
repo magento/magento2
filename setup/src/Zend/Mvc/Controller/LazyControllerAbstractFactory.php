@@ -3,7 +3,10 @@
  * @link      http://github.com/zendframework/zend-mvc for the canonical source repository
  * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   https://github.com/zendframework/zend-mvc/blob/master/LICENSE.md New BSD License
+ * @SuppressWarnings(PHPMD)
  */
+
+declare(strict_types=1);
 
 namespace Zend\Mvc\Controller;
 
@@ -191,6 +194,7 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
      * @param $name
      * @param $requestedName
      * @return bool
+     * @SuppressWarnings("unused")
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
@@ -204,6 +208,7 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
      * @param $name
      * @param $requestedName
      * @return mixed
+     * @SuppressWarnings("unused")
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
