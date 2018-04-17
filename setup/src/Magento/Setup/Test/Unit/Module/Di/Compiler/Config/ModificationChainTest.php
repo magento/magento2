@@ -25,7 +25,8 @@ class ModificationChainTest extends \PHPUnit\Framework\TestCase
 
     public function testConstructorException()
     {
-        $this->expectException('InvalidArgumentException', 'Wrong modifier provided');
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Wrong modifier provided');
         $modificationsList = [];
         $modificationsList[] = $this->getMockBuilder(
             \Magento\Setup\Module\Di\Compiler\Config\ModificationInterface::class

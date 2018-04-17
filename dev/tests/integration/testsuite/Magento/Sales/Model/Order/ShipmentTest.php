@@ -34,13 +34,15 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         );
         $payment->setBlockMock($paymentInfoBlock);
 
+        $items = [];
+        foreach ($order->getItems() as $item) {
+            $items[$item->getId()] = $item->getQtyOrdered();
+        }
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipment = $objectManager->create(\Magento\Sales\Model\Order\Shipment::class);
-        $shipment->setOrder($order);
+        $shipment = $objectManager->get(ShipmentFactory::class)->create($order, $items);
 
         $packages = [['1'], ['2']];
 
-        $shipment->addItem($objectManager->create(\Magento\Sales\Model\Order\Shipment\Item::class));
         $shipment->setPackages($packages);
         $this->assertEquals($packages, $shipment->getPackages());
         $shipment->save();
@@ -61,11 +63,12 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
 
+        $items = [];
+        foreach ($order->getItems() as $item) {
+            $items[$item->getId()] = $item->getQtyOrdered();
+        }
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipment = $objectManager->create(\Magento\Sales\Model\Order\Shipment::class);
-        $shipment->setOrder($order);
-
-        $shipment->addItem($objectManager->create(\Magento\Sales\Model\Order\Shipment\Item::class));
+        $shipment = $objectManager->get(ShipmentFactory::class)->create($order, $items);
         $shipment->save();
 
         /** @var $track \Magento\Sales\Model\Order\Shipment\Track */
