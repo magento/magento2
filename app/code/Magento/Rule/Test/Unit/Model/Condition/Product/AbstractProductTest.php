@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,6 +39,12 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $_configProperty;
 
+    /** @var \ReflectionProperty */
+    private $categoryProperty;
+
+    /** @var \ReflectionProperty */
+    private $productResourceProperty;
+
     protected function setUp()
     {
         $this->_condition = $this->getMockForAbstractClass(
@@ -58,14 +64,82 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             '_config'
         );
         $this->_configProperty->setAccessible(true);
+
+        $this->categoryProperty = new \ReflectionProperty(
+            \Magento\Rule\Model\Condition\Product\AbstractProduct::class,
+            'category'
+        );
+        $this->categoryProperty->setAccessible(true);
+
+        $this->productResourceProperty = new \ReflectionProperty(
+            \Magento\Rule\Model\Condition\Product\AbstractProduct::class,
+            '_productResource'
+        );
+        $this->productResourceProperty->setAccessible(true);
     }
 
     public function testValidateAttributeEqualCategoryId()
     {
-        $product = $this->getMock('Magento\Framework\Model\AbstractModel', ["getAttribute"], [], '', false);
+        $product = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCategoryIds'])
+            ->getMock();
+
         $this->_condition->setAttribute('category_ids');
-        $product->setAvailableInCategories(new \Magento\Framework\DataObject());
-        $this->assertFalse($this->_condition->validate($product));
+        $this->_condition->setValueParsed('1');
+        $this->_condition->setOperator('{}');
+
+        $this->_configProperty->setValue(
+            $this->_condition,
+            $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+                ->disableOriginalConstructor()
+                ->getMock()
+        );
+
+        $category = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $category->expects($this->once())
+            ->method('getCategoryProductTable')
+            ->willReturnSelf();
+        $this->categoryProperty->setValue(
+            $this->_condition,
+            $category
+        );
+
+        $dbSelect = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['from', 'where'])
+            ->getMock();
+        $dbSelect->expects($this->atLeastOnce())
+            ->method('from')
+            ->willReturnSelf();
+        $dbSelect->expects($this->atLeastOnce())
+            ->method('where')
+            ->willReturnSelf();
+
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $connection->expects($this->atLeastOnce())
+            ->method('select')
+            ->willReturn($dbSelect);
+        $connection->expects($this->once())
+            ->method('fetchCol')
+            ->willReturn([1, 2]);
+
+        $resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resource->expects($this->atLeastOnce())
+            ->method('getConnection')
+            ->willReturn($connection);
+        $this->productResourceProperty->setValue(
+            $this->_condition,
+            $resource
+        );
+
+        $this->assertTrue($this->_condition->validate($product));
     }
 
     public function testValidateEmptyEntityAttributeValues()

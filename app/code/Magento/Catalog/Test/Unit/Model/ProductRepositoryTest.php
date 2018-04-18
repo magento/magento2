@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,14 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Tests \Magento\Catalog\Model\ProductRepositoryTest
@@ -152,6 +157,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Catalog\Model\Product\Option\Converter||\PHPUnit_Framework_MockObject_MockObject
      */
     private $optionConverterMock;
+
+    /**
+     * @var JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributesJoinProcessor;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -322,6 +332,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->optionConverterMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Converter::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->extensionAttributesJoinProcessor = $this->getMockBuilder(JoinProcessorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $this->objectManager->getObject(
             \Magento\Catalog\Model\ProductRepository::class,
@@ -347,6 +360,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'imageProcessor' => $this->imageProcessorMock,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
                 'mediaGalleryProcessor' => $this->mediaGalleryProcessor,
+                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessor,
             ]
         );
     }
@@ -671,85 +685,95 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetList($fieldName)
     {
-        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class, [], [], '', false);
         $attributeCode = 'attribute_code';
-        $collectionMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $extendedSearchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
-        $productAttributeSearchResultsMock = $this->getMock(
-            \Magento\Framework\Api\SearchResults::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $productAttributeMock = $this->getMock(
-            \Magento\Catalog\Api\Data\ProductAttributeInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $filterGroupMock = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $filterGroupFilterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
-        $sortOrderMock = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
-        $itemsMock = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
 
-        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
-        $this->searchCriteriaBuilderMock
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($extendedSearchCriteriaMock);
-        $this->metadataServiceMock
-            ->expects($this->once())
-            ->method('getList')
-            ->with($extendedSearchCriteriaMock)
-            ->willReturn($productAttributeSearchResultsMock);
-        $productAttributeSearchResultsMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$productAttributeMock]);
-        $productAttributeMock->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);
-        $collectionMock->expects($this->once())->method('addAttributeToSelect')->with($attributeCode);
-        $collectionMock->expects($this->exactly(2))
-            ->method('joinAttribute')
+        $filterGroupFilterMock = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filterGroupFilterMock->expects(self::exactly(2))->method('getConditionType')->willReturn('eq');
+        $filterGroupFilterMock->expects(self::atLeastOnce())->method('getField')->willReturn($fieldName);
+        $filterGroupFilterMock->expects(self::once())->method('getValue')->willReturn('value');
+
+        $filterGroupMock = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filterGroupMock->expects(self::once())->method('getFilters')->willReturn([$filterGroupFilterMock]);
+
+        $sortOrderMock = $this->getMockBuilder(\Magento\Framework\Api\SortOrder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sortOrderMock->expects(self::atLeastOnce())->method('getField')->willReturn($fieldName);
+        $sortOrderMock->expects(self::once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
+
+        /** @var \Magento\Framework\Api\SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        $searchCriteriaMock = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $searchCriteriaMock->expects(self::once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
+        $searchCriteriaMock->expects(self::once())->method('getCurrentPage')->willReturn(4);
+        $searchCriteriaMock->expects(self::once())->method('getPageSize')->willReturn(42);
+        $searchCriteriaMock->expects(self::once())->method('getSortOrders')->willReturn([$sortOrderMock]);
+
+        $itemsMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $collectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects(self::once())->method('addAttributeToSelect')->with($attributeCode);
+        $collectionMock->expects(self::once())->method('setPageSize')->with(42);
+        $collectionMock->expects(self::once())->method('load');
+        $collectionMock->expects(self::once())->method('addCategoryIds');
+        $collectionMock->expects(self::once())->method('getItems')->willReturn([$itemsMock]);
+        $collectionMock->expects(self::once())->method('getSize')->willReturn(128);
+        $collectionMock->expects(self::once())->method('addOrder')->with($fieldName, 'ASC');
+        $collectionMock->expects(self::once())->method('setCurPage')->with(4);
+        $collectionMock->expects(self::exactly(2))->method('joinAttribute')
             ->withConsecutive(
                 ['status', 'catalog_product/status', 'entity_id', null, 'inner'],
                 ['visibility', 'catalog_product/visibility', 'entity_id', null, 'inner']
-        );
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
-        $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterGroupFilterMock]);
-        $filterGroupFilterMock->expects($this->exactly(2))->method('getConditionType')->willReturn('eq');
-        $filterGroupFilterMock->expects($this->atLeastOnce())->method('getField')->willReturn($fieldName);
-        $filterGroupFilterMock->expects($this->once())->method('getValue')->willReturn('value');
-        $this->expectAddToFilter($fieldName, $collectionMock);
-        $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
-        $sortOrderMock->expects($this->atLeastOnce())->method('getField')->willReturn($fieldName);
-        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
-        $collectionMock->expects($this->once())->method('addOrder')->with($fieldName, 'ASC');
-        $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn(4);
-        $collectionMock->expects($this->once())->method('setCurPage')->with(4);
-        $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn(42);
-        $collectionMock->expects($this->once())->method('setPageSize')->with(42);
-        $collectionMock->expects($this->once())->method('load');
-        $collectionMock->expects($this->once())->method('getItems')->willReturn([$itemsMock]);
-        $collectionMock->expects($this->once())->method('getSize')->willReturn(128);
-        $searchResultsMock = $this->getMock(
-            \Magento\Catalog\Api\Data\ProductSearchResultsInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
-        $searchResultsMock->expects($this->once())->method('setItems')->with([$itemsMock]);
-        $searchResultsMock->expects($this->once())->method('setTotalCount')->with(128);
-        $this->searchResultsFactoryMock->expects($this->once())->method('create')->willReturn($searchResultsMock);
+            );
 
+        $productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productAttributeMock->expects(self::once())->method('getAttributeCode')->willReturn($attributeCode);
+
+        $extendedSearchCriteriaMock = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteria::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productAttributeSearchResultsMock = $this->getMockBuilder(ProductAttributeSearchResultsInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getItems'])
+            ->getMockForAbstractClass();
+        $productAttributeSearchResultsMock->expects(self::once())->method('getItems')
+            ->willReturn([$productAttributeMock]);
+
+        $this->collectionFactoryMock->expects(self::once())
+            ->method('create')
+            ->willReturn($collectionMock);
+
+        $this->extensionAttributesJoinProcessor->expects(self::once())
+            ->method('process')
+            ->with($collectionMock);
+
+        $this->metadataServiceMock->expects(self::once())->method('getList')->with($extendedSearchCriteriaMock)
+            ->willReturn($productAttributeSearchResultsMock);
+
+        $this->searchCriteriaBuilderMock->expects(self::once())->method('create')
+            ->willReturn($extendedSearchCriteriaMock);
+
+        $this->expectAddToFilter($fieldName, $collectionMock);
+
+        $searchResultsMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductSearchResultsInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $searchResultsMock->expects(self::once())->method('setSearchCriteria')->with($searchCriteriaMock);
+        $searchResultsMock->expects(self::once())->method('setItems')->with([$itemsMock]);
+
+        $this->searchResultsFactoryMock->expects($this->once())->method('create')->willReturn($searchResultsMock);
         $this->assertEquals($searchResultsMock, $this->model->getList($searchCriteriaMock));
     }
 
@@ -1265,6 +1289,45 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         $this->model->save($this->productMock);
+    }
+
+    public function testSaveWithDifferentWebsites()
+    {
+        $getWebsitesResultData = [
+            1 => ['first'],
+            2 => ['second'],
+            3 => ['third']
+        ];
+        $getWebsiteIdsResultData = [1,2,3];
+        $setWebsiteIdsResultData = [2,3];
+        $getIdBySkuResultData = 100;
+        $storeMock = $this->getMock(StoreInterface::class);
+        $this->resourceModelMock->expects($this->at(0))->method('getIdBySku')->will($this->returnValue(null));
+        $this->resourceModelMock
+            ->expects($this->at(3))
+            ->method('getIdBySku')
+            ->will($this->returnValue($getIdBySkuResultData));
+        $this->productFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->initializationHelperMock->expects($this->never())->method('initialize');
+        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
+            ->willReturn(true);
+        $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)->willReturn(true);
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($storeMock);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getWebsites')
+            ->willReturn($getWebsitesResultData);
+        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn($getWebsiteIdsResultData);
+        $this->productMock->expects($this->once())->method('setWebsiteIds')->willReturn($setWebsiteIdsResultData);
+
+        $this->assertEquals($this->productMock, $this->model->save($this->productMock));
     }
 
     public function testSaveExistingWithMediaGalleryEntries()

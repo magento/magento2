@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,8 @@ class AliasResolver
                 $alias = 'price_index';
                 break;
             case 'category_ids':
-                $alias = 'category_ids_index';
+            case 'visibility':
+                $alias = 'category_products_index';
                 break;
             default:
                 $alias = $field . RequestGenerator::FILTER_SUFFIX;

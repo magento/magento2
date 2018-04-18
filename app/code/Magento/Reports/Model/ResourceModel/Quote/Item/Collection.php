@@ -1,12 +1,10 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Model\ResourceModel\Quote\Item;
-
-use Magento\Framework\App\ResourceConnection;
 
 /**
  * Collection of Magento\Quote\Model\Quote\Item
@@ -88,7 +86,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->_init('Magento\Quote\Model\Quote\Item', 'Magento\Quote\Model\ResourceModel\Quote\Item');
     }
-
 
     /**
      * Prepare select query for products in carts report
@@ -219,8 +216,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $orderData = $this->getOrdersData($productIds);
         foreach ($items as $item) {
             $item->setId($item->getProductId());
-            $item->setPrice($productData[$item->getProductId()]['price'] * $item->getBaseToGlobalRate());
-            $item->setName($productData[$item->getProductId()]['name']);
+            if (isset($productData[$item->getProductId()])) {
+                $item->setPrice($productData[$item->getProductId()]['price'] * $item->getBaseToGlobalRate());
+                $item->setName($productData[$item->getProductId()]['name']);
+            }
             $item->setOrders(0);
             if (isset($orderData[$item->getProductId()])) {
                 $item->setOrders($orderData[$item->getProductId()]['orders']);

@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 // @codingStandardsIgnoreFile
 
@@ -71,4 +72,7 @@ $order->setIncrementId(
 )->setPayment(
     $payment
 );
-$order->save();
+
+/** @var OrderRepositoryInterface $orderRepository */
+$orderRepository = $objectManager->create(OrderRepositoryInterface::class);
+$orderRepository->save($order);

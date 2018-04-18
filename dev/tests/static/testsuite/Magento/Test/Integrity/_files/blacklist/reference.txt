@@ -77,3 +77,6 @@ Model3
 \Magento\Framework\B
 DoubleColon
 \Magento\Mtf\Client\ElementInterface
+BarFactory
+PartialNamespace\BarFactory
+Product\OptionFactory

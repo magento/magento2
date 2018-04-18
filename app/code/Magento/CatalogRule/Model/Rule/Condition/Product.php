@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $attrCode = $this->getAttribute();
         if ('category_ids' == $attrCode) {
-            return $this->validateAttribute($model->getAvailableInCategories());
+            return parent::validate($model);
         }
 
         $oldAttrValue = $model->getData($attrCode);

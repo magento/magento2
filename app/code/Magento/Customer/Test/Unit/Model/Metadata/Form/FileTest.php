@@ -2,7 +2,7 @@
 /**
  * Magento\Customer\Model\Metadata\Form\File
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
@@ -33,6 +33,11 @@ class FileTest extends AbstractFormTestCase
     protected $uploaderFactoryMock;
 
     /**
+     * @var \Magento\Customer\Model\FileProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fileProcessorFactory;
+
+    /**
      * @var \Magento\Customer\Model\FileProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fileProcessorMock;
@@ -50,7 +55,6 @@ class FileTest extends AbstractFormTestCase
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()->getMock();
         $this->uploaderFactoryMock = $this->getMock('Magento\Framework\File\UploaderFactory', [], [], '', false);
-
         $this->fileProcessorMock = $this->getMockBuilder('Magento\Customer\Model\FileProcessor')
             ->disableOriginalConstructor()
             ->getMock();
@@ -59,7 +63,6 @@ class FileTest extends AbstractFormTestCase
     /**
      * @param array|bool $expected
      * @param string $attributeCode
-     * @param bool $isAjax
      * @param string $delete
      * @dataProvider extractValueNoRequestScopeDataProvider
      */
@@ -448,6 +451,9 @@ class FileTest extends AbstractFormTestCase
      */
     private function initialize(array $data)
     {
+        $this->fileProcessorFactory = $this->getMockBuilder(\Magento\Customer\Model\FileProcessorFactory::class)
+            ->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        $this->fileProcessorFactory->expects($this->any())->method('create')->willReturn($this->fileProcessorMock);
         $model = new \Magento\Customer\Model\Metadata\Form\File(
             $this->localeMock,
             $this->loggerMock,
@@ -459,14 +465,8 @@ class FileTest extends AbstractFormTestCase
             $this->urlEncode,
             $this->fileValidatorMock,
             $this->fileSystemMock,
-            $this->uploaderFactoryMock
-        );
-
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManager->setBackwardCompatibleProperty(
-            $model,
-            'fileProcessor',
-            $this->fileProcessorMock
+            $this->uploaderFactoryMock,
+            $this->fileProcessorFactory
         );
 
         return $model;
@@ -514,7 +514,6 @@ class FileTest extends AbstractFormTestCase
             'isAjax' => false,
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
-
         $this->fileProcessorMock->expects($this->once())
             ->method('removeUploadedFile')
             ->with($value)

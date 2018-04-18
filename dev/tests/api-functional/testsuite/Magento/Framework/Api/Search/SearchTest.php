@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Search;
@@ -33,6 +33,11 @@ class SearchTest extends WebapiAbstract
                             [
                                 'field' => 'price_dynamic_algorithm',
                                 'value' => 'auto',
+                                'condition_type' => 'eq'
+                            ],
+                            [
+                                'field' => 'visibility',
+                                'value' => 4,
                                 'condition_type' => 'eq'
                             ]
                         ]

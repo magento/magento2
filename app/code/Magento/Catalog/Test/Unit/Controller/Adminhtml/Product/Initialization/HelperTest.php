@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
@@ -11,7 +11,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Api\ProductRepositoryInterface\Proxy;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
@@ -124,8 +124,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepository::class)
-            ->disableOriginalConstructor()
+        $this->productRepositoryMock = $this->getMockBuilder(Proxy::class)
+            ->setMethods(['getById'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getPost'])
@@ -704,7 +704,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                     ->willReturn($link['sku']);
 
                 // Even optional arguments need to be provided for returnMapValue
-                $repositoryReturnMap[] = [$link['id'], false, null, false, $mockLinkedProduct];
+                $repositoryReturnMap[] = [$link['id'], $mockLinkedProduct];
             }
         }
 

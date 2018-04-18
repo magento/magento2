@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -59,8 +59,8 @@
             <argument name="patterns" xsi:type="array">
                 <item name="i18n_translation" xsi:type="string"><![CDATA[~i18n\:\s*(["'])(.*?)(?<!\\)\1~]]></item>
                 <item name="translate_wrapping" xsi:type="string"><![CDATA[~translate\=("')([^\'].*?)\'\"~]]></item>
-                <item name="mage_translation_widget" xsi:type="string">~\$\.mage\.__\((?s)[^'"]*?(['"])(.+?)\1(?s).*?\)~</item>
-                <item name="mage_translation_static" xsi:type="string">~\$t\((?s)[^'"]*?(["'])(.+?)\1(?s).*?\)~</item>
+                <item name="mage_translation_widget" xsi:type="string"><![CDATA[~(?:\$|jQuery)\.mage\.__\((?s)[^'"]*?(['"])(.+?)(?<!\\)\1(?s).*?\)~]]></item>
+                <item name="mage_translation_static" xsi:type="string"><![CDATA[~\$t\((?s)[^'"]*?(["'])(.+?)\1(?s).*?\)~]]></item>
             </argument>
         </arguments>
     </type>

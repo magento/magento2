@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,7 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Store\Model\Store;
@@ -936,21 +937,29 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Return resized product image information
      *
      * @return array
+     * @throws NotLoadInfoImageException
      */
     public function getResizedImageInfo()
     {
-        $fileInfo = null;
-        if ($this->_newFile === true) {
-            $asset = $this->_assetRepo->createAsset(
-                "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
-            );
-            $img = $asset->getSourceFile();
-            $fileInfo = getimagesize($img);
-        } else {
-            if ($this->_mediaDirectory->isFile($this->_mediaDirectory->getAbsolutePath($this->_newFile))) {
-                $fileInfo = getimagesize($this->_mediaDirectory->getAbsolutePath($this->_newFile));
+        try {
+            $fileInfo = null;
+            if ($this->_newFile === true) {
+                $asset = $this->_assetRepo->createAsset(
+                    "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
+                );
+                $image = $asset->getSourceFile();
+                $fileInfo = getimagesize($image);
+            } else {
+                $image = $this->_mediaDirectory->getAbsolutePath($this->_newFile);
+                if ($this->_mediaDirectory->isFile($image)) {
+                    $fileInfo = getimagesize($image);
+                }
+            }
+            return $fileInfo;
+        } finally {
+            if (empty($fileInfo)) {
+                throw new NotLoadInfoImageException(__('Can\'t get information about the picture: %1', $image));
             }
         }
-        return $fileInfo;
     }
 }

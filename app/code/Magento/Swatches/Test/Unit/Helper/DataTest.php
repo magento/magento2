@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Helper;
@@ -234,7 +234,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testLoadFirstVariationWithSwatchImage($imageTypes, $expected, $requiredAttributes)
     {
         $this->getSwatchAttributes($this->productMock);
-        $this->getUsedProducts($imageTypes + $requiredAttributes);
+        $this->getUsedProducts($imageTypes + $requiredAttributes, $imageTypes);
 
         $result = $this->swatchHelperObject->loadFirstVariationWithSwatchImage($this->productMock, $requiredAttributes);
 
@@ -293,7 +293,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testLoadFirstVariationWithImage($imageTypes, $expected, $requiredAttributes)
     {
         $this->getSwatchAttributes($this->productMock);
-        $this->getUsedProducts($imageTypes + $requiredAttributes);
+        $this->getUsedProducts($imageTypes + $requiredAttributes, $imageTypes);
 
         $result = $this->swatchHelperObject->loadFirstVariationWithImage($this->productMock, $requiredAttributes);
 
@@ -346,53 +346,68 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductMediaGallery($mediaGallery, $image)
     {
-        $this->productMock->expects($this->once())->method('getMediaAttributeValues')->willReturn($mediaGallery);
-        $this->productMock->expects($this->any())->method('getId')->willReturn(95);
+        $mediaGalleryEntries = [];
+        $id = 0;
+        $mediaUrls = [];
+        foreach ($mediaGallery as $mediaType => $mediaFile) {
+            $mediaGalleryEntryMock = $this->getMockBuilder(
+                \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+            )->getMock();
+            $mediaGalleryEntryMock->expects($this->atLeastOnce())
+                ->method('isDisabled')
+                ->willReturn(false);
+            $mediaGalleryEntryMock->expects($this->atLeastOnce())
+                ->method('getTypes')
+                ->willReturn([$mediaType]);
+            $mediaGalleryEntryMock->expects($this->atLeastOnce())
+                ->method('getFile')
+                ->willReturn($mediaFile);
+            $mediaGalleryEntryMock->expects($this->atLeastOnce())
+                ->method('getId')
+                ->willReturn(++$id);
 
-        $this->imageHelperMock->expects($this->any())
-            ->method('init')
-            ->willReturnMap([
-                [$this->productMock, 'product_page_image_large', [], $this->imageHelperMock],
-                [$this->productMock, 'product_page_image_medium', [], $this->imageHelperMock],
-                [$this->productMock, 'product_page_image_small', [], $this->imageHelperMock],
-            ]);
+            $mediaGalleryEntries[] = $mediaGalleryEntryMock;
+            $mediaUrls[] = ['http://full_path_to_image' . $mediaFile]; //large
+            $mediaUrls[] = ['http://full_path_to_image' . $mediaFile]; //medium
+            $mediaUrls[] = ['http://full_path_to_image' . $mediaFile]; //small
+        }
+        $this->productMock->expects($this->once())
+            ->method('getMediaGalleryEntries')
+            ->willReturn($mediaGalleryEntries);
 
-        $this->imageHelperMock->expects($this->any())
-            ->method('setImageFile')
-            ->with($image)
-            ->willReturnSelf();
-        $this->imageHelperMock->expects($this->any())
-            ->method('constrainOnly')
-            ->willReturnSelf();
-        $this->imageHelperMock->expects($this->any())
-            ->method('keepAspectRatio')
-            ->willReturnSelf();
-        $this->imageHelperMock->expects($this->any())
-            ->method('keepFrame')
-            ->willReturnSelf();
-        $this->imageHelperMock->expects($this->any())
-            ->method('getUrl')
-            ->willReturn('http://full_path_to_image/magento1.png');
+        if ($mediaGallery) {
+            $this->imageHelperMock->expects($this->atLeastOnce())
+                ->method('init')
+                ->willReturnMap([
+                    [$this->productMock, 'product_page_image_large', [], $this->imageHelperMock],
+                    [$this->productMock, 'product_page_image_medium', [], $this->imageHelperMock],
+                    [$this->productMock, 'product_page_image_small', [], $this->imageHelperMock],
+                ]);
+            $this->imageHelperMock->expects($this->atLeastOnce())
+                ->method('setImageFile')
+                ->willReturnSelf();
+            $this->imageHelperMock->expects($this->atLeastOnce())
+                ->method('constrainOnly')
+                ->willReturnSelf();
+            $this->imageHelperMock->expects($this->atLeastOnce())
+                ->method('keepAspectRatio')
+                ->willReturnSelf();
+            $this->imageHelperMock->expects($this->atLeastOnce())
+                ->method('keepFrame')
+                ->willReturnSelf();
+            $this->imageHelperMock->expects($this->atLeastOnce())
+                ->method('getUrl')
+                ->willReturnMap($mediaUrls);
+        }
 
-        $this->productRepoMock->expects($this->any())
-            ->method('getById')
-            ->with(95)
-            ->willReturn($this->productMock);
-
-        $mediaObject = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
-        $iterator = new \ArrayIterator([$mediaObject]);
-        $mediaCollectionMock = $this->getMock(\Magento\Framework\Data\Collection::class, [], [], '', false);
-        $mediaCollectionMock->expects($this->any())->method('getIterator')->willReturn($iterator);
-        $mediaObject->method('getData')->withConsecutive(
-            ['value_id'],
-            ['file']
-        )->willReturnOnConsecutiveCalls(
-            0,
-            $image
-        );
-        $this->productMock->method('getMediaGalleryImages')->willReturn($mediaCollectionMock);
-
-        $this->swatchHelperObject->getProductMediaGallery($this->productMock);
+        $productMediaGallery = $this->swatchHelperObject->getProductMediaGallery($this->productMock);
+        if ($mediaGallery) {
+            $this->assertContains($image, $productMediaGallery['large']);
+            $this->assertContains($image, $productMediaGallery['medium']);
+            $this->assertContains($image, $productMediaGallery['small']);
+        } else {
+            $this->assertEmpty($productMediaGallery);
+        }
     }
 
     public function dataForMediaGallery()
@@ -432,22 +447,48 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($returnFromProvideMethod);
     }
 
-    protected function getUsedProducts(array $attributes)
+    protected function getUsedProducts(array $attributes, array $imageTypes)
     {
         $this->productMock
             ->expects($this->atLeastOnce())
             ->method('getTypeInstance')
             ->willReturn($this->configurableMock);
 
-        $product1 = $this->getMock(\Magento\Catalog\Model\Product::class, ['hasData'], [], '', false);
-        $product1->setData($attributes);
+        $simpleProducts = [];
+        for ($i = 0; $i < 2; $i++) {
+            $simpleProduct = $this->getMock(
+                \Magento\Catalog\Model\Product::class,
+                ['hasData', 'getMediaGalleryEntries'],
+                [],
+                '',
+                false
+            );
+            $simpleProduct->setData($attributes);
 
-        $product2 = $this->getMock(\Magento\Catalog\Model\Product::class, ['hasData'], [], '', false);
-        $product2->setData($attributes);
+            $mediaGalleryEntries = [];
+            foreach (array_keys($imageTypes) as $mediaType) {
+                $mediaGalleryEntryMock = $this->getMockBuilder(
+                    \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+                )->getMock();
+                $mediaGalleryEntryMock->expects($this->any())
+                    ->method('isDisabled')
+                    ->willReturn(false);
+                $mediaGalleryEntryMock->expects($this->any())
+                    ->method('getTypes')
+                    ->willReturn([$mediaType]);
 
-        $simpleProducts = [$product2, $product1];
+                $mediaGalleryEntries[] = $mediaGalleryEntryMock;
+            }
+            $simpleProduct->expects($this->any())
+                ->method('getMediaGalleryEntries')
+                ->willReturn($mediaGalleryEntries);
 
-        $this->configurableMock->expects($this->once())->method('getUsedProducts')->with($this->productMock)
+            $simpleProducts[] = $simpleProduct;
+        }
+
+        $this->configurableMock->expects($this->once())
+            ->method('getUsedProducts')
+            ->with($this->productMock)
             ->willReturn($simpleProducts);
 
     }

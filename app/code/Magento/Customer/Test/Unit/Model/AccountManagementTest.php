@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -722,14 +722,14 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'testNumber' => 1,
                 'password' => 'qwer',
                 'minPasswordLength' => 5,
-                'minCharacterSetsNum' => 1
+                'minCharacterSetsNum' => 1,
             ],
             [
                 'testNumber' => 2,
                 'password' => 'wrfewqedf1',
                 'minPasswordLength' => 5,
-                'minCharacterSetsNum' => 3
-            ]
+                'minCharacterSetsNum' => 3,
+            ],
         ];
     }
 
@@ -761,7 +761,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                             AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
                             'default',
                             null,
-                            $minCharacterSetsNum],
+                            $minCharacterSetsNum,
+                        ],
                     ]
                 )
             );
@@ -855,8 +856,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                         AccountManagement::XML_PATH_REGISTER_EMAIL_IDENTITY,
                         ScopeInterface::SCOPE_STORE,
                         1,
-                        $sender
-                    ]
+                        $sender,
+                    ],
                 ]
             );
         $this->string->expects($this->any())
@@ -1040,6 +1041,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->transportBuilder->expects($this->once())
             ->method('setTemplateVars')
             ->with(['customer' => $this->customerSecure, 'store' => $this->store])
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setScopeId')
+            ->with($this->store->getId())
             ->willReturnSelf();
         $this->transportBuilder->expects($this->once())
             ->method('setFrom')
@@ -1645,10 +1650,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->withConsecutive(
                 [
                     'customer_customer_authenticated',
-                    ['model' => $customerModel, 'password' => $password]
+                    ['model' => $customerModel, 'password' => $password],
                 ],
                 [
-                    'customer_data_object_login', ['customer' => $customerData]
+                    'customer_data_object_login', ['customer' => $customerData],
                 ]
             );
 

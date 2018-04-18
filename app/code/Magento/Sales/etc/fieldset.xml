@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -485,6 +485,12 @@
             <field name="discount_amount">
                 <aspect name="to_quote_address_shipping" />
                 <aspect name="to_cm"/>
+            </field>
+            <field name="discount_description">
+                <aspect name="to_quote" />
+                <aspect name="to_invoice" />
+                <aspect name="to_shipment" />
+                <aspect name="to_cm" />
             </field>
             <field name="shipping_amount">
                 <aspect name="to_quote_address_shipping" />

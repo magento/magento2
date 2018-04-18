@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
-use Magento\CatalogUrlRewrite\Model\CategoryBasedProductRewriteGenerator;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
@@ -15,6 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 use Magento\UrlRewrite\Model\MergeDataProvider;
+use Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator;
 
 /**
  * Tests UrlRewriteHandler class.
@@ -64,9 +65,9 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
     private $mergeDataProviderMock;
 
     /**
-     * @var CategoryBasedProductRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var $CategoryProductUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $categoryBasedProductRewriteGeneratorMock;
+    private $categoryProductUrlPathGeneratorMock;
 
     /**
      * @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject
@@ -125,6 +126,9 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->categoryProductUrlPathGeneratorMock = $this->getMockBuilder(CategoryProductUrlPathGenerator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mergeDataProviderFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->mergeDataProviderMock);
@@ -135,20 +139,15 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
             $this->productUrlRewriteGeneratorMock,
             $this->urlPersistMock,
             $this->collectionFactoryMock,
+            $this->categoryProductUrlPathGeneratorMock,
             $this->mergeDataProviderFactoryMock
         );
-
-        $this->categoryBasedProductRewriteGeneratorMock = $this->getMockBuilder(
-            CategoryBasedProductRewriteGenerator::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->objectManager = new ObjectManager($this);
         $this->objectManager->setBackwardCompatibleProperty(
             $this->urlRewriteHandler,
-            'categoryBasedProductRewriteGenerator',
-            $this->categoryBasedProductRewriteGeneratorMock
+            'categoryProductUrlPathGenerator',
+            $this->categoryProductUrlPathGeneratorMock
         );
 
         $this->productItem = $this->getMock(
@@ -182,6 +181,7 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
      * Covers generateProductUrlRewrites(), getCategoryProductsUrlRewrites() methods.
      *
      * @dataProvider generateProductUrlRewritesDataProvider
+     * @param array $affectedProductIds
      * @return void
      */
     public function testGenerateProductUrlRewrites($affectedProductIds)
@@ -202,7 +202,7 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->categoryMock->expects($this->any())
             ->method('getChangedProductIds')
             ->willReturn($affectedProductIds);
-        $this->categoryMock->expects($this->once())
+        $this->categoryMock->expects($this->any())
             ->method('getEntityId')
             ->willReturn($categoryId);
 
@@ -230,15 +230,15 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Calls when $affectedProductIds is not empty.
      *
-     * @param $saveRewritesHistory
-     * @param $storeId
-     * @param $categoryId
-     * @param $affectedProductIds
+     * @param bool $saveRewritesHistory
+     * @param int $storeId
+     * @param int $categoryId
+     * @param array $affectedProductIds
      * @return void
      */
     private function callIfAffectedProductsIsset($saveRewritesHistory, $storeId, $categoryId, $affectedProductIds)
     {
-        $productCollectionMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
+        $productCollectionMock = $this->getMockBuilder(ProductCollection::class)
             ->setMethods(
                 [
                     'getData',
@@ -257,7 +257,8 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('addIdFilter')
             ->with($affectedProductIds)
             ->willReturn($productCollectionMock);
-        $productCollectionMock = $this->setAdditionalMocks($productCollectionMock, $storeId, $saveRewritesHistory);
+        $productCollectionMock =
+            $this->setAdditionalMocks($productCollectionMock, $storeId, $categoryId, $saveRewritesHistory);
         $this->collectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($productCollectionMock);
@@ -270,29 +271,27 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Calls when $affectedProductIds is empty.
      *
-     * @param $saveRewritesHistory
-     * @param $storeId
-     * @param $categoryId
-     * @param $affectedProductIds
+     * @param bool $saveRewritesHistory
+     * @param int $storeId
+     * @param int $categoryId
+     * @param array $affectedProductIds
      * @return void
      */
     private function getCategoryProductsUrlRewrites($saveRewritesHistory, $storeId, $categoryId, $affectedProductIds)
     {
         $productCollection = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
-            ['addAttributeToSelect'],
+            ProductCollection::class,
+            ['addAttributeToSelect', 'setStoreId', 'addCategoriesFilter'],
             [],
             '',
             false
         );
-        $productCollection = $this->setAdditionalMocks($productCollection, $storeId, $saveRewritesHistory);
-        $this->categoryMock->expects($this->once())
-            ->method('getProductCollection')
-            ->willReturn($productCollection);
+        $productCollection = $this->setAdditionalMocks($productCollection, $storeId, $categoryId, $saveRewritesHistory);
+        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($productCollection);
         $categoryBasedProductRewriteGenerated = $this->getProductUrlRewriteResult($affectedProductIds);
-        $this->categoryBasedProductRewriteGeneratorMock->expects($this->once())
+        $this->categoryProductUrlPathGeneratorMock->expects($this->once())
             ->method('generate')
-            ->with($this->productItem, $this->categoryMock, $categoryId)
+            ->with($this->productItem, $categoryId)
             ->willReturn($categoryBasedProductRewriteGenerated);
         $this->productItem->expects($this->exactly(2))
             ->method('getId')
@@ -319,6 +318,7 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns products urlRewrite result.
      *
+     * @param array $affectedProductIds
      * @return array
      */
     private function getProductUrlRewriteResult($affectedProductIds)
@@ -360,20 +360,21 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets additional data to the product Collection Mock.
      *
-     * @param $productCollectionMock
-     * @return $productCollectionMock
+     * @param ProductCollection|\PHPUnit_Framework_MockObject_MockObject $productCollectionMock
+     * @param int $storeId
+     * @param int $categoryId
+     * @param bool $saveRewritesHistory
+     * @return ProductCollection|\PHPUnit_Framework_MockObject_MockObject $productCollectionMock
      */
-    private function setAdditionalMocks($productCollectionMock, $storeId, $saveRewritesHistory)
+    private function setAdditionalMocks($productCollectionMock, $storeId, $categoryId, $saveRewritesHistory)
     {
+        $productCollectionMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
         $productCollectionMock->expects($this->any())->method('addAttributeToSelect')
-            ->willReturnMap(
-                [
-                    ['visibility', false, $productCollectionMock],
-                    ['name', false, $productCollectionMock],
-                    ['url_key', false, $productCollectionMock],
-                    ['url_path', false, $productCollectionMock]
-                ]
-            );
+            ->willReturnSelf();
+        $productCollectionMock->expects($this->any())
+            ->method('addCategoriesFilter')
+            ->with(['eq' => [$categoryId]])
+            ->willReturnSelf();
         $this->productItem->expects($this->once())
             ->method('setStoreId')
             ->with($storeId)

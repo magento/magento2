@@ -1,31 +1,31 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Customer;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Customer\Model\Attribute;
-use Magento\Customer\Model\FileProcessor;
-use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Attribute;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\FileProcessor;
+use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Customer\Model\Address;
-use Magento\Customer\Model\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Customer\Model\ResourceModel\Customer\Collection;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
@@ -129,7 +129,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
        'rp_token',
        'confirmation',
     ];
-    
+
     /**
      * @param string $name
      * @param string $primaryFieldName
@@ -140,6 +140,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param FilterPool $filterPool
      * @param array $meta
      * @param array $data
+     * @param FileProcessorFactory|null $fileProcessorFactory
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -150,7 +154,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         Config $eavConfig,
         FilterPool $filterPool,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        FileProcessorFactory $fileProcessorFactory = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->eavValidationRules = $eavValidationRules;
@@ -164,6 +169,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->meta['address']['children'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer_address')
         );
+        if (null === $fileProcessorFactory) {
+            $fileProcessorFactory = ObjectManager::getInstance()->get(FileProcessorFactory::class);
+        }
+        $this->fileProcessorFactory = $fileProcessorFactory;
     }
 
     /**
@@ -273,7 +282,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             : '';
 
         /** @var FileProcessor $fileProcessor */
-        $fileProcessor = $this->getFileProcessorFactory()->create([
+        $fileProcessor = $this->fileProcessorFactory->create([
             'entityTypeCode' => $entityType->getEntityTypeCode(),
         ]);
 
@@ -533,21 +542,5 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($addresses[$addressId]['street']) && !is_array($addresses[$addressId]['street'])) {
             $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
         }
-    }
-
-    /**
-     * Get FileProcessorFactory instance
-     *
-     * @return FileProcessorFactory
-     *
-     * @deprecated
-     */
-    private function getFileProcessorFactory()
-    {
-        if ($this->fileProcessorFactory === null) {
-            $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get(\Magento\Customer\Model\FileProcessorFactory::class);
-        }
-        return $this->fileProcessorFactory;
     }
 }

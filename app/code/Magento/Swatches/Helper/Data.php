@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Helper;
@@ -190,6 +190,28 @@ class Data
     }
 
     /**
+     * Check is media attribute available
+     *
+     * @param ModelProduct $product
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function isMediaAvailable(ModelProduct $product, $attributeCode)
+    {
+        $isAvailable = false;
+
+        $mediaGallery = $product->getMediaGalleryEntries();
+        foreach ($mediaGallery as $mediaEntry) {
+            if (in_array($attributeCode, $mediaEntry->getTypes(), true)) {
+                $isAvailable = !$mediaEntry->isDisabled();
+                break;
+            }
+        }
+
+        return $isAvailable;
+    }
+
+    /**
      * @param string $attributeCode swatch_image|image
      * @param ModelProduct $configurableProduct
      * @param array $requiredAttributes
@@ -201,8 +223,9 @@ class Data
             $usedProducts = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
 
             foreach ($usedProducts as $simpleProduct) {
-                if (!in_array($simpleProduct->getData($attributeCode), [null, self::EMPTY_IMAGE_VALUE], true)
-                    && !array_diff_assoc($requiredAttributes, $simpleProduct->getData())
+                if (
+                    !array_diff_assoc($requiredAttributes, $simpleProduct->getData())
+                    && $this->isMediaAvailable($simpleProduct, $attributeCode)
                 ) {
                     return $simpleProduct;
                 }
@@ -313,48 +336,32 @@ class Data
      */
     public function getProductMediaGallery(ModelProduct $product)
     {
-        if (!in_array($product->getData('image'), [null, self::EMPTY_IMAGE_VALUE], true)) {
-            $baseImage = $product->getData('image');
-        } else {
-            $productMediaAttributes = array_filter($product->getMediaAttributeValues(), function ($value) {
-                return $value !== self::EMPTY_IMAGE_VALUE && $value !== null;
-            });
-            foreach ($productMediaAttributes as $attributeCode => $value) {
-                if ($attributeCode !== 'swatch_image') {
-                    $baseImage = (string)$value;
-                    break;
-                }
+        $baseImage = null;
+        $gallery = [];
+
+        $mediaGallery = $product->getMediaGalleryEntries();
+        foreach ($mediaGallery as $mediaEntry) {
+            if ($mediaEntry->isDisabled()) {
+                continue;
             }
+
+            if (in_array('image', $mediaEntry->getTypes(), true)) {
+                $baseImage = $mediaEntry->getFile();
+            } elseif (!$baseImage) {
+                $baseImage = $mediaEntry->getFile();
+            }
+
+            $gallery[$mediaEntry->getId()] = $this->getAllSizeImages($product, $mediaEntry->getFile());
         }
 
-        if (empty($baseImage)) {
+        if (!$baseImage) {
             return [];
         }
 
         $resultGallery = $this->getAllSizeImages($product, $baseImage);
-        $resultGallery['gallery'] = $this->getGalleryImages($product);
+        $resultGallery['gallery'] = $gallery;
 
         return $resultGallery;
-    }
-
-    /**
-     * @param ModelProduct $product
-     * @return array
-     */
-    private function getGalleryImages(ModelProduct $product)
-    {
-        //TODO: remove after fix MAGETWO-48040
-        $product = $this->productRepository->getById($product->getId());
-
-        $result = [];
-        $mediaGallery = $product->getMediaGalleryImages();
-        foreach ($mediaGallery as $media) {
-            $result[$media->getData('value_id')] = $this->getAllSizeImages(
-                $product,
-                $media->getData('file')
-            );
-        }
-        return $result;
     }
 
     /**

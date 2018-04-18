@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Paypal\Test\Unit\Controller\Payflow;
 
+use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Checkout\Block\Onepage\Success;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Http;
@@ -15,6 +15,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Paypal\Controller\Payflow\ReturnUrl;
 use Magento\Paypal\Controller\Payflowadvanced\ReturnUrl as PayflowadvancedReturnUrl;
 use Magento\Paypal\Helper\Checkout;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Psr\Log\LoggerInterface;
@@ -27,6 +28,7 @@ use Magento\Paypal\Model\PayflowlinkFactory;
  * Class ReturnUrlTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ReturnUrlTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,105 +40,150 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $contextMock;
+    protected $context;
 
     /**
      * @var View|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewMock;
+    protected $view;
 
     /**
      * @var Http|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestMock;
+    protected $request;
 
     /**
      * @var Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $checkoutSessionMock;
+    protected $checkoutSession;
 
     /**
      * @var OrderFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderFactoryMock;
+    protected $orderFactory;
 
     /**
      * @var PayflowlinkFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $payflowlinkFactoryMock;
+    protected $payflowlinkFactory;
 
     /**
      * @var Checkout|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $helperCheckoutMock;
+    protected $helperCheckout;
 
     /**
      * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $loggerMock;
+    protected $logger;
 
     /**
      * @var Success|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $blockMock;
+    protected $block;
 
     /**
      * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $layoutMock;
+    protected $layout;
 
     /**
      * @var Order|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderMock;
+    protected $order;
 
     /**
      * @var Payment|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $paymentMock;
+    protected $payment;
+
+    /**
+     * @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $paymentFailures;
+
+    /**
+     * @var CartInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quote;
 
     const LAST_REAL_ORDER_ID = '000000001';
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(Context::class, [], [], '', false);
-        $this->viewMock = $this->getMock(ViewInterface::class);
-        $this->requestMock = $this->getMock(Http::class, ['getParam'], [], '', false);
-        $this->layoutMock = $this->getMock(LayoutInterface::class);
-        $this->blockMock = $this
-            ->getMockBuilder(Success::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderFactoryMock = $this->getMock(OrderFactory::class, ['create'], [], '', false);
-        $this->payflowlinkFactoryMock = $this->getMock(PayflowlinkFactory::class, [], [], '', false);
-        $this->helperCheckoutMock = $this->getMock(Checkout::class, ['cancelCurrentOrder'], [], '', false);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->orderMock = $this
-            ->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentMock = $this
-            ->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderMock->expects($this->any())->method('getPayment')->will($this->returnValue($this->paymentMock));
-
-        $this->checkoutSessionMock = $this
-            ->getMockBuilder(Session::class)
-            ->setMethods(['getLastRealOrderId', 'getLastRealOrder', 'restoreQuote'])
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
-        $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
+        $this->view = $this->getMockBuilder(ViewInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->request = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getParam'])
+            ->getMock();
+
+        $this->layout = $this->getMockBuilder(LayoutInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->block = $this->getMockBuilder(Success::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->orderFactory = $this->getMockBuilder(OrderFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->payflowlinkFactory = $this->getMockBuilder(PayflowlinkFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->helperCheckout = $this->getMockBuilder(Checkout::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['cancelCurrentOrder'])
+            ->getMock();
+
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+
+        $this->order = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->payment = $this->getMockBuilder(Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->order->expects($this->any())->method('getPayment')->will($this->returnValue($this->payment));
+
+        $this->checkoutSession = $this->getMockBuilder(Session::class)
+            ->setMethods(['getLastRealOrderId', 'getLastRealOrder', 'restoreQuote', 'getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->quote = $this->getMockBuilder(CartInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->checkoutSession
+            ->method('getQuote')
+            ->willReturn($this->quote);
+
+        $this->context->expects($this->any())->method('getView')->will($this->returnValue($this->view));
+        $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
+
+        $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->returnUrl = new ReturnUrl(
-            $this->contextMock,
-            $this->checkoutSessionMock,
-            $this->orderFactoryMock,
-            $this->payflowlinkFactoryMock,
-            $this->helperCheckoutMock,
-            $this->loggerMock
+            $this->context,
+            $this->checkoutSession,
+            $this->orderFactory,
+            $this->payflowlinkFactory,
+            $this->helperCheckout,
+            $this->logger,
+            $this->paymentFailures
         );
     }
 
@@ -181,22 +228,22 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
         $this->initLayoutMock();
         $this->initOrderMock(self::LAST_REAL_ORDER_ID, $state);
 
-        $this->requestMock
+        $this->request
             ->expects($this->never())
             ->method('getParam');
 
-        $this->checkoutSessionMock
+        $this->checkoutSession
             ->expects($this->exactly(2))
             ->method('getLastRealOrderId')
             ->will($this->returnValue(self::LAST_REAL_ORDER_ID));
 
-        $this->blockMock
+        $this->block
             ->expects($this->once())
             ->method('setData')
             ->with('goto_success_page', true)
             ->will($this->returnSelf());
 
-        $this->paymentMock
+        $this->payment
             ->expects($this->never())
             ->method('getMethod');
 
@@ -213,27 +260,27 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
     {
         $this->initLayoutMock();
         $this->initOrderMock(self::LAST_REAL_ORDER_ID, $state);
-        $this->initCheckoutSessionMock(self::LAST_REAL_ORDER_ID, $restoreQuote);
+        $this->initcheckoutSession(self::LAST_REAL_ORDER_ID, $restoreQuote);
 
-        $this->requestMock
+        $this->request
             ->expects($this->once())
             ->method('getParam')
             ->with('RESPMSG')
             ->will($this->returnValue('message'));
 
-        $this->blockMock
+        $this->block
             ->expects($this->at(0))
             ->method('setData')
             ->with('goto_section', $expectedGotoSection)
             ->will($this->returnSelf());
 
-        $this->blockMock
+        $this->block
             ->expects($this->at(1))
             ->method('setData')
             ->with('error_msg', __('Your payment has been declined. Please try again.'))
             ->will($this->returnSelf());
 
-        $this->paymentMock
+        $this->payment
             ->expects($this->once())
             ->method('getMethod')
             ->will($this->returnValue(Config::METHOD_PAYFLOWLINK));
@@ -246,28 +293,28 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
         $this->initLayoutMock();
         $this->initOrderMock(self::LAST_REAL_ORDER_ID, Order::STATE_NEW);
 
-        $this->requestMock
+        $this->request
             ->expects($this->never())
             ->method('getParam');
 
-        $this->checkoutSessionMock
+        $this->checkoutSession
             ->expects($this->any())
             ->method('getLastRealOrderId')
             ->will($this->returnValue(self::LAST_REAL_ORDER_ID));
 
-        $this->blockMock
+        $this->block
             ->expects($this->at(0))
             ->method('setData')
             ->with('goto_section', false)
             ->will($this->returnSelf());
 
-        $this->blockMock
+        $this->block
             ->expects($this->at(1))
             ->method('setData')
             ->with('error_msg', __('Requested payment method does not match with order.'))
             ->will($this->returnSelf());
 
-        $this->paymentMock
+        $this->payment
             ->expects($this->once())
             ->method('getMethod')
             ->will($this->returnValue('something_else'));
@@ -296,33 +343,33 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
     {
         $this->initLayoutMock();
         $this->initOrderMock(self::LAST_REAL_ORDER_ID, Order::STATE_NEW);
-        $this->initCheckoutSessionMock(self::LAST_REAL_ORDER_ID, true);
+        $this->initcheckoutSession(self::LAST_REAL_ORDER_ID, true);
 
-        $this->requestMock
+        $this->request
             ->expects($this->once())
             ->method('getParam')
             ->with('RESPMSG')
             ->will($this->returnValue($errorMsg));
 
-        $this->helperCheckoutMock
+        $this->helperCheckout
             ->expects($this->once())
             ->method('cancelCurrentOrder')
             ->with($errorMsgEscaped)
             ->will($this->returnValue(self::LAST_REAL_ORDER_ID));
 
-        $this->blockMock
+        $this->block
             ->expects($this->at(0))
             ->method('setData')
             ->with('goto_section', 'paymentMethod')
             ->will($this->returnSelf());
 
-        $this->blockMock
+        $this->block
             ->expects($this->at(1))
             ->method('setData')
             ->with('error_msg', __('Your payment has been declined. Please try again.'))
             ->will($this->returnSelf());
 
-        $this->paymentMock
+        $this->payment
             ->expects($this->once())
             ->method('getMethod')
             ->will($this->returnValue(Config::METHOD_PAYFLOWLINK));
@@ -334,38 +381,39 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
     {
         $this->initLayoutMock();
         $this->initOrderMock(self::LAST_REAL_ORDER_ID, Order::STATE_NEW);
-        $this->initCheckoutSessionMock(self::LAST_REAL_ORDER_ID, true);
+        $this->initcheckoutSession(self::LAST_REAL_ORDER_ID, true);
 
-        $this->requestMock
+        $this->request
             ->expects($this->once())
             ->method('getParam')
             ->with('RESPMSG')
             ->will($this->returnValue('message'));
 
-        $this->blockMock
+        $this->block
             ->expects($this->at(0))
             ->method('setData')
             ->with('goto_section', 'paymentMethod')
             ->will($this->returnSelf());
 
-        $this->blockMock
+        $this->block
             ->expects($this->at(1))
             ->method('setData')
             ->with('error_msg', __('Your payment has been declined. Please try again.'))
             ->will($this->returnSelf());
 
-        $this->paymentMock
+        $this->payment
             ->expects($this->once())
             ->method('getMethod')
             ->will($this->returnValue(Config::METHOD_PAYFLOWADVANCED));
 
         $payflowadvancedReturnUrl = new PayflowadvancedReturnUrl(
-            $this->contextMock,
-            $this->checkoutSessionMock,
-            $this->orderFactoryMock,
-            $this->payflowlinkFactoryMock,
-            $this->helperCheckoutMock,
-            $this->loggerMock
+            $this->context,
+            $this->checkoutSession,
+            $this->orderFactory,
+            $this->payflowlinkFactory,
+            $this->helperCheckout,
+            $this->logger,
+            $this->paymentFailures
         );
 
         $payflowadvancedReturnUrl->execute();
@@ -373,23 +421,23 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
 
     private function initOrderMock($orderId, $state)
     {
-        $this->orderFactoryMock
+        $this->orderFactory
             ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->orderMock));
+            ->will($this->returnValue($this->order));
 
-        $this->orderMock
+        $this->order
             ->expects($this->once())
             ->method('loadByIncrementId')
             ->with($orderId)
             ->will($this->returnSelf());
 
-        $this->orderMock
+        $this->order
             ->expects($this->once())
             ->method('getIncrementId')
             ->will($this->returnValue($orderId));
 
-        $this->orderMock
+        $this->order
             ->expects($this->once())
             ->method('getState')
             ->will($this->returnValue($state));
@@ -397,40 +445,40 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
 
     private function initLayoutMock()
     {
-        $this->viewMock
+        $this->view
             ->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($this->layoutMock));
+            ->will($this->returnValue($this->layout));
 
-        $this->viewMock
+        $this->view
             ->expects($this->once())
             ->method('loadLayout')
             ->willReturnSelf();
 
-        $this->viewMock
+        $this->view
             ->expects($this->once())
             ->method('renderLayout')
             ->willReturnSelf();
 
-        $this->layoutMock
+        $this->layout
             ->expects($this->once())
             ->method('getBlock')
-            ->will($this->returnValue($this->blockMock));
+            ->will($this->returnValue($this->block));
     }
 
-    private function initCheckoutSessionMock($orderId, $restoreQuote)
+    private function initcheckoutSession($orderId, $restoreQuote)
     {
-        $this->checkoutSessionMock
+        $this->checkoutSession
             ->expects($this->any())
             ->method('getLastRealOrderId')
             ->will($this->returnValue($orderId));
 
-        $this->checkoutSessionMock
+        $this->checkoutSession
             ->expects($this->any())
             ->method('getLastRealOrder')
-            ->will($this->returnValue($this->orderMock));
+            ->will($this->returnValue($this->order));
 
-        $this->checkoutSessionMock
+        $this->checkoutSession
             ->expects($this->any())
             ->method('restoreQuote')
             ->will($this->returnValue($restoreQuote));

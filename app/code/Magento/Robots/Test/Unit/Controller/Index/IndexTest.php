@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,6 +51,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $resultPageMock->expects($this->once())
             ->method('addHandle')
             ->with('robots_index_index');
+        $resultPageMock->expects($this->once())
+            ->method('setHeader')
+            ->with('Content-Type', 'text/plain');
 
         $this->resultPageFactory->expects($this->any())
             ->method('create')

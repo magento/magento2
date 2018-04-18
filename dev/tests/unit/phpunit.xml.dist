@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -38,6 +38,9 @@
             </exclude>
         </whitelist>
     </filter>
+    <listeners>
+        <listener class="Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager"/>
+    </listeners>
     <logging>
         <!--coverage_html_placeholder
             <log type="coverage-html" target="{{coverage_dir}}/test-reports/coverage" charset="UTF-8" yui="true" highlight="true"/>

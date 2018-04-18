@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Robots\Controller\Index;
@@ -43,6 +43,7 @@ class Index extends Action
         /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create(true);
         $resultPage->addHandle('robots_index_index');
+        $resultPage->setHeader('Content-Type', 'text/plain');
         return $resultPage;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Test\Unit\Controller\Adminhtml\Index;
@@ -147,7 +147,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     {
         $redirectUrl = '*/*/index';
         $redirectUrlBackup = 'backup/index/index';
-        
+
         $this->requestMock->expects($this->any())
             ->method('isAjax')
             ->willReturn(true);
@@ -181,7 +181,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $backupType = 'db';
         $backupName = 'backup1';
         $response = '{"redirect_url":"backup\/index\/index"}';
-        
+
         $this->requestMock->expects($this->any())
             ->method('isAjax')
             ->willReturn(true);

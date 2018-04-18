@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -322,5 +322,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->with($productId, false, $storeId, true)
             ->willReturn($productMock);
         $this->assertEquals($productMock, $this->model->getProduct());
+    }
+
+    public function testGetBuyRequestWithNoOption()
+    {
+        $buyRequest = $this->model->getBuyRequest();
+
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $buyRequest);
+        $this->assertEquals([
+            'qty' => 0,
+            'original_qty' => null
+        ], $buyRequest->getData());
     }
 }

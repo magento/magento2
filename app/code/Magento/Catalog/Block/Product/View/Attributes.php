@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,8 +81,9 @@ class Attributes extends \Magento\Framework\View\Element\Template
         $attributes = $product->getAttributes();
         foreach ($attributes as $attribute) {
             if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
-                $value = $attribute->getFrontend()->getValue($product);
-
+                if (is_array($value = $attribute->getFrontend()->getValue($product))) {
+                    continue;
+                }
                 if (!$product->hasData($attribute->getAttributeCode())) {
                     $value = __('N/A');
                 } elseif ((string)$value == '') {

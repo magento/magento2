@@ -2,9 +2,10 @@
 /**
  * Configuration data converter. Converts associative array to tree array
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Config\Scope;
 
 class Converter implements \Magento\Framework\Config\ConverterInterface
@@ -19,7 +20,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $output = [];
         foreach ($source as $key => $value) {
-            $this->_setArrayValue($output, $key, $value);
+            $output = $this->_setArrayValue($output, $key, $value);
         }
         return $output;
     }
@@ -27,21 +28,28 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Set array value by path
      *
-     * @param array &$container
+     * @param array $container
      * @param string $path
      * @param string $value
-     * @return void
+     * @return array
      */
-    protected function _setArrayValue(array &$container, $path, $value)
+    protected function _setArrayValue(array $container, $path, $value)
     {
-        $segments = explode('/', $path);
-        $currentPointer = & $container;
-        foreach ($segments as $segment) {
-            if (!isset($currentPointer[$segment])) {
-                $currentPointer[$segment] = [];
+        $parts = explode('/', $path);
+
+        if (count($parts) > 0) {
+            $parts = array_reverse($parts);
+
+            $result = $value;
+            foreach ($parts as $part) {
+                $part = trim($part);
+                if ($part !== '') {
+                    $result = [$part => $result];
+                }
             }
-            $currentPointer = & $currentPointer[$segment];
+
+            $container = array_merge_recursive($container, $result);
         }
-        $currentPointer = $value;
+        return $container;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,6 +84,9 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
      * @param LinksInitializer $linkInitializer
      * @param Management $linkManagement
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param ProductLinkInterfaceFactory|null $productLinkFactory
+     * @param ProductLinkExtensionFactory|null $productLinkExtensionFactory
+     * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -91,13 +94,25 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
         \Magento\Catalog\Model\ProductLink\Management $linkManagement,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null,
+        \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->entityCollectionProvider = $entityCollectionProvider;
         $this->linkInitializer = $linkInitializer;
         $this->linkManagement = $linkManagement;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        if (null === $productLinkFactory) {
+            $productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
+        }
+        if (null === $productLinkExtensionFactory) {
+            $productLinkExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Api\Data\ProductLinkExtensionFactory::class);
+        }
+        $this->productLinkFactory = $productLinkFactory;
+        $this->productLinkExtensionFactory = $productLinkExtensionFactory;
     }
 
     /**
@@ -149,7 +164,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
             $collection = $this->entityCollectionProvider->getCollection($product, $linkTypeName);
             foreach ($collection as $item) {
                 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
-                $productLink = $this->getProductLinkFactory()->create();
+                $productLink = $this->productLinkFactory->create();
                 $productLink->setSku($product->getSku())
                     ->setLinkType($linkTypeName)
                     ->setLinkedProductSku($item['sku'])
@@ -158,7 +173,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 if (isset($item['custom_attributes'])) {
                     $productLinkExtension = $productLink->getExtensionAttributes();
                     if ($productLinkExtension === null) {
-                        $productLinkExtension = $this->getProductLinkExtensionFactory()->create();
+                        $productLinkExtension = $this->productLinkExtensionFactory->create();
                     }
                     foreach ($item['custom_attributes'] as $option) {
                         $name = $option['attribute_code'];
@@ -256,30 +271,6 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 ->get('Magento\Catalog\Model\Product\LinkTypeProvider');
         }
         return $this->linkTypeProvider;
-    }
-
-    /**
-     * @return ProductLinkInterfaceFactory
-     */
-    private function getProductLinkFactory()
-    {
-        if (null === $this->productLinkFactory) {
-            $this->productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
-        }
-        return $this->productLinkFactory;
-    }
-
-    /**
-     * @return ProductLinkExtensionFactory
-     */
-    private function getProductLinkExtensionFactory()
-    {
-        if (null === $this->productLinkExtensionFactory) {
-            $this->productLinkExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\Data\ProductLinkExtensionFactory');
-        }
-        return $this->productLinkExtensionFactory;
     }
 
     /**

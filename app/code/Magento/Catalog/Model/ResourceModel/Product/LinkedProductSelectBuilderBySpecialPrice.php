@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -139,6 +139,7 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
                 'special_to.value IS NULL OR ' . $connection->getDatePartSql('special_to.value') .' >= ?',
                 $currentDate
             )->order('t.value ' . Select::SQL_ASC)
+            ->order(BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . '.' . $linkField . ' ' . Select::SQL_ASC)
             ->limit(1);
         $specialPrice = $this->baseSelectProcessor->process($specialPrice);
 

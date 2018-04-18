@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
@@ -141,7 +141,10 @@ class Preprocessor implements PreprocessorInterface
                 $query
             );
         } elseif ($filter->getField() === 'category_ids') {
-            return 'category_ids_index.category_id = ' . (int) $filter->getValue();
+            return "{$this->aliasResolver->getAlias($filter)}.category_id = "
+                . (int) $filter->getValue();
+        } elseif ($filter->getField() === 'visibility') {
+            return "{$this->aliasResolver->getAlias($filter)}." . $query;
         } elseif ($attribute->isStatic()) {
             $alias = $this->aliasResolver->getAlias($filter);
             $resultQuery = str_replace(
