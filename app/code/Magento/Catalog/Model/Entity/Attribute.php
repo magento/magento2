@@ -105,7 +105,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
@@ -113,7 +112,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         LockValidatorInterface $lockValidator,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory
     ) {
         $this->attrLockValidator = $lockValidator;
         parent::__construct(
@@ -129,14 +129,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
             $optionDataFactory,
             $dataObjectProcessor,
             $dataObjectHelper,
-            $frontendLabelFactory,
             $localeDate,
             $reservedAttributeList,
             $localeResolver,
             $dateTimeFormatter,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $frontendLabelFactory
         );
     }
 
