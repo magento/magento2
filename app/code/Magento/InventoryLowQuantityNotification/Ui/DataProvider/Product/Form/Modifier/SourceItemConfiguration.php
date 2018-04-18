@@ -65,11 +65,11 @@ class SourceItemConfiguration extends AbstractModifier
     public function modifyData(array $data)
     {
         $product = $this->locator->getProduct();
-        if ($this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
-            return $data;
-        }
-
-        if (!isset($data[$product->getId()]['sources']['assigned_sources'])) {
+        if (
+            $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false
+            || null === $product->getId()
+            || !isset($data[$product->getId()]['sources']['assigned_sources'])
+        ) {
             return $data;
         }
 
