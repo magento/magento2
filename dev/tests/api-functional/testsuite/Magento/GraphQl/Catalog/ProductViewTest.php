@@ -44,8 +44,6 @@ class ProductViewTest extends GraphQlAbstract
             attribute_set_id
             country_of_manufacture
             created_at
-            custom_layout
-            custom_layout_update
             description
             gift_message_available
             id
@@ -292,15 +290,12 @@ QUERY;
     {
         items{
             attribute_set_id
-            category_ids
             categories
             {
                 id
             }
             country_of_manufacture
             created_at
-            custom_layout
-            custom_layout_update
             description
             gift_message_available
             id
