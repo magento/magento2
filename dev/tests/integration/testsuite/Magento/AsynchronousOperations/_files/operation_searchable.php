@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Bulk\OperationInterface;
 
@@ -20,8 +23,8 @@ $bulks = [
         'user_id' => 1,
         'description' => 'Bulk Description',
         'operation_count' => 3,
-        'start_time' => '2009-10-10 00:00:00'
-    ]
+        'start_time' => '2009-10-10 00:00:00',
+    ],
 ];
 // Only processed operations are saved into database (i.e. operations that are not in 'open' state)
 $operations = [
