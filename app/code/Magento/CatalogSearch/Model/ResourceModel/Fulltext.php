@@ -103,17 +103,20 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        $select = $connection->select()->from(
-            ['relation' => $this->getTable('catalog_product_relation')],
-            []
-        )->join(
-            ['cpe' => $this->getTable('catalog_product_entity')],
-            'cpe.' . $linkField . ' = relation.parent_id',
-            ['cpe.entity_id']
-        )->where(
-            'relation.child_id IN (?)',
-            $childIds
-        )->distinct(true);
+        $select = $connection
+            ->select()
+            ->from(
+                ['relation' => $this->getTable('catalog_product_relation')],
+                []
+            )->distinct(true)
+            ->join(
+                ['cpe' => $this->getTable('catalog_product_entity')],
+                'cpe.' . $linkField . ' = relation.parent_id',
+                ['cpe.entity_id']
+            )->where(
+                'relation.child_id IN (?)',
+                $childIds
+            );
 
         return $connection->fetchCol($select);
     }
