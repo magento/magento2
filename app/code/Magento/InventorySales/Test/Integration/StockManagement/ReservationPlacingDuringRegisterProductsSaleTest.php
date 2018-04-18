@@ -29,6 +29,8 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests correct Product Salable Quantity decreasing after Order placing.
  *
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
@@ -57,7 +59,6 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
      * @var CleanupReservationsInterface
      */
     private $cleanupReservations;
-
 
     /**
      * @var GetProductSalableQtyInterface
@@ -154,11 +155,6 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
 
         self::assertEquals(5, $this->getProductSalableQty->execute('SKU-1', 10));
 
-        $this->appendReservations->execute([
-            // unreserved 3.5 units for cleanup
-            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(3.5)->build(),
-        ]);
-
         //cleanup
         $this->deleteOrderById((int)$orderId);
     }
@@ -192,16 +188,16 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
     {
         /** @var CartItemInterface $cartItem */
         $cartItem = $this->cartItemFactory->create(
-                [
-                    'data' => [
-                        CartItemInterface::KEY_SKU => $product->getSku(),
-                        CartItemInterface::KEY_QTY => $quoteItemQty,
-                        CartItemInterface::KEY_QUOTE_ID => $cartId,
-                        'product_id' => $product->getId(),
-                        'product' => $product
-                    ]
+            [
+                'data' => [
+                    CartItemInterface::KEY_SKU => $product->getSku(),
+                    CartItemInterface::KEY_QTY => $quoteItemQty,
+                    CartItemInterface::KEY_QUOTE_ID => $cartId,
+                    'product_id' => $product->getId(),
+                    'product' => $product,
                 ]
-            );
+            ]
+        );
 
         return $cartItem;
     }
