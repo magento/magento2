@@ -186,6 +186,13 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpTokenCreatedAt(null);
         }
 
+        // Set group id to current stored id if no group id passed.
+        if (!is_null($prevCustomerData) && $prevCustomerData->getGroupId() && is_null($customer->getGroupId())) {
+            $customerModel->setGroupId(
+                $prevCustomerData->getGroupId()
+            );
+        }
+
         $this->setDefaultBilling($customerArr, $prevCustomerDataArr, $customerModel);
 
         $this->setDefaultShipping($customerArr, $prevCustomerDataArr, $customerModel);
