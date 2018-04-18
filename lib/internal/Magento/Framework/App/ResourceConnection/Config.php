@@ -107,4 +107,13 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
             }
         }
     }
+
+    /**
+     * Reset configuration, in order to have ability to reuse it during changing deployment configuration
+     */
+    public function resetConfig()
+    {
+        $this->initialized = false;
+        $this->_connectionNames = [];
+    }
 }
