@@ -503,12 +503,11 @@ class Item
         $this->_tooltip = $this->_getArgument($data, 'toolTip');
         $this->_title = $this->_getArgument($data, 'title');
         $this->target = $this->_getArgument($data, 'target');
+        $this->_submenu = null;
         if (isset($data['sub_menu'])) {
             $menu = $this->_menuFactory->create();
             $menu->populateFromArray($data['sub_menu']);
             $this->_submenu = $menu;
-        } else {
-            $this->_submenu = null;
         }
     }
 }
