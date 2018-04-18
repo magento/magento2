@@ -59,8 +59,7 @@ define([
                         }
                     }.bind(this));
                     this.source.trigger('reInitSources');
-                    this.source.set('data.sourceCodes', response['sourceCodes'] ? response['sourceCodes'] : []);
-
+                    this.source.set('data.sourceCodes', response.sourceCodes ? response.sourceCodes : []);
                 }.bind(this),
 
                 /**

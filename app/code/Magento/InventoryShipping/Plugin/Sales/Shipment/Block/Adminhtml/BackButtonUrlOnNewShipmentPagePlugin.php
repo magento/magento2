@@ -9,9 +9,9 @@ namespace Magento\InventoryShipping\Plugin\Sales\Shipment\Block\Adminhtml;
 
 use Magento\Shipping\Block\Adminhtml\Create;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class BackButtonUrlOnNewShipmentPagePlugin
 {
@@ -47,11 +47,16 @@ class BackButtonUrlOnNewShipmentPagePlugin
 
     /**
      * @param Create $subject
+     * @param $result
      * @return string
      */
     public function afterGetBackUrl(Create $subject, $result)
     {
-        $websiteId = (int)$subject->getShipment()->getStore()->getWebsiteId();
+        if (empty($subject->getShipment())) {
+            return $result;
+        }
+
+        $websiteId = (int)$subject->getShipment()->getOrder()->getStore()->getWebsiteId();
         if ($this->isMultiSourceMode($websiteId)) {
             return $subject->getUrl(
                 'inventoryshipping/SourceSelection/index',

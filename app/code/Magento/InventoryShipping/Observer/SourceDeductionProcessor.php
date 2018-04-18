@@ -12,7 +12,6 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Exception\InputException;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterfaceFactory;
 use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterfaceFactory;
@@ -22,9 +21,11 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\DefaultSourceProvider;
 use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 
 /**
  * Class SourceDeductionProcessor
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SourceDeductionProcessor implements ObserverInterface
 {
