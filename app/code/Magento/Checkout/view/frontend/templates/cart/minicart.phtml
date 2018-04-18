@@ -42,9 +42,7 @@
             <?= $block->getChildHtml('minicart.addons') ?>
         </div>
     <?php endif ?>
-    <script>
-        window.checkout = <?= /* @escapeNotVerified */ $block->getSerializedConfig() ?>;
-    </script>
+    <?= $block->outputLegacyJavaScript('checkout', $block->getConfig()); ?>
     <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {

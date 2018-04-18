@@ -13,7 +13,5 @@
             }
         }
     </script>
-    <script>
-        window.giftOptionsConfig = <?= /* @escapeNotVerified */ $block->getGiftOptionsConfigJson() ?>;
-    </script>
+    <?= $block->outputLegacyJavaScript('giftOptions', $block->getGiftOptionsConfig()); ?>
 </div>

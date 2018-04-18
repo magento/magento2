@@ -22,12 +22,7 @@
             }
         }
     </script>
-    <script>
-        window.checkoutConfig = <?= /* @escapeNotVerified */ $block->getSerializedCheckoutConfig() ?>;
-        // Create aliases for customer.js model from customer module
-        window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
-        window.customerData = window.checkoutConfig.customerData;
-    </script>
+    <?= $block->outputLegacyJavaScript('checkoutConfig', $block->getCheckoutConfig()); ?>
     <script>
         require([
             'mage/url',

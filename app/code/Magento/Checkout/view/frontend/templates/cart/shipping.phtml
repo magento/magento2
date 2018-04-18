@@ -24,10 +24,8 @@
                 }
             }
         </script>
+        <?= $block->outputLegacyJavaScript('checkoutConfig', $block->getCheckoutConfig()); ?>
         <script>
-            window.checkoutConfig = <?= /* @escapeNotVerified */ $block->getSerializedCheckoutConfig() ?>;
-            window.customerData = window.checkoutConfig.customerData;
-            window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
             require([
                 'mage/url',
                 'Magento_Ui/js/block-loader'
