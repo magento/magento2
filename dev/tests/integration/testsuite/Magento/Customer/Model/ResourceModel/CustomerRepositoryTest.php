@@ -393,10 +393,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $customer = $this->customerRepository->get($fixtureCustomerEmail);
         $this->customerRepository->delete($customer);
         /** Ensure that customer was deleted */
-        $this->expectException(
-            \Magento\Framework\Exception\NoSuchEntityException::class,
-            'No such entity with email = customer@example.com, websiteId = 1'
-        );
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with email = customer@example.com, websiteId = 1');
         $this->customerRepository->get($fixtureCustomerEmail);
     }
 
@@ -411,10 +409,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $fixtureCustomerId = 1;
         $this->customerRepository->deleteById($fixtureCustomerId);
         /** Ensure that customer was deleted */
-        $this->expectException(
-            \Magento\Framework\Exception\NoSuchEntityException::class,
-            'No such entity with email = customer@example.com, websiteId = 1'
-        );
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with email = customer@example.com, websiteId = 1');
         $this->customerRepository->get($fixtureCustomerEmail);
     }
 
