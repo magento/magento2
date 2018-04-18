@@ -136,10 +136,19 @@ class TableMaintainer
     public function createTablesForStore(int $storeId)
     {
         $mainTableName = $this->getMainTable($storeId);
-        $this->createTable($this->getTable(AbstractAction::MAIN_INDEX_TABLE), $mainTableName);
+        //Create index table for store based on on main replica table
+        //Using main replica table is necessary for backward capability and TableResolver plugin work
+        $this->createTable(
+            $this->getTable(AbstractAction::MAIN_INDEX_TABLE . $this->additionalTableSuffix),
+            $mainTableName
+        );
 
         $mainReplicaTableName = $this->getMainTable($storeId) . $this->additionalTableSuffix;
-        $this->createTable($this->getTable(AbstractAction::MAIN_INDEX_TABLE), $mainReplicaTableName);
+        //Create replica table for store based on main replica table
+        $this->createTable(
+            $this->getTable(AbstractAction::MAIN_INDEX_TABLE . $this->additionalTableSuffix),
+            $mainReplicaTableName
+        );
     }
 
     /**
