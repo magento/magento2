@@ -81,7 +81,8 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
-        $this->invoiceItemCreationFactory = Bootstrap::getObjectManager()->get(InvoiceItemCreationInterfaceFactory::class);
+        $this->invoiceItemCreationFactory
+            = Bootstrap::getObjectManager()->get(InvoiceItemCreationInterfaceFactory::class);
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
         $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
         $this->getReservationsQuantity = Bootstrap::getObjectManager()->get(GetReservationsQuantityInterface::class);

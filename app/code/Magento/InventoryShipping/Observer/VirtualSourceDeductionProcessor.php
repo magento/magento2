@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Observer;
 
+use Magento\Catalog\Model\Product\Type as VirtualType;
+use Magento\Downloadable\Model\Product\Type as DownloadableType;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -131,8 +133,7 @@ class VirtualSourceDeductionProcessor implements ObserverInterface
         ItemRequestInterfaceFactory $itemRequestFactory,
         SourceSelectionServiceInterface $sourceSelectionService,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
-    )
-    {
+    ) {
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
         $this->sourceItemsSave = $sourceItemsSave;
@@ -208,9 +209,10 @@ class VirtualSourceDeductionProcessor implements ObserverInterface
     {
         $orderItem = $invoiceItem->getOrderItem();
         return in_array(
-            $orderItem->getProductType(), [
-                \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
-                \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
+            $orderItem->getProductType(),
+            [
+                VirtualType::TYPE_VIRTUAL,
+                DownloadableType::TYPE_DOWNLOADABLE
             ]
         );
     }
