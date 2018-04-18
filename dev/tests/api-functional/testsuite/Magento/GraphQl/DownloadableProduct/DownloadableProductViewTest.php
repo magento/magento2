@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GraphQl\DownloadableProduct;
 
@@ -17,9 +18,10 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class DownloadableProductViewTest extends GraphQlAbstract
 {
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @magentoApiDataFixture Magento/Downloadable/_files/downloadable_product_with_files_and_sample_url.php
      */
-    public function testQueryAllFieldsDownloadableProducts()
+    public function testQueryAllFieldsDownloadableProductsWithDownloadableFileAndSample()
     {
         $productSku = 'downloadable-product';
         $query = <<<QUERY
@@ -76,6 +78,95 @@ class DownloadableProductViewTest extends GraphQlAbstract
    }
 }
 QUERY;
+
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
+        $config->saveConfig(
+            \Magento\Downloadable\Model\Link::XML_PATH_CONFIG_IS_SHAREABLE,
+            0,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+        $response = $this->graphQlQuery($query);
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $downloadableProduct = $productRepository->get($productSku, false, null, true);
+        $this->assertNull($downloadableProduct->getWeight());
+        $IsLinksPurchasedSeparately = $downloadableProduct->getLinksPurchasedSeparately();
+        $linksTitle = $downloadableProduct->getLinksTitle();
+        $this->assertEquals(
+            $IsLinksPurchasedSeparately,
+            $response['products']['items'][0]['links_purchased_separately']
+        );
+        $this->assertEquals($linksTitle, $response['products']['items'][0]['links_title']);
+        $this->assertDownloadableProductLinks($downloadableProduct, $response['products']['items'][0]);
+        $this->assertDownloadableProductSamples($downloadableProduct, $response['products']['items'][0]);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testDownloadableProductQueryWithNoSample()
+    {
+        $productSku = 'downloadable-product';
+        $query = <<<QUERY
+{
+  products(filter:{sku: {eq:"{$productSku}"}})
+  {
+       items{
+           id
+           attribute_set_id
+           created_at
+           name
+           sku
+           type_id
+           updated_at
+           ...on PhysicalProductInterface{
+          weight
+          }
+        price{
+        regularPrice{
+          amount{
+            value
+            currency
+          }
+          adjustments{
+            code
+            description
+          }
+        }
+      }
+           category_ids
+           ... on DownloadableProduct {
+            links_title
+            links_purchased_separately
+
+            downloadable_product_links{
+              id
+              sample_url
+              sample_type
+              is_shareable
+              number_of_downloads
+              sort_order
+              title
+              link_type
+              price
+            }
+            downloadable_product_samples{
+              title
+              sort_order
+              sort_order
+              sample_type
+              sample_file
+            }
+           }
+       }
+   }
+}
+QUERY;
         $response = $this->graphQlQuery($query);
         /**
          * @var ProductRepositoryInterface $productRepository
@@ -90,8 +181,6 @@ QUERY;
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             1
         );
-
-        $this->assertNull($downloadableProduct->getWeight());
         $IsLinksPurchasedSeparately = $downloadableProduct->getLinksPurchasedSeparately();
         $linksTitle = $downloadableProduct->getLinksTitle();
         $this->assertEquals(
@@ -99,8 +188,26 @@ QUERY;
             $response['products']['items'][0]['links_purchased_separately']
         );
         $this->assertEquals($linksTitle, $response['products']['items'][0]['links_title']);
-        $this->assertDownloadableProductLinks($downloadableProduct, $response['products']['items'][0]);
-        $this->assertDownloadableProductSamples($downloadableProduct, $response['products']['items'][0]);
+        $this->assertEmpty($response['products']['items'][0]['downloadable_product_samples']);
+        $this->assertNotEmpty(
+            $response['products']['items'][0]['downloadable_product_links'],
+            "Precondition failed: 'downloadable_product_links' must not be empty"
+        );
+        /** @var LinkInterface $downloadableProductLinks */
+        $downloadableProductLinks = $downloadableProduct->getExtensionAttributes()->getDownloadableProductLinks();
+        $downloadableProductLink = $downloadableProductLinks[0];
+        $this->assertResponseFields(
+            $response['products']['items'][0]['downloadable_product_links'][0],
+            [
+                'id' => $downloadableProductLink->getId(),
+                'is_shareable' => false,
+                'number_of_downloads' => $downloadableProductLink->getNumberOfDownloads(),
+                'sort_order' => $downloadableProductLink->getSortOrder(),
+                'title' => $downloadableProductLink->getTitle(),
+                'link_type' => strtoupper($downloadableProductLink->getLinkType()),
+                'price' => $downloadableProductLink->getPrice()
+            ]
+        );
     }
 
     /**
@@ -115,15 +222,14 @@ QUERY;
         );
         /** @var LinkInterface $downloadableProductLinks */
         $downloadableProductLinks = $product->getExtensionAttributes()->getDownloadableProductLinks();
-        $downloadableProductLink = $downloadableProductLinks[0];
+        $downloadableProductLink = $downloadableProductLinks[1];
 
         $this->assertResponseFields(
-            $actualResponse['downloadable_product_links'][0],
+            $actualResponse['downloadable_product_links'][1],
             [
                 'id' => $downloadableProductLink->getId(),
                 'sample_url' => $downloadableProductLink->getSampleUrl(),
                 'sample_type' => strtoupper($downloadableProductLink->getSampleType()),
-              //'sample_file' => $downloadableProductLink->getSampleFile(),
                 'is_shareable' => false,
                 'number_of_downloads' => $downloadableProductLink->getNumberOfDownloads(),
                 'sort_order' => $downloadableProductLink->getSortOrder(),

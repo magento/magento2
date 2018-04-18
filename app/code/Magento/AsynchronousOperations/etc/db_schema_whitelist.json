@@ -20,6 +20,7 @@
       "bulk_uuid": true,
       "topic_name": true,
       "serialized_data": true,
+      "result_serialized_data": true,
       "status": true,
       "error_code": true,
       "result_message": true

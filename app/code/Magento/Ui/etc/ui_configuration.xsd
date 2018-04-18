@@ -19,6 +19,7 @@
             <xs:element ref="button" maxOccurs="unbounded"/>
             <xs:element ref="checkbox" maxOccurs="unbounded"/>
             <xs:element ref="checkboxset" maxOccurs="unbounded"/>
+            <xs:element ref="colorPicker" maxOccurs="unbounded"/>
             <xs:element ref="component" maxOccurs="unbounded"/>
             <xs:element ref="container" maxOccurs="unbounded"/>
             <xs:element ref="dataSource" maxOccurs="unbounded"/>
@@ -54,6 +55,7 @@
             <xs:element ref="text" maxOccurs="unbounded"/>
             <xs:element ref="textarea" maxOccurs="unbounded"/>
             <xs:element ref="wysiwyg" maxOccurs="unbounded"/>
+            <xs:element ref="urlInput" maxOccurs="unbounded"/>
         </xs:choice>
     </xs:group>
     <xs:group name="listingElements">
@@ -65,6 +67,7 @@
             <xs:element ref="button" maxOccurs="unbounded"/>
             <xs:element ref="checkbox" maxOccurs="unbounded"/>
             <xs:element ref="checkboxset" maxOccurs="unbounded"/>
+            <xs:element ref="colorPicker" maxOccurs="unbounded"/>
             <xs:element ref="column" maxOccurs="unbounded"/>
             <xs:element ref="columns" maxOccurs="unbounded"/>
             <xs:element ref="columnsControls" maxOccurs="unbounded"/>
@@ -157,6 +160,7 @@
             <xs:element ref="button" maxOccurs="unbounded"/>
             <xs:element ref="checkbox" maxOccurs="unbounded"/>
             <xs:element ref="checkboxset" maxOccurs="unbounded"/>
+            <xs:element ref="colorPicker" maxOccurs="unbounded"/>
             <xs:element ref="column" maxOccurs="unbounded"/>
             <xs:element ref="columns" maxOccurs="unbounded"/>
             <xs:element ref="columnsControls" maxOccurs="unbounded"/>
@@ -445,6 +449,14 @@
             <xs:documentation>
                 The Checkboxset component implements a group of selection elements type of which can be either
                 "checkbox" (default) or "radio".
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="colorPicker" type="componentColorPicker">
+        <xs:annotation>
+            <xs:documentation>
+                The ColorPicker component uses the Spectrum and tinycolor .js libraries to make it easier to choose and
+                implement color values.
             </xs:documentation>
         </xs:annotation>
     </xs:element>
@@ -777,6 +789,14 @@
                 The Wysiwyg component is an adapter for the TinyMCE editor which is used to integrate editor's instance
                 into the UI Form. It expects to receive complete widget declaration in the "content" option
                 which should contain both markup and the script responsible for creating editor's instance.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="urlInput" type="componentUrlInput">
+        <xs:annotation>
+            <xs:documentation>
+                The Url Input component allows to insert External URL and relative URL into the content. Add abilities
+                to define custom url link types.
             </xs:documentation>
         </xs:annotation>
     </xs:element>

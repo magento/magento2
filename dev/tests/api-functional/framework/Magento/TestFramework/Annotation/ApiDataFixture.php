@@ -139,7 +139,8 @@ class ApiDataFixture
      */
     protected function _revertFixtures()
     {
-        foreach ($this->_appliedFixtures as $fixture) {
+        $appliedFixtures = array_reverse($this->_appliedFixtures);
+        foreach ($appliedFixtures as $fixture) {
             if (is_callable($fixture)) {
                 $fixture[1] .= 'Rollback';
                 if (is_callable($fixture)) {
