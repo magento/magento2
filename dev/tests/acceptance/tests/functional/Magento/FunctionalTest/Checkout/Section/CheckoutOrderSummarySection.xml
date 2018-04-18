@@ -13,7 +13,5 @@
         <element name="productItemName" type="text" selector=".product-item-name"/>
         <element name="productItemQty" type="text" selector=".value"/>
         <element name="productItemPrice" type="text" selector=".price"/>
-        <element name="giftCardCodeName" type="text" selector="#opc-sidebar>div.opc-block-summary>table >tbody >tr:nth-child(2)"/>
-        <element name="giftCardAmountDiscount" type="text" selector="#opc-sidebar>div.opc-block-summary>table>tbody>tr.totals.giftcard>td"/>
     </section>
 </sections>

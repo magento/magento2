@@ -13,7 +13,7 @@
         <element name="availablePaymentSolutions" type="text" selector="#checkout-payment-method-load>div>div>div:nth-child(2)>div.payment-method-title.field.choice"/>
         <element name="notAvailablePaymentSolutions" type="text" selector="#checkout-payment-method-load>div>div>div.payment-method._active>div.payment-method-title.field.choice"/>
         <element name="billingNewAddressForm" type="text" selector="#billing-new-address-form"/>
-        <element name="placeOrderDisabled" type="button" selector="//*[@id='checkout-payment-method-load']//div/button[contains(@class,'disabled')]"/>
+        <element name="placeOrderDisabled" type="button" selector="#checkout-payment-method-load button.disabled"/>
         <element name="update" type="button" selector=".payment-method-billing-address .action.action-update"/>
         <element name="guestFirstName" type="input" selector="div[name='billingAddressfree.firstname'] input"/>
         <element name="guestLastName" type="input" selector="div[name='billingAddressfree.lastname'] input"/>
@@ -21,8 +21,7 @@
         <element name="guestCity" type="input" selector="div[name='billingAddressfree.city'] input"/>
         <element name="guestRegion" type="select" selector="div[name='billingAddressfree.region_id'] select"/>
         <element name="guestPostcode" type="input" selector="div[name='billingAddressfree.postcode'] input"/>
-        <element name="guestTtelephone" type="input" selector="div[name='billingAddressfree.telephone'] input"/>
-
+        <element name="guestTelephone" type="input" selector="div[name='billingAddressfree.telephone'] input"/>
         <element name="billingAddress" type="text" selector="div.billing-address-details"/>
         <element name="cartItems" type="text" selector="ol.minicart-items"/>
         <element name="cartItemsArea" type="button" selector="div.block.items-in-cart"/>
