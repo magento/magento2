@@ -22,7 +22,7 @@ class Index extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Inventory::source';
+    const ADMIN_RESOURCE = 'Magento_InventoryApi::source';
 
     /**
      * @var OrderRepository
