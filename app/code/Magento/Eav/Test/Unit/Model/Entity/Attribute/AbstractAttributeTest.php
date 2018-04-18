@@ -223,6 +223,63 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param $simpleArray
+     * @param $assocArray
+     *
+     * @dataProvider attributeFrontendLabelsDataProvider
+     */
+    public function testLoadWithFrontendLabelsForSingleStore($simpleArray, $assocArray)
+    {
+        $resourceModel = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class);
+
+        $model = $this->getMockForAbstractClass(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            [
+                'frontendLabelFactory' => \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory::class
+            ],
+            '',
+            false,
+            false,
+            true,
+            [
+                'getId', '_getResource'
+            ]
+        );
+
+        $frontendLabelFactoryMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory::class);
+        $reflection = new \ReflectionClass($model);
+        $reflectionProperty = $reflection->getProperty('frontendLabelFactory');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($model, $frontendLabelFactoryMock);
+
+        $resourceModel->expects($this->once())->method('getStoreLabelsByAttributeId')
+            ->with(1)
+            ->willReturn($simpleArray);
+
+
+        $model->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $model->expects($this->once())->method('_getResource')->willReturn($resourceModel);
+
+        $labelMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\FrontendLabel::class);
+        $labelMock->expects($this->once())->method('getData')->willReturn($assocArray);
+        $frontendLabelFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['data' => $assocArray])
+            ->willReturn($labelMock);
+
+
+        $labelExpectedMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\FrontendLabel::class);
+        $labelExpectedMock->expects($this->once())->method('getData')->willReturn($assocArray);
+
+        $model->addFrontendLabels();
+        $this->assertEquals([$labelExpectedMock], $model->getFrontendLabels());
+        $this->assertEquals($labelExpectedMock, $model->getFrontendLabels()[0]);
+        $this->assertEquals($labelExpectedMock->getData(), $model->getFrontendLabels()[0]->getData());
+    }
+
+    /**
      * @return array
      */
     public function attributeValueDataProvider()
@@ -238,6 +295,20 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             [true, false, 'varchar'],
             [false, 'not empty value', 'varchar'],
             [false, false, 'int'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function attributeFrontendLabelsDataProvider()
+    {
+        return [
+            [
+                ['1' => 'Single Store Frontend Label'],
+                ['store_id' => '1', 'label' => 'Single Store Frontend Label']
+            ],
+
         ];
     }
 }
