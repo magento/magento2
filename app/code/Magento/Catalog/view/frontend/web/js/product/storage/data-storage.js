@@ -228,7 +228,7 @@ define([
             this.updateRequestConfig.data = queryBuilder.buildQuery(prepareAjaxParams);
             this.updateRequestConfig.data['store_id'] = store;
             this.updateRequestConfig.data['currency_code'] = currency;
-            $.ajax(this.updateRequestConfig).success(function (data) {
+            $.ajax(this.updateRequestConfig).done(function (data) {
                 this.request = {};
                 this.providerHandler(getParsedDataFromServer(data));
             }.bind(this));
