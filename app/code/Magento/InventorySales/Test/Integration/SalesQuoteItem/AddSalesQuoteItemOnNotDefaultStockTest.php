@@ -168,7 +168,8 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
         return [
             ['SKU-1', 20, 6],
             ['SKU-1', 30, 9],
-            ['SKU-2', 30, 1.5],
+            ['SKU-2', 10, 1.5],
+            ['SKU-2', 30, 5.5],
             ['SKU-3', 20, 1.9]
         ];
     }
