@@ -1062,17 +1062,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Clear cache related with product id
      *
+     * @deprecated
+     * @see \Magento\Framework\Model\AbstractModel::cleanModelCache
      * @return $this
      */
     public function cleanCache()
     {
-        if ($this->getId()) {
-            $this->_cacheManager->clean(
-                self::CACHE_TAG . '_' . $this->getId()
-            );
-        }
-
-        return $this;
+        return $this->cleanModelCache();
     }
 
     /**
@@ -1998,7 +1994,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function addCustomOption($code, $value, $product = null)
     {
-        $product = $product ? $product : $this;
+        $product = $product ?: $this;
         $option = $this->_itemOptionFactory->create()->addData(
             ['product_id' => $product->getId(), 'product' => $product, 'code' => $code, 'value' => $value]
         );
@@ -2101,6 +2097,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get cache tags associated with object id
      *
+     * @deprecated
+     * @see \Magento\Catalog\Model\Product::getIdentities
      * @return string[]
      */
     public function getCacheIdTags()

@@ -26,7 +26,7 @@ class Lists
      *
      * @var array
      */
-    protected $allowedCurrencies;
+    private $allowedCurrencies;
 
     /**
      * @param ConfigInterface $localeConfig

@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Catalog\Model\Product\Exception;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -27,6 +28,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
+
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $this->addSupportVideoMediaAttributes($setup);
             $this->removeGroupPrice($setup);
@@ -130,6 +132,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '2.2.4', '<')) {
             $this->removeAttributeSetRelation($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.2.5', '<')) {
+            $this->addGeneralIndexOnGalleryValueTable($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.2.5', '<')) {
+            $this->enableSegmentation($setup);
         }
 
         $setup->endSetup();
@@ -523,6 +533,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ),
             'value_id'
         );
+
         $this->addForeignKeys($setup);
     }
 
@@ -720,5 +731,72 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getTable('catalog_product_entity'),
             $setup->getFkName('catalog_product_entity', 'attribute_set_id', 'eav_attribute_set', 'attribute_set_id')
         );
+    }
+
+    /**
+     * Adds index for table catalog_product_entity_media_gallery_value
+     * It was added because it suits best for selecting media data for products
+     *
+     * @see \Magento\Catalog\Model\ResourceModel\Product\Gallery::createBatchBaseSelect
+     * @param SchemaSetupInterface $setup
+     * @return void
+     * @throws \Exception
+     */
+    private function addGeneralIndexOnGalleryValueTable(SchemaSetupInterface $setup)
+    {
+        $existingKeys = $setup->getConnection()->getIndexList(
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE)
+        );
+
+        $newIndexName = $setup->getConnection()->getIndexName(
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+            ['entity_id', 'value_id', 'store_id']
+        );
+
+        if (!array_key_exists($newIndexName, $existingKeys)) {
+            $entityIdKeyName = $setup->getConnection()->getIndexName(
+                $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+                ['entity_id']
+            );
+
+            if (array_key_exists($entityIdKeyName, $existingKeys)) {
+                $keyColumns = $existingKeys[$entityIdKeyName]['COLUMNS_LIST'];
+                $linkField = reset($keyColumns);
+
+                $setup->getConnection()->addIndex(
+                    $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+                    $newIndexName,
+                    [$linkField, 'value_id', 'store_id']
+                );
+            }
+        }
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function enableSegmentation(SchemaSetupInterface $setup)
+    {
+        $storeSelect = $setup->getConnection()->select()->from($setup->getTable('store'))->where('store_id > 0');
+        foreach ($setup->getConnection()->fetchAll($storeSelect) as $store) {
+            $indexTable = $setup->getTable('catalog_category_product_index') .
+                '_' .
+                \Magento\Store\Model\Store::ENTITY .
+                $store['store_id'];
+
+            $setup->getConnection()->createTable(
+                $setup->getConnection()->createTableByDdl(
+                    $setup->getTable('catalog_category_product_index'),
+                    $indexTable
+                )
+            );
+            $setup->getConnection()->createTable(
+                $setup->getConnection()->createTableByDdl(
+                    $setup->getTable('catalog_category_product_index'),
+                    $indexTable . '_replica'
+                )
+            );
+        }
     }
 }
