@@ -61,7 +61,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
@@ -71,6 +70,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array|null $data
      * @param \Magento\Customer\Model\Metadata\AttributeMetadataCache|null $attributeMetadataCache
+     * @param \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
