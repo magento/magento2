@@ -38,6 +38,7 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
@@ -50,6 +51,11 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
         $attr->setIsFilterable(1)->save();
 
         $this->assertTrue($attr->isIndexable());
+
+        $priceIndexerProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Catalog\Model\Indexer\Product\Price\Processor::class
+        );
+        $priceIndexerProcessor->reindexAll();
 
         $this->_processor->reindexAll();
 

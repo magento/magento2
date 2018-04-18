@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
 class FlatTest extends \Magento\TestFramework\Indexer\TestCase
