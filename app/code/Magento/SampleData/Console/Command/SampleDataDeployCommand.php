@@ -85,9 +85,8 @@ class SampleDataDeployCommand extends Command
     {
         $rootJson = json_decode($this->filesystem->getDirectoryRead(DirectoryList::ROOT)->readFile("composer.json"));
         if (!isset($rootJson->version)) {
-            $output->writeln('<info>' .
-                'Git installations must deploy sample data from GitHub; see github.com/magento/magento2-sample-data'
-                . '</info>');
+            // @codingStandardsIgnoreLine
+            $output->writeln('<info>' . 'Git installations must deploy sample data from GitHub; see https://devdocs.magento.com/guides/v2.3/install-gde/install/sample-data-after-clone.html for more information.' . '</info>');
             return;
         }
         $this->updateMemoryLimit();
