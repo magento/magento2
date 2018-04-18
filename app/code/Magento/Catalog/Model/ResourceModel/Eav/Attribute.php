@@ -125,7 +125,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
@@ -137,7 +136,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null
+        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null,
+        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory = null
     ) {
         $this->_indexerEavProcessor = $indexerEavProcessor;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
@@ -158,14 +158,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
             $optionDataFactory,
             $dataObjectProcessor,
             $dataObjectHelper,
-            $frontendLabelFactory,
             $localeDate,
             $reservedAttributeList,
             $localeResolver,
             $dateTimeFormatter,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $frontendLabelFactory
         );
     }
 

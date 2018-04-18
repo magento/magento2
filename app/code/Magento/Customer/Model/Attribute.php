@@ -86,7 +86,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
@@ -95,7 +94,8 @@ class Attribute extends \Magento\Eav\Model\Attribute
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Customer\Model\Metadata\AttributeMetadataCache $attributeMetadataCache = null
+        \Magento\Customer\Model\Metadata\AttributeMetadataCache $attributeMetadataCache = null,
+        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory = null
     ) {
         $this->indexerRegistry = $indexerRegistry;
         $this->attributeMetadataCache = $attributeMetadataCache ?: \Magento\Framework\App\ObjectManager::getInstance()
@@ -117,10 +117,10 @@ class Attribute extends \Magento\Eav\Model\Attribute
             $reservedAttributeList,
             $localeResolver,
             $dateTimeFormatter,
-            $frontendLabelFactory,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $frontendLabelFactory
         );
     }
 

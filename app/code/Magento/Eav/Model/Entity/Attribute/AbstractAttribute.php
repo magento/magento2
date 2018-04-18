@@ -179,10 +179,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory = null
     ) {
         parent::__construct(
             $context,
@@ -201,7 +201,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->optionDataFactory = $optionDataFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->frontendLabelFactory = $frontendLabelFactory;
+        $this->frontendLabelFactory = $frontendLabelFactory ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory::class);
     }
 
     /**
@@ -805,7 +805,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         parent::_afterLoad();
 
-        $this->_addFrontendLabels();
+        $this->addFrontendLabels();
 
         return $this;
     }
@@ -815,7 +815,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      *
      * @throws LocalizedException
      */
-    public function _addFrontendLabels()
+    public function addFrontendLabels()
     {
         $labels = [];
         foreach($this->_getResource()->getStoreLabelsByAttributeId($this->getId()) as $storeId => $label){
