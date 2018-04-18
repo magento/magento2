@@ -70,11 +70,23 @@ class Table extends GenericElement implements
     private $onCreate;
 
     /**
+     * @var string
+     */
+    private $charset;
+
+    /**
+     * @var string
+     */
+    private $collation;
+
+    /**
      * @param string $name
      * @param string $type
      * @param string $nameWithoutPrefix
      * @param string $resource
      * @param string $engine
+     * @param string $charset
+     * @param string $collation
      * @param string|null $comment
      * @param array $columns
      * @param array $indexes
@@ -88,11 +100,13 @@ class Table extends GenericElement implements
         string $nameWithoutPrefix,
         string $resource,
         string $engine,
+        string $charset,
+        string $collation,
+        string $onCreate,
         string $comment = null,
         array $columns = [],
         array $indexes = [],
-        array $constraints = [],
-        string $onCreate = ''
+        array $constraints = []
     ) {
         parent::__construct($name, $type);
         $this->columns = $columns;
@@ -103,6 +117,8 @@ class Table extends GenericElement implements
         $this->nameWithoutPrefix = $nameWithoutPrefix;
         $this->comment = $comment;
         $this->onCreate = $onCreate;
+        $this->charset = $charset;
+        $this->collation = $collation;
     }
 
     /**
@@ -296,8 +312,30 @@ class Table extends GenericElement implements
         return [
             'resource' => $this->getResource(),
             'engine' => $this->getEngine(),
-            'comment' => $this->getComment()
+            'comment' => $this->getComment(),
+            'charset' => $this->getCharset(),
+            'collation' => $this->getCollation()
         ];
+    }
+
+    /**
+     * Return charset of table
+     *
+     * @return string
+     */
+    public function getCharset() : string
+    {
+        return $this->charset;
+    }
+
+    /**
+     * Return charset of table
+     *
+     * @return string
+     */
+    public function getCollation() : string
+    {
+        return $this->collation;
     }
 
     /**

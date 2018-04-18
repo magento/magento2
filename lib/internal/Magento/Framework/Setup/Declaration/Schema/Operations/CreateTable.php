@@ -181,7 +181,7 @@ class CreateTable implements OperationInterface
                 $table->getName(),
                 $elementHistory->getNew()->getResource(),
                 $definition,
-                ['engine' => $table->getEngine(), 'comment' => $table->getComment()]
+                $table->getDiffSensitiveParams()
             );
 
         $this->setupTableTriggers($table, $createTableStatement);

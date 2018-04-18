@@ -88,8 +88,10 @@ class SchemaBuilder
                     [
                         'name' => $tableName,
                         'resource' => $resource,
-                        'engine' => strtolower($tableOptions['Engine']),
-                        'comment' => $tableOptions['Comment'] === '' ? null : $tableOptions['Comment']
+                        'engine' => strtolower($tableOptions['engine']),
+                        'comment' => $tableOptions['comment'] === '' ? null : $tableOptions['comment'],
+                        'charset' => $tableOptions['charset'],
+                        'collation' => $tableOptions['collation']
                     ]
                 );
 

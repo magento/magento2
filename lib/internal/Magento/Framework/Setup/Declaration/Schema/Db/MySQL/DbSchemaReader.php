@@ -46,9 +46,28 @@ class DbSchemaReader implements DbSchemaReaderInterface
      */
     public function getTableOptions($tableName, $resource)
     {
-        $sql = sprintf('SHOW TABLE STATUS WHERE `Name` = "%s"', $tableName);
         $adapter = $this->resourceConnection->getConnection($resource);
-        return $adapter->fetchRow($sql);
+        $dbName = $this->resourceConnection->getSchemaName($resource);
+        $stmt = $adapter->select()
+            ->from(
+                ['i_tables' => 'information_schema.TABLES'],
+                [
+                    'engine' => 'ENGINE',
+                    'comment' => 'TABLE_COMMENT',
+                    'collation' => 'TABLE_COLLATION'
+                ]
+            )
+            ->joinInner(
+                ['charset_applicability' => 'information_schema.COLLATION_CHARACTER_SET_APPLICABILITY'],
+                'i_tables.table_collation = charset_applicability.collation_name',
+                [
+                    'charset' => 'charset_applicability.CHARACTER_SET_NAME'
+                ]
+            )
+            ->where('TABLE_SCHEMA = ?', $dbName)
+            ->where('TABLE_NAME = ?', $tableName);
+
+        return $adapter->fetchRow($stmt);
     }
 
     /**
