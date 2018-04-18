@@ -20,6 +20,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoAppArea graphql
  * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
  * @magentoDbIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
 {
