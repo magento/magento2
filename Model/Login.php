@@ -79,10 +79,10 @@ class Login extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Framework\Math\Random $random
      * @param \Magento\Checkout\Model\Cart $cart
-     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param null|\Magento\Checkout\Model\Session $checkoutSession
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -92,10 +92,10 @@ class Login extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\Math\Random $random,
         \Magento\Checkout\Model\Cart $cart,
-        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        $checkoutSession = null
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_customerSession = $customerSession;
@@ -103,6 +103,9 @@ class Login extends \Magento\Framework\Model\AbstractModel
         $this->_dateTime = $dateTime;
         $this->_random = $random;
         $this->cart = $cart;
+        $this->_checkoutSession = $checkoutSession ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Checkout\Model\Session::class
+        );
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
