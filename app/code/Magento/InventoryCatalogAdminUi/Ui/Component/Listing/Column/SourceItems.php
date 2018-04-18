@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogAdminUi\Ui\Component\Listing\Column;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
@@ -88,6 +89,7 @@ class SourceItems extends Column
     /**
      * @param string $sku
      * @return array
+     * @throws NoSuchEntityException
      */
     private function getSourceItemsData(string $sku): array
     {
