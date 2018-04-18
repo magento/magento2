@@ -1,5 +1,8 @@
 # [Magento 2 Login As Customer](https://magefan.com/login-as-customer-magento-2-extension) by Magefan
 
+[![Total Downloads](https://poser.pugx.org/magefan/module-login-as-customer/downloads)](https://packagist.org/packages/magefan/module-login-as-customer)
+[![Latest Stable Version](https://poser.pugx.org/magefan/module-login-as-customer/v/stable)](https://packagist.org/packages/magefan/module-login-as-customer)
+
 Allows admin to login as a customer (enter to customer account).
 
 ## Requirements
