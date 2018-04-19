@@ -76,8 +76,8 @@ class OptionsAvailabilityTest extends TestCase
         $configurableProduct = $this->productRepository->get('configurable', false, null, true);
         $this->configurableView->setProduct($configurableProduct);
         $result = $this->serializer->unserialize($this->configurableView->getJsonConfig());
-        $attributes = $result['attributes'];
-        $actual = count(reset($attributes)['options']);
+        $attributes = reset($result['attributes']);
+        $actual = count($attributes['options'] ?? []);
 
         $this->assertEquals(
             $expected,
