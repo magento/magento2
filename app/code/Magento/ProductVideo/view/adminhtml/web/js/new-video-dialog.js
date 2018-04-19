@@ -86,6 +86,9 @@ define([
          * @private
          */
         _doUpdate: function () {
+            var uploaderLinkUrl,
+                uploaderLink;
+
             this.reset();
             this.element.find(this.options.container).append('<div class="' +
             this.options.videoClass +
@@ -99,13 +102,12 @@ define([
             this.element.find(this.options.metaData.DOM.uploaded).text(this.options.metaData.data.uploaded);
             this.element.find(this.options.metaData.DOM.duration).text(this.options.metaData.data.duration);
 
-            let uploaderLinkUrl = "";
             if (this.options.videoProvider === 'youtube') {
                 uploaderLinkUrl = 'https://youtube.com/channel/' + this.options.metaData.data.uploaderUrl;
             } else if (this.options.videoProvider === 'vimeo') {
                 uploaderLinkUrl = this.options.metaData.data.uploaderUrl;
             }
-            let uploaderLink = document.createElement('a');
+            uploaderLink = document.createElement('a');
             uploaderLink.setAttribute('href', uploaderLinkUrl);
             uploaderLink.setAttribute('target', '_blank');
             uploaderLink.innerText = this.options.metaData.data.uploader;
