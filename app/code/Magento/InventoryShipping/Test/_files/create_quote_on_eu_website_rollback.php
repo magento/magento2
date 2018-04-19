@@ -9,6 +9,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Registry;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var Registry $registry */
@@ -34,3 +35,6 @@ foreach ($carts as $cart) {
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+
+/* Refresh stores memory cache */
+Bootstrap::getObjectManager()->get(StoreManagerInterface::class)->reinitStores();

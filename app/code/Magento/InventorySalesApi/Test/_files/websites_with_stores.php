@@ -5,13 +5,16 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Api\Data\GroupInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $websiteCodes = ['eu_website', 'us_website', 'global_website'];
 
-$store = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+$eventManager = Bootstrap::getObjectManager()->create(ManagerInterface::class);
+$store = Bootstrap::getObjectManager()->create(Store::class);
 $store->load('default');
 $rootCategoryId = $store->getRootCategoryId();
 
@@ -25,7 +28,7 @@ foreach ($websiteCodes as $key => $websiteCode) {
     ]);
     $website->save();
 
-    $store = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+    $store = Bootstrap::getObjectManager()->create(Store::class);
     $store->setCode(
         'store_for_' . $websiteCode
     )->setWebsiteId(
@@ -51,6 +54,7 @@ foreach ($websiteCodes as $key => $websiteCode) {
     $website->save();
     $store->setGroupId($group->getId());
     $store->save();
+    $eventManager->dispatch('store_add', ['store' => $store]);
 }
 
 $objectManager = Bootstrap::getObjectManager();

@@ -12,6 +12,7 @@ use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Api\Data\InvoiceItemCreationInterfaceFactory;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -63,6 +64,11 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
      */
     private $registry;
 
+    /**
+     * @var GetProductSalableQtyInterface
+     */
+    private $getProductSalableQty;
+
     protected function setUp()
     {
         $this->invoiceOrder = Bootstrap::getObjectManager()->get(InvoiceOrderInterface::class);
@@ -74,6 +80,7 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
         $this->getReservationsQuantity = Bootstrap::getObjectManager()->get(GetReservationsQuantityInterface::class);
         $this->invoiceRepository = Bootstrap::getObjectManager()->get(InvoiceRepositoryInterface::class);
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
+        $this->getProductSalableQty = Bootstrap::getObjectManager()->get(GetProductSalableQtyInterface::class);
     }
 
     /**
@@ -91,10 +98,6 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
      */
     public function testSourceDeductionWhileInvoicingWholeOrderedQty()
     {
-        self::markTestIncomplete(
-            'Finalizing this test is moved to issue https://github.com/magento-engcom/msi/issues/977'
-        );
-
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('increment_id', 'test_order_virt_1')
             ->create();
@@ -121,7 +124,7 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
         self::assertEquals(0, $this->getReservationsQuantity('VIRT-1', 10));
         self::assertEquals(0, $this->getReservationsQuantity('VIRT-1', 10));
 
-        $this->deleteInvoice($invoiceId);
+        $this->deleteInvoice((int)$invoiceId);
     }
 
     /**
@@ -139,10 +142,6 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
      */
     public function testSourceDeductionWhileInvoicingPartialOrderedQty()
     {
-        self::markTestIncomplete(
-            'Finalizing this test is moved to issue https://github.com/magento-engcom/msi/issues/977'
-        );
-
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('increment_id', 'test_order_virt_1')
             ->create();
@@ -174,19 +173,22 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
         self::assertEquals(0, $this->getSourceItemQuantity('VIRT-1', 'eu-1'));
         self::assertEquals(11, $this->getSourceItemQuantity('VIRT-1', 'eu-2'));
 
-        self::assertEquals(16, $this->getSourceItemQuantity('VIRT-2', 'eu-1'));
+        self::assertEquals(19, $this->getSourceItemQuantity('VIRT-2', 'eu-1'));
         self::assertEquals(12, $this->getSourceItemQuantity('VIRT-2', 'eu-2'));
 
-        self::assertEquals(2, $this->getSalableQty('VIRT-1', 10));
-        self::assertEquals(3, $this->getSalableQty('VIRT-1', 10));
+        self::assertEquals(-2, $this->getReservationsQuantity('VIRT-1', 10));
+        self::assertEquals(-3, $this->getReservationsQuantity('VIRT-2', 10));
 
-        $this->deleteInvoice($invoiceId);
+        self::assertEquals(9, $this->getSalableQty('VIRT-1', 10));
+        self::assertEquals(28, $this->getSalableQty('VIRT-2', 10));
+
+        $this->deleteInvoice((int)$invoiceId);
     }
 
     /**
      * @param int $invoiceId
      */
-    private function deleteInvoice($invoiceId)
+    private function deleteInvoice(int $invoiceId)
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);
@@ -202,7 +204,7 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
      * @param string $sourceCode
      * @return float
      */
-    private function getSourceItemQuantity($sku, $sourceCode)
+    private function getSourceItemQuantity(string $sku, string $sourceCode): float
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('sku', $sku)
@@ -218,8 +220,18 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
      * @param int $stockId
      * @return float
      */
-    private function getReservationsQuantity($sku, $stockId)
+    private function getReservationsQuantity(string $sku, int $stockId): float
     {
         return $this->getReservationsQuantity->execute($sku, $stockId);
+    }
+
+    /**
+     * @param string $sku
+     * @param int $stockId
+     * @return float
+     */
+    private function getSalableQty(string $sku, int $stockId): float
+    {
+        return $this->getProductSalableQty->execute($sku, $stockId);
     }
 }
