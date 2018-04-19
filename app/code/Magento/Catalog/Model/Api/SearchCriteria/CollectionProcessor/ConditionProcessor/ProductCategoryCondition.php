@@ -48,6 +48,8 @@ class ProductCategoryCondition implements CustomConditionInterface
     }
 
     /**
+     * Builds condition to filter product collection by categories
+     *
      * @param Filter $filter
      * @return string
      */
@@ -109,14 +111,14 @@ class ProductCategoryCondition implements CustomConditionInterface
      * Map equal and not equal conditions to in and not in
      *
      * @param string $conditionType
-     * @return mixed
+     * @return string
      */
     private function mapConditionType(string $conditionType): string
     {
         $conditionsMap = [
-            'eq'    => 'in',
-            'neq'   => 'nin',
-            'like'  => 'in',
+            'eq' => 'in',
+            'neq' => 'nin',
+            'like' => 'in',
             'nlike' => 'nin',
         ];
         return $conditionsMap[$conditionType] ?? $conditionType;

@@ -183,16 +183,16 @@ class ConditionsToSearchCriteriaMapper
     private function reverseSqlOperatorInFilter(Filter $filter)
     {
         $operatorsMap = [
-            'eq'    => 'neq',
-            'neq'   => 'eq',
-            'gteq'  => 'lt',
-            'lteq'  => 'gt',
-            'gt'    => 'lteq',
-            'lt'    => 'gteq',
-            'like'  => 'nlike',
+            'eq' => 'neq',
+            'neq' => 'eq',
+            'gteq' => 'lt',
+            'lteq' => 'gt',
+            'gt' => 'lteq',
+            'lt' => 'gteq',
+            'like' => 'nlike',
             'nlike' => 'like',
-            'in'    => 'nin',
-            'nin'   => 'in',
+            'in' => 'nin',
+            'nin' => 'in',
         ];
 
         if (!array_key_exists($filter->getConditionType(), $operatorsMap)) {
@@ -254,16 +254,16 @@ class ConditionsToSearchCriteriaMapper
     private function mapRuleOperatorToSQLCondition(string $ruleOperator): string
     {
         $operatorsMap = [
-            '=='    => 'eq',    // is
-            '!='    => 'neq',   // is not
-            '>='    => 'gteq',  // equals or greater than
-            '<='    => 'lteq',  // equals or less than
-            '>'     => 'gt',    // greater than
-            '<'     => 'lt',    // less than
-            '{}'    => 'like',  // contains
-            '!{}'   => 'nlike', // does not contains
-            '()'    => 'in',    // is one of
-            '!()'   => 'nin',   // is not one of
+            '==' => 'eq',    // is
+            '!=' => 'neq',   // is not
+            '>=' => 'gteq',  // equals or greater than
+            '<=' => 'lteq',  // equals or less than
+            '>' => 'gt',    // greater than
+            '<' => 'lt',    // less than
+            '{}' => 'like',  // contains
+            '!{}' => 'nlike', // does not contains
+            '()' => 'in',    // is one of
+            '!()' => 'nin',   // is not one of
         ];
 
         if (!array_key_exists($ruleOperator, $operatorsMap)) {
@@ -289,8 +289,8 @@ class ConditionsToSearchCriteriaMapper
     private function mapRuleAggregatorToSQLAggregator(string $ruleAggregator): string
     {
         $operatorsMap = [
-            'all'    => 'AND',
-            'any'    => 'OR',
+            'all' => 'AND',
+            'any' => 'OR',
         ];
 
         if (!array_key_exists(strtolower($ruleAggregator), $operatorsMap)) {

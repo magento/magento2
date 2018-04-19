@@ -163,7 +163,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     /**
      * @var ConditionsToCollectionApplier
      */
-    protected $conditionsToCollectionApplier;
+    private $conditionsToCollectionApplier;
 
     /**
      * @var array
@@ -372,6 +372,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         return $this->_productIds;
     }
 
+    /**
+     * Check if we can use mapping for rule conditions
+     *
+     * @return bool
+     */
     private function canPreMapProducts()
     {
         $conditions = $this->getConditions();
