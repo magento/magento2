@@ -8,11 +8,11 @@ define([
     var selectors = {
         formSelector: '#product_addtocart_form',
         productIdSelector: '#product_addtocart_form [name="product"]',
-        itemIdSelector:'#product_addtocart_form [name="item"]'
+        itemIdSelector: '#product_addtocart_form [name="item"]'
     },
     cartData = customerData.get('cart'),
     productId = $(selectors.productIdSelector).val(),
-    itemId= $(selectors.itemIdSelector).val(),
+    itemId = $(selectors.itemIdSelector).val(),
 
     /**
     * set productOptions according to cart data from customer-data
@@ -27,7 +27,7 @@ define([
             return false;
         }
         changedProductOptions = data.items.find(function (item) {
-            if (item['item_id'] == itemId) {
+            if (item['item_id'] === itemId) {
                 return item['product_id'] === productId;
             }
         });

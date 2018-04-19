@@ -42,7 +42,7 @@ require([
             return;
         }
         product = data.items.find(function (item) {
-            if (item['item_id'] == itemId) {
+            if (item['item_id'] === itemId) {
                 return item['product_id'] === productId ||
                     item['item_id'] === productId;
             }
