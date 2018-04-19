@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model\SourceSelection\Request;
+namespace Magento\InventorySourceSelection\Model\Request;
 
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface;
@@ -27,9 +27,9 @@ class InventoryRequest implements InventoryRequestInterface
 
     /**
      * @param int $stockId
-     * @param array $items
+     * @param ItemRequestInterface[] $items
      */
-    public function __construct(int $stockId, array $items)
+    public function __construct(int $stockId = null, array $items = null)
     {
         $this->stockId = $stockId;
         $this->items = $items;
@@ -49,5 +49,21 @@ class InventoryRequest implements InventoryRequestInterface
     public function getItems(): array
     {
         return $this->items;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStockId($stockId)
+    {
+        $this->stockId = $stockId;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setItems($items)
+    {
+        $this->items = $items;
     }
 }

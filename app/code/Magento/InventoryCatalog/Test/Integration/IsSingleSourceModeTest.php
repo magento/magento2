@@ -17,7 +17,7 @@ class IsSingleSourceModeTest extends TestCase
     /**
      * @var IsSingleSourceModeInterface
      */
-    protected $isSingleSourcekMode;
+    protected $isSingleSourceMode;
 
     /**
      * @var SourceRepositoryInterface
@@ -29,13 +29,13 @@ class IsSingleSourceModeTest extends TestCase
      */
     protected function setUp()
     {
-        $this->isSingleSourcekMode = Bootstrap::getObjectManager()->get(IsSingleSourceModeInterface::class);
+        $this->isSingleSourceMode = Bootstrap::getObjectManager()->get(IsSingleSourceModeInterface::class);
         $this->sourceRepository = Bootstrap::getObjectManager()->get(SourceRepositoryInterface::class);
     }
 
     public function testExecuteOnCleanInstall()
     {
-        self::assertTrue($this->isSingleSourcekMode->execute());
+        self::assertTrue($this->isSingleSourceMode->execute());
     }
 
     /**
@@ -47,7 +47,7 @@ class IsSingleSourceModeTest extends TestCase
         $sourceToDisable->setEnabled(false);
         $this->sourceRepository->save($sourceToDisable);
 
-        self::assertTrue($this->isSingleSourcekMode->execute());
+        self::assertTrue($this->isSingleSourceMode->execute());
     }
 
     /**
@@ -55,6 +55,6 @@ class IsSingleSourceModeTest extends TestCase
      */
     public function testExecuteWithEnabledSources()
     {
-        self::assertFalse($this->isSingleSourcekMode->execute());
+        self::assertFalse($this->isSingleSourceMode->execute());
     }
 }

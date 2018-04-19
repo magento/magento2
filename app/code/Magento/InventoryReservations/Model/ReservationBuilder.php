@@ -12,6 +12,7 @@ use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
+use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
 
 /**
  * @inheritdoc

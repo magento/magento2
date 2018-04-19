@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model\SourceSelection;
+namespace Magento\InventorySourceSelection\Model;
 
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
@@ -83,12 +83,10 @@ class InventoryRequestFromOrderFactory
                 continue;
             }
 
-            $requestItems[] = $this->itemRequestFactory->create(
-                [
+            $requestItems[] = $this->itemRequestFactory->create([
                     'sku' => $itemSku,
                     'qty' => $qtyToDeliver
-                ]
-            );
+            ]);
         }
 
         return $this->inventoryRequestFactory->create([

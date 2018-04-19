@@ -29,7 +29,7 @@ class ShipmentProvider implements ShipmentProviderInterface
     /**
      * @inheritdoc
      */
-    public function getShipment(): array
+    public function getShipmentData(): array
     {
         $sourceCode = $this->request->getParam('sourceCode');
         $items = $this->request->getParam('items', []);

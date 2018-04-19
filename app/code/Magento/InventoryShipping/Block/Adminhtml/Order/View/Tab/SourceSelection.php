@@ -12,10 +12,10 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryShipping\Model\SourceSelection\InventoryRequestFromOrderFactory;
+use Magento\InventorySourceSelection\Model\InventoryRequestFromOrderFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
-use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface;
+use Magento\InventorySourceSelection\Model\GetDefaultSourceSelectionAlgorithmCodeInterface;
 
 /**
  * Tab for source items display on the order editing page

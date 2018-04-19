@@ -15,7 +15,7 @@ namespace Magento\InventorySourceSelectionApi\Api\Data;
 interface SourceSelectionResultInterface
 {
     /**
-     * @return SourceSelectionItemInterface[]
+     * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface[]
      */
     public function getSourceSelectionItems(): array;
 
