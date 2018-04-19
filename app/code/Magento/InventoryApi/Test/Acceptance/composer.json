@@ -43,7 +43,7 @@
         "map": [
             [
                 "*",
-                "tests/functional/Magento/FunctionalTest/InventoryApi"
+                "app/code/Magento/InventoryApi/Acceptance"
             ]
         ]
     }
