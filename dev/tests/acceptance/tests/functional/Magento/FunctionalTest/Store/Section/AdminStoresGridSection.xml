@@ -15,6 +15,5 @@
         <element name="websiteNameInFirstRow" type="text" selector=".col-website_title>a"/>
         <element name="storeGrpNameInFirstRow" type="text" selector=".col-group_title>a"/>
         <element name="storeNameInFirstRow" type="text" selector=".col-store_title>a"/>
-
     </section>
 </sections>
