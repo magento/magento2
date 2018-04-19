@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @magentoAppArea frontend
  */
-class TestOptionsAvailability extends TestCase
+class OptionsAvailabilityTest extends TestCase
 {
     /**
      * @var StoreManagerInterface
@@ -38,6 +38,19 @@ class TestOptionsAvailability extends TestCase
      * @var SerializerInterface
      */
     private $serializer;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $this->configurableView = Bootstrap::getObjectManager()->get(ConfigurableView::class);
+        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $this->serializer = Bootstrap::getObjectManager()->get(SerializerInterface::class);
+    }
 
     /**
      * @codingStandardsIgnoreStart
@@ -87,18 +100,5 @@ class TestOptionsAvailability extends TestCase
                 2
             ],
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-        $this->configurableView = Bootstrap::getObjectManager()->get(ConfigurableView::class);
-        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-        $this->serializer = Bootstrap::getObjectManager()->get(SerializerInterface::class);
     }
 }
