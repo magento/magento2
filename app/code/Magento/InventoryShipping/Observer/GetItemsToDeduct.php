@@ -98,7 +98,7 @@ class GetItemsToDeduct
                     $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
                         [$item->getProductId()]
                     )[$item->getProductId()];
-                    $itemsToShip[] = [
+                    $itemsToShip = [
                         'sku' => $itemSku,
                         'qty' => $qty
                     ];
@@ -110,7 +110,7 @@ class GetItemsToDeduct
                     [$shipmentItem->getProductId()]
                 )[$shipmentItem->getProductId()];
                 $qty = $this->castQty($orderItem, $shipmentItem->getQty());
-                $itemsToShip[] =[
+                $itemsToShip =[
                     'sku' => $itemSku,
                     'qty' => $qty
                 ];
