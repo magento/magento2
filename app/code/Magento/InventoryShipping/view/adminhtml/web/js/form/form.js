@@ -54,9 +54,9 @@ define([
                  * @param {Object} response
                  */
                 success: function (response) {
-                    var data = this.source.get('data');
+                    var dataItems = this.source.get('data.items');
 
-                    _.each(data.items, function (item) {
+                    _.each(dataItems, function (item) {
                         if (response[item.orderItemId]) {
                             this.source.set('data.items.' + item['record_id'] + '.sources', response[item.orderItemId]);
                         }
