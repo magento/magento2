@@ -5,8 +5,9 @@
 define([
     'jquery',
     'Magento_Ui/js/form/form',
+    'underscore',
     'mageUtils'
-], function ($, Form, utils) {
+], function ($, Form, _, utils) {
     'use strict';
 
     return Form.extend({
@@ -22,6 +23,7 @@ define([
          */
         processAlgorithm: function (redirect, data) {
             var formData = utils.filterFormData(this.source.get('data'));
+
             data.requestData = [];
 
             _.each(formData.items, function (item) {
@@ -52,8 +54,9 @@ define([
                  * @param {Object} response
                  */
                 success: function (response) {
-                    var formData = this.source.get('data');
-                    _.each(formData.items, function (item) {
+                    var data = this.source.get('data');
+
+                    _.each(data.items, function (item) {
                         if (response[item.orderItemId]) {
                             this.source.set('data.items.' + item['record_id'] + '.sources', response[item.orderItemId]);
                         }

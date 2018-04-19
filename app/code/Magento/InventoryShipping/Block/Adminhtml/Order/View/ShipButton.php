@@ -10,10 +10,7 @@ namespace Magento\InventoryShipping\Block\Adminhtml\Order\View;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\Registry;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryShipping\Model\IsMultiSourceMode;
 
 /**
  * Update order_ship button to redirect to Source Selection page
@@ -28,41 +25,25 @@ class ShipButton extends Container
     private $registry;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var IsMultiSourceMode
      */
-    private $stockByWebsiteIdResolver;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var GetStockSourceLinksInterface
-     */
-    private $getStockSourceLinks;
+    private $isMultiSourceMode;
 
     /**
      * @param Context $context
      * @param Registry $registry
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param GetStockSourceLinksInterface $getStockSourceLinks
+     * @param IsMultiSourceMode $isMultiSourceMode
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        GetStockSourceLinksInterface $getStockSourceLinks,
+        IsMultiSourceMode $isMultiSourceMode,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->registry = $registry;
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->getStockSourceLinks = $getStockSourceLinks;
+        $this->isMultiSourceMode = $isMultiSourceMode;
     }
 
     /**
@@ -72,7 +53,9 @@ class ShipButton extends Container
     {
         parent::_prepareLayout();
 
-        if ($this->isMultiSourceMode()) {
+        $order = $this->registry->registry('current_order');
+        $websiteId = (int)$order->getStore()->getWebsiteId();
+        if ($this->isMultiSourceMode->execute($websiteId)) {
             $this->buttonList->update(
                 'order_ship',
                 'onclick',
@@ -95,21 +78,5 @@ class ShipButton extends Container
                 'order_id' => $this->getRequest()->getParam('order_id')
             ]
         );
-    }
-
-    /**
-     * Check if system has more than one enabled Source for stock
-     *
-     * @return bool
-     */
-    private function isMultiSourceMode(): bool
-    {
-        $order = $this->registry->registry('current_order');
-        $websiteId = $order->getStore()->getWebsiteId();
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
-            ->create();
-        return $this->getStockSourceLinks->execute($searchCriteria)->getTotalCount() > 1;
     }
 }

@@ -43,10 +43,10 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <fieldset name="general" sortOrder="10">
+    <fieldset name="source_selection" sortOrder="10">
         <settings>
             <dataScope />
-            <label />
+            <label translate="true">Select a Source to Ship from</label>
             <collapsible>false</collapsible>
             <opened>true</opened>
         </settings>
@@ -70,6 +70,14 @@
                 </select>
             </formElements>
         </field>
+    </fieldset>
+    <fieldset name="items_ordered" sortOrder="20">
+        <settings>
+            <dataScope />
+            <label translate="true">Items Ordered</label>
+            <collapsible>false</collapsible>
+            <opened>true</opened>
+        </settings>
         <dynamicRows name="items" component="Magento_Ui/js/dynamic-rows/dynamic-rows" sortOrder="20" template="ui/dynamic-rows/templates/grid">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -114,7 +122,15 @@
                         <label translate="true">Product</label>
                     </settings>
                 </field>
-                <field name="qtyToShip" formElement="input" sortOrder="20">
+                <field name="sku" formElement="input" sortOrder="20">
+                    <settings>
+                        <elementTmpl>ui/form/element/html</elementTmpl>
+                        <dataType>text</dataType>
+                        <dataScope>sku</dataScope>
+                        <label translate="true">SKU</label>
+                    </settings>
+                </field>
+                <field name="qtyToShip" formElement="input" sortOrder="30">
                     <settings>
                         <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                         <dataType>text</dataType>
@@ -122,7 +138,7 @@
                         <label translate="true">Qty To Ship</label>
                     </settings>
                 </field>
-                <dynamicRows name="sources" sortOrder="30">
+                <dynamicRows name="sources" sortOrder="40">
                     <argument name="data" xsi:type="array">
                         <item name="js_config" xsi:type="array">
                             <item name="dataProvider" xsi:type="string">sources</item>

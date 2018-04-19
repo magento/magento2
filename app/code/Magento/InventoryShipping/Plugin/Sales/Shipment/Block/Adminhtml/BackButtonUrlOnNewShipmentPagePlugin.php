@@ -8,41 +8,22 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Plugin\Sales\Shipment\Block\Adminhtml;
 
 use Magento\Shipping\Block\Adminhtml\Create;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
-use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\InventoryShipping\Model\IsMultiSourceMode;
 
 class BackButtonUrlOnNewShipmentPagePlugin
 {
     /**
-     * @var StockByWebsiteIdResolver
+     * @var IsMultiSourceMode
      */
-    private $stockByWebsiteIdResolver;
+    private $isMultiSourceMode;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var GetStockSourceLinksInterface
-     */
-    private $getStockSourceLinks;
-
-    /**
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param GetStockSourceLinksInterface $getStockSourceLinks
+     * @param IsMultiSourceMode $isMultiSourceMode
      */
     public function __construct(
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        GetStockSourceLinksInterface $getStockSourceLinks
+        IsMultiSourceMode $isMultiSourceMode
     ) {
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->getStockSourceLinks = $getStockSourceLinks;
+        $this->isMultiSourceMode = $isMultiSourceMode;
     }
 
     /**
@@ -57,7 +38,7 @@ class BackButtonUrlOnNewShipmentPagePlugin
         }
 
         $websiteId = (int)$subject->getShipment()->getOrder()->getStore()->getWebsiteId();
-        if ($this->isMultiSourceMode($websiteId)) {
+        if ($this->isMultiSourceMode->execute($websiteId)) {
             return $subject->getUrl(
                 'inventoryshipping/SourceSelection/index',
                 [
@@ -67,20 +48,5 @@ class BackButtonUrlOnNewShipmentPagePlugin
         }
 
         return $result;
-    }
-
-    /**
-     * Check if system has more than one enabled Source for stock
-     *
-     * @param $websiteId
-     * @return bool
-     */
-    private function isMultiSourceMode($websiteId): bool
-    {
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
-            ->create();
-        return $this->getStockSourceLinks->execute($searchCriteria)->getTotalCount() > 1;
     }
 }
