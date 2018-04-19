@@ -17,6 +17,7 @@
         <fillField userInput="{{customer.email}}" selector="{{AdminCustomerFiltersSection.emailInput}}" stepKey="filterEmail"/>
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
         <click selector="{{AdminCustomerGridSection.rowEditAction}}" stepKey="clickEdit"/>
+        <waitForElement selector="{{AdminCustomerAccountInformationSection.accountInformationTitle}}" stepKey="waitLoadCustomPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2" />
     </actionGroup>
 </actionGroups>
