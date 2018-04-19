@@ -5,18 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
-
     <!-- Enable Free Shipping method -->
     <entity name="FreeShippinMethodConfig" type="free_shipping_method">
         <requiredEntity type="active">freeActiveEnable</requiredEntity>
     </entity>
-
     <entity name="freeActiveEnable" type="active">
         <data key="value">1</data>
     </entity>
-
     <!-- Free Shipping method default setup -->
     <entity name="FreeShippinMethodDefault" type="free_shipping_method">
         <requiredEntity type="active">freeActiveDefault</requiredEntity>
@@ -29,7 +25,6 @@
         <requiredEntity type="showmethod">freeShowmethodDefault</requiredEntity>
         <requiredEntity type="sort_order">freeSortOrderDefault</requiredEntity>
     </entity>
-
     <entity name="freeActiveDefault" type="active">
         <data key="value">0</data>
     </entity>
