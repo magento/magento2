@@ -935,7 +935,6 @@ interface AdapterInterface
      */
     public function getTableName($tableName);
 
-
     /**
      * Build a trigger name based on table name and trigger details
      *
