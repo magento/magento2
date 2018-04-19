@@ -20,7 +20,7 @@ interface SourceSelectionServiceInterface
     /**
      * @param InventoryRequestInterface $inventoryRequest
      * @param string $algorithmCode
-     * @return SourceSelectionResultInterface
+     * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface
      */
     public function execute(
         InventoryRequestInterface $inventoryRequest,

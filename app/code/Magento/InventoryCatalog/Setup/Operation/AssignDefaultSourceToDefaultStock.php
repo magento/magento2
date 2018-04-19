@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Setup\Operation;
 
+use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterfaceFactory;
-use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
@@ -29,31 +29,31 @@ class AssignDefaultSourceToDefaultStock
     private $defaultSourceProvider;
 
     /**
-     * @var StockSourceLinksSaveInterface
-     */
-    private $stockSourceLinksSave;
-
-    /**
      * @var StockSourceLinkInterfaceFactory
      */
     private $stockSourceLinkFactory;
 
     /**
+     * @var SaveMultiple
+     */
+    private $saveMultiple;
+
+    /**
      * @param DefaultStockProviderInterface $defaultStockProvider
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param StockSourceLinkInterfaceFactory $stockSourceLinkFactory
-     * @param StockSourceLinksSaveInterface $stockSourceLinksSave
+     * @param SaveMultiple $saveMultiple
      */
     public function __construct(
         DefaultStockProviderInterface $defaultStockProvider,
         DefaultSourceProviderInterface $defaultSourceProvider,
         StockSourceLinkInterfaceFactory $stockSourceLinkFactory,
-        StockSourceLinksSaveInterface $stockSourceLinksSave
+        SaveMultiple $saveMultiple
     ) {
         $this->defaultStockProvider = $defaultStockProvider;
         $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->stockSourceLinksSave = $stockSourceLinksSave;
         $this->stockSourceLinkFactory = $stockSourceLinkFactory;
+        $this->saveMultiple = $saveMultiple;
     }
 
     /**
@@ -70,6 +70,7 @@ class AssignDefaultSourceToDefaultStock
         $link->setSourceCode($this->defaultSourceProvider->getCode());
         $link->setPriority(1);
 
-        $this->stockSourceLinksSave->execute([$link]);
+        //Avoid default stock validation for source links during installation.
+        $this->saveMultiple->execute([$link]);
     }
 }
