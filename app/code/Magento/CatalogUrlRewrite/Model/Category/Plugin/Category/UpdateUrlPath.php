@@ -60,7 +60,7 @@ class UpdateUrlPath
     }
 
     /**
-     * Perform url updating for different stores
+     * Perform url updating for different stores.
      *
      * @param CategoryResource $subject
      * @param CategoryResource $result
@@ -76,7 +76,8 @@ class UpdateUrlPath
         $parentCategoryId = $category->getParentId();
         if ($category->isObjectNew()
             && !$category->isInRootCategoryList()
-            && !empty($parentCategoryId)) {
+            && !empty($parentCategoryId)
+        ) {
             foreach ($category->getStoreIds() as $storeId) {
                 if (!$this->isGlobalScope((int)$storeId)
                     && $this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
@@ -96,17 +97,19 @@ class UpdateUrlPath
     }
 
     /**
-     * Check that store id is in global scope
+     * Check that store id is in global scope.
      *
      * @param int $storeId
      * @return bool
      */
     private function isGlobalScope(int $storeId): bool
     {
-        return null === $storeId || $storeId === Store::DEFAULT_STORE_ID;
+        return $storeId === Store::DEFAULT_STORE_ID;
     }
 
     /**
+     * Updates category url path.
+     *
      * @param Category $category
      * @param CategoryResource $categoryResource
      * @return void
