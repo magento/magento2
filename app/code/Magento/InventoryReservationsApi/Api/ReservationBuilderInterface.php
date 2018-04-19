@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservations\Model;
+namespace Magento\InventoryReservationsApi\Api;
 
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;

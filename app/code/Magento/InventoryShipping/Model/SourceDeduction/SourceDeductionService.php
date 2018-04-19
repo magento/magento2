@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model\SourceDeduction;
 
-use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface;
-use Magento\InventoryReservations\Model\ReservationBuilderInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
-use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
+use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
+use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
+use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface;
 
 /**
  * @inheritdoc
