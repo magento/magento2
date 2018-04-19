@@ -17,6 +17,26 @@
             <testCaseId value="MAGETWO-46142"/>
             <group value="category"/>
         </annotations>
+        <!--Delete all created data during the test execution and assign Default Root Category to Store-->
+        <after>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin2"/>
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
+            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+            <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
+            <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
+            <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
+            <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickOnSearchButton"/>
+            <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
+            <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickOnstoreGrpNameInFirstRow"/>
+            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad1" />
+            <selectOption userInput="Default Category" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectOptionDefaultCategory"/>
+            <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
+            <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkOnModalDialog2"/>
+            <actionGroup ref="DeleteCategory" stepKey="deleteCreatedNewRootCategory">
+                <argument name="categoryEntity" value="NewRootCategory"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout2"/>
+        </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnAdminCategoryPage"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
@@ -47,9 +67,9 @@
         <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickOnstoreGrpNameInFirstRow"/>
         <waitForPageLoad stepKey="waitForPageAdminStoresGroupEditLoad" />
         <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectOptionCreatedNewRootCategory"/>
-        <click selector="{{AdminNewStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
+        <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkOnModalDialog1"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="logout" stepKey="logout1"/>
         <!--Go to storefront and verify created subcategory on frontend-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad2"/>
@@ -59,25 +79,5 @@
         <actionGroup ref="CheckCategoryOnStorefront" stepKey="checkCreatedSubcategory2OnFrontend">
             <argument name="categoryEntity" value="SubCategoryWithParent"/>
         </actionGroup>
-        <!--Delete all created data during the test execution and assign Default Root Category to Store-->
-        <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin2"/>
-            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
-            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
-            <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
-            <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
-            <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
-            <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickOnSearchButton"/>
-            <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
-            <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickOnstoreGrpNameInFirstRow"/>
-            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad1" />
-            <selectOption userInput="Default Category" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectOptionDefaultCategory"/>
-            <click selector="{{AdminNewStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
-            <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkOnModalDialog2"/>
-            <actionGroup ref="DeleteCategory" stepKey="deleteCreatedNewRootCategory">
-                <argument name="categoryEntity" value="NewRootCategory"/>
-            </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
-        </after>
     </test>
 </tests>

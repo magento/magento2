@@ -47,7 +47,7 @@
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage2"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickOnCreatedSimpleSubCategory1"/>
-        <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="SetNoToIncludeInMenuSelect"/>
+        <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="setNoToIncludeInMenuSelect"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton1"/>
         <seeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="seeCheckboxEnableCategoryIsChecked"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="dontSeeCheckboxIncludeInMenuIsChecked"/>
