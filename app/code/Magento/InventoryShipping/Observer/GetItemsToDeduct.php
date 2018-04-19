@@ -55,7 +55,10 @@ class GetItemsToDeduct
     {
         $orderItem = $shipmentItem->getOrderItem();
         $itemsToShip = [];
-        if ($orderItem->getHasChildren() && !$orderItem->isDummy(true)) {
+        if ($orderItem->getHasChildren()) {
+            if ($orderItem->isDummy(true)) {
+                return [];
+            }
             $itemsToShip[] = $this->itemToDeduct->create($this->processComplexItem($shipmentItem));
         } else {
             $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(

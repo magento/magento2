@@ -117,12 +117,14 @@ class SourceDeductionProcessor implements ObserverInterface
             'objectId' => $shipment->getOrderId()
         ]);
 
-        $sourceDeductionRequest = $this->sourceDeductionRequestFactory->create([
-            'stockId' => $stockId,
-            'sourceCode' => $sourceCode,
-            'items' => $this->getItemsToDeduct->execute($shipmentItem),
-            'salesEvent' => $salesEvent
-        ]);
-        $this->sourceDeductionService->execute($sourceDeductionRequest);
+        if ($items = $this->getItemsToDeduct->execute($shipmentItem)) {
+            $sourceDeductionRequest = $this->sourceDeductionRequestFactory->create([
+                'stockId' => $stockId,
+                'sourceCode' => $sourceCode,
+                'items' => $items,
+                'salesEvent' => $salesEvent
+            ]);
+            $this->sourceDeductionService->execute($sourceDeductionRequest);
+        }
     }
 }
