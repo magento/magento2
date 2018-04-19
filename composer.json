@@ -27,6 +27,7 @@
         "ext-spl": "*",
         "ext-xsl": "*",
         "ext-zip": "*",
+        "ext-bcmath": "*",
         "lib-libxml": "*",
         "braintree/braintree_php": "3.28.0",
         "colinmollenhour/cache-backend-file": "~1.4.1",
