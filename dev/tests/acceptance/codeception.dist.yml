@@ -5,8 +5,8 @@ paths:
     tests: tests
     log: tests/_output
     data: tests/_data
-    support: %REPLACED IN BUILD:PROJECT%
-    envs: %REPLACED IN BUILD:PROJECT%
+    support: "%REPLACED IN BUILD:PROJECT%"
+    envs: "%REPLACED IN BUILD:PROJECT%"
 settings:
     bootstrap: _bootstrap.php
     colors: true
