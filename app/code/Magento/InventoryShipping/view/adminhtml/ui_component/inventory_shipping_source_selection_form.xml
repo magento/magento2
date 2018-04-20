@@ -201,6 +201,7 @@
                                     <link name="qtyAvailable">${$.parentName}.qtyAvailable:value</link>
                                     <link name="toggleDisable">ns = ${ $.ns }, index = sourceCode:value</link>
                                 </imports>
+                                <disabled>true</disabled>
                             </settings>
                         </field>
                     </container>
