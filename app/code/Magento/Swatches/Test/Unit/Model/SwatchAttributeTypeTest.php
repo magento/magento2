@@ -137,10 +137,15 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $attributeMock->expects($this->any())->method('hasData')->willReturn(false);
-        $attributeMock->expects($this->at(0))->method('getData')->willReturn('test');
-        $attributeMock->expects($this->at(1))->method('getData')->willReturn($encodedAdditionData);
-        $attributeMock->expects($this->at(2))->method('getData')->willReturn(Swatch::SWATCH_INPUT_TYPE_TEXT);
-        $attributeMock->expects($this->at(3))->method('getData')->willReturn(Swatch::SWATCH_INPUT_TYPE_TEXT);
+
+        $attributeMock->expects($this->any())
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    ['additional_data',  $encodedAdditionData],
+                    [Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT],
+                ]
+            );
 
         $this->assertEquals(true, $this->swatchType->isTextSwatch($attributeMock));
         $this->assertEquals(false, $this->swatchType->isVisualSwatch($attributeMock));

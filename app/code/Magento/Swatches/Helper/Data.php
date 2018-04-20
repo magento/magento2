@@ -488,14 +488,12 @@ class Data
     {
         $currentStoreId = $this->storeManager->getStore()->getId();
         foreach ($fallbackValues as $optionId => $optionsArray) {
-            if (isset($optionsArray[$currentStoreId], $swatches[$optionId]['type'])
+            if (isset($optionsArray[$currentStoreId]['type'], $swatches[$optionId]['type'])
                 && $swatches[$optionId]['type'] === $optionsArray[$currentStoreId]['type']
             ) {
                 $swatches[$optionId] = $optionsArray[$currentStoreId];
-            } else {
-                if (isset($optionsArray[self::DEFAULT_STORE_ID])) {
-                    $swatches[$optionId] = $optionsArray[self::DEFAULT_STORE_ID];
-                }
+            } elseif (isset($optionsArray[self::DEFAULT_STORE_ID])) {
+                $swatches[$optionId] = $optionsArray[self::DEFAULT_STORE_ID];
             }
         }
 

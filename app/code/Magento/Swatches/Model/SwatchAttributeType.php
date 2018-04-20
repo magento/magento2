@@ -10,6 +10,9 @@ namespace Magento\Swatches\Model;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class contains swatch attribute helper methods.
+ */
 class SwatchAttributeType
 {
     /**
@@ -29,7 +32,6 @@ class SwatchAttributeType
     ];
 
     /**
-     * SwatchAttributeType constructor.
      * @param Json $serializer
      */
     public function __construct(Json $serializer)
@@ -41,7 +43,7 @@ class SwatchAttributeType
      * @param AttributeInterface $productAttribute
      * @return bool
      */
-    public function isTextSwatch(AttributeInterface $productAttribute)
+    public function isTextSwatch(AttributeInterface $productAttribute): bool
     {
         $this->populateAdditionalDataEavAttribute($productAttribute);
 
@@ -52,7 +54,7 @@ class SwatchAttributeType
      * @param AttributeInterface $productAttribute
      * @return bool
      */
-    public function isVisualSwatch(AttributeInterface $productAttribute)
+    public function isVisualSwatch(AttributeInterface $productAttribute): bool
     {
         $this->populateAdditionalDataEavAttribute($productAttribute);
 
@@ -63,16 +65,18 @@ class SwatchAttributeType
      * @param AttributeInterface $productAttribute
      * @return bool
      */
-    public function isSwatchAttribute(AttributeInterface $productAttribute)
+    public function isSwatchAttribute(AttributeInterface $productAttribute): bool
     {
-        return ($this->isTextSwatch($productAttribute) || $this->isVisualSwatch($productAttribute));
+        return $this->isTextSwatch($productAttribute) || $this->isVisualSwatch($productAttribute);
     }
 
     /**
+     * Unserializes attribute additional data and sets it to attribute object.
+     *
      * @param AttributeInterface $attribute
      * @return void
      */
-    private function populateAdditionalDataEavAttribute(AttributeInterface $attribute)
+    private function populateAdditionalDataEavAttribute(AttributeInterface $attribute): void
     {
         if (!$attribute->hasData(Swatch::SWATCH_INPUT_TYPE_KEY)) {
             $serializedAdditionalData = $attribute->getData('additional_data');
