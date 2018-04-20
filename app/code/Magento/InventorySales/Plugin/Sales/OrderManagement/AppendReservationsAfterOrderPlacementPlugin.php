@@ -9,7 +9,6 @@ namespace Magento\InventorySales\Plugin\Sales\OrderManagement;
 
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
@@ -110,19 +109,17 @@ class AppendReservationsAfterOrderPlacementPlugin
      */
     public function afterPlace(OrderManagementInterface $subject, OrderInterface $order) : OrderInterface
     {
-        $itemsBySku = $productTypes = $itemsToSell = [];
-        /** @var OrderItemInterface $item **/
+        $itemsById = $itemsBySku = $productTypes = $itemsToSell = [];
         foreach ($order->getItems() as $item) {
-            $productSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
-                [$item->getProductId()]
-            )[$item->getProductId()];
-            $itemsBySku[$productSku] = (float)$item->getQtyOrdered();
-            $productTypes[$productSku] = $item->getProductType() ?: $this->getProductTypesBySkus->execute(
-                [$productSku]
-            )[$productSku];
+            $itemsById[$item->getProductId()] = $item->getQtyOrdered();
+        }
+        $productSkus = $this->getSkusByProductIds->execute(array_keys($itemsById));
+        $productTypes = $this->getProductTypesBySkus->execute($productSkus);
+        foreach ($productSkus as $productId => $sku) {
+            $itemsBySku[$sku] = (float)$itemsById[$productId];
             $itemsToSell[] = $this->itemsToSellFactory->create([
-                'sku' => $productSku,
-                'qty' => -(float)$item->getQtyOrdered()
+                'sku' => $sku,
+                'qty' => -(float)$itemsById[$productId]
             ]);
         }
 
