@@ -15,7 +15,8 @@
         "magento/module-shipping": "*",
         "magento/module-ui": "*",
         "magento/module-inventory-configuration-api": "*",
-        "magento/module-inventory-sales-api": "*"
+        "magento/module-inventory-sales-api": "*",
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [
