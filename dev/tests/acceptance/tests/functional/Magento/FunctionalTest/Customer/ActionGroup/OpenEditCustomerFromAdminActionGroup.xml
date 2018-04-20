@@ -16,8 +16,8 @@
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilter"/>
         <fillField userInput="{{customer.email}}" selector="{{AdminCustomerFiltersSection.emailInput}}" stepKey="filterEmail"/>
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
         <click selector="{{AdminCustomerGridSection.rowEditAction}}" stepKey="clickEdit"/>
-        <waitForElement selector="{{AdminCustomerAccountInformationSection.accountInformationTitle}}" stepKey="waitLoadCustomPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2" />
     </actionGroup>
 </actionGroups>
