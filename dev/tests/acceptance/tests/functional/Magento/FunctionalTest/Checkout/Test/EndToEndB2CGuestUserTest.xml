@@ -34,7 +34,8 @@
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartGrabSimpleProduct1PageImageSrc" after="cartAssertProduct1Page"/>
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartGrabSimpleProduct1PageImageSrc" stepKey="cartAssertSimpleProduct1PageImageNotDefault" after="cartGrabSimpleProduct1PageImageSrc"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddProduct1ToCart" after="cartAssertSimpleProduct1PageImageNotDefault">
-            <argument name="product" value="$$createSimpleProduct1$$"/>
+            <argument name
+                              ="product" value="$$createSimpleProduct1$$"/>
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
             <argument name="productCount" value="CONST.one"/>
         </actionGroup>
