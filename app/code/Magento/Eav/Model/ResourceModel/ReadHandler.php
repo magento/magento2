@@ -57,14 +57,16 @@ class ReadHandler implements AttributeInterface
      * Get attribute of given entity type
      *
      * @param string $entityType
+     * @param \Magento\Framework\DataObject|null $product
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @throws \Exception if for unknown entity type
      */
-    protected function getAttributes($entityType)
+    protected function getAttributes($entityType, $product = null)
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $eavEntityType = $metadata->getEavEntityType();
-        $attributes = (null === $eavEntityType) ? [] : $this->config->getAttributes($eavEntityType);
+        $attributes = null === $eavEntityType ? [] : $this->config->getEntityAttributes($eavEntityType, $product);
+
         return $attributes;
     }
 
@@ -105,7 +107,7 @@ class ReadHandler implements AttributeInterface
         $selects = [];
 
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-        foreach ($this->getAttributes($entityType) as $attribute) {
+        foreach ($this->getAttributes($entityType, new \Magento\Framework\DataObject($entityData)) as $attribute) {
             if (!$attribute->isStatic()) {
                 $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
                 $attributesMap[$attribute->getAttributeId()] = $attribute->getAttributeCode();
