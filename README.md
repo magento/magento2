@@ -74,6 +74,19 @@ To suggest documentation improvements, click [here][4].
 [3]: <https://github.com/magento/magento2/issues>
 [4]: <http://devdocs.magento.com>
 
+<h3>Community Maintainers</h3>
+The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks these Community Maintainers for their valuable contributions.
+
+<a href="https://magento.com/magento-contributors#maintainers">
+    <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/maintainers.png"/>
+</a>
+
+<h3>Top Contributors</h3>
+Magento team thanks for any contribution that can improve our code base, documentation or increase test coverage. We always recognize our most active members, your contributions are the foundation of the Magento open source platform.
+<a href="https://magento.com/magento-contributors">
+    <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/contributors.png"/>
+</a>
+
 <h2>Reporting security issues</h2>
 
 To report security vulnerabilities in Magento software or web sites, please e-mail <a href="mailto:security@magento.com">security@magento.com</a>. Please do not report security issues using GitHub. Be sure to encrypt your e-mail with our <a href="https://info2.magento.com/rs/magentoenterprise/images/security_at_magento.asc">encryption key</a> if it includes sensitive information. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
