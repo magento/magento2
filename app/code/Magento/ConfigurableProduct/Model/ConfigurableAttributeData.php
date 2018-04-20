@@ -37,7 +37,7 @@ class ConfigurableAttributeData
                     'code' => $productAttribute->getAttributeCode(),
                     'label' => $productAttribute->getStoreLabel($product->getStoreId()),
                     'options' => $attributeOptionsData,
-                    'position' => $attribute->getPosition(),
+                    'position' => $productAttribute->getPosition(),
                 ];
                 $defaultValues[$attributeId] = $this->getAttributeConfigValue($attributeId, $product);
             }
