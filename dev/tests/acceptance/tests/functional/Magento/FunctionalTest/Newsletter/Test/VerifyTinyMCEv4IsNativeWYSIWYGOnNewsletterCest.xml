@@ -16,6 +16,8 @@
             <description value="Admin see TinyMCEv4.6 is native WYSIWYG on Newsletter"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84683"/>
+            <!-- MAGETWO-90659 -->
+            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
