@@ -19,12 +19,13 @@ use Magento\CatalogRule\Model\Rule\Condition\CombineFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Data\FormFactory;
-use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Model\ResourceModel\Iterator;
@@ -160,6 +161,16 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     protected $ruleConditionConverter;
 
     /**
+     * @var ConditionsToCollectionApplier
+     */
+    protected $conditionsToCollectionApplier;
+
+    /**
+     * @var array
+     */
+    private $websitesMap;
+
+    /**
      * @var RuleResourceModel
      */
     private $ruleResourceModel;
@@ -189,7 +200,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @param \Magento\CatalogRule\Model\ResourceModel\RuleResourceModel|null $ruleResourceModel
+     * @param ConditionsToCollectionApplier $conditionsToCollectionApplier
+     * @param RuleResourceModel|null $ruleResourceModel
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -215,6 +227,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         ExtensionAttributesFactory $extensionFactory = null,
         AttributeValueFactory $customAttributeFactory = null,
         Json $serializer = null,
+        ConditionsToCollectionApplier $conditionsToCollectionApplier = null,
         RuleResourceModel $ruleResourceModel = null
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -230,6 +243,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $this->dateTime = $dateTime;
         $this->_ruleProductProcessor = $ruleProductProcessor;
         $this->ruleResourceModel = $ruleResourceModel ?: ObjectManager::getInstance()->get(RuleResourceModel::class);
+        $this->conditionsToCollectionApplier = $conditionsToCollectionApplier
+            ?? ObjectManager::getInstance()->get(ConditionsToCollectionApplier::class);
 
         parent::__construct(
             $context,
@@ -336,6 +351,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
                 }
                 $this->getConditions()->collectValidatedAttributes($productCollection);
 
+                if ($this->canPreMapProducts()) {
+                    $productCollection = $this->conditionsToCollectionApplier
+                        ->applyConditionsToCollection($this->getConditions(), $productCollection);
+                }
+
                 $this->_resourceIterator->walk(
                     $productCollection->getSelect(),
                     [[$this, 'callbackValidateProduct']],
@@ -348,6 +368,21 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         }
 
         return $this->_productIds;
+    }
+
+    /**
+     * @return bool
+     */
+    private function canPreMapProducts()
+    {
+        $conditions = $this->getConditions();
+
+        // No need to map products if there is no conditions in rule
+        if (!$conditions || !$conditions->getConditions()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -378,16 +413,19 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     protected function _getWebsitesMap()
     {
-        $map = [];
-        $websites = $this->_storeManager->getWebsites();
-        foreach ($websites as $website) {
-            // Continue if website has no store to be able to create catalog rule for website without store
-            if ($website->getDefaultStore() === null) {
-                continue;
+        if ($this->websitesMap === null) {
+            $this->websitesMap = [];
+            $websites = $this->_storeManager->getWebsites();
+            foreach ($websites as $website) {
+                // Continue if website has no store to be able to create catalog rule for website without store
+                if ($website->getDefaultStore() === null) {
+                    continue;
+                }
+                $this->websitesMap[$website->getId()] = $website->getDefaultStore()->getId();
             }
-            $map[$website->getId()] = $website->getDefaultStore()->getId();
         }
-        return $map;
+
+        return $this->websitesMap;
     }
 
     /**
