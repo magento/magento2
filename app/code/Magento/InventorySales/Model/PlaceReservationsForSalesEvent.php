@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model;
 
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
@@ -16,6 +15,7 @@ use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 
 /**
  * @inheritdoc
@@ -33,14 +33,14 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
     private $appendReservations;
 
     /**
-     * @var GetProductTypesBySkusInterface
-     */
-    private $getProductTypesBySkus;
-
-    /**
      * @var StockResolverInterface
      */
     private $stockResolver;
+
+    /**
+     * @var GetProductTypesBySkusInterface
+     */
+    private $getProductTypesBySkus;
 
     /**
      * @var IsSourceItemsAllowedForProductTypeInterface
@@ -48,31 +48,23 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
     private $isSourceItemsAllowedForProductType;
 
     /**
-     * @var CheckItemsQuantity
-     */
-    private $checkItemsQuantity;
-
-    /**
      * @param ReservationBuilderInterface $reservationBuilder
      * @param AppendReservationsInterface $appendReservations
      * @param StockResolverInterface $stockResolver
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
-     * @param CheckItemsQuantity $checkItemsQuantity
      */
     public function __construct(
         ReservationBuilderInterface $reservationBuilder,
         AppendReservationsInterface $appendReservations,
         StockResolverInterface $stockResolver,
         GetProductTypesBySkusInterface $getProductTypesBySkus,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
-        CheckItemsQuantity $checkItemsQuantity
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
     ) {
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
         $this->stockResolver = $stockResolver;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
-        $this->checkItemsQuantity = $checkItemsQuantity;
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
     }
 
@@ -86,15 +78,14 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
         }
 
         $stockId = (int)$this->stockResolver->get($salesChannel->getType(), $salesChannel->getCode())->getStockId();
-        $itemsBySku = [];
+
+        $skus = [];
         /** @var ItemToSellInterface $item */
         foreach ($items as $item) {
-            //TODO: Failed for bundle products.. need to fix it
-            $itemsBySku[$item->getSku()] = $item->getQuantity();
+            $skus[] = $item->getSku();
         }
-        $skus = array_keys($itemsBySku);
         $productTypes = $this->getProductTypesBySkus->execute($skus);
-        $this->checkItemsQuantity->execute($itemsBySku, $productTypes, $stockId);
+
         $reservations = [];
         /** @var ItemToSellInterface $item */
         foreach ($items as $item) {
