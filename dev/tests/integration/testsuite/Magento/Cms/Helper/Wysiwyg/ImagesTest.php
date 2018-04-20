@@ -93,7 +93,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
                         'e3ttZWRpYSB1cmw9Ind5c2l3eWcvaGVsbG8ucG5nIn19/'
                     );
 
-                    $this->assertEquals($expectedResult, parse_url($actualResult, PHP_URL_PATH));
+                    $this->assertContains($expectedResult, parse_url($actualResult, PHP_URL_PATH));
                 }
             ],
             [true, 'wysiwyg/hello.png', false, 'http://example.com/pub/media/wysiwyg/hello.png'],
