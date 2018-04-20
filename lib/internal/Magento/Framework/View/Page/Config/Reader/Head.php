@@ -71,16 +71,12 @@ class Head implements Layout\ReaderInterface
         Layout\Element $headElement
     ) {
         $pageConfigStructure = $readerContext->getPageConfigStructure();
-        $nodes = [];
-
-        foreach ($headElement as $node) {
-            $nodes[] = $node;
-        }
+        $nodes = iterator_to_array($headElement, false);
 
         usort(
             $nodes,
             function (Layout\Element $current, Layout\Element $next) {
-                return $current->getAttribute('order') > $next->getAttribute('order');
+                return $current->getAttribute('order') <=> $next->getAttribute('order');
             }
         );
 
