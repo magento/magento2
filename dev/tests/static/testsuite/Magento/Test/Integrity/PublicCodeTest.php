@@ -68,10 +68,10 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
         /** @var $node \SimpleXMLElement */
         foreach ($elements as $node) {
             $class = (string) $node['class'];
-                if ($class && \class_exists($class) && !in_array($class, $this->getWhitelist())) {
-                    $reflection = (new \ReflectionClass($class));
-                    if (strpos($reflection->getDocComment(), '@api') === false) {
-                        $nonPublishedBlocks[] = $class;
+            if ($class && \class_exists($class) && !in_array($class, $this->getWhitelist())) {
+                $reflection = (new \ReflectionClass($class));
+                if (strpos($reflection->getDocComment(), '@api') === false) {
+                    $nonPublishedBlocks[] = $class;
                 }
             }
         }
