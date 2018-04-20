@@ -14,7 +14,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class GetSourceItemConfigurationTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/inventory/source-item-configuration';
-    const SERVICE_NAME = 'InventoryLowQuantityNotificationApiGetSourceItemConfigurationV1';
+    const SERVICE_NAME = 'inventoryLowQuantityNotificationApiGetSourceItemConfigurationV1';
 
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
@@ -23,8 +23,8 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
      */
     public function testGetSourceItemConfiguration()
     {
-        $sourceCode = 'eu-1';
-        $sku = 'SKU-1';
+        $sourceCode = 'eu-2';
+        $sku = 'SKU-3';
 
         $serviceInfo = [
             'rest' => [

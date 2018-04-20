@@ -165,8 +165,29 @@ class CarrierLinkManagementTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, ['source' => $carrierData]);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
-            self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
-            self::assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
+            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+                self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
+                self::assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
+            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+                $this->assertInstanceOf('SoapFault', $e);
+                $expectedWrappedErrors = [];
+                foreach ($expectedErrorData['errors'] as $error) {
+                    // @see \Magento\TestFramework\TestCase\WebapiAbstract::getActualWrappedErrors()
+                    $expectedWrappedErrors[] = [
+                        'message' => $error['message'],
+                        'params' => $error['parameters'],
+                    ];
+                }
+                $this->checkSoapFault(
+                    $e,
+                    $expectedErrorData['message'],
+                    'env:Sender',
+                    [],
+                    $expectedWrappedErrors
+                );
+            } else {
+                throw $e;
+            }
         }
     }
 

@@ -19,7 +19,8 @@ class SaveTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/source-item';
-    const SERVICE_NAME = 'inventoryApiSourceItemsSaveV1';
+    const SERVICE_NAME_SAVE = 'inventoryApiSourceItemsSaveV1';
+    const SERVICE_NAME_DELETE = 'inventoryApiSourceItemsDeleteV1';
     /**#@-*/
 
     /**
@@ -49,8 +50,8 @@ class SaveTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'Execute',
+                'service' => self::SERVICE_NAME_SAVE,
+                'operation' => self::SERVICE_NAME_SAVE . 'Execute',
             ],
         ];
         $this->_webApiCall($serviceInfo, ['sourceItems' => $sourceItems]);
@@ -80,8 +81,8 @@ class SaveTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'Execute',
+                'service' => self::SERVICE_NAME_DELETE,
+                'operation' => self::SERVICE_NAME_DELETE . 'Execute',
             ],
         ];
         (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)

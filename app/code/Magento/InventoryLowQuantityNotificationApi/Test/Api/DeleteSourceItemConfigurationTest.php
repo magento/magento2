@@ -14,13 +14,14 @@ use Magento\Framework\Webapi\Rest\Request;
 class DeleteSourceItemConfigurationTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/inventory/source-item-configuration';
-    const SERVICE_NAME_DELETE = 'InventoryLowQuantityNotificationApiDeleteSourceItemConfigurationV1';
-    const SERVICE_NAME_GET = 'InventoryLowQuantityNotificationApiGetSourceItemConfigurationV1';
+    const SERVICE_NAME_DELETE = 'inventoryLowQuantityNotificationApiDeleteSourceItemConfigurationV1';
+    const SERVICE_NAME_GET = 'inventoryLowQuantityNotificationApiGetSourceItemConfigurationV1';
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
+     * @magentoDbIsolation disabled
      */
     public function testDeleteSourceItemConfiguration()
     {

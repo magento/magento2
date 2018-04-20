@@ -55,7 +55,7 @@ class GetListTest extends WebapiAbstract
         $expectedItemsData = [
             [
                 SourceInterface::ENABLED => true,
-                SourceInterface::NAME => 'US-source-1',
+                SourceInterface::NAME => 'EU-source-2',
             ],
             [
                 SourceInterface::ENABLED => true,
