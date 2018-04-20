@@ -60,8 +60,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         string $routePath,
         array $requestParams,
         string $expectedResult,
-        array $routeParams = null
-    ) {
+        $routeParams = null
+    ): void {
         $this->request->setParams($requestParams);
         $url = $this->_model->getUrl($routePath, $routeParams);
 
@@ -73,7 +73,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getUrlDataProvider()
+    public function getUrlDataProvider(): array
     {
         /** @var $escaper Escaper */
         $escaper = Bootstrap::getObjectManager()->get(Escaper::class);
@@ -117,7 +117,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 'expectedResult' => '/param3/' . $escaper->encodeUrlParam('a3==') . '/',
                 'routeParams' => [
                     '_escape_params' => true,
-                    'param3' => 'a3=='
+                    'param3' => 'a3==',
                 ],
             ],
             [
@@ -147,7 +147,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @dataProvider getSecretKeyDataProvider
      * @magentoAppIsolation enabled
      */
-    public function testGetSecretKey(string $routeName, string $controller, string $action, string $expectedHash)
+    public function testGetSecretKey(string $routeName, string $controller, string $action, string $expectedHash): void
     {
         $this->request->setControllerName('default_controller')
             ->setActionName('default_action')
@@ -162,7 +162,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getSecretKeyDataProvider()
+    public function getSecretKeyDataProvider(): array
     {
         /** @var $encryptor EncryptorInterface */
         $encryptor = Bootstrap::getObjectManager()->get(EncryptorInterface::class);
@@ -210,7 +210,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 'controller',
                 'action',
                 $encryptor->getHash('adminhtml' . 'controller' . 'action' . 'salt'),
-            ]
+            ],
         ];
     }
 
@@ -218,7 +218,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @return void
      */
-    public function testGetSecretKeyForwarded()
+    public function testGetSecretKeyForwarded(): void
     {
         /** @var $encryptor EncryptorInterface */
         $encryptor = $this->objectManager->get(EncryptorInterface::class);
@@ -234,7 +234,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUseSecretKey()
+    public function testUseSecretKey(): void
     {
         $this->_model->setNoSecret(true);
         $this->assertFalse($this->_model->useSecretKey());
