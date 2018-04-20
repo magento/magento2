@@ -77,7 +77,8 @@ class GetSourcesAssignedToStockOrderedByPriorityTest extends WebapiAbstract
             $errorData = $this->processRestExceptionResult($e);
             self::assertEquals(
                 'The "not_numeric" value\'s type is invalid. The "int" type was expected. Verify and try again.',
-                $errorData['message']);
+                $errorData['message']
+            );
             self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
         }
     }

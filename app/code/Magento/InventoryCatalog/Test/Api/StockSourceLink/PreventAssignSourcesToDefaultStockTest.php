@@ -150,5 +150,4 @@ class PreventAssignSourcesToDefaultStockTest extends WebapiAbstract
             "Wrapped errors in fault details are invalid."
         );
     }
-
 }
