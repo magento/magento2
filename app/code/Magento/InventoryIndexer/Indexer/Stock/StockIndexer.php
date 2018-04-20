@@ -116,45 +116,33 @@ class StockIndexer
             if ($this->defaultStockProvider->getId() === (int)$stockId) {
                 continue;
             }
-            list($mainIndexName, $replicaIndexName) = $this->buildIndex((int)$stockId);
+
+            $replicaIndexName = $this->indexNameBuilder
+                ->setIndexId(InventoryIndexer::INDEXER_ID)
+                ->addDimension('stock_', (string)$stockId)
+                ->setAlias(Alias::ALIAS_REPLICA)
+                ->build();
+
+            $mainIndexName = $this->indexNameBuilder
+                ->setIndexId(InventoryIndexer::INDEXER_ID)
+                ->addDimension('stock_', (string)$stockId)
+                ->setAlias(Alias::ALIAS_MAIN)
+                ->build();
+
+            $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
+            $this->indexStructure->create($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
+
+            if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
+                $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
+            }
+
+            $this->indexHandler->saveIndex(
+                $replicaIndexName,
+                $this->indexDataProviderByStockId->execute((int)$stockId),
+                ResourceConnection::DEFAULT_CONNECTION
+            );
             $this->indexTableSwitcher->switch($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
             $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
         }
-    }
-
-    /**
-     * Build index for specified stock Id.
-     *
-     * @param int $stockId
-     * @return \Magento\Framework\MultiDimensionalIndexer\IndexName[]
-     */
-    public function buildIndex(int $stockId): array
-    {
-        $replicaIndexName = $this->indexNameBuilder
-            ->setIndexId(InventoryIndexer::INDEXER_ID)
-            ->addDimension('stock_', (string)$stockId)
-            ->setAlias(Alias::ALIAS_REPLICA)
-            ->build();
-
-        $mainIndexName = $this->indexNameBuilder
-            ->setIndexId(InventoryIndexer::INDEXER_ID)
-            ->addDimension('stock_', (string)$stockId)
-            ->setAlias(Alias::ALIAS_MAIN)
-            ->build();
-
-        $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
-        $this->indexStructure->create($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
-
-        if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
-            $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
-        }
-
-        $this->indexHandler->saveIndex(
-            $replicaIndexName,
-            $this->indexDataProviderByStockId->execute((int)$stockId),
-            ResourceConnection::DEFAULT_CONNECTION
-        );
-
-        return [$mainIndexName, $replicaIndexName];
     }
 }

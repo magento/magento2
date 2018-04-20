@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCache\Plugin\InventoryIndexer\Indexer\Stock\StockIndexer;
 
 use Magento\InventoryCache\Model\FlushCacheByProductIds;
-use Magento\InventoryCache\Model\ResourceModel\GetProductIdsForCacheFlush;
+use Magento\InventoryCache\Model\ResourceModel\GetProductIdsByStockIds;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 
 /**
@@ -22,38 +22,40 @@ class CacheFlush
     private $flushCacheByProductIds;
 
     /**
-     * @var GetProductIdsForCacheFlush
+     * @var GetProductIdsByStockIds
      */
-    private $getProductIdsForCacheFlush;
+    private $getProductIdsByStockIds;
 
     /**
      * @param FlushCacheByProductIds $flushCacheByProductIds
-     * @param GetProductIdsForCacheFlush $getProductIdsForCacheFlush
+     * @param GetProductIdsByStockIds $getProductIdsForCacheFlush
      */
     public function __construct(
         FlushCacheByProductIds $flushCacheByProductIds,
-        GetProductIdsForCacheFlush $getProductIdsForCacheFlush
+        GetProductIdsByStockIds $getProductIdsForCacheFlush
     ) {
         $this->flushCacheByProductIds = $flushCacheByProductIds;
-        $this->getProductIdsForCacheFlush = $getProductIdsForCacheFlush;
+        $this->getProductIdsByStockIds = $getProductIdsForCacheFlush;
     }
 
     /**
      * Clean cache after non default stock reindex.
      *
      * @param StockIndexer $subject
-     * @param \Magento\Framework\MultiDimensionalIndexer\IndexName[] $indexNames
-     * @return \Magento\Framework\MultiDimensionalIndexer\IndexName[]
+     * @param callable $proceed
+     * @param array $stockIds
+     * @return void
      * @throws \Exception in case product entity type hasn't been initialize.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterBuildIndex(StockIndexer $subject, array $indexNames)
+    public function aroundExecuteList(StockIndexer $subject, callable $proceed, array $stockIds)
     {
-        $productIds = $this->getProductIdsForCacheFlush->execute($indexNames);
-        if ($productIds) {
-            $this->flushCacheByProductIds->execute($productIds);
+        $beforeReindexProductIds = $this->getProductIdsByStockIds->execute($stockIds);
+        $proceed($stockIds);
+        $afterReindexProductIds = $this->getProductIdsByStockIds->execute($stockIds);
+        $productIdsForCacheClean = array_diff($beforeReindexProductIds, $afterReindexProductIds);
+        if ($productIdsForCacheClean) {
+            $this->flushCacheByProductIds->execute($productIdsForCacheClean);
         }
-
-        return $indexNames;
     }
 }
