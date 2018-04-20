@@ -76,8 +76,7 @@ class AdvancedInventory extends AbstractModifier
             ]
         );
 
-        $stockStatusPath = $stockDataPath
-            . '/children/container_is_in_stock/children/is_in_stock/arguments/data/config';
+        $stockStatusPath = $stockDataPath . '/children/container_is_in_stock/arguments/data/config';
         $meta = $this->arrayManager->set(
             $stockStatusPath,
             $meta,
