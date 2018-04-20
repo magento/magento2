@@ -40,6 +40,8 @@ class SwatchAttributeType
     }
 
     /**
+     * Checks if attribute is Textual Swatch.
+     *
      * @param AttributeInterface $productAttribute
      * @return bool
      */
@@ -51,6 +53,8 @@ class SwatchAttributeType
     }
 
     /**
+     * Checks if attribute is Visual Swatch.
+     *
      * @param AttributeInterface $productAttribute
      * @return bool
      */
@@ -62,6 +66,8 @@ class SwatchAttributeType
     }
 
     /**
+     * Checks if an attribute is Swatch.
+     *
      * @param AttributeInterface $productAttribute
      * @return bool
      */

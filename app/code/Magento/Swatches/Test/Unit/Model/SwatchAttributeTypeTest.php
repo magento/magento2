@@ -142,7 +142,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->willReturnMap(
                 [
-                    ['additional_data',  $encodedAdditionData],
+                    ['additional_data', $encodedAdditionData],
                     [Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT],
                 ]
             );
