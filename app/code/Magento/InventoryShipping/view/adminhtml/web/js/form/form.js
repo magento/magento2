@@ -5,9 +5,9 @@
 define([
     'jquery',
     'Magento_Ui/js/form/form',
-    'mageUtils',
-    'underscore'
-], function ($, Form, utils, _) {
+    'underscore',
+    'mageUtils'
+], function ($, Form, _, utils) {
     'use strict';
 
     return Form.extend({
@@ -54,16 +54,15 @@ define([
                  * @param {Object} response
                  */
                 success: function (response) {
-                    //TODO: also, need to update sourceCodes select
-                    formData = this.source.get('data');
+                    var dataItems = this.source.get('data.items');
 
-                    _.each(formData.items, function (item) {
+                    _.each(dataItems, function (item) {
                         if (response[item.orderItemId]) {
-                            //TODO: this feature doesn't work
-                            //TODO: rebuild select field sourceCode
                             this.source.set('data.items.' + item['record_id'] + '.sources', response[item.orderItemId]);
                         }
                     }.bind(this));
+                    this.source.trigger('reInitSources');
+                    this.source.set('data.sourceCodes', response.sourceCodes ? response.sourceCodes : []);
                 }.bind(this),
 
                 /**

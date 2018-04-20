@@ -8,16 +8,16 @@ declare(strict_types=1);
 namespace Magento\Shipping\Model;
 
 /**
- * Provide shipment items data from request.
+ * Provide shipment items data.
  *
  * @api
  */
 interface ShipmentProviderInterface
 {
     /**
-     * Retrieve shipment items from request.
+     * Retrieve shipment items.
      *
      * @return array
      */
-    public function getShipment(): array;
+    public function getShipmentData(): array;
 }
