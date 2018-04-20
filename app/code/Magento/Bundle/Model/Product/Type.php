@@ -1015,9 +1015,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         ];
         if ($aPosition == $bPosition) {
             return 0;
-        } else {
-            return $aPosition < $bPosition ? -1 : 1;
         }
+        return $aPosition < $bPosition ? -1 : 1;
     }
 
     /**

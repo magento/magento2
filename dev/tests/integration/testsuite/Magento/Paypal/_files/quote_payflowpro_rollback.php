@@ -14,6 +14,12 @@ require 'fixed_discount_rollback.php';
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 
+/** @var \Magento\Framework\Registry $registry */
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
+
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', true);
+
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var SearchCriteriaBuilder $productSearchCriteriaBuilder */
@@ -41,3 +47,6 @@ if (!empty($items)) {
     $quote = array_pop($items);
     $quoteRepository->delete($quote);
 }
+
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', false);

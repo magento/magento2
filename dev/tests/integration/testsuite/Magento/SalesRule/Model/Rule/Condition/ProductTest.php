@@ -31,6 +31,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @magentoDataFixture Magento/SalesRule/_files/rules_category.php
      * @dataProvider validateProductConditionDataProvider
+     * @magentoDbIsolation disabled
      */
     public function testValidateCategorySalesRuleIncludesChildren($categoryId, $expectedResult)
     {
