@@ -150,7 +150,7 @@ class HeadTest extends \PHPUnit\Framework\TestCase
                     'src_type' => 'url',
                     'content_type' => 'css',
                     'media' => 'all',
-                ],
+                    ],
                     'remoteCssOrderedLast' => [
                         'src' => 'file-url-css-last',
                         'src_type' => 'url',
