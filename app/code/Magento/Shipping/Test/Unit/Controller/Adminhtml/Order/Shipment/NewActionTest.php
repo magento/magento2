@@ -135,7 +135,7 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
         );
         $this->shipmentProviderMock = $this->getMockBuilder(\Magento\Shipping\Model\ShipmentProviderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getShipment'])
+            ->setMethods(['getShipmentData'])
             ->getMockForAbstractClass();
         $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
@@ -270,7 +270,7 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             ->with('menu')
             ->will($this->returnValue($menuBlock));
         $this->shipmentProviderMock->expects($this->once())
-            ->method('getShipment')
+            ->method('getShipmentData')
             ->willReturn($shipmentData);
 
         $this->assertNull($this->newAction->execute());

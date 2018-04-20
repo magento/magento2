@@ -65,7 +65,7 @@ class AlgorithmSelectionButton implements ButtonProviderInterface
                                 'params' => [
                                     false,
                                     [
-                                        'algorithm_code' => $defaultSAlgorithmCode,
+                                        'algorithmCode' => $defaultSAlgorithmCode,
                                     ],
                                 ]
                             ]
@@ -101,7 +101,7 @@ class AlgorithmSelectionButton implements ButtonProviderInterface
                                     'params' => [
                                         false,
                                         [
-                                            'algorithm_code' => $algorithm->getCode(),
+                                            'algorithmCode' => $algorithm->getCode(),
                                         ],
                                     ],
                                 ],
