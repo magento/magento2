@@ -10,14 +10,14 @@ namespace Magento\InventorySales\Test\Integration\StockManagement;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Registry;
 use Magento\InventoryReservations\Model\CleanupReservationsInterface;
+use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
+use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
 use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
-use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
-use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\TestCase;
+use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -70,6 +70,11 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
     private $getProductSalableQty;
 
     /**
+     * @var GetReservationsQuantityInterface
+     */
+    private $getReservationsQuantity;
+
+    /**
      * @var OrderManagementInterface
      */
     private $orderManagement;
@@ -95,6 +100,11 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
     private $reservationBuilder;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -112,11 +122,13 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
         $this->cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->getProductSalableQty = Bootstrap::getObjectManager()->get(GetProductSalableQtyInterface::class);
+        $this->getReservationsQuantity = Bootstrap::getObjectManager()->get(GetReservationsQuantityInterface::class);
         $this->orderManagement = Bootstrap::getObjectManager()->get(OrderManagementInterface::class);
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
+        $this->resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
     }
@@ -144,7 +156,6 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
      */
     public function testRegisterProductsSale()
     {
-        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
         $this->storeManager->setCurrentStore('store_for_eu_website');
         $sku = 'SKU-1';
         $quoteItemQty = 3.5;
@@ -155,9 +166,22 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
         $cart->addItem($cartItem);
         $this->cartRepository->save($cart);
 
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
+        self::assertEquals(0, $this->getReservationsQuantity->execute('SKU-1', 10));
+
         $orderId = $this->cartManagement->placeOrder($cart->getId());
 
         self::assertEquals(5, $this->getProductSalableQty->execute('SKU-1', 10));
+        self::assertEquals(-3.5, $this->getReservationsQuantity->execute('SKU-1', 10));
+        self::assertEquals(
+            sprintf(
+                '%s:%s:%d',
+                SalesEventInterface::EVENT_ORDER_PLACED,
+                SalesEventInterface::OBJECT_TYPE_ORDER,
+                $orderId
+            ),
+            $this->getReservationMetadata()
+        );
 
         //cleanup
         $this->deleteOrderById((int)$orderId);
@@ -219,5 +243,23 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
         $this->orderRepository->delete($this->orderRepository->get($orderId));
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', false);
+    }
+
+    /**
+     * Get "metadata" field value of last created Inventory Reservation.
+     *
+     * @return string
+     */
+    private function getReservationMetadata(): string
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $select = $connection->select()->from(
+            ['inventory_reservation' => $this->resourceConnection->getTableName('inventory_reservation')],
+            ['metadata']
+        )->order(
+            ReservationInterface::RESERVATION_ID . ' DESC'
+        );
+        $result = $connection->fetchOne($select);
+        return $result;
     }
 }
