@@ -10,7 +10,7 @@ define([
 
     return Column.extend({
         defaults: {
-            bodyTmpl: 'Magento_InventorySales/stock/grid/cell/sales-channel-cell.html'
+            bodyTmpl: 'Magento_InventorySalesAdminUi/stock/grid/cell/sales-channel-cell.html'
         },
 
         /**

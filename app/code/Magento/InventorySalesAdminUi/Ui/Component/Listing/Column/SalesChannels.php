@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Ui\Component\Listing\Column;
+namespace Magento\InventorySalesAdminUi\Ui\Component\Listing\Column;
 
-use Magento\InventorySales\Ui\SalesChannelNameResolverInterface;
+use Magento\InventorySalesAdminUi\Ui\SalesChannelNameResolverInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;

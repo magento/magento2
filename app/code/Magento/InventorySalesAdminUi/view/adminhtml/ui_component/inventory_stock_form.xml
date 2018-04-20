@@ -8,7 +8,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <settings>
         <buttons>
-            <button name="delete" class="Magento\InventorySales\Ui\Component\Control\Stock\DeleteButton"/>
+            <button name="delete" class="Magento\InventorySalesAdminUi\Ui\Component\Control\Stock\DeleteButton"/>
         </buttons>
     </settings>
     <fieldset name="sales_channels" sortOrder="30">
