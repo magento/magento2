@@ -18,6 +18,7 @@ use Magento\Framework\Setup\Declaration\Schema\ElementHistoryFactory;
  * Holds 2 items:
  *  - new (Should be changed to)
  *  - old ()
+ * @api
  */
 class Diff implements DiffInterface
 {
@@ -147,13 +148,15 @@ class Diff implements DiffInterface
      * Check whether element can be registered.
      *
      * For example, if element is not in db_schema_whitelist.json it cant
-     * be registered due to backward incompatibility.
+     * be registered due to backward incompatibility
+     * Extensibility point: if you want to add some dynamic rules of applying or ignoring any schema elements
+     * you can do this by pluginizing this method
      *
      * @param  ElementInterface | Table $object
      * @param string $operation
      * @return bool
      */
-    private function canBeRegistered(ElementInterface $object, $operation)
+    public function canBeRegistered(ElementInterface $object, $operation)
     {
         if (!isset($this->destructiveOperations[$operation])) {
             return true;

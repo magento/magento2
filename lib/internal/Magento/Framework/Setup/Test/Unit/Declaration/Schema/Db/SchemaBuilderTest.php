@@ -164,7 +164,10 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             $name,
             'table',
             'default',
-            'resource'
+            'resource',
+            'utf-8',
+            'utf-8',
+            ''
         );
     }
 
@@ -334,8 +337,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('getTableOptions')
             ->withConsecutive(...array_values($withContext))
             ->willReturnOnConsecutiveCalls(
-                ['Engine' => 'innodb', 'Comment' => ''],
-                ['Engine' => 'innodb', 'Comment' => 'Not null comment']
+                ['engine' => 'innodb', 'comment' => '', 'charset' => 'utf-8', 'collation' => 'utf-8'],
+                ['engine' => 'innodb', 'comment' => 'Not null comment', 'charset' => 'utf-8', 'collation' => 'utf-8']
             );
         $this->dbSchemaReaderMock->expects($this->any())
             ->method('readColumns')
@@ -383,7 +386,9 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                         'name' =>'first_table',
                         'resource' => 'default',
                         'engine' => 'innodb',
-                        'comment' => null
+                        'comment' => null,
+                        'charset' => 'utf-8',
+                        'collation' => 'utf-8'
                     ]
                 ],
                 [
@@ -433,7 +438,9 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                         'name' =>'second_table',
                         'resource' => 'default',
                         'engine' => 'innodb',
-                        'comment' => 'Not null comment'
+                        'comment' => 'Not null comment',
+                        'charset' => 'utf-8',
+                        'collation' => 'utf-8'
                     ]
                 ],
                 [

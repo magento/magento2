@@ -50,7 +50,16 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
     public function testShouldBeCreated()
     {
         $elements = ['first' => new \stdClass(), 'second' => new \stdClass()];
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $element = new Column('third', 'int', $table);
         $existingElement = new Column('second', 'int', $table);
         self::assertTrue($this->model->shouldBeCreated($elements, $element));
@@ -63,7 +72,16 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $element = new Column('third', 'int', $table);
         $generatedElement = new Column('third', 'int', $table, 'Previous column');
         $diff->expects(self::once())
@@ -78,7 +96,16 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $column = new Column('third', 'int', $table, 'Previous column');
         $index = new Index('index_type', 'index', $table, [$column], 'btree');
         $generatedIndex = new Index('index_type', 'index', $table, [$column], 'hash');
@@ -94,13 +121,25 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $refTable = new Table(
             'ref_table',
             'ref_table',
             'table',
             'default',
-            'innodb'
+            'innodb',
+            'utf-8',
+            'utf-8',
+            ''
         );
         $column = new Column('third', 'int', $table, 'Previous column');
         $reference = new Reference('ref', 'foreign', $table, $column, $refTable, $column, 'CASCADE');
@@ -119,7 +158,16 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $column = new Column('third', 'int', $table, 'Previous column');
         $reference = new Reference('ref', 'foreign', $table, $column, $table, $column, 'CASCADE');
         $diff->expects(self::exactly(3))
@@ -140,13 +188,25 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $generateTable = new Table(
             'name',
             'name',
             'table',
             'sales',
-            'innodb'
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
         );
         $diff->expects(self::once())
             ->method('register')
@@ -160,13 +220,25 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $generateTable = new Table(
             'name',
             'name',
             'table',
             'default',
-            'memory'
+            'memory',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
         );
         $diff->expects(self::once())
             ->method('register')
