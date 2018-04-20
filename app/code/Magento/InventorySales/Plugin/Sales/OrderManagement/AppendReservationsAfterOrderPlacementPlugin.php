@@ -19,7 +19,6 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
-use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
 
 class AppendReservationsAfterOrderPlacementPlugin
 {
@@ -89,6 +88,7 @@ class AppendReservationsAfterOrderPlacementPlugin
      * @param OrderManagementInterface $subject
      * @param OrderInterface $order
      * @return OrderInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterPlace(OrderManagementInterface $subject, OrderInterface $order) : OrderInterface
     {
@@ -99,16 +99,16 @@ class AppendReservationsAfterOrderPlacementPlugin
             'objectId' => (string)$order->getEntityId()
         ]);
 
-        $itemsById = [];
+        $itemsToSell = [];
         /** @var OrderItemInterface $item **/
         foreach ($order->getItems() as $item) {
-            $itemsById[$item->getProductId()] = $item->getQtyOrdered();
-        }
-        $productSkus = $this->getSkusByProductIds->execute(array_keys($itemsById));
-        /** @var ItemToSellInterface[] $itemsToSell */
-        $itemsToSell = [];
-        foreach ($productSkus as $productId => $sku) {
-            $itemsToSell[] = $this->itemsToSellFactory->create(['sku' => $sku, 'qty' => $itemsById[$productId]]);
+            $productSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
+                [$item->getProductId()]
+            )[$item->getProductId()];
+            $itemsToSell[] = $this->itemsToSellFactory->create([
+                'sku' => $productSku,
+                'qty' => -(float)$item->getQtyOrdered()
+            ]);
         }
 
         $websiteId = $this->storeManager->getStore($order->getStoreId())->getWebsiteId();

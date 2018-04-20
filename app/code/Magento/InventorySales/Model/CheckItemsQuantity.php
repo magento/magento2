@@ -12,6 +12,7 @@ use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 class CheckItemsQuantity
 {
@@ -26,15 +27,23 @@ class CheckItemsQuantity
     private $isProductSalableForRequestedQty;
 
     /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
      * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
-        IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
+        IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->isProductSalableForRequestedQty = $isProductSalableForRequestedQty;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -42,8 +51,7 @@ class CheckItemsQuantity
      *
      * @param array $items [['sku' => 'qty'], ...]
      * @param array $productTypes [['sku' => 'product_type'], ...]
-     * @psram int $stockId
-     *
+     * @param int $stockId
      * @return void
      * @throws LocalizedException
      */
@@ -51,6 +59,12 @@ class CheckItemsQuantity
     {
         foreach ($items as $sku => $qty) {
             if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
+                $defaultStockId = $this->defaultStockProvider->getId();
+                if ($defaultStockId !== $stockId) {
+                    throw new LocalizedException(
+                        __('Product type is not supported on Default Stock.')
+                    );
+                }
                 continue;
             }
             /** @var ProductSalableResultInterface $isSalable */

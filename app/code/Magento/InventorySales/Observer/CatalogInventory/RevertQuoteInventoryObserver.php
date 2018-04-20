@@ -17,12 +17,12 @@ class RevertQuoteInventoryObserver implements ObserverInterface
     /**
      * @var ProductQty
      */
-    protected $productQty;
+    private $productQty;
 
     /**
      * @var Processor
      */
-    protected $priceIndexer;
+    private $priceIndexer;
 
     /**
      * @param ProductQty $productQty

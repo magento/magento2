@@ -10,14 +10,14 @@ namespace Magento\InventorySales\Observer\CatalogInventory;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
-use Magento\InventoryReservations\Model\ReservationBuilderInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
+use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 class CancelOrderItemObserver implements ObserverInterface
@@ -38,58 +38,50 @@ class CancelOrderItemObserver implements ObserverInterface
     private $getSkusByProductIds;
 
     /**
-     * @var GetProductTypesBySkusInterface
+     * @var PlaceReservationsForSalesEventInterface
      */
-    private $getProductTypesBySkus;
+    private $placeReservationsForSalesEvent;
 
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
+     * @var SalesChannelInterfaceFactory
      */
-    private $isSourceItemsAllowedForProductType;
+    private $salesChannelFactory;
 
     /**
-     * @var ReservationBuilderInterface
+     * @var ItemToSellInterfaceFactory
      */
-    private $reservationBuilder;
+    private $itemsToSellFactory;
 
     /**
-     * @var AppendReservationsInterface
+     * @var WebsiteRepositoryInterface
      */
-    private $appendReservations;
-
-    /**
-     * @var StockByWebsiteIdResolver
-     */
-    private $stockByWebsiteIdResolver;
+    private $websiteRepository;
 
     /**
      * @param Processor $priceIndexer
      * @param SalesEventInterfaceFactory $salesEventFactory
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
-     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
-     * @param ReservationBuilderInterface $reservationBuilder
-     * @param AppendReservationsInterface $appendReservations
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
+     * @param SalesChannelInterfaceFactory $salesChannelFactory
+     * @param ItemToSellInterfaceFactory $itemsToSellFactory
+     * @param WebsiteRepositoryInterface $websiteRepository
      */
     public function __construct(
         Processor $priceIndexer,
         SalesEventInterfaceFactory $salesEventFactory,
         GetSkusByProductIdsInterface $getSkusByProductIds,
-        GetProductTypesBySkusInterface $getProductTypesBySkus,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
-        ReservationBuilderInterface $reservationBuilder,
-        AppendReservationsInterface $appendReservations,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver
+        PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent,
+        SalesChannelInterfaceFactory $salesChannelFactory,
+        ItemToSellInterfaceFactory $itemsToSellFactory,
+        WebsiteRepositoryInterface $websiteRepository
     ) {
         $this->priceIndexer = $priceIndexer;
         $this->salesEventFactory = $salesEventFactory;
         $this->getSkusByProductIds = $getSkusByProductIds;
-        $this->getProductTypesBySkus = $getProductTypesBySkus;
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
-        $this->reservationBuilder = $reservationBuilder;
-        $this->appendReservations = $appendReservations;
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
+        $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
+        $this->salesChannelFactory = $salesChannelFactory;
+        $this->itemsToSellFactory = $itemsToSellFactory;
+        $this->websiteRepository = $websiteRepository;
     }
 
     /**
@@ -108,39 +100,30 @@ class CancelOrderItemObserver implements ObserverInterface
                 [$item->getProductId()]
             )[$item->getProductId()];
 
-            $productType = $item->getProductType() ?: $this->getProductTypesBySkus->execute(
-                [$productSku]
-            )[$productSku];
+            $itemToSell = $this->itemsToSellFactory->create([
+                'sku' => $productSku,
+                'qty' => (float)$qty
+            ]);
 
-            if (true === $this->isSourceItemsAllowedForProductType->execute($productType)) {
-                /** @var SalesEventInterface $salesEvent */
-                $salesEvent = $this->salesEventFactory->create([
-                    'type' => SalesEventInterface::EVENT_ORDER_CANCELED,
-                    'objectType' => SalesEventInterface::OBJECT_TYPE_ORDER,
-                    'objectId' => (string)$item->getOrderId()
-                ]);
+            $websiteId = $item->getStore()->getWebsiteId();
+            $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
+            $salesChannel = $this->salesChannelFactory->create([
+                'data' => [
+                    'type' => SalesChannelInterface::TYPE_WEBSITE,
+                    'code' => $websiteCode
+                ]
+            ]);
 
-                $websiteId = $item->getStore()->getWebsiteId();
-                if (null === $websiteId) {
-                    throw new LocalizedException(__('$websiteId is required'));
-                }
+            /** @var SalesEventInterface $salesEvent */
+            $salesEvent = $this->salesEventFactory->create([
+                'type' => SalesEventInterface::EVENT_ORDER_CANCELED,
+                'objectType' => SalesEventInterface::OBJECT_TYPE_ORDER,
+                'objectId' => (string)$item->getOrderId()
+            ]);
 
-                $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
-                $reservation = $this->reservationBuilder
-                    ->setSku($productSku)
-                    ->setQuantity((float)$qty)
-                    ->setStockId($stockId)
-                    ->setMetadata(sprintf(
-                        '%s:%s:%s',
-                        $salesEvent->getType(),
-                        $salesEvent->getObjectType(),
-                        $salesEvent->getObjectId()
-                    ))
-                    ->build();
-
-                $this->appendReservations->execute([$reservation]);
-            }
+            $this->placeReservationsForSalesEvent->execute([$itemToSell], $salesChannel, $salesEvent);
         }
+
         $this->priceIndexer->reindexRow($item->getProductId());
     }
 }
