@@ -49,7 +49,7 @@
         <requiredEntity type="product_option_value">ProductOptionValueDropdown1</requiredEntity>
         <requiredEntity type="product_option_value">ProductOptionValueDropdown2</requiredEntity>
     </entity>
-    <entity name="ProductOptionRadioButtons" type="product_option">
+    <entity name="ProductOptionRadiobutton" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionRadioButtons</data>
         <data key="type">radio</data>
@@ -84,9 +84,9 @@
         <data key="price">1234</data>
         <data key="price_type">fixed</data>
     </entity>
-    <entity name="ProductOptionDateAndTime" type="product_option">
+    <entity name="ProductOptionDateTime" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
-        <data key="title">OptionDateAndTime</data>
+        <data key="title">OptionDateTime</data>
         <data key="type">date_time</data>
         <data key="sort_order">9</data>
         <data key="is_require">true</data>

@@ -13,5 +13,7 @@
         <element name="saveButton" type="button" selector="#save-button" timeout="30"/>
         <element name="saveArrow" type="button" selector="button[data-ui-id='save-button-dropdown']" timeout="10"/>
         <element name="saveAndClose" type="button" selector="span[title='Save &amp; Close']" timeout="30"/>
+        <element name="storeSwitcherAll" type="button" selector="//div[contains(@class,'store-switcher')]//button" timeout="10"/>
+        <element name="storeSwitcher" type="button" selector="//div[contains(@class,'store-switcher')]//button/../ul/li/a[contains(., '{{var1}}')]" timeout="10" parameterized="true"/>
     </section>
 </sections>

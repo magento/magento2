@@ -168,11 +168,11 @@
         <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
         <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
         <requiredEntity type="product_option">ProductOptionDropdown</requiredEntity>
-        <requiredEntity type="product_option">ProductOptionRadioButtons</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionRadiobutton</requiredEntity>
         <requiredEntity type="product_option">ProductOptionCheckbox</requiredEntity>
         <requiredEntity type="product_option">ProductOptionMultiSelect</requiredEntity>
         <requiredEntity type="product_option">ProductOptionDate</requiredEntity>
-        <requiredEntity type="product_option">ProductOptionDateAndTime</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
         <requiredEntity type="product_option">ProductOptionTime</requiredEntity>
     </entity>
 </entities>

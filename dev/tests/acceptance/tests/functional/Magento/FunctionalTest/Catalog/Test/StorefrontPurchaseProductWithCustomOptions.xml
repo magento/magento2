@@ -45,13 +45,13 @@
 
         <amOnPage url="{{StorefrontHomePage.url}}$createProduct.custom_attributes[url_key]$.html" stepKey="amOnProduct3Page"/>
 
-        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsField(ProductOptionField.title, ProductOptionField.price)}}" stepKey="field"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsArea(ProductOptionArea.title)}}" stepKey="area"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsDropDown(ProductOptionDropdown.title, ProductOptionValueDropdown1.price)}}" stepKey="dropdown"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsRadioButtons(ProductOptionRadioButtons.title, ProductOptionValueRadioButtons1.price)}}" stepKey="buttons"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsCheckbox(ProductOptionCheckbox.title)}}" stepKey="checkbox"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsMultiselect(ProductOptionMultiSelect.title, ProductOptionValueMultiSelect1.price)}}" stepKey="multiSelect"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsData(ProductOptionDate.title, ProductOptionDate.price)}}" stepKey="data"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsField(ProductOptionField.title, ProductOptionField.price)}}" stepKey="checkFieldProductOption"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsArea(ProductOptionArea.title, '1.7')}}" stepKey="checkAreaProductOption"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsDropDown(ProductOptionDropdown.title, ProductOptionValueDropdown1.price)}}" stepKey="checkDropDownProductOption"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsRadioButtons(ProductOptionRadiobutton.title, ProductOptionValueRadioButtons1.price)}}" stepKey="checkButtonsProductOption"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsCheckbox(ProductOptionCheckbox.title, '20.91')}}" stepKey="checkCheckboxProductOptiozn"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsMultiselect(ProductOptionMultiSelect.title, ProductOptionValueMultiSelect1.price)}}" stepKey="checkMultiSelectProductOption"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsData(ProductOptionDate.title, ProductOptionDate.price)}}" stepKey="checkDataProductOption"/>
 
         <!-- Adding items to the checkout -->
 
@@ -59,19 +59,19 @@
         <fillField userInput="OptionArea" selector="{{StorefrontProductInfoMainSection.productOptionAreaInput(ProductOptionArea.title)}}" stepKey="fillProductOptionInputArea"/>
         <attachFile userInput="{{productWithOptions.file}}" selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" stepKey="fillUploadFile"/>
         <selectOption userInput="{{ProductOptionValueDropdown1.price}}" selector="{{StorefrontProductInfoMainSection.productOptionSelect(ProductOptionDropdown.title)}}" stepKey="seeProductOptionDropDown"/>
-        <checkOption selector="{{StorefrontProductInfoMainSection.productOptionRadioButtonsCheckbox(ProductOptionRadioButtons.title, ProductOptionValueRadioButtons1.price)}}" stepKey="seeProductOptionRadioButtons"/>
+        <checkOption selector="{{StorefrontProductInfoMainSection.productOptionRadioButtonsCheckbox(ProductOptionRadiobutton.title, ProductOptionValueRadioButtons1.price)}}" stepKey="seeProductOptionRadioButtons"/>
         <checkOption selector="{{StorefrontProductInfoMainSection.productOptionRadioButtonsCheckbox(ProductOptionCheckbox.title, '20.91')}}" stepKey="seeProductOptionCheckbox"/>
-        <selectOption userInput="{{ProductOptionValueMultiSelect1.price}}" selector="{{StorefrontProductInfoMainSection.productOptionSelect(ProductOptionMultiSelect.title)}}" stepKey="seeProductOptionMultiSelect"/>
-        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDataMonth(ProductOptionDate.title)}}" stepKey="ProductOptionDate"/>
-        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDataDay(ProductOptionDate.title)}}" stepKey="ProductOptionDate1"/>
-        <selectOption userInput="2018" selector="{{StorefrontProductInfoMainSection.productOptionDataYear(ProductOptionDate.title)}}" stepKey="ProductOptionDate2"/>
-        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.ProductOptionDateAndTimeMonth(ProductOptionDateAndTime.title)}}" stepKey="ProductOptionDateAndTimeMonth"/>
-        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.ProductOptionDateAndTimeDay(ProductOptionDateAndTime.title)}}" stepKey="ProductOptionDateAndTimeDay"/>
-        <selectOption userInput="2018" selector="{{StorefrontProductInfoMainSection.ProductOptionDateAndTimeYear(ProductOptionDateAndTime.title)}}" stepKey="ProductOptionDateAndTimeYear"/>
-        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.ProductOptionDateAndTimeHour(ProductOptionDateAndTime.title)}}" stepKey="ProductOptionDateAndTimeHour"/>
-        <selectOption userInput="00" selector="{{StorefrontProductInfoMainSection.ProductOptionDateAndTimeMinute(ProductOptionDateAndTime.title)}}" stepKey="ProductOptionDateAndTimeMinute"/>
-        <selectOption userInput="02" selector="{{StorefrontProductInfoMainSection.ProductOptionTimeHour(ProductOptionTime.title)}}" stepKey="ProductOptionTimeHour"/>
-        <selectOption userInput="00" selector="{{StorefrontProductInfoMainSection.ProductOptionTimeMinute(ProductOptionTime.title)}}" stepKey="ProductOptionTimeMinute"/>
+        <selectOption userInput="{{ProductOptionValueMultiSelect1.price}}" selector="{{StorefrontProductInfoMainSection.productOptionSelect(ProductOptionMultiSelect.title)}}" stepKey="selectProductOptionMultiSelect"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDataMonth(ProductOptionDate.title)}}" stepKey="selectProductOptionDate"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDataDay(ProductOptionDate.title)}}" stepKey="selectProductOptionDate1"/>
+        <selectOption userInput="2018" selector="{{StorefrontProductInfoMainSection.productOptionDataYear(ProductOptionDate.title)}}" stepKey="selectProductOptionDate2"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.ProductOptionDateAndTimeMonth(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeMonth"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.ProductOptionDateAndTimeDay(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeDay"/>
+        <selectOption userInput="2018" selector="{{StorefrontProductInfoMainSection.ProductOptionDateAndTimeYear(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeYear"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.ProductOptionDateAndTimeHour(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeHour"/>
+        <selectOption userInput="00" selector="{{StorefrontProductInfoMainSection.ProductOptionDateAndTimeMinute(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeMinute"/>
+        <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.ProductOptionTimeHour(ProductOptionTime.title)}}" stepKey="selectProductOptionTimeHour"/>
+        <selectOption userInput="00" selector="{{StorefrontProductInfoMainSection.ProductOptionTimeMinute(ProductOptionTime.title)}}" stepKey="selectProductOptionTimeMinute"/>
 
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="finalProductPrice"/>
 
@@ -129,7 +129,7 @@
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionArea.title}}" stepKey="seeAdminOrderProductOptionArea"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{productWithOptions.file}}" stepKey="seeAdminOrderProductOptionFile"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
-        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeAdminOrderProductOptionValueRadioButtons1"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeAdminOrderProductOptionValueRadioButton1"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeAdminOrderProductOptionValueCheckbox" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeAdminOrderproductAttributeOptionsMultiselect1" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Jan 1, 2018" stepKey="seeAdminOrderProductOptionDateAndTime" />
@@ -145,7 +145,7 @@
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionArea.title}}" stepKey="seeAdminOrderProductOptionArea1"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{productWithOptions.file}}" stepKey="seeAdminOrderProductOptionFile1"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeAdminOrderProductOptionValueDropdown11"/>
-        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeAdminOrderProductOptionValueRadioButtons11"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeAdminOrderProductOptionValueRadioButton11"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeAdminOrderProductOptionValueCheckbox1" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeAdminOrderproductAttributeOptionsMultiselect11" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Jan 1, 2018" stepKey="seeAdminOrderProductOptionDateAndTime1" />
@@ -156,19 +156,18 @@
 
         <!-- Go to Customer Order Page and Checking the correctness of displayed custom options for user parameters on Order -->
 
-        <amOnPage url="{{StorefrontCustomerOrderPage.url}}{$grabOrderNumber}" stepKey="amOnProduct4Page"/>
+        <amOnPage url="{{StorefrontCustomerOrderPage.url({$grabOrderNumber})}}" stepKey="amOnProduct4Page"/>
 
-
-        <see selector="{{StorefrontCustomerOrderSection.productNameOptions}}" userInput="{{ProductOptionField.title}}" stepKey="seeStorefontOrderProductOptionField1" />
-        <see selector="{{StorefrontCustomerOrderSection.productNameOptions}}" userInput="{{ProductOptionArea.title}}" stepKey="seeStorefontOrderProductOptionArea1"/>
-        <see selector="{{StorefrontCustomerOrderSection.productNameOptions}}" userInput="{{productWithOptions.file}}" stepKey="seeStorefontOrderProductOptionFile1"/>
-        <see selector="{{StorefrontCustomerOrderSection.productNameOptions}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeStorefontOrderProductOptionValueDropdown11"/>
-        <see selector="{{StorefrontCustomerOrderSection.productNameOptions}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeStorefontOrderProductOptionValueRadioButtons11"/>
-        <see selector="{{StorefrontCustomerOrderSection.productNameOptions}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeStorefontOrderProductOptionValueCheckbox1" />
-        <see selector="{{StorefrontCustomerOrderSection.productNameOptions}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeStorefontOrderproductAttributeOptionsMultiselect11" />
-        <see selector="{{StorefrontCustomerOrderSection.productNameOptions}}" userInput="Jan 1, 2018" stepKey="seeStorefontOrderProductOptionDateAndTime1" />
-        <see selector="{{StorefrontCustomerOrderSection.productNameOptions}}" userInput="1/1/18, 1:00 AM" stepKey="seeStorefontOrderProductOptionData1" />
-        <see selector="{{StorefrontCustomerOrderSection.productNameOptions}}" userInput="1:00 AM" stepKey="seeStorefontOrderProductOptionTime1" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions(ProductOptionField.title, ProductOptionField.title)}}" userInput="{{ProductOptionField.title}}" stepKey="seeStorefontOrderProductOptionField1" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions(ProductOptionArea.title, ProductOptionArea.title)}}" userInput="{{ProductOptionArea.title}}" stepKey="seeStorefontOrderProductOptionArea1"/>
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptionsFile(ProductOptionFile.title, productWithOptions.file)}}" userInput="{{productWithOptions.file}}" stepKey="seeStorefontOrderProductOptionFile1"/>
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions(ProductOptionDropdown.title, ProductOptionValueDropdown1.title)}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeStorefontOrderProductOptionValueDropdown11"/>
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions(ProductOptionRadiobutton.title, ProductOptionValueRadioButtons1.title)}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeStorefontOrderProductOptionValueRadioButtons11"/>
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions(ProductOptionCheckbox.title, ProductOptionValueCheckbox.title)}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeStorefontOrderProductOptionValueCheckbox1" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions(ProductOptionMultiSelect.title, ProductOptionValueMultiSelect1.title)}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeStorefontOrderproductAttributeOptionsMultiselect11" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions(ProductOptionDate.title, 'Jan 1, 2018')}}" userInput="Jan 1, 2018" stepKey="seeStorefontOrderProductOptionDateAndTime1" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions(ProductOptionDateTime.title, '1/1/18, 1:00 AM')}}" userInput="1/1/18, 1:00 AM" stepKey="seeStorefontOrderProductOptionData1" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions(ProductOptionTime.title, '1:00 AM')}}" userInput="1:00 AM" stepKey="seeStorefontOrderProductOptionTime1" />
 
         <!-- Delete product and category -->
 
