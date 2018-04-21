@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">inventory_source_form.inventory_source_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Source Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <dataScope>data</dataScope>
+        <namespace>inventory_source_form</namespace>
+        <deps>
+            <dep>inventory_source_form.inventory_source_form_data_source</dep>
+        </deps>
+        <buttons>
+            <button name="back">
+                <url path="*/*/index"/>
+                <class>back</class>
+                <label translate="true">Back</label>
+            </button>
+            <button name="reset">
+                <class>reset</class>
+                <label translate="true">Reset</label>
+            </button>
+            <button name="save" class="Magento\Inventory\Ui\Component\Control\Source\SaveSplitButton"/>
+        </buttons>
+    </settings>
+    <dataSource name="inventory_source_form_data_source" component="Magento_Ui/js/form/provider">
+        <settings>
+            <submitUrl path="*/*/save"/>
+        </settings>
+        <dataProvider class="Magento\Inventory\Ui\DataProvider\SourceDataProvider" name="inventory_source_form_data_source">
+            <settings>
+                <requestFieldName>source_code</requestFieldName>
+                <primaryFieldName>source_code</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general" sortOrder="10">
+        <settings>
+            <label translate="true">General</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+            <dataScope>general</dataScope>
+        </settings>
+        <field name="source_code" formElement="input" sortOrder="20">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="no-whitespace" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Code</label>
+                <imports>
+                    <link name="disabled">${ $.provider }:data.general.disable_source_code</link>
+                </imports>
+            </settings>
+        </field>
+        <field name="name" formElement="input" sortOrder="20">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Name</label>
+            </settings>
+        </field>
+        <field name="enabled" formElement="checkbox" sortOrder="30">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Is Enabled</label>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="description" formElement="textarea" sortOrder="40">
+            <settings>
+                <validation>
+                    <rule name="max_text_length" xsi:type="number">1000</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Description</label>
+            </settings>
+        </field>
+        <field name="latitude" formElement="input" sortOrder="50">
+            <settings>
+                <validation>
+                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>number</dataType>
+                <label translate="true">Latitude</label>
+            </settings>
+        </field>
+        <field name="longitude" formElement="input" sortOrder="60">
+            <settings>
+                <validation>
+                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>number</dataType>
+                <label translate="true">Longitude</label>
+            </settings>
+        </field>
+    </fieldset>
+    <fieldset name="contact_info" sortOrder="20">
+        <settings>
+            <label translate="true">Contact Info</label>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+            <dataScope>general</dataScope>
+        </settings>
+        <field name="contact_name" formElement="input" sortOrder="10">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Contact Name</label>
+            </settings>
+        </field>
+        <field name="email" formElement="input" sortOrder="20">
+            <settings>
+                <validation>
+                    <rule name="validate-email" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Email</label>
+            </settings>
+        </field>
+        <field name="phone" formElement="input" sortOrder="30">
+            <settings>
+                <validation>
+                    <rule name="validate-phoneStrict" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Phone</label>
+            </settings>
+        </field>
+        <field name="fax" formElement="input" sortOrder="40">
+            <settings>
+                <validation>
+                    <rule name="validate-fax" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Fax</label>
+            </settings>
+        </field>
+    </fieldset>
+    <fieldset name="address" sortOrder="30">
+        <settings>
+            <label translate="true">Address Data</label>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+            <dataScope>general</dataScope>
+        </settings>
+        <field name="country_id" formElement="select" sortOrder="10">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Country</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Directory\Model\Config\Source\Country"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="region_id" formElement="select" sortOrder="20">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">State/Province</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Inventory\Model\OptionSource\RegionSource"/>
+                        <filterBy>
+                            <field>country_id</field>
+                            <target>${ $.provider }:${ $.parentScope }.country_id</target>
+                        </filterBy>
+                        <customEntry>region</customEntry>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="region" formElement="input" sortOrder="30">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">State/Province</label>
+                <visible>false</visible>
+            </settings>
+        </field>
+        <field name="city" formElement="input" sortOrder="40">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">City</label>
+            </settings>
+        </field>
+        <field name="street" formElement="input" sortOrder="50">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Street</label>
+            </settings>
+        </field>
+        <field name="postcode" formElement="input" sortOrder="60">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Postcode</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+    </fieldset>
+    <fieldset name="carriers" sortOrder="40">
+        <settings>
+            <label translate="true">Carriers</label>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+            <dataScope>general</dataScope>
+        </settings>
+        <field name="use_default_carrier_config" formElement="checkbox" sortOrder="10">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Use global Shipping configuration</label>
+                <dataType>boolean</dataType>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="true" xsi:type="number">1</map>
+                            <map name="false" xsi:type="number">0</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="carrier_codes" formElement="multiselect" sortOrder="20">
+            <settings>
+                <label translate="true">Shipping methods</label>
+                <imports>
+                    <link name="visible">!${$.parentName}.use_default_carrier_config:checked</link>
+                </imports>
+                <notice>Use Ctrl+Click for check several values or uncheck value</notice>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Magento\Inventory\Model\OptionSource\CarrierSource"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

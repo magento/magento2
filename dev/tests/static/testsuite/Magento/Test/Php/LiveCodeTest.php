@@ -364,4 +364,40 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             . implode(PHP_EOL, $filesMissingStrictTyping)
         );
     }
+
+    public function testCodeFreeze()
+    {
+        $changedFiles = self::getChangedFilesList('');
+        if (empty($changedFiles)) {
+            return;
+        }
+
+        $allowedChanges = Files::init()->readLists(
+            self::getBaseFilesFolder() . '/_files/blacklist/code_freeze.txt'
+        );
+
+        $changedFrozenCode = [];
+        foreach ($changedFiles as $changedFile) {
+            foreach ($allowedChanges as $notFrozenCode) {
+                if (0 === strpos($changedFile, $notFrozenCode)) {
+                    continue 2;
+                }
+            }
+            $changedFrozenCode[] = $changedFile;
+        }
+
+        $changedFrozenCode = array_map(function ($file) {
+            return substr($file, strlen(self::$pathToSource) + 1);
+        }, $changedFrozenCode);
+        sort($changedFrozenCode, SORT_NATURAL);
+
+        $this->assertEmpty(
+            $changedFrozenCode,
+            sprintf(
+                "Frozen code must not be modified. %d modified files detected:\n\t%s",
+                count($changedFrozenCode),
+                join("\n\t", $changedFrozenCode)
+            )
+        );
+    }
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="website_save_after">
+        <observer name="assign_website_to_default_stock" instance="Magento\InventorySales\Observer\Website\AssignWebsiteToDefaultStock"/>
+    </event>
+    <event name="website_delete_after">
+        <observer name="delete_website_to_stock_link" instance="Magento\InventorySales\Observer\Website\DeleteWebsiteToStockLink"/>
+    </event>
+</config>

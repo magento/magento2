@@ -35,8 +35,7 @@ class IndexName
     /**
      * @param string $indexId
      * @param Dimension[] $dimensions
-     * @param Alias $alias
-     *
+     * @param Alias $alias*
      * @throws LocalizedException
      */
     public function __construct(string $indexId, array $dimensions, Alias $alias)

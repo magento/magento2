@@ -16,6 +16,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 class IndexTableSwitcher implements IndexTableSwitcherInterface
 {
     /**
+     * TODO: move to separate configurable interface (https://github.com/magento-engcom/msi/issues/213)
      * Suffix for replica index table
      *
      * @var string
@@ -23,6 +24,7 @@ class IndexTableSwitcher implements IndexTableSwitcherInterface
     private $replicaTableSuffix = '_replica';
 
     /**
+     * TODO: move to separate configurable interface (https://github.com/magento-engcom/msi/issues/213)
      * Suffix for outdated index table
      *
      * @var string

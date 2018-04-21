@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter">
+        <plugin name="adapt_stock_status_filter" type="Magento\InventoryCatalogSearch\Plugin\Search\FilterMapper\AdaptStockStatusFilterPlugin"/>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\ApplyStockConditionToSelect">
+        <plugin name="adapt_apply_stock_condition_to_select"
+                type="Magento\InventoryCatalogSearch\Plugin\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\AdaptApplyStockConditionToSelectPlugin"/>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect">
+        <plugin name="adapt_apply_stock_condition_to_select"
+                type="Magento\InventoryCatalogSearch\Plugin\Model\Search\FilterMapper\TermDropdownStrategy\AdaptApplyStockConditionToSelectPlugin"/>
+    </type>
+</config>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_InventoryApi::source" title="Inventory Sources" translate="title" sortOrder="10">
+                    <resource id="Magento_InventoryApi::source_edit" title="Edit Inventory Sources" translate="title" sortOrder="10" />
+                </resource>
+                <resource id="Magento_InventoryApi::stock" title="Inventory Stocks" translate="title" sortOrder="20">
+                    <resource id="Magento_InventoryApi::stock_edit" title="Edit Inventory Stocks" translate="title" sortOrder="10" />
+                    <resource id="Magento_InventoryApi::stock_delete" title="Delete Inventory Stocks" translate="title" sortOrder="20" />
+                    <resource id="Magento_InventoryApi::source_stock_link" title="Source to Stock Assigning" translate="title" sortOrder="30" />
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

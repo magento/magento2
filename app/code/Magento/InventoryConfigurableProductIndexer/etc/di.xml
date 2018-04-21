@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
+        <plugin name="configurable_product_index" type="Magento\InventoryConfigurableProductIndexer\Plugin\InventoryIndexer\SourceItemIndexerPlugin" />
+    </type>
+    <type name="Magento\InventoryIndexer\Indexer\Stock\StockIndexer">
+        <plugin name="configurable_product_index" type="Magento\InventoryConfigurableProductIndexer\Plugin\InventoryIndexer\StockIndexerPlugin" />
+    </type>
+    <type name="Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem\SourceItemIndexer">
+        <arguments>
+            <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
+            <argument name="indexStructure" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexStructure</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryConfigurableProductIndexer\Indexer\Stock\StockIndexer">
+        <arguments>
+            <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
+            <argument name="indexStructure" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexStructure</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem\SiblingSkuListInStockProvider">
+        <arguments>
+            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
+        </arguments>
+    </type>
+</config>
