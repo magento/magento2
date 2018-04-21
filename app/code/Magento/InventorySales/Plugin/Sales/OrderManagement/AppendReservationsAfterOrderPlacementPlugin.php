@@ -102,7 +102,10 @@ class AppendReservationsAfterOrderPlacementPlugin
         $itemsById = [];
         /** @var OrderItemInterface $item **/
         foreach ($order->getItems() as $item) {
-            $itemsById[$item->getProductId()] = $item->getQtyOrdered();
+            if (!isset($itemsById[$item->getProductId()])) {
+                $itemsById[$item->getProductId()] = 0;
+            }
+            $itemsById[$item->getProductId()] += $item->getQtyOrdered();
         }
         $productSkus = $this->getSkusByProductIds->execute(array_keys($itemsById));
         /** @var ItemToSellInterface[] $itemsToSell */
