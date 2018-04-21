@@ -81,7 +81,7 @@ class SourceDeductionForBundleProductsOnDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_bundle_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
-    public function testSourceDeductionWhileShippingBundleWithShipmentTogether()
+    public function testSourceDeductionWhileShippingBundleWithShipmentSeparately()
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('increment_id', 'test_order_bundle_1')
@@ -129,7 +129,7 @@ class SourceDeductionForBundleProductsOnDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_bundle_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
-    public function testSourceDeductionWhileShippingBundleWithShipmentSeparately()
+    public function testSourceDeductionWhileShippingBundleWithShipmentTogether()
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('increment_id', 'test_order_bundle_1')
