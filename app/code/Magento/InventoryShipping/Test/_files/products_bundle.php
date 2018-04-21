@@ -34,7 +34,7 @@ $productsData = [
         'attributes'        => [
             'attribute_set_id' => 4,
             'type_id'          => Type::TYPE_BUNDLE,
-            'sku'              => 'SKU-BUNDLE-2',
+            'sku'              => 'SKU-BUNDLE-1',
             'name'             => 'Bundle Product Blue',
             'status'           => Status::STATUS_ENABLED,
             'stock_data'       => ['is_in_stock' => true]
@@ -45,17 +45,24 @@ $productsData = [
             'sku_type'      => 0,
             'price_view'    => 1
         ],
-        'simple_link'       => [
-            'sku'   => 'SKU-2',
-            'qty'   => 2,
-            'title' => 'Simple Product Blue'
+        'simple_links'      => [
+            [
+                'sku'   => 'SKU-1',
+                'qty'   => 2,
+                'title' => 'Simple Product Orange'
+            ],
+            [
+                'sku'   => 'SKU-3',
+                'qty'   => 3,
+                'title' => 'Simple Product Blue'
+            ]
         ]
     ],
     [
         'attributes'        => [
             'attribute_set_id' => 4,
             'type_id'          => Type::TYPE_BUNDLE,
-            'sku'              => 'SKU-BUNDLE-3',
+            'sku'              => 'SKU-BUNDLE-2',
             'name'             => 'Bundle Product White',
             'status'           => Status::STATUS_ENABLED,
             'stock_data'       => ['is_in_stock' => true]
@@ -66,10 +73,17 @@ $productsData = [
             'sku_type'      => 0,
             'price_view'    => 1
         ],
-        'simple_link'       => [
-            'sku'   => 'SKU-1',
-            'qty'   => 3,
-            'title' => 'Simple Product White'
+        'simple_links'      => [
+            [
+                'sku'   => 'SKU-2',
+                'qty'   => 3,
+                'title' => 'Simple Product White'
+            ],
+            [
+                'sku'   => 'SKU-3',
+                'qty'   => 4,
+                'title' => 'Simple Product Blue'
+            ]
         ]
     ]
 ];
@@ -82,22 +96,26 @@ foreach ($productsData as $productData) {
     }
     $product->setCustomAttributes($productData['custom_attributes']);
 
-    /** @var Magento\Bundle\Api\Data\LinkInterface $link */
-    $link = $productLinkFactory->create();
-    $link->setSku($productData['simple_link']['sku']);
-    $link->setQty($productData['simple_link']['qty']);
-    $link->setCanChangeQuantity(1);
+    $options = [];
+    foreach ($productData['simple_links'] as $linkData) {
+        /** @var Magento\Bundle\Api\Data\LinkInterface $link */
+        $link = $productLinkFactory->create();
+        $link->setSku($linkData['sku']);
+        $link->setQty($linkData['qty']);
+        $link->setCanChangeQuantity(1);
 
-    /** @var Magento\Bundle\Api\Data\OptionInterface $option */
-    $option = $bundleOptionFactory->create();
-    $option->setTitle($productData['simple_link']['title']);
-    $option->setRequired(true);
-    $option->setType('select');
-    $option->setProductLinks([$link]);
+        /** @var Magento\Bundle\Api\Data\OptionInterface $option */
+        $option = $bundleOptionFactory->create();
+        $option->setTitle($linkData['title']);
+        $option->setRequired(true);
+        $option->setType('select');
+        $option->setProductLinks([$link]);
+        $options[] = $option;
+    }
 
     /** @var \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes */
     $extensionAttributes = $extensionAttributesFactory->create(ProductInterface::class);
-    $extensionAttributes->setBundleProductOptions([$option]);
+    $extensionAttributes->setBundleProductOptions($options);
 
     $product->setExtensionAttributes($extensionAttributes);
     $product = $productRepository->save($product);

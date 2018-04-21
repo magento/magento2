@@ -20,6 +20,7 @@ use Magento\Sales\Api\ShipOrderInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\Sales\Model\Order\Item as OrderItem;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -75,51 +76,104 @@ class SourceDeductionForBundleProductsOnDefaultStockTest extends TestCase
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_bundle_children.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/products_bundle.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_bundle_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
-    public function testSourceDeductionWhileShippingPartialOrderedQty()
+    public function testSourceDeductionWhileShippingBundleWithShipmentTogether()
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('increment_id', 'test_order_bundle_1')
             ->create();
         /** @var OrderInterface $order */
         $order = current($this->orderRepository->getList($searchCriteria)->getItems());
+        /** @var \Magento\Sales\Model\Order\Item $item */
+        $item = $this->getBundleOrderItemByShipmentType($order, AbstractType::SHIPMENT_SEPARATELY);
 
         $items = [];
-
-        /** @var \Magento\Sales\Model\Order\Item $item */
-        foreach ($order->getAllVisibleItems() as $item) {
+        /** @var ShipmentItemCreationInterface $invoiceItemCreation */
+        $shipmentItemCreation = $this->shipmentItemCreationFactory->create();
+        $shipmentItemCreation->setOrderItemId($item->getId());
+        $shipmentItemCreation->setQty(1);
+        $items[] = $shipmentItemCreation;
+        foreach ($item->getChildrenItems() as $childItem) {
             /** @var ShipmentItemCreationInterface $invoiceItemCreation */
             $shipmentItemCreation = $this->shipmentItemCreationFactory->create();
-            $shipmentItemCreation->setOrderItemId($item->getId());
-            $shipmentItemCreation->setQty(1);
+            $shipmentItemCreation->setOrderItemId($childItem->getId());
+            $shipmentItemCreation->setQty(2);
             $items[] = $shipmentItemCreation;
-            if ($item->getProduct()->getShipmentType() == AbstractType::SHIPMENT_SEPARATELY) {
-                foreach ($item->getChildrenItems() as $childrenItem) {
-                    /** @var ShipmentItemCreationInterface $invoiceItemCreation */
-                    $shipmentItemCreation = $this->shipmentItemCreationFactory->create();
-                    $shipmentItemCreation->setOrderItemId($childrenItem->getId());
-                    $shipmentItemCreation->setQty(2);
-                    $items[] = $shipmentItemCreation;
-                }
-            }
         }
+
         $this->shipOrder->execute($order->getEntityId(), $items);
 
         /** @var SourceItemInterface $sourceItem */
-        $sourceItem = current($this->getSourceItemBySku->execute('SKU-2')->getItems());
-        self::assertEquals(3, $sourceItem->getQuantity());
-
         $sourceItem = current($this->getSourceItemBySku->execute('SKU-1')->getItems());
-        self::assertEquals(3.5, $sourceItem->getQuantity());
+        self::assertEquals(8, $sourceItem->getQuantity());
 
-        $salableQty = $this->getProductSalableQty->execute('SKU-2', $this->defaultStockProvider->getId());
-        self::assertEquals(2, $salableQty);
+        /** @var SourceItemInterface $sourceItem */
+        $sourceItem = current($this->getSourceItemBySku->execute('SKU-3')->getItems());
+        self::assertEquals(28, $sourceItem->getQuantity());
 
         $salableQty = $this->getProductSalableQty->execute('SKU-1', $this->defaultStockProvider->getId());
-        self::assertEquals(1.5, $salableQty);
+        self::assertEquals(4, $salableQty);
+
+        $salableQty = $this->getProductSalableQty->execute('SKU-3', $this->defaultStockProvider->getId());
+        self::assertEquals(4, $salableQty);
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_bundle_children.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/products_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_bundle_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     */
+    public function testSourceDeductionWhileShippingBundleWithShipmentSeparately()
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('increment_id', 'test_order_bundle_1')
+            ->create();
+        /** @var OrderInterface $order */
+        $order = current($this->orderRepository->getList($searchCriteria)->getItems());
+        /** @var \Magento\Sales\Model\Order\Item $item */
+        $item = $this->getBundleOrderItemByShipmentType($order, AbstractType::SHIPMENT_TOGETHER);
+
+        /** @var ShipmentItemCreationInterface $invoiceItemCreation */
+        $shipmentItemCreation = $this->shipmentItemCreationFactory->create();
+        $shipmentItemCreation->setOrderItemId($item->getId());
+        $shipmentItemCreation->setQty(2);
+
+        $this->shipOrder->execute($order->getEntityId(), [$shipmentItemCreation]);
+
+        /** @var SourceItemInterface $sourceItem */
+        $sourceItem = current($this->getSourceItemBySku->execute('SKU-2')->getItems());
+        self::assertEquals(10, $sourceItem->getQuantity());
+
+        /** @var SourceItemInterface $sourceItem */
+        $sourceItem = current($this->getSourceItemBySku->execute('SKU-3')->getItems());
+        self::assertEquals(18, $sourceItem->getQuantity());
+
+        $salableQty = $this->getProductSalableQty->execute('SKU-2', $this->defaultStockProvider->getId());
+        self::assertEquals(5, $salableQty);
+
+        $salableQty = $this->getProductSalableQty->execute('SKU-3', $this->defaultStockProvider->getId());
+        self::assertEquals(4, $salableQty);
+    }
+
+    /**
+     * Get order item for bundle product by shipment type
+     *
+     * @param OrderInterface $order
+     * @param int $type
+     * @return OrderItem
+     */
+    private function getBundleOrderItemByShipmentType(OrderInterface $order, int $type): OrderItem
+    {
+        foreach ($order->getAllVisibleItems() as $item) {
+            if ($item->getProduct()->getShipmentType() == $type) {
+                return $item;
+            }
+        }
     }
 }

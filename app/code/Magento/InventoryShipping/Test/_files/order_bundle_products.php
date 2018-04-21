@@ -22,8 +22,8 @@ $cartManagement = Bootstrap::getObjectManager()->get(CartManagementInterface::cl
 $addressFactory = Bootstrap::getObjectManager()->get(AddressInterfaceFactory::class);
 
 $itemsToBuy = [
-    'SKU-BUNDLE-2' => ['qty' => 1, 'option_qty' => 3],
-    'SKU-BUNDLE-3' => ['qty' => 2, 'option_qty' => 2]
+    'SKU-BUNDLE-1' => ['qty' => 2, 'options_qty' => [3, 4]],
+    'SKU-BUNDLE-2' => ['qty' => 3, 'options_qty' => [5, 6]]
 ];
 
 $cartId = $cartManagement->createEmptyCart();
@@ -57,12 +57,19 @@ $cart->getShippingAddress()->collectShippingRates();
 foreach ($itemsToBuy as $sku => $qtyData) {
     $product = $productRepository->get($sku);
     $options = $product->getTypeInstance()->getOptions($product);
-    $option = array_shift($options);
+    $optionsData = [];
+    $optionsQtyData = [];
+    $i = 0;
+    foreach ($options as $option) {
+        $optionsData[$option->getId()] = $option->getId();
+        $optionsQtyData[$option->getId()] = $qtyData['options_qty'][$i];
+        $i++;
+    }
     $requestData = [
         'product'           => $product->getProductId(),
         'qty'               => $qtyData['qty'],
-        'bundle_option'     => [$option->getId() => $option->getId()],
-        'bundle_option_qty' => [$option->getId() => $qtyData['option_qty']],
+        'bundle_option'     => $optionsData,
+        'bundle_option_qty' => $optionsQtyData,
     ];
     $request = new \Magento\Framework\DataObject($requestData);
     $cart->addProduct($product, $request);
