@@ -64,18 +64,17 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getEvent')
             ->will($this->returnValue($eventObject));
 
-         $objectManager = new ObjectManager($this);
-         $taxObserverObject = $objectManager->getObject(
-             \Magento\Tax\Observer\UpdateProductOptionsObserver::class,
-             [
-                 'taxData' => $taxData,
-                 'registry' => $registry,
-             ]
-         );
+        $objectManager = new ObjectManager($this);
+        $taxObserverObject = $objectManager->getObject(
+            \Magento\Tax\Observer\UpdateProductOptionsObserver::class,
+            [
+                'taxData' => $taxData,
+                'registry' => $registry,
+                ]
+        );
 
-         $taxObserverObject->execute($observerObject);
-
-         $this->assertEquals($expected, $frameworkObject->getAdditionalOptions());
+        $taxObserverObject->execute($observerObject);
+        $this->assertEquals($expected, $frameworkObject->getAdditionalOptions());
     }
 
     /**

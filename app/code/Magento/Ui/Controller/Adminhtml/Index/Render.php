@@ -54,7 +54,7 @@ class Render extends AbstractAction
     }
 
     /**
-     * Action for AJAX request
+     * Action for AJAX request.
      *
      * @return void|\Magento\Framework\Controller\ResultInterface
      */
@@ -69,6 +69,11 @@ class Render extends AbstractAction
             $component = $this->factory->create($this->_request->getParam('namespace'));
             if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
                 $this->prepareComponent($component);
+
+                if ($component->getContext()->getAcceptType() === 'json') {
+                    $this->_response->setHeader('Content-Type', 'application/json');
+                }
+
                 $this->_response->appendBody((string) $component->render());
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -103,7 +108,7 @@ class Render extends AbstractAction
     }
 
     /**
-     * Call prepare method in the component UI
+     * Call prepare method in the component UI.
      *
      * @param UiComponentInterface $component
      * @return void
@@ -118,7 +123,7 @@ class Render extends AbstractAction
     }
 
     /**
-     * Optionally validate ACL resource of components with a DataSource/DataProvider
+     * Optionally validate ACL resource of components with a DataSource/DataProvider.
      *
      * @param mixed $dataProviderConfigData
      * @return bool

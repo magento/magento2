@@ -18,14 +18,14 @@
         "magento/module-quote": "101.0.*",
         "magento/module-paypal": "100.2.*",
         "magento/module-ui": "101.0.*",
-        "braintree/braintree_php": "3.25.0"
+        "braintree/braintree_php": "3.27.0"
     },
     "suggest": {
         "magento/module-checkout-agreements": "100.2.*",
         "magento/module-theme": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.2",
+    "version": "100.2.3",
     "license": [
         "proprietary"
     ],

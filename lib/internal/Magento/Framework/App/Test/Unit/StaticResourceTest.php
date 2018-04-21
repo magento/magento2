@@ -8,14 +8,17 @@ namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Filesystem;
+use Magento\Framework\App\State as AppState;
 
 /**
+ * Test for Magento\Framework\App\StaticResource class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StaticResourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppState|\PHPUnit_Framework_MockObject_MockObject
      */
     private $state;
 
@@ -66,7 +69,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->state = $this->createMock(\Magento\Framework\App\State::class);
+        $this->state = $this->createMock(AppState::class);
         $this->response = $this->createMock(\Magento\MediaStorage\Model\File\Storage\Response::class);
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->publisher = $this->createMock(\Magento\Framework\App\View\Asset\Publisher::class);
@@ -92,7 +95,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     {
         $this->state->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\App\State::MODE_PRODUCTION));
+            ->will($this->returnValue(AppState::MODE_PRODUCTION));
         $this->response->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(404);
@@ -160,7 +163,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'developer mode with non-modular resource' => [
-                \Magento\Framework\App\State::MODE_DEVELOPER,
+                AppState::MODE_DEVELOPER,
                 'area/Magento/theme/locale/dir/file.js',
                 'dir',
                 false,
@@ -168,7 +171,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
                 ['area' => 'area', 'locale' => 'locale', 'module' => '', 'theme' => 'Magento/theme'],
             ],
             'default mode with modular resource' => [
-                \Magento\Framework\App\State::MODE_DEFAULT,
+                AppState::MODE_DEFAULT,
                 'area/Magento/theme/locale/Namespace_Module/dir/file.js',
                 'Namespace_Module',
                 true,
@@ -188,11 +191,26 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     {
         $this->state->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
+            ->will($this->returnValue(AppState::MODE_DEVELOPER));
         $this->request->expects($this->once())
             ->method('get')
             ->with('resource')
             ->will($this->returnValue('short/path.js'));
+        $this->object->launch();
+    }
+    
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testLaunchPathAbove()
+    {
+        $this->state->expects($this->once())
+            ->method('getMode')
+            ->willreturn(AppState::MODE_DEVELOPER);
+        $this->request->expects($this->once())
+            ->method('get')
+            ->with('resource')
+            ->willReturn('frontend/..\..\folder_above/././Magento_Ui/template/messages.html');
         $this->object->launch();
     }
 
