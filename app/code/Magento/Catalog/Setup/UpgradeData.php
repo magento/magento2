@@ -396,6 +396,10 @@ class UpgradeData implements UpgradeDataInterface
             $this->enableSegmentation($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.2.6') < 0) {
+            $this->addStoreviewScopeToStatusAttribute($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -479,5 +483,27 @@ class UpgradeData implements UpgradeDataInterface
         $setup->getConnection()->truncateTable($setup->getTable('catalog_category_product_index'));
         $setup->getConnection()->truncateTable($setup->getTable('catalog_category_product_index_replica'));
         $setup->getConnection()->truncateTable($setup->getTable('catalog_category_product_index_tmp'));
+    }
+
+    /**
+     * Enable storeview level for product status attribute because products can't enable/disable
+     * for storeviewwise
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function addStoreviewScopeToStatusAttribute(ModuleDataSetupInterface $setup)
+    {
+        /** @var CategorySetup $categorySetup */
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        $attribute = $categorySetup->getAttribute($entityTypeId, 'status');
+
+        $setup->getConnection()
+            ->update(
+                $setup->getTable('catalog_eav_attribute'),
+                ['is_global' => 0],
+                $setup->getConnection()->quoteInto('attribute_id = ?', $attribute['attribute_id'])
+            );
     }
 }
