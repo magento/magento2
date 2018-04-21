@@ -57,8 +57,8 @@ class ExtensionAttributesFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateWithLogicException()
     {
-        $this->expectException(
-            'LogicException',
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage(
             "Class 'Magento\\Framework\\Api\\ExtensionAttributesFactoryTest' must implement an interface, "
             . "which extends from 'Magento\\Framework\\Api\\ExtensibleDataInterface'"
         );
