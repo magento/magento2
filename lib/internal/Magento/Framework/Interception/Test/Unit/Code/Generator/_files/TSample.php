@@ -10,6 +10,11 @@ class TSample
     private $value;
     private $variadicValue;
 
+    public function returnVoid() : void
+    {
+        // Nothing to do here
+    }
+
     public function getValue() : string
     {
         return $this->value;
