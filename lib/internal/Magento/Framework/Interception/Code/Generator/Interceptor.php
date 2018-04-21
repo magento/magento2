@@ -102,17 +102,20 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
+        // Void methods must not use the return statement with any value
+        $return = ((string) $method->getReturnType() === 'void') ? '' : 'return ';
+
         $methodInfo = [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,
             'body' => "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
                 "if (!\$pluginInfo) {\n" .
-                "    return parent::{$method->getName()}({$this->_getParameterList(
+                "    {$return}parent::{$method->getName()}({$this->_getParameterList(
                 $parameters
             )});\n" .
-            "} else {\n" .
-            "    return \$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
-            "}",
+                "} else {\n" .
+                "    {$return}\$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
+                "}",
             'returnType' => $method->getReturnType(),
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
