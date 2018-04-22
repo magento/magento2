@@ -105,11 +105,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         $resultPage->getConfig()->getTitle()->prepend($resultPageTitle);
         $resultPage->addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
 
-        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
-        if ($block) {
-            $block->setStoreId($storeId);
-        }
-
         return $resultPage;
     }
 

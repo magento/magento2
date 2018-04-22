@@ -88,51 +88,31 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     }
 
     /**
+     *
+     * Clear the table we'll be writing de-normalized data into
+     * to prevent archived data getting in the way of actual data.
+     *
+     * @return void
+     */
+    private function clearCurrentTable()
+    {
+        $this->connection->delete(
+            $this->activeTableSwitcher
+                ->getAdditionalTableName($this->getMainTable())
+        );
+    }
+
+    /**
      * Refresh entities index
      *
      * @return $this
      */
     public function execute()
     {
+        $this->clearCurrentTable();
         $this->reindex();
         $this->activeTableSwitcher->switchTable($this->connection, [$this->getMainTable()]);
         return $this;
-    }
-
-    /**
-     * Return select for remove unnecessary data
-     *
-     * @return \Magento\Framework\DB\Select
-     */
-    protected function getSelectUnnecessaryData()
-    {
-        return $this->connection->select()->from(
-            $this->getMainTable(),
-            []
-        )->joinLeft(
-            ['t' => $this->getMainTable()],
-            $this->getMainTable() .
-            '.category_id = t.category_id AND ' .
-            $this->getMainTable() .
-            '.store_id = t.store_id AND ' .
-            $this->getMainTable() .
-            '.product_id = t.product_id',
-            []
-        )->where(
-            't.category_id IS NULL'
-        );
-    }
-
-    /**
-     * Remove unnecessary data
-     *
-     * @return void
-     */
-    protected function removeUnnecessaryData()
-    {
-        $this->connection->query(
-            $this->connection->deleteFromSelect($this->getSelectUnnecessaryData(), $this->getMainTable())
-        );
     }
 
     /**
@@ -233,7 +213,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                 )
             );
             $this->publishData();
-            $this->removeUnnecessaryData();
         }
     }
 }

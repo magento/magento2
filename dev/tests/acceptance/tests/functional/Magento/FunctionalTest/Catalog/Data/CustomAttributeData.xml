@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="CustomAttributeCategoryUrlKey" type="custom_attribute">
         <data key="attribute_code">url_key</data>
@@ -24,4 +24,12 @@
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <var key="value" entityKey="value" entityType="ProductAttributeOption"/>
     </entity>
-</config>
+    <entity name="ApiProductDescription" type="custom_attribute">
+        <data key="attribute_code">description</data>
+        <data key="value" unique="suffix">API Product Description</data>
+    </entity>
+    <entity name="ApiProductShortDescription" type="custom_attribute">
+        <data key="attribute_code">short_description</data>
+        <data key="value" unique="suffix">API Product Short Description</data>
+    </entity>
+</entities>

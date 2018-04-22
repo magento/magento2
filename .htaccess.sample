@@ -111,7 +111,8 @@
 ############################################
 ## enable rewrites
 
-    Options +FollowSymLinks
+    # The following line has better security but add some performance overhead - see https://httpd.apache.org/docs/2.4/en/misc/perf-tuning.html
+    Options -FollowSymLinks +SymLinksIfOwnerMatch
     RewriteEngine on
 
 ############################################
@@ -323,6 +324,15 @@
         </IfVersion>
     </Files>
     <Files magento_umask>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+    </Files>
+    <Files auth.json>
         <IfVersion < 2.4>
             order allow,deny
             deny from all

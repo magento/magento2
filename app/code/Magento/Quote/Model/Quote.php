@@ -1046,7 +1046,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function updateCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
         $quoteCustomer = $this->getCustomer();
-        $this->dataObjectHelper->mergeDataObjects(get_class($quoteCustomer), $quoteCustomer, $customer);
+        $this->dataObjectHelper->mergeDataObjects(CustomerInterface::class, $quoteCustomer, $customer);
         $this->setCustomer($quoteCustomer);
         return $this;
     }

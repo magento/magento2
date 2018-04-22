@@ -3,11 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class ProductAttributeTypeTest extends GraphQlAbstract
@@ -71,7 +70,7 @@ QUERY;
             'customer',
             \Magento\Catalog\Api\Data\ProductInterface::class
         ];
-        $attributeTypes = ['String', 'Int', 'Double','Boolean', 'Double'];
+        $attributeTypes = ['String', 'Int', 'Float','Boolean', 'Float'];
         $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityType, $response);
     }
 
@@ -110,6 +109,10 @@ QUERY;
     {
      attribute_code:"region"
      entity_type:"customer_address"
+    },
+    {
+      attribute_code:"media_gallery",
+      entity_type:"catalog_product"
     }
   ]
   )
@@ -130,7 +133,8 @@ QUERY;
             'store_id',
             'quantity_and_stock_status',
             'default_billing',
-            'region'
+            'region',
+            'media_gallery'
         ];
         $entityTypes = [
             'catalog_category',
@@ -138,15 +142,17 @@ QUERY;
             'customer',
             'catalog_product',
             'customer',
-            'customer_address'
+            'customer_address',
+            'catalog_product'
         ];
         $attributeTypes = [
-            'EavDataAttributeOptionInterface',
-            'EavDataAttributeOptionInterface',
+            'String[]',
+            'String[]',
             'Int',
             'CatalogInventoryDataStockItemInterface[]',
             'CustomerDataAddressInterface',
-            'CustomerDataRegionInterface'
+            'CustomerDataRegionInterface',
+            'ProductMediaGallery'
         ];
         $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityTypes, $response);
     }
@@ -166,10 +172,6 @@ QUERY;
 {
   customAttributeMetadata(attributes:
   [
-    {
-      attribute_code:"media_gallery",
-      entity_type:"catalog_product"
-    },
     {
       attribute_code:"undefine_attribute",
       entity_type:"catalog_category"
@@ -191,8 +193,8 @@ QUERY;
  }
 QUERY;
         $response = $this->graphQlQuery($query);
-        $expectedAttributeCodes = ['media_gallery', 'undefine_attribute', 'special_price'];
-        $entityTypes = ['catalog_product', 'catalog_category', 'customer'];
+        $expectedAttributeCodes = ['undefine_attribute', 'special_price'];
+        $entityTypes = ['catalog_category', 'customer'];
         $attributeTypes = ['AnyType'];
         $attributeMetaData = array_map(null, $response['customAttributeMetadata']['items'], $entityTypes);
         foreach ($attributeMetaData as $itemsIndex => $itemArray) {
