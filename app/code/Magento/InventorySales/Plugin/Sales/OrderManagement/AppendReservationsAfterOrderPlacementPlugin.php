@@ -17,7 +17,6 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventorySales\Model\CheckItemsQuantity;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 
@@ -54,11 +53,6 @@ class AppendReservationsAfterOrderPlacementPlugin
     private $itemsToSellFactory;
 
     /**
-     * @var GetProductTypesBySkusInterface
-     */
-    private $getProductTypesBySkus;
-
-    /**
      * @var CheckItemsQuantity
      */
     private $checkItemsQuantity;
@@ -75,7 +69,6 @@ class AppendReservationsAfterOrderPlacementPlugin
      * @param SalesChannelInterfaceFactory $salesChannelFactory
      * @param SalesEventInterfaceFactory $salesEventFactory
      * @param ItemToSellInterfaceFactory $itemsToSellFactory
-     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param CheckItemsQuantity $checkItemsQuantity
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      */
@@ -86,7 +79,6 @@ class AppendReservationsAfterOrderPlacementPlugin
         SalesChannelInterfaceFactory $salesChannelFactory,
         SalesEventInterfaceFactory $salesEventFactory,
         ItemToSellInterfaceFactory $itemsToSellFactory,
-        GetProductTypesBySkusInterface $getProductTypesBySkus,
         CheckItemsQuantity $checkItemsQuantity,
         StockByWebsiteIdResolver $stockByWebsiteIdResolver
     ) {
@@ -96,7 +88,6 @@ class AppendReservationsAfterOrderPlacementPlugin
         $this->salesChannelFactory = $salesChannelFactory;
         $this->salesEventFactory = $salesEventFactory;
         $this->itemsToSellFactory = $itemsToSellFactory;
-        $this->getProductTypesBySkus = $getProductTypesBySkus;
         $this->checkItemsQuantity = $checkItemsQuantity;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
     }
@@ -109,12 +100,11 @@ class AppendReservationsAfterOrderPlacementPlugin
      */
     public function afterPlace(OrderManagementInterface $subject, OrderInterface $order) : OrderInterface
     {
-        $itemsById = $itemsBySku = $productTypes = $itemsToSell = [];
+        $itemsById = $itemsBySku = $itemsToSell = [];
         foreach ($order->getItems() as $item) {
             $itemsById[$item->getProductId()] = $item->getQtyOrdered();
         }
         $productSkus = $this->getSkusByProductIds->execute(array_keys($itemsById));
-        $productTypes = $this->getProductTypesBySkus->execute($productSkus);
         foreach ($productSkus as $productId => $sku) {
             $itemsBySku[$sku] = (float)$itemsById[$productId];
             $itemsToSell[] = $this->itemsToSellFactory->create([
@@ -127,7 +117,7 @@ class AppendReservationsAfterOrderPlacementPlugin
         $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
 
-        $this->checkItemsQuantity->execute($itemsBySku, $productTypes, $stockId);
+        $this->checkItemsQuantity->execute($itemsBySku, $stockId);
 
         /** @var SalesEventInterface $salesEvent */
         $salesEvent = $this->salesEventFactory->create([
