@@ -59,7 +59,7 @@ class GetItemsToDeduct
             if ($orderItem->isDummy(true)) {
                 return [];
             }
-            $itemsToShip[] = $this->processComplexItem($shipmentItem);
+            $itemsToShip = $this->processComplexItem($shipmentItem);
         } else {
             $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(
                 [$shipmentItem->getProductId()]
@@ -98,7 +98,7 @@ class GetItemsToDeduct
                     $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
                         [$item->getProductId()]
                     )[$item->getProductId()];
-                    $itemsToShip = $this->itemToDeduct->create([
+                    $itemsToShip[] = $this->itemToDeduct->create([
                         'sku' => $itemSku,
                         'qty' => $qty
                     ]);
@@ -110,7 +110,7 @@ class GetItemsToDeduct
                     [$shipmentItem->getProductId()]
                 )[$shipmentItem->getProductId()];
                 $qty = $this->castQty($orderItem, $shipmentItem->getQty());
-                $itemsToShip = $this->itemToDeduct->create([
+                $itemsToShip[] = $this->itemToDeduct->create([
                     'sku' => $itemSku,
                     'qty' => $qty
                 ]);
