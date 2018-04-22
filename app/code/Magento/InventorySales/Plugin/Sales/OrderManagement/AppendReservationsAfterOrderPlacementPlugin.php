@@ -89,6 +89,8 @@ class AppendReservationsAfterOrderPlacementPlugin
      * @param OrderManagementInterface $subject
      * @param OrderInterface $order
      * @return OrderInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterPlace(OrderManagementInterface $subject, OrderInterface $order) : OrderInterface
     {
