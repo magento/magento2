@@ -321,7 +321,6 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
         $sender = 'Sender';
         $senderValues = ['name' => $sender, 'email' => $sender];
         $storeIds = [1, 2];
-        $defaultStoreId = reset($storeIds);
         
         $this->senderResolverMock
             ->expects($this->once())
