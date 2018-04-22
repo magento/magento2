@@ -50,8 +50,8 @@ $orderItem1->setProductId($product->getId())
 /** @var Item $orderItem */
 $orderItem2 = $objectManager->create(Item::class);
 $orderItem2->setProductId($product->getId())
-    ->setSku('simple2')
-    ->setName('Simple product')
+    ->setSku($product->getSku())
+    ->setName($product->getName())
     ->setPrice(100)
     ->setQtyOrdered(2)
     ->setBasePrice($product->getPrice())
