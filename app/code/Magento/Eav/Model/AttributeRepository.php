@@ -132,9 +132,14 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         $attributeCollection->addAttributeGrouping();
 
         $attributes = [];
-        /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
-        foreach ($attributeCollection as $attribute) {
-            $attributes[] = $this->get($entityTypeCode, $attribute->getAttributeCode());
+        // If search criteria not specified try to load all attributes for speedup
+        if (!$searchCriteria->getFilterGroups()) {
+            $attributes = $this->eavConfig->getEntityAttributes($entityTypeCode);
+        } else {
+            /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
+            foreach ($attributeCollection as $attribute) {
+                $attributes[] = $this->get($entityTypeCode, $attribute->getAttributeCode());
+            }
         }
 
         /** @var \Magento\Eav\Api\Data\AttributeSearchResultsInterface $searchResults */
