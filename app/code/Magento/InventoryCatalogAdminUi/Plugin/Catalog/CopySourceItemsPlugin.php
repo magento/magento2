@@ -17,7 +17,6 @@ use Magento\InventoryCatalogAdminUi\Observer\SourceItemsProcessor;
 
 /**
  * Copies source items from the original product to the duplicate
- * @package Magento\InventoryCatalogAdminUi\Plugin\Catalog
  */
 class CopySourceItemsPlugin
 {
@@ -37,7 +36,6 @@ class CopySourceItemsPlugin
     private $sourceItemsProcessor;
 
     /**
-     * CopySourceItemsPlugin constructor.
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
      * @param SourceItemsProcessor $sourceItemsProcessor
@@ -57,6 +55,7 @@ class CopySourceItemsPlugin
      * @param Product $result
      * @param Product $product
      * @return Product $result
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterCopy(
         Copier $subject,
