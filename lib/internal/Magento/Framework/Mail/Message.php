@@ -13,7 +13,7 @@ class Message implements MailMessageInterface
     /**
      * @var \Zend\Mail\Message
      */
-    private $zendMessage;
+    protected $zendMessage;
 
     /**
      * Message type
