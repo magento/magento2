@@ -10,7 +10,6 @@
         "magento/module-inventory-catalog": "*",
         "magento/module-inventory-source-selection-api": "*",
         "magento/module-inventory-source-selection": "*",
-        "magento/module-inventory-reservations-api": "*",
         "magento/module-sales": "*",
         "magento/module-shipping": "*",
         "magento/module-ui": "*",
