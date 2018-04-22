@@ -20,11 +20,6 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
     private $design;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $registry;
-
-    /**
      * @var \Magento\Store\Model\App\Emulation|\PHPUnit_Framework_MockObject_MockObject
      */
     private $appEmulation;
@@ -134,7 +129,6 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
                 \Magento\Email\Model\AbstractTemplate::class,
                 [
                     'design' => $this->design,
-                    'registry' => $this->registry,
                     'appEmulation' => $this->appEmulation,
                     'storeManager' => $this->storeManager,
                     'filesystem' => $this->filesystem,

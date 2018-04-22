@@ -73,11 +73,6 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
             $resultPage->getConfig()->getTitle()->prepend(__('New Product'));
         }
 
-        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
-        if ($block) {
-            $block->setStoreId($product->getStoreId());
-        }
-
         return $resultPage;
     }
 }

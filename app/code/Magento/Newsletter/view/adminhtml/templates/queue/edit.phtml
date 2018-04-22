@@ -37,10 +37,10 @@
 <script>
 require([
     'jquery',
-    'tinymce',
+    'wysiwygAdapter',
     'mage/mage',
     'prototype'
-], function(jQuery, tinyMCE){
+], function(jQuery, wysiwyg){
 
 //<![CDATA[
 jQuery('#queue_edit_form').mage('form').mage('validation');
@@ -49,10 +49,10 @@ jQuery('#newsletter_queue_preview_form').mage('form').mage('validation');
 queueControl = {
     id: 'text',
     preview: function() {
-        if (this.isEditor() && tinyMCE.get(this.id)) {
-            tinyMCE.triggerSave();
-            $('preview_text').value = tinyMCE.get(this.id).getContent();
-            tinyMCE.triggerSave();
+        if (this.isEditor() && wysiwyg.get(this.id)) {
+            wysiwyg.triggerSave();
+            $('preview_text').value = wysiwyg.get(this.id).getContent();
+            wysiwyg.triggerSave();
         } else {
             $('preview_text').value = $(this.id).value;
         }

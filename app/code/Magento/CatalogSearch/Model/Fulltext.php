@@ -73,6 +73,8 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
      * Reset search results cache
      *
      * @return $this
+     * @deprecated Not used anymore
+     * @see \Magento\CatalogSearch\Model\ResourceModel\Fulltext::resetSearchResultsByStore
      */
     public function resetSearchResults()
     {

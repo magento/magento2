@@ -104,7 +104,8 @@ class UrlRewriteHandler
         $this->isSkippedProduct[$category->getEntityId()] = [];
         $saveRewriteHistory = $category->getData('save_rewrites_history');
         $storeId = $category->getStoreId();
-        if ($category->getAffectedProductIds()) {
+
+        if ($category->getChangedProductIds()) {
             $this->isSkippedProduct[$category->getEntityId()] = $category->getAffectedProductIds();
             /* @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
             $collection = $this->productCollectionFactory->create()
@@ -140,6 +141,7 @@ class UrlRewriteHandler
                 )
             );
         }
+
         foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
             $mergeDataProvider->merge(
                 $this->getCategoryProductsUrlRewrites(

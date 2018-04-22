@@ -14,9 +14,9 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * @param string $filename
-         */
+            /**
+             * @param string $filename
+             */
             function ($filename) {
                 $dom = new \DOMDocument();
                 $xmlFile = file_get_contents($filename);
@@ -105,7 +105,6 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
         $list = [
             '#etc/countries.xml$#',
             '#conf/schema.xml$#',
-            '#conf/solrconfig.xml$#',
             '#layout/swagger_index_index.xml$#',
             '#Doc/etc/doc/vars.xml$#'
         ];

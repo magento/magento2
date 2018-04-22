@@ -326,7 +326,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                         $amountExclTax = $amountInclTax - $taxAmount;
                     } else {
                         $appliedRates = $this->_calculationFactory->create()->getAppliedRates($rateRequest);
-                        if (count($appliedRates) > 1) {
+                        if (is_array($appliedRates) && count($appliedRates) > 1) {
                             $taxAmount = 0;
                             foreach ($appliedRates as $appliedRate) {
                                 $taxRate = $appliedRate['percent'];

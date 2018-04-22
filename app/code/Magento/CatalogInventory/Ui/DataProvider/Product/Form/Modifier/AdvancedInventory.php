@@ -210,7 +210,6 @@ class AdvancedInventory extends AbstractModifier
                     'scopeLabel' => '[GLOBAL]',
                 ]
             );
-
             $container['arguments']['data']['config'] = [
                 'formElement' => 'container',
                 'componentType' => 'container',
@@ -227,6 +226,7 @@ class AdvancedInventory extends AbstractModifier
             ];
             $qty['arguments']['data']['config'] = [
                 'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
+                'group' => 'quantity_and_stock_status_qty',
                 'dataType' => 'number',
                 'formElement' => 'input',
                 'componentType' => 'field',

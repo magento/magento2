@@ -27,7 +27,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->webSiteModel = $this->getMockBuilder(\Magento\Store\Model\WebSite::class)
+        $this->webSiteModel = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->setMethods(['getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();

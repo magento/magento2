@@ -9,27 +9,57 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 
 /**
- * Assert that Developer section is not present in production mode.
+ * Assert that all groups in Developer section is not present in production mode except debug group "Log to File" field.
  */
 class AssertDeveloperSectionVisibility extends AbstractConstraint
 {
     /**
-     * Assert Developer section is not present in production mode.
+     * List of groups not visible in production mode.
+     *
+     * @var array
+     */
+    private $groups = [
+        'front_end_development_workflow',
+        'restrict',
+        'template',
+        'translate_inline',
+        'js',
+        'css',
+        'image',
+        'static',
+        'grid',
+    ];
+
+    /**
+     * Assert all groups in Developer section is not present in production mode except debug group "Log to File" field.
      *
      * @param SystemConfigEdit $configEdit
      * @return void
      */
     public function processAssert(SystemConfigEdit $configEdit)
     {
+        $configEdit->open();
         if ($_ENV['mage_mode'] === 'production') {
-            \PHPUnit_Framework_Assert::assertFalse(
-                in_array('Developer', $configEdit->getTabs()->getSubTabsNames('Advanced')),
-                'Developer section should be hidden in production mode.'
+            foreach ($this->groups as $group) {
+                \PHPUnit\Framework\Assert::assertFalse(
+                    $configEdit->getForm()->isGroupVisible('dev', $group),
+                    sprintf('%s group should be hidden in production mode.', $group)
+                );
+            }
+            \PHPUnit\Framework\Assert::assertTrue(
+                $configEdit->getForm()->getGroup('dev', 'debug')->isFieldVisible('dev', 'debug_debug', 'logging'),
+                '"Log to File" should be presented in production mode.'
             );
         } else {
-            \PHPUnit_Framework_Assert::assertTrue(
-                in_array('Developer', $configEdit->getTabs()->getSubTabsNames('Advanced')),
-                'Developer section should be not hidden in developer or default mode.'
+            foreach ($this->groups as $group) {
+                \PHPUnit\Framework\Assert::assertTrue(
+                    $configEdit->getForm()->isGroupVisible('dev', $group),
+                    sprintf('%s group should be visible in developer mode.', $group)
+                );
+            }
+            \PHPUnit\Framework\Assert::assertTrue(
+                $configEdit->getForm()->isGroupVisible('dev', 'debug'),
+                'Debug group should be visible in developer mode.'
             );
         }
     }

@@ -25,7 +25,7 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
     /**
      * Expected message.
      */
-    const UNIQUE_MESSAGE = 'The value of attribute "%s" must be unique';
+    const UNIQUE_MESSAGE = 'The value of the "%s" attribute isn\'t unique. Set a unique value and try again.';
 
     /**
      * Fixture factory.
@@ -61,7 +61,7 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
         $actualErrorMessage = $catalogProductEdit->getMessagesBlock()->getErrorMessage();
         $attributeLabel = $attribute->getFrontendLabel();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             sprintf(self::UNIQUE_MESSAGE, $attributeLabel),
             $actualErrorMessage,
             'JS error notice on product edit page is not equal to expected.'
