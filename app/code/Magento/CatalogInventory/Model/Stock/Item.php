@@ -401,7 +401,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
                 if ($this->getUseConfigQtyIncrements()) {
                     $this->qtyIncrements = $this->stockConfiguration->getQtyIncrements($this->getStoreId());
                 } else {
-                    $this->qtyIncrements = (int) $this->getData(static::QTY_INCREMENTS);
+                    $this->qtyIncrements = (float) $this->getData(static::QTY_INCREMENTS);
                 }
             }
             if ($this->qtyIncrements <= 0) {
