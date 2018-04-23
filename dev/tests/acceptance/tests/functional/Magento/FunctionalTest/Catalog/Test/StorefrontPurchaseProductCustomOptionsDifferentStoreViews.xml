@@ -109,15 +109,15 @@
         <!-- Update Option Customizable Options and Option Value 1-->
 
         <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
-        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitle}}" stepKey="unCheckUseDefaultOptionTitle"/>
+        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitle}}" stepKey="uncheckUseDefaultOptionTitle"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionTitle('Custom Options 1')}}" userInput="FR Custom Options 1" stepKey="fillOptionTitle2"/>
-        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('0')}}" stepKey="unCheckUseDefaultOptionValueTitle1"/>
+        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('0')}}" stepKey="uncheckUseDefaultOptionValueTitle1"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('FR Custom Options 1', '0')}}" userInput="FR option1" stepKey="fillOptionValueTitle3"/>
 
         <!-- Update Product with Option Value 1 DropDown 1-->
 
         <click selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="clickHiddenRequireMessage"/>
-        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="unCheckUseDefaultOptionValueTitle2"/>
+        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="uncheckUseDefaultOptionValueTitle2"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('FR Custom Options 1', '1')}}" userInput="FR option2" stepKey="fillOptionValueTitle4"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
 
