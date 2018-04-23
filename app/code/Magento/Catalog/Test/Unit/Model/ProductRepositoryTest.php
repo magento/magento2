@@ -179,6 +179,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'load',
                 'setData',
                 'getStoreId',
+                'getPriceModel',
                 'getMediaGalleryEntries'
             ]
         );
@@ -197,6 +198,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getProductLinks',
                 'setProductLinks',
                 'validate',
+                'getPriceModel',
                 'save',
                 'getMediaGalleryEntries',
             ]
@@ -204,6 +206,21 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->initializedProductMock->expects($this->any())
             ->method('hasGalleryAttribute')
             ->willReturn(true);
+
+        $productTypePriceMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Type\Price::class,
+            ['getFinalPrice']
+        );
+
+        $this->productMock->expects($this->any())
+            ->method('getPriceModel')
+            ->willReturn($productTypePriceMock);
+
+        $this->initializedProductMock->expects($this->any())
+            ->method('getPriceModel')
+            ->willReturn($productTypePriceMock);
+
+
         $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
         $this->initializationHelperMock = $this->createMock(
             \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class
@@ -332,7 +349,10 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->productMock));
         $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)
             ->will($this->returnValue('test_id'));
-        $this->productMock->expects($this->once())->method('setData')->with('_edit_mode', true);
+        $this->productMock->expects($this->atLeastOnce())->method('setData')->withConsecutive(
+            [$this->equalTo('_edit_mode'), $this->equalTo(true)],
+            [$this->equalTo('minimal_price'), $this->equalTo(null)]
+        );
         $this->productMock->expects($this->once())->method('load')->with('test_id');
         $this->productMock->expects($this->once())->method('getSku')->willReturn($sku);
         $this->assertEquals($this->productMock, $this->model->get($sku, true));
@@ -358,7 +378,10 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $storeId = 7;
         $this->productFactoryMock->expects($this->once())->method('create')->willReturn($this->productMock);
         $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)->willReturn($productId);
-        $this->productMock->expects($this->once())->method('setData')->with('store_id', $storeId);
+        $this->productMock->expects($this->atLeastOnce())->method('setData')->withConsecutive(
+            [$this->equalTo('store_id'), $this->equalTo($storeId)],
+            [$this->equalTo('minimal_price'), $this->equalTo(null)]
+        );
         $this->productMock->expects($this->once())->method('load')->with($productId);
         $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
         $this->productMock->expects($this->once())->method('getSku')->willReturn($sku);

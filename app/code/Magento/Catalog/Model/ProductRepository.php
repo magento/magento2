@@ -248,7 +248,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($storeId !== null) {
                 $product->setData('store_id', $storeId);
             }
+
             $product->load($productId);
+            $product->setMinimalPrice($product->getFinalPrice());
+
             $this->cacheProduct($cacheKey, $product);
         }
         if (!isset($this->instances[$sku])) {
@@ -699,6 +702,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection->addAttributeToSelect('*');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+        $collection->addMinimalPrice();
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
