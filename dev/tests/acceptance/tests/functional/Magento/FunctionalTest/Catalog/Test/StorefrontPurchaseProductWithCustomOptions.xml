@@ -157,7 +157,7 @@
 
         <!-- Go to Customer Order Page and Checking the correctness of displayed custom options for user parameters on Order -->
 
-        <amOnPage url="{{StorefrontCustomerOrderPage.url({$grabOrderNumber})}}" stepKey="amOnProduct4Page"/>
+        <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="amOnProduct4Page"/>
 
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionField.title, ProductOptionField.title)}}" userInput="{{ProductOptionField.title}}" stepKey="seeStorefontOrderProductOptionField1" />
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionArea.title, ProductOptionArea.title)}}" userInput="{{ProductOptionArea.title}}" stepKey="seeStorefontOrderProductOptionArea1"/>
