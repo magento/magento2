@@ -40,9 +40,9 @@
         <data key="image_size_x">0</data>
         <data key="image_size_y">0</data>
     </entity>
-    <entity name="ProductOptionDropdown" type="product_option">
+    <entity name="ProductOptionDropDown" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
-        <data key="title">OptionDorpDown</data>
+        <data key="title">OptionDropDown</data>
         <data key="type">drop_down</data>
         <data key="sort_order">4</data>
         <data key="is_require">true</data>

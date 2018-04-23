@@ -167,7 +167,7 @@
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
         <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
         <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
-        <requiredEntity type="product_option">ProductOptionDropdown</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionDropDown</requiredEntity>
         <requiredEntity type="product_option">ProductOptionRadiobutton</requiredEntity>
         <requiredEntity type="product_option">ProductOptionCheckbox</requiredEntity>
         <requiredEntity type="product_option">ProductOptionMultiSelect</requiredEntity>

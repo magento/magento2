@@ -24,13 +24,13 @@
         <element name="productOptionDataMonth" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='month']" parameterized="true"/>
         <element name="productOptionDataDay" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='day']" parameterized="true"/>
         <element name="productOptionDataYear" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='year']" parameterized="true"/>
-        <element name="ProductOptionDateAndTimeMonth" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='month']" parameterized="true"/>
-        <element name="ProductOptionDateAndTimeDay" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='day']" parameterized="true"/>
-        <element name="ProductOptionDateAndTimeYear" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='year']" parameterized="true"/>
-        <element name="ProductOptionDateAndTimeHour" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='hour']" parameterized="true"/>
-        <element name="ProductOptionDateAndTimeMinute" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='minute']" parameterized="true"/>
-        <element name="ProductOptionTimeHour" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='hour']" parameterized="true"/>
-        <element name="ProductOptionTimeMinute" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='minute']" parameterized="true"/>
+        <element name="productOptionDateAndTimeMonth" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='month']" parameterized="true"/>
+        <element name="productOptionDateAndTimeDay" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='day']" parameterized="true"/>
+        <element name="productOptionDateAndTimeYear" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='year']" parameterized="true"/>
+        <element name="productOptionDateAndTimeHour" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='hour']" parameterized="true"/>
+        <element name="productOptionDateAndTimeMinute" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='minute']" parameterized="true"/>
+        <element name="productOptionTimeHour" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='hour']" parameterized="true"/>
+        <element name="productOptionTimeMinute" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='minute']" parameterized="true"/>
 
         <!-- Only one of Upload/Url Inputs are available for File and Sample depending on the value of the corresponding TypeSelector -->
         <element name="addLinkFileUploadFile" type="file" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//input[@type='file']" parameterized="true" />
@@ -38,9 +38,7 @@
         <element name="productShortDescription" type="text" selector="//div[@class='product attribute overview']//div[@class='value']"/>
         <element name="productAttributeTitle1" type="text" selector="#product-options-wrapper div[tabindex='0'] label"/>
         <element name="productAttributeOptions1" type="select" selector="#product-options-wrapper div[tabindex='0'] option"/>
-        <element name="productAttributeOptionsField" type="text" selector="//label[contains(.,'{{var1}}')]//span[@data-price-amount='{{var2}}']" parameterized="true"/>
-        <element name="productAttributeOptionsArea" type="text" selector="//label[contains(.,'{{var1}}')]//span[@data-price-amount='{{var2}}']" parameterized="true"/>
-        <element name="productAttributeOptionsFile" type="text" selector="//label[contains(.,'{{var1}}')]//span[@data-price-amount='{{var2}}']" parameterized="true"/>
+        <element name="productAttributeOptionsPrice" type="text" selector="//label[contains(.,'{{var1}}')]//span[@data-price-amount='{{var2}}']" parameterized="true"/>
         <element name="productAttributeOptionsDropDown" type="text" selector="//label[contains(.,'{{var1}}')]/../div[@class='control']//select//option[@price='{{var2}}']" parameterized="true"/>
         <element name="productAttributeOptionsRadioButtons" type="text" selector="//label[contains(.,'{{var1}}')]/../div[@class='control']//span[@data-price-amount='{{var2}}']" parameterized="true"/>
         <element name="productAttributeOptionsCheckbox" type="text" selector="//label[contains(.,'{{var1}}')]/../div[@class='control']//span[@data-price-amount='{{var2}}']" parameterized="true"/>
