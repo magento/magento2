@@ -109,15 +109,15 @@
         <!-- Update Option Customizable Options and Option Value 1-->
 
         <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
-        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitle}}" stepKey="unCheckboxUseDefault1"/>
+        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitle}}" stepKey="unCheckboxUseDefaultOptionTitle"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionTitle('Custom Options 1')}}" userInput="FR Custom Options 1" stepKey="fillOptionTitle2"/>
-        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('0')}}" stepKey="unCheckboxUseDefaultOption1"/>
+        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('0')}}" stepKey="unCheckboxUseDefaultOptionValueTitle1"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('FR Custom Options 1', '0')}}" userInput="FR option1" stepKey="fillOptionValueTitle3"/>
 
         <!-- Update Product with Option Value 1 DropDown 1-->
 
         <click selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="clickHiddenRequireMessage"/>
-        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="unCheckboxUseDefaultOption4"/>
+        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="unCheckboxUseDefaultOptionValueTitle2"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('FR Custom Options 1', '1')}}" userInput="FR option2" stepKey="fillOptionValueTitle4"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
 
@@ -269,13 +269,13 @@
         <!-- Update Option Customizable Options and Option Value 1-->
 
         <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
-        <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitle}}" stepKey="checkboxUseDefault2"/>
-        <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('0')}}" stepKey="checkboxUseDefault3"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitle}}" stepKey="checkboxUseDefaultOptionTitle"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('0')}}" stepKey="checkboxUseDefaultOptionValueTitle1"/>
 
         <!-- Update Product with Option Value 1 DropDown 1-->
 
         <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
-        <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="checkboxUseDefault5"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="checkboxUseDefaultOptionValueTitle2"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton3"/>
 
         <!--Go to Product Page-->
