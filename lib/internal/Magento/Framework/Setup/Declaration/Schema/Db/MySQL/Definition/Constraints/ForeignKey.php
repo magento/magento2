@@ -74,7 +74,9 @@ class ForeignKey implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         if (!isset($data['Create Table'])) {
-            throw new LocalizedException(__('Can`t read foreign keys from current database'));
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase('Can`t read foreign keys from current database')
+            );
         }
 
         $createMySQL = $data['Create Table'];
