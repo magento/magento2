@@ -71,8 +71,16 @@ class Head implements Layout\ReaderInterface
         Layout\Element $headElement
     ) {
         $pageConfigStructure = $readerContext->getPageConfigStructure();
-        /** @var \Magento\Framework\View\Layout\Element $node */
-        foreach ($headElement as $node) {
+        $nodes = iterator_to_array($headElement, false);
+
+        usort(
+            $nodes,
+            function (Layout\Element $current, Layout\Element $next) {
+                return $current->getAttribute('order') <=> $next->getAttribute('order');
+            }
+        );
+
+        foreach ($nodes as $node) {
             switch ($node->getName()) {
                 case self::HEAD_CSS:
                 case self::HEAD_SCRIPT:
@@ -105,6 +113,7 @@ class Head implements Layout\ReaderInterface
                     break;
             }
         }
+
         return $this;
     }
 
