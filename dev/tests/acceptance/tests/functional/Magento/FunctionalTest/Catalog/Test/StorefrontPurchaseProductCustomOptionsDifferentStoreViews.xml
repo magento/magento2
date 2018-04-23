@@ -47,9 +47,9 @@
         </before>
 
         <after>
-            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
-            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
-            <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Delete Store View EN -->
 
