@@ -18,11 +18,6 @@ class Observer
     const XML_PATH_GENERATION_ENABLED = 'sitemap/generate/enabled';
 
     /**
-     * Cronjob expression configuration
-     */
-    const XML_PATH_CRON_EXPR = 'crontab/default/jobs/generate_sitemaps/schedule/cron_expr';
-
-    /**
      * Error email template configuration
      */
     const XML_PATH_ERROR_TEMPLATE = 'sitemap/generate/error_email_template';
@@ -63,6 +58,11 @@ class Observer
      * @var \Magento\Framework\Translate\Inline\StateInterface
      */
     protected $inlineTranslation;
+
+    /**
+     * @var \Magento\Cron\Model\ScheduleFactory
+     */
+    private $scheduleFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
