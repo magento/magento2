@@ -11,6 +11,6 @@
     <section name="AdminOrderTotalSection">
         <element name="subTotal" type="text" selector=".order-subtotal-table tbody tr.col-0>td span.price"/>
         <element name="grandTotal" type="text" selector=".order-subtotal-table tfoot tr.col-0>td span.price"/>
-        <element name="shippingAndHandling" type="text" selector="//*[@id='sales_order_view_tabs_order_info_content']//table/tbody/tr[2]/td[2]/span"/>
+        <element name="shippingAndHandling" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Shipping &amp; Handling']/following-sibling::td//span[@class='price']"/>
     </section>
 </sections>
