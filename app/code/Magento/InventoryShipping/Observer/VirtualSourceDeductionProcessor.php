@@ -7,92 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Observer;
 
-use Magento\Catalog\Model\Product\Type as VirtualType;
-use Magento\Downloadable\Model\Product\Type as DownloadableType;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Validation\ValidationException;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
+use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
+use Magento\InventoryShipping\Model\InventoryRequestFromInvoiceFactory;
+use Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface;
+use Magento\InventoryShipping\Model\SourceDeductionRequestsFromSourceSelectionFactory;
 use Magento\InventorySourceSelection\Model\GetDefaultSourceSelectionAlgorithmCodeInterface;
-use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
-use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
-use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
-use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
-use Magento\Sales\Api\Data\InvoiceItemInterface;
-use Magento\Sales\Model\Order\Item;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
- * Class VirtualSourceDeductionProcessor | Probably need to divide on services
+ * Class VirtualSourceDeductionProcessor
  */
 class VirtualSourceDeductionProcessor implements ObserverInterface
 {
-    /**
-     * @var ReservationBuilderInterface
-     */
-    private $reservationBuilder;
-
-    /**
-     * @var AppendReservationsInterface
-     */
-    private $appendReservations;
-
-    /**
-     * @var SourceItemsSaveInterface
-     */
-    private $sourceItemsSave;
-
-    /**
-     * @var StockByWebsiteIdResolver
-     */
-    private $stockByWebsiteIdResolver;
-
-    /**
-     * @var GetSourceItemBySourceCodeAndSku
-     */
-    private $getSourceItemBySourceCodeAndSku;
-
-    /**
-     * @var GetSkusByProductIdsInterface
-     */
-    private $getSkusByProductIds;
-
-    /**
-     * @var GetStockItemConfigurationInterface
-     */
-    private $getStockItemConfiguration;
-
-    /**
-     * @var Json
-     */
-    private $jsonSerializer;
-
-    /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
-     * @var InventoryRequestInterfaceFactory
-     */
-    private $inventoryRequestFactory;
-
-    /**
-     * @var ItemRequestInterfaceFactory
-     */
-    private $itemRequestFactory;
-
     /**
      * @var SourceSelectionServiceInterface
      */
@@ -104,49 +36,47 @@ class VirtualSourceDeductionProcessor implements ObserverInterface
     private $getDefaultSourceSelectionAlgorithmCode;
 
     /**
-     * VirtualSourceDeductionProcessor constructor.
-     * @param ReservationBuilderInterface $reservationBuilder
-     * @param AppendReservationsInterface $appendReservations
-     * @param SourceItemsSaveInterface $sourceItemsSave
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
-     * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
-     * @param GetSkusByProductIdsInterface $getSkusByProductIds
-     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param Json $jsonSerializer
-     * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
-     * @param ItemRequestInterfaceFactory $itemRequestFactory
+     * @var InventoryRequestFromInvoiceFactory
+     */
+    private $inventoryRequestFromInvoiceFactory;
+
+    /**
+     * @var SourceDeductionServiceInterface
+     */
+    private $sourceDeductionService;
+
+    /**
+     * @var SourceDeductionRequestsFromSourceSelectionFactory
+     */
+    private $sourceDeductionRequestsFromSourceSelectionFactory;
+
+    /**
+     * @var SalesEventInterfaceFactory
+     */
+    private $salesEventFactory;
+
+    /**
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+     * @param InventoryRequestFromInvoiceFactory $inventoryRequestFromInvoiceFactory
+     * @param SourceDeductionServiceInterface $sourceDeductionService
+     * @param SourceDeductionRequestsFromSourceSelectionFactory $sourceDeductionRequestsFromSourceSelectionFactory
+     * @param SalesEventInterfaceFactory $salesEventFactory
      */
     public function __construct(
-        ReservationBuilderInterface $reservationBuilder,
-        AppendReservationsInterface $appendReservations,
-        SourceItemsSaveInterface $sourceItemsSave,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
-        GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku,
-        GetSkusByProductIdsInterface $getSkusByProductIds,
-        GetStockItemConfigurationInterface $getStockItemConfiguration,
-        DefaultSourceProviderInterface $defaultSourceProvider,
-        Json $jsonSerializer,
-        InventoryRequestInterfaceFactory $inventoryRequestFactory,
-        ItemRequestInterfaceFactory $itemRequestFactory,
         SourceSelectionServiceInterface $sourceSelectionService,
-        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
+        InventoryRequestFromInvoiceFactory $inventoryRequestFromInvoiceFactory,
+        SourceDeductionServiceInterface $sourceDeductionService,
+        SourceDeductionRequestsFromSourceSelectionFactory $sourceDeductionRequestsFromSourceSelectionFactory,
+        SalesEventInterfaceFactory $salesEventFactory
     ) {
-        $this->reservationBuilder = $reservationBuilder;
-        $this->appendReservations = $appendReservations;
-        $this->sourceItemsSave = $sourceItemsSave;
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
-        $this->getSourceItemBySourceCodeAndSku = $getSourceItemBySourceCodeAndSku;
-        $this->getSkusByProductIds = $getSkusByProductIds;
-        $this->getStockItemConfiguration = $getStockItemConfiguration;
-        $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->jsonSerializer = $jsonSerializer;
-        $this->inventoryRequestFactory = $inventoryRequestFactory;
-        $this->itemRequestFactory = $itemRequestFactory;
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
+        $this->inventoryRequestFromInvoiceFactory = $inventoryRequestFromInvoiceFactory;
+        $this->sourceDeductionService = $sourceDeductionService;
+        $this->sourceDeductionRequestsFromSourceSelectionFactory = $sourceDeductionRequestsFromSourceSelectionFactory;
+        $this->salesEventFactory = $salesEventFactory;
     }
 
     /**
@@ -158,114 +88,59 @@ class VirtualSourceDeductionProcessor implements ObserverInterface
     {
         /** @var \Magento\Sales\Model\Order\Invoice $invoice */
         $invoice = $observer->getEvent()->getInvoice();
-
-        if ($invoice->getOrigData('entity_id')) {
+        if (!$this->isValid($invoice)) {
             return;
         }
 
-        $selectionRequestItems = [];
-        foreach ($invoice->getItems() as $invoiceItem) {
-            if (!$this->isValidItem($invoiceItem)) {
-                continue;
-            }
+        $inventoryRequest = $this->inventoryRequestFromInvoiceFactory->create($invoice);
+        $selectionAlgorithmCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
+        $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest, $selectionAlgorithmCode);
 
-            $itemSku = $invoiceItem->getSku() ?: $this->getSkusByProductIds->execute(
-                [$invoiceItem->getProductId()]
-            )[$invoiceItem->getProductId()];
-            $qty = $this->castQty($invoiceItem->getOrderItem(), $invoiceItem->getQty());
-
-            $selectionRequestItems[] = $this->itemRequestFactory->create([
-                'sku' => $itemSku,
-                'qty' => $qty,
-            ]);
-        }
-
-        if (empty($selectionRequestItems)) {
-            return;
-        }
-
-        $order = $invoice->getOrder();
-        $websiteId = $order->getStore()->getWebsiteId();
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
-
-        /** @var InventoryRequestInterface $inventoryRequest */
-        $inventoryRequest = $this->inventoryRequestFactory->create([
-            'stockId' => $stockId,
-            'items' => $selectionRequestItems
+        /** @var SalesEventInterface $salesEvent */
+        $salesEvent = $this->salesEventFactory->create([
+            'type' => SalesEventInterface::EVENT_INVOICE_CREATED,
+            'objectType' => SalesEventInterface::OBJECT_TYPE_ORDER,
+            'objectId' => $invoice->getOrderId(),
         ]);
-        $sourceSelectionResult = $this->sourceSelectionService->execute(
-            $inventoryRequest,
-            $this->getDefaultSourceSelectionAlgorithmCode->execute()
+
+        $sourceDeductionRequests = $this->sourceDeductionRequestsFromSourceSelectionFactory->create(
+            $sourceSelectionResult,
+            $salesEvent,
+            (int)$invoice->getOrder()->getStore()->getWebsiteId()
         );
 
-        $this->deductSources($sourceSelectionResult, $stockId);
+        foreach ($sourceDeductionRequests as $sourceDeductionRequest) {
+            $this->sourceDeductionService->execute($sourceDeductionRequest);
+        }
     }
 
     /**
-     * @param InvoiceItemInterface $invoiceItem
+     * @param InvoiceInterface $invoice
      * @return bool
      */
-    private function isValidItem(InvoiceItemInterface $invoiceItem): bool
+    private function isValid(InvoiceInterface $invoice): bool
     {
-        $orderItem = $invoiceItem->getOrderItem();
-        return in_array(
-            $orderItem->getProductType(),
-            [
-                VirtualType::TYPE_VIRTUAL,
-                DownloadableType::TYPE_DOWNLOADABLE
-            ]
-        );
+        if ($invoice->getOrigData('entity_id')) {
+            return false;
+        }
+
+        return $this->hasValidItems($invoice);
     }
 
     /**
-     * @param SourceSelectionResultInterface $sourceSelectionResult
-     * @param int $stockId
-     *
-     * @throws ValidationException
-     * @throws CouldNotSaveException
-     * @throws InputException
+     * @param InvoiceInterface $invoice
+     * @return bool
      */
-    private function deductSources(SourceSelectionResultInterface $sourceSelectionResult, int $stockId)
+    private function hasValidItems(InvoiceInterface $invoice): bool
     {
-        $reservationsToSave = [];
-        $sourceItemsToSave = [];
-        foreach ($sourceSelectionResult->getSourceSelectionItems() as $sourceSelectionItem) {
-            $deductQty = $sourceSelectionItem->getQtyToDeduct();
-            if ($deductQty <= 0) {
-                 continue;
+        foreach ($invoice->getItems() as $invoiceItem) {
+            /** @var OrderItemInterface $orderItem */
+            $orderItem = $invoiceItem->getOrderItem();
+            if ($orderItem->getIsVirtual()) {
+                return true;
             }
-
-            $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute(
-                $sourceSelectionItem->getSourceCode(),
-                $sourceSelectionItem->getSku()
-            );
-            $sourceItem->setQuantity($sourceItem->getQuantity() - $deductQty);
-            $sourceItemsToSave[] = $sourceItem;
-
-            $reservationsToSave[] = $this->reservationBuilder
-                ->setSku($sourceSelectionItem->getSku())
-                ->setStockId($stockId)
-                ->setQuantity($sourceSelectionItem->getQtyToDeduct())
-                ->build();
         }
 
-        $this->sourceItemsSave->execute($sourceItemsToSave);
-        $this->appendReservations->execute($reservationsToSave);
-    }
-
-    /**
-     * @param Item $item
-     * @param string|int|float $qty
-     * @return float|int
-     */
-    private function castQty(Item $item, $qty)
-    {
-        if ($item->getIsQtyDecimal()) {
-            $qty = (double)$qty;
-        } else {
-            $qty = (int)$qty;
-        }
-
-        return $qty > 0 ? $qty : 0;
+        return false;
     }
 }
