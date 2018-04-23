@@ -12,7 +12,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySales\Model\CheckItemsQuantity;
 
@@ -36,11 +35,6 @@ class ProcessRegisterProductsSalePlugin
      */
     private $stockResolver;
 
-    /*
-     * @var GetProductTypesBySkusInterface
-     */
-    private $getProductTypesBySkus;
-
     /**
      * @var CheckItemsQuantity
      */
@@ -50,20 +44,17 @@ class ProcessRegisterProductsSalePlugin
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param StockResolverInterface $stockResolver
-     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param CheckItemsQuantity $checkItemsQuantity
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
         WebsiteRepositoryInterface $websiteRepository,
         StockResolverInterface $stockResolver,
-        GetProductTypesBySkusInterface $getProductTypesBySkus,
         CheckItemsQuantity $checkItemsQuantity
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->websiteRepository = $websiteRepository;
         $this->stockResolver = $stockResolver;
-        $this->getProductTypesBySkus = $getProductTypesBySkus;
         $this->checkItemsQuantity = $checkItemsQuantity;
     }
 
@@ -96,8 +87,7 @@ class ProcessRegisterProductsSalePlugin
         }
         $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
         $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
-        $productTypes = $this->getProductTypesBySkus->execute(array_keys($itemsBySku));
-        $this->checkItemsQuantity->execute($itemsBySku, $productTypes, $stockId);
+        $this->checkItemsQuantity->execute($itemsBySku, $stockId);
         return [];
     }
 }
