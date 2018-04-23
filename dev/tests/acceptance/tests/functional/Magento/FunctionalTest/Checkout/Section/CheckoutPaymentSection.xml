@@ -26,5 +26,7 @@
         <element name="shipToInfomation" type="text" selector="//div[@class='ship-to']//div[@class='shipping-information-content']" />
         <element name="shippingMethodInfomation" type="text" selector="//div[@class='ship-via']//div[@class='shipping-information-content']" />
         <element name="paymentMethodTitle" type="text" selector=".payment-method-title span" />
+        <element name="productOptionsByProductItemPrice" type="text" selector="//div[@class='product-item-inner']//div[@class='subtotal']//span[@class='price'][contains(.,'{{var1}}')]//ancestor::div[@class='product-item-details']//div[@class='product options']" parameterized="true"/>
+        <element name="productOptionsActiveByProductItemPrice" type="text" selector="//div[@class='subtotal']//span[@class='price'][contains(.,'{{var1}}')]//ancestor::div[@class='product-item-details']//div[@class='product options active']" parameterized="true"/>
     </section>
 </sections>
