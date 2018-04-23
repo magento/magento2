@@ -21,7 +21,6 @@ define([
          */
         setShippingRates: function (ratesData) {
             shippingRates(ratesData);
-            shippingRates.valueHasMutated();
             checkoutDataResolver.resolveShippingRates(ratesData);
         },
 
