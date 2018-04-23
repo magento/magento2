@@ -33,6 +33,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     const ERROR_DUPLICATED_VARIATIONS = 'duplicatedVariations';
 
+    const ERROR_UNIDENTIFIABLE_VARIATION = 'unidentifiableVariation';
+
     /**
      * Validation failure message template definitions
      *
@@ -43,6 +45,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         self::ERROR_INVALID_OPTION_VALUE => 'Invalid option value for attribute "%s"',
         self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
         self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
+        self::ERROR_UNIDENTIFIABLE_VARIATION => 'Configurable variation "%s" is unidentifiable',
     ];
 
     /**
@@ -497,7 +500,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
                 if (!empty($nameAndValue)) {
                     $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
-                    $fieldName  = trim($nameAndValue[0]);
+                    // Ignoring field names' case.
+                    $fieldName  = strtolower(trim($nameAndValue[0]));
                     if ($fieldName) {
                         $fieldAndValuePairs[$fieldName] = $value;
                     }
@@ -518,8 +522,18 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $additionalRow = [];
                     $position += 1;
                 }
+            } else {
+                throw new LocalizedException(
+                    __(
+                        sprintf(
+                            $this->_messageTemplates[self::ERROR_UNIDENTIFIABLE_VARIATION],
+                            $variation
+                        )
+                    )
+                );
             }
         }
+
         return $additionalRows;
     }
 
@@ -861,6 +875,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
             $error |= !parent::isRowValid($option, $rowNum, $isNewProduct);
         }
+
         return !$error;
     }
 
