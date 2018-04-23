@@ -19,7 +19,7 @@
       "registration.php"
     ],
     "psr-4": {
-      "Magento\\InventoryGrouped\\": ""
+      "Magento\\InventoryGroupedProduct\\": ""
     }
   }
 }
