@@ -18,6 +18,11 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
 class DbSchemaReader implements DbSchemaReaderInterface
 {
     /**
+     * Table type in information_schema.TABLES which allows to identify only tables and ignore views
+     */
+    const MYSQL_TABLE_TYPE = 'BASE TABLE';
+
+    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
@@ -209,8 +214,15 @@ class DbSchemaReader implements DbSchemaReaderInterface
      */
     public function readTables($resource)
     {
-        return $this->resourceConnection
-            ->getConnection($resource)
-            ->getTables();
+        $adapter = $this->resourceConnection->getConnection($resource);
+        $dbName = $this->resourceConnection->getSchemaName($resource);
+        $stmt = $adapter->select()
+            ->from(
+                ['information_schema.TABLES'],
+                ['TABLE_NAME']
+            )
+            ->where('TABLE_SCHEMA = ?', $dbName)
+            ->where('TABLE_TYPE = ?', self::MYSQL_TABLE_TYPE);
+        return $adapter->fetchCol($stmt);
     }
 }
