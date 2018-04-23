@@ -9,7 +9,6 @@ namespace Magento\InventoryShipping\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface;
 use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterfaceFactory;
@@ -22,11 +21,6 @@ use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
  */
 class SourceDeductionProcessor implements ObserverInterface
 {
-    /**
-     * @var StockByWebsiteIdResolver
-     */
-    private $stockByWebsiteIdResolver;
-
     /**
      * @var SourceDeductionRequestInterfaceFactory
      */
@@ -58,7 +52,6 @@ class SourceDeductionProcessor implements ObserverInterface
     private $getItemsToDeduct;
 
     /**
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      * @param SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory
      * @param SourceDeductionServiceInterface $sourceDeductionService
      * @param DefaultSourceProvider $defaultSourceProvider
@@ -67,7 +60,6 @@ class SourceDeductionProcessor implements ObserverInterface
      * @param GetItemsToDeduct $getItemsToDeduct
      */
     public function __construct(
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
         SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory,
         SourceDeductionServiceInterface $sourceDeductionService,
         DefaultSourceProvider $defaultSourceProvider,
@@ -75,7 +67,6 @@ class SourceDeductionProcessor implements ObserverInterface
         IsSingleSourceModeInterface $isSingleSourceMode,
         GetItemsToDeduct $getItemsToDeduct
     ) {
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->sourceDeductionRequestFactory = $sourceDeductionRequestFactory;
         $this->sourceDeductionService = $sourceDeductionService;
         $this->defaultSourceProvider = $defaultSourceProvider;
@@ -109,7 +100,6 @@ class SourceDeductionProcessor implements ObserverInterface
         }
 
         $websiteId = $shipment->getOrder()->getStore()->getWebsiteId();
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
 
         $salesEvent = $this->salesEventFactory->create([
             'type' => SalesEventInterface::EVENT_SHIPMENT_CREATED,
@@ -119,7 +109,7 @@ class SourceDeductionProcessor implements ObserverInterface
 
         if ($items = $this->getItemsToDeduct->execute($shipmentItem)) {
             $sourceDeductionRequest = $this->sourceDeductionRequestFactory->create([
-                'stockId' => $stockId,
+                'websiteId' => $websiteId,
                 'sourceCode' => $sourceCode,
                 'items' => $items,
                 'salesEvent' => $salesEvent
