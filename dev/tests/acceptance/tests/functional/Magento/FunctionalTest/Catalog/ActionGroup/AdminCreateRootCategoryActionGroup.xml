@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!--Create a new root category-->
-    <actionGroup name="AdminCreateRootCategory">
+    <actionGroup name="AdminCreateRootCategoryActionGroup">
         <arguments>
             <argument name="categoryEntity" defaultValue="NewRootCategory"/>
         </arguments>

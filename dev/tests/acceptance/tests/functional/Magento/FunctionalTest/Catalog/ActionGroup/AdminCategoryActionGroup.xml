@@ -24,16 +24,6 @@
         <seeInTitle userInput="{{categoryEntity.name}}" stepKey="seeNewCategoryPageTitle"/>
         <seeElement selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="seeCategoryInTree"/>
     </actionGroup>
-    <!--Actions to check if a category exists on StoreFront-->
-    <actionGroup name="CheckCategoryOnStorefront">
-        <arguments>
-            <argument name="categoryEntity" defaultValue="_defaultCategory"/>
-        </arguments>
-        <amOnPage url="/{{categoryEntity.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{categoryEntity.name_lwr}}" stepKey="assertCategoryOnStorefront"/>
-        <seeInTitle userInput="{{categoryEntity.name}}" stepKey="seeCategoryNameInTitle"/>
-    </actionGroup>
     <!--Actions to delete category-->
     <actionGroup name="DeleteCategory">
         <arguments>

@@ -14,7 +14,7 @@
             <title value="Test child categories should not include in menu."/>
             <description value="Test child categories should not include in menu."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-72238"/>
+            <testCaseId value="MAGETWO-75843"/>
             <group value="category"/>
         </annotations>
         <after>
