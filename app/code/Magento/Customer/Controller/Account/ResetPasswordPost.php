@@ -36,6 +36,8 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
      * @param AccountManagementInterface $accountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param CredentialsValidator|null $credentialsValidator
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
