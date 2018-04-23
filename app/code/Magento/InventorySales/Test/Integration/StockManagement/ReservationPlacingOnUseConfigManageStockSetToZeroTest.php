@@ -9,8 +9,8 @@ namespace Magento\InventorySales\Test\Integration\StockManagement;
 
 use Magento\InventoryReservations\Model\CleanupReservationsInterface;
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
-use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
+use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

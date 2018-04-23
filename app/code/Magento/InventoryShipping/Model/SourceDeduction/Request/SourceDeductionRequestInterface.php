@@ -19,7 +19,7 @@ interface SourceDeductionRequestInterface
     /**
      * @return int
      */
-    public function getStockId(): int;
+    public function getWebsiteId(): int;
 
     /**
      * @return string
