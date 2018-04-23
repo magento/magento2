@@ -23,5 +23,7 @@
         <element name="rowUnAssign" type="button" selector=".data-row[data-repeat-index='{{arg1}}'] button[data-action='remove_row']" parameterized="true"/>
         <element name="rowNotifyQuantityUseDefault" type="button" selector=".data-row[data-repeat-index='{{arg1}}'] input[name='sources[assigned_sources][{{arg1}}][notify_stock_qty_use_default]']" parameterized="true"/>
         <element name="rowDelete" type="button" selector=".data-row[data-repeat-index='{{arg1}}'] .action-delete" parameterized="true" timeout="5"/>
+
+        <element name="rowDeleteByCode" type="button" selector="//button[ancestor::tr[contains(., '{{var1}}')]]" parameterized="true" timeout="5"/>
     </section>
 </sections>
