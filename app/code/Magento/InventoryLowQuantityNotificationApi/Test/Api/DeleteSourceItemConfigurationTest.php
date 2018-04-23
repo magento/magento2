@@ -13,15 +13,14 @@ use Magento\Framework\Webapi\Rest\Request;
 
 class DeleteSourceItemConfigurationTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/inventory/source-item-configuration';
+    const RESOURCE_PATH = '/V1/inventory/low-quantity-notification';
     const SERVICE_NAME_DELETE = 'inventoryLowQuantityNotificationApiDeleteSourceItemConfigurationV1';
     const SERVICE_NAME_GET = 'inventoryLowQuantityNotificationApiGetSourceItemConfigurationV1';
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
-     * @magentoDbIsolation disabled
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
      */
     public function testDeleteSourceItemConfiguration()
     {
@@ -40,7 +39,7 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
             ],
         ];
 
-        (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+        (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode, 'sku' => $sku]);
 

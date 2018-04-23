@@ -32,16 +32,16 @@ class PreventAssignedToSalesChannelsStockDeletingTest extends WebapiAbstract
         ];
         $expectedMessage = 'Stock has at least one sale channel and could not be deleted.';
         try {
-            (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+            (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
                 ? $this->_webApiCall($serviceInfo)
                 : $this->_webApiCall($serviceInfo, ['stockId' => $stockId]);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
-            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
                 $errorData = $this->processRestExceptionResult($e);
                 self::assertEquals($expectedMessage, $errorData['message']);
                 self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
-            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault($e, $expectedMessage, 'env:Sender');
             } else {

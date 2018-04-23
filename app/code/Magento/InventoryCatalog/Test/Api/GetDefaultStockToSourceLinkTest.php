@@ -50,7 +50,7 @@ class GetDefaultStockToSourceLinkTest extends WebapiAbstract
                 'operation' => 'inventoryApiGetSourcesAssignedToStockOrderedByPriorityV1Execute',
             ],
         ];
-        if (self::ADAPTER_REST == TESTS_WEB_API_ADAPTER) {
+        if (self::ADAPTER_REST === TESTS_WEB_API_ADAPTER) {
             $source = $this->_webApiCall($serviceInfo);
         } else {
             $source = $this->_webApiCall($serviceInfo, ['stockId' => $defaultStockId]);

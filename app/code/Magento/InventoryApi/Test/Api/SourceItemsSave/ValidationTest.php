@@ -154,7 +154,7 @@ class ValidationTest extends WebapiAbstract
      */
     public function failedValidationDataProvider(): array
     {
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
             $nonExistedSourceCodeError = [
                 'message' => 'Could not save Source Item',
                 'errors' => [],
@@ -317,7 +317,7 @@ class ValidationTest extends WebapiAbstract
      */
     public function testFailedValidationOnCreateRelatedOnlyForRest(string $field, $value, array $expectedErrorData)
     {
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
             $this->markTestSkipped(
                 'Test works only for REST adapter because in SOAP one parameters would be converted'
                 . ' into zero (zero is allowed input value)'
@@ -383,7 +383,7 @@ class ValidationTest extends WebapiAbstract
     public function testCreateWithEmptyData()
     {
         $sourceItems = [];
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
             $expectedErrorData = [
                 'message' => 'Input data is empty',
                 'errors' => [],

@@ -56,7 +56,7 @@ class GetSourcesAssignedToStockOrderedByPriorityTest extends WebapiAbstract
      */
     public function testGetAssignedSourcesWithNotNumericStockId()
     {
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
             $this->markTestSkipped(
                 'Test works only for REST adapter because in SOAP one stock_id would be converted'
                 . ' into zero (zero is allowed input for service ner mind it\'s illigible value as'

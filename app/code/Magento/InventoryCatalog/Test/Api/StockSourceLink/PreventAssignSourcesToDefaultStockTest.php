@@ -53,15 +53,15 @@ class PreventAssignSourcesToDefaultStockTest extends WebapiAbstract
             $links['links'][] = ['stock_id' => $stockId, 'source_code' => $sourceCode, 'priority' => 1];
         }
         try {
-            (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+            (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
                 ? $this->_webApiCall($serviceInfo, $links)
                 : $this->_webApiCall($serviceInfo, $links);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
-            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
                 self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
                 self::assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
-            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
                 $expectedWrappedErrors = [];
                 foreach ($expectedErrorData['errors'] as $error) {
@@ -147,7 +147,7 @@ class PreventAssignSourcesToDefaultStockTest extends WebapiAbstract
         $this->assertEquals(
             $expectedErrors,
             $actualErrors,
-            "Wrapped errors in fault details are invalid."
+            'Wrapped errors in fault details are invalid.'
         );
     }
 }

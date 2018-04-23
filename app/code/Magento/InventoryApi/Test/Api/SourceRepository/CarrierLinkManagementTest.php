@@ -111,7 +111,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
             $this->_webApiCall($serviceInfo, ['source' => $data]);
         } else {
             $requestData = $data;
@@ -136,7 +136,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+        $response = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode]);
         self::assertArrayHasKey(SourceInterface::SOURCE_CODE, $response);
@@ -165,10 +165,10 @@ class CarrierLinkManagementTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, ['source' => $carrierData]);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
-            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
                 self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
                 self::assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
-            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
                 $expectedWrappedErrors = [];
                 foreach ($expectedErrorData['errors'] as $error) {
