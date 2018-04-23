@@ -323,7 +323,6 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $methodMock->expects($this->never())->method('getData');
 
-
         $shippingAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getCountryId']);
         $shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(null);
 
