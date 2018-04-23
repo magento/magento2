@@ -73,10 +73,10 @@
         <!--Go to storefront and verify created subcategory on frontend-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad2"/>
-        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="checkCreatedSubcategory1OnFrontend">
+        <actionGroup ref="StorefrontCategoryCheckActionGroup" stepKey="checkCreatedSubcategory1OnFrontend">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="checkCreatedSubcategory2OnFrontend">
+        <actionGroup ref="StorefrontCategoryCheckActionGroup" stepKey="checkCreatedSubcategory2OnFrontend">
             <argument name="categoryEntity" value="SubCategoryWithParent"/>
         </actionGroup>
     </test>

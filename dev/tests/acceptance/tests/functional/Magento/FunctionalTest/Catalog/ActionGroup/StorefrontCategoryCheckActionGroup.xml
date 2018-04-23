@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!--Actions to check if a category exists on StoreFront-->
-    <actionGroup name="StorefrontCheckCategoryActionGroup">
+    <actionGroup name="StorefrontCategoryCheckActionGroup">
         <arguments>
             <argument name="categoryEntity" defaultValue="_defaultCategory"/>
         </arguments>
