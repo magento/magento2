@@ -99,7 +99,7 @@
 
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreSwitcher"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView(customStoreFR.name)}}" stepKey="clickStoreView"/>
-        <click selector="{{AdminProductFormActionSection.acceptMessage}}" stepKey="acceptMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptMessage"/>
 
         <!-- Open tab Customizable Options -->
 
@@ -259,7 +259,7 @@
 
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreSwitcher1"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView(customStoreFR.name)}}" stepKey="clickStoreView1"/>
-        <click selector="{{AdminProductFormActionSection.acceptMessage}}" stepKey="acceptMessage1"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptMessage1"/>
 
         <!-- Open tab Customizable Options -->
 
