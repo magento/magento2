@@ -11,6 +11,7 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\AddressInterfaceFactory;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
@@ -23,6 +24,8 @@ $cartManagement = Bootstrap::getObjectManager()->get(CartManagementInterface::cl
 $addressFactory = Bootstrap::getObjectManager()->get(AddressInterfaceFactory::class);
 /** @var StoreRepositoryInterface $storeRepository */
 $storeRepository = Bootstrap::getObjectManager()->get(StoreRepositoryInterface::class);
+/** @var StoreManagerInterface\ $storeManager */
+$storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
 
 $cartId = $cartManagement->createEmptyCart();
 $cart = $cartRepository->get($cartId);
@@ -30,6 +33,7 @@ $cart->setCustomerEmail('admin@example.com');
 $cart->setCustomerIsGuest(true);
 $store = $storeRepository->getActiveStoreByCode('store_for_eu_website');
 $cart->setStoreId($store->getId());
+$storeManager->setCurrentStore($store->getCode());
 
 /** @var AddressInterface $address */
 $address = $addressFactory->create(
