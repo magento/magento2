@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminEachSourceQuantityCanBeSetTest">
+        <annotations>
+            <features value="Multi-Source Inventory"/>
+            <stories value="Set Source Quantity"/>
+            <title value="Set Source Quantity via the Admin"/>
+            <description value="You should be able to set each Source Quantity via the Admin."/>
+            <testCaseId value="861"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+        </annotations>
+        
+        <before>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="FullSource2" stepKey="createSource2"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+                <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+                <argument name="value" value="SimpleProduct.sku"/>
+            </actionGroup>
+
+            <click selector="{{AdminGridRow.editByValue(SimpleProduct.sku)}}" stepKey="clickOnEdit1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+        </after>
+
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createSource1.source[source_code]$$)}}" stepKey="clickOnCheckbox1"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone1"/>
+
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources2"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createSource2.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createSource2.source[source_code]$$)}}" stepKey="clickOnCheckbox2"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone2"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="150" stepKey="fillDefaultQuantityField1"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="50" stepKey="fillDefaultQuantityField2"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="100" stepKey="fillDefaultQuantityField3"/>
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue1"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="150" stepKey="fillDefaultQuantityField4"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="50" stepKey="fillDefaultQuantityField5"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="100" stepKey="fillDefaultQuantityField6"/>
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue2"/>
+
+        <seeInField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="150" stepKey="seeSourceNameInGrid1"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="50" stepKey="seeSourceNameInGrid2"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="100" stepKey="seeSourceNameInGrid3"/>
+    </test>
+</tests>
