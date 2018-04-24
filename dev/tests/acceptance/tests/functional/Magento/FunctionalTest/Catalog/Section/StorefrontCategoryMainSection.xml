@@ -11,6 +11,7 @@
     <section name="StorefrontCategoryMainSection">
         <element name="CategoryTitle" type="text" selector="#page-title-heading span"/>
         <element name="ProductItemInfo" type="button" selector=".product-item-info"/>
+        <element name="specifiedProductItemInfo" type="button" selector="//a[@class='product-item-link'][contains(text(), '{{var1}}')]" parameterized="true"/>
         <element name="AddToCartBtn" type="button" selector="button.action.tocart.primary"/>
         <element name="SuccessMsg" type="button" selector="div.message-success"/>
         <element name="productCount" type="text" selector="#toolbar-amount"/>
