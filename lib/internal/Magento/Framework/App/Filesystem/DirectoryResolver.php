@@ -50,9 +50,8 @@ class DirectoryResolver
      */
     public function validatePath($path, $directoryConfig = DirectoryList::MEDIA)
     {
-        $directory = $this->filesystem->getDirectoryWrite($directoryConfig);
-        $realPath = $directory->getDriver()->getRealPathSafety($path);
-        $root = $this->directoryList->getPath($directoryConfig);
+        $realPath = realpath($path);
+        $root = realpath($this->directoryList->getPath($directoryConfig));
         
         return strpos($realPath, $root) === 0;
     }
