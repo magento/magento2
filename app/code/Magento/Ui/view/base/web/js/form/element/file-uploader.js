@@ -345,6 +345,10 @@ define([
                 target   = $(e.target);
 
             if (allowed.passed) {
+                target.on('fileuploadsend', function (event, postData) {
+                    postData.data.append('param_name', this.paramName);
+                }.bind(data));
+
                 target.fileupload('process', data).done(function () {
                     data.submit();
                 });
