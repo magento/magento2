@@ -109,7 +109,7 @@ class NodeTest extends \PHPUnit\Framework\TestCase
                     'node_data' => true,
                     'keys' => null,
                 ], \Magento\Framework\Exception\LocalizedException::class,
-                'Enter the key and try again.'
+                'The encryption key can\'t be empty. Enter the key and try again.'
             ]
         ];
     }
