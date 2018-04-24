@@ -121,10 +121,8 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ->method('makeApiCall')
             ->willThrowException(new ApiCallException($apiCallFailureMessage));
 
-        $this->expectException(
-            GatewayException::class,
-            $apiCallFailureMessage
-        );
+        $this->expectException(GatewayException::class);
+        $this->expectExceptionMessage($apiCallFailureMessage);
         $this->gateway->createCase($dummyOrderId);
     }
 
@@ -197,10 +195,8 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ->method('makeApiCall')
             ->willThrowException(new ApiCallException($apiCallFailureMessage));
 
-        $this->expectException(
-            GatewayException::class,
-            $apiCallFailureMessage
-        );
+        $this->expectException(GatewayException::class);
+        $this->expectExceptionMessage($apiCallFailureMessage);
         $result = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
         $this->assertEquals('Api call failed', $result);
     }

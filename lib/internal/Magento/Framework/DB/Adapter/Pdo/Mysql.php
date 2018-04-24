@@ -549,6 +549,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     $retry = true;
                     $triesCount++;
                     $this->closeConnection();
+
+                    /**
+                     * _connect() function does not allow port parameter, so put the port back with the host
+                     */
+                    if (!empty($this->_config['port'])) {
+                        $this->_config['host'] = implode(':', [$this->_config['host'], $this->_config['port']]);
+                        unset($this->_config['port']);
+                    }
+
                     $this->_connect();
                 }
 
@@ -2013,7 +2022,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $bind         = [];
         $columnsCount = count($columns);
         foreach ($data as $row) {
-            if ($columnsCount != count($row)) {
+            if (is_array($row) && $columnsCount != count($row)) {
                 throw new \Zend_Db_Exception('Invalid data for insert');
             }
             $values[] = $this->_prepareInsertData($row, $bind);
