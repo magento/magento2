@@ -68,4 +68,18 @@
         <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
     </entity>
+    <entity name="productWithOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionDropDown</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionRadiobutton</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionCheckbox</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionMultiSelect</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionDate</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionTime</requiredEntity>
+    </entity>
 </entities>
