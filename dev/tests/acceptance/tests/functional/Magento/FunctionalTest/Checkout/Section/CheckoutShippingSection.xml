@@ -11,6 +11,6 @@
     <section name="CheckoutShippingSection">
         <element name="selectedShippingAddress" type="text" selector=".shipping-address-item.selected-item"/>
         <element name="newAddressButton" type="button" selector="#checkout-step-shipping button"/>
-        <element name="next" type="button" selector="button.button.action.continue.primary"/>
+        <element name="next" type="button" selector="[data-role='opc-continue']"/>
     </section>
 </sections>

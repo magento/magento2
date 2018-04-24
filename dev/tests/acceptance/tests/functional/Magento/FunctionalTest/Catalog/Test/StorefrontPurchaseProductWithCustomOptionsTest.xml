@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="StorefrontPurchaseProductWithCustomOptions">
+    <test name="StorefrontPurchaseProductWithCustomOptionsTest">
         <annotations>
             <features value="Purchase a product with Custom Options of different types"/>
             <stories value="Purchase a product with Custom Options of different types"/>
             <title value="You should be able to sell products with different variants of your own."/>
             <description value="You should be able to sell products with different variants of your own."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-61717"/>
+            <testCaseId value="MAGETWO-77414"/>
             <group value="product"/>
         </annotations>
         <before>
