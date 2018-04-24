@@ -18,6 +18,13 @@ class Observer
     const XML_PATH_GENERATION_ENABLED = 'sitemap/generate/enabled';
 
     /**
+     * Cronjob expression configuration
+     *
+     * @deprecated Use \Magento\Cron\Model\Config\Backend\Sitemap::CRON_STRING_PATH instead.
+     */
+    const XML_PATH_CRON_EXPR = 'crontab/default/jobs/generate_sitemaps/schedule/cron_expr';
+
+    /**
      * Error email template configuration
      */
     const XML_PATH_ERROR_TEMPLATE = 'sitemap/generate/error_email_template';
