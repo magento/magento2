@@ -7,17 +7,27 @@
 
 define([
     'jquery',
+    'underscore',
     'Magento_Ui/js/form/element/file-uploader'
-], function ($, FileUploader) {
+], function ($, _, FileUploader) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/file-uploader', function () {
-        var component;
+        var component,
+            originalJQueryFnInit;
 
         beforeEach(function () {
+            originalJQueryFnInit = $.fn.init;
+
             component = new FileUploader({
                 dataScope: 'abstract'
             });
+
+            component.initUploader();
+        });
+
+        afterEach(function () {
+            $.fn.init = originalJQueryFnInit;
         });
 
         describe('initUploader method', function () {
@@ -235,28 +245,36 @@ define([
 
         describe('onFileUploaded handler', function () {
             it('calls addFile method if upload was successful', function () {
+                spyOn(component, 'aggregateError');
                 spyOn(component, 'addFile');
 
                 component.onFileUploaded({}, {
+                    files: [{
+                        name: 'hello.jpg'
+                    }],
                     result: {
                         error: false
                     }
                 });
 
+                expect(component.aggregateError).not.toHaveBeenCalled();
                 expect(component.addFile).toHaveBeenCalled();
             });
 
-            it('calls notifyError method if upload resulted in error', function () {
-                spyOn(component, 'notifyError');
+            it('calls aggregateError method if upload resulted in error', function () {
+                spyOn(component, 'aggregateError');
                 spyOn(component, 'addFile');
 
                 component.onFileUploaded({}, {
+                    files: [{
+                        name: 'hello.jpg'
+                    }],
                     result: {
                         error: true
                     }
                 });
 
-                expect(component.notifyError).toHaveBeenCalled();
+                expect(component.aggregateError).toHaveBeenCalledWith('hello.jpg', true);
                 expect(component.addFile).not.toHaveBeenCalled();
             });
         });
@@ -270,6 +288,234 @@ define([
                 component.onElementRender(input);
 
                 expect(component.initUploader).toHaveBeenCalledWith(input);
+            });
+        });
+
+        describe('aggregateError method', function () {
+            it('should append onto aggregatedErrors array when called', function () {
+                spyOn(component.aggregatedErrors, 'push');
+
+                component.aggregateError('blah.jpg', 'File is too awesome');
+
+                expect(component.aggregatedErrors.push).toHaveBeenCalledWith({
+                    filename: 'blah.jpg',
+                    message: 'File is too awesome'
+                });
+            });
+        });
+
+        describe('onBeforeFileUpload method', function () {
+            it('should call aggregateError when allowed.passed is false', function () {
+                var fakeEvent = {
+                        target: document.createElement('input')
+                    },
+                    file = {
+                        name: 'hello.jpg'
+                    },
+                    data = {
+                        files: [file],
+                        originalFiles: [file]
+                    };
+
+                spyOn(component, 'aggregateError');
+                spyOn(component.uploaderConfig, 'stop');
+                spyOn(component, 'isFileAllowed').and.callFake(function (fileArg) {
+                    expect(fileArg).toBe(file);
+
+                    return {
+                        passed: false,
+                        message: 'Not awesome enough'
+                    };
+                });
+
+                component.onBeforeFileUpload(fakeEvent, data);
+
+                expect(component.aggregateError).toHaveBeenCalledWith(file.name, 'Not awesome enough');
+            });
+
+            it('should not call aggregateError when allowed.passed is true', function () {
+                var targetInputEl = document.createElement('input'),
+                    fakeEvent = {
+                        target: targetInputEl
+                    },
+                    file = {
+                        name: 'hello.jpg'
+                    },
+                    data = {
+                        files: [file],
+                        originalFiles: [file]
+                    },
+                    spies = {
+                        fileupload: jasmine.createSpy().and.callFake(function () {
+                            return spies;
+                        }),
+                        done: jasmine.createSpy()
+                    };
+
+                $.fn.init = jasmine.createSpy().and.callFake(function (elArg) {
+                    expect(elArg).toBe(targetInputEl);
+
+                    return spies;
+                });
+
+                spyOn(component, 'aggregateError');
+
+                spyOn(component, 'isFileAllowed').and.callFake(function (fileArg) {
+                    expect(fileArg).toBe(file);
+
+                    return {
+                        passed: true
+                    };
+                });
+
+                component.onBeforeFileUpload(fakeEvent, data);
+                expect(component.aggregateError).not.toHaveBeenCalled();
+                expect(spies.fileupload).toHaveBeenCalledWith('process', data);
+                expect(spies.done).toHaveBeenCalled();
+            });
+
+            it('should call uploaderConfig.stop when number of errors is equal to number of files', function () {
+                var fakeEvent = {
+                        target: document.createElement('input')
+                    },
+                    file = {
+                        name: 'hello.jpg'
+                    },
+                    data = {
+                        files: [file],
+                        originalFiles: [file]
+                    };
+
+                spyOn(component.uploaderConfig, 'stop');
+                spyOn(component, 'isFileAllowed').and.callFake(function (fileArg) {
+                    expect(fileArg).toBe(file);
+
+                    return {
+                        passed: false,
+                        message: 'Not awesome enough'
+                    };
+                });
+
+                component.onBeforeFileUpload(fakeEvent, data);
+                expect(component.uploaderConfig.stop).toHaveBeenCalled();
+            });
+
+            it('should not call uploaderConfig.stop when number of errors is unequal to number of files', function () {
+                var fakeEvent = {
+                        target: document.createElement('input')
+                    },
+                    file = {
+                        name: 'hello.jpg'
+                    },
+                    otherFileInQueue = {
+                        name: 'world.png'
+                    },
+                    data = {
+                        files: [file],
+                        originalFiles: [file, otherFileInQueue]
+                    };
+
+                spyOn(component.uploaderConfig, 'stop');
+                spyOn(component, 'isFileAllowed').and.callFake(function (fileArg) {
+                    expect(fileArg).toBe(file);
+
+                    return {
+                        passed: false,
+                        message: 'Not awesome enough'
+                    };
+                });
+
+                component.onBeforeFileUpload(fakeEvent, data);
+                expect(component.uploaderConfig.stop).not.toHaveBeenCalled();
+            });
+        });
+
+        describe('onLoadingStop method', function () {
+            it('should not call notifyError if aggregatedErrors is empty', function () {
+                spyOn(component, 'notifyError');
+
+                component.onLoadingStop();
+
+                expect(component.notifyError).not.toHaveBeenCalled();
+            });
+
+            it('should call notifyError with first aggregated error if !this.isMultipleFiles', function () {
+                component.isMultipleFiles = false;
+                component.aggregatedErrors = [{
+                    filename: 'blah.jpg',
+                    message: 'Not awesome enough'
+                }];
+
+                spyOn(component, 'notifyError');
+
+                component.onLoadingStop();
+
+                expect(component.notifyError).toHaveBeenCalledWith('Not awesome enough');
+            });
+
+            it('should call notifyError with first aggregated error if !this.isMultipleFiles', function () {
+                component.isMultipleFiles = false;
+                component.aggregatedErrors = [{
+                    filename: 'blah.jpg',
+                    message: 'Not awesome enough'
+                }];
+
+                spyOn(component, 'notifyError');
+
+                component.onLoadingStop();
+
+                expect(component.notifyError).toHaveBeenCalledWith('Not awesome enough');
+            });
+
+            it('should call notifyError once with all error messages if this.isMultipleFiles', function () {
+                component.isMultipleFiles = true;
+                component.aggregatedErrors = [
+                    {
+                        filename: 'blah.jpg',
+                        message: 'Not awesome enough'
+                    },
+                    {
+                        filename: 'widget.png',
+                        message: 'Too awesome for storage'
+                    }
+                ];
+
+                spyOn(component, 'notifyError').and.callFake(function (constructedMessage) {
+                    _.each(component.aggregatedErrors, function (error) {
+                        // assert filename in constructedMessage
+                        expect(constructedMessage.indexOf(error.filename) !== -1).toBe(true);
+
+                        // assert error message in constructedMessage
+                        expect(constructedMessage.indexOf(error.message) !== -1).toBe(true);
+                    });
+                });
+
+                component.onLoadingStop();
+                expect(component.notifyError).toHaveBeenCalledTimes(1);
+            });
+        });
+
+        describe('onFilesChoosed method', function () {
+            it('should splice files to length of 1 if isMultipleFiles is false', function () {
+                var data = {
+                    files: [{}, {}] // 2 files
+                };
+
+                component.isMultipleFiles = false;
+
+                expect(component.onFilesChoosed({}, data)).toBe(undefined);
+                expect(data.files.length).toBe(1);
+            });
+
+            it('should not splice files to length of 1 if isMultipleFiles is true', function () {
+                var data = {
+                    files: [{}, {}] // 1 file
+                };
+
+                component.isMultipleFiles = true;
+
+                expect(component.onFilesChoosed({}, data)).toBe(undefined);
+                expect(data.files.length).toBe(2);
             });
         });
     });
