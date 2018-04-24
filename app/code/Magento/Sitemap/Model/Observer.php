@@ -60,11 +60,6 @@ class Observer
     protected $inlineTranslation;
 
     /**
-     * @var \Magento\Cron\Model\ScheduleFactory
-     */
-    private $scheduleFactory;
-
-    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory $collectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
