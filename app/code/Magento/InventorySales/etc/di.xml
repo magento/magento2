@@ -131,4 +131,7 @@
     <type name="Magento\Sales\Api\OrderManagementInterface">
         <plugin name="inventory_reservations_placement" type="Magento\InventorySales\Plugin\Sales\OrderManagement\AppendReservationsAfterOrderPlacementPlugin"/>
     </type>
+    <type name="Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface">
+        <plugin name="stock_status_replacement" type="Magento\InventorySales\Plugin\CatalogInventory\Model\Spi\StockRegistryProvider\ReplaceStockStatus"/>
+    </type>
 </config>
