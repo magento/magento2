@@ -3,22 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Bundle\Pricing\Price\BundleOptionRegularPrice;
 use Magento\Catalog\Model\Product;
-use Magento\Bundle\Pricing\Price\BundleOptions;
 use Magento\Bundle\Pricing\Adjustment\Calculator;
-use \Magento\Bundle\Model\Selection;
+use Magento\Bundle\Pricing\Price\BundleOptions;
+use Magento\Bundle\Model\ResourceModel\Option\Collection;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Bundle\Model\Selection;
 
-class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for Magento\Bundle\Pricing\Price\BundleRegularPrice
+ */
+class BundleOptionRegularPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Bundle\Pricing\Price\BundleOptionPrice
+     * @var BundleOptionRegularPrice
      */
-    private $bundleOptionPrice;
+    private $bundleOptionRegularPrice;
 
     /**
      * @var ObjectManagerHelper
@@ -26,12 +32,12 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $saleableItemMock;
 
     /**
-     * @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Calculator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $bundleCalculatorMock;
 
@@ -50,8 +56,8 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
         $this->bundleCalculatorMock = $this->createMock(Calculator::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->bundleOptionPrice = $this->objectManagerHelper->getObject(
-            \Magento\Bundle\Pricing\Price\BundleOptionPrice::class,
+        $this->bundleOptionRegularPrice = $this->objectManagerHelper->getObject(
+            BundleOptionRegularPrice::class,
             [
                 'saleableItem' => $this->saleableItemMock,
                 'quantity' => 1.,
@@ -62,21 +68,21 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test method \Magento\Bundle\Pricing\Price\BundleOptionPrice::getOptions
+     * Test method \Magento\Bundle\Pricing\Price\BundleOptionRegularPrice::getOptions
      *
      * @return void
      */
     public function testGetOptions()
     {
-        $collection = $this->createMock(\Magento\Bundle\Model\ResourceModel\Option\Collection::class);
+        $collection = $this->createMock(Collection::class);
         $this->bundleOptionsMock->expects($this->any())
             ->method('getOptions')
             ->will($this->returnValue($collection));
-        $this->assertEquals($collection, $this->bundleOptionPrice->getOptions());
+        $this->assertEquals($collection, $this->bundleOptionRegularPrice->getOptions());
     }
 
     /**
-     * Test method \Magento\Bundle\Pricing\Price\BundleOptionPrice::getOptionSelectionAmount
+     * Test method \Magento\Bundle\Pricing\Price\BundleOptionRegularPrice::getOptionSelectionAmount
      *
      * @return void
      */
@@ -88,12 +94,12 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
         $this->bundleOptionsMock->expects($this->any())
             ->method('getOptionSelectionAmount')
             ->will($this->returnValue($selectionAmount))
-            ->with($product, $selection, false);
-        $this->assertEquals($selectionAmount, $this->bundleOptionPrice->getOptionSelectionAmount($selection));
+            ->with($product, $selection, true);
+        $this->assertEquals($selectionAmount, $this->bundleOptionRegularPrice->getOptionSelectionAmount($selection));
     }
 
     /**
-     * Test method \Magento\Bundle\Pricing\Price\BundleOptionPrice::getAmount
+     * Test method \Magento\Bundle\Pricing\Price\BundleOptionRegularPrice::getAmount
      *
      * @return void
      */
@@ -104,11 +110,11 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getOptionsAmount')
             ->with($this->equalTo($this->saleableItemMock))
             ->will($this->returnValue($amountMock));
-        $this->assertSame($amountMock, $this->bundleOptionPrice->getAmount());
+        $this->assertSame($amountMock, $this->bundleOptionRegularPrice->getAmount());
     }
 
     /**
-     * Test method \Magento\Bundle\Pricing\Price\BundleOptionPrice::getValue
+     * Test method \Magento\Bundle\Pricing\Price\BundleOptionRegularPrice::getValue
      *
      * @return void
      */
@@ -116,6 +122,6 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
     {
         $value = 1;
         $this->bundleOptionsMock->expects($this->any())->method('calculateOptions')->will($this->returnValue($value));
-        $this->assertEquals($value, $this->bundleOptionPrice->getValue());
+        $this->assertEquals($value, $this->bundleOptionRegularPrice->getValue());
     }
 }
