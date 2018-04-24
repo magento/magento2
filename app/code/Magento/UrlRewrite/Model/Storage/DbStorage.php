@@ -37,7 +37,7 @@ class DbStorage extends AbstractStorage
     protected $resource;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -45,7 +45,7 @@ class DbStorage extends AbstractStorage
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Psr\Log\LoggerInterface|null $logger
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
@@ -56,7 +56,7 @@ class DbStorage extends AbstractStorage
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
         $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Psr\Log\LoggerInterface::class);
+            ->get(LoggerInterface::class);
 
         parent::__construct($urlRewriteFactory, $dataObjectHelper);
     }
