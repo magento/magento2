@@ -8,9 +8,9 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
-    <section name="AdminProductFormActionSection">
-        <element name="saveButton" type="button" selector="#save-button" timeout="30"/>
-        <element name="changeStoreButton" type="button" selector="#store-change-button"/>
-        <element name="selectStoreView" type="button" selector="//ul[@data-role='stores-list']/li/a[normalize-space(.)='{{var1}}']" timeout="10" parameterized="true"/>
+    <section name="AdminOrderFormActionSection">
+        <element name="submitOrder" type="button" selector="#submit_order_top_button" timeout="30"/>
+        <element name="cancel" type="button" selector="#reset_order_top_button" timeout="30"/>
+        <element name="createNewCustomer" type="button" selector="#order-customer-selector .actions button.primary" timeout="30"/>
     </section>
 </sections>
