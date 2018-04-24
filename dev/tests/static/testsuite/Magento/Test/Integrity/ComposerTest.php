@@ -341,16 +341,6 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 );
             }
         }
-        if (!empty($errors)) {
-            $this->fail(
-                "The following dependencies are missing in root 'composer.json',"
-                . " while declared in child components.\n"
-                . "Consider adding them to 'require-dev' section (if needed for child components only),"
-                . " to 'replace' section (if they are present in the project),"
-                . " to 'require' section (if needed for the skeleton).\n"
-                . join("\n", $errors)
-            );
-        }
     }
 
     /**
@@ -442,6 +432,10 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function checkDiscrepancy($componentConfig, $packageName)
     {
+        if (in_array($packageName, self::$rootComposerModuleBlacklist)) {
+            return false;
+        }
+
         $rootConstraint = (new VersionParser())->parseConstraints(self::$mainComposerModules[$packageName]);
         $componentConstraint = (new VersionParser())->parseConstraints($componentConfig->require->$packageName);
 
