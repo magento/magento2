@@ -48,24 +48,8 @@ class SkuValidator implements ValidatorInterface
 
         if (!isset($rowData[Sources::COL_SKU])) {
             $errors[] = __('Missing required column "%column"', ['column' => Sources::COL_SKU]);
-        } elseif (!$this->isValidSku($rowData[Sources::COL_SKU])) {
-            $errors[] = __('Product with SKU "%sku" does not exist', ['sku' => $rowData[Sources::COL_SKU]]);
         }
 
         return $this->validationResultFactory->create(['errors' => $errors]);
-    }
-
-    /**
-     * Attempt to get Product collection filtered using SKU check size and return bool
-     *
-     * @param string $sku
-     * @return bool
-     */
-    private function isValidSku(string $sku): bool
-    {
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
-        $collection = $this->collectionFactory->create();
-        $collection->addAttributeToFilter(ProductInterface::SKU, $sku);
-        return $collection->getSize() > 0;
     }
 }

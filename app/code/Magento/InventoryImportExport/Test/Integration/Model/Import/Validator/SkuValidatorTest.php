@@ -39,13 +39,13 @@ class SkuValidatorTest extends TestCase
     }
 
     /**
-     * Tests that with an invalid SKU the validation does not pass as expected
+     * Tests that with a SKU that deosn't exist in the catalog still passes as valid
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      */
-    public function testInvalidSkuDoesNotPassValidation()
+    public function testNonExistentSkuDoesPassValidation()
     {
-        // SKU-50000 is an invalid SKU and should therefore fail validation
+        // SKU-50000 is a non-existent SKU but should still pass Sku Validation
         $rowData = $this->buildRowDataArray(
             'default',
             'SKU-50000',
@@ -53,7 +53,7 @@ class SkuValidatorTest extends TestCase
             1
         );
         $result = $this->importer->validateRow($rowData, 1);
-        $this->assertFalse($result);
+        $this->assertTrue($result);
     }
 
     /**
