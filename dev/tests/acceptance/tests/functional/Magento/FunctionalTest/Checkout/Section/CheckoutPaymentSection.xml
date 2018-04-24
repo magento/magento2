@@ -25,5 +25,6 @@
         <element name="ProductOptionsActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']" parameterized="true" />
         <element name="shipToInfomation" type="text" selector="//div[@class='ship-to']//div[@class='shipping-information-content']" />
         <element name="shippingMethodInfomation" type="text" selector="//div[@class='ship-via']//div[@class='shipping-information-content']" />
+        <element name="paymentMethodTitle" type="text" selector=".payment-method-title span" />
     </section>
 </sections>
