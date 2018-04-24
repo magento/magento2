@@ -113,12 +113,12 @@ class GetProductIdsByStockIds
     /**
      * Get index name by stock id.
      *
-     * @param $stockId
+     * @param int $stockId
      * @return IndexName
      */
-    public function getIndexName($stockId): IndexName
+    private function getIndexName(int $stockId): IndexName
     {
-        return $indexName = $this->indexNameBuilder
+        return $this->indexNameBuilder
             ->setIndexId(InventoryIndexer::INDEXER_ID)
             ->addDimension('stock_', (string)$stockId)
             ->setAlias(Alias::ALIAS_MAIN)
