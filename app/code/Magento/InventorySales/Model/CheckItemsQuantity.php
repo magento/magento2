@@ -77,7 +77,7 @@ class CheckItemsQuantity
                 continue;
             }
             /** @var ProductSalableResultInterface $isSalable */
-            $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty);
+            $isSalable = $this->isProductSalableForRequestedQty->execute((string)$sku, $stockId, $qty);
             if (false === $isSalable->isSalable()) {
                 $errors = $isSalable->getErrors();
                 /** @var ProductSalabilityErrorInterface $errorMessage */
