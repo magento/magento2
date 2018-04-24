@@ -117,15 +117,15 @@ class RoboFile extends \Robo\Tasks
         'config' => null,
         'force' => false,
         'nodes' => null,
-        'lines' => null,
+        'lines' => 500,
         'tests' => null
     ])
     {
         require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
         $testConfiguration = $this->createTestConfiguration($tests, $opts);
 
-        // maintain backwards compatability for devops
-        $lines = $opts['lines'] ?? $opts ['nodes'];
+        // maintain backwards compatability for devops by not removing the nodes option yet
+        $lines = $opts['lines'];
 
         // create our manifest file here
         $testManifest = \Magento\FunctionalTestingFramework\Util\Manifest\TestManifestFactory::makeManifest($opts['config'],$testConfiguration['suites']);
