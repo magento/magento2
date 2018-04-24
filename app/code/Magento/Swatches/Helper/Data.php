@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
@@ -59,13 +60,6 @@ class Data
     protected $swatchCollectionFactory;
 
     /**
-     * Catalog Image Helper
-     *
-     * @var Image
-     */
-    protected $imageHelper;
-
-    /**
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
@@ -101,11 +95,16 @@ class Data
     private $swatchTypeChecker;
 
     /**
+     * @var UrlBuilder
+     */
+    private $imageUrlBuilder;
+
+    /**
      * @param CollectionFactory $productCollectionFactory
      * @param ProductRepositoryInterface $productRepository
      * @param StoreManagerInterface $storeManager
      * @param SwatchCollectionFactory $swatchCollectionFactory
-     * @param Image $imageHelper
+     * @param UrlBuilder $urlBuilder
      * @param Json|null $serializer
      * @param SwatchAttributesProvider $swatchAttributesProvider
      * @param SwatchAttributeType|null $swatchTypeChecker
@@ -115,7 +114,7 @@ class Data
         ProductRepositoryInterface $productRepository,
         StoreManagerInterface $storeManager,
         SwatchCollectionFactory $swatchCollectionFactory,
-        Image $imageHelper,
+        UrlBuilder $urlBuilder,
         Json $serializer = null,
         SwatchAttributesProvider $swatchAttributesProvider = null,
         SwatchAttributeType $swatchTypeChecker = null
@@ -124,12 +123,12 @@ class Data
         $this->productRepository = $productRepository;
         $this->storeManager = $storeManager;
         $this->swatchCollectionFactory = $swatchCollectionFactory;
-        $this->imageHelper = $imageHelper;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
         $this->swatchAttributesProvider = $swatchAttributesProvider
             ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
         $this->swatchTypeChecker = $swatchTypeChecker
             ?: ObjectManager::getInstance()->create(SwatchAttributeType::class);
+        $this->imageUrlBuilder = $urlBuilder;
     }
 
     /**
@@ -309,7 +308,7 @@ class Data
             return [];
         }
 
-        $resultGallery = $this->getAllSizeImages($product, $baseImage);
+        $resultGallery = $this->getAllSizeImages($baseImage);
         $resultGallery['gallery'] = $this->getGalleryImages($product);
 
         return $resultGallery;
@@ -327,31 +326,21 @@ class Data
         $result = [];
         $mediaGallery = $product->getMediaGalleryImages();
         foreach ($mediaGallery as $media) {
-            $result[$media->getData('value_id')] = $this->getAllSizeImages(
-                $product,
-                $media->getData('file')
-            );
+            $result[$media->getData('value_id')] = $this->getAllSizeImages($media->getData('file'));
         }
         return $result;
     }
 
     /**
-     * @param ModelProduct $product
      * @param string $imageFile
      * @return array
      */
-    private function getAllSizeImages(ModelProduct $product, $imageFile)
+    private function getAllSizeImages($imageFile)
     {
         return [
-            'large' => $this->imageHelper->init($product, 'product_page_image_large_no_frame')
-                ->setImageFile($imageFile)
-                ->getUrl(),
-            'medium' => $this->imageHelper->init($product, 'product_page_image_medium_no_frame')
-                ->setImageFile($imageFile)
-                ->getUrl(),
-            'small' => $this->imageHelper->init($product, 'product_page_image_small')
-                ->setImageFile($imageFile)
-                ->getUrl(),
+            'large' => $this->imageUrlBuilder->getUrl($imageFile, 'product_page_image_large'),
+            'medium' => $this->imageUrlBuilder->getUrl($imageFile, 'product_page_image_medium'),
+            'small' => $this->imageUrlBuilder->getUrl($imageFile, 'product_page_image_small')
         ];
     }
 
