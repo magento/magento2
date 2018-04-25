@@ -84,9 +84,10 @@ class SwitchAction extends Action
             $error = __('Requested store is not found');
         }
 
+        $redirectUrl = $this->_redirect->getRedirectUrl();
         if (isset($error)) {
             $this->messageManager->addError($error);
-            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+            $this->getResponse()->setRedirect($redirectUrl);
             return;
         }
 
@@ -100,19 +101,19 @@ class SwitchAction extends Action
 
         if ($store->isUseStoreInUrl()) {
             // Change store code in redirect url
-            if (strpos($this->_redirect->getRedirectUrl(), $currentActiveStore->getBaseUrl()) !== false) {
+            if (strpos($redirectUrl, $currentActiveStore->getBaseUrl()) !== false) {
                 $this->getResponse()->setRedirect(
                     str_replace(
                         $currentActiveStore->getBaseUrl(),
                         $store->getBaseUrl(),
-                        $this->_redirect->getRedirectUrl()
+                        $redirectUrl
                     )
                 );
             } else {
                 $this->getResponse()->setRedirect($store->getBaseUrl());
             }
         } else {
-            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+            $this->getResponse()->setRedirect($redirectUrl);
         }
     }
 }
