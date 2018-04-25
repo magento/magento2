@@ -70,37 +70,37 @@ class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
     }
     
    /**
-   * @param string $path
-   * @param string $directoryConfig
-   * @param bool $expectation
-   * @dataProvider validatePathDataProvider
-   * @throws \Magento\Framework\Exception\FileSystemException
-   * @magentoAppIsolation enabled
-   * @return void
-   */
-  public function testValidatePathWithSymlink($path, $directoryConfig, $expectation)
-  {
-      $directory = $this->filesystem
+    * @param string $path
+    * @param string $directoryConfig
+    * @param bool $expectation
+    * @dataProvider validatePathDataProvider
+    * @throws \Magento\Framework\Exception\FileSystemException
+    * @magentoAppIsolation enabled
+    * @return void
+    */
+    public function testValidatePathWithSymlink($path, $directoryConfig, $expectation)
+    {
+        $directory = $this->filesystem
           ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::PUB);
-      $driver = $directory->getDriver();
+        $driver = $directory->getDriver();
      
-      $mediaPath = $directory->getAbsolutePath('media');
-      $mediaMovedPath = $directory->getAbsolutePath('moved-media');
+        $mediaPath = $directory->getAbsolutePath('media');
+        $mediaMovedPath = $directory->getAbsolutePath('moved-media');
 
-     try {
-          $driver->rename($mediaPath, $mediaMovedPath);
-          $driver->symlink($mediaMovedPath, $mediaPath);
-          $this->testValidatePath($path, $directoryConfig, $expectation);
-      } finally {
-          // be defensive in case some operations failed
-          if ($driver->isExists($mediaPath) && $driver->isExists($mediaMovedPath)) {
-              $driver->deleteFile($mediaPath);
-              $driver->rename($mediaMovedPath, $mediaPath);
-          } elseif ($driver->isExists($mediaMovedPath)) {
-             $driver->rename($mediaMovedPath, $mediaPath);
-         }
-     }
-  }
+        try {
+            $driver->rename($mediaPath, $mediaMovedPath);
+            $driver->symlink($mediaMovedPath, $mediaPath);
+            $this->testValidatePath($path, $directoryConfig, $expectation);
+        } finally {
+            // be defensive in case some operations failed
+            if ($driver->isExists($mediaPath) && $driver->isExists($mediaMovedPath)) {
+                $driver->deleteFile($mediaPath);
+                $driver->rename($mediaMovedPath, $mediaPath);
+            } elseif ($driver->isExists($mediaMovedPath)) {
+                $driver->rename($mediaMovedPath, $mediaPath);
+            }
+        }
+    }
     
     /**
      * @return array
