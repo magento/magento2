@@ -94,6 +94,7 @@ class CategoryTree
         $depth = $this->calculateDepth($categoryQuery);
         $level = $this->getLevelByRootCategoryId($rootCategoryId);
         //Search for desired part of category tree
+        $collection->addPathFilter(sprintf('.*/%s/[/0-9]*$', $rootCategoryId));
         $collection->addFieldToFilter('level', ['gt' => $level]);
         $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
         $collection->setOrder('level');

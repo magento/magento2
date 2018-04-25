@@ -23,6 +23,109 @@ class CategoryTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories_no_products.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @param int $categoryId
+     * @param array $expectedResponse
+     *
+     * @dataProvider categorySubtreeTestDataProvider
+     */
+    public function testCategoriesSubtree($categoryId, $expectedResponse)
+    {
+        $query = <<<QUERY
+  {
+  categories(
+    filter: {root_category_id: $categoryId}) {
+    category_tree {
+      id
+      level
+     name
+      path
+     product_count
+      children {
+        id
+       name
+        level
+        is_active
+        path
+        children {
+          id
+          name
+          level
+          description
+          path
+        }
+      }
+    }
+  }
+}
+QUERY;
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
+        );
+        $customerToken = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $this->assertEquals($expectedResponse, $response);
+    }
+
+    public function categorySubtreeTestDataProvider()
+    {
+        return [
+            [
+                'category_id' => 3,
+                'expected_subtree' => [
+                    'categories' => [
+                        'category_tree' => [
+                            'id' => 3,
+                            'level' => 2,
+                            'name' => 'Category 1',
+                            'path' => '1/2/3',
+                            'product_count' => 0,
+                            'children' => [
+                                [
+                                    'id' => 4,
+                                    'name' => 'Category 1.1',
+                                    'level' => 3,
+                                    'is_active' => true,
+                                    'path' => '1/2/3/4',
+                                    'children' => [
+                                        [
+                                            'id' => 5,
+                                            'name' => 'Category 1.1.1',
+                                            'level' => 4,
+                                            'description' => NULL,
+                                            'path' => '1/2/3/4/5',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+            [
+                'category_id' => 6,
+                'expected_subtree' => [
+                    'categories' => [
+                        'category_tree' => [
+                            'id' => 6,
+                            'level' => 2,
+                            'name' => 'Category 2',
+                            'path' => '1/2/6',
+                            'product_count' => 0,
+                            'children' => []
+                        ],
+                    ],
+                ]
+            ]
+        ];
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
