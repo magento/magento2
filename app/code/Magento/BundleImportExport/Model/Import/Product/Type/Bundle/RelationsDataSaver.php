@@ -18,12 +18,20 @@ class RelationsDataSaver
     private $resource;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Relation
+     */
+    private $productRelation;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $productRelation
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource
+        \Magento\Framework\App\ResourceConnection $resource,
+        \Magento\Catalog\Model\ResourceModel\Product\Relation $productRelation
     ) {
-        $this->resource = $resource;
+        $this->resource        = $resource;
+        $this->productRelation = $productRelation;
     }
 
     /**
@@ -91,5 +99,18 @@ class RelationsDataSaver
                 ]
             );
         }
+    }
+
+    /**
+     * Saves given parent/child relations.
+     *
+     * @param int $parentId
+     * @param array $childIds
+     *
+     * @return void
+     */
+    public function saveProductRelations($parentId, $childIds)
+    {
+        $this->productRelation->processRelations($parentId, $childIds);
     }
 }
