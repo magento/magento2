@@ -12,5 +12,7 @@
         <section name="OrderDetailsMainActionsSection"/>
         <section name="OrderDetailsInformationSection"/>
         <section name="OrderDetailsMessagesSection"/>
+        <section name="AdminOrderItemsOrderedSection"/>
+        <section name="AdminOrderTotalSection" />
     </page>
 </pages>
