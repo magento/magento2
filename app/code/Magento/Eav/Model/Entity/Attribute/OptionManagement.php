@@ -75,7 +75,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             throw new StateException(__('The "%1" attribute can\'t be saved.', $attributeCode));
         }
 
-        return $option;
+        return $this->getOptionId($option);
     }
 
     /**
@@ -151,7 +151,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
      * @return string
      */
-    private function getOptionId($option)
+    private function getOptionId(\Magento\Eav\Api\Data\AttributeOptionInterface $option) : string
     {
         return $option->getValue() ?: 'new_option';
     }
@@ -162,8 +162,11 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
      * @param string $optionLabel
      * @return void
      */
-    protected function setOptionValue($option, $attribute, $optionLabel)
-    {
+    private function setOptionValue(
+        \Magento\Eav\Api\Data\AttributeOptionInterface $option,
+        \Magento\Eav\Api\Data\AttributeInterface $attribute,
+        string $optionLabel
+    ) {
         $optionId = $attribute->getSource()->getOptionId($optionLabel);
         if ($optionId) {
             $option->setValue($attribute->getSource()->getOptionId($optionId));
