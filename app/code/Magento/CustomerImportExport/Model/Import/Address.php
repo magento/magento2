@@ -5,7 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source as Sources;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites as CountryWithWebsitesSource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
@@ -241,7 +241,7 @@ class Address extends AbstractCustomer
     protected $postcodeValidator;
 
     /**
-     * @var Sources\CountryWithWebsites
+     * @var CountryWithWebsitesSource
      */
     private $countryWithWebsites;
 
@@ -271,7 +271,7 @@ class Address extends AbstractCustomer
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator
      * @param array $data
-     * @param Sources\CountryWithWebsites|null $countryWithWebsites
+     * @param CountryWithWebsitesSource|null $countryWithWebsites
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -295,7 +295,7 @@ class Address extends AbstractCustomer
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator,
         array $data = [],
-        Sources\CountryWithWebsites $countryWithWebsites = null
+        CountryWithWebsitesSource $countryWithWebsites = null
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
@@ -303,9 +303,8 @@ class Address extends AbstractCustomer
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->postcodeValidator = $postcodeValidator;
-        $this->countryWithWebsites = $countryWithWebsites ?
-            $countryWithWebsites
-            : ObjectManager::getInstance()->get(Sources\CountryWithWebsites::class);
+        $this->countryWithWebsites = $countryWithWebsites ?:
+            ObjectManager::getInstance()->get(CountryWithWebsitesSource::class);
 
         if (!isset($data['attribute_collection'])) {
             /** @var $attributeCollection \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection */
