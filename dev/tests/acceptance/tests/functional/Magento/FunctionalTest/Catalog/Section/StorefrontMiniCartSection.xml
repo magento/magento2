@@ -11,6 +11,7 @@
     <section name="StorefrontMiniCartSection">
         <element name="quantity" type="button" selector="span.counter-number"/>
         <element name="show" type="button" selector="a.showcart"/>
-        <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout"/>
+        <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout" timeout="30"/>
+        <element name="productCount" type="text" selector="//header//div[contains(@class, 'minicart-wrapper')]//a[contains(@class, 'showcart')]//span[@class='counter-number']"/>
     </section>
 </sections>
