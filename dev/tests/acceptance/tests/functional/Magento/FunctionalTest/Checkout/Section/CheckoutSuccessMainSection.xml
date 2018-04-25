@@ -11,6 +11,7 @@
     <section name="CheckoutSuccessMainSection">
         <element name="success" type="text" selector="div.checkout-success"/>
         <element name="orderNumber" type="text" selector="div.checkout-success > p:nth-child(1) > span"/>
+        <element name="orderNumberLink" type="text" selector="div.checkout-success > p:nth-child(1) > a"/>
         <element name="orderNumber22" type="text" selector=".order-number>strong"/>
         <element name="orderLink" type="text" selector="a[href*=order_id].order-number"/>
     </section>

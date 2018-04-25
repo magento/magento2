@@ -12,5 +12,7 @@
         <element name="cartItems" type="text" selector=".minicart-items"/>
         <element name="billingAddress" type="text" selector="div.billing-address-details"/>
         <element name="placeOrder" type="button" selector="button.action.primary.checkout" timeout="30"/>
+        <element name="paymentSectionTitle" type="text" selector="#checkout-payment-method-load .step-title" />
+        <element name="paymentMethodTitle" type="text" selector=".payment-method-title span" />
     </section>
 </sections>
