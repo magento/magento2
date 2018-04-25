@@ -9,6 +9,7 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Sales\Api\OrderManagementInterface;
 
 class MassUnhold extends AbstractMassAction
 {
@@ -16,16 +17,29 @@ class MassUnhold extends AbstractMassAction
      * Authorization level of a basic admin session
      */
     const ADMIN_RESOURCE = 'Magento_Sales::unhold';
+    
+    /**
+     * @var OrderManagementInterface
+     */
+    private $orderManagement;
 
     /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
+     * @param OrderManagementInterface|null $orderManagement
      */
-    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
-    {
+    public function __construct(
+        Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+        OrderManagementInterface $orderManagement = null
+    ) {
         parent::__construct($context, $filter);
         $this->collectionFactory = $collectionFactory;
+        $this->orderManagement = $orderManagement ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Sales\Api\OrderManagementInterface::class
+        );
     }
 
     /**
@@ -40,12 +54,10 @@ class MassUnhold extends AbstractMassAction
 
         /** @var \Magento\Sales\Model\Order $order */
         foreach ($collection->getItems() as $order) {
-            $order->load($order->getId());
             if (!$order->canUnhold()) {
                 continue;
             }
-            $order->unhold();
-            $order->save();
+            $this->orderManagement->unHold($order->getEntityId());
             $countUnHoldOrder++;
         }
 
