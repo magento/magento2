@@ -183,12 +183,12 @@ define([
         },
 
         /**
-         * Sets window location.
+         * Sets window location hash.
          *
-         * @param {String} code
+         * @param {String} hash
          */
-        setLocation: function (code) {
-            window.location = window.checkoutConfig.checkoutUrl + '#' + code;
+        setHash: function (hash) {
+            window.location.hash = hash;
         },
 
         /**
@@ -208,7 +208,7 @@ define([
             if (steps().length > activeIndex + 1) {
                 code = steps()[activeIndex + 1].code;
                 steps()[activeIndex + 1].isVisible(true);
-                this.setLocation(code);
+                this.setHash(code);
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
             }
         }

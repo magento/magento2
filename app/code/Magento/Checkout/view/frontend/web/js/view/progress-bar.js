@@ -28,7 +28,7 @@ define([
             $(window).hashchange(_.bind(stepNavigator.handleHash, stepNavigator));
 
             if (!window.location.hash) {
-                stepNavigator.setLocation(stepNavigator.steps().sort(stepNavigator.sortItems)[0].code);
+                stepNavigator.setHash(stepNavigator.steps().sort(stepNavigator.sortItems)[0].code);
             }
 
             stepNavigator.handleHash();
