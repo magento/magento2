@@ -13,6 +13,8 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
         </variation>
         <variation name="AddConfigurableProductWithSwatchToShoppingCartTest2" summary="Add configurable product to cart with mixed option types" ticketId="MAGETWO-59979">
+            <data name="issue" xsi:type="string">MAGETWO-90369</data>
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/dataset" xsi:type="string">product_with_text_swatch_and_size</data>
             <constraint name="Magento\Swatches\Test\Constraint\AssertSelectedSwatchOptionsOnProductPage" />
         </variation>
