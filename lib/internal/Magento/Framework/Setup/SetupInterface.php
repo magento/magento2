@@ -65,13 +65,49 @@ interface SetupInterface
      * Prepares database before install/upgrade
      *
      * @return $this
+     *
+     * @deprecated Call individual methods only if required
+     * @see disableAutoValueOnZero()
+     * @see disableForeignKeyChecks()
      */
     public function startSetup();
+
+    /**
+     * Set no auto value on zero
+     *
+     * @return $this
+     */
+    public function disableAutoValueOnZero();
+
+    /**
+     * Disable foreign key checks
+     *
+     * @return $this
+     */
+    public function disableForeignKeyChecks();
 
     /**
      * Prepares database after install/upgrade
      *
      * @return $this
+     *
+     * @deprecated Call individual methods only if required
+     * @see resetAutoValueOnZero()
+     * @see resetForeignKeyChecks()
      */
     public function endSetup();
+
+    /**
+     * Reset mode back to what it was previously
+     *
+     * @return $this
+     */
+    public function resetAutoValueOnZero();
+
+    /**
+     * Reset foreign key checks back to what they were previously
+     *
+     * @return $this
+     */
+    public function resetForeignKeyChecks();
 }

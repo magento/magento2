@@ -169,6 +169,10 @@ class Setup implements SetupInterface
      * Prepare database before install/upgrade
      *
      * @return $this
+     *
+     * @deprecated Call individual methods only if required
+     * @see disableAutoValueOnZero()
+     * @see disableForeignKeyChecks()
      */
     public function startSetup()
     {
@@ -177,13 +181,61 @@ class Setup implements SetupInterface
     }
 
     /**
+     * Set no auto value on zero
+     *
+     * @return $this
+     */
+    public function disableAutoValueOnZero()
+    {
+        $this->getConnection()->disableAutoValueOnZero();
+        return $this;
+    }
+
+    /**
+     * Disable foreign key checks
+     *
+     * @return $this
+     */
+    public function disableForeignKeyChecks()
+    {
+        $this->getConnection()->disableForeignKeyChecks();
+        return $this;
+    }
+
+    /**
      * Prepare database after install/upgrade
      *
      * @return $this
+     *
+     * @deprecated Call individual methods only if required
+     * @see resetAutoValueOnZero()
+     * @see resetForeignKeyChecks()
      */
     public function endSetup()
     {
         $this->getConnection()->endSetup();
+        return $this;
+    }
+
+    /**
+     * Reset mode back to what it was previously
+     *
+     * @return $this
+     */
+    public function resetAutoValueOnZero()
+    {
+        $this->getConnection()->resetAutoValueOnZero();
+        return $this;
+    }
+
+    /**
+     * Reset foreign key checks back to what they were previously
+     *
+     * @return $this
+     */
+    public function resetForeignKeyChecks()
+    {
+        $this->getConnection()->resetForeignKeyChecks();
         return $this;
     }
 }

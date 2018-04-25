@@ -2812,12 +2812,40 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Run additional environment before setup
      *
      * @return $this
+     *
+     * @deprecated Call individual methods only if required
+     * @see disableAutoValueOnZero()
+     * @see disableForeignKeyChecks()
      */
     public function startSetup()
     {
         $this->rawQuery("SET SQL_MODE=''");
-        $this->rawQuery("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
+        $this->disableForeignKeyChecks();
+        $this->disableAutoValueOnZero();
+
+        return $this;
+    }
+
+    /**
+     * Set no auto value on zero
+     *
+     * @return $this
+     */
+    public function disableAutoValueOnZero()
+    {
         $this->rawQuery("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO'");
+
+        return $this;
+    }
+
+    /**
+     * Disable foreign key checks
+     *
+     * @return $this
+     */
+    public function disableForeignKeyChecks()
+    {
+        $this->rawQuery("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
 
         return $this;
     }
@@ -2826,10 +2854,38 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Run additional environment after setup
      *
      * @return $this
+     *
+     * @deprecated Call individual methods only if required
+     * @see resetAutoValueOnZero()
+     * @see resetForeignKeyChecks()
      */
     public function endSetup()
     {
+        $this->resetAutoValueOnZero();
+        $this->resetForeignKeyChecks();
+
+        return $this;
+    }
+
+    /**
+     * Reset mode back to what it was previously
+     *
+     * @return $this
+     */
+    public function resetAutoValueOnZero()
+    {
         $this->rawQuery("SET SQL_MODE=IFNULL(@OLD_SQL_MODE,'')");
+
+        return $this;
+    }
+
+    /**
+     * Reset foreign key checks back to what they were previously
+     *
+     * @return $this
+     */
+    public function resetForeignKeyChecks()
+    {
         $this->rawQuery("SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS=0, 0, 1)");
 
         return $this;
