@@ -64,26 +64,26 @@ class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
     public function testValidatePathWithException()
     {
         $directory = $this->filesystem
-             ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
         $path = $directory->getAbsolutePath();
         $this->directoryResolver->validatePath($path, 'wrong_dir');
     }
-    
-   /**
-    * @param string $path
-    * @param string $directoryConfig
-    * @param bool $expectation
-    * @dataProvider validatePathDataProvider
-    * @throws \Magento\Framework\Exception\FileSystemException
-    * @magentoAppIsolation enabled
-    * @return void
-    */
+
+    /**
+     * @param string $path
+     * @param string $directoryConfig
+     * @param bool $expectation
+     * @dataProvider validatePathDataProvider
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @magentoAppIsolation enabled
+     * @return void
+     */
     public function testValidatePathWithSymlink($path, $directoryConfig, $expectation)
     {
         $directory = $this->filesystem
-          ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::PUB);
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::PUB);
         $driver = $directory->getDriver();
-     
+
         $mediaPath = $directory->getAbsolutePath('media');
         $mediaMovedPath = $directory->getAbsolutePath('moved-media');
 
@@ -101,7 +101,7 @@ class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
             }
         }
     }
-    
+
     /**
      * @return array
      */

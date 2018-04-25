@@ -3,11 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 namespace Magento\Framework\App\Filesystem;
-
-use Magento\Framework\Filesystem;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Magento directories resolver.
@@ -20,19 +16,11 @@ class DirectoryResolver
     private $directoryList;
 
     /**
-     * @var \Magento\Framework\Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @param DirectoryList $directoryList
-     * @param Filesystem|null $filesystem
-     * @throws \RuntimeException
      */
-    public function __construct(DirectoryList $directoryList, Filesystem $filesystem = null)
+    public function __construct(DirectoryList $directoryList)
     {
         $this->directoryList = $directoryList;
-        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
     }
 
     /**
@@ -52,7 +40,7 @@ class DirectoryResolver
     {
         $realPath = realpath($path);
         $root = realpath($this->directoryList->getPath($directoryConfig));
-        
+
         return strpos($realPath, $root) === 0;
     }
 }
