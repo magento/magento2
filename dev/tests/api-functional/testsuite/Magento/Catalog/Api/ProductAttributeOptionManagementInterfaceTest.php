@@ -74,7 +74,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
             ]
         );
 
-        $this->assertNotNull($response[AttributeOptionInterface::VALUE]);
+        $this->assertNotNull($response);
         $updatedData = $this->getAttributeOptions($testAttributeCode);
         $lastOption = array_pop($updatedData);
         $this->assertEquals(
