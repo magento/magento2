@@ -14,6 +14,11 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Psr\Log\LoggerInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteData;
 
+/**
+ * Url rewrites DB storage.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DbStorage extends AbstractStorage
 {
     /**
