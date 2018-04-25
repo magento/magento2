@@ -219,12 +219,8 @@ class ImageResize
     private function getUniqImageIndex(array $imageData): string
     {
         ksort($imageData);
-        $index = '';
         unset($imageData['type']);
-        foreach ($imageData as $key => $data) {
-            $index .= "$key:$data|";
-        }
-        return $index;
+        return md5(serialize($imageData));
     }
 
     /**

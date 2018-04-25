@@ -102,13 +102,13 @@ class ParamsBuilder
         $angle = $imageArguments['angle'] ?? $this->defaultAngle;
 
         return [
-            'background' => $background,
+            'background' => (array) $background,
             'angle' => $angle,
             'quality' => $this->defaultQuality,
-            'keep_aspect_ratio' => $aspectRatio,
+            'keep_aspect_ratio' => (bool) $aspectRatio,
             'keep_frame' => (bool) $frame,
-            'keep_transparency' => $transparency,
-            'constrain_only' => $constrain,
+            'keep_transparency' => (bool) $transparency,
+            'constrain_only' => (bool) $constrain,
         ];
     }
 
