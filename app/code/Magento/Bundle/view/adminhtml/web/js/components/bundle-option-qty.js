@@ -13,8 +13,7 @@ define([
             valueUpdate: 'input',
             isInteger: true,
             validation: {
-                'validate-number': true,
-                'validate-digits': true
+                'validate-number': true
             }
         },
 
@@ -33,16 +32,6 @@ define([
             var notEqual = this.value() !== this.initialValue.toString();
 
             return !this.visible() ? false : notEqual;
-        },
-
-        /**
-         * Update field validation rules
-         *
-         * @param value
-         */
-        validateDigits: function(value) {
-            this.isInteger = value;
-            this.validation['validate-digits'] = this.isInteger;
         }
 
     });
