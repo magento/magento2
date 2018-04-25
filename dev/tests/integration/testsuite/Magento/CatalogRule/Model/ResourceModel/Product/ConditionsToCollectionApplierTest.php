@@ -73,8 +73,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
                 array_values($resultCollection->getItems())
             );
 
-            asort($expectedSkuList);
-            asort($resultSkuList);
+            sort($expectedSkuList);
+            sort($resultSkuList);
 
             $this->assertEquals($expectedSkuList, $resultSkuList, sprintf('%s failed', $variationName));
         }
