@@ -5,7 +5,6 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
@@ -28,6 +27,8 @@
         <element name="frontendInput" type="select" selector="select[name = 'frontend_input']"/>
         <element name="productFormTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]" parameterized="true"/>
         <element name="productFormTabState" type="text" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]/parent::*/parent::*[@data-state-collapsible='{{state}}']" parameterized="true"/>
+        <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
+        <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
     </section>
     <section name="ProductDesignSection">
         <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
