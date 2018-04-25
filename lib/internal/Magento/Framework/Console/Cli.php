@@ -17,6 +17,7 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Shell\ComplexParameter;
 use Magento\Setup\Console\CompilerPreparation;
 use \Magento\Framework\App\ProductMetadata;
+use Magento\Framework\App\State;
 
 /**
  * Magento 2 CLI Application. This is the hood for all command line tools supported by Magento
@@ -48,6 +49,11 @@ class Cli extends SymfonyApplication
     private $initException;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @param string $name  application name
      * @param string $version application version
      * @SuppressWarnings(PHPMD.ExitExpression)
@@ -56,15 +62,7 @@ class Cli extends SymfonyApplication
     {
         $this->serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
             ->getServiceManager();
-        $generationDirectoryAccess = new GenerationDirectoryAccess($this->serviceManager);
-        if (!$generationDirectoryAccess->check()) {
-            $output = new ConsoleOutput();
-            $output->writeln(
-                '<error>Command line user does not have read and write permissions on var/generation directory.  Please'
-                . ' address this issue before using Magento command line.</error>'
-            );
-            exit(0);
-        }
+
         /**
          * Temporary workaround until the compiler is able to clear the generation directory
          * @todo remove after MAGETWO-44493 resolved
@@ -74,6 +72,21 @@ class Cli extends SymfonyApplication
             $compilerPreparation->handleCompilerEnvironment();
         }
 
+        $bootstrapParam = new ComplexParameter(self::INPUT_KEY_BOOTSTRAP);
+        $params = $bootstrapParam->mergeFromArgv($_SERVER, $_SERVER);
+        $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
+        $bootstrap = Bootstrap::create(BP, $params);
+        $this->objectManager = $bootstrap->getObjectManager();
+
+        if ($this->checkGenerationDirectoryAccess()) {
+            $output = new ConsoleOutput();
+            $output->writeln(
+                '<error>Command line user does not have read and write permissions on var/generation directory.  Please'
+                . ' address this issue before using Magento command line.</error>'
+            );
+            exit(0);
+        }
+
         if ($version == 'UNKNOWN') {
             $directoryList      = new DirectoryList(BP);
             $composerJsonFinder = new ComposerJsonFinder($directoryList);
@@ -81,6 +94,22 @@ class Cli extends SymfonyApplication
             $version = $productMetadata->getVersion();
         }
         parent::__construct($name, $version);
+    }
+
+    /**
+     * Check generation directory access.
+     *
+     * Skip and return true if production mode is enabled.
+     *
+     * @return bool
+     */
+    private function checkGenerationDirectoryAccess()
+    {
+        $generationDirectoryAccess = new GenerationDirectoryAccess($this->serviceManager);
+        /** @var State $state */
+        $state = $this->objectManager->create(State::class);
+
+        return $state->getMode() !== State::MODE_PRODUCTION && !$generationDirectoryAccess->check();
     }
 
     /**
@@ -121,31 +150,25 @@ class Cli extends SymfonyApplication
     {
         $commands = [];
         try {
-            $bootstrapParam = new ComplexParameter(self::INPUT_KEY_BOOTSTRAP);
-            $params = $bootstrapParam->mergeFromArgv($_SERVER, $_SERVER);
-            $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
-            $bootstrap = Bootstrap::create(BP, $params);
-            $objectManager = $bootstrap->getObjectManager();
-
             // Specialized setup command list available before and after M2 install
             if (class_exists('Magento\Setup\Console\CommandList')
                 && class_exists('Magento\Setup\Model\ObjectManagerProvider')
             ) {
                 /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
                 $omProvider = $this->serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class);
-                $omProvider->setObjectManager($objectManager);
+                $omProvider->setObjectManager($this->objectManager);
                 $setupCommandList = new \Magento\Setup\Console\CommandList($this->serviceManager);
                 $commands = array_merge($commands, $setupCommandList->getCommands());
             }
 
             // Allowing instances of all modular commands only after M2 install
-            if ($objectManager->get(\Magento\Framework\App\DeploymentConfig::class)->isAvailable()) {
+            if ($this->objectManager->get(\Magento\Framework\App\DeploymentConfig::class)->isAvailable()) {
                 /** @var \Magento\Framework\Console\CommandListInterface $commandList */
-                $commandList = $objectManager->create(\Magento\Framework\Console\CommandListInterface::class);
+                $commandList = $this->objectManager->create(\Magento\Framework\Console\CommandListInterface::class);
                 $commands = array_merge($commands, $commandList->getCommands());
             }
 
-            $commands = array_merge($commands, $this->getVendorCommands($objectManager));
+            $commands = array_merge($commands, $this->getVendorCommands($this->objectManager));
         } catch (\Exception $e) {
             $this->initException = $e;
         }
