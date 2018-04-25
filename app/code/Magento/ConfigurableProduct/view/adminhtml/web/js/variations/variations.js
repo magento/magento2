@@ -492,7 +492,7 @@ define([
                 dataType: 'json',
                 showLoader: true,
                 context: this
-            }).success(function (data) {
+            }).done(function (data) {
                 if (!data.error) {
                     this.set(
                         'skeletonAttributeSet',
@@ -507,7 +507,7 @@ define([
                 }
 
                 return false;
-            }).error(function (xhr) {
+            }).fail(function (xhr) {
                 if (xhr.statusText === 'abort') {
                     return;
                 }

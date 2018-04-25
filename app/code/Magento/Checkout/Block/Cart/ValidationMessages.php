@@ -84,7 +84,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
     protected function validateMinimumAmount()
     {
         if (!$this->cartHelper->getQuote()->validateMinimumAmount()) {
-            $this->messageManager->addNotice($this->getMinimumAmountErrorMessage()->getMessage());
+            $this->messageManager->addNoticeMessage($this->getMinimumAmountErrorMessage()->getMessage());
         }
     }
 

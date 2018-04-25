@@ -147,7 +147,10 @@ class DbStorage extends AbstractStorage
     {
         foreach ($this->createFilterDataBasedOnUrls($urls) as $type => $urlData) {
             $urlData[UrlRewrite::ENTITY_TYPE] = $type;
-            $this->deleteByData($urlData);
+            // prevent query locking in a case when nothing to delete
+            if ($this->connection->fetchRow($this->prepareSelect($urlData))) {
+                $this->deleteByData($urlData);
+            }
         }
         $data = [];
         foreach ($urls as $url) {

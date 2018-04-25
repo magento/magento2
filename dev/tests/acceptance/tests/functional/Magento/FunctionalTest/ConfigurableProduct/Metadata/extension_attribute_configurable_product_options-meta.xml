@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateExtensionAttributeConfigProductOption" dataType="ExtensionAttributeConfigProductOption" type="create">
         <contentType>application/json</contentType>
@@ -18,4 +18,4 @@
             </object>
         </array>
     </operation>
-</config>
+</operations>

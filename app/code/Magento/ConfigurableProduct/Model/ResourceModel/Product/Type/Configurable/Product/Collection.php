@@ -89,7 +89,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * Retrieve is flat enabled flag
-     * Return alvays false if magento run admin
+     * Return always false if magento run admin
      *
      * @return bool
      */

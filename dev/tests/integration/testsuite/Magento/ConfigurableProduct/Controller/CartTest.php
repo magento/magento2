@@ -91,7 +91,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $this->assertSessionMessages(
-            $this->equalTo(['The coupon code "test" is not valid.']),
+            $this->equalTo(['The coupon code &quot;test&quot; is not valid.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

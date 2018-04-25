@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fraud_protection" translate="label" type="text" sortOrder="410" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Fraud Protection</label>
+            <tab>sales</tab>
+            <resource>Magento_Sales::fraud_protection</resource>
+            <group id="signifyd" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <fieldset_css>signifyd-logo-header</fieldset_css>
+                <group id="about" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <frontend_model>Magento\Signifyd\Block\Adminhtml\System\Config\Fieldset\Info</frontend_model>
+                    <fieldset_css>signifyd-about-header</fieldset_css>
+                    <label><![CDATA[Protect your store from fraud with Guaranteed Fraud Protection by Signifyd.]]></label>
+                    <comment><![CDATA[Signifyd automatically reviews your orders for fraud, telling you in seconds which orders to ship, and which to reject.
+                    We back our approvals with 100% chargeback protection, reimbursing you the full order amount plus fees should you ever receive a fraudulent chargeback.
+                    <p>Benefits:<ul>
+                    <li>Grow your business without fear of fraud</li>
+                    <li>Accept more orders and maximize your revenue</li>
+                    <li>Automate order review and shift fraud off your plate</li></ul></p>]]>
+                    </comment>
+                    <more_url>https://www.signifyd.com/magento-guaranteed-fraud-protection</more_url>
+                </group>
+                <group id="config" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <fieldset_css>signifyd-about-header</fieldset_css>
+                    <label>Configuration</label>
+                    <comment><![CDATA[<a href="https://www.signifyd.com/resources/manual/magento-2/signifyd-on-magento-integration-guide/" target="_blank">View our setup guide</a> for step-by-step instructions on how to integrate Signifyd with Magento.<br />For support contact <a href="mailto:support@signifyd.com">support@signifyd.com</a>.]]>
+                    </comment>
+                    <field id="active" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable this Solution</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>fraud_protection/signifyd/active</config_path>
+                    </field>
+                    <field id="api_key" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>API Key</label>
+                        <comment><![CDATA[Your API key can be found on the <a href="http://signifyd.com/settings" target="_blank">settings page</a> in the Signifyd console]]></comment>
+                        <config_path>fraud_protection/signifyd/api_key</config_path>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    </field>
+                    <field id="api_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>API URL</label>
+                        <config_path>fraud_protection/signifyd/api_url</config_path>
+                        <comment>Don’t change unless asked to do so.</comment>
+                    </field>
+                    <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Debug</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>fraud_protection/signifyd/debug</config_path>
+                    </field>
+                    <field id="webhook_url" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Webhook URL</label>
+                        <comment><![CDATA[Your webhook URL will be used to <a href="https://app.signifyd.com/settings/notifications" target="_blank">configure</a> a guarantee completed webhook in Signifyd. Webhooks are used to sync Signifyd`s guarantee decisions back to Magento.]]></comment>
+                        <attribute type="handler_url">signifyd/webhooks/handler</attribute>
+                        <frontend_model>Magento\Signifyd\Block\Adminhtml\System\Config\Field\WebhookUrl</frontend_model>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

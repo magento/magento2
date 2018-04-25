@@ -45,6 +45,7 @@ Blocks,Blocks
 "Please correct the data sent.","Please correct the data sent."
 "A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
 "You saved the block.","You saved the block."
+"You duplicated the block.","You duplicated the block."
 "Something went wrong while saving the block.","Something went wrong while saving the block."
 "The page has been deleted.","The page has been deleted."
 "We can't find a page to delete.","We can't find a page to delete."
@@ -58,6 +59,7 @@ Pages,Pages
 "Page Title","Page Title"
 "To apply changes you should fill in hidden required ""%1"" field","To apply changes you should fill in hidden required ""%1"" field"
 "You saved the page.","You saved the page."
+"You duplicated the page.","You duplicated the page."
 "The directory %1 is not writable by server.","The directory %1 is not writable by server."
 "Make sure that static block content does not reference the block itself.","Make sure that static block content does not reference the block itself."
 "CMS Block with id ""%1"" does not exist.","CMS Block with id ""%1"" does not exist."
@@ -133,7 +135,7 @@ Block,Block
 "Enable Page","Enable Page"
 Content,Content
 "Content Heading","Content Heading"
-"Search Engine Optimisation","Search Engine Optimisation"
+"Search Engine Optimization","Search Engine Optimization"
 "Meta Title","Meta Title"
 "Meta Keywords","Meta Keywords"
 "Meta Description","Meta Description"
@@ -146,6 +148,7 @@ To,To
 "New Theme","New Theme"
 "-- Please Select --","-- Please Select --"
 "New Layout","New Layout"
+"Default Page Layout","Default Page Layout"
 Disable,Disable
 Enable,Enable
 "Custom design from","Custom design from"

@@ -323,10 +323,8 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $quote->setTotalsCollectedFlag(false)->collectTotals();
         $this->assertEquals(1, $quote->getItemsQty());
 
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            'We don\'t have as many "Simple Product" as you requested.'
-        );
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('We don\'t have as many "Simple Product" as you requested.');
         $updateParams['qty'] = $productStockQty + 1;
         $quote->updateItem($updateParams['id'], $updateParams);
     }
@@ -393,7 +391,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Data\Customer::DOB => '2014-02-03 00:00:00',
             \Magento\Customer\Model\Data\Customer::EMAIL => 'qa@example.com',
             \Magento\Customer\Model\Data\Customer::FIRSTNAME => 'Joe',
-            \Magento\Customer\Model\Data\Customer::GENDER => 'Male',
+            \Magento\Customer\Model\Data\Customer::GENDER => 0,
             \Magento\Customer\Model\Data\Customer::GROUP_ID =>
                 \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
             \Magento\Customer\Model\Data\Customer::ID => 1,
@@ -441,10 +439,8 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Quote\Model\Quote  $quote */
         $product = $productRepository->getById($productId, false, null, true);
 
-        $this->expectException(
-            LocalizedException::class,
-            'Product that you are trying to add is not available.'
-        );
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Product that you are trying to add is not available.');
 
         $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->addProduct($product);
