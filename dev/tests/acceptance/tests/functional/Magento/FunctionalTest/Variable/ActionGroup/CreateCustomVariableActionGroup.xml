@@ -22,6 +22,7 @@
     <waitForPageLoad stepKey="waitForPageLoad1" />
     <click selector="{{CustomVariableSection.GridCustomVariableCode(customVariable.code)}}" stepKey="goToCustomVariableEditPage" />
     <waitForPageLoad stepKey="waitForPageLoad2" />
+    <waitForElementVisible selector="{{CustomVariableSection.delete}}" stepKey="waitForDeleteBtn" />
     <click selector="{{CustomVariableSection.delete}}" stepKey="deleteCustomVariable" />
     <waitForText userInput="Are you sure you want to do this?" stepKey="waitForText" />
     <click selector="{{CustomVariableSection.confirmDelete}}" stepKey="confirmDelete" />
