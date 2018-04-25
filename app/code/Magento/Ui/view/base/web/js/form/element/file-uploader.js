@@ -324,7 +324,6 @@ define([
          *
          * @param {Event} e - Event object.
          * @param {Object} data - File data that will be uploaded.
-         * @returns {Boolean|void} - false if further processing should halt or undefined if processing should continue
          */
         onFilesChoosed: function (e, data) {
             // no option exists in fileuploader for restricting upload chains to single files; this enforces that policy
