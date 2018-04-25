@@ -469,6 +469,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     public function dispatchExceptionInCallbackDataProvider()
     {
         $throwable = new \TypeError();
+
         return [
             'non-callable callback' => [
                 'Not_Existed_Class',
@@ -495,7 +496,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                     'Error when running a cron job',
                     0,
                     $throwable
-                )
+                ),
             ],
         ];
     }
