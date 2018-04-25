@@ -45,7 +45,8 @@
         <fillField selector="{{ProductDescriptionWYSIWYGToolbarSection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName1" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.AcceptFolderName}}" stepKey="acceptFolderName11" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
-        <conditionalClick selector="{{ProductDescriptionWYSIWYGToolbarSection.StorageRootArrow}}" dependentSelector="{{ProductDescriptionWYSIWYGToolbarSection.checkIfArrowExpand}}" stepKey="clickArrowIfCloses1" visible="true"/>
+        <conditionalClick selector="{{ProductDescriptionWYSIWYGToolbarSection.StorageRootArrow}}" dependentSelector="{{ProductDescriptionWYSIWYGToolbarSection.checkIfArrowExpand}}" stepKey="clickStorageRootArrowIfClosed" visible="true"/>
+        <conditionalClick selector="{{ProductDescriptionWYSIWYGToolbarSection.WysiwygArrow}}" dependentSelector="{{ProductDescriptionWYSIWYGToolbarSection.checkIfWysiwygArrowExpand}}" stepKey="clickWysiwygArrowIfClosed" visible="true"/>
         <waitForText userInput="{{ImageFolder.name}}" stepKey="waitForNewFolder1" />
         <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder1" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading4" />
