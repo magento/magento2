@@ -182,7 +182,7 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('send')
             ->willThrowException(new \Exception());
         $this->loggerMock->expects($this->once())
-            ->method('warning');
+            ->method('critical');
 
         $this->commentRepository->save($this->commentMock);
     }
