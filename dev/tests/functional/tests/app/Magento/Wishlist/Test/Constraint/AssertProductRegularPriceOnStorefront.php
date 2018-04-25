@@ -16,7 +16,7 @@ use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\Bundle\Test\Fixture\BundleProduct;
 
 /**
- * Assert that product is present in default wishlist.
+ * Asserts that correct product regular price is displayed in default wishlist.
  */
 class AssertProductRegularPriceOnStorefront extends AbstractConstraint
 {
@@ -26,7 +26,7 @@ class AssertProductRegularPriceOnStorefront extends AbstractConstraint
     private $regularPriceLabel = 'Regular Price';
 
     /**
-     * Assert that product is present in default wishlist.
+     * Asserts that correct product regular price is displayed in default wishlist.
      *
      * @param CmsIndex             $cmsIndex
      * @param CustomerAccountIndex $customerAccountIndex

@@ -11,7 +11,9 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Pricing\Price as CatalogPrice;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
-use \Magento\Catalog\Pricing\Price\ConfiguredPriceSelection;
+use Magento\Catalog\Pricing\Price\ConfiguredPriceSelection;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
 /**
  * Configured price model
@@ -37,7 +39,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     /**
      * Serializer interface instance.
      *
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var JsonSerializer
      */
     private $serializer;
 
@@ -50,23 +52,23 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @param Product $saleableItem
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param PriceCurrencyInterface $priceCurrency
      * @param ItemInterface $item
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param JsonSerializer|null $serializer
      * @param ConfiguredPriceSelection|null $configuredPriceSelection
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         BundleCalculatorInterface $calculator,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        PriceCurrencyInterface $priceCurrency,
         ItemInterface $item = null,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        JsonSerializer $serializer = null,
         ConfiguredPriceSelection $configuredPriceSelection = null
     ) {
         $this->item = $item;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+            ->get(JsonSerializer::class);
         $this->configuredPriceSelection = $configuredPriceSelection
             ?: \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(ConfiguredPriceSelection::class);
@@ -95,7 +97,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
         $typeInstance = $bundleProduct->getTypeInstance();
         $bundleOptionsIds = [];
-        if ($this->item) {
+        if ($this->item !== null) {
             // get bundle options
             $optionsQuoteItemOption = $this->item->getOptionByCode('bundle_option_ids');
             if ($optionsQuoteItemOption && $optionsQuoteItemOption->getValue()) {

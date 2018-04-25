@@ -34,7 +34,7 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
 
     /**
      * @param Product $saleableItem
-     * @param float|null $quantity
+     * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param PriceCurrencyInterface $priceCurrency
      * @param ConfiguredOptions $configuredOptions
