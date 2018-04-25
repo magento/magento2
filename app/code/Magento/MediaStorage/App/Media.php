@@ -172,14 +172,7 @@ class Media implements AppInterface
 
     private function setPlaceholderImage()
     {
-        $exsistType = preg_match(
-            '/thumbnail|small_image|swatch_image|swatch_thumb|image/',
-            $this->relativeFileName,
-            $matches
-        );
-        $imageType = $exsistType ? $matches[0] : 'image';
-
-        $placeholder = $this->placeholderFactory->create(['type' => $imageType]);
+        $placeholder = $this->placeholderFactory->create(['type' => 'image']);
         $this->response->setFilePath($placeholder->getPath());
     }
 

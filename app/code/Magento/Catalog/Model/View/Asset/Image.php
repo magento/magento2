@@ -184,7 +184,6 @@ class Image implements LocalInterface
     private function getImageInfo()
     {
         $path = $this->getModule()
-            . DIRECTORY_SEPARATOR . $this->getSourceContentType()
             . DIRECTORY_SEPARATOR . $this->getMiscPath()
             . DIRECTORY_SEPARATOR . $this->getFilePath();
         return preg_replace('|\Q'. DIRECTORY_SEPARATOR . '\E+|', DIRECTORY_SEPARATOR, $path);

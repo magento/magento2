@@ -118,14 +118,13 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'miscParams' => $miscParams
             ]
         );
-        $imageType = $miscParams['image_type'] ?? 'image';
         $miscParams['background'] = isset($miscParams['background']) ? implode(',', $miscParams['background']) : '';
         $absolutePath = '/var/www/html/magento2ce/pub/media/catalog/product';
         $hashPath = md5(implode('_', $miscParams));
         $this->context->method('getPath')->willReturn($absolutePath);
         $this->encryptor->method('hash')->willReturn($hashPath);
         static::assertEquals(
-            $absolutePath . '/cache/' . $imageType . '/' . $hashPath . $filePath,
+            $absolutePath . '/cache/'. $hashPath . $filePath,
             $imageModel->getPath()
         );
     }
@@ -148,14 +147,13 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'miscParams' => $miscParams
             ]
         );
-        $imageType = $miscParams['image_type'] ?? 'image';
         $miscParams['background'] = isset($miscParams['background']) ? implode(',', $miscParams['background']) : '';
         $absolutePath = 'http://localhost/pub/media/catalog/product';
         $hashPath = md5(implode('_', $miscParams));
         $this->context->expects(static::once())->method('getBaseUrl')->willReturn($absolutePath);
         $this->encryptor->expects(static::once())->method('hash')->willReturn($hashPath);
         static::assertEquals(
-            $absolutePath . '/cache/' . $imageType . '/' . $hashPath . $filePath,
+            $absolutePath . '/cache/' . $hashPath . $filePath,
             $imageModel->getUrl()
         );
     }
