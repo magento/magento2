@@ -15,6 +15,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\SalesInventory\Model\Order\ReturnProcessor;
 
 class ProcessReturnQtyOnCreditMemoPlugin
 {
@@ -62,7 +63,7 @@ class ProcessReturnQtyOnCreditMemoPlugin
     }
 
     /**
-     * @param $subject
+     * @param ReturnProcessor $subject
      * @param callable $proceed
      * @param CreditmemoInterface $creditmemo
      * @param OrderInterface $order
@@ -71,7 +72,7 @@ class ProcessReturnQtyOnCreditMemoPlugin
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
-        $subject,
+        ReturnProcessor $subject,
         callable $proceed,
         CreditmemoInterface $creditmemo,
         OrderInterface $order,
@@ -84,7 +85,7 @@ class ProcessReturnQtyOnCreditMemoPlugin
             $orderItem = $item->getOrderItem();
             $parentItemId = $orderItem->getParentItemId();
             $qty = (float)$item->getQty();
-            if ($this->canReturnItem($orderItem->getId(), $qty, $parentItemId) && empty($parentItemId)) {
+            if ($this->isValidItem($orderItem->getId(), $qty, $parentItemId) && empty($parentItemId)) {
                 $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
                     [$item->getProductId()]
                 )[$item->getProductId()];
@@ -149,7 +150,7 @@ class ProcessReturnQtyOnCreditMemoPlugin
             foreach ($shipment->getItems() as $item) {
                 $orderItem = $item->getOrderItem();
                 $parentItemId = $orderItem->getParentItemId();
-                if ($this->canReturnItem($orderItem->getId(), $item->getQty(), $parentItemId)) {
+                if ($this->isValidItem($orderItem->getId(), $item->getQty(), $parentItemId)) {
                     $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
                         [$item->getProductId()]
                     )[$item->getProductId()];
@@ -167,7 +168,7 @@ class ProcessReturnQtyOnCreditMemoPlugin
      * @param int $parentItemId
      * @return bool
      */
-    private function canReturnItem($orderItemId, $qty, $parentItemId = null): bool
+    private function isValidItem($orderItemId, $qty, $parentItemId = null): bool
     {
         return (in_array($orderItemId, $this->returnToStockItems)
                 || in_array($parentItemId, $this->returnToStockItems)) && $qty;
