@@ -74,7 +74,7 @@ class DbStorage extends AbstractStorage
      * @param array $data
      * @return Select
      */
-    protected function prepareSelect(array $data): Select
+    protected function prepareSelect(array $data)
     {
         $select = $this->connection->select();
         $select->from($this->resource->getTableName(self::TABLE_NAME));
