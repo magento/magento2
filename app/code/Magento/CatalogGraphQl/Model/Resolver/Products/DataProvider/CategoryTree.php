@@ -62,7 +62,6 @@ class CategoryTree
     public function __construct(
         CollectionFactory $collectionFactory,
         AttributesJoiner $attributesJoiner,
-        CustomAttributesFlattener $customAttributesFlattener,
         DepthCalculator $depthCalculator,
         LevelCalculator $levelCalculator,
         MetadataPool $metadata
