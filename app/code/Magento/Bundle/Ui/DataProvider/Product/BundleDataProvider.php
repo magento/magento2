@@ -8,6 +8,8 @@ namespace Magento\Bundle\Ui\DataProvider\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
 use Magento\Bundle\Helper\Data;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class BundleDataProvider extends ProductDataProvider
 {
@@ -15,6 +17,11 @@ class BundleDataProvider extends ProductDataProvider
      * @var Data
      */
     protected $dataHelper;
+
+    /**
+     * @var StockRegistryInterface
+     */
+    private $stockRegistry;
 
     /**
      * Construct
@@ -28,6 +35,7 @@ class BundleDataProvider extends ProductDataProvider
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @param StockRegistryInterface $stockRegistry
      */
     public function __construct(
         $name,
@@ -38,7 +46,8 @@ class BundleDataProvider extends ProductDataProvider
         array $meta = [],
         array $data = [],
         array $addFieldStrategies = [],
-        array $addFilterStrategies = []
+        array $addFilterStrategies = [],
+        StockRegistryInterface $stockRegistry = null
     ) {
         parent::__construct(
             $name,
@@ -52,6 +61,8 @@ class BundleDataProvider extends ProductDataProvider
         );
 
         $this->dataHelper = $dataHelper;
+        $this->stockRegistry = $stockRegistry
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(StockRegistryInterface::class);
     }
 
     /**
@@ -74,9 +85,29 @@ class BundleDataProvider extends ProductDataProvider
         }
         $items = $this->getCollection()->toArray();
 
+        foreach ($items as $index => $item) {
+            $items[$index]['selection_qty_is_integer'] = !$this->isProductQtyDecimal($item['entity_id']);
+        }
+
         return [
             'totalRecords' => $this->getCollection()->getSize(),
             'items' => array_values($items),
         ];
+    }
+
+    /**
+     * @param int $productId
+     * @return bool
+     */
+    private function isProductQtyDecimal(int $productId): bool
+    {
+        try {
+            $productStock = $this->stockRegistry->getStockItem($productId);
+            $result = $productStock->getIsQtyDecimal();
+        } catch (NoSuchEntityException $e) {
+            $result = false;
+        }
+
+        return $result;
     }
 }

@@ -9,6 +9,8 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Data provider for main panel of product page
@@ -36,15 +38,24 @@ class General extends AbstractModifier
     private $localeCurrency;
 
     /**
+     * @var StockRegistryInterface
+     */
+    private $stockRegistry;
+
+    /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
+     * @param StockRegistryInterface $stockRegistry
      */
     public function __construct(
         LocatorInterface $locator,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        StockRegistryInterface $stockRegistry = null
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
+        $this->stockRegistry = $stockRegistry
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(StockRegistryInterface::class);
     }
 
     /**
@@ -106,7 +117,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
+                    $this->formatPriceQty($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY]);
             }
         }
 
@@ -406,6 +417,24 @@ class General extends AbstractModifier
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
 
         return $value;
+    }
+
+    /**
+     * Make price qty even int or decimal
+     *
+     * @param int|float|string $priceQty
+     * @return int|float
+     */
+    private function formatPriceQty($priceQty)
+    {
+        $productId = $this->locator->getProduct()->getId();
+        try {
+            $isQtyDecimal = $this->stockRegistry->getStockItem($productId)->getIsQtyDecimal();
+        } catch (NoSuchEntityException $e) {
+            $isQtyDecimal = false;
+        }
+
+        return ($isQtyDecimal ? (float) $priceQty : (int) $priceQty);
     }
 
     /**
