@@ -97,7 +97,7 @@ QUERY;
                                             'id' => 5,
                                             'name' => 'Category 1.1.1',
                                             'level' => 4,
-                                            'description' => NULL,
+                                            'description' => null,
                                             'path' => '1/2/3/4/5',
                                         ],
                                     ],
