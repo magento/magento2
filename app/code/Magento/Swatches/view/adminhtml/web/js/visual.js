@@ -157,7 +157,7 @@ define([
                 /**
                  * Update sort order values
                  */
-                updateSortOrder: function() {
+                updateSortOrder: function () {
                     jQuery('[data-role=swatch-visual-options-container] tr:not(.no-display) [data-role=order]').each(
                         function (index, element) {
                             jQuery(element).val(index + 1);
