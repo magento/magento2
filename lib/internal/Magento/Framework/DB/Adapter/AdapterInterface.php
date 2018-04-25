@@ -687,15 +687,51 @@ interface AdapterInterface
      * Run additional environment before setup
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     *
+     * @deprecated Call individual methods only if required
+     * @see disableAutoValueOnZero()
+     * @see disableForeignKeyChecks()
      */
     public function startSetup();
+
+    /**
+     * Set no auto value on zero
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function disableAutoValueOnZero();
+
+    /**
+     * Disable foreign key checks
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function disableForeignKeyChecks();
 
     /**
      * Run additional environment after setup
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     *
+     * @deprecated Call individual methods only if required
+     * @see resetAutoValueOnZero()
+     * @see resetForeignKeyChecks()
      */
     public function endSetup();
+
+    /**
+     * Reset mode back to what it was previously
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function resetAutoValueOnZero();
+
+    /**
+     * Reset foreign key checks back to what they were previously
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function resetForeignKeyChecks();
 
     /**
      * Set cache adapter
