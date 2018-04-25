@@ -92,21 +92,6 @@ class CreateTable implements OperationInterface
     }
 
     /**
-     * In some cases according to backward compatibility we want to use old table,
-     * for example in case of table recreation or table renaming
-     *
-     * We need to use definition of old table in order to prevent removal of 3-rd party columns, indexes, etc..
-     * added not with declarative schema
-     *
-     * @param ElementHistory $elementHistory
-     * @return ElementInterface
-     */
-    private function prepareTable(ElementHistory $elementHistory) : ElementInterface
-    {
-        return $elementHistory->getOld() ? $elementHistory->getOld() : $elementHistory->getNew();
-    }
-
-    /**
      * Setup callbacks for newely created columns
      *
      * @param array $columns
@@ -158,7 +143,7 @@ class CreateTable implements OperationInterface
     public function doOperation(ElementHistory $elementHistory)
     {
         /** @var Table $table */
-        $table = $this->prepareTable($elementHistory);
+        $table = $elementHistory->getNew();
         $definition = [];
         $data = [
             Column::TYPE => $table->getColumns(),

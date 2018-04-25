@@ -174,6 +174,23 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Retrieve internal constraints
+     *
+     * @return array
+     */
+    public function getInternalConstraints() : array
+    {
+        $constraints = [];
+        foreach ($this->getConstraints() as $constraint) {
+            if ($constraint instanceof Internal) {
+                $constraints[] = $constraint;
+            }
+        }
+
+        return $constraints;
+    }
+
+    /**
      * @param string $name
      * @return Index | bool
      */
