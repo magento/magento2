@@ -62,6 +62,8 @@ class Switcher
         Store $store,
         array $data = []
     ): string {
+        // ToDo: check if this plugin is needed
+        return $result;
         $data[StoreResolverInterface::PARAM_NAME] = $store->getCode();
 
         $currentUrl = $store->getCurrentUrl(true);
