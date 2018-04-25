@@ -198,8 +198,7 @@ class RoboFile extends \Robo\Tasks
 
         // stop execution if we have failed to properly parse any json
         if (json_last_error() != JSON_ERROR_NONE) {
-            $this->say("JSON could not be parsed: " . json_last_error_msg());
-            exit(1);
+            throw new \Magento\FunctionalTestingFramework\Exceptions\TestFrameworkException("JSON could not be parsed: " . json_last_error_msg());
         }
 
         $jsonTestConfiguration['tests'] = $testConfigArray['tests'] ?? null;;
