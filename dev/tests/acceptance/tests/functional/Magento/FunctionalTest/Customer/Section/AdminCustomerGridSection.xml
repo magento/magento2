@@ -11,5 +11,6 @@
     <section name="AdminCustomerGridSection">
         <element name="customerGrid" type="text" selector="table[data-role='grid']"/>
         <element name="rowEditAction" type="button" selector=".data-grid-actions-cell .action-menu-item"/>
+        <element name="firstRowEditLink" type="checkbox" selector="tr[data-repeat-index='0'] .action-menu-item" timeout="30"/>
     </section>
 </sections>
