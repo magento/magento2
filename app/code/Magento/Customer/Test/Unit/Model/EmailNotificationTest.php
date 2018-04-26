@@ -573,7 +573,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Create default mock for $this->transportBuilderMock
+     * Create default mock for $this->transportBuilderMock.
      *
      * @param string $templateIdentifier
      * @param int $customerStoreId
@@ -584,14 +584,14 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function mockDefaultTransportBuilder(
+    private function mockDefaultTransportBuilder(
         string $templateIdentifier,
         int $customerStoreId,
         array $senderValues,
         string $customerEmail,
         string $customerName,
         array $templateVars = []
-    ) {
+    ): void {
         $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
 
         $this->transportBuilderMock->expects($this->once())
