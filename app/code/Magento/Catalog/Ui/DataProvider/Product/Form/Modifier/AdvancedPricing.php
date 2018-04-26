@@ -24,8 +24,6 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Select;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Modal;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class AdvancedPricing
@@ -103,11 +101,6 @@ class AdvancedPricing extends AbstractModifier
     private $customerGroupSource;
 
     /**
-     * @var StockRegistryInterface
-     */
-    private $stockRegistry;
-
-    /**
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param GroupRepositoryInterface $groupRepository
@@ -118,7 +111,6 @@ class AdvancedPricing extends AbstractModifier
      * @param ArrayManager $arrayManager
      * @param string $scopeName
      * @param GroupSourceInterface $customerGroupSource
-     * @param StockRegistryInterface $stockRegistry
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -131,8 +123,7 @@ class AdvancedPricing extends AbstractModifier
         Data $directoryHelper,
         ArrayManager $arrayManager,
         $scopeName = '',
-        GroupSourceInterface $customerGroupSource = null,
-        StockRegistryInterface $stockRegistry = null
+        GroupSourceInterface $customerGroupSource = null
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -145,8 +136,6 @@ class AdvancedPricing extends AbstractModifier
         $this->scopeName = $scopeName;
         $this->customerGroupSource = $customerGroupSource
             ?: ObjectManager::getInstance()->get(GroupSourceInterface::class);
-        $this->stockRegistry = $stockRegistry
-            ?: ObjectManager::getInstance()->get(StockRegistryInterface::class);
     }
 
     /**
@@ -511,8 +500,8 @@ class AdvancedPricing extends AbstractModifier
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
+                                            'validate-digits' => false,
                                             'validate-number' => true,
-                                            'validate-digits' => $this->hasPriceQtyDigitsValidationPassed(),
                                         ],
                                     ],
                                 ],
@@ -685,26 +674,5 @@ class AdvancedPricing extends AbstractModifier
     private function getStore()
     {
         return $this->locator->getStore();
-    }
-
-    /**
-     * Get Price Qty digits validation
-     *
-     * @return bool
-     */
-    private function hasPriceQtyDigitsValidationPassed(): bool
-    {
-        $productId = $this->locator->getProduct()->getId();
-        if ($productId) {
-            try {
-                $result = $this->stockRegistry->getStockItem($productId)->getIsQtyDecimal();
-            } catch (NoSuchEntityException $e) {
-                $result = false;
-            }
-        } else {
-            $result = false;
-        }
-
-        return $result;
     }
 }
