@@ -307,7 +307,8 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($rateTitles)
             ->willThrowException($expectedException);
         $this->rateRegistryMock->expects($this->never())->method('registerTaxRate')->with($rateMock);
-        $this->expectException($exceptionType, $exceptionMessage);
+        $this->expectException($exceptionType);
+        $this->expectExceptionMessage($exceptionMessage);
         $this->model->save($rateMock);
     }
 
@@ -391,7 +392,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage percentage_rate is a required field.
+     * @expectedExceptionMessage "percentage_rate" is required. Enter and try again.
      */
     public function testValidateWithNoRate()
     {
@@ -429,7 +430,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage percentage_rate is a required field.
+     * @expectedExceptionMessage "percentage_rate" is required. Enter and try again.
      */
     public function testValidateWithWrongRate()
     {

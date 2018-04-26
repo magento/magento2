@@ -29,7 +29,7 @@ class AssertCustomVariableRestrictedAccess extends AbstractConstraint
         $systemVariable->persist();
         $cmsPageNew->open();
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $cmsPageNew->getPageForm()->isVariablesBlockVisible(),
             'Access to system variables block is supposed to be restricted.'
         );

@@ -139,7 +139,9 @@ class Save extends Attribute
                         ->setName($name)
                         ->getAttributeSet();
                 } catch (AlreadyExistsException $alreadyExists) {
-                    $this->messageManager->addErrorMessage(__('An attribute set named \'%1\' already exists.', $name));
+                    $this->messageManager->addErrorMessage(
+                        __('A "%1" attribute set name already exists. Create a new name and try again.', $name)
+                    );
                     $this->_session->setAttributeData($data);
                     return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
                 } catch (LocalizedException $e) {
@@ -200,8 +202,6 @@ class Save extends Attribute
                 }
             }
 
-            $data = $this->presentation->convertPresentationDataToInputType($data);
-
             if ($attributeId) {
                 if (!$model->getId()) {
                     $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
@@ -216,6 +216,7 @@ class Save extends Attribute
 
                 $data['attribute_code'] = $model->getAttributeCode();
                 $data['is_user_defined'] = $model->getIsUserDefined();
+                $data['frontend_input'] = $model->getFrontendInput();
             } else {
                 /**
                  * @todo add to helper and specify all relations for properties
@@ -227,6 +228,8 @@ class Save extends Attribute
                     $data['frontend_input']
                 );
             }
+
+            $data = $this->presentation->convertPresentationDataToInputType($data);
 
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
 

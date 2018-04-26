@@ -114,10 +114,8 @@ class AddressRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertTrue($response, 'Expected response should be true.');
 
-        $this->expectException(
-            \Magento\Framework\Exception\NoSuchEntityException::class,
-            'No such entity with addressId = 1'
-        );
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with addressId = 1');
         $this->addressRepository->getById($fixtureAddressId);
     }
 

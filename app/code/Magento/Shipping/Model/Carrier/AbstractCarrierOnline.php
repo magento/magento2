@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -655,7 +656,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {
         if (!$this->xmlSecurity->scan($xmlContent)) {
-            throw new LocalizedException(__('Security validation of XML document has been failed.'));
+            throw new LocalizedException(__('The security validation of the XML document has failed.'));
         }
 
         $xmlElement = simplexml_load_string($xmlContent, $customSimplexml);

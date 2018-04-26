@@ -31,8 +31,6 @@ $attribute->setAttributeCode(
     'custom_attributes_frontend_label'
 )->setAttributeGroupId(
     $groupId
-)->setAttributeSetId(
-    $attributeSetId
 )->setIsFilterable(
     1
 )->setIsUserDefined(

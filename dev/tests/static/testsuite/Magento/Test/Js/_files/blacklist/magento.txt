@@ -25,5 +25,4 @@ lib/web/mage/adminhtml/tools.js
 lib/web/mage/adminhtml/varienLoader.js
 lib/web/magnifier/magnifier.js
 lib/web/magnifier/magnify.js
-lib/web/varien/form.js
 lib/web/varien/js.js

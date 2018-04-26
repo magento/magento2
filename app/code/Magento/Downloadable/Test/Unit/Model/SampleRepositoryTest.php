@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Test\Unit\Model;
 
 use Magento\Downloadable\Model\SampleRepository;
@@ -206,7 +207,7 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Sample title cannot be empty.
+     * @expectedExceptionMessage The sample title is empty. Enter the title and try again.
      */
     public function testCreateThrowsExceptionIfTitleIsEmpty()
     {
@@ -341,7 +342,7 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Sample title cannot be empty.
+     * @expectedExceptionMessage The sample title is empty. Enter the title and try again.
      */
     public function testUpdateThrowsExceptionIfTitleIsEmptyAndScopeIsGlobal()
     {
@@ -388,7 +389,7 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage There is no downloadable sample with provided ID.
+     * @expectedExceptionMessage No downloadable sample with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfSampleIdIsNotValid()
     {

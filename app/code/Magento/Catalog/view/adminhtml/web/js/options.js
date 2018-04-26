@@ -24,6 +24,7 @@ define([
                 totalItems: 0,
                 rendered: 0,
                 template: mageTemplate('#row-template'),
+                newOptionClass: 'new-option',
                 isReadOnly: config.isReadOnly,
                 add: function (data, render) {
                     var isNewOption = false,
@@ -32,7 +33,8 @@ define([
                     if (typeof data.id == 'undefined') {
                         data = {
                             'id': 'option_' + this.itemCount,
-                            'sort_order': this.itemCount + 1
+                            'sort_order': this.itemCount + 1,
+                            'rowClasses': this.newOptionClass
                         };
                         isNewOption = true;
                     }
@@ -83,6 +85,10 @@ define([
                         element.hide();
                         this.totalItems--;
                         this.updateItemsCountField();
+                    }
+
+                    if (element.hasClassName(this.newOptionClass)) {
+                        element.remove();
                     }
                 },
                 updateItemsCountField: function () {
