@@ -286,7 +286,7 @@ define([
 
             if (!galleryObject) {
                 gallery.on('gallery:loaded', this._changeGalleryImage.bind(this, gallery));
-                
+
                 return;
             }
 
