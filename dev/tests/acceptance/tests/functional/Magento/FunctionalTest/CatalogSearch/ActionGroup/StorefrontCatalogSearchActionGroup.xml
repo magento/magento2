@@ -24,8 +24,8 @@
     <actionGroup name="StorefrontOpenAdvancedSearchActionGroup">
         <click selector="{{StorefrontFooterSection.AdvancedSearch}}" stepKey="clickAdvancedSearchLink" />
         <seeInCurrentUrl url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="checkUrl"/>
-        <seeInTitle userInput="Advanced Search" stepKey="assertAdvancedSearchTitle"/>
-        <see userInput="Advanced Search" selector="{{StorefrontCatalogSearchAdvancedFormSection.SearchTitle}}" stepKey="assertAdvancedSearchTitle"/>
+        <seeInTitle userInput="Advanced Search" stepKey="assertAdvancedSearchTitle1"/>
+        <see userInput="Advanced Search" selector="{{StorefrontCatalogSearchAdvancedFormSection.SearchTitle}}" stepKey="assertAdvancedSearchTitle2"/>
     </actionGroup>
 
     <!-- Check that Advanced Search result page contains correct information -->

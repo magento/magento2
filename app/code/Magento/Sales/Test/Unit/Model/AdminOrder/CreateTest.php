@@ -18,12 +18,14 @@ use Magento\Customer\Model\Metadata\FormFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Updater;
 use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Sales\Model\AdminOrder\Product;
+use Magento\Quote\Model\QuoteFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -38,6 +40,16 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @var Create
      */
     private $adminOrderCreate;
+
+    /**
+     * @var CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteRepository;
+
+    /**
+     * @var QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteFactory;
 
     /**
      * @var SessionQuote|MockObject
@@ -76,11 +88,21 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->sessionQuote = $this->createMock(SessionQuote::class);
         $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
+        $this->quoteFactory = $this->createPartialMock(QuoteFactory::class, ['create']);
         $this->customerFactory = $this->createPartialMock(CustomerInterfaceFactory::class, ['create']);
 
         $this->itemUpdater = $this->createMock(Updater::class);
+
+        $this->quoteRepository = $this->getMockBuilder(CartRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getForCustomer'])
+            ->getMockForAbstractClass();
+
+        $this->sessionQuote = $this->getMockBuilder(\Magento\Backend\Model\Session\Quote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getQuote', 'getStoreId', 'getCustomerId'])
+            ->getMock();
 
         $this->customerMapper = $this->getMockBuilder(Mapper::class)
             ->setMethods(['toFlatArray'])
@@ -103,6 +125,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
                 'quoteItemUpdater' => $this->itemUpdater,
                 'customerMapper' => $this->customerMapper,
                 'dataObjectHelper' => $this->dataObjectHelper,
+                'quoteRepository' => $this->quoteRepository,
+                'quoteFactory' => $this->quoteFactory,
             ]
         );
     }
@@ -263,5 +287,29 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $object = $this->adminOrderCreate->applyCoupon($couponCode);
         self::assertEquals($this->adminOrderCreate, $object);
+    }
+
+    public function testGetCustomerCart()
+    {
+        $storeId = 2;
+        $customerId = 2;
+        $cartResult = [
+            'cart' => true,
+        ];
+
+        $this->quoteFactory->expects($this->once())
+            ->method('create');
+        $this->sessionQuote->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $this->sessionQuote->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+        $this->quoteRepository->expects($this->once())
+            ->method('getForCustomer')
+            ->with($customerId, [$storeId])
+            ->willReturn($cartResult);
+
+        $this->assertEquals($cartResult, $this->adminOrderCreate->getCustomerCart());
     }
 }
