@@ -74,11 +74,11 @@ class ReadHandler implements AttributeInterface
      * Get attribute of given entity type
      *
      * @param string $entityType
-     * @param DataObject|null $entity
+     * @param DataObject $entity
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @throws \Exception if for unknown entity type
      */
-    private function getEntityAttributes($entityType, $entity): array
+    private function getEntityAttributes(string $entityType, DataObject $entity): array
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $eavEntityType = $metadata->getEavEntityType();
