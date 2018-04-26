@@ -54,10 +54,6 @@ $orderItem1->setProductId($product1->getId())
 $product2 = $productRepository->get('simple2');
 /** @var Item $orderItem */
 $orderItem2 = $objectManager->create(Item::class);
-$orderItem2->setProductId($product->getId())
-    ->setSku($product->getSku())
-    ->setName($product->getName())
-    ->setPrice(100)
 $orderItem2->setProductId($product2->getId())
     ->setSku($product2->getSku())
     ->setName($product2->getName())
