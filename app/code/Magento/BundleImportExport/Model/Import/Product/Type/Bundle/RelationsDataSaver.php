@@ -5,6 +5,9 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type\Bundle;
 
+use Magento\Catalog\Model\ResourceModel\Product\Relation;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * A bundle product relations (options, selections, etc.) data saver.
  *
@@ -18,20 +21,21 @@ class RelationsDataSaver
     private $resource;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Relation
+     * @var Relation
      */
     private $productRelation;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $productRelation
+     * @param Relation                                  $productRelation
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Catalog\Model\ResourceModel\Product\Relation $productRelation
+        Relation $productRelation = null
     ) {
         $this->resource        = $resource;
-        $this->productRelation = $productRelation;
+        $this->productRelation = $productRelation
+            ?: ObjectManager::getInstance()->get(Relation::class);
     }
 
     /**
