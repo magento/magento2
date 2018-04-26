@@ -126,11 +126,11 @@ class SampleTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
         $this->downloadHelper->expects($this->once())->method('getFilename')
             ->will($this->returnValue('sample.jpg'));
-        $this->downloadHelper->expects($this->once())->method('getContentType')
+        $this->downloadHelper->expects($this->never())->method('getContentType')
             ->will($this->returnSelf('file'));
         $this->downloadHelper->expects($this->once())->method('getFileSize')
             ->will($this->returnValue(null));
-        $this->downloadHelper->expects($this->once())->method('getContentDisposition')
+        $this->downloadHelper->expects($this->never())->method('getContentDisposition')
             ->will($this->returnValue(null));
         $this->downloadHelper->expects($this->once())->method('output')
             ->will($this->returnSelf());
@@ -167,11 +167,11 @@ class SampleTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
         $this->downloadHelper->expects($this->once())->method('getFilename')
             ->will($this->returnValue('sample.jpg'));
-        $this->downloadHelper->expects($this->once())->method('getContentType')
+        $this->downloadHelper->expects($this->never())->method('getContentType')
             ->will($this->returnSelf('url'));
         $this->downloadHelper->expects($this->once())->method('getFileSize')
             ->will($this->returnValue(null));
-        $this->downloadHelper->expects($this->once())->method('getContentDisposition')
+        $this->downloadHelper->expects($this->never())->method('getContentDisposition')
             ->will($this->returnValue(null));
         $this->downloadHelper->expects($this->once())->method('output')
             ->will($this->returnSelf());

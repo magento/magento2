@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateStoreGroupTest">
+        <annotations>
+            <features value="Create a store group in admin"/>
+            <stories value="Create a store group in admin"/>
+            <title value="Create a store group in admin"/>
+            <description value="Create a store group in admin"/>
+            <group value="store"/>
+        </annotations>
+        <before>
+            <getData entity="DefaultRootCategoryGetter" stepKey="getDefaultRootCategory"/>
+            <createData stepKey="createCustomStoreGroup1" entity="customStoreGroup">
+                <requiredEntity createDataKey="getDefaultRootCategory"/>
+            </createData>
+            <createData stepKey="createCustomStoreGroup2" entity="customStoreGroup">
+                <requiredEntity createDataKey="getDefaultRootCategory"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStoreGroup1">
+                <argument name="storeGroupName" value="$$createCustomStoreGroup1.group[name]$$"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStoreGroup2">
+                <argument name="storeGroupName" value="$$createCustomStoreGroup2.group[name]$$"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+        <amOnPage stepKey="openAdminSystemStorePage" url="{{AdminSystemStorePage.url}}"/>
+
+        <click stepKey="clickResetButton" selector="{{AdminStoresGridSection.resetButton}}"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterReset" time="10"/>
+
+        <fillField stepKey="enterStoreGroup1Name" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$createCustomStoreGroup1.group[name]$$"/>
+        <click stepKey="searchStoreGroup1Name" selector="{{AdminStoresGridSection.searchButton}}"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterSearch" time="10"/>
+        <see stepKey="seeStoreGroup1NameAfterSearch" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$createCustomStoreGroup1.group[name]$$"/>
+
+        <click stepKey="clickResetButton2" selector="{{AdminStoresGridSection.resetButton}}"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterReset2" time="10"/>
+        <fillField stepKey="enterStoreGroup2Name2" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$createCustomStoreGroup2.group[name]$$"/>
+        <click stepKey="searchStoreGroup2Name" selector="{{AdminStoresGridSection.searchButton}}"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterSearch2" time="10"/>
+        <see stepKey="seeStoreGroup1NameAfterSearch2" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$createCustomStoreGroup2.group[name]$$"/>
+    </test>
+</tests>

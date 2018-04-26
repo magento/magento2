@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Helper\ImageFactory as HelperFactory;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 
 class ImageBuilder
 {
@@ -20,7 +22,7 @@ class ImageBuilder
     protected $helperFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $product;
 
@@ -49,10 +51,10 @@ class ImageBuilder
     /**
      * Set product
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return $this
      */
-    public function setProduct(\Magento\Catalog\Model\Product $product)
+    public function setProduct(Product $product)
     {
         $this->product = $product;
         return $this;
@@ -78,9 +80,7 @@ class ImageBuilder
      */
     public function setAttributes(array $attributes)
     {
-        if ($attributes) {
-            $this->attributes = $attributes;
-        }
+        $this->attributes = $attributes;
         return $this;
     }
 
@@ -121,6 +121,14 @@ class ImageBuilder
      */
     public function create()
     {
+        /** @var \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface $simpleOption */
+        $simpleOption = $this->product->getCustomOption('simple_product');
+
+        if ($simpleOption !== null) {
+            $optionProduct = $simpleOption->getProduct();
+            $this->setProduct($optionProduct);
+        }
+
         /** @var \Magento\Catalog\Helper\Image $helper */
         $helper = $this->helperFactory->create()
             ->init($this->product, $this->imageId);
@@ -129,7 +137,11 @@ class ImageBuilder
             ? 'Magento_Catalog::product/image.phtml'
             : 'Magento_Catalog::product/image_with_borders.phtml';
 
-        $imagesize = $helper->getResizedImageInfo();
+        try {
+            $imagesize = $helper->getResizedImageInfo();
+        } catch (NotLoadInfoImageException $exception) {
+            $imagesize = [$helper->getWidth(), $helper->getHeight()];
+        }
 
         $data = [
             'data' => [
@@ -140,8 +152,9 @@ class ImageBuilder
                 'label' => $helper->getLabel(),
                 'ratio' =>  $this->getRatio($helper),
                 'custom_attributes' => $this->getCustomAttributes(),
-                'resized_image_width' => !empty($imagesize[0]) ? $imagesize[0] : $helper->getWidth(),
-                'resized_image_height' => !empty($imagesize[1]) ? $imagesize[1] : $helper->getHeight(),
+                'resized_image_width' => $imagesize[0],
+                'resized_image_height' => $imagesize[1],
+                'product_id' => $this->product->getId()
             ],
         ];
 
