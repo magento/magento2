@@ -72,5 +72,14 @@
         <see stepKey="s91" selector="{{AdminOrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
         <see stepKey="s93" selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
         <see stepKey="s95" selector="{{AdminOrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$" />
+
+        <amOnPage stepKey="s96" url="{{AdminCustomerPage.url}}"/>
+        <waitForPageLoad stepKey="s97"/>
+        <click stepKey="s98" selector="{{AdminCustomerFiltersSection.filtersButton}}"/>
+        <fillField stepKey="s99" selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="$$simpleuscustomer.email$$"/>
+        <click stepKey="s100" selector="{{AdminCustomerFiltersSection.apply}}"/>
+        <click stepKey="s101" selector="{{AdminCustomerGridSection.firstRowEditLink}}"/>
+        <click stepKey="s102" selector="{{AdminEditCustomerInformationSection.orders}}"/>
+        <see stepKey="s103" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$simpleuscustomer.firstname$$ $$simpleuscustomer.lastname$$" />
     </test>
 </tests>
