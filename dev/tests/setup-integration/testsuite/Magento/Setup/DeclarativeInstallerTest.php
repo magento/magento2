@@ -256,4 +256,44 @@ class DeclarativeInstallerTest extends SetupTestCase
         $afterRollback = $this->describeTable->describeShard('default');
         self::assertEquals($this->getData()['after'], $afterRollback);
     }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule1
+     * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/table_rename.php
+     */
+    public function testTableRename()
+    {
+        $dataToMigrate = ['some_column' => 'Some Value'];
+        //Move db_schema.xml file and tried to install
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'table_rename',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->cliCommad->install(
+            ['Magento_TestSetupDeclarationModule1']
+        );
+        $before = $this->describeTable->describeShard('default');
+        $adapter = $this->resourceConnection->getConnection('default');
+        $adapter->insert(
+            $this->resourceConnection->getTableName('some_table'),
+            $dataToMigrate
+        );
+        self::assertEquals($this->getData()['before'], $before['some_table']);
+        //Move db_schema.xml file and tried to install
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'table_rename_after',
+            'db_schema.xml',
+            'etc'
+        );
+
+        $this->cliCommad->upgrade();
+        $after = $this->describeTable->describeShard('default');
+        self::assertEquals($this->getData()['after'], $after['some_table_renamed']);
+        $select = $adapter->select()
+            ->from($this->resourceConnection->getTableName('some_table_renamed'));
+        self::assertEquals([$dataToMigrate], $adapter->fetchAll($select));
+    }
 }

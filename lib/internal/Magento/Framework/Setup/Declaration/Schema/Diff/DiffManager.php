@@ -104,12 +104,12 @@ class DiffManager
     ) {
         foreach ($generatedElements as $generatedElement) {
             if ($generatedElement instanceof Reference) {
-                $this->registerReferenceDrop($generatedElement, $diff);
-                continue;
+                $diff->register($generatedElement, DropReference::OPERATION_NAME, $generatedElement);
+            } elseif ($generatedElement instanceof Table) {
+                $diff->register($generatedElement, DropTable::OPERATION_NAME, $generatedElement);
+            } else {
+                $diff->register($generatedElement, DropElement::OPERATION_NAME, $generatedElement);
             }
-
-            $operation = $generatedElement instanceof Table ? DropTable::OPERATION_NAME : DropElement::OPERATION_NAME;
-            $diff->register($generatedElement, $operation, $generatedElement);
         }
 
         return $diff;
@@ -134,27 +134,6 @@ class DiffManager
 
         $diff->register($element, $operation);
 
-        return $diff;
-    }
-
-    /**
-     * We need to register drop of foreign key in scope of reference table.
-     *
-     * This done because reference table is goes first and starting from this table
-     * there should be no foreign key on modified column.
-     *
-     * @param Reference $reference
-     * @param Diff $diff
-     * @return Diff
-     */
-    public function registerReferenceDrop(Reference $reference, Diff $diff)
-    {
-        $diff->register(
-            $reference,
-            DropReference::OPERATION_NAME,
-            $reference,
-            $reference->getReferenceTable()->getName()
-        );
         return $diff;
     }
 

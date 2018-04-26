@@ -1472,8 +1472,8 @@
         <arguments>
             <argument name="operations" xsi:type="array">
                 <item name="recreate_table" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\ReCreateTable</item>
-                <item name="drop_table" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\DropTable</item>
                 <item name="create_table" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\CreateTable</item>
+                <item name="drop_table" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\DropTable</item>
                 <item name="drop_reference" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\DropReference</item>
                 <item name="modify_column" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\ModifyColumn</item>
                 <item name="add_column" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\AddColumn</item>

@@ -70,5 +70,10 @@
     "constraint": {
       "": true
     }
+  },
+  "some_table": {
+    "column": {
+      "some_column": true
+    }
   }
 }
