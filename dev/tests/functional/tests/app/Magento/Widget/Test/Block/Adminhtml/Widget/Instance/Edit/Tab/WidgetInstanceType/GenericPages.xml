@@ -11,6 +11,10 @@
             <selector>.page_group_select</selector>
             <input>optgroupselect</input>
         </page_group>
+        <layout_handle>
+            <selector>#layout_handle</selector>
+            <input>select</input>
+        </layout_handle>
         <block>
             <selector>.block_reference select</selector>
             <input>select</input>
