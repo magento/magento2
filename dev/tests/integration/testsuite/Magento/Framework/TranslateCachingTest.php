@@ -48,7 +48,7 @@ class TranslateCachingTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Translate $model */
         $model = $this->objectManager->get('Magento\Framework\Translate');
 
-        $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND); // this is supposed to cache the fixture
+        $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND, true); // this is supposed to cache the fixture
         $this->assertEquals('Fixture Db Translation', new Phrase('Fixture String'));
 
         /** @var \Magento\Translation\Model\ResourceModel\StringUtils $translateString */
