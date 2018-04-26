@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Plugin\SalesInventory;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
@@ -16,6 +17,8 @@ use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
+use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
+use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 
 class ProcessReturnQtyOnCreditMemoPlugin
 {
@@ -40,6 +43,16 @@ class ProcessReturnQtyOnCreditMemoPlugin
     private $getSkusByProductIds;
 
     /**
+     * @var StockByWebsiteIdResolver
+     */
+    private $stockByWebsiteIdResolver;
+
+    /**
+     * @var GetSourcesAssignedToStockOrderedByPriorityInterface
+     */
+    private $getSourcesAssignedToStockOrderedByPriority;
+
+    /**
      * @var array
      */
     private $returnToStockItems = [];
@@ -49,17 +62,23 @@ class ProcessReturnQtyOnCreditMemoPlugin
      * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
      * @param SourceItemsSaveInterface $sourceItemsSave
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
+     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      */
     public function __construct(
         GetSourceCodeByShipmentId $getSourceCodeByShipmentId,
         GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku,
         SourceItemsSaveInterface $sourceItemsSave,
-        GetSkusByProductIdsInterface $getSkusByProductIds
+        GetSkusByProductIdsInterface $getSkusByProductIds,
+        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
     ) {
         $this->getSourceCodeByShipmentId = $getSourceCodeByShipmentId;
         $this->getSourceItemBySourceCodeAndSku = $getSourceItemBySourceCodeAndSku;
         $this->sourceItemsSave = $sourceItemsSave;
         $this->getSkusByProductIds = $getSkusByProductIds;
+        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
+        $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
     }
 
     /**
@@ -85,7 +104,7 @@ class ProcessReturnQtyOnCreditMemoPlugin
             $orderItem = $item->getOrderItem();
             $parentItemId = $orderItem->getParentItemId();
             $qty = (float)$item->getQty();
-            if ($this->isValidItem($orderItem->getId(), $qty, $parentItemId) && empty($parentItemId)) {
+            if ($this->isValidItem($orderItem->getId(), $qty, $parentItemId) && !$orderItem->isDummy()) {
                 $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
                     [$item->getProductId()]
                 )[$item->getProductId()];
@@ -109,26 +128,34 @@ class ProcessReturnQtyOnCreditMemoPlugin
     {
         $sourceItemToSave = [];
         foreach ($itemsToRefund as $sku => $qty) {
+            if (empty($processedItems[$sku])) {
+                continue;
+            }
+
             $qtyBackToSource = $qty;
+            $originalProcessedQty = $processedItems[$sku] + $qty;
+
             foreach ($shippedItems as $sourceCode => $data) {
-                if (empty($processedItems[$sku])) {
+                if (empty($data[$sku])) {
                     continue;
                 }
 
-                $availableQtyToBack = $data[$sku] + $processedItems[$sku] + $qty;
+                $availableQtyToBack = $data[$sku] + $originalProcessedQty;
                 $backQty = min($availableQtyToBack, $qtyBackToSource);
+                $originalProcessedQty += $data[$sku];
 
                 // check if source has some qty of SKU, so it's possible to take them into account
                 if ($this->isZero((float)$availableQtyToBack)) {
                     continue;
                 }
-                $qtyBackToSource -= $backQty;
 
                 if ($backQty > 0) {
                     $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute($sourceCode, $sku);
                     $sourceItem->setQuantity($sourceItem->getQuantity() + $backQty);
                     $sourceItemToSave[] = $sourceItem;
                 }
+
+                $qtyBackToSource -= $backQty;
             }
         }
 
@@ -158,8 +185,38 @@ class ProcessReturnQtyOnCreditMemoPlugin
                 }
             }
         }
+        $websiteId = $order->getStore()->getWebsiteId();
 
-        return $sources;
+        return $this->sortSourcesByPriority($sources, (int)$websiteId);
+    }
+
+    /**
+     * @param array $sources
+     * @param int $websiteId
+     * @return array
+     */
+    private function sortSourcesByPriority(array $sources, int $websiteId): array
+    {
+        $sourcesByPriority = [];
+        try {
+            $stockId = (int)$this->stockByWebsiteIdResolver->get($websiteId)->getStockId();
+            $assignedSourcesToStock = $this->getSourcesAssignedToStockOrderedByPriority->execute($stockId);
+        } catch (LocalizedException $e) {
+            $assignedSourcesToStock = [];
+        }
+
+        foreach ($assignedSourcesToStock as $source) {
+            if (!empty($sources[$source->getSourceCode()])) {
+                $sourcesByPriority[$source->getSourceCode()] = $sources[$source->getSourceCode()];
+                unset($sources[$source->getSourceCode()]);
+            }
+        }
+
+        foreach ($sources as $sourceCode => $data) {
+            $sourcesByPriority[$sourceCode] = $data;
+        }
+
+        return $sourcesByPriority;
     }
 
     /**
