@@ -122,3 +122,7 @@ DoubleColon
 BarFactory
 PartialNamespace\BarFactory
 Product\OptionFactory
+Magento_Module
+Magento_Framework
+Magento_TestModule
+Magento_Test

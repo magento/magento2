@@ -4,10 +4,10 @@ Always,Always
 "Incorrect CAPTCHA","Incorrect CAPTCHA"
 "Incorrect CAPTCHA.","Incorrect CAPTCHA."
 "The account is locked. Please wait and try again or contact %1.","The account is locked. Please wait and try again or contact %1."
-"Please enter the letters from the image","Please enter the letters from the image"
+"Please enter the letters and numbers from the image","Please enter the letters and numbers from the image"
 "<strong>Attention</strong>: Captcha is case sensitive.","<strong>Attention</strong>: Captcha is case sensitive."
 "Reload captcha","Reload captcha"
-"Please type the letters below","Please type the letters below"
+"Please type the letters and numbers below","Please type the letters and numbers below"
 "Attention: Captcha is case sensitive.","Attention: Captcha is case sensitive."
 CAPTCHA,CAPTCHA
 "Enable CAPTCHA in Admin","Enable CAPTCHA in Admin"

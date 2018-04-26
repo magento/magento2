@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminCategoryBasicFieldSection">
+        <element name="IncludeInMenu" type="checkbox" selector="input[name='include_in_menu']"/>
+        <element name="EnableCategory" type="checkbox" selector="input[name='is_active']"/>
+        <element name="CategoryNameInput" type="input" selector="input[name='name']"/>
+    </section>
+    <section name="CatalogWYSIWYGSection">
+        <element name="ShowHideBtn" type="button" selector="#togglecategory_form_description"/>
+        <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by"/>
+        <element name="Style" type="button" selector=".mce-txt" />
+        <element name="Bold" type="button" selector=".mce-i-bold" />
+        <element name="Italic" type="button" selector=".mce-i-italic" />
+        <element name="Underline" type="button" selector=".mce-i-underline" />
+        <element name="AlignLeft" type="button" selector=".mce-i-alignleft" />
+        <element name="AlignCenter" type="button" selector=".mce-i-aligncenter" />
+        <element name="AlignRight" type="button" selector=".mce-i-alignright" />
+        <element name="Bullet" type="button" selector=".mce-i-bullist" />
+        <element name="Numlist" type="button" selector=".mce-i-numlist" />
+        <element name="InsertLink" type="button" selector=".mce-i-link" />
+        <element name="InsertImage" type="button" selector=".mce-i-image" />
+        <element name="InsertTable" type="button" selector=".mce-i-table" />
+        <element name="SpecialCharacter" type="button" selector=".mce-i-charmap"/>
+        <element name="InsertImageIcon" type="button" selector=".mce-i-image"/>
+        <element name="Browse" type="button" selector=".mce-i-browse"/>
+        <element name="BrowseUploadImage" type="file" selector=".fileupload" />
+        <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
+        <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
+        <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open" />
+        <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last" />
+        <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first" />
+        <element name="UploadImage" type="file" selector=".fileupload" />
+        <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
+        <element name="InsertFile" type="text" selector="#insert_files"/>
+        <element name="CreateFolder" type="button" selector="#new_folder" />
+        <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
+        <element name="CancelBtn" type="button" selector="#cancel" />
+        <element name="FolderName" type="button" selector="input[data-role='promptField']" />
+        <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
+        <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
+        <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
+        <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
+    </section>
+</sections>

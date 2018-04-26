@@ -6,6 +6,7 @@
 
 namespace Magento\Theme\Test\Unit\Console\Command;
 
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
 use Magento\Theme\Model\Theme\themePackageInfo;
 use Magento\Theme\Model\Theme\ThemeUninstaller;
@@ -19,7 +20,7 @@ use Magento\Framework\Setup\BackupRollbackFactory;
 class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Console\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
      */
     private $maintenanceMode;
 
@@ -107,7 +108,8 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
             $this->themeValidator,
             $this->themePackageInfo,
             $this->themeUninstaller,
-            $this->themeDependencyChecker
+            $this->themeDependencyChecker,
+            new MaintenanceModeEnabler($this->maintenanceMode)
         );
         $this->tester = new CommandTester($this->command);
     }

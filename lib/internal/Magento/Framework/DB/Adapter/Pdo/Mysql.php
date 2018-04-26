@@ -423,6 +423,22 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
+     * Create new database connection
+     *
+     * @return \PDO
+     */
+    private function createConnection()
+    {
+        $connection = new \PDO(
+            $this->_dsn(),
+            $this->_config['username'],
+            $this->_config['password'],
+            $this->_config['driver_options']
+        );
+        return $connection;
+    }
+
+    /**
      * Run RAW Query
      *
      * @param string $sql
@@ -541,6 +557,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 ) {
                     $retry = true;
                     $triesCount++;
+                    
+                    /**
+                    * _connect() function does not allow port parameter, so put the port back with the host
+                    */
+                    if (!empty($this->_config['port'])) {
+                        $this->_config['host'] = implode(':', [$this->_config['host'], $this->_config['port']]);
+                        unset($this->_config['port']);
+                    }
+
                     $this->closeConnection();
                     $this->_connect();
                 }
@@ -1994,11 +2019,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         switch ($strategy) {
-            case self::INSERT_ON_DUPLICATE:
+            case self::REPLACE:
                 $query = $this->_getReplaceSqlQuery($table, $columns, $values);
                 break;
             default:
-                $query = $this->_getInsertSqlQuery($table, $columns, $values);
+                $query = $this->_getInsertSqlQuery($table, $columns, $values, $strategy);
         }
 
         // execute the statement and return the number of affected rows
@@ -2071,7 +2096,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             implode(",\n", $sqlFragment),
             implode(" ", $tableOptions)
         );
-        $result = $this->query($sql);
+
+        if ($this->getTransactionLevel() > 0) {
+            $result = $this->createConnection()->query($sql);
+        } else {
+            $result = $this->query($sql);
+        }
         $this->resetDdlCache($table->getName(), $table->getSchema());
 
         return $result;
@@ -2495,7 +2525,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         $table = $this->quoteIdentifier($this->_getTableName($tableName, $schemaName));
         $query = 'DROP TABLE IF EXISTS ' . $table;
-        $this->query($query);
+        if ($this->getTransactionLevel() > 0) {
+            $this->createConnection()->query($query);
+        } else {
+            $this->query($query);
+        }
         $this->resetDdlCache($tableName, $schemaName);
         return true;
     }
@@ -2571,8 +2605,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $newTable = $this->_getTableName($newTableName, $schemaName);
 
         $query = sprintf('ALTER TABLE %s RENAME TO %s', $oldTable, $newTable);
-        $this->query($query);
 
+        if ($this->getTransactionLevel() > 0) {
+            $this->createConnection()->query($query);
+        } else {
+            $this->query($query);
+        }
         $this->resetDdlCache($oldTableName, $schemaName);
 
         return true;
@@ -3641,16 +3679,18 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param array $columns
      * @param array $values
+     * @param null|int $strategy
      * @return string
      */
-    protected function _getInsertSqlQuery($tableName, array $columns, array $values)
+    protected function _getInsertSqlQuery($tableName, array $columns, array $values, $strategy = null)
     {
         $tableName = $this->quoteIdentifier($tableName, true);
         $columns   = array_map([$this, 'quoteIdentifier'], $columns);
         $columns   = implode(',', $columns);
         $values    = implode(', ', $values);
+        $strategy = $strategy === self::INSERT_IGNORE ? 'IGNORE' : '';
 
-        $insertSql = sprintf('INSERT INTO %s (%s) VALUES %s', $tableName, $columns, $values);
+        $insertSql = sprintf('INSERT %s INTO %s (%s) VALUES %s', $strategy, $tableName, $columns, $values);
 
         return $insertSql;
     }

@@ -135,6 +135,31 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->_model->validateSource($source);
     }
 
+    public function testValidateSourceExceptionMessage()
+    {
+        $exceptionMessage = 'Test Exception Message.';
+
+        $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
+        $this->_model->setEntity('catalog_product');
+        $this->_model->setData(\Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY, $validationStrategy);
+        $this->_model->setData(\Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT, 0);
+
+        /** @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject $source */
+        $source = $this->getMockForAbstractClass(
+            \Magento\ImportExport\Model\Import\AbstractSource::class,
+            [['sku', 'name']]
+        );
+        $source->expects($this->any())->method('_getNextRow')->willThrowException(
+            new \Exception($exceptionMessage)
+        );
+
+        $this->assertFalse($this->_model->validateSource($source));
+        $this->assertEquals(
+            $exceptionMessage,
+            $this->_model->getErrorAggregator()->getAllErrors()[0]->getErrorMessage()
+        );
+    }
+
     public function testGetEntity()
     {
         $entityName = 'entity_name';

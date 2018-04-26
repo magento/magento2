@@ -103,7 +103,10 @@ class BundleSelectionPrice extends AbstractPrice
             return $this->value;
         }
         $product = $this->selection;
-        $bundleSelectionKey = 'bundle-selection-value-' . $product->getSelectionId();
+        $bundleSelectionKey = 'bundle-selection-'
+            . ($this->useRegularPrice ? 'regular-' : '')
+            . 'value-'
+            . $product->getSelectionId();
         if ($product->hasData($bundleSelectionKey)) {
             return $product->getData($bundleSelectionKey);
         }
@@ -128,7 +131,8 @@ class BundleSelectionPrice extends AbstractPrice
                     'catalog_product_get_final_price',
                     ['product' => $product, 'qty' => $this->bundleProduct->getQty()]
                 );
-                $value = $product->getData('final_price') * ($selectionPriceValue / 100);
+                $price = $this->useRegularPrice ? $product->getData('price') : $product->getData('final_price');
+                $value = $price * ($selectionPriceValue / 100);
             } else {
                 // calculate price for selection type fixed
                 $value = $this->priceCurrency->convert($selectionPriceValue);
@@ -150,7 +154,10 @@ class BundleSelectionPrice extends AbstractPrice
     public function getAmount()
     {
         $product = $this->selection;
-        $bundleSelectionKey = 'bundle-selection-amount-' . $product->getSelectionId();
+        $bundleSelectionKey = 'bundle-selection'
+            . ($this->useRegularPrice ? 'regular-' : '')
+            . '-amount-'
+            . $product->getSelectionId();
         if ($product->hasData($bundleSelectionKey)) {
             return $product->getData($bundleSelectionKey);
         }
@@ -177,8 +184,7 @@ class BundleSelectionPrice extends AbstractPrice
     {
         if ($this->bundleProduct->getPriceType() == Price::PRICE_TYPE_DYNAMIC) {
             return parent::getProduct();
-        } else {
-            return $this->bundleProduct;
         }
+        return $this->bundleProduct;
     }
 }

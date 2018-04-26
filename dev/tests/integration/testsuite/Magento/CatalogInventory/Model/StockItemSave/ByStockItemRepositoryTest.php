@@ -40,7 +40,7 @@ class ByStockItemRepositoryTest extends \PHPUnit\Framework\TestCase
     private $stockItemData = [
         StockItemInterface::QTY => 555,
         StockItemInterface::MANAGE_STOCK => true,
-        StockItemInterface::IS_IN_STOCK => false,
+        StockItemInterface::IS_IN_STOCK => true,
     ];
 
     public function setUp()
@@ -56,6 +56,7 @@ class ByStockItemRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test stock item saving via stock item repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSave()
     {

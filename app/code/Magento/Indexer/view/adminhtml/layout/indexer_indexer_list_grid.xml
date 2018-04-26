@@ -38,7 +38,7 @@
                         <argument name="id" xsi:type="string">indexer_grid</argument>
                         <argument name="filter_visibility" xsi:type="string">0</argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_title">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.indexer.grid.columnSet.indexer_title" as="indexer_title">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Indexer</argument>
                             <argument name="width" xsi:type="string">180</argument>
@@ -49,7 +49,7 @@
                             <argument name="translate" xsi:type="boolean">true</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_description">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.indexer.grid.columnSet.indexer_description" as="indexer_description">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Description</argument>
                             <argument name="index" xsi:type="string">description</argument>
@@ -58,7 +58,7 @@
                             <argument name="translate" xsi:type="boolean">true</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_mode">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.indexer.grid.columnSet.indexer_mode" as="indexer_mode">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Mode</argument>
                             <argument name="index" xsi:type="string">is_scheduled</argument>
@@ -67,7 +67,7 @@
                             <argument name="column_css_class" xsi:type="string">indexer-mode</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_status">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.indexer.grid.columnSet.indexer_status" as="indexer_status">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Status</argument>
                             <argument name="index" xsi:type="string">status</argument>
@@ -76,7 +76,7 @@
                             <argument name="column_css_class" xsi:type="string">indexer-status</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_updated">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.indexer.grid.columnSet.indexer_updated" as="indexer_updated">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Updated</argument>
                             <argument name="index" xsi:type="string">updated</argument>

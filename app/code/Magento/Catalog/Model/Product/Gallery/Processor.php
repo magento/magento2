@@ -149,7 +149,7 @@ class Processor
         }
 
         $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
-        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
+        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
         $fileName = $dispretionPath . '/' . $fileName;
 
         $fileName = $this->getNotDuplicatedFilename($fileName, $dispretionPath);
@@ -192,6 +192,7 @@ class Processor
         $mediaGalleryData['images'][] = [
             'file' => $fileName,
             'position' => $position,
+            'media_type' => 'image',
             'label' => '',
             'disabled' => (int)$exclude,
         ];
