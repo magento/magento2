@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AddImageToWYSIWYGCatalogEditor">
+    <test name="AdminAddImageToWYSIWYGCatalogTest">
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
@@ -49,7 +49,7 @@
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <seeElement selector="{{StorefrontCategoryMainSection.mediaDescription(ImageUpload3.content)}}" stepKey="assertMediaDescription"/>
-        <seeElementInDOM selector="{{StorefrontCategoryMainSection.ImageSource(ImageUpload3.fileName,ImageUpload3.extension)}}" stepKey="assertMediaSource"/>
+        <seeElementInDOM selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>

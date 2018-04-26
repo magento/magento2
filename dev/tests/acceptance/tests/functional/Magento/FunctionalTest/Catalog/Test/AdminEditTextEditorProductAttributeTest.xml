@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="EditTextEditorProductAttributeCest">
+    <test name="AdminEditTextEditorProductAttributeTest">
         <annotations>
             <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
             <stories value="MAGETWO-51484-Input type configuration for custom Product Attributes"/>
@@ -16,6 +16,7 @@
             <description value="Admin should be able to switch between 2 version of Tinymce in the admin back-end."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-85745"/>
+            <!-- Skipped, see https://jira.corp.magento.com/browse/MQE-890 -->
             <group value="skip"/>
         </annotations>
         <before>
@@ -74,7 +75,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingAfterBasicFilter"/>
         <click selector="{{AdminProductGridActionSection.productName(_defaultProduct.name)}}"  stepKey="navigateToEditProduct" />
         <waitForPageLoad stepKey="waitForPageLoad10" />
-        <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="waitForPageLoad11"/>
+        <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="seePoweredBy"/>
         <after>
             <deleteData createDataKey="myProductAttributeCreation" stepKey="deletePreReqProductAttribute" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>

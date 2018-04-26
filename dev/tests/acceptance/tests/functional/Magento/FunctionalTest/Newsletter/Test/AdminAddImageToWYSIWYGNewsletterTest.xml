@@ -7,21 +7,22 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AddWidgetToNewsletter">
+    <test name="AdminAddImageToWYSIWYGNewsletterTest">
         <annotations>
             <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
             <stories value="MAGETWO-47309-Apply new WYSIWYG in Newsletter"/>
             <group value="Newsletter"/>
-            <title value="You should be able to add widget to WYSIWYG Editor of Newsletter"/>
-            <description value="You should be able to add widget to WYSIWYG Editor Newsletter"/>
+            <title value="Admin should be able to add image to WYSIWYG content of Newsletter"/>
+            <description value="Admin should be able to add image to WYSIWYG content Newsletter"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-84682"/>
+            <testCaseId value="MAGETWO-84377"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
+        <!--Create a newsletter template that contains an image-->
         <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillTemplateName" />
@@ -29,28 +30,32 @@
         <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
         <conditionalClick selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" dependentSelector="{{NewsletterWYSIWYGSection.TinyMCE4}}" visible="false" stepKey="toggleEditorIfHidden"/>
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
-        <click selector="{{NewsletterWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
-        <wait time="10" stepKey="waitForPageLoad" />
-        <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
-        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Page Link" stepKey="selectCMSPageLink" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
-        <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
-        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Page Link Block Template" stepKey="selectTemplate" />
-        <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
-        <waitForElementVisible selector="{{WidgetSection.CMSPage}}" stepKey="waitForPageVisible" />
-        <click selector="{{WidgetSection.CMSPage}}" stepKey="selectPreCreateCMS" />
-        <waitForElementNotVisible selector="{{WidgetSection.SelectPageTitle}}" stepKey="waitForSlideOutCloses" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
-        <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideOutCloses1" />
+        <waitForElementVisible selector="{{NewsletterWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <actionGroup ref="clickBrowseBtnOnUploadPopup" stepKey="clickBrowserBtn"/>
+        <actionGroup ref="VerifyMediaGalleryStorageActions" stepKey="VerifyMediaGalleryStorageBtn"/>
+        <actionGroup ref="CreateImageFolder" stepKey="CreateImageFolder">
+            <argument name="ImageFolder" value="ImageFolder"/>
+        </actionGroup>
+        <actionGroup ref="attachImage" stepKey="attachImage1">
+            <argument name="Image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="saveImage" stepKey="insertImage"/>
+        <actionGroup ref="fillOutUploadImagePopup" stepKey="fillOutUploadImagePopup" />
         <click selector="{{BasicFieldNewsletterSection.save}}" stepKey="clickSaveTemplate"/>
         <waitForPageLoad stepKey="waitForPageLoad10" />
-        <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview" />
+        <!--Preview the newsletter template-->
+        <fillField selector="{{BasicFieldNewsletterSection.searchInput}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillSearch"/>
+        <click selector="{{BasicFieldNewsletterSection.searchButton}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
+        <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview"/>
         <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
         <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe" />
-        <waitForText userInput="Home page" stepKey="waitForPageLoad9"/>
-        <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <!--Verify that the text and image are present-->
+        <seeElement selector="{{StorefrontNewsletterSection.mediaDescription}}" stepKey="assertMediaDescription"/>
+        <seeElementInDOM selector="{{StorefrontNewsletterSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>
         <closeTab stepKey="closeTab"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
