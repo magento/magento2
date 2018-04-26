@@ -21,6 +21,7 @@
         </testsuite>
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
+            <directory suffix="Test.php">../../../app/code/*/*/Test/Integration</directory>
             <exclude>testsuite/Magento/MemoryUsageTest.php</exclude>
         </testsuite>
     </testsuites>
@@ -54,8 +55,6 @@
         <!-- Memory usage and estimated leaks thresholds -->
         <!--<const name="TESTS_MEM_USAGE_LIMIT" value="1024M"/>-->
         <const name="TESTS_MEM_LEAK_LIMIT" value=""/>
-        <!-- Whether to output all CLI commands executed by the bootstrap and tests -->
-        <!--<const name="TESTS_EXTRA_VERBOSE_LOG" value="1"/>-->
         <!-- Path to Percona Toolkit bin directory -->
         <!--<const name="PERCONA_TOOLKIT_BIN_DIR" value=""/>-->
         <!-- CSV Profiler Output file -->

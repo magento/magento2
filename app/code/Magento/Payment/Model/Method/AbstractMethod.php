@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\DataObject;
@@ -31,12 +29,6 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     MethodInterface,
     PaymentMethodInterface
 {
-    const ACTION_ORDER = 'order';
-
-    const ACTION_AUTHORIZE = 'authorize';
-
-    const ACTION_AUTHORIZE_CAPTURE = 'authorize_capture';
-
     const STATUS_UNKNOWN = 'UNKNOWN';
 
     const STATUS_APPROVED = 'APPROVED';
@@ -48,23 +40,6 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     const STATUS_VOID = 'VOID';
 
     const STATUS_SUCCESS = 'SUCCESS';
-
-    /**
-     * Different payment method checks.
-     */
-    const CHECK_USE_FOR_COUNTRY = 'country';
-
-    const CHECK_USE_FOR_CURRENCY = 'currency';
-
-    const CHECK_USE_CHECKOUT = 'checkout';
-
-    const CHECK_USE_INTERNAL = 'internal';
-
-    const CHECK_ORDER_TOTAL_MIN_MAX = 'total';
-
-    const CHECK_ZERO_TOTAL = 'zero_total';
-
-    const GROUP_OFFLINE = 'offline';
 
     /**
      * @var string
@@ -528,7 +503,9 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     public function getCode()
     {
         if (empty($this->_code)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot retrieve the payment method code.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot retrieve the payment method code.')
+            );
         }
         return $this->_code;
     }
@@ -568,7 +545,9 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     {
         $instance = $this->getData('info_instance');
         if (!$instance instanceof InfoInterface) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot retrieve the payment information object instance.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot retrieve the payment information object instance.')
+            );
         }
         return $instance;
     }

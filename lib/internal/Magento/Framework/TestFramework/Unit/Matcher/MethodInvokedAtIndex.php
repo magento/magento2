@@ -31,13 +31,17 @@ class MethodInvokedAtIndex extends \PHPUnit_Framework_MockObject_Matcher_Invoked
      */
     public function matches(\PHPUnit_Framework_MockObject_Invocation $invocation)
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         if (!isset($this->indexes[$invocation->methodName])) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $this->indexes[$invocation->methodName] = 0;
         } else {
+            /** @noinspection PhpUndefinedFieldInspection */
             $this->indexes[$invocation->methodName]++;
         }
         $this->currentIndex++;
 
+        /** @noinspection PhpUndefinedFieldInspection */
         return $this->indexes[$invocation->methodName] == $this->sequenceIndex;
     }
 }

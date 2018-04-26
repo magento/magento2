@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+      <!--Include rush theme assets-->
+      <link src="js/foo.js"/>
+
+      <!--Remove require-js assets-->
+      <remove src="mage/calendar.css"/>
+      <remove src="requirejs/require.js"/>
+      <remove src="mage/requirejs/mixins.js"/>
+      <remove src="requirejs-config.js"/>
+    </head>
+</page>

@@ -6,12 +6,14 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="StorefrontProductPage" urlPath="admin/catalog/product/view" module="Magento_Catalog">
+    <page name="StorefrontProductPage" url="/{{var1}}.html" area="storefront" module="Catalog" parameterized="true">
         <section name="StorefrontProductInfoMainSection" />
         <section name="StorefrontProductInfoDetailsSection" />
+        <section name="WYSIWYGToolbarSection"/>
         <section name="StorefrontProductImageSection" />
         <section name="StorefrontMessagesSection" />
+        <section name="StorefrontProductRelatedProductsSection"/>
     </page>
-</config>
+</pages>

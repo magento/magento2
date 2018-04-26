@@ -201,6 +201,7 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
                     [
                         ['qty', null, 1],
                         ['final_price', null, 100],
+                        ['price', null, 100],
                     ]
                 )
             );

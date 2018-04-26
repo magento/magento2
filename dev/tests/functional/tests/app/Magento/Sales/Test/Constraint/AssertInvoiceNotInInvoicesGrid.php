@@ -42,7 +42,7 @@ class AssertInvoiceNotInInvoicesGrid extends AbstractConstraint
             $invoiceIndex->getInvoicesGrid()->search($filter);
             $filter['grand_total_from'] = number_format($amount[$key]['grand_invoice_total'], 2);
             $filter['grand_total_to'] = number_format($amount[$key]['grand_invoice_total'], 2);
-            \PHPUnit_Framework_Assert::assertFalse(
+            \PHPUnit\Framework\Assert::assertFalse(
                 $invoiceIndex->getInvoicesGrid()->isRowVisible($filter, false, false),
                 'Invoice is present in invoices grid on invoice index page.'
             );

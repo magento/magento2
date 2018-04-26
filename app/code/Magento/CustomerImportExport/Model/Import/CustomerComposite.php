@@ -308,14 +308,13 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
                 // Add new customer data into customer storage for address entity instance
                 $websiteId = $this->_customerEntity->getWebsiteId($this->_currentWebsiteCode);
                 if (!$this->_addressEntity->getCustomerStorage()->getCustomerId($this->_currentEmail, $websiteId)) {
-                    $customerData = new \Magento\Framework\DataObject(
+                    $this->_addressEntity->getCustomerStorage()->addCustomerByArray(
                         [
-                            'id' => $this->_nextCustomerId,
+                            'entity_id' => $this->_nextCustomerId,
                             'email' => $this->_currentEmail,
                             'website_id' => $websiteId,
                         ]
                     );
-                    $this->_addressEntity->getCustomerStorage()->addCustomer($customerData);
                     $this->_nextCustomerId++;
                 }
 

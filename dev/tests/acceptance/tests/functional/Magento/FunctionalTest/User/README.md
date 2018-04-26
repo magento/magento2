@@ -1,3 +1,3 @@
-# Magento 2 Acceptance Tests
+# Magento 2 Functional Tests
 
-The Acceptance Tests Module for **Magento_User** Module.
+The Functional Tests Module for **Magento_User** Module.

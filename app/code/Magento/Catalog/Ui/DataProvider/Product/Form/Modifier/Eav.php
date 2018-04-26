@@ -31,6 +31,8 @@ use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav\CompositeConfigProcessor;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class Eav
@@ -188,6 +190,17 @@ class Eav extends AbstractModifier
     private $localeCurrency;
 
     /**
+     * @var CompositeConfigProcessor
+     */
+    private $wysiwygConfigProcessor;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * Eav constructor.
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
      * @param Config $eavConfig
@@ -207,6 +220,8 @@ class Eav extends AbstractModifier
      * @param DataPersistorInterface $dataPersistor
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
+     * @param CompositeConfigProcessor|null $wysiwygConfigProcessor
+     * @param ScopeConfigInterface|null $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -228,7 +243,9 @@ class Eav extends AbstractModifier
         ScopeOverriddenValue $scopeOverriddenValue,
         DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
-        $attributesToEliminate = []
+        $attributesToEliminate = [],
+        CompositeConfigProcessor $wysiwygConfigProcessor = null,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         $this->locator = $locator;
         $this->catalogEavValidationRules = $catalogEavValidationRules;
@@ -249,6 +266,10 @@ class Eav extends AbstractModifier
         $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
+        $this->wysiwygConfigProcessor = $wysiwygConfigProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(CompositeConfigProcessor::class);
+        $this->scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+        ->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -572,15 +593,14 @@ class Eav extends AbstractModifier
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
         $configPath = ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER);
-
         $meta = $this->arrayManager->set($configPath, [], [
             'dataType' => $attribute->getFrontendInput(),
             'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
             'visible' => $attribute->getIsVisible(),
             'required' => $attribute->getIsRequired(),
             'notice' => $attribute->getNote() === null ? null : __($attribute->getNote()),
-            'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
-            'label' => $attribute->getDefaultFrontendLabel(),
+            'default' => (!$this->isProductExists()) ? $this->getAttributeDefaultValue($attribute) : null,
+            'label' => __($attribute->getDefaultFrontendLabel()),
             'code' => $attribute->getAttributeCode(),
             'source' => $groupCode,
             'scopeLabel' => $this->getScopeLabel($attribute),
@@ -643,6 +663,24 @@ class Eav extends AbstractModifier
         }
 
         return $meta;
+    }
+
+    /**
+     * Returns attribute default value, based on db setting or setting in the system configuration
+     * @param ProductAttributeInterface $attribute
+     * @return null|string
+     */
+    private function getAttributeDefaultValue(ProductAttributeInterface $attribute)
+    {
+        if ($attribute->getAttributeCode() === 'page_layout') {
+            $defaultValue = $this->scopeConfig->getValue(
+                'web/default_layouts/default_product_layout',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $this->storeManager->getStore()
+            );
+            $attribute->setDefaultValue($defaultValue);
+        }
+        return $attribute->getDefaultValue();
     }
 
     /**
@@ -779,13 +817,7 @@ class Eav extends AbstractModifier
 
         $meta['arguments']['data']['config']['formElement'] = WysiwygElement::NAME;
         $meta['arguments']['data']['config']['wysiwyg'] = true;
-        $meta['arguments']['data']['config']['wysiwygConfigData'] = [
-            'add_variables' => false,
-            'add_widgets' => false,
-            'add_directives' => true,
-            'use_container' => true,
-            'container_class' => 'hor-scroll',
-        ];
+        $meta['arguments']['data']['config']['wysiwygConfigData'] = $this->wysiwygConfigProcessor->process($attribute);
 
         return $meta;
     }

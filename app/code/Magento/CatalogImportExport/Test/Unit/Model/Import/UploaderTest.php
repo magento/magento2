@@ -217,12 +217,32 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             [
                 '$fileUrl' => 'http://test_uploader_file',
                 '$expectedHost' => 'test_uploader_file',
-                '$expectedFileName' => 'httptest_uploader_file',
+                '$expectedFileName' => 'test_uploader_file',
             ],
             [
                 '$fileUrl' => 'https://!:^&`;file',
                 '$expectedHost' => '!:^&`;file',
-                '$expectedFileName' => 'httpsfile',
+                '$expectedFileName' => 'file',
+            ],
+            [
+                '$fileUrl' => 'https://www.google.com/image.jpg',
+                '$expectedHost' => 'www.google.com/image.jpg',
+                '$expectedFileName' => 'image.jpg',
+            ],
+            [
+                '$fileUrl' => 'https://www.google.com/image.jpg?param=1',
+                '$expectedHost' => 'www.google.com/image.jpg?param=1',
+                '$expectedFileName' => 'image.jpg',
+            ],
+            [
+                '$fileUrl' => 'https://www.google.com/image.jpg?param=1&param=2',
+                '$expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
+                '$expectedFileName' => 'image.jpg',
+            ],
+            [
+                '$fileUrl' => 'http://www.google.com/image.jpg?param=1&param=2',
+                '$expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
+                '$expectedFileName' => 'image.jpg',
             ],
         ];
     }

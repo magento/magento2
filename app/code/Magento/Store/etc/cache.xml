@@ -32,6 +32,6 @@
     </type>
     <type name="compiled_config" translate="label,description" instance="Magento\Framework\App\Interception\Cache\CompiledConfig">
         <label>Compiled Config</label>
-        <description>Compliation configuration</description>
+        <description>Compilation configuration</description>
     </type>
 </config>

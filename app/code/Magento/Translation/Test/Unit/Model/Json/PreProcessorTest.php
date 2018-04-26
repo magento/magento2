@@ -36,17 +36,24 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected $translateMock;
 
+    /**
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $designMock;
+
     protected function setUp()
     {
         $this->configMock = $this->createMock(\Magento\Translation\Model\Js\Config::class);
         $this->dataProviderMock = $this->createMock(\Magento\Translation\Model\Js\DataProvider::class);
         $this->areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
         $this->translateMock = $this->getMockForAbstractClass(\Magento\Framework\TranslateInterface::class);
+        $this->designMock = $this->getMockForAbstractClass(\Magento\Framework\View\DesignInterface::class);
         $this->model = new PreProcessor(
             $this->configMock,
             $this->dataProviderMock,
             $this->areaListMock,
-            $this->translateMock
+            $this->translateMock,
+            $this->designMock
         );
     }
 
@@ -80,6 +87,11 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->once())
             ->method('getAreaCode')
             ->willReturn($areaCode);
+        $context->expects($this->once())
+            ->method('getLocale')
+            ->willReturn('en_US');
+
+        $this->designMock->expects($this->once())->method('setDesignTheme')->with($themePath, $areaCode);
 
         $this->areaListMock->expects($this->once())
             ->method('getArea')
@@ -96,6 +108,9 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
         $chain->expects($this->once())
             ->method('setContentType')
             ->with('json');
+
+        $this->translateMock->expects($this->once())->method('setLocale')->with('en_US')->willReturnSelf();
+        $this->translateMock->expects($this->once())->method('loadData')->with($areaCode, true);
 
         $this->model->process($chain);
     }
