@@ -194,9 +194,9 @@
         <!-- Switch to FR Store View Storefront -->
 
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page"/>
-        <click selector="{{StorefrontBannerSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher1"/>
-        <waitForElementVisible selector="{{StorefrontBannerSection.storeViewDropdown}}" stepKey="waitForStoreViewDropdown1"/>
-        <click selector="{{StorefrontBannerSection.storeViewOption(customStoreFR.code)}}" stepKey="selectStoreView1"/>
+        <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher1"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.storeViewDropdown}}" stepKey="waitForStoreViewDropdown1"/>
+        <click selector="{{StorefrontHeaderSection.storeViewOption(customStoreFR.code)}}" stepKey="selectStoreView1"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
 
         <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page"/>
