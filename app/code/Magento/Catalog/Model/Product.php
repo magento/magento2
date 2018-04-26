@@ -271,6 +271,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @deprecated Not used anymore due to performance issue (loaded all product attributes)
      */
     protected $metadataService;
 
@@ -348,7 +349,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $linkTypeProvider;
 
     /**
-     * @var \Magento\Eav\Model\Config|null
+     * @var \Magento\Eav\Model\Config
      */
     private $eavConfig;
 
@@ -389,7 +390,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
-     *
      * @param \Magento\Eav\Model\Config|null $config
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -483,7 +483,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * Get a list of custom attribute codes that belongs to product attribute set. If attribute set not specified for
+     * product will return all attribute codes
+     *
+     * @return array|string[]
      */
     protected function getCustomAttributesCodes()
     {
