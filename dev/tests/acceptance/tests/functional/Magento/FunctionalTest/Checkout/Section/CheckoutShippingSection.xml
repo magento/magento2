@@ -22,5 +22,6 @@
         <element name="firstShippingMethod" type="radio" selector="#checkout-shipping-method-load input[type='radio']"/>
         <element name="selectedShippingAddress" type="text" selector=".shipping-address-item.selected-item"/>
         <element name="newAddressButton" type="button" selector="#checkout-step-shipping button"/>
+        <element name="next" type="button" selector="[data-role='opc-continue']"/>
     </section>
 </sections>

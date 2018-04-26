@@ -11,5 +11,6 @@
     <page name="AdminNewCustomerPage" url="/customer/index/edit/id" area="admin" module="Customer">
         <section name="AdminEditCuctomerInformationSection"/>
         <section name="AdminEditCustomerOrdersSection"/>
+        <section name="StorefrontCustomerOrderViewSection"/>
     </page>
 </pages>
