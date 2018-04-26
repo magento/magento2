@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Model\ResourceModel;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
 use Magento\Framework\Model\Entity\ScopeInterface;
@@ -57,17 +58,31 @@ class ReadHandler implements AttributeInterface
      * Get attribute of given entity type
      *
      * @param string $entityType
-     * @param \Magento\Framework\DataObject|null $product
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @throws \Exception if for unknown entity type
+     * @deprecated Not used anymore
+     * @see ReadHandler::getEntityAttributes
      */
-    protected function getAttributes($entityType, $product = null)
+    protected function getAttributes($entityType)
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $eavEntityType = $metadata->getEavEntityType();
-        $attributes = null === $eavEntityType ? [] : $this->config->getEntityAttributes($eavEntityType, $product);
+        return null === $eavEntityType ? [] : $this->config->getEntityAttributes($eavEntityType);
+    }
 
-        return $attributes;
+    /**
+     * Get attribute of given entity type
+     *
+     * @param string $entityType
+     * @param DataObject|null $entity
+     * @return \Magento\Eav\Api\Data\AttributeInterface[]
+     * @throws \Exception if for unknown entity type
+     */
+    private function getEntityAttributes($entityType, $entity): array
+    {
+        $metadata = $this->metadataPool->getMetadata($entityType);
+        $eavEntityType = $metadata->getEavEntityType();
+        return null === $eavEntityType ? [] : $this->config->getEntityAttributes($eavEntityType, $entity);
     }
 
     /**
@@ -107,7 +122,7 @@ class ReadHandler implements AttributeInterface
         $selects = [];
 
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-        foreach ($this->getAttributes($entityType, new \Magento\Framework\DataObject($entityData)) as $attribute) {
+        foreach ($this->getEntityAttributes($entityType, new DataObject($entityData)) as $attribute) {
             if (!$attribute->isStatic()) {
                 $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
                 $attributesMap[$attribute->getAttributeId()] = $attribute->getAttributeCode();

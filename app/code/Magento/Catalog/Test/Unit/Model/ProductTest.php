@@ -1278,6 +1278,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $colorAttributeCode = 'color';
         $customAttributesMetadata = [$priceCode => 'attribute1', $colorAttributeCode => 'attribute2'];
 
+        $this->metadataServiceMock->expects($this->never())->method('getCustomAttributesMetadata');
         $this->eavConfig->expects($this->once())
             ->method('getEntityAttributes')
             ->willReturn($customAttributesMetadata);

@@ -486,7 +486,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get a list of custom attribute codes that belongs to product attribute set. If attribute set not specified for
      * product will return all attribute codes
      *
-     * @return array|string[]
+     * @return string[]
      */
     protected function getCustomAttributesCodes()
     {
