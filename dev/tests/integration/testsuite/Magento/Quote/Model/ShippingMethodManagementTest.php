@@ -17,10 +17,8 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/SalesRule/_files/cart_rule_100_percent_off.php
      * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
      * @return void
-     *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testRateAppliedToShipping()
+    public function testRateAppliedToShipping(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

@@ -25,7 +25,7 @@ $salesRule->setData(
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Store\Model\StoreManagerInterface::class
-            )->getWebsite()->getId()
+            )->getWebsite()->getId(),
         ],
         'discount_qty' => 0,
         'apply_to_shipping' => 1,
