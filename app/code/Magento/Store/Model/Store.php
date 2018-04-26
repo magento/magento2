@@ -18,6 +18,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Zend\Uri\UriFactory;
 
 /**
  * Store model
@@ -535,8 +536,8 @@ class Store extends AbstractExtensibleModel implements
     public function getConfig($path)
     {
         $data = $this->_config->getValue($path, ScopeInterface::SCOPE_STORE, $this->getCode());
-        if (!$data) {
-            $data = $this->_config->getValue($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        if ($data === null) {
+            $data = $this->_config->getValue($path);
         }
         return $data === false ? null : $data;
     }
@@ -801,7 +802,7 @@ class Store extends AbstractExtensibleModel implements
             return false;
         }
 
-        $uri = \Zend_Uri::factory($secureBaseUrl);
+        $uri = UriFactory::factory($secureBaseUrl);
         $port = $uri->getPort();
         $serverPort = $this->_request->getServer('SERVER_PORT');
         $isSecure = $uri->getScheme() == 'https' && isset($serverPort) && $port == $serverPort;

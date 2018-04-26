@@ -32,6 +32,8 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @method Category setUrlPath(string $urlPath)
  * @method Category getSkipDeleteChildren()
  * @method Category setSkipDeleteChildren(boolean $value)
+ * @method Category setChangedProductIds(array $categoryIds) Set products ids that inserted or deleted for category
+ * @method array getChangedProductIds() Get products ids that inserted or deleted for category
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -96,6 +98,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
+
+    /**
+     * @var ResourceModel\Category
+     */
+    protected $_resource;
 
     /**
      * URL rewrite model
@@ -311,6 +318,16 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected function getCustomAttributesCodes()
     {
         return $this->getCustomAttributeCodes->execute($this->metadataService);
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Catalog\Model\ResourceModel\Category
+     * @deprecated because resource models should be used directly
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**
@@ -937,8 +954,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getProductCount()
     {
-        $count = $this->_getResource()->getProductCount($this);
-        $this->setData(self::KEY_PRODUCT_COUNT, $count);
+        if (!$this->hasData(self::KEY_PRODUCT_COUNT)) {
+            $count = $this->_getResource()->getProductCount($this);
+            $this->setData(self::KEY_PRODUCT_COUNT, $count);
+        }
+
         return $this->getData(self::KEY_PRODUCT_COUNT);
     }
 

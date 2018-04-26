@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">bulk_details_form.bulk_details_form_data_source</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="save" class="Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details\RetryButton"/>
+            <button name="back" class="Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details\BackButton"/>
+        </buttons>
+        <namespace>bulk_details_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>bulk_details_form.bulk_details_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="bulk_details_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="bulk/bulk/retry"/>
+        </settings>
+        <dataProvider class="Magento\AsynchronousOperations\Ui\Component\Operation\DataProvider" name="bulk_details_form_data_source">
+            <settings>
+                <requestFieldName>uuid</requestFieldName>
+                <primaryFieldName>uuid</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general" sortOrder="10">
+        <settings>
+            <label/>
+        </settings>
+        <field name="description" formElement="input">
+            <settings>
+                <elementTmpl>ui/form/element/text</elementTmpl>
+                <dataType>text</dataType>
+                <label translate="true">Description of Operation</label>
+            </settings>
+        </field>
+        <field name="summary" formElement="input">
+            <settings>
+                <elementTmpl>ui/form/element/text</elementTmpl>
+                <dataType>text</dataType>
+                <label translate="true">Summary</label>
+            </settings>
+        </field>
+        <field name="start_time" formElement="date">
+            <settings>
+                <elementTmpl>ui/form/element/textDate</elementTmpl>
+                <dataType>text</dataType>
+                <label translate="true">Start Time</label>
+            </settings>
+            <formElements>
+                <date>
+                    <settings>
+                        <options>
+                            <option name="showsTime" xsi:type="boolean">true</option>
+                            <option name="dateFormat" xsi:type="string">MMM d, YYYY</option>
+                            <option name="timeFormat" xsi:type="string">h:mm:ss A</option>
+                        </options>
+                    </settings>
+                </date>
+            </formElements>
+        </field>
+    </fieldset>
+    <fieldset name="retriable_operations" sortOrder="20">
+        <settings>
+            <label translate="true">Items to Retry</label>
+        </settings>
+        <container name="retriable_operations_description" template="ui/form/components/complex">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string"/>
+                    <item name="text" xsi:type="string" translate="true">To retry, select the items and click “Retry”.</item>
+                </item>
+            </argument>
+        </container>
+        <field name="retriable_operation_validation" component="Magento_AsynchronousOperations/js/form/error" template="Magento_AsynchronousOperations/form/field" formElement="input">
+            <settings>
+                <additionalClasses>
+                    <class name="message message-warning">true</class>
+                </additionalClasses>
+                <validation>
+                    <rule name="required-entry" xsi:type="array">
+                        <item name="validate" xsi:type="boolean">true</item>
+                        <item name="message" xsi:type="string">An item needs to be selected. Select and try again.</item>
+                    </rule>
+                </validation>
+                <elementTmpl/>
+                <dataType>text</dataType>
+                <dataScope>operations_to_retry</dataScope>
+            </settings>
+        </field>
+        <insertListing name="retriable_operation">
+            <settings>
+                <externalProvider>${ $.ns }.retriable_operation_listing_data_source</externalProvider>
+                <loading>false</loading>
+                <selectionsProvider>${ $.ns }.${ $.ns }.retriable_operation_listing_columns.ids</selectionsProvider>
+                <autoRender>true</autoRender>
+                <dataScope>operations_to_retry</dataScope>
+                <ns>retriable_operation_listing</ns>
+                <exports>
+                    <link name="uuid">${ $.externalProvider }:params.uuid</link>
+                </exports>
+                <imports>
+                    <link name="uuid">${ $.provider }:data.uuid</link>
+                </imports>
+            </settings>
+        </insertListing>
+    </fieldset>
+    <fieldset name="failed_operations" sortOrder="30">
+        <settings>
+            <label translate="true">Items That Can’t Be Updated.</label>
+        </settings>
+        <container name="failed_operations_description" template="ui/form/components/complex">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string"/>
+                </item>
+            </argument>
+        </container>
+        <insertListing name="failed_operation">
+            <settings>
+                <externalProvider>failed_operation_listing.failed_operation_listing_data_source</externalProvider>
+                <loading>false</loading>
+                <autoRender>true</autoRender>
+                <ns>failed_operation_listing</ns>
+                <exports>
+                    <link name="uuid">${ $.externalProvider }:params.uuid</link>
+                </exports>
+                <imports>
+                    <link name="uuid">${ $.provider }:data.uuid</link>
+                </imports>
+            </settings>
+        </insertListing>
+    </fieldset>
+</form>

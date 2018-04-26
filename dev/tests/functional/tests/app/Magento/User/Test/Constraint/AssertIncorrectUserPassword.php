@@ -25,7 +25,7 @@ class AssertIncorrectUserPassword extends AbstractConstraint
     public function processAssert(Dashboard $dashboard)
     {
         $errorMessage = $dashboard->getMessagesBlock()->getErrorMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_MESSAGE,
             $errorMessage,
             'Wrong error message is displayed.'

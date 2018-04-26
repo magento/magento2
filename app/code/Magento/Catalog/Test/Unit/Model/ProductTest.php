@@ -330,9 +330,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $this->mediaGalleryEntryFactoryMock =
             $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
 
         $this->metadataServiceMock = $this->createMock(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
         $this->attributeValueFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
@@ -1171,19 +1171,19 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         ];
 
         $entryMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class)
-                          ->setMethods(
-                              [
-                                  'getId',
-                                  'getFile',
-                                  'getLabel',
-                                  'getPosition',
-                                  'isDisabled',
-                                  'types',
-                                  'getContent',
-                                  'getMediaType'
-                              ]
-                          )
-                          ->getMockForAbstractClass();
+            ->setMethods(
+                [
+                    'getId',
+                    'getFile',
+                    'getLabel',
+                    'getPosition',
+                    'isDisabled',
+                    'types',
+                    'getContent',
+                    'getMediaType'
+                ]
+            )
+            ->getMockForAbstractClass();
 
         $result = [
             'value_id' => 1,
@@ -1278,31 +1278,40 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomAttributes()
     {
-        $priceCode = 'price';
-        $colorAttributeCode = 'color';
+        $interfaceAttributeCode = 'price';
+        $customAttributeCode = 'color';
+        $initialCustomAttributeValue = 'red';
+        $newCustomAttributeValue = 'blue';
+
         $this->getCustomAttributeCodes->expects($this->exactly(3))
             ->method('execute')
-            ->willReturn([$colorAttributeCode]);
-        $this->model->setData($priceCode, 10);
+            ->willReturn([$customAttributeCode]);
+        $this->model->setData($interfaceAttributeCode, 10);
 
         //The color attribute is not set, expect empty custom attribute array
         $this->assertEquals([], $this->model->getCustomAttributes());
 
         //Set the color attribute;
-        $this->model->setData($colorAttributeCode, "red");
+        $this->model->setData($customAttributeCode, $initialCustomAttributeValue);
         $attributeValue = new \Magento\Framework\Api\AttributeValue();
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
-        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
-        $this->assertEquals("red", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+        $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
+        $this->assertEquals(
+            $initialCustomAttributeValue,
+            $this->model->getCustomAttribute($customAttributeCode)->getValue()
+        );
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->model->setData($colorAttributeCode, "blue");
+        $this->model->setCustomAttribute($customAttributeCode, $newCustomAttributeValue);
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
-        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
-        $this->assertEquals("blue", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+        $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
+        $this->assertEquals(
+            $newCustomAttributeValue,
+            $this->model->getCustomAttribute($customAttributeCode)->getValue()
+        );
     }
 
     /**
@@ -1398,7 +1407,20 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $qty = 1;
         $this->model->setQty($qty);
         $this->model->setFinalPrice($finalPrice);
-        $this->productTypeInstanceMock->expects($this->never())->method('priceFactory');
+        $productTypePriceMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Type\Price::class,
+            ['getFinalPrice']
+        );
+        $productTypePriceMock->expects($this->any())
+            ->method('getFinalPrice')
+            ->with($qty, $this->model)
+            ->willReturn($finalPrice);
+
+        $this->productTypeInstanceMock->expects($this->any())
+            ->method('priceFactory')
+            ->with($this->model->getTypeId())
+            ->willReturn($productTypePriceMock);
+
         $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
     }
 

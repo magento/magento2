@@ -121,6 +121,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_urlModel = null;
 
     /**
+     * @var ResourceModel\Product
+     */
+    protected $_resource;
+
+    /**
      * @var string
      */
     protected static $_url;
@@ -476,6 +481,18 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * Get resource instance
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Catalog\Model\ResourceModel\Product
+     * @deprecated because resource models should be used directly
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getCustomAttributesCodes()
@@ -608,6 +625,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param bool $calculate
      * @return void
+     * @deprecated
      */
     public function setPriceCalculation($calculate = true)
     {
@@ -1157,10 +1175,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getFinalPrice($qty = null)
     {
-        if ($this->_getData('final_price') === null) {
-            $this->setFinalPrice($this->getPriceModel()->getFinalPrice($qty, $this));
+        if ($this->_calculatePrice || $this->_getData('final_price') === null) {
+            return $this->getPriceModel()->getFinalPrice($qty, $this);
+        } else {
+            return $this->_getData('final_price');
         }
-        return $this->_getData('final_price');
     }
 
     /**
@@ -1989,7 +2008,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function addCustomOption($code, $value, $product = null)
     {
-        $product = $product ? $product : $this;
+        $product = $product ?: $this;
         $option = $this->_itemOptionFactory->create()->addData(
             ['product_id' => $product->getId(), 'product' => $product, 'code' => $code, 'value' => $value]
         );

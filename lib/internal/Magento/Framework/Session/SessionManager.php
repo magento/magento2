@@ -124,9 +124,6 @@ class SessionManager implements SessionManagerInterface
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->appState = $appState;
-
-        // Enable session.use_only_cookies
-        ini_set('session.use_only_cookies', '1');
         $this->start();
     }
 
@@ -317,11 +314,8 @@ class SessionManager implements SessionManagerInterface
      */
     public function destroy(array $options = null)
     {
-        if (null === $options) {
-            $options = $this->defaultDestroyOptions;
-        } else {
-            $options = array_merge($this->defaultDestroyOptions, $options);
-        }
+        $options = $options ?? [];
+        $options = array_merge($this->defaultDestroyOptions, $options);
 
         if ($options['clear_storage']) {
             $this->clearStorage();
@@ -504,21 +498,7 @@ class SessionManager implements SessionManagerInterface
             return $this;
         }
 
-        //@see http://php.net/manual/en/function.session-regenerate-id.php#53480 workaround
-        if ($this->isSessionExists()) {
-            $oldSessionId = session_id();
-            session_regenerate_id();
-            $newSessionId = session_id();
-            session_id($oldSessionId);
-            session_destroy();
-
-            $oldSession = $_SESSION;
-            session_id($newSessionId);
-            session_start();
-            $_SESSION = $oldSession;
-        } else {
-            session_start();
-        }
+        $this->isSessionExists() ? session_regenerate_id(true) : session_start();
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
 
         if ($this->sessionConfig->getUseCookies()) {
@@ -576,13 +556,25 @@ class SessionManager implements SessionManagerInterface
      */
     private function initIniOptions()
     {
+        $result = ini_set('session.use_only_cookies', '1');
+        if ($result === false) {
+            $error = error_get_last();
+            throw new \InvalidArgumentException(
+                sprintf('Failed to set ini option session.use_only_cookies to value 1. %s', $error['message'])
+            );
+        }
+
         foreach ($this->sessionConfig->getOptions() as $option => $value) {
-            $result = ini_set($option, $value);
-            if ($result === false) {
-                $error = error_get_last();
-                throw new \InvalidArgumentException(
-                    sprintf('Failed to set ini option "%s" to value "%s". %s', $option, $value, $error['message'])
-                );
+            if ($option=='session.save_handler') {
+                continue;
+            } else {
+                $result = ini_set($option, $value);
+                if ($result === false) {
+                    $error = error_get_last();
+                    throw new \InvalidArgumentException(
+                        sprintf('Failed to set ini option "%s" to value "%s". %s', $option, $value, $error['message'])
+                    );
+                }
             }
         }
     }

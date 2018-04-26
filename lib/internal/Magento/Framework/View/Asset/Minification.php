@@ -143,12 +143,26 @@ class Minification
         if (!isset($this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType])) {
             $this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType] = [];
             $key = sprintf(self::XML_PATH_MINIFICATION_EXCLUDES, $contentType);
-            foreach (explode("\n", $this->scopeConfig->getValue($key, $this->scope)) as $exclude) {
+            $excludeValues = $this->getMinificationExcludeValues($key);
+            foreach ($excludeValues as $exclude) {
                 if (trim($exclude) != '') {
                     $this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType][] = trim($exclude);
                 }
             }
         }
         return $this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType];
+    }
+
+    /**
+     * Get minification exclude values from configuration
+     *
+     * @param string $key
+     * @return string[]
+     */
+    private function getMinificationExcludeValues($key)
+    {
+        $configValues = $this->scopeConfig->getValue($key, $this->scope) ?? [];
+
+        return array_values($configValues);
     }
 }

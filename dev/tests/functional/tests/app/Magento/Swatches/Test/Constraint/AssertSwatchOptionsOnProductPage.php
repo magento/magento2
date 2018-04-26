@@ -35,7 +35,7 @@ class AssertSwatchOptionsOnProductPage extends AbstractConstraint
         $expectedData = $product->getConfigurableAttributesData()['attributes_data'];
 
         foreach ($expectedData as $expectedAttributeData) {
-            \PHPUnit_Framework_Assert::assertArrayHasKey(
+            \PHPUnit\Framework\Assert::assertArrayHasKey(
                 $expectedAttributeData['attribute_code'],
                 $actualData,
                 'Attribute with code ' . $expectedAttributeData['attribute_code'] . ' is absent on Product page'
@@ -54,7 +54,7 @@ class AssertSwatchOptionsOnProductPage extends AbstractConstraint
      */
     private function verifyAttribute(array $expectedAttributeData, array $actualAttributeData)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedAttributeData['attribute_code'],
             $actualAttributeData['attribute_code'],
             sprintf(
@@ -63,7 +63,7 @@ class AssertSwatchOptionsOnProductPage extends AbstractConstraint
                 $expectedAttributeData['attribute_code']
             )
         );
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedAttributeData['attribute_id'],
             $actualAttributeData['attribute_id'],
             sprintf(
@@ -72,7 +72,7 @@ class AssertSwatchOptionsOnProductPage extends AbstractConstraint
                 $expectedAttributeData['attribute_id']
             )
         );
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedAttributeData['label'],
             $actualAttributeData['label'],
             sprintf(
@@ -92,7 +92,7 @@ class AssertSwatchOptionsOnProductPage extends AbstractConstraint
     private function verifyAttributeOptions(array $expectedAttributeData, array $actualAttributeData)
     {
         if (isset($expectedAttributeData['options'])) {
-            \PHPUnit_Framework_Assert::assertArrayHasKey(
+            \PHPUnit\Framework\Assert::assertArrayHasKey(
                 'options',
                 $actualAttributeData,
                 'Swatch attribute options are missed on Product page'
@@ -100,7 +100,7 @@ class AssertSwatchOptionsOnProductPage extends AbstractConstraint
 
             $expectedOptionsCount = count($expectedAttributeData['options']);
             $actualOptionsCount = count($actualAttributeData['options']);
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $expectedOptionsCount,
                 $actualOptionsCount,
                 sprintf(
@@ -110,7 +110,7 @@ class AssertSwatchOptionsOnProductPage extends AbstractConstraint
                 )
             );
         } else {
-            \PHPUnit_Framework_Assert::assertArrayNotHasKey(
+            \PHPUnit\Framework\Assert::assertArrayNotHasKey(
                 'options',
                 $actualAttributeData,
                 'Product page must be without swatch attribute options'

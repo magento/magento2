@@ -28,7 +28,7 @@ class AssertAdvancedSearchEmptyTerm extends AbstractConstraint
     public function processAssert(AdvancedSearch $advancedSearch)
     {
         $actualMessage = $advancedSearch->getMessagesBlock()->getErrorMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_MESSAGE,
             $actualMessage,
             'Wrong error message is displayed.'
