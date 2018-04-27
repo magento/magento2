@@ -35,7 +35,7 @@ The members of this team have been recognized for their outstanding commitment t
 </a>
 
 <h3>Top Contributors</h3>
-Magento team thanks for any contribution that can improve our code base, documentation or increase test coverage. We always recognize our most active members, your contributions are the foundation of the Magento open source platform.
+Magento is thankful for any contribution that can improve our code base, documentation or increase test coverage. We always recognize our most active members, as their contributions are the foundation of the Magento Open Source platform.
 <a href="https://magento.com/magento-contributors">
     <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/contributors.png"/>
 </a>

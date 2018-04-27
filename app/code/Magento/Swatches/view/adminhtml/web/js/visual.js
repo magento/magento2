@@ -143,6 +143,7 @@ define([
                         element.hide();
                         this.totalItems--;
                         this.updateItemsCountField();
+                        this.updateSortOrder();
                     }
                 },
 
@@ -151,6 +152,17 @@ define([
                  */
                 updateItemsCountField: function () {
                     $('swatch-visual-option-count-check').value = this.totalItems > 0 ? '1' : '';
+                },
+
+                /**
+                 * Update sort order values
+                 */
+                updateSortOrder: function () {
+                    jQuery('[data-role=swatch-visual-options-container] tr:not(.no-display) [data-role=order]').each(
+                        function (index, element) {
+                            jQuery(element).val(index + 1);
+                        }
+                    );
                 },
 
                 /**
@@ -267,11 +279,7 @@ define([
                      * Update component
                      */
                     update: function () {
-                        $('[data-role=swatch-visual-options-container] [data-role=order]').each(
-                            function (index, element) {
-                                $(element).val(index + 1);
-                            }
-                        );
+                        swatchVisualOption.updateSortOrder();
                     }
                 });
             });

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "84ddf256e6a89c77be49113b633f8ac2",
+    "content-hash": "84aec63129b35d8f32677016b8d8adc7",
     "packages": [
         {
             "name": "allure-framework/allure-codeception",
@@ -1673,19 +1673,23 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.1.2",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:magento/magento2-functional-testing-framework.git",
-                "reference": "10d547a984cde1e1e9d9100c658011b467b10010"
+                "reference": "4dd196d745bf836cbf0c5904a1df6dd241124309"
             },
             "require": {
+                "allure-framework/allure-codeception": "~1.2.6",
                 "codeception/codeception": "~2.3.4",
+                "consolidation/robo": "^1.0.0",
                 "epfremme/swagger-php": "^2.0",
                 "flow/jsonpath": ">0.2",
                 "fzaninotto/faker": "^1.6",
                 "mustache/mustache": "~2.5",
-                "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0"
+                "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0",
+                "symfony/process": "^2.8 || ^3.1 || ^4.0",
+                "vlucas/phpdotenv": "^2.4"
             },
             "require-dev": {
                 "brainmaestro/composer-git-hooks": "^2.3",
@@ -1699,6 +1703,9 @@
                 "squizlabs/php_codesniffer": "1.5.3",
                 "symfony/stopwatch": "~3.4.6"
             },
+            "bin": [
+                "bin/mftf"
+            ],
             "type": "library",
             "extra": {
                 "hooks": {
@@ -1707,7 +1714,8 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Magento\\FunctionalTestingFramework\\": "src/Magento/FunctionalTestingFramework"
+                    "Magento\\FunctionalTestingFramework\\": "src/Magento/FunctionalTestingFramework",
+                    "MFTF\\": "dev/tests/functional/MFTF"
                 }
             },
             "autoload-dev": {
@@ -1733,7 +1741,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-03-14T19:09:58+00:00"
+            "time": "2018-04-24T01:46:09+00:00"
         },
         {
             "name": "moontoast/math",
