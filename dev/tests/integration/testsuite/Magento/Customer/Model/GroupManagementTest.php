@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 class GroupManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\TestFramework\ObjectManager
      */
     protected $objectManager;
 
@@ -46,6 +46,9 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDefaultGroupWithNonDefaultStoreId()
     {
+        $this->objectManager->removeSharedInstance('Magento\TestFramework\App\Config');
+        $this->objectManager->removeSharedInstance('Magento\Framework\App\Config\ScopeConfigInterface');
+
         /** @var \Magento\Store\Model\StoreManagerInterface  $storeManager */
         $storeManager = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface');
         $nonDefaultStore = $storeManager->getStore('secondstore');
