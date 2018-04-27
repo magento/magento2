@@ -167,6 +167,8 @@ class Date extends AbstractElement
                         'buttonImage' => $this->getImage(),
                         'buttonText' => 'Select Date',
                         'disabled' => $this->getDisabled(),
+                        'minDate' => $this->getMinDate(),
+                        'maxDate' => $this->getMaxDate(),
                     ],
                 ]
             )
