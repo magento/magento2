@@ -141,8 +141,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartGrabConfigProductPageImageSrc2" stepKey="cartAssertConfigProductPageImageNotDefault2" after="cartGrabConfigProductPageImageSrc2"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddConfigProductToCart" after="cartAssertConfigProductPageImageNotDefault2">
             <argument name="product" value="$$createConfigProduct$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.three"/>
+            <argument name="productCount" value="3"/>
         </actionGroup>
 
         <!-- Check configurable product in minicart -->
