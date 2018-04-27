@@ -72,12 +72,12 @@
             </createData>
 
             <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle1">
-                <requiredEntity createDataKey="childProductHandle1"/>
                 <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle1"/>
             </createData>
             <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle2">
-                <requiredEntity createDataKey="childProductHandle2"/>
                 <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle2"/>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>

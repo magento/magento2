@@ -44,6 +44,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testAddPriceDataOnSchedule()
     {
@@ -88,6 +89,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testAddPriceDataOnSave()
     {
@@ -148,5 +150,21 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             . ' AND (alias.entity_type = \'product\')';
 
         self::assertContains($expected, str_replace(PHP_EOL, '', $sql));
+    }
+
+    /**
+     * Checks that a collection uses the correct join when filtering by null.
+     *
+     * This actually affects AbstractCollection, but inheritance yada yada.
+     *
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @magentoDbIsolation enabled
+     */
+    public function testFilterByNull()
+    {
+        $this->collection->addAttributeToFilter([['attribute' => 'special_price', 'null' => true]]);
+        $productCount = $this->collection->count();
+
+        $this->assertEquals(1, $productCount, 'Product with null special_price not found');
     }
 }

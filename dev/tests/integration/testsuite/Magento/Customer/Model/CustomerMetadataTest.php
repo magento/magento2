@@ -231,6 +231,12 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertNotEmpty($attributes);
 
+        // remove odd extension attributes
+        $allAtrributes = $expectAttrsWithVals;
+        $allAtrributes['created_at'] = $attributes['created_at'];
+        $allAtrributes['updated_at'] = $attributes['updated_at'];
+        $attributes = array_intersect_key($attributes, $allAtrributes);
+
         foreach ($attributes as $attributeCode => $attributeValue) {
             $this->assertNotNull($attributeCode);
             $this->assertNotNull($attributeValue);
