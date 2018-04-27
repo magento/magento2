@@ -107,8 +107,6 @@ class Rss
             FeedFactoryInterface::FORMAT_RSS
         );
 
-        return $feed->getFormattedContentAs(
-            FeedInterface::FORMAT_XML
-        );
+        return $feed->getFormattedContent();
     }
 }
