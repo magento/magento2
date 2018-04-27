@@ -139,7 +139,12 @@ class DataFixtureBeforeTransaction
             }
         } catch (\Exception $e) {
             throw new \PHPUnit_Framework_Exception(
-                sprintf("Error in fixture: %s.\n %s\n %s", json_encode($fixture), $e->getMessage(), $e->getTraceAsString()),
+                sprintf(
+                    "Error in fixture: %s.\n %s\n %s",
+                    json_encode($fixture),
+                    $e->getMessage(),
+                    $e->getTraceAsString()
+                ),
                 500,
                 $e
             );
