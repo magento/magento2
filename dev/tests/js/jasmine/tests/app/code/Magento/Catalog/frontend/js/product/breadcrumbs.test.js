@@ -13,11 +13,13 @@ define([
 
     var injector = new Squire(),
         widget,
+        parentWidget,
         menuContainer,
         mocks = {
             'Magento_Theme/js/model/breadcrumb-list': jasmine.createSpyObj(['push'])
         },
         defaultContext = require.s.contexts._,
+        menuSelector = '[data-action="navigation"] > ul',
         menuItem = $('<li class="level0"><a href="http://localhost.com/cat1.html" id="ui-id-3">Cat1</a></li>')[0],
 
         /**
@@ -39,10 +41,10 @@ define([
         injector.require(
             [
                 'Magento_Catalog/js/product/breadcrumbs',
-                'Magento_Theme/js/view/breadcrumbs',
-                'jquery/ui'
+                'Magento_Theme/js/view/breadcrumbs'
             ], function (mixin, breadcrumb) {
                 widget = mixin(breadcrumb);
+                parentWidget = breadcrumb;
                 done();
             }
         );
@@ -82,7 +84,7 @@ define([
                 expect(widget).toEqual(jasmine.any(Function));
                 expect(widget.prototype._appendCatalogCrumbs).toBeDefined();
 
-                $('[data-action="navigation"] > ul').html(menuItem);
+                $(menuSelector).html(menuItem);
 
                 spyOn(widget.prototype, '_resolveCategoryCrumbs').and.returnValues([], [categoryCrumb]);
                 spyOn(widget.prototype, '_getProductCrumb');
@@ -166,7 +168,7 @@ define([
                 expect(widget).toEqual(jasmine.any(Function));
                 expect(widget.prototype._resolveCategoryMenuItem).toBeDefined();
 
-                $('[data-action="navigation"] > ul').html(menuItem);
+                $(menuSelector).html(menuItem);
 
                 spyOn(widget.prototype, '_resolveCategoryUrl').and.returnValue('http://localhost.com/cat1.html');
 
@@ -208,7 +210,7 @@ define([
                 expect(widget).toEqual(jasmine.any(Function));
                 expect(widget.prototype._resolveCategoryCrumbs).toBeDefined();
 
-                $('[data-action="navigation"] > ul').html(menuItem);
+                $(menuSelector).html(menuItem);
 
                 spyOn(widget.prototype, '_resolveCategoryUrl').and.returnValue('http://localhost.com/cat1.html');
 
@@ -243,7 +245,7 @@ define([
                     context,
                     getParentMenuHandler;
 
-                $('[data-action="navigation"] > ul').html(menuItems);
+                $(menuSelector).html(menuItems);
 
                 expect(widget).toBeDefined();
                 expect(widget).toEqual(jasmine.any(Function));
@@ -261,6 +263,48 @@ define([
                 result = getParentMenuHandler($('#ui-id-3'));
 
                 expect(result).toBeNull();
+            });
+
+            it('Check _init event binding', function () {
+                var context,
+                    initMethod;
+
+                expect(parentWidget).toBeDefined();
+                expect(parentWidget).toEqual(jasmine.any(Function));
+
+                context = createContext(widget.prototype);
+                initMethod = widget.prototype._init.bind(context);
+
+                spyOn(parentWidget.prototype, '_init');
+                spyOn(widget.prototype, '_on').and.returnValue(widget);
+
+                initMethod();
+
+                expect(parentWidget.prototype._init).not.toHaveBeenCalled();
+                expect(widget.prototype._on).toHaveBeenCalledWith(
+                    jasmine.objectContaining({
+                        selector: menuSelector
+                    }),
+                    {
+                        'menucreate': jasmine.any(Function)
+                    }
+                );
+            });
+
+            it('Check parent _init call', function () {
+                var context,
+                    initMethod;
+
+                expect(parentWidget).toBeDefined();
+                expect(parentWidget).toEqual(jasmine.any(Function));
+
+                context = createContext(widget.prototype);
+                initMethod = widget.prototype._init.bind(context);
+                spyOn(parentWidget.prototype, '_init');
+
+                jQuery(menuSelector).attr('data-mage-menu', '<li></li>');
+                initMethod();
+                expect(parentWidget.prototype._init).toHaveBeenCalled();
             });
         });
     });
