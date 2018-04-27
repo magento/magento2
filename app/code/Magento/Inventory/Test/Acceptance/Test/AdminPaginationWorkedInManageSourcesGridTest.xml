@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminPaginationWorkedInManageSourcesGridTest">
+        <annotations>
+            <features value="Multi-Source Inventory"/>
+            <stories value="Configuration-Sources"/>
+            <title value="Pagination worked in Manage Sources grid - Admin user"/>
+            <description value="You should be able to switch between pages on Manage Sources grid"/>
+            <testCaseId value="933"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+        </annotations>
+
+        <before>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource1"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource2"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource3"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource4"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource5"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource6"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource7"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource8"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource9"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource10"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource11"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource12"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource13"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource14"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource15"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource16"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource17"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource18"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource19"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource20"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource21"/>
+            <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource22"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheManageSourcePage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <!--TODO Change this to scalar when MQE-498 is implemented-->
+            <argument name="value" value="TemporaryConsts.special_source"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <actionGroup ref="adminDataGridSelectPerPage" stepKey="select20SourcesPerPage1">
+            <!--TODO Change this to scalar when MQE-498 is implemented-->
+            <argument name="perPage" value="TemporaryConsts.twenty"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <see selector="{{AdminDataGridPaginationSection.totalPages}}" userInput="2" stepKey="seeTotalPages1"/>
+        <seeNumberOfElements selector="{{AdminManageSourcesGridBody.dataRows}}" userInput="20" stepKey="seeNumberOfRows1"/>
+        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="goToNextPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <seeNumberOfElements selector="{{AdminManageSourcesGridBody.dataRows}}" userInput="2" stepKey="seeNumberOfRows2"/>
+        <click selector="{{AdminDataGridPaginationSection.previousPage}}" stepKey="goTopreviousPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <seeNumberOfElements selector="{{AdminManageSourcesGridBody.dataRows}}" userInput="20" stepKey="seeNumberOfRows3"/>
+    </test>
+</tests>
