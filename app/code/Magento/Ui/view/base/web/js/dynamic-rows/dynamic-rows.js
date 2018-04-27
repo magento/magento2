@@ -533,7 +533,8 @@ define([
          * Init header elements
          */
         initHeader: function () {
-            var data;
+            var labels = [],
+                data;
 
             if (!this.labels().length) {
                 _.each(this.childTemplate.children, function (cell) {
@@ -546,9 +547,9 @@ define([
                         columnsHeaderClasses: cell.config.columnsHeaderClasses,
                         sortOrder: cell.config.sortOrder
                     });
-
-                    this.labels.push(data);
+                    labels.push(data);
                 }, this);
+                this.labels(_.sortBy(labels, 'sortOrder'));
             }
         },
 
@@ -901,7 +902,7 @@ define([
             prop = prop || this.identificationProperty;
 
             return _.reject(this.getChildItems(), function (recordData) {
-                return ~~recordData[prop] === ~~id;
+                return recordData[prop].toString() === id.toString();
             }, this);
         },
 

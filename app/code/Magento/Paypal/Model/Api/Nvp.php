@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model\Api;
 
 use Magento\Payment\Model\Cart;
@@ -991,7 +989,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     {
         $request = $this->_exportToRequest($this->_refundTransactionRequest);
         if ($this->getRefundType() === \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL) {
-            $request['AMT'] = $this->getAmount();
+            $request['AMT'] = $this->formatPrice($this->getAmount());
         }
         $response = $this->call(self::REFUND_TRANSACTION, $request);
         $this->_importFromResponse($this->_refundTransactionResponse, $response);

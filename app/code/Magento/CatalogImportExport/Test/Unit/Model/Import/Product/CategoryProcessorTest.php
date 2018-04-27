@@ -49,6 +49,8 @@ class CategoryProcessorTest extends \PHPUnit\Framework\TestCase
             . self::CHILD_CATEGORY_ID
         ));
 
+        $childCategory->method('save')->willThrowException(new \Exception());
+
         $parentCategory = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -103,6 +105,17 @@ class CategoryProcessorTest extends \PHPUnit\Framework\TestCase
         $categoriesSeparator = ',';
         $categoryIds = $this->categoryProcessor->upsertCategories(self::CHILD_CATEGORY_NAME, $categoriesSeparator);
         $this->assertArrayHasKey(self::CHILD_CATEGORY_ID, array_flip($categoryIds));
+    }
+
+    /**
+     * Tests case when newly created category save throws exception.
+     */
+    public function testCreateCategoryException()
+    {
+        $method = new \ReflectionMethod(CategoryProcessor::class, 'createCategory');
+        $method->setAccessible(true);
+        $method->invoke($this->categoryProcessor, self::CHILD_CATEGORY_NAME, self::PARENT_CATEGORY_ID);
+        $this->assertNotEmpty($this->categoryProcessor->getFailedCategories());
     }
 
     public function testClearFailedCategories()

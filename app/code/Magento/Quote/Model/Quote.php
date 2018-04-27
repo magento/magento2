@@ -1046,7 +1046,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function updateCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
         $quoteCustomer = $this->getCustomer();
-        $this->dataObjectHelper->mergeDataObjects(get_class($quoteCustomer), $quoteCustomer, $customer);
+        $this->dataObjectHelper->mergeDataObjects(CustomerInterface::class, $quoteCustomer, $customer);
         $this->setCustomer($quoteCustomer);
         return $this;
     }
@@ -1620,6 +1620,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $item = $this->getItemByProduct($candidate);
             if (!$item) {
                 $item = $this->itemProcessor->init($candidate, $request);
+                $item->setQuote($this);
+                $item->setOptions($candidate->getCustomOptions());
+                $item->setProduct($candidate);
                 // Add only item that is not in quote already
                 $this->addItem($item);
             }
@@ -2374,8 +2377,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected function _afterLoad()
     {
         // collect totals and save me, if required
-        if (1 == $this->getData('trigger_recollect')) {
-            $this->collectTotals()->save();
+        if (1 == $this->getTriggerRecollect()) {
+            $this->collectTotals()
+                ->setTriggerRecollect(0)
+                ->save();
         }
         return parent::_afterLoad();
     }

@@ -115,7 +115,9 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
 
     public function testReindexWithNotNullArgumentExecutesReindexEntities()
     {
-        $ids = [1, 2, 3];
+        $childIds = [1, 2, 3];
+        $parentIds = [4];
+        $reindexIds = array_merge($childIds, $parentIds);
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->getMockForAbstractClass();
 
@@ -127,21 +129,21 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $eavSource->expects($this->once())->method('getRelationsByChild')->with($ids)->willReturn([]);
-        $eavSource->expects($this->once())->method('getRelationsByParent')->with($ids)->willReturn([]);
+        $eavSource->expects($this->once())->method('getRelationsByChild')->with($childIds)->willReturn($childIds);
+        $eavSource->expects($this->once())->method('getRelationsByParent')->with($childIds)->willReturn($parentIds);
 
-        $eavDecimal->expects($this->once())->method('getRelationsByChild')->with($ids)->willReturn([]);
-        $eavDecimal->expects($this->once())->method('getRelationsByParent')->with($ids)->willReturn([]);
+        $eavDecimal->expects($this->once())->method('getRelationsByChild')->with($reindexIds)->willReturn($reindexIds);
+        $eavDecimal->expects($this->once())->method('getRelationsByParent')->with($reindexIds)->willReturn([]);
 
         $eavSource->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->once())
             ->method('reindexEntities')
-            ->with($ids);
+            ->with($reindexIds);
 
         $eavSource->expects($this->once())
             ->method('reindexEntities')
-            ->with($ids);
+            ->with($reindexIds);
 
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
@@ -151,6 +153,6 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($eavDecimal));
 
-        $this->_model->reindex($ids);
+        $this->_model->reindex($childIds);
     }
 }

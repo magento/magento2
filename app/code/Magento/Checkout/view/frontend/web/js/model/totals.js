@@ -8,15 +8,26 @@
  */
 define([
     'ko',
-    'Magento_Checkout/js/model/quote'
-], function (ko, quote) {
+    'Magento_Checkout/js/model/quote',
+    'Magento_Customer/js/customer-data'
+], function (ko, quote, customerData) {
     'use strict';
 
-    var quoteItems = ko.observable(quote.totals().items);
+    var quoteItems = ko.observable(quote.totals().items),
+        cartData = customerData.get('cart');
 
     quote.totals.subscribe(function (newValue) {
         quoteItems(newValue.items);
     });
+
+    cartData.subscribe(function () {
+        var quoteSubtotal = parseFloat(quote.totals().subtotal),
+            subtotalAmount = parseFloat(cartData().subtotalAmount);
+
+        if (quoteSubtotal !== subtotalAmount) {
+            customerData.reload(['cart'], false);
+        }
+    }, this);
 
     return {
         totals: quote.totals,

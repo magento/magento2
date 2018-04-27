@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Variable\Model\ResourceModel;
 
 /**
@@ -86,7 +84,10 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'plain_value' => $object->getPlainValue(),
                 'html_value' => $object->getHtmlValue(),
             ];
-            $data = $this->_prepareDataForTable(new \Magento\Framework\DataObject($data), $this->getTable('variable_value'));
+            $data = $this->_prepareDataForTable(
+                new \Magento\Framework\DataObject($data),
+                $this->getTable('variable_value')
+            );
             $this->getConnection()->insertOnDuplicate(
                 $this->getTable('variable_value'),
                 $data,
@@ -123,7 +124,11 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID
     ) {
         $connection = $this->getConnection();
-        $ifNullPlainValue = $connection->getCheckSql('store.plain_value IS NULL', 'def.plain_value', 'store.plain_value');
+        $ifNullPlainValue = $connection->getCheckSql(
+            'store.plain_value IS NULL',
+            'def.plain_value',
+            'store.plain_value'
+        );
         $ifNullHtmlValue = $connection->getCheckSql('store.html_value IS NULL', 'def.html_value', 'store.html_value');
 
         $select->joinLeft(

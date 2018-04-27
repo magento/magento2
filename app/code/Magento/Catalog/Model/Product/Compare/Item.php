@@ -220,7 +220,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     }
 
     /**
-     * Retrieve Customer Id if loggined
+     * Retrieve Customer Id if logged in
      *
      * @return int
      */

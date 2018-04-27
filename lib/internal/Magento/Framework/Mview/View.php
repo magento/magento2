@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview;
 
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
@@ -20,6 +18,11 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Default batch size for partial reindex
      */
     const DEFAULT_BATCH_SIZE = 1000;
+
+    /**
+     * Max versions to load from database at a time
+     */
+    private static $maxVersionQueryBatch = 100000;
 
     /**
      * @var string
@@ -272,14 +275,20 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
             try {
                 $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
 
+                $versionBatchSize = self::$maxVersionQueryBatch;
                 $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
                     ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
                     : self::DEFAULT_BATCH_SIZE;
 
-                for ($versionFrom = $lastVersionId; $versionFrom < $currentVersionId; $versionFrom += $batchSize) {
-                    $ids = $this->getChangelog()->getList($versionFrom, $versionFrom + $batchSize);
+                for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
+                    // Don't go past the current version for atomicy.
+                    $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
+                    $ids = $this->getChangelog()->getList($vsFrom, $versionTo);
 
-                    if (!empty($ids)) {
+                    // We run the actual indexer in batches.
+                    // Chunked AFTER loading to avoid duplicates in separate chunks.
+                    $chunks = array_chunk($ids, $batchSize);
+                    foreach ($chunks as $ids) {
                         $action->execute($ids);
                     }
                 }

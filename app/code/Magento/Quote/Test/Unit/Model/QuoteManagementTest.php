@@ -9,6 +9,7 @@ namespace Magento\Quote\Test\Unit\Model;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 use Magento\Quote\Model\CustomerManagement;
+use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -132,6 +133,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     private $addressRepositoryMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteFactoryMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -240,11 +246,15 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $quoteId = 2311;
 
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-
-        $quoteAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $quoteAddress = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['setCollectShippingRates']
+        );
+        $quoteAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
 
         $quoteMock->expects($this->any())->method('setBillingAddress')->with($quoteAddress)->willReturnSelf();
         $quoteMock->expects($this->any())->method('setShippingAddress')->with($quoteAddress)->willReturnSelf();
+        $quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($quoteAddress);
 
         $this->quoteAddressFactory->expects($this->any())->method('create')->willReturn($quoteAddress);
 
@@ -310,7 +320,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart belongs to different store
+     * @expectedExceptionMessage The customer can't be assigned to the cart. The cart belongs to a different store.
      */
     public function testAssignCustomerFromAnotherStore()
     {
@@ -354,7 +364,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart is not anonymous.
+     * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
      */
     public function testAssignCustomerToNonanonymousCart()
     {
@@ -403,7 +413,6 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot assign customer to the given cart. Customer already has active cart.
      */
     public function testAssignCustomerNoSuchCustomer()
     {
@@ -453,6 +462,10 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->with($customerId);
 
         $this->model->assignCustomer($cartId, $customerId, $storeId);
+
+        $this->expectExceptionMessage(
+            "The customer can't be assigned to the cart because the customer already has an active cart."
+        );
     }
 
     public function testAssignCustomer()
@@ -530,12 +543,12 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $shippingAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $payment = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
         $baseOrder = $this->createMock(\Magento\Sales\Api\Data\OrderInterface::class);
-        $convertedBillingAddress = $this->createMock(\Magento\Sales\Api\Data\OrderAddressInterface::class);
-        $convertedShippingAddress = $this->createMock(\Magento\Sales\Api\Data\OrderAddressInterface::class);
+        $convertedBilling = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
+        $convertedShipping = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
         $convertedPayment = $this->createMock(\Magento\Sales\Api\Data\OrderPaymentInterface::class);
         $convertedQuoteItem = $this->createMock(\Magento\Sales\Api\Data\OrderItemInterface::class);
 
-        $addresses = [$convertedShippingAddress, $convertedBillingAddress];
+        $addresses = [$convertedShipping, $convertedBilling];
         $quoteItems = [$quoteItem];
         $convertedItems = [$convertedQuoteItem];
 
@@ -564,7 +577,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                     'email' => 'customer@example.com'
                 ]
             )
-            ->willReturn($convertedShippingAddress);
+            ->willReturn($convertedShipping);
         $this->quoteAddressToOrderAddress->expects($this->at(1))
             ->method('convert')
             ->with(
@@ -574,22 +587,26 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                     'email' => 'customer@example.com'
                 ]
             )
-            ->willReturn($convertedBillingAddress);
+            ->willReturn($convertedBilling);
+        $billingAddress->expects($this->once())->method('getId')->willReturn(4);
+        $convertedBilling->expects($this->once())->method('setData')->with('quote_address_id', 4);
+
         $this->quoteItemToOrderItem->expects($this->once())->method('convert')
             ->with($quoteItem, ['parent_item' => null])
             ->willReturn($convertedQuoteItem);
         $this->quotePaymentToOrderPayment->expects($this->once())->method('convert')->with($payment)
             ->willReturn($convertedPayment);
         $shippingAddress->expects($this->once())->method('getShippingMethod')->willReturn('free');
-
+        $shippingAddress->expects($this->once())->method('getId')->willReturn(5);
+        $convertedShipping->expects($this->once())->method('setData')->with('quote_address_id', 5);
         $order = $this->prepareOrderFactory(
             $baseOrder,
-            $convertedBillingAddress,
+            $convertedBilling,
             $addresses,
             $convertedPayment,
             $convertedItems,
             $quoteId,
-            $convertedShippingAddress
+            $convertedShipping
         );
 
         $this->orderManagement->expects($this->once())
@@ -857,22 +874,22 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param \Magento\Sales\Api\Data\OrderInterface $baseOrder
-     * @param \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress
+     * @param OrderAddressInterface $billingAddress
      * @param array $addresses
      * @param $payment
      * @param array $items
      * @param $quoteId
-     * @param \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress
+     * @param OrderAddressInterface $shippingAddress
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function prepareOrderFactory(
         \Magento\Sales\Api\Data\OrderInterface $baseOrder,
-        \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress,
+        OrderAddressInterface $billingAddress,
         array $addresses,
         $payment,
         array $items,
         $quoteId,
-        \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null,
+        OrderAddressInterface $shippingAddress = null,
         $customerId = null
     ) {
         $order = $this->createPartialMock(
@@ -963,9 +980,6 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         return $object;
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
     public function testSubmitForCustomer()
     {
         $orderData = [];
@@ -978,16 +992,12 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $shippingAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $payment = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
         $baseOrder = $this->createMock(\Magento\Sales\Api\Data\OrderInterface::class);
-        $convertedBillingAddress = $this->createMock(
-            \Magento\Sales\Api\Data\OrderAddressInterface::class
-        );
-        $convertedShippingAddress = $this->createMock(
-            \Magento\Sales\Api\Data\OrderAddressInterface::class
-        );
+        $convertedBilling = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
+        $convertedShipping = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
         $convertedPayment = $this->createMock(\Magento\Sales\Api\Data\OrderPaymentInterface::class);
         $convertedQuoteItem = $this->createMock(\Magento\Sales\Api\Data\OrderItemInterface::class);
 
-        $addresses = [$convertedShippingAddress, $convertedBillingAddress];
+        $addresses = [$convertedShipping, $convertedBilling];
         $quoteItems = [$quoteItem];
         $convertedItems = [$convertedQuoteItem];
 
@@ -1016,7 +1026,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                     'email' => 'customer@example.com'
                 ]
             )
-            ->willReturn($convertedShippingAddress);
+            ->willReturn($convertedShipping);
         $this->quoteAddressToOrderAddress->expects($this->at(1))
             ->method('convert')
             ->with(
@@ -1026,22 +1036,23 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                     'email' => 'customer@example.com'
                 ]
             )
-            ->willReturn($convertedBillingAddress);
+            ->willReturn($convertedBilling);
         $this->quoteItemToOrderItem->expects($this->once())->method('convert')
             ->with($quoteItem, ['parent_item' => null])
             ->willReturn($convertedQuoteItem);
         $this->quotePaymentToOrderPayment->expects($this->once())->method('convert')->with($payment)
             ->willReturn($convertedPayment);
         $shippingAddress->expects($this->once())->method('getShippingMethod')->willReturn('free');
-
+        $shippingAddress->expects($this->once())->method('getId')->willReturn(5);
+        $convertedShipping->expects($this->once())->method('setData')->with('quote_address_id', 5);
         $order = $this->prepareOrderFactory(
             $baseOrder,
-            $convertedBillingAddress,
+            $convertedBilling,
             $addresses,
             $convertedPayment,
             $convertedItems,
             $quoteId,
-            $convertedShippingAddress
+            $convertedShipping
         );
         $customerAddressMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->getMockForAbstractClass();
@@ -1050,6 +1061,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $quote->expects($this->any())->method('addCustomerAddress')->with($customerAddressMock);
         $billingAddress->expects($this->once())->method('getCustomerId')->willReturn(2);
         $billingAddress->expects($this->once())->method('getSaveInAddressBook')->willReturn(false);
+        $billingAddress->expects($this->once())->method('getId')->willReturn(4);
+        $convertedBilling->expects($this->once())->method('setData')->with('quote_address_id', 4);
         $this->orderManagement->expects($this->once())
             ->method('place')
             ->with($order)
@@ -1062,5 +1075,26 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->with('sales_model_service_quote_submit_success', ['order' => $order, 'quote' => $quote]);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
+    }
+
+    /**
+     * Get mock for abstract class with methods.
+     *
+     * @param string $className
+     * @param array $methods
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createPartialMockForAbstractClass($className, $methods = [])
+    {
+        return $this->getMockForAbstractClass(
+            $className,
+            [],
+            '',
+            true,
+            true,
+            true,
+            $methods
+        );
     }
 }

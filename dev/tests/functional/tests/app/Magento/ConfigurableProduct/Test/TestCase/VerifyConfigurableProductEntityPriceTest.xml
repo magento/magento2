@@ -32,7 +32,6 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>
         <variation name="VerifyConfigurableProductEntityPriceTestVariation3" summary="Disable all child products" ticketId="MAGETWO-60236">
-            <data name="issue" xsi:type="string">MAGETWO-66699: Configurable product when all child products are disabled</data>
             <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
             <data name="productUpdate/childProductUpdate" xsi:type="array">
                 <item name="data" xsi:type="array">

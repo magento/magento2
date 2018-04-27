@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model\Report;
 
 use DateTime;
@@ -311,15 +309,10 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      */
     public static function createConnection(array $config)
     {
-        if (!isset(
-                $config['hostname']
-            ) || !isset(
-                $config['username']
-            ) || !isset(
-                $config['password']
-            ) || !isset(
-                $config['path']
-            )
+        if (!isset($config['hostname'])
+            || !isset($config['username'])
+            || !isset($config['password'])
+            || !isset($config['path'])
         ) {
             throw new \InvalidArgumentException('Required config elements: hostname, username, password, path');
         }
@@ -376,7 +369,8 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                     // Section columns.
                     // In case ever the column order is changed, we will have the items recorded properly
                     // anyway. We have named, not numbered columns.
-                    for ($i = 1; $i < count($line); $i++) {
+                    $count = count($line);
+                    for ($i = 1; $i < $count; $i++) {
                         $sectionColumns[$line[$i]] = $i;
                     }
                     $flippedSectionColumns = array_flip($sectionColumns);
@@ -416,7 +410,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     {
         $bodyItem = [];
         for ($i = 1, $count = count($line); $i < $count; $i++) {
-            if(isset($rowMap[$sectionColumns[$i]])) {
+            if (isset($rowMap[$sectionColumns[$i]])) {
                 if (in_array($rowMap[$sectionColumns[$i]], $this->dateTimeColumns)) {
                     $line[$i] = $this->formatDateTimeColumns($line[$i]);
                 }

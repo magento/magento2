@@ -157,7 +157,6 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
      */
     public function testFileWasNotUploaded()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $data = false;
 
         $this->requestMock->expects($this->once())

@@ -34,7 +34,7 @@ define([
                         paypalExpressCheckout.checkout.closeFlow();
                     }
 
-                    $.get(this.path, {
+                    $.getJSON(this.path, {
                         button: 1
                     }).done(function (response) {
                         var message = response && response.message;

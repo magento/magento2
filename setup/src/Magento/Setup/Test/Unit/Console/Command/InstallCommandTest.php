@@ -6,7 +6,11 @@
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Setup\Console\Command\InstallCommand;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
@@ -37,6 +41,26 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Installer
      */
     private $installer;
+
+    /**
+     * @var Application|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $applicationMock;
+
+    /**
+     * @var HelperSet|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $helperSetMock;
+
+    /**
+     * @var InputDefinition|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $definitionMock;
+
+    /**
+     * @var ConfigImportCommand|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configImportMock;
 
     public function setUp()
     {
@@ -88,11 +112,41 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->installer = $this->createMock(\Magento\Setup\Model\Installer::class);
+        $this->applicationMock = $this->getMockBuilder(Application::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->helperSetMock = $this->getMockBuilder(HelperSet::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->definitionMock = $this->getMockBuilder(InputDefinition::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->configImportMock = $this->getMockBuilder(ConfigImportCommand::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->applicationMock->expects($this->any())
+            ->method('getHelperSet')
+            ->willReturn($this->helperSetMock);
+        $this->applicationMock->expects($this->any())
+            ->method('getDefinition')
+            ->willReturn($this->definitionMock);
+        $this->definitionMock->expects($this->any())
+            ->method('getOptions')
+            ->willReturn([]);
+        $this->applicationMock->expects($this->any())
+            ->method('find')
+            ->with(ConfigImportCommand::COMMAND_NAME)
+            ->willReturn($this->configImportMock);
+
         $this->command = new InstallCommand(
             $this->installerFactory,
             $configModel,
             $userConfig,
             $adminUser
+        );
+        $this->command->setApplication(
+            $this->applicationMock
         );
     }
 
@@ -102,6 +156,8 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->installer));
         $this->installer->expects($this->once())->method('install');
+        $this->configImportMock->expects($this->once())
+            ->method('run');
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($this->input);
@@ -134,6 +190,7 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getName')
             ->will($this->returnValue(BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME));
+
         return [$option1, $option2, $option3, $option4];
     }
 
@@ -164,6 +221,7 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getName')
             ->will($this->returnValue(StoreConfigurationDataMapper::KEY_CURRENCY));
+
         return [$option1, $option2, $option3, $option4];
     }
 
@@ -199,6 +257,7 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getName')
             ->will($this->returnValue(AdminAccount::KEY_LAST_NAME));
+
         return [$option1, $option2, $option3, $option4, $option5];
     }
 
@@ -246,8 +305,8 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'without option' => ['', ''],
-            'normal case'    => ['abcde', ''],
-            '20 chars'       => ['12345678901234567890', '']
+            'normal case' => ['abcde', ''],
+            '20 chars' => ['12345678901234567890', ''],
         ];
     }
 
@@ -258,7 +317,7 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['123456789012345678901', 'InvalidArgumentException'],
-            ['abcdefghijk12345678fdgsdfgsdfgsdfsgsdfg90abcdefgdfddgsdfg', 'InvalidArgumentException']
+            ['abcdefghijk12345678fdgsdfgsdfgsdfsgsdfg90abcdefgdfddgsdfg', 'InvalidArgumentException'],
         ];
     }
 }

@@ -115,7 +115,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     {
         $uploader = $this->_prepareUploader();
 
-        $uploader->expects($this->once())->method('save')->will($this->returnValue(['not_empty']));
+        $uploader->expects($this->once())->method('save')->will($this->returnValue(['not_empty', 'path' => 'absPath']));
 
         $this->_helperStorage->expects(
             $this->any()
@@ -165,9 +165,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testUploadInvalidFile()
     {
-        $uplaoder = $this->_prepareUploader();
+        $uploader = $this->_prepareUploader();
 
-        $uplaoder->expects($this->once())->method('save')->will($this->returnValue(null));
+        $uploader->expects($this->once())->method('save')->will($this->returnValue(null));
 
         $this->_storageModel->uploadFile($this->_storageRoot);
     }

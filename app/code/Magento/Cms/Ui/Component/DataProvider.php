@@ -57,7 +57,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * @deprecated 101.1.0
+     * @deprecated 101.0.7
      * @return AuthorizationInterface|mixed
      */
     private function getAuthorizationInstance()

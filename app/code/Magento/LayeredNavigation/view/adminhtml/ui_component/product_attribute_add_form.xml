@@ -48,6 +48,9 @@
                 <notice translate="true">Can be used only with catalog input type Dropdown, Multiple Select and Price.</notice>
                 <label translate="true">Use in Search Results Layered Navigation</label>
                 <dataScope>is_filterable_in_search</dataScope>
+                <imports>
+                    <link name="visible">${ $.parentName}:visible</link>
+                </imports>
             </settings>
             <formElements>
                 <checkbox>
