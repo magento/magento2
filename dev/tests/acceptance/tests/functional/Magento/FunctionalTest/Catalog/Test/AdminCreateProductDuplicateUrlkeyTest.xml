@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminCreateSimpleProductDuplicateUrlkeyTest">
+    <test name="AdminCreateProductDuplicateUrlkeyTest">
         <annotations>
             <features value="Product Creation Negative"/>
             <stories value="Error when try to save project with duplicate URL key"/>

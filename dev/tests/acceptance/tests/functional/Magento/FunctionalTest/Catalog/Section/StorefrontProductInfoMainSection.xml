@@ -13,6 +13,8 @@
         <element name="productName" type="text" selector=".base"/>
         <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
         <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
+        <element name="specialPrice" type="text" selector=".special-price"/>
+        <element name="oldPrice" type="text" selector=".old-price"/>
         <element name="productStockStatus" type="text" selector=".stock[title=Availability]>span"/>
         <element name="productImage" type="text" selector="//*[@id='maincontent']//div[@class='gallery-placeholder']//img[@class='fotorama__img']"/>
         <element name="productDescription" type="text" selector="#description .value"/>
