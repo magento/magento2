@@ -6,6 +6,11 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminStoresGridControlsSection">
+        <element name="createStoreView" type="button" selector="#add_store"/>
+        <element name="createStore" type="button" selector="#add_group"/>
+        <element name="createWebsite" type="button" selector="#add"/>
+    </section>
     <section name="AdminStoresGridSection">
         <element name="storeGrpFilterTextField" type="input" selector="#storeGrid_filter_group_title"/>
         <element name="websiteFilterTextField" type="input" selector="#storeGrid_filter_website_title"/>
@@ -15,6 +20,6 @@
         <element name="websiteNameInFirstRow" type="text" selector=".col-website_title>a"/>
         <element name="storeGrpNameInFirstRow" type="text" selector=".col-group_title>a"/>
         <element name="storeNameInFirstRow" type="text" selector=".col-store_title>a"/>
-
-    </section>
+        <element name="firstRow" type="textarea" selector="(//*[@id='storeGrid_table']/tbody/tr)[1]"/>
+     </section>
 </sections>
