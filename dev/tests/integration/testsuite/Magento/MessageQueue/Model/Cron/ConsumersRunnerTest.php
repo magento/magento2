@@ -104,7 +104,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
                 $command = str_replace('bin/magento', 'dev/tests/integration/bin/magento', $command);
                 $command = $params . ' ' . $command;
 
-                return exec("{$command} > /dev/null &");
+                return exec("{$command} >/dev/null 2>&1 &");
             });
     }
 
