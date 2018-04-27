@@ -1095,8 +1095,20 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     public function isCacheable()
     {
         $this->build();
-        $cacheableXml = !(bool)count($this->getXml()->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]'));
-        return $this->cacheable && $cacheableXml;
+
+        $elements = $this->getXml()->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]');
+        foreach ($elements as $element) {
+            $attributes = $element->attributes();
+            if (empty($attributes['name'])) {
+                return false;
+            }
+            $elementId = (string) $attributes['name'];
+            if ($this->structure->hasElement($elementId)) {
+                return false;
+            }
+        }
+
+        return $this->cacheable;
     }
 
     /**

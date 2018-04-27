@@ -706,11 +706,15 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $xmlString
+     * @param bool $nonCacheableElement
      * @param bool $result
      * @dataProvider isCacheableDataProvider
      */
-    public function testIsCacheable($xmlString, $result)
+    public function testIsCacheable($xmlString, $nonCacheableElement, $result)
     {
+        $this->structureMock->method('hasElement')
+            ->with($this->equalTo('non_cacheable_block'))
+            ->willReturn($nonCacheableElement);
         $xml = simplexml_load_string($xmlString, \Magento\Framework\View\Layout\Element::class);
         $this->assertSame($this->model, $this->model->setXml($xml));
         $this->assertSame($result, $this->model->isCacheable());
@@ -725,11 +729,45 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             [
                 '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                 . '<block></block></layout>',
+                false,
                 true,
             ],
             [
                 '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                 . '<block cacheable="false"></block></layout>',
+                false,
+                false
+            ],
+            [
+                '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                . '<referenceBlock name="not_existing_block">'
+                . '<block name="non_cacheable_block" cacheable="false"></block>'
+                . '</referenceBlock></layout>',
+                false,
+                true
+            ],
+            [
+                '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                . '<referenceContainer name="not_existing_container">'
+                . '<block name="non_cacheable_block" cacheable="false"></block>'
+                . '</referenceContainer></layout>',
+                false,
+                true
+            ],
+            [
+                '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                . '<referenceBlock name="existing_block">'
+                . '<block name="non_cacheable_block" cacheable="false"></block>'
+                . '</referenceBlock></layout>',
+                true,
+                false
+            ],
+            [
+                '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                . '<referenceContainer name="existing_container">'
+                . '<block name="non_cacheable_block" cacheable="false"></block>'
+                . '</referenceContainer></layout>',
+                true,
                 false
             ],
         ];
