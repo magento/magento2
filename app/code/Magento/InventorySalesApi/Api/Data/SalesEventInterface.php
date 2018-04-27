@@ -20,6 +20,7 @@ interface SalesEventInterface
     const EVENT_ORDER_PLACED = 'order_placed';
     const EVENT_ORDER_CANCELED = 'order_canceled';
     const EVENT_SHIPMENT_CREATED = 'shipment_created';
+    const EVENT_CREDITMEMO_CREATED = 'creditmemo_created';
     /**#@-*/
 
     /**#@+
