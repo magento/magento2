@@ -29,6 +29,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @param int $categoryId
      * @param bool $expectedResult
      * @dataProvider validateProductConditionDataProvider
+     * @magentoDbIsolation disabled
      */
     public function testValidateCategorySalesRuleIncludesChildren($categoryId, $expectedResult)
     {

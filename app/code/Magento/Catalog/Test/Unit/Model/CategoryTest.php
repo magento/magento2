@@ -468,7 +468,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->category->setData($customAttributeCode, $newCustomAttributeValue);
+        $this->category->setCustomAttribute($customAttributeCode, $newCustomAttributeValue);
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
         $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
