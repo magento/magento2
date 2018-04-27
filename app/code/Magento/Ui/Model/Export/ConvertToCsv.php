@@ -8,7 +8,6 @@ namespace Magento\Ui\Model\Export;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Ui\Component\MassAction\Filter;
 
 /**
@@ -17,7 +16,7 @@ use Magento\Ui\Component\MassAction\Filter;
 class ConvertToCsv
 {
     /**
-     * @var WriteInterface
+     * @var DirectoryList
      */
     protected $directory;
 
