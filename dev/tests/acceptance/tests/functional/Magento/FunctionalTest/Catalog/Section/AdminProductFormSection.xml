@@ -12,6 +12,7 @@
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
         <element name="productWeight" type="input" selector=".admin__field[data-index=weight] input"/>
+        <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
         <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']"/>
@@ -103,6 +104,8 @@
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
         <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
         <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
+        <element name="WysiwygArrow" type="button" selector="#d3lzaXd5Zw-- > .jstree-icon" />
+        <element name="checkIfWysiwygArrowExpand" type="button" selector="//li[@id='d3lzaXd5Zw--' and contains(@class,'jstree-closed')]" />
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
     </section>
     <section name="ProductShortDescriptionWYSIWYGToolbarSection">
@@ -140,5 +143,9 @@
         <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
         <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
+    </section>
+    <section name="AdminProductFormAdvancedPricingSection">
+        <element name="specialPrice" type="input" selector="input[name='product[special_price]']"/>
+        <element name="doneButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-primary"/>
     </section>
 </sections>
