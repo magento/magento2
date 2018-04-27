@@ -27,11 +27,11 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
         <click selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}" stepKey="clickCreateCustomer"/>
-        <waitForElement selector="{{AdminNewCustomerAccountInformationSection.firstName}}" stepKey="wait1"/>
-        <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminNewCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
-        <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminNewCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
-        <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminNewCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
-        <click selector="{{AdminNewCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
+        <waitForElement selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="wait1"/>
+        <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
+        <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
+        <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <waitForElementNotVisible selector="div [data-role='spinner']" time="10" stepKey="waitForSpinner1"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilter"/>
