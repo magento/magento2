@@ -8,7 +8,8 @@ namespace Magento\Rss\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\Serialize\SerializerInterface;
-use Zend\Feed\Writer\FeedFactory;
+use Magento\Framework\App\FeedInterface;
+use Magento\Framework\App\FeedFactoryInterface;
 
 /**
  * Provides functionality to work with RSS feeds
@@ -29,6 +30,11 @@ class Rss
     protected $cache;
 
     /**
+     * @var \Magento\Framework\App\FeedFactoryInterface
+     */
+    private $feedFactory;
+
+    /**
      * @var SerializerInterface
      */
     private $serializer;
@@ -38,13 +44,16 @@ class Rss
      *
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param SerializerInterface|null $serializer
+     * @param FeedFactoryInterface|null $feedFactory
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        FeedFactoryInterface $feedFactory = null
     ) {
         $this->cache = $cache;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->feedFactory = $feedFactory ?: ObjectManager::getInstance()->get(FeedFactoryInterface::class);
     }
 
     /**
@@ -93,7 +102,11 @@ class Rss
      */
     public function createRssXml()
     {
-        $feed = FeedFactory::factory($this->getFeeds());
-        return $feed->export('rss');
+        $feed = $this->feedFactory->create(
+            $this->getFeeds(),
+            FeedFactoryInterface::FORMAT_RSS
+        );
+
+        return $feed->getFormattedContent();
     }
 }
