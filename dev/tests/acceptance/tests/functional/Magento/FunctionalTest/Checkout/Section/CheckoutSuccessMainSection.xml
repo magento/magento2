@@ -13,5 +13,6 @@
         <element name="orderNumber" type="text" selector="div.checkout-success > p:nth-child(1) > span"/>
         <element name="orderNumberLink" type="text" selector=".order-number"/>
         <element name="orderNumber22" type="text" selector=".order-number>strong"/>
+        <element name="orderLink" type="text" selector="a[href*=order_id].order-number"/>
     </section>
 </sections>
