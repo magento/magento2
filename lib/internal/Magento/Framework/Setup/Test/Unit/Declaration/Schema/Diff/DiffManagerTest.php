@@ -146,7 +146,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff->expects(self::exactly(2))
             ->method('register')
             ->withConsecutive(
-                [$reference, 'drop_reference', $reference, 'ref_table'],
+                [$reference, 'drop_reference', $reference],
                 [$table, 'drop_table', $table]
             );
         $this->model->registerRemoval($diff, [$reference, $table]);
