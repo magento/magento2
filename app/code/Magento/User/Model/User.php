@@ -48,6 +48,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /** @deprecated */
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
 
+    const MESSAGE_ID_PASSWORD_EXPIRED = 'magento_user_password_expired';
+
     /**
      * Model event prefix
      *
