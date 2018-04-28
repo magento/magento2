@@ -23,6 +23,7 @@
     <preference for="Magento\Framework\Api\Search\ReportingInterface" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting"/>
     <preference for="Magento\Ui\Config\ConverterInterface" type="Magento\Ui\Config\Converter\Composite"/>
     <preference for="Magento\Ui\Config\Argument\ParserInterface" type="Magento\Ui\Config\Argument\Parser\Composite"/>
+    <preference for="Magento\Ui\DataProvider\Modifier\PoolInterface" type="Magento\Ui\DataProvider\Modifier\Pool"/>
     <type name="Magento\Ui\TemplateEngine\Xhtml\Result" shared="false"/>
     <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false" />
     <type name="Magento\Framework\View\TemplateEngineFactory">
@@ -415,6 +416,7 @@
                 <item name="additionalClasses" xsi:type="object">Magento\Ui\Config\Converter\AdditionalClasses</item>
                 <item name="options" xsi:type="object">Magento\Ui\Config\Converter\Options</item>
                 <item name="actions" xsi:type="object">Magento\Ui\Config\Converter\Actions\Proxy</item>
+                <item name="urlTypes" xsi:type="object">Magento\Ui\Config\Converter\Actions\Proxy</item>
             </argument>
             <argument name="discriminator" xsi:type="string">type</argument>
         </arguments>

@@ -104,9 +104,8 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
 
         $returnType = $method->getReturnType();
         $returnTypeValue = $returnType
-            ? ($returnType->allowsNull() ? '?' : '') . $returnType->getName()
+            ? ($returnType->allowsNull() ? '?' : '') .$returnType->getName()
             : null;
-
         $methodInfo = [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,

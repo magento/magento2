@@ -8,6 +8,7 @@ namespace Magento\Rss\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Zend\Feed\Writer\FeedFactory;
 
 /**
  * Provides functionality to work with RSS feeds
@@ -92,7 +93,7 @@ class Rss
      */
     public function createRssXml()
     {
-        $rssFeedFromArray = \Zend_Feed::importArray($this->getFeeds(), 'rss');
-        return $rssFeedFromArray->saveXML();
+        $feed = FeedFactory::factory($this->getFeeds());
+        return $feed->export('rss');
     }
 }

@@ -11,6 +11,7 @@ namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Importing configurable products
@@ -32,6 +33,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     const ERROR_DUPLICATED_VARIATIONS = 'duplicatedVariations';
 
+    const ERROR_UNIDENTIFIABLE_VARIATION = 'unidentifiableVariation';
+
     /**
      * Validation failure message template definitions
      *
@@ -42,6 +45,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         self::ERROR_INVALID_OPTION_VALUE => 'Invalid option value for attribute "%s"',
         self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
         self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
+        self::ERROR_UNIDENTIFIABLE_VARIATION => 'Configurable variation "%s" is unidentifiable',
     ];
 
     /**
@@ -247,9 +251,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         if (isset($this->_productSuperAttrs["{$productId}_{$attributeId}"])) {
             return $this->_productSuperAttrs["{$productId}_{$attributeId}"];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -470,14 +473,22 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      *
      * @return array
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _parseVariations($rowData)
     {
         $additionalRows = [];
-        if (!isset($rowData['configurable_variations'])) {
+        if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
+        } elseif (!empty($rowData['store_view_code'])) {
+            throw new LocalizedException(
+                __(
+                    'Product with assigned super attributes should not have specified "%1" value',
+                    'store_view_code'
+                )
+            );
         }
         $variations = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variations']);
         foreach ($variations as $variation) {
@@ -489,7 +500,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
                 if (!empty($nameAndValue)) {
                     $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
-                    $fieldName  = trim($nameAndValue[0]);
+                    // Ignoring field names' case.
+                    $fieldName  = strtolower(trim($nameAndValue[0]));
                     if ($fieldName) {
                         $fieldAndValuePairs[$fieldName] = $value;
                     }
@@ -510,8 +522,18 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $additionalRow = [];
                     $position += 1;
                 }
+            } else {
+                throw new LocalizedException(
+                    __(
+                        sprintf(
+                            $this->_messageTemplates[self::ERROR_UNIDENTIFIABLE_VARIATION],
+                            $variation
+                        )
+                    )
+                );
             }
         }
+
         return $additionalRows;
     }
 
@@ -822,7 +844,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
         $error = false;
-        $dataWithExtraVirtualRows = $this->_parseVariations($rowData);
+        try {
+            $dataWithExtraVirtualRows = $this->_parseVariations($rowData);
+        } catch (LocalizedException $exception) {
+            $this->_entityModel->addRowError($exception->getMessage(), $rowNum);
+
+            return false;
+        }
+
         $skus = [];
         $rowData['price'] = isset($rowData['price']) && $rowData['price'] ? $rowData['price'] : '0.00';
         if (!empty($dataWithExtraVirtualRows)) {
@@ -846,6 +875,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
             $error |= !parent::isRowValid($option, $rowNum, $isNewProduct);
         }
+
         return !$error;
     }
 

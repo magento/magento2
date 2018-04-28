@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\Form;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -76,10 +77,10 @@ class Element extends \Magento\Framework\Model\AbstractModel
     public function beforeSave()
     {
         if (!$this->getTypeId()) {
-            throw new LocalizedException(__('Invalid form type.'));
+            throw new LocalizedException(__('The form type is invalid. Reset the type and try again.'));
         }
         if (!$this->getAttributeId()) {
-            throw new LocalizedException(__('Invalid EAV attribute'));
+            throw new LocalizedException(__('The EAV attribute is invalid. Verify the attribute and try again.'));
         }
 
         return parent::beforeSave();

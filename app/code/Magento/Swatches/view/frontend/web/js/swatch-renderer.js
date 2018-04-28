@@ -90,7 +90,7 @@ define([
                 $title,
                 $corner;
 
-            if (!$element.size()) {
+            if (!$element.length) {
                 $element = $('<div class="' +
                     $widget.options.tooltipClass +
                     '"><div class="image"></div><div class="title"></div><div class="corner"></div></div>'
@@ -268,8 +268,11 @@ define([
             // tier prise selectors start
             tierPriceTemplateSelector: '#tier-prices-template',
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
-            tierPriceTemplate: ''
+            tierPriceTemplate: '',
             // tier prise selectors end
+
+            // A price label selector
+            normalPriceLabelSelector: '.normal-price .price-label'
         },
 
         /**
@@ -312,7 +315,7 @@ define([
          */
         _sortAttributes: function () {
             this.options.jsonConfig.attributes = _.sortBy(this.options.jsonConfig.attributes, function (attribute) {
-                return attribute.position;
+                return parseInt(attribute.position, 10);
             });
         },
 
@@ -810,7 +813,7 @@ define([
             $widget._Rewind(controls);
 
             // done if nothing selected
-            if (selected.size() <= 0) {
+            if (selected.length <= 0) {
                 return;
             }
 
@@ -820,7 +823,7 @@ define([
                     id = $this.attr('attribute-id'),
                     products = $widget._CalcProducts(id);
 
-                if (selected.size() === 1 && selected.first().attr('attribute-id') === id) {
+                if (selected.length === 1 && selected.first().attr('attribute-id') === id) {
                     return;
                 }
 
@@ -924,6 +927,22 @@ define([
             } else {
                 $(this.options.tierPriceBlockSelector).hide();
             }
+
+            $(this.options.normalPriceLabelSelector).hide();
+
+            _.each($('.' + this.options.classes.attributeOptionsWrapper), function (attribute) {
+                if ($(attribute).find('.' + this.options.classes.optionClass + '.selected').length === 0) {
+                    if ($(attribute).find('.' + this.options.classes.selectClass).length > 0) {
+                        _.each($(attribute).find('.' + this.options.classes.selectClass), function (dropdown) {
+                            if ($(dropdown).val() === '0') {
+                                $(this.options.normalPriceLabelSelector).show();
+                            }
+                        }.bind(this));
+                    } else {
+                        $(this.options.normalPriceLabelSelector).show();
+                    }
+                }
+            }.bind(this));
         },
 
         /**
@@ -1016,7 +1035,7 @@ define([
         _EnableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').size() > 0) {
+            if ($('body.catalog-product-view').length > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .addClass($widget.options.classes.loader);
             } else {
@@ -1035,7 +1054,7 @@ define([
         _DisableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').size() > 0) {
+            if ($('body.catalog-product-view').length > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .removeClass($widget.options.classes.loader);
             } else {

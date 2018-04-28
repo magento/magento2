@@ -106,15 +106,15 @@
                     <comment>We'll use the default error above if you leave this empty.</comment>
                 </field>
             </group>
-            <group id="dashboard" translate="label,comment" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="dashboard" translate="label" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Dashboard</label>
-                <field id="use_aggregated_data" translate="label" sortOrder="10" type="select" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="use_aggregated_data" translate="label comment" sortOrder="10" type="select" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Use Aggregated Data</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Improves dashboard performance but provides non-realtime data.</comment>
                 </field>
             </group>
-            <group id="orders" translate="label,comment" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="orders" translate="label" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Orders Cron Settings</label>
                 <field id="delete_pending_after" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Pending Payment Order Lifetime (minutes)</label>

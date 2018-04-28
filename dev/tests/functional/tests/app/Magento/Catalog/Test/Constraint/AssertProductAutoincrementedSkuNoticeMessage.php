@@ -26,7 +26,7 @@ class AssertProductAutoincrementedSkuNoticeMessage extends AbstractConstraint
     {
         $actualMessage = $productPage->getMessagesBlock()->getNoticeMessage();
         $reg = '/(SKU for product ' . $product->getName() . ' has been changed to ' . $product->getSku() . '-)(\d+.$)/';
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             preg_match($reg, $actualMessage) == 1,
             'Incorrect notice that existing sku automatically changed when saving product with same sku.'
         );

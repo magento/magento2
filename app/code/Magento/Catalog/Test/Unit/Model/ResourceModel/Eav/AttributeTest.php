@@ -173,7 +173,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('global', $this->_model->getScope());
     }
 
-    public function testGetScopeWebiste()
+    public function testGetScopeWebsite()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(

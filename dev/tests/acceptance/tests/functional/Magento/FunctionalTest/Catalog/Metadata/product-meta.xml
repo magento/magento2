@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateProduct" dataType="product" type="create" auth="adminOauth" url="/V1/products" method="POST">
         <contentType>application/json</contentType>
@@ -14,7 +14,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>
@@ -40,7 +40,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>
@@ -69,7 +69,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>
@@ -95,7 +95,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>
@@ -118,4 +118,4 @@
     <operation name="deleteProduct2" dataType="product2" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
         <contentType>application/json</contentType>
     </operation>
-</config>
+</operations>
