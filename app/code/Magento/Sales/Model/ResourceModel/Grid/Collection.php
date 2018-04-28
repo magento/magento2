@@ -15,7 +15,6 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
  */
 class Collection extends AbstractCollection implements SearchResultInterface
 {
-
     /**
      * @var AggregationInterface
      */
@@ -80,7 +79,6 @@ class Collection extends AbstractCollection implements SearchResultInterface
         $this->aggregations = $aggregations;
         return $this;
     }
-
 
     /**
      * Retrieve all ids for collection
