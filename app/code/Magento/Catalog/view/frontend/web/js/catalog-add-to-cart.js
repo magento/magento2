@@ -79,7 +79,7 @@ define([
                     }
                 },
                 success: function(res) {
-                    $(document).trigger('ajax:addToCart', form.data().productSku);
+                    $(document).trigger('ajax:addToCart', form.data().productSku, form, res);
 
                     if (self.isLoaderEnabled()) {
                         $('body').trigger(self.options.processStop);
