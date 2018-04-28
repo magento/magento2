@@ -83,11 +83,11 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
 
         $options = $this->getAttributeOptions();
         if ($options) {
-            $this->setAttribute(key($options));
+            $this->setAttribute(key(reset($options)));
         }
         $options = $this->getOperatorOptions();
         if ($options) {
-            $this->setOperator(key($options));
+            $this->setOperator(key(reset($options)));
         }
     }
 
@@ -504,9 +504,9 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     public function getAttributeElement()
     {
         if (null === $this->getAttribute()) {
-            $options = $this->getAttributeOptions();
+            $options = $this->getAttributeOption();
             if ($options) {
-                $this->setAttribute(key($options));
+                $this->setAttribute(key(reset($options)));
             }
         }
         return $this->getForm()->addField(
@@ -542,7 +542,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     {
         $options = $this->getOperatorSelectOptions();
         if ($this->getOperator() === null) {
-            $option = current($options);
+            $option = current(reset($options));
             $this->setOperator($option['value']);
         }
 
