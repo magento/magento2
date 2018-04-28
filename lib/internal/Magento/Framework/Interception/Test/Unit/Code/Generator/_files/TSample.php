@@ -15,6 +15,11 @@ class TSample
         // Nothing to do here
     }
 
+    public function getNullableValue() : ?string
+    {
+        return null;
+    }
+
     public function getValue() : string
     {
         return $this->value;
