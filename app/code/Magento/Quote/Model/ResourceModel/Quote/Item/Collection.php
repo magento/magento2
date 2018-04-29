@@ -40,6 +40,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     protected $_quoteConfig;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface|null
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -48,6 +53,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @param Option\CollectionFactory $itemOptionCollectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Quote\Model\Quote\Config $quoteConfig
+     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -61,6 +67,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         \Magento\Quote\Model\ResourceModel\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Quote\Model\Quote\Config $quoteConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
@@ -76,6 +83,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         $this->_itemOptionCollectionFactory = $itemOptionCollectionFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_quoteConfig = $quoteConfig;
+
+        // Backward compatibility constructor parameters
+        $this->storeManager = $storeManager ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
     }
 
     /**
@@ -95,7 +106,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      */
     public function getStoreId()
     {
-        return (int)$this->_productCollectionFactory->create()->getStoreId();
+        // Fallback to current storeId if no quote is provided
+        // (see https://github.com/magento/magento2/commit/9d3be732a88884a66d667b443b3dc1655ddd0721)
+        return $this->_quote === null ?
+            (int) $this->storeManager->getStore()->getId() : (int) $this->_quote->getStoreId();
     }
 
     /**
