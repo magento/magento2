@@ -15,6 +15,7 @@
     <preference for="Magento\Quote\Api\Data\CartItemInterface" type="Magento\Quote\Model\Quote\Item" />
     <preference for="Magento\Quote\Api\Data\CartInterface" type="Magento\Quote\Model\Quote" />
     <preference for="Magento\Quote\Api\CartItemRepositoryInterface" type="Magento\Quote\Model\Quote\Item\Repository" />
+    <preference for="Magento\Quote\Model\Webapi\SaveCartItemWithCartIdInterface" type="Magento\Quote\Model\Webapi\SaveCartItemWithCartId" />
     <preference for="Magento\Quote\Api\CartRepositoryInterface" type="Magento\Quote\Model\QuoteRepository" />
     <preference for="Magento\Quote\Api\Data\CartSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Quote\Api\PaymentMethodManagementInterface" type="Magento\Quote\Model\PaymentMethodManagement" />
@@ -31,6 +32,7 @@
     <preference for="Magento\Quote\Api\GuestCartManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartManagement" />
     <preference for="Magento\Quote\Api\GuestCartRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartRepository" />
     <preference for="Magento\Quote\Api\GuestCartItemRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartItemRepository" />
+    <preference for="Magento\Quote\Model\Webapi\SaveGuestCartItemWithCartIdInterface" type="Magento\Quote\Model\Webapi\SaveGuestCartItemWithCartId" />
     <preference for="Magento\Quote\Api\GuestCouponManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCouponManagement" />
     <preference for="Magento\Quote\Api\GuestPaymentMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestPaymentMethodManagement" />
     <preference for="Magento\Quote\Api\GuestCartTotalRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartTotalRepository" />
