@@ -199,11 +199,13 @@ class AuthObserver implements ObserverInterface
                 $message = __('It\'s time to <a href="%1">change your password</a>.', $myAccountUrl);
             }
 
-            // Avoid duplicating the message
-            $this->messageManager->getMessages()->deleteMessageByIdentifier(User::MESSAGE_ID_PASSWORD_EXPIRED);
+            $messages = $this->messageManager->getMessages();
+
+            // Remove existing messages with same ID to avoid duplication
+            $messages->deleteMessageByIdentifier(User::MESSAGE_ID_PASSWORD_EXPIRED);
 
             $this->messageManager->addNoticeMessage($message);
-            $message = $this->messageManager->getMessages()->getLastAddedMessage();
+            $message = $messages->getLastAddedMessage();
             if ($message) {
                 $message->setIdentifier(User::MESSAGE_ID_PASSWORD_EXPIRED)->setIsSticky(true);
                 $this->authSession->setPciAdminUserIsPasswordExpired(true);
