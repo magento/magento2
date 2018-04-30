@@ -245,12 +245,13 @@ class CreateHandler implements ExtensionInterface
             if (empty($image['removed'])) {
                 $data = $this->processNewImage($product, $image);
 
-                $this->resourceModel->deleteGalleryValueInStore(
-                    $image['value_id'],
-                    $product->getData($this->metadata->getLinkField()),
-                    $product->getStoreId()
-                );
-
+                if (!$product->isObjectNew()) {
+                    $this->resourceModel->deleteGalleryValueInStore(
+                        $image['value_id'],
+                        $product->getData($this->metadata->getLinkField()),
+                        $product->getStoreId()
+                    );
+                }
                 // Add per store labels, position, disabled
                 $data['value_id'] = $image['value_id'];
                 $data['label'] = isset($image['label']) ? $image['label'] : '';
@@ -328,7 +329,7 @@ class CreateHandler implements ExtensionInterface
      */
     protected function moveImageFromTmp($file)
     {
-        $file = $this->getFilenameFromTmp($file);
+        $file = $this->getFilenameFromTmp($this->getSafeFilename($file));
         $destinationFile = $this->getUniqueFileName($file);
 
         if ($this->fileStorageDb->checkDbUsage()) {
@@ -347,6 +348,19 @@ class CreateHandler implements ExtensionInterface
         }
 
         return str_replace('\\', '/', $destinationFile);
+    }
+
+    /**
+     * Returns safe filename for posted image
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getSafeFilename($file)
+    {
+        $file = DIRECTORY_SEPARATOR . ltrim($file, DIRECTORY_SEPARATOR);
+
+        return $this->mediaDirectory->getDriver()->getRealPathSafety($file);
     }
 
     /**

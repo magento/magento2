@@ -24,6 +24,7 @@
             </filterUrlParams>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Sales::sales_invoice</aclResource>
         <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sales_order_view_invoice_grid_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -34,7 +35,13 @@
     <listingToolbar name="listing_top">
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
-        <exportButton name="export_button"/>
+        <exportButton name="export_button">
+            <settings>
+                <additionalParams>
+                    <param xsi:type="string" active="true" name="order_id">*</param>
+                </additionalParams>
+            </settings>
+        </exportButton>
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
             <filterSelect name="store_id" provider="${ $.parentName }">

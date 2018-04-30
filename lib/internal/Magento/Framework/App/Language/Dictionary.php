@@ -85,7 +85,7 @@ class Dictionary
                 } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         new \Magento\Framework\Phrase(
-                            "Invalid XML in file %1:\n%2",
+                            'The XML in file "%1" is invalid:' . "\n%2\nVerify the XML and try again.",
                             [$path . '/language.xml', $e->getMessage()]
                         ),
                         $e
@@ -193,7 +193,9 @@ class Dictionary
             foreach ($foundCsvFiles as $foundCsvFile) {
                 $file = $directoryRead->openFile($foundCsvFile);
                 while (($row = $file->readCsv()) !== false) {
-                    $result[$row[0]] = $row[1];
+                    if (is_array($row) && count($row) > 1) {
+                        $result[$row[0]] = $row[1];
+                    }
                 }
             }
         }

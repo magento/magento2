@@ -23,8 +23,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const KEY_PRODUCT_ID = StockStatusInterface::PRODUCT_ID;
     const KEY_CUSTOM_ATTRIBUTES = 'custom_attributes';
     const KEY_ATTRIBUTE_CODE = \Magento\Eav\Api\Data\AttributeInterface::ATTRIBUTE_CODE;
-    const CODE_QUANTITY_AND_STOCK_STATUS = 'quantity_and_stock_status';
+    const KEY_IS_IN_STOCK = 'is_in_stock';
 
+    const CODE_QUANTITY_AND_STOCK_STATUS = 'quantity_and_stock_status';
     const PRODUCT_SKU = 'sku-test-catalog-inventory';
 
     /**
@@ -159,6 +160,36 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue($response);
     }
 
+    /**
+     * Tests updating product stock item data when previously product was created without specified stock_item
+     */
+    public function testUpdatingQuantity()
+    {
+        // create a simple product with catalog inventory
+        $qty = null;
+        $productData = $this->getSimpleProductData($qty);
+        $response = $this->saveProduct($productData);
+        $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
+
+        $this->assertEquals($qty, $stockItemData[self::KEY_QTY]);
+        $this->assertEquals(false, $stockItemData[self::KEY_IS_IN_STOCK]);
+
+        // update a created product with catalog inventory
+        $qty = 1;
+        $inStock = true;
+        $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM][self::KEY_QTY] = $qty;
+        $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM][self::KEY_IS_IN_STOCK] = $inStock;
+        $responseUpdated = $this->updateProduct($response);
+        $stockItemDataUpdated = $responseUpdated[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
+
+        $this->assertEquals($qty, $stockItemDataUpdated[self::KEY_QTY]);
+        $this->assertEquals($inStock, $stockItemDataUpdated[self::KEY_IS_IN_STOCK]);
+
+        // delete the product; expect that all goes well
+        $response = $this->deleteProduct($productData[ProductInterface::SKU]);
+        $this->assertTrue($response);
+    }
+
     // --- my helpers -----------------------------------------------------------------------------
 
     /**
@@ -193,7 +224,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         if ($qty != null) {
             $productData[self::KEY_CUSTOM_ATTRIBUTES] = [
                 [self::KEY_ATTRIBUTE_CODE => 'description', 'value' => 'My Product Description'],
-                [self::KEY_ATTRIBUTE_CODE => self::CODE_QUANTITY_AND_STOCK_STATUS, 'value' => [true, $qty]],
+                [
+                    self::KEY_ATTRIBUTE_CODE => self::CODE_QUANTITY_AND_STOCK_STATUS,
+                    'value' => [self::KEY_IS_IN_STOCK => true, 'qty' => $qty]
+                ],
             ];
         }
 
@@ -211,7 +245,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         return [
             self::KEY_STOCK_ITEM => [
                 self::KEY_QTY => $qty,
-                'is_in_stock' => true,
+                self::KEY_IS_IN_STOCK => true,
                 'is_qty_decimal' => false,
                 'show_default_notification_message' => false,
                 'use_config_min_qty' => true,
@@ -271,6 +305,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     protected function saveProduct($product)
     {
+        if (isset($product['custom_attributes'])) {
+            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
+                    && !is_array($product['custom_attributes'][$i]['value'])
+                ) {
+                    $product['custom_attributes'][$i]['value'] = [""];
+                }
+            }
+        }
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
@@ -295,6 +338,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     protected function updateProduct($product)
     {
+        if (isset($product['custom_attributes'])) {
+            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
+                    && !is_array($product['custom_attributes'][$i]['value'])
+                ) {
+                    $product['custom_attributes'][$i]['value'] = [""];
+                }
+            }
+        }
         $sku = $product[ProductInterface::SKU];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
             $product[ProductInterface::SKU] = null;

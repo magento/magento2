@@ -51,10 +51,11 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     {
         $this->rule = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMockClassName('Rule')
+            ->setMethods(null)
             ->disableOriginalConstructor()
             ->getMock();
         $this->item = $this->createMock(\Magento\Quote\Model\Quote\Item\AbstractItem::class);
-        $this->data = $this->createMock(\Magento\SalesRule\Model\Rule\Action\Discount\Data::class);
+        $this->data = $this->createPartialMock(\Magento\SalesRule\Model\Rule\Action\Discount\Data::class, []);
 
         $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->address = $this->createPartialMock(
@@ -85,7 +86,6 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
      */
     public function testCalculate()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->rule->setData(['id' => 1, 'discount_amount' => 10.0]);
 
         $this->address->expects($this->any())->method('getCartFixedRules')->will($this->returnValue([]));

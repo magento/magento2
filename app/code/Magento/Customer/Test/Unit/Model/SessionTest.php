@@ -149,7 +149,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
     public function testLoginById()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $customerId = 1;
 
         $customerDataMock = $this->prepareLoginDataMock($customerId);
@@ -175,7 +174,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
         $customerMock = $this->createPartialMock(
             \Magento\Customer\Model\Customer::class,
-            ['getId', 'isConfirmationRequired', 'getConfirmation', 'updateData']
+            ['getId', 'isConfirmationRequired', 'getConfirmation', 'updateData', 'getGroupId']
         );
         $customerMock->expects($this->once())
             ->method('getId')

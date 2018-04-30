@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
@@ -31,7 +29,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
 
     /**
      * @var Session
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected $customerSession;
 
@@ -215,14 +213,21 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Calculates savings percentage according to the given tier price amount
+     * and related product price amount.
+     *
      * @param AmountInterface $amount
+     *
      * @return float
      */
     public function getSavePercent(AmountInterface $amount)
     {
+        $productPriceAmount = $this->priceInfo->getPrice(
+            FinalPrice::PRICE_CODE
+        )->getAmount();
+
         return round(
-            100 - ((100 / $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue())
-                * $amount->getBaseAmount())
+            100 - ((100 / $productPriceAmount->getValue()) * $amount->getValue())
         );
     }
 

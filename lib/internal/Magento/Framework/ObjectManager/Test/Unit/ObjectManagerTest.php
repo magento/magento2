@@ -358,7 +358,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
+        /** @var $result \Magento\Test\Di\Aggregate\Child */
         $result = $this->_object->create(\Magento\Test\Di\Aggregate\Child::class);
         $this->assertInstanceOf(\Magento\Test\Di\DiParent::class, $result->interface);
         $this->assertEquals('first_param_value', $result->scalar);
@@ -388,7 +388,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
+        /** @var $result \Magento\Test\Di\Aggregate\Child */
         $result = $this->_object->create(\Magento\Test\Di\Aggregate\Child::class);
         $this->assertInstanceOf(\Magento\Test\Di\Child::class, $result->interface);
         $this->assertEquals('second_param_value', $result->scalar);
@@ -400,7 +400,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame(
             $this->_object->get(\Magento\Test\Di\Child::class),
-            $this->_object->get(\Magento\Test\Di\Child::class)
+            $this->_object->get('\\' . \Magento\Test\Di\Child::class)
         );
     }
 }

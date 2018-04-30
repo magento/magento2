@@ -4,13 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Controller\Product;
+
 use Magento\Framework\Message\MessageInterface;
 
 /**
  * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
+ *
+ * @magentoDbIsolation disabled
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -305,7 +306,8 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         // important
         $compareItems->setVisitorId(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\Customer\Model\Visitor::class)->getId()
+                \Magento\Customer\Model\Visitor::class
+            )->getId()
         );
         $actualProductIds = [];
         foreach ($compareItems as $compareItem) {

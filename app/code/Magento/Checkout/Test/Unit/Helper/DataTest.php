@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Test\Unit\Helper;
 
 use \Magento\Checkout\Helper\Data;
@@ -41,17 +39,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected  $_checkoutSession;
+    protected $_checkoutSession;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected  $_scopeConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected  $_collectionFactory;
+    protected $_collectionFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -343,7 +341,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'priceCurrency' => $this->priceCurrency,
             ]
         );
-        $itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getPriceInclTax', 'getQty', 'getTaxAmount', 'getDiscountTaxCompensation', 'getRowTotal', 'getQtyOrdered']);
+        $itemMock = $this->createPartialMock(
+            \Magento\Framework\DataObject::class,
+            ['getPriceInclTax', 'getQty', 'getTaxAmount', 'getDiscountTaxCompensation', 'getRowTotal', 'getQtyOrdered']
+        );
         $itemMock->expects($this->once())->method('getPriceInclTax')->will($this->returnValue(false));
         $itemMock->expects($this->exactly(2))->method('getQty')->will($this->returnValue($qty));
         $itemMock->expects($this->never())->method('getQtyOrdered');
@@ -370,7 +371,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $discountTaxCompensation = 1;
         $rowTotal = 15;
         $expected = 17;
-        $itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getRowTotalInclTax', 'getTaxAmount', 'getDiscountTaxCompensation', 'getRowTotal']);
+        $itemMock = $this->createPartialMock(
+            \Magento\Framework\DataObject::class,
+            ['getRowTotalInclTax', 'getTaxAmount', 'getDiscountTaxCompensation', 'getRowTotal']
+        );
         $itemMock->expects($this->once())->method('getRowTotalInclTax')->will($this->returnValue(false));
         $itemMock->expects($this->once())->method('getTaxAmount')->will($this->returnValue($taxAmount));
         $itemMock->expects($this->once())
@@ -416,7 +420,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetBaseSubtotalInclTax()
     {
-        $itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getBaseTaxAmount', 'getBaseDiscountTaxCompensation', 'getBaseRowTotal']);
+        $itemMock = $this->createPartialMock(
+            \Magento\Framework\DataObject::class,
+            ['getBaseTaxAmount', 'getBaseDiscountTaxCompensation', 'getBaseRowTotal']
+        );
         $itemMock->expects($this->once())->method('getBaseTaxAmount');
         $itemMock->expects($this->once())->method('getBaseDiscountTaxCompensation');
         $itemMock->expects($this->once())->method('getBaseRowTotal');

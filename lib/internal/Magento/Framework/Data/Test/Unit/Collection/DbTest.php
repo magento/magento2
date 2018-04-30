@@ -58,9 +58,6 @@ class DbTest extends \PHPUnit\Framework\TestCase
         unset($this->collection);
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
-     */
     public function testSetAddOrder()
     {
         $adapter = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['fetchAll', 'select']);
@@ -87,17 +84,11 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
         $this->assertEquals('other_field DESC', (string)array_shift($selectOrders));
         $this->assertEmpty(array_shift($selectOrders));
-
-        return $adapter;
     }
 
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql $adapter
-     * @depends testSetAddOrder
-     */
-    public function testUnshiftOrder($adapter)
+    public function testUnshiftOrder()
     {
-        $this->markTestSkipped('Test needs to be refacotred.');
+        $adapter = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['fetchAll', 'select']);
         $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new \Magento\Framework\DB\Select($adapter, $renderer);
         $adapter

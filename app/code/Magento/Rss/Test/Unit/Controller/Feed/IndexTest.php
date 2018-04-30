@@ -6,6 +6,7 @@
 namespace Magento\Rss\Test\Unit\Controller\Feed;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Zend\Feed\Writer\Exception\InvalidArgumentException;
 
 /**
  * Class IndexTest
@@ -106,7 +107,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->rssFactory->expects($this->once())->method('create')->will($this->returnValue($rssModel));
         $this->rssManager->expects($this->once())->method('getProvider')->will($this->returnValue($dataProvider));
 
-        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->controller->execute();
     }
 }

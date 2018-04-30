@@ -7,8 +7,21 @@ namespace Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 
-class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\AbstractPlugin
+class Import
 {
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
+    private $indexerRegistry;
+
+    /**
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     */
+    public function __construct(\Magento\Framework\Indexer\IndexerRegistry $indexerRegistry)
+    {
+        $this->indexerRegistry = $indexerRegistry;
+    }
+
     /**
      * After import handler
      *
@@ -18,9 +31,7 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
      */
     public function afterSaveAdvancedPricing(AdvancedPricing $subject)
     {
-        if (!$this->getPriceIndexer()->isScheduled()) {
-            $this->invalidateIndexer();
-        }
+        $this->invalidateIndexer();
     }
 
     /**
@@ -32,18 +43,19 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
      */
     public function afterDeleteAdvancedPricing(AdvancedPricing $subject)
     {
-        if (!$this->getPriceIndexer()->isScheduled()) {
-            $this->invalidateIndexer();
-        }
+        $this->invalidateIndexer();
     }
 
     /**
-     * Get price indexer
+     * Invalidate indexer
      *
-     * @return \Magento\Framework\Indexer\IndexerInterface
+     * @return void
      */
-    protected function getPriceIndexer()
+    private function invalidateIndexer()
     {
-        return $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID);
+        $priceIndexer = $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID);
+        if (!$priceIndexer->isScheduled()) {
+            $priceIndexer->invalidate();
+        }
     }
 }

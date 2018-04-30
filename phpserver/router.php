@@ -28,16 +28,17 @@ $debug = function ($val) {
         $val = json_encode($val);
     }
 
-    echo 'debug: ' . $val . PHP_EOL . '<br/>' . PHP_EOL;
+    error_log('debug: '.$val);
 };
 
 /**
- * Note: the code below is experimental and not intended to be used outside development environment.
- * The code is protected against running outside of PHP built-in web server.
+ * Caution, this is very experimental stuff
+ * no guarantee for working result
+ * has tons of potential big security holes
  */
 
 if (php_sapi_name() === 'cli-server') {
-    $debug($_SERVER["REQUEST_URI"]);
+    $debug("URI: {$_SERVER["REQUEST_URI"]}");
     if (preg_match('/^\/(index|get|static)\.php(\/)?/', $_SERVER["REQUEST_URI"])) {
         return false;    // serve the requested resource as-is.
     }
@@ -45,30 +46,20 @@ if (php_sapi_name() === 'cli-server') {
     $path = pathinfo($_SERVER["SCRIPT_FILENAME"]);
     $url   = pathinfo(substr($_SERVER["REQUEST_URI"], 1));
     $route = parse_url(substr($_SERVER["REQUEST_URI"], 1))["path"];
-
-    $debug($path);
-    $debug($route);
+    $pathinfo = pathinfo($route);
+    $ext = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
 
     if ($path["basename"] == 'favicon.ico') {
         return false;
     }
 
-    $debug($route);
-    $debug(strpos($route, 'errors/default/css/'));
+    $debug("route: $route");
 
     if (strpos($route, 'pub/errors/default/') === 0) {
         $route = preg_replace('#pub/errors/default/#', 'errors/default/', $route, 1);
     }
 
-    $debug($route);
-    
-    if (strpos($route, 'static/version') === 0) {
-        $redirectRoute = preg_replace("/version\d+\//", "", $route, 1);
-        $redirectDebugInfo = "redirect static version string to: " . $redirectRoute;
-        $debug($redirectDebugInfo);
-        header('Location: /' . $redirectRoute);
-        exit;
-    }
+    $magentoPackagePubDir = __DIR__."/../pub";
 
     if (strpos($route, 'media/') === 0 ||
         strpos($route, 'opt/') === 0 ||
@@ -76,26 +67,55 @@ if (php_sapi_name() === 'cli-server') {
         strpos($route, 'errors/default/css/') === 0 ||
         strpos($route, 'errors/default/images/') === 0
     ) {
-        $magentoPackagePubDir = __DIR__ . "/../pub";
+        $origFile = $magentoPackagePubDir.'/'.$route;
 
-        $file = $magentoPackagePubDir . '/' . $route;
-        $debug($file);
-        if (file_exists($file)) {
+        if (strpos($route, 'static/version') === 0) {
+            $route = preg_replace('#static/(version\d+/)?#', 'static/', $route, 1);
+        }
+        $file = $magentoPackagePubDir.'/'.$route;
+
+        $debug("file: $file");
+
+        if (file_exists($origFile) || file_exists($file)) {
+            if (file_exists($origFile)) {
+                $file = $origFile;
+            }
+
             $debug('file exists');
-            return false;
+            $mimeTypes = [
+                'css' => 'text/css',
+                'js'  => 'application/javascript',
+                'jpg' => 'image/jpg',
+                'png' => 'image/png',
+                'gif' => 'image/gif',
+                'svg' => 'image/svg+xml',
+                'map' => 'application/json',
+                'woff' => 'application/x-woff',
+                'woff2' => 'application/font-woff2',
+                'html' => 'text/html',
+            ];
+
+            if (isset($mimeTypes[$ext])) {
+                header("Content-Type: $mimeTypes[$ext]");
+            }
+            readfile($file);
+            return;
         } else {
             $debug('file does not exist');
             if (strpos($route, 'static/') === 0) {
                 $route = preg_replace('#static/#', '', $route, 1);
                 $_GET['resource'] = $route;
-                include $magentoPackagePubDir . '/static.php';
+                $debug("static: $route");
+                include($magentoPackagePubDir.'/static.php');
                 exit;
             } elseif (strpos($route, 'media/') === 0) {
-                include $magentoPackagePubDir . '/get.php';
+                $debug("media: $route");
+                include($magentoPackagePubDir.'/get.php');
                 exit;
             }
         }
+    } else {
+        $debug("thunk to index in $route");
+        include($magentoPackagePubDir.'/index.php');
     }
-
-    header('HTTP/1.0 404 Not Found');
 }

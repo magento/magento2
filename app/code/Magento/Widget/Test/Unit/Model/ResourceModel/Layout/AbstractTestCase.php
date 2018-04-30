@@ -83,7 +83,6 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
 
     public function testAddUpdatedDaysBeforeFilter()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $select = $this->createMock(\Magento\Framework\DB\Select::class);
         $select->expects($this->any())->method('where')->with(self::TEST_WHERE_CONDITION);
 

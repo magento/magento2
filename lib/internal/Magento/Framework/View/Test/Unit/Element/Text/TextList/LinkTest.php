@@ -47,20 +47,11 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider toHtmlDataProvider
      */
-    public function testToHtml($liParams, $liAttr, $aParams, $aAttr, $innerText, $afterText)
+    public function testToHtml($liParams, $aParams, $innerText, $afterText, $expectedHtml)
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->link->setLink($liParams, $aParams, $innerText, $afterText);
-        $this->assertTag([
-            'tag' => 'li',
-            'attributes' => [$liAttr['name'] => $liAttr['value']],
-            'child' => [
-                'tag' => 'a',
-                'attributes' => [$aAttr['name'] => $aAttr['value']],
-                'content' => $innerText,
-            ],
-            'content' => $afterText,
-        ], $this->link->toHtml());
+
+        $this->assertEquals($expectedHtml, $this->link->toHtml());
     }
 
     public function toHtmlDataProvider()
@@ -68,19 +59,17 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'liParams' => ['class' => 'some-css-class'],
-                'liAttr' => ['name' => 'class', 'value' => 'some-css-class'],
                 'aParams' => ['href' => 'url'],
-                'aAttr' => ['name' => 'href', 'value' => 'url'],
                 'innerText' => 'text',
                 'afterText' => 'afterText',
+                'expectedHtml' => '<li class="some-css-class"><a href="url">text</a>afterText</li>' . "\r\n"
             ],
             [
                 'liParams' => 'class="some-css-class"',
-                'liAttr' => ['name' => 'class', 'value' => 'some-css-class'],
                 'aParams' => 'href="url"',
-                'aAttr' => ['name' => 'href', 'value' => 'url'],
                 'innerText' => 'text',
                 'afterText' => 'afterText',
+                'expectedHtml' => '<li class="some-css-class"><a href="url">text</a>afterText</li>' . "\r\n"
             ]
         ];
     }

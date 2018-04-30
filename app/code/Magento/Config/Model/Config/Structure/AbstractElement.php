@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Model\Config\Structure;
 
+use Magento\Config\Model\Config\StructureElementInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
@@ -13,7 +14,7 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @since 100.0.2
  */
-abstract class AbstractElement implements ElementInterface
+abstract class AbstractElement implements StructureElementInterface
 {
     /**
      * Element data

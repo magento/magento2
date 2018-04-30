@@ -111,7 +111,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * Load counfigurable attribute by product and product's attribute
+     * Load configurable attribute by product and product's attribute
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute  $attribute

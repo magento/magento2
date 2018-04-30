@@ -335,18 +335,6 @@
 }
 
 //
-//  Url existing check
-//  ---------------------------------------------
-
-.lib-url-check(@_path) {
-    @lib-url-check-output: @_path;
-}
-
-.lib-url-check(@_path) when not (@_path = false) {
-    @lib-url-check-output: url(@_path);
-}
-
-//
 //  Arrow
 //  ---------------------------------------------
 

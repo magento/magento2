@@ -10,6 +10,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\FeedInterface;
 use Magento\Framework\App\FeedFactoryInterface;
+use Zend\Feed\Writer\FeedFactory;
 
 /**
  * Provides functionality to work with RSS feeds
@@ -102,13 +103,7 @@ class Rss
      */
     public function createRssXml()
     {
-        $feed = $this->feedFactory->create(
-            $this->getFeeds(),
-            FeedFactoryInterface::FORMAT_RSS
-        );
-
-        return $feed->getFormattedContentAs(
-            FeedInterface::FORMAT_XML
-        );
+        $feed = FeedFactory::factory($this->getFeeds());
+        return $feed->export('rss');
     }
 }

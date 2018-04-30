@@ -183,7 +183,10 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $expectedResult = [
             'file' => 'filename.ext1',
-            'path' => 'filepath',
+        ];
+        $resultWithPath = [
+            'file' => 'filename.ext1',
+            'path' => 'filepath'
         ];
 
         $uploaderMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
@@ -208,7 +211,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
         $uploaderMock->expects($this->once())
             ->method('save')
             ->with($absolutePath)
-            ->willReturn($expectedResult);
+            ->willReturn($resultWithPath);
 
         $this->uploaderFactory->expects($this->once())
             ->method('create')

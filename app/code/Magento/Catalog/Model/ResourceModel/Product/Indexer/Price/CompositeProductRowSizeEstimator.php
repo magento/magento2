@@ -18,7 +18,7 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
     /**
      * Calculated memory size for one record in catalog_product_index_price table
      */
-    const MEMORY_SIZE_FOR_ONE_ROW = 200;
+    const MEMORY_SIZE_FOR_ONE_ROW = 250;
 
     /**
      * @var WebsiteManagementInterface
@@ -32,7 +32,6 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
 
     /**
      * @var CompositeProductRelationsCalculator
-     * @since 2.2.0
      */
     private $compositeProductRelationsCalculator;
 
@@ -40,7 +39,6 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
      * @param WebsiteManagementInterface $websiteManagement
      * @param CollectionFactory $collectionFactory
      * @param CompositeProductRelationsCalculator $compositeProductRelationsCalculator
-     * @since 2.2.0
      */
     public function __construct(
         WebsiteManagementInterface $websiteManagement,

@@ -32,7 +32,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
             $this->createMock(\Psr\Log\LoggerInterface::class),
             $this->getMockForAbstractClass(\Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class),
             $eventManager,
-            $this->createMock(\Magento\Framework\Stdlib\DateTime::class),
+            $this->createPartialMock(\Magento\Framework\Stdlib\DateTime::class, []),
             null,
             $this->_getResource($select)
         );

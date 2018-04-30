@@ -63,11 +63,11 @@ class ProcessInventoryDataObserver implements ObserverInterface
      */
     private function processStockData(Product $product)
     {
-        /** @var Item $stockItem */
-        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
-
         $quantityAndStockStatus = $product->getData('quantity_and_stock_status');
         if (is_array($quantityAndStockStatus)) {
+            /** @var Item $stockItem */
+            $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
+
             $quantityAndStockStatus = $this->prepareQuantityAndStockStatus($stockItem, $quantityAndStockStatus);
 
             if ($quantityAndStockStatus) {
@@ -97,7 +97,7 @@ class ProcessInventoryDataObserver implements ObserverInterface
             ) {
                 unset($quantityAndStockStatus['is_in_stock']);
             }
-            if (isset($quantityAndStockStatus['qty'])
+            if (array_key_exists('qty', $quantityAndStockStatus)
                 && $stockItem->getQty() == $quantityAndStockStatus['qty']
             ) {
                 unset($quantityAndStockStatus['qty']);

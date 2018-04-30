@@ -490,7 +490,6 @@ class FileTest extends AbstractFormTestCase
 
     public function testExtractValueFileUploaderUIComponent()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $attributeCode = 'img1';
         $requestScope = 'customer';
         $fileName = 'filename.ext1';

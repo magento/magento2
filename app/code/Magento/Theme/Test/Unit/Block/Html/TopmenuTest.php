@@ -116,7 +116,6 @@ HTML;
 
     public function testGetHtmlWithoutSelectedCategory()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $topmenuBlock = $this->getTopmenu();
 
         $treeNode = $this->buildTree(false);
@@ -150,7 +149,6 @@ HTML;
 
     public function testGetHtmlWithSelectedCategory()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $topmenuBlock = $this->getTopmenu();
 
         $treeNode = $this->buildTree(true);
@@ -254,7 +252,11 @@ HTML;
         $nodeMock->expects($this->once())
             ->method('getChildren')
             ->willReturn($children);
-        $nodeMock->expects($this->any())
+        $nodeMock->expects($this->at(0))
+            ->method('__call')
+            ->with('setOutermostClass')
+            ->willReturn(null);
+        $nodeMock->expects($this->at(3))
             ->method('__call')
             ->with('getLevel', [])
             ->willReturn(null);

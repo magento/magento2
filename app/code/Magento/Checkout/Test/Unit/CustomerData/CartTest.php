@@ -160,7 +160,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ],
             'extra_actions' => '<span>Buttons</span>',
             'isGuestCheckoutAllowed' => 1,
-            'website_id' => $websiteId
+            'website_id' => $websiteId,
+            'subtotalAmount' => 200,
         ];
         $this->assertEquals($expectedResult, $this->model->getSectionData());
     }
@@ -262,7 +263,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ],
             'extra_actions' => '<span>Buttons</span>',
             'isGuestCheckoutAllowed' => 1,
-            'website_id' => $websiteId
+            'website_id' => $websiteId,
+            'subtotalAmount' => 200,
         ];
         $this->assertEquals($expectedResult, $this->model->getSectionData());
     }
