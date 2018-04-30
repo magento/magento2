@@ -338,9 +338,9 @@ class Data
     private function getAllSizeImages($imageFile)
     {
         return [
-            'large' => $this->imageUrlBuilder->getUrl($imageFile, 'product_page_image_large'),
-            'medium' => $this->imageUrlBuilder->getUrl($imageFile, 'product_page_image_medium'),
-            'small' => $this->imageUrlBuilder->getUrl($imageFile, 'product_page_image_small')
+            'large' => $this->imageUrlBuilder->getUrl($imageFile, 'product_swatch_image_large'),
+            'medium' => $this->imageUrlBuilder->getUrl($imageFile, 'product_swatch_image_medium'),
+            'small' => $this->imageUrlBuilder->getUrl($imageFile, 'product_swatch_image_small')
         ];
     }
 
