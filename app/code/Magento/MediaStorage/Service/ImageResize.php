@@ -219,7 +219,7 @@ class ImageResize
     {
         ksort($imageData);
         unset($imageData['type']);
-        return md5(serialize($imageData));
+        return md5(json_encode($imageData));
     }
 
     /**
