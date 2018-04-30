@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryImportExport\Model\Import\Validator;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryImportExport\Model\Import\Sources;
 
@@ -18,24 +16,16 @@ use Magento\InventoryImportExport\Model\Import\Sources;
 class SkuValidator implements ValidatorInterface
 {
     /**
-     * @var CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
      * @var ValidationResultFactory
      */
     private $validationResultFactory;
 
     /**
-     * @param CollectionFactory $collectionFactory
      * @param ValidationResultFactory $validationResultFactory
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
         ValidationResultFactory $validationResultFactory
     ) {
-        $this->collectionFactory = $collectionFactory;
         $this->validationResultFactory = $validationResultFactory;
     }
 
