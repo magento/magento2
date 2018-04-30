@@ -978,9 +978,21 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Retrieve frontend label of order status
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getFrontendStatusLabel()
+    {
+        return $this->getConfig()->getStatusLabel($this->getStatus(), \Magento\Framework\App\Area::AREA_FRONTEND);
+    }
+
+    /**
      * Retrieve label of order status
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getStatusLabel()
     {

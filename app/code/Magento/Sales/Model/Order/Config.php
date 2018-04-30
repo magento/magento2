@@ -118,11 +118,13 @@ class Config
      * Retrieve status label
      *
      * @param   string $code
+     * @param null $forceArea
      * @return  string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getStatusLabel($code)
+    public function getStatusLabel($code, $forceArea = null)
     {
-        $area = $this->state->getAreaCode();
+        $area = $forceArea ?: $this->state->getAreaCode();
         $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);
 
