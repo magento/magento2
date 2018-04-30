@@ -10,6 +10,7 @@ namespace Magento\InventorySales\Model\ReturnProcessor;
 use Magento\Framework\Exception\InputException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
@@ -39,11 +40,6 @@ class GetShippedItemsPerSourceByPriority
     private $getSourcesAssignedToStockOrderedByPriority;
 
     /**
-     * @var array
-     */
-    private $returnToStockItems = [];
-
-    /**
      * @param GetSourceCodeByShipmentId $getSourceCodeByShipmentId
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
@@ -70,14 +66,11 @@ class GetShippedItemsPerSourceByPriority
     public function execute(OrderInterface $order, array $returnToStockItems): array
     {
         $sources = [];
-        $this->returnToStockItems = $returnToStockItems;
         /** @var Shipment $shipment */
         foreach ($order->getShipmentsCollection() as $shipment) {
             $sourceCode = $this->getSourceCodeByShipmentId->execute((int)$shipment->getId());
             foreach ($shipment->getItems() as $item) {
-                $orderItem = $item->getOrderItem();
-                $parentItemId = $orderItem->getParentItemId();
-                if ($this->isValidItem($orderItem->getId(), $item->getQty(), $parentItemId)) {
+                if ($this->isValidItem($item->getOrderItem(), (float)$item->getQty(), $returnToStockItems)) {
                     $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
                         [$item->getProductId()]
                     )[$item->getProductId()];
@@ -87,10 +80,42 @@ class GetShippedItemsPerSourceByPriority
         }
         $websiteId = $order->getStore()->getWebsiteId();
 
-        return $this->sortSourcesByPriority($sources, (int)$websiteId);
+        // Sort items by source priority
+        $sources = $this->sortSourcesByPriority($sources, (int)$websiteId);
+
+        // Group items by SKU
+        $sources = $this->groupItemsBySku($sources);
+
+        return $sources;
     }
 
     /**
+     * Group items by SKU
+     *
+     * @param array $sources
+     * @return array
+     */
+    private function groupItemsBySku(array $sources): array
+    {
+        $skuPerSource = $itemsGroupedBySku = [];
+        foreach ($sources as $sourceCode => $data) {
+            foreach ($data as $sku => $qty) {
+                if (empty($skuPerSource[$sku])) {
+                    $itemsGroupedBySku[$sourceCode][$sku] = $qty;
+                    $skuPerSource[$sku] = $sourceCode;
+                } else {
+                    $existingSourceCode = $skuPerSource[$sku];
+                    $itemsGroupedBySku[$existingSourceCode][$sku] += $qty;
+                }
+            }
+        }
+
+        return $itemsGroupedBySku;
+    }
+
+    /**
+     * Sort items by source priority
+     *
      * @param array $sources
      * @param int $websiteId
      * @return array
@@ -120,14 +145,16 @@ class GetShippedItemsPerSourceByPriority
     }
 
     /**
-     * @param int $orderItemId
-     * @param int $qty
-     * @param int $parentItemId
+     * @param OrderItemInterface $orderItem
+     * @param float $qty
+     * @param array $returnToStockItems
      * @return bool
      */
-    private function isValidItem($orderItemId, $qty, $parentItemId = null): bool
+    private function isValidItem(OrderItemInterface $orderItem, float $qty, array $returnToStockItems): bool
     {
-        return (in_array($orderItemId, $this->returnToStockItems)
-                || in_array($parentItemId, $this->returnToStockItems)) && $qty;
+        $parentItemId = $orderItem->getParentItemId();
+
+        return (in_array($orderItem->getId(), $returnToStockItems)
+                || in_array($parentItemId, $returnToStockItems)) && $qty;
     }
 }

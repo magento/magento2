@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Plugin\SalesInventory;
 
-use Magento\InventorySales\Model\ReturnProcessor\ProcessItems;
+use Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefundInterfaceFactory;
+use Magento\InventorySales\Model\ReturnProcessor\ProcessRefundItemsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
 
@@ -21,25 +23,28 @@ class ProcessReturnQtyOnCreditMemoPlugin
     private $getSkusByProductIds;
 
     /**
-     * @var ProcessItems
+     * @var ItemsToRefundInterfaceFactory
      */
-    private $processItems;
+    private $itemsToRefundFactory;
 
     /**
-     * @var array
+     * @var ProcessRefundItemsInterface
      */
-    private $returnToStockItems = [];
+    private $processRefundItems;
 
     /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
-     * @param ProcessItems $processItems
+     * @param ItemsToRefundInterfaceFactory $itemsToRefundFactory
+     * @param ProcessRefundItemsInterface $processRefundItems
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
-        ProcessItems $processItems
+        ItemsToRefundInterfaceFactory $itemsToRefundFactory,
+        ProcessRefundItemsInterface $processRefundItems
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
-        $this->processItems = $processItems;
+        $this->itemsToRefundFactory = $itemsToRefundFactory;
+        $this->processRefundItems = $processRefundItems;
     }
 
     /**
@@ -50,6 +55,8 @@ class ProcessReturnQtyOnCreditMemoPlugin
      * @param array $returnToStockItems
      * @param bool $isAutoReturn
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function aroundExecute(
         ReturnProcessor $subject,
@@ -59,34 +66,43 @@ class ProcessReturnQtyOnCreditMemoPlugin
         array $returnToStockItems = [],
         $isAutoReturn = false
     ) {
-        $itemsToRefund = $processedItems = [];
-        $this->returnToStockItems = $returnToStockItems;
+        $items = [];
         foreach ($creditmemo->getItems() as $item) {
             $orderItem = $item->getOrderItem();
-            $parentItemId = $orderItem->getParentItemId();
             $qty = (float)$item->getQty();
-            if ($this->canReturnItem($orderItem->getId(), $qty, $parentItemId) && !$orderItem->isDummy()) {
+            if ($this->canReturnItem($orderItem, $qty, $returnToStockItems) && !$orderItem->isDummy()) {
                 $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
                     [$item->getProductId()]
                 )[$item->getProductId()];
-                $itemsToRefund[$itemSku] = ($itemsToRefund[$itemSku] ?? 0) + $qty;
                 $processedQty = $orderItem->getQtyCanceled() - $orderItem->getQtyRefunded();
-                $processedItems[$itemSku] = ($processedItems[$itemSku] ?? 0) + (float)$processedQty;
+                $items[$itemSku] = [
+                    'qty' => ($items[$itemSku]['qty'] ?? 0) + $qty,
+                    'processedQty' => ($items[$itemSku]['processedQty'] ?? 0) + (float)$processedQty
+                ];
             }
         }
 
-        $this->processItems->execute($order, $itemsToRefund, $processedItems, $returnToStockItems);
+        $itemsToRefund = [];
+        foreach ($items as $sku => $data) {
+            $itemsToRefund[] = $this->itemsToRefundFactory->create([
+                'sku' => $sku,
+                'qty' => $data['qty'],
+                'processedQty' => $data['processedQty']
+            ]);
+        }
+        $this->processRefundItems->execute($order, $itemsToRefund, $returnToStockItems);
     }
 
     /**
-     * @param int $orderItemId
-     * @param int $qty
-     * @param int $parentItemId
+     * @param OrderItemInterface $orderItem
+     * @param float $qty
+     * @param array $returnToStockItems
      * @return bool
      */
-    private function canReturnItem($orderItemId, $qty, $parentItemId = null): bool
+    private function canReturnItem(OrderItemInterface $orderItem, float $qty, array $returnToStockItems): bool
     {
-        return (in_array($orderItemId, $this->returnToStockItems)
-                || in_array($parentItemId, $this->returnToStockItems)) && $qty;
+        $parentItemId = $orderItem->getParentItemId();
+        return (in_array($orderItem->getId(), $returnToStockItems)
+                || in_array($parentItemId, $returnToStockItems)) && $qty;
     }
 }
