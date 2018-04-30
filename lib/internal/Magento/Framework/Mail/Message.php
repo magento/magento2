@@ -49,7 +49,6 @@ class Message implements MailMessageInterface
     /**
      * {@inheritdoc}
      *
-     * @deprecated
      * @see \Magento\Framework\Mail\Message::setBodyText
      * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
