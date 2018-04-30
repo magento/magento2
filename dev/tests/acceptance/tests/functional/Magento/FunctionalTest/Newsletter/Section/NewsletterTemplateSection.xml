@@ -13,6 +13,8 @@
         <element name="senderName" type="input" selector="#sender_name"/>
         <element name="senderEmail" type="input" selector="#sender_email"/>
         <element name="save" type="button" selector="button[data-role='template-save']"/>
+        <element name="searchButton" type="button" selector=".admin__filter-actions button[title=Search]"/>
+        <element name="searchInput" type="input" selector="input[name=code]"/>
     </section>
     <section name="NewsletterWYSIWYGSection">
         <element name="TextArea" type="text" selector="#text" />

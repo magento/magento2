@@ -7,7 +7,6 @@
 namespace Magento\Bundle\Model\Product;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
  * @magentoAppArea frontend
  */
 class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
@@ -17,6 +16,8 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
      * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {
@@ -56,6 +57,8 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForDynamicBundleInWebsiteScope(array $strategyModifiers, array $expectedResults)
     {
