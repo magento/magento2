@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 
 use \Magento\Catalog\Model\Product;
@@ -25,17 +26,60 @@ class AttributeFilter
      * @param array $useDefaults
      * @return array
      */
-    public function prepareProductAttributes(Product $product, array $productData, array $useDefaults)
+    public function prepareProductAttributes(Product $product, array $productData, array $useDefaults): array
     {
-        foreach ($productData as $attribute => $value) {
-            $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === "1";
-            if ($value === '' && $considerUseDefaultsAttribute) {
-                /** @var $product Product */
-                if ((bool)$product->getData($attribute) === (bool)$value) {
-                    unset($productData[$attribute]);
-                }
+        $attributeList = $product->getAttributes();
+
+        foreach ($productData as $attributeCode => $attributeValue) {
+            $considerUseDefaultsAttribute = !isset($useDefaults[$attributeCode]) || $useDefaults[$attributeCode] === '1';
+
+            if ($considerUseDefaultsAttribute) {
+                $productData = $this->prepareUselessAttributes($product, $attributeCode, $attributeValue, $productData);
+                $productData = $this->prepareDefaultData($attributeList, $attributeCode, $productData);
+                $productData = $this->prepareConfigData($product, $attributeCode, $productData);
+            }
+        }
+
+        return $productData;
+    }
+
+    private function prepareConfigData(Product $product, $attributeCode, array $productData): array
+    {
+        // UI component sends value even if field is disabled, so 'Use Config Settings' must be reset to false
+        if ($product->hasData('use_config_' . $attributeCode)) {
+            $productData['use_config_' . $attributeCode] = false;
+        }
+
+        return $productData;
+    }
+
+    private function prepareUselessAttributes(
+        Product $product,
+        $attributeCode,
+        $attributeValue,
+        array $productData
+    ): array {
+        if ($attributeValue === '' && (bool)$product->getData($attributeCode) === (bool)$attributeValue) {
+            unset($productData[$attributeCode]);
+        }
+
+        return $productData;
+    }
+
+    private function prepareDefaultData(array $attributeList, $attributeCode, array $productData): array
+    {
+        $productData[$attributeCode] = null;
+        if (isset($attributeList[$attributeCode])) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+            $attribute = $attributeList[$attributeCode];
+            $attributeType = $attribute->getBackendType();
+            $attribute->setIsRequired(false);
+            // For non-numberic types set the attributeValue to 'false' to trigger their removal from the db
+            if ($attributeType === 'varchar' || $attributeType === 'text' || $attributeType === 'datetime') {
+                $productData[$attributeCode] = false;
             }
         }
         return $productData;
     }
+
 }
