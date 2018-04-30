@@ -26,4 +26,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ProductLink\Search">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\CatalogSearch\Ui\DataProvider\Product\AddFulltextFilterToCollection</argument>
+        </arguments>
+    </type>
 </config>

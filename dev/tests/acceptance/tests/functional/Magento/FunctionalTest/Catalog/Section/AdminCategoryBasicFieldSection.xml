@@ -10,8 +10,21 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCategoryBasicFieldSection">
         <element name="IncludeInMenu" type="checkbox" selector="input[name='include_in_menu']"/>
+        <element name="includeInMenuLabel" type="text" selector="input[name='include_in_menu']+label"/>
         <element name="EnableCategory" type="checkbox" selector="input[name='is_active']"/>
+        <element name="enableCategoryLabel" type="text" selector="input[name='is_active']+label"/>
         <element name="CategoryNameInput" type="input" selector="input[name='name']"/>
+        <element name="ContentTab" type="input" selector="input[name='name']"/>
+        <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
+    </section>
+    <section name="CategoryContentSection">
+        <element name="SelectFromGalleryBtn" type="button" selector="//label[text()='Select from Gallery']"/>
+        <element name="ImagePlaceHolder" type="button" selector=".file-uploader-summary.product-image-wrapper"/>
+        <element name="Upload" type="button" selector=".file-uploader-area input"/>
+    </section>
+    <section name="CategoryDesignSection">
+        <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
+        <element name="LayoutDropdown" type="select" selector="select[name='page_layout']"/>
     </section>
     <section name="CatalogWYSIWYGSection">
         <element name="ShowHideBtn" type="button" selector="#togglecategory_form_description"/>

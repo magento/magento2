@@ -15,7 +15,7 @@
         <field key="type">string</field>
         <field key="sort_order">integer</field>
         <field key="is_require">boolean</field>
-        <field key="price">integer</field>
+        <field key="price">number</field>
         <field key="price_type">string</field>
         <field key="sku">string</field>
         <field key="file_extension">string</field>
@@ -33,7 +33,7 @@
         <field key="type">string</field>
         <field key="sort_order">integer</field>
         <field key="is_require">boolean</field>
-        <field key="price">integer</field>
+        <field key="price">number</field>
         <field key="price_type">string</field>
         <field key="sku">string</field>
         <field key="file_extension">string</field>

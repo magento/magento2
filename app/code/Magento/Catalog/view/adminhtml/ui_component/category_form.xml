@@ -151,29 +151,33 @@
             <collapsible>true</collapsible>
             <label translate="true">Content</label>
         </settings>
-        <field name="image" sortOrder="40" formElement="fileUploader">
+        <field name="image" sortOrder="40" formElement="imageUploader">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">category</item>
                 </item>
             </argument>
             <settings>
-                <elementTmpl>ui/form/element/uploader/uploader</elementTmpl>
+                <elementTmpl>ui/form/element/uploader/image</elementTmpl>
                 <dataType>string</dataType>
                 <label translate="true">Category Image</label>
                 <visible>true</visible>
                 <required>false</required>
             </settings>
             <formElements>
-                <fileUploader>
+                <imageUploader>
                     <settings>
                         <required>false</required>
                         <uploaderConfig>
                             <param xsi:type="url" name="url" path="catalog/category_image/upload"/>
                         </uploaderConfig>
                         <previewTmpl>Magento_Catalog/image-preview</previewTmpl>
+                        <openDialogTitle>Media Gallery</openDialogTitle>
+                        <initialMediaGalleryOpenSubpath>catalog/category</initialMediaGalleryOpenSubpath>
+                        <allowedExtensions>jpg jpeg gif png</allowedExtensions>
+                        <maxFileSize>4194304</maxFileSize>
                     </settings>
-                </fileUploader>
+                </imageUploader>
             </formElements>
         </field>
         <field name="description" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
@@ -459,7 +463,7 @@
                 </imports>
             </settings>
         </field>
-        <field name="page_layout" sortOrder="190" formElement="select">
+        <field name="page_layout" sortOrder="190" formElement="select" class="Magento\Catalog\Ui\Component\Form\Field\Category\PageLayout">
             <settings>
                 <dataType>string</dataType>
                 <label translate="true">Layout</label>

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Adminhtml;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -217,8 +218,15 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertNotEquals(0, $this->accountManagement->getDefaultBillingAddress($customerId));
         $this->assertNull($this->accountManagement->getDefaultShippingAddress($customerId));
 
+        $urlPatternParts = [
+            $this->_baseControllerUrl . 'edit',
+            'id/' . $customerId,
+            'back/1',
+        ];
+        $urlPattern = '/^' . str_replace('/', '\/', implode('(/.*/)|/', $urlPatternParts)) . '/';
+
         $this->assertRedirect(
-            $this->stringStartsWith($this->_baseControllerUrl . 'edit/id/' . $customerId . '/back/1')
+            $this->matchesRegularExpression($urlPattern)
         );
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
@@ -347,6 +355,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'email' => 'customer@example.com',
                 'firstname' => 'test firstname',
                 'lastname' => 'test lastname',
+                'sendemail_store_id' => 1
             ],
             'subscription' => '0'
         ];
@@ -483,7 +492,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
          * Check that error message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(['A customer with the same email already exists in an associated website.']),
+            $this->equalTo(['A customer with the same email address already exists in an associated website.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
         $this->assertEquals(

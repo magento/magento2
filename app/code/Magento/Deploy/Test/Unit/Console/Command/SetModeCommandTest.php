@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Test\Unit\Console\Command;
 
 use Magento\Deploy\Console\Command\SetModeCommand;
@@ -95,7 +96,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'invalid-mode']);
         $this->assertContains(
-            "Cannot switch into given mode",
+            'The mode can\'t be switched to "invalid-mode".',
             $tester->getDisplay()
         );
     }

@@ -129,7 +129,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      */
     public function get($categoryId, $storeId = null)
     {
-        $cacheKey = null !== $storeId ? $storeId : 'all';
+        $cacheKey = $storeId ?? 'all';
         if (!isset($this->instances[$categoryId][$cacheKey])) {
             /** @var Category $category */
             $category = $this->categoryFactory->create();
@@ -197,7 +197,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
                 if ($error === true) {
                     $attribute = $this->categoryResource->getAttribute($code)->getFrontend()->getLabel();
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Attribute "%1" is required.', $attribute)
+                        __('The "%1" attribute is required. Enter and try again.', $attribute)
                     );
                 } else {
                     throw new \Magento\Framework\Exception\LocalizedException(__($error));

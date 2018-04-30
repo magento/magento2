@@ -10,7 +10,9 @@
 namespace Magento\Store\Block;
 
 use Magento\Directory\Helper\Data;
+use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Group;
+use Magento\Store\Model\Store;
 
 /**
  * @api
@@ -217,15 +219,18 @@ class Switcher extends \Magento\Framework\View\Element\Template
     /**
      * Returns target store post data
      *
-     * @param \Magento\Store\Model\Store $store
+     * @param Store $store
      * @param array $data
      * @return string
      */
-    public function getTargetStorePostData(\Magento\Store\Model\Store $store, $data = [])
+    public function getTargetStorePostData(Store $store, $data = [])
     {
-        $data[\Magento\Store\Api\StoreResolverInterface::PARAM_NAME] = $store->getCode();
+        $data[StoreResolverInterface::PARAM_NAME] = $store->getCode();
+
+        //We need to set fromStore argument as true because
+        //it will enable proper URL rewriting during store switching.
         return $this->_postDataHelper->getPostData(
-            $store->getCurrentUrl(false),
+            $store->getCurrentUrl(true),
             $data
         );
     }

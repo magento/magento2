@@ -394,6 +394,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->setDataArrayValue('qty_increments', $config['qty_increments']);
         $this->setDataArrayValue('enable_qty_increments', $config['enable_qty_increments']);
         $this->setDataArrayValue('use_config_qty_increments', $config['use_config_qty_increments']);
+        $this->setDataArrayValue('is_qty_decimal', $config['is_qty_decimal']);
         if ($config['use_config_qty_increments']) {
             $this->stockConfiguration->expects($this->once())
                 ->method('getQtyIncrements')
@@ -415,7 +416,26 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                 [
                     'qty_increments' => 1,
                     'enable_qty_increments' => true,
-                    'use_config_qty_increments' => true
+                    'use_config_qty_increments' => true,
+                    'is_qty_decimal' => false,
+                ],
+                1
+            ],
+            [
+                [
+                    'qty_increments' => 1.5,
+                    'enable_qty_increments' => true,
+                    'use_config_qty_increments' => true,
+                    'is_qty_decimal' => true,
+                ],
+                1.5
+            ],
+            [
+                [
+                    'qty_increments' => 1.5,
+                    'enable_qty_increments' => true,
+                    'use_config_qty_increments' => true,
+                    'is_qty_decimal' => false,
                 ],
                 1
             ],
@@ -423,7 +443,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                 [
                     'qty_increments' => -2,
                     'enable_qty_increments' => true,
-                    'use_config_qty_increments' => true
+                    'use_config_qty_increments' => true,
+                    'is_qty_decimal' => false,
                 ],
                 false
             ],
@@ -431,7 +452,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                 [
                     'qty_increments' => 3,
                     'enable_qty_increments' => true,
-                    'use_config_qty_increments' => false
+                    'use_config_qty_increments' => false,
+                    'is_qty_decimal' => false,
                 ],
                 3
             ],
