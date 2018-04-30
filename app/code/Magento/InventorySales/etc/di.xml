@@ -10,7 +10,6 @@
     <preference for="Magento\InventorySalesApi\Api\Data\SalesChannelInterface" type="Magento\InventorySales\Model\SalesChannel"/>
     <preference for="Magento\InventorySales\Model\GetAssignedSalesChannelsForStockInterface" type="Magento\InventorySales\Model\GetAssignedSalesChannelsForStock"/>
     <preference for="Magento\InventorySales\Model\ReplaceSalesChannelsForStockInterface" type="Magento\InventorySales\Model\ResourceModel\ReplaceSalesChannelsDataForStock"/>
-    <preference for="Magento\InventorySales\Ui\SalesChannelNameResolverInterface" type="Magento\InventorySales\Ui\WebsiteNameResolver"/>
     <preference for="Magento\InventorySales\Model\GetAssignedStockIdForWebsiteInterface" type="Magento\InventorySales\Model\ResourceModel\GetAssignedStockIdForWebsite"/>
     <preference for="Magento\InventorySales\Model\DeleteSalesChannelToStockLinkInterface" type="Magento\InventorySales\Model\ResourceModel\DeleteSalesChannelToStockLink"/>
     <preference for="Magento\InventorySalesApi\Api\StockResolverInterface" type="Magento\InventorySales\Model\StockResolver"/>
@@ -20,9 +19,6 @@
         <plugin name="save_sales_channels_links" type="Magento\InventorySales\Plugin\InventoryApi\StockRepository\SaveSalesChannelsLinksPlugin"/>
         <plugin name="prevent_deleting_assigned_to_sales_channels_stock"
                 type="Magento\InventorySales\Plugin\InventoryApi\StockRepository\PreventDeletingAssignedToSalesChannelsStockPlugin"/>
-    </type>
-    <type name="Magento\Inventory\Ui\DataProvider\StockDataProvider">
-        <plugin name="sales_channel_data" type="Magento\InventorySales\Plugin\Inventory\Ui\StockDataProvider\SalesChannels" />
     </type>
     <type name="Magento\CatalogInventory\Api\StockStateInterface">
         <plugin name="check_quote_item_qty" type="Magento\InventorySales\Plugin\StockState\CheckQuoteItemQtyPlugin"/>

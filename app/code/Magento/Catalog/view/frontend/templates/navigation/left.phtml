@@ -28,6 +28,7 @@
                 <dt><?= /* @escapeNotVerified */ __('Category') ?></dt>
                 <dd>
                     <ol class="items">
+                        <?php /** @var \Magento\Catalog\Model\Category $_category */ ?>
                         <?php foreach ($_categories as $_category): ?>
                             <?php if ($_category->getIsActive()): ?>
                                 <li class="item">

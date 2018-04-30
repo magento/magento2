@@ -54,8 +54,8 @@ class DateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetElementHtmlException()
     {
-        $this->expectException(
-            'Exception',
+        $this->expectException('Exception');
+        $this->expectExceptionMessage(
             'Output format is not specified. Please specify "format" key in constructor, or set it using setFormat().'
         );
         $formMock = $this->getFormMock('never');

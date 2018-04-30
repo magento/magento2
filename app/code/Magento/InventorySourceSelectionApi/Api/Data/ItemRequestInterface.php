@@ -27,4 +27,20 @@ interface ItemRequestInterface
      * @return float
      */
     public function getQty(): float;
+
+    /**
+     * Set SKU
+     *
+     * @param $sku
+     * @return void
+     */
+    public function setSku($sku);
+
+    /**
+     * Set Quantity
+     *
+     * @param $qty
+     * @return void
+     */
+    public function setQty($qty);
 }
