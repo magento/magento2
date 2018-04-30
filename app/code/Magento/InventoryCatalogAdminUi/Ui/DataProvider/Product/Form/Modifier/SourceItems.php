@@ -112,6 +112,8 @@ class SourceItems extends AbstractModifier
             ['source_name' => SourceInterface::NAME, 'source_status' => SourceInterface::ENABLED]
         );
 
+        $collection->setOrder(SourceInterface::NAME, Collection::SORT_ORDER_ASC);
+
         $sourceItemsData = [];
         foreach ($collection->getData() as $row) {
             $sourceItemsData[] = [
