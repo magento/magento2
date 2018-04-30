@@ -61,7 +61,7 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
-        <amOnPage stepKey="s67" url="{{OrdersPage.url}}"/>
+        <amOnPage stepKey="s67" url="{{AdminOrdersPage.url}}"/>
         <waitForPageLoad stepKey="s75"/>
         <fillField stepKey="s77" selector="{{OrdersGridSection.search}}" userInput="{$s53}" />
         <waitForPageLoad stepKey="s78"/>
