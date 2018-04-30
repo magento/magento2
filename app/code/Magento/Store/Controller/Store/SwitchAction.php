@@ -24,6 +24,8 @@ use Magento\Framework\Url\Helper\Data as UrlHelper;
 
 /**
  * Switch current store view.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitchAction extends Action
 {
