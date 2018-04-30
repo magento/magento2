@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+
+
+    <test name="AdminConfigurableProductSearchTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Search"/>
+            <title value="admin should be able to search for a configurable product"/>
+            <description value="admin should be able to search for a configurable product"/>
+            <testCaseId value="MAGETWO-89920"/>
+            <group value="configurable"/>
+            <group value="product"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
+        <actionGroup ref="searchProductGridByKeyword" stepKey="searchForProduct">
+            <argument name="keyword" value="ApiConfigurableProduct.name"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="wait2"/>
+        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOneResult"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{ApiConfigurableProduct.name}}" stepKey="seeInGrid"/>
+        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="{{ApiConfigurableProduct.name}}" stepKey="seeInActiveFilters"/>
+    </test>
+
+
+    <test name="AdminConfigurableProductFilterByTypeTest">
+        <annotations>
+            <title value="admin should be able to filter by type configurable product"/>
+            <stories value="Search"/>
+            <description value="admin should be able to filter by type configurable product"/>
+            <testCaseId value="MAGETWO-90014"/>
+            <group value="configurable"/>
+            <group value="product"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickShowFilters"/>
+        <selectOption selector="{{AdminProductGridFilterSection.typeFilter}}" userInput="{{ApiConfigurableProduct.type_id}}" stepKey="selectConfigurableType"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="Type: Configurable Product" stepKey="seeFilter"/>
+        <see selector="{{AdminProductGridSection.table}}" userInput="$$createProduct.name$$" stepKey="seeProduct"/>
+    </test>
+
+
+</tests>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+
+
+    <test name="AdminConfigurableProductDeleteTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create, Read, Update, Delete"/>
+            <title value="admin should be able to delete a configurable product"/>
+            <description value="admin should be able to delete a configurable product"/>
+            <testCaseId value="MAGETWO-89921"/>
+            <group value="configurable"/>
+            <group value="product"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- assert product visible in storefront -->
+        <amOnPage url="$$createProduct.sku$$.html" stepKey="gotoStorefront1"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProduct"/>
+
+        <!-- go to admin and delete -->
+        <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
+        <actionGroup ref="searchProductGridByKeyword" stepKey="searchForProduct">
+            <argument name="keyword" value="ApiConfigurableProduct.name"/>
+        </actionGroup>
+        <click selector="label.data-grid-checkbox-cell-inner" stepKey="clickCheckbox"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
+        <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="seeSuccessMsg"/>
+
+        <!-- after delete, assert product page is 404 -->
+        <amOnPage url="$$createProduct.sku$$.html" stepKey="gotoStorefront2"/>
+        <waitForPageLoad stepKey="wait3"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
+        <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="dontSeeProduct"/>
+    </test>
+
+
+    <test name="AdminConfigurableProductBulkDeleteTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create, Read, Update, Delete"/>
+            <title value="admin should be able to mass delete configurable products"/>
+            <description value="admin should be able to mass delete configurable products"/>
+            <testCaseId value="MAGETWO-89922"/>
+            <group value="configurable"/>
+            <group value="product"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Search for prefix of the 3 products we created via api -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
+        <actionGroup ref="searchProductGridByKeyword" stepKey="searchForProduct">
+            <argument name="keyword" value="ApiConfigurableProduct.name"/>
+        </actionGroup>
+
+        <!-- Select all, then delete -->
+        <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
+        <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+
+        <!-- Should not see the records in the admin panel -->
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 3 record(s) have been deleted." stepKey="seeSuccessMsg"/>
+        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="0" stepKey="seeNoResults"/>
+
+        <!-- after delete, assert product pages are 404 -->
+        <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoStorefront1"/>
+        <waitForPageLoad stepKey="waitForProduct1"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops1"/>
+        <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct1.name$$" stepKey="dontSeeProduct1"/>
+        <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoStorefront2"/>
+        <waitForPageLoad stepKey="waitForProduct2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops2"/>
+        <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct1.name$$" stepKey="dontSeeProduct2"/>
+        <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoStorefront3"/>
+        <waitForPageLoad stepKey="waitForProduct3"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops3"/>
+        <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct1.name$$" stepKey="dontSeeProduct3"/>
+    </test>
+
+
+</tests>
