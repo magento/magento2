@@ -38,7 +38,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="additionalParams" xsi:type="array">
-                        <item xsi:type="string" active="true" name="order_id">*</item>
+                        <item xsi:type="string" name="order_id">*</item>
                     </item>
                 </item>
             </argument>
