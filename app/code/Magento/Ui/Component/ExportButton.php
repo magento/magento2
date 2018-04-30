@@ -76,7 +76,7 @@ class ExportButton extends AbstractComponent
      * @param ContextInterface $context
      * @return array
      */
-    protected function getAdditionalParams($config, $context)
+    private function getAdditionalParams($config, $context)
     {
         $additionalParams = [];
         if (isset($config['additionalParams'])) {
