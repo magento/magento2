@@ -760,7 +760,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ksort($newOptionTitles);
             $existingOptions = $this->_oldCustomOptions[$productId];
             foreach ($existingOptions as $optionId => $optionData) {
-                if ($optionData['type'] == $newOptionData['type'] && $optionData['titles'][0] == $newOptionTitles[0]) {
+                if (
+                    $optionData['type'] == $newOptionData['type']
+                    && $optionData['titles'][Store::DEFAULT_STORE_ID] == $newOptionTitles[Store::DEFAULT_STORE_ID]
+                ) {
                     return $optionId;
                 }
             }
@@ -1158,7 +1161,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $optionRow
      * @return array
      */
-    private function addPriceData($result, $optionRow): array
+    private function addPriceData(array $result, array $optionRow): array
     {
         if (isset($optionRow['price'])) {
             $percent_suffix = '';

@@ -10,9 +10,8 @@ use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProductModel;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
 use Magento\ImportExport\Model\Import as ImportModel;
-use \Magento\Catalog\Model\Product\Type\AbstractType;
-use \Magento\Framework\App\ObjectManager;
-use \Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class RowCustomizer
@@ -128,7 +127,6 @@ class RowCustomizer implements RowCustomizerInterface
 
     /**
      * @param StoreManagerInterface $storeManager
-     * @throws \RuntimeException
      */
     public function __construct(StoreManagerInterface $storeManager)
     {
@@ -235,9 +233,9 @@ class RowCustomizer implements RowCustomizerInterface
      * @param \Magento\Catalog\Model\Product $product
      * @return string
      */
-    protected function getFormattedBundleOptionValues($product)
+    protected function getFormattedBundleOptionValues(\Magento\Catalog\Model\Product $product): string
     {
-        $optionCollections = $this->getProductOptionCollections($product);
+        $optionCollections = $this->getProductOptionCollection($product);
         $bundleData = '';
         $optionTitles = $this->getBundleOptionTitles($product);
         foreach ($optionCollections->getItems() as $option) {
@@ -298,8 +296,10 @@ class RowCustomizer implements RowCustomizerInterface
      * @param string[] $optionTitles
      * @return string
      */
-    protected function getFormattedOptionValues($option, $optionTitles = [])
-    {
+    protected function getFormattedOptionValues(
+        \Magento\Bundle\Model\Option $option,
+        array $optionTitles = []
+    ): string {
         $names = implode(ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, array_map(
             function ($title, $storeName) {
                 return $storeName . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $title;
@@ -433,7 +433,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     private function getBundleOptionTitles(\Magento\Catalog\Model\Product $product): array
     {
-        $optionCollections = $this->getProductOptionCollections($product);
+        $optionCollections = $this->getProductOptionCollection($product);
         $optionsTitles = [];
         /** @var \Magento\Bundle\Model\Option $option */
         foreach ($optionCollections->getItems() as $option) {
@@ -442,12 +442,13 @@ class RowCustomizer implements RowCustomizerInterface
         $storeIds = $product->getStoreIds();
         if (count($storeIds) > 1) {
             foreach ($storeIds as $storeId) {
-                $optionCollections = $this->getProductOptionCollections($product, $storeId);
+                $optionCollections = $this->getProductOptionCollection($product, (int)$storeId);
                 /** @var \Magento\Bundle\Model\Option $option */
                 foreach ($optionCollections->getItems() as $option) {
                     $optionTitle = $option->getTitle();
                     if ($optionsTitles[$option->getId()]['name'] != $optionTitle) {
-                        $optionsTitles[$option->getId()]['name_' . $this->getStoreCodeById($storeId)] = $optionTitle;
+                        $optionsTitles[$option->getId()]['name_' . $this->getStoreCodeById((int)$storeId)] =
+                            $optionTitle;
                     }
                 }
             }
@@ -464,9 +465,9 @@ class RowCustomizer implements RowCustomizerInterface
      * @param int $storeId
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
-    private function getProductOptionCollections(
+    private function getProductOptionCollection(
         \Magento\Catalog\Model\Product $product,
-        $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        int $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID
     ): \Magento\Bundle\Model\ResourceModel\Option\Collection {
         $productSku = $product->getSku();
         if (!isset($this->optionCollections[$productSku][$storeId])) {
@@ -487,7 +488,7 @@ class RowCustomizer implements RowCustomizerInterface
      * @param int $storeId
      * @return string
      */
-    private function getStoreCodeById($storeId): string
+    private function getStoreCodeById(int $storeId): string
     {
         if (!isset($this->storeIdToCode[$storeId])) {
             $this->storeIdToCode[$storeId] = $this->storeManager->getStore($storeId)->getCode();

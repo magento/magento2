@@ -164,7 +164,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         foreach ($product->getStoreIds() as $storeId) {
             $bundleOptionCollection = $productRepository->get(self::TEST_PRODUCT_NAME, false, $storeId)
                 ->getExtensionAttributes()->getBundleProductOptions();
-            $this->assertEquals(2, count($bundleOptionCollection));
+            $this->assertCount(2, $bundleOptionCollection);
             $i++;
             foreach ($bundleOptionCollection as $optionKey => $option) {
                 $this->assertEquals('checkbox', $option->getData('type'));

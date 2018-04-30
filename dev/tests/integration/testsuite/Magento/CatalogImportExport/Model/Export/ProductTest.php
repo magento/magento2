@@ -382,10 +382,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $exportedCustomOption
+     * @param string $exportedCustomOption
      * @return array
      */
-    private function parseExportedCustomOption($exportedCustomOption)
+    private function parseExportedCustomOption(string $exportedCustomOption): array
     {
         $customOptions = explode('|', $exportedCustomOption);
         $optionItems = [];

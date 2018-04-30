@@ -100,7 +100,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     protected $_assertOptionValues = [
         'title' => 'option_title',
         'price' => 'price',
-        'sku' => 'sku'
+        'sku' => 'sku',
     ];
 
     /**
@@ -350,7 +350,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $storeCodes = [
             'admin',
             'default',
-            'fixture_second_store'
+            'fixture_second_store',
         ];
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $importFile = 'product_with_custom_options_and_multiple_store_views.csv';
@@ -553,7 +553,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function getExpectedOptionsData($pathToFile, $storeCode = ''): array
+    protected function getExpectedOptionsData(string $pathToFile, string $storeCode = ''): array
     {
         $productData = $this->csvToArray(file_get_contents($pathToFile));
         $expectedOptionId = 0;
@@ -580,7 +580,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                     explode(',', $optionData)
                 )
             );
-            $option = call_user_func_array('array_merge', $option);
+            $option = array_merge(...$option);
 
             if (!empty($option['type']) && !empty($option['name'])) {
                 $lastOptionKey = $option['type'] . '|' . $option['name'];

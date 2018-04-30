@@ -8,11 +8,15 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
-use \Magento\Framework\App\ObjectManager;
-use \Magento\Bundle\Model\Product\Price as BundlePrice;
-use \Magento\Catalog\Model\Product\Type\AbstractType;
-use \Magento\CatalogImportExport\Model\Import\Product;
-use \Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Bundle\Model\Product\Price as BundlePrice;
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Bundle
@@ -148,20 +152,20 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     private $storeCodeToId = [];
 
     /**
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param AttributeSetCollectionFactory $attrSetColFac
+     * @param AttributeCollectionFactory $prodAttrColFac
+     * @param ResourceConnection $resource
      * @param array $params
-     * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
+     * @param MetadataPool|null $metadataPool
      * @param Bundle\RelationsDataSaver|null $relationsDataSaver
-     * @param StoreManagerInterface $storeManager
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
-        \Magento\Framework\App\ResourceConnection $resource,
+        AttributeSetCollectionFactory $attrSetColFac,
+        AttributeCollectionFactory $prodAttrColFac,
+        ResourceConnection $resource,
         array $params,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        MetadataPool $metadataPool = null,
         Bundle\RelationsDataSaver $relationsDataSaver = null,
         StoreManagerInterface $storeManager = null
     ) {
@@ -279,10 +283,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param int $storeId
      * @return array
      */
-    protected function populateOptionValueTemplate($option, $optionId, $storeId = 0)
+    protected function populateOptionValueTemplate(array $option, int $optionId, int $storeId = 0): array
     {
         $optionValues = [];
-        if (isset($option['name']) && isset($option['parent_id']) && $optionId) {
+        if (isset($option['name'], $option['parent_id']) && $optionId) {
             $pattern = '/^name[_]?(.*)/';
             $keys = array_keys($option);
             $optionNames = preg_grep($pattern, $keys);
@@ -298,6 +302,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 ];
             }
         }
+
         return $optionValues;
     }
 
@@ -597,7 +602,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param array $optionIds
      * @return array
      */
-    protected function populateInsertOptionValues($optionIds)
+    protected function populateInsertOptionValues(array $optionIds): array
     {
         $optionValues = [];
         foreach ($this->_cachedOptions as $entityId => $options) {
@@ -616,6 +621,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 }
             }
         }
+
         return $optionValues;
     }
 
@@ -752,6 +758,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 $this->storeCodeToId[$store->getCode()] = $store->getId();
             }
         }
+
         return $this->storeCodeToId[$storeCode];
     }
 }
