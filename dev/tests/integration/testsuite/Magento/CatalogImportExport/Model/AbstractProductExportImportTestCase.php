@@ -72,7 +72,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      *
      * @param array $fixtures
@@ -159,7 +159,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      *
      * @param array $fixtures
@@ -240,7 +240,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      *
      * @param array $fixtures
@@ -259,7 +259,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      *
      * @param array $fixtures
