@@ -123,8 +123,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
-        $data['general'] = $this->getRequest()->getPostValue();
-        $categoryPostData = $data['general'];
+        $categoryPostData = $this->getRequest()->getPostValue();
 
         $isNewCategory = !isset($categoryPostData['entity_id']);
         $categoryPostData = $this->stringToBoolConverting($categoryPostData);
