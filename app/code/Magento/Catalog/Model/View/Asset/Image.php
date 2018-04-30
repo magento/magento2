@@ -171,7 +171,7 @@ class Image implements LocalInterface
     private function getMiscPath()
     {
         return $this->encryptor->hash(
-            implode('_', $this->convertTotoReadableFormat($this->miscParams)),
+            implode('_', $this->convertToReadableFormat($this->miscParams)),
             Encryptor::HASH_VERSION_MD5
         );
     }
@@ -194,7 +194,7 @@ class Image implements LocalInterface
      * @param $miscParams
      * @return array
      */
-    private function convertTotoReadableFormat($miscParams)
+    private function convertToReadableFormat($miscParams)
     {
         $miscParams['image_height'] = 'h:' . ($miscParams['image_height'] ?? 'empty');
         $miscParams['image_width'] = 'w:' . ($miscParams['image_width'] ?? 'empty');

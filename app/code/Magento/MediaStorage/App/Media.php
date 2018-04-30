@@ -82,6 +82,7 @@ class Media implements AppInterface
      * @var State
      */
     private $appState;
+
     /**
      * @var ImageResize
      */

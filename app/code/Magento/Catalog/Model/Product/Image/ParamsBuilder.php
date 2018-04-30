@@ -137,7 +137,7 @@ class ParamsBuilder
                 ScopeInterface::SCOPE_STORE
             );
             $width = !empty($size['width']) ? $size['width'] : null;
-            $height = !empty($size['width']) ? $size['height'] : null;
+            $height = !empty($size['height']) ? $size['height'] : null;
 
             return [
                 'watermark_file' => $file,

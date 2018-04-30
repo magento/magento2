@@ -148,13 +148,12 @@ class ImageResize
      */
     public function resizeFromThemes(array $themes = null): \Generator
     {
-        $productImages = $this->productImage->getAllProductImages();
-
         $count = $this->productImage->getCountAllProductImages();
         if (!$count) {
             throw new NotFoundException(__('Cannot resize images - product images not found'));
         }
 
+        $productImages = $this->productImage->getAllProductImages();
         $viewImages = $this->getViewImages($themes ?? $this->getThemesInUse());
 
         foreach ($productImages as $image) {
