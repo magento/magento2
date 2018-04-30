@@ -99,8 +99,7 @@ class Router implements \Magento\Framework\App\RouterInterface
                     ]
                 );
                 if ($currentRewrite
-                    && $currentRewrite->getRequestPath()
-                    !== $oldRewrite->getRequestPath()
+                    && $currentRewrite->getRequestPath() !== $oldRewrite->getRequestPath()
                 ) {
                     return $this->redirect(
                         $request,
