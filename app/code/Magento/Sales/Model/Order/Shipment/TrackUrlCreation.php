@@ -13,7 +13,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface TrackUrlCreationInterface extends TrackInterface, ExtensibleDataInterface
+interface TrackUrlCreation extends TrackInterface, ExtensibleDataInterface
 {
     /**
      * Retrieve existing extension attributes object or create a new one.

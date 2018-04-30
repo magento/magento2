@@ -102,7 +102,9 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getValidTrackUrl($track){
         //\Zend_Uri::setConfig(array('allowRelative' => false, 'allowAbsolute' => false));
-        if ($track->getTrackUrl() && \Zend_Uri::check($track->getTrackUrl())) {
+        //if ($track->getTrackUrl() && \Zend_Uri::check($track->getTrackUrl())) {
+        if ($track->getTrackUrl() && $this->zendValidatorUri->check($track->getTrackUrl())) {
+
             return $track->getTrackUrl();
         }
         return false;
