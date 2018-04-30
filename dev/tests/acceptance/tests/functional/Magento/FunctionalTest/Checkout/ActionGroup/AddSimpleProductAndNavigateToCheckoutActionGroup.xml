@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddSimpleProductAndNavigateToCheckoutActionGroup">
+        <arguments>
+            <argument name="category" defaultValue="category"/>
+            <argument name="product" defaultValue="product"/>
+        </arguments>
+        <amOnPage url="{{StorefrontCategoryPage.url(category.name)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="seeAddedToCartMessage"/>
+        <see selector="{{StorefrontMiniCartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickCart"/>
+        <click selector="{{StorefrontMiniCartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+    </actionGroup>
+</actionGroups>

@@ -30,16 +30,11 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
-        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
-        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
-        <see selector="{{StorefrontMiniCartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
-        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickCart"/>
-        <click selector="{{StorefrontMiniCartSection.goToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <!-- Add simple product to cart and navigate to checkout -->
+        <actionGroup stepKey="addProductNavigateToCheckout" ref="AddSimpleProductAndNavigateToCheckoutActionGroup">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
         <fillField selector="{{GuestCheckoutShippingSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
         <fillField selector="{{GuestCheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{GuestCheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
