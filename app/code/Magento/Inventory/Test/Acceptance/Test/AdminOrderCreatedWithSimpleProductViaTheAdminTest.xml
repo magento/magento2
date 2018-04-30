@@ -97,6 +97,9 @@
         <click selector="#sales_order_create_customer_grid_table tbody tr" stepKey="clickOnTheFirstRow1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
 
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad20"/>
+
         <click selector="#add_products" stepKey="clickOnAddProductsButton1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
 
