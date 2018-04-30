@@ -34,7 +34,7 @@
     "suggest": {
         "magento/module-cookie": "*",
         "magento/module-sales": "*",
-        "magento/module-catalog-sample-data": "Sample Data version:100.3.*"
+        "magento/module-catalog-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [
