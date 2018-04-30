@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\Indexer;
 
-use \Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 
 /**
  * Generator of consecutive entity ID ranges that must be handled as a batch.
@@ -24,22 +25,15 @@ class BatchProvider implements BatchProviderInterface
             $adapter->select()->from(
                 ['entity' => $tableName],
                 [
-                    'max_value' => new \Zend_Db_Expr('MAX(entity.' . $linkField . ')')
+                    'max_value' => new \Zend_Db_Expr('COUNT(*)')
                 ]
             )
         );
 
-        /** @var int $truncatedBatchSize size of the last batch that is smaller than expected batch size */
-        $truncatedBatchSize = $maxLinkFieldValue % $batchSize;
-        /** @var int $fullBatchCount count of the batches that have expected batch size */
-        $fullBatchCount = ($maxLinkFieldValue - $truncatedBatchSize) / $batchSize;
+        $fullBatchCount = ceil($maxLinkFieldValue / $batchSize);
 
         for ($batchIndex = 0; $batchIndex < $fullBatchCount; $batchIndex ++) {
-            yield ['from' => $batchIndex * $batchSize + 1, 'to' => ($batchIndex + 1) * $batchSize];
-        }
-        // return the last batch if it has smaller size
-        if ($truncatedBatchSize > 0) {
-            yield ['from' => $fullBatchCount * $batchSize + 1, 'to' => $maxLinkFieldValue];
+            yield ['limit' => $batchSize, 'offset' => $batchIndex * $batchSize];
         }
     }
 
@@ -47,18 +41,11 @@ class BatchProvider implements BatchProviderInterface
      * @inheritdoc
      */
     public function getBatchIds(
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection,
-        \Magento\Framework\DB\Select $select,
+        AdapterInterface $connection,
+        Select $select,
         array $batch
     ) {
-        $betweenCondition = sprintf(
-            '(%s BETWEEN %s AND %s)',
-            'entity_id',
-            $connection->quote($batch['from']),
-            $connection->quote($batch['to'])
-        );
-
-        $ids = $connection->fetchCol($select->where($betweenCondition));
+        $ids = $connection->fetchCol($select->order('entity_id')->limit($batch['limit'], $batch['offset']));
         return array_map('intval', $ids);
     }
 }
