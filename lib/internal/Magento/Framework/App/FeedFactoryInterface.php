@@ -20,12 +20,9 @@ interface FeedFactoryInterface
      *
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\RuntimeException
-     * @param  array  $data
-     * @param  string $format
+     * @param array $data
+     * @param string $format
      * @return FeedInterface
      */
-    public function create(
-        array $data,
-        $format = self::FORMAT_RSS
-    );
+    public function create(array $data, $format = self::FORMAT_RSS) : FeedInterface;
 }

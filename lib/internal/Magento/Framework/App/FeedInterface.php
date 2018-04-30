@@ -11,16 +11,9 @@ namespace Magento\Framework\App;
 interface FeedInterface
 {
     /**
-     * XML feed output format
-     */
-    const FORMAT_XML = 'xml';
-
-    /**
-     * @param string $format
+     * Returns the formatted feed content
      *
      * @return string
      */
-    public function getFormattedContentAs(
-        $format = self::FORMAT_XML
-    );
+    public function getFormattedContent() : string;
 }

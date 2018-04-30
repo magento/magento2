@@ -5,47 +5,32 @@
  */
 namespace Magento\Framework\App;
 
+use Zend\Feed\Writer\FeedFactory;
+
 /**
  * Default XML feed class
  */
 class Feed implements FeedInterface
 {
     /**
-     * @var \Zend_Feed
-     */
-    private $feedProcessor;
-
-    /**
      * @var array
      */
-    private $data;
+    private $feeds;
 
     /**
-     * @param Zend_Feed $feedProcessor
-     * @param array $data
+     * Feed constructor.
+     * @param array $feeds
      */
-    public function __construct(
-        \Zend_Feed $feedProcessor,
-        array $data
-    ) {
-        $this->feedProcessor = $feedProcessor;
-        $this->data = $data;
+    public function __construct(array $feeds)
+    {
+        $this->feeds = $feeds;
     }
 
     /**
-     * Returns the formatted feed content
-     *
-     * @param string $format
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getFormattedContentAs(
-        $format = self::FORMAT_XML
-    ) {
-        $feed = $this->feedProcessor::importArray(
-            $this->data,
-            FeedFactoryInterface::FORMAT_RSS
-        );
-        return $feed->saveXml();
+    public function getFormattedContent() : string
+    {
+        return FeedFactory::factory($this->feeds)->export(FeedFactoryInterface::FORMAT_RSS);
     }
 }

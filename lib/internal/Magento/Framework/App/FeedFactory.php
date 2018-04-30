@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\FeedFactoryInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -47,21 +46,17 @@ class FeedFactory implements FeedFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create(
-        array $data,
-        $format = FeedFactoryInterface::FORMAT_RSS
-    ) {
+    public function create(array $data, $format = FeedFactoryInterface::FORMAT_RSS) : FeedInterface
+    {
         if (!isset($this->formats[$format])) {
             throw new \Magento\Framework\Exception\InputException(
-                new \Magento\Framework\Phrase('The format is not supported'),
-                $e
+                new \Magento\Framework\Phrase('The format is not supported')
             );
         }
 
         if (!is_subclass_of($this->formats[$format], \Magento\Framework\App\FeedInterface::class)) {
             throw new \Magento\Framework\Exception\InputException(
-                new \Magento\Framework\Phrase('Wrong format handler type'),
-                $e
+                new \Magento\Framework\Phrase('Wrong format handler type')
             );
         }
 
