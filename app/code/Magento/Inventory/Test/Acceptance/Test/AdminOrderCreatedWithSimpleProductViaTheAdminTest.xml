@@ -161,7 +161,6 @@
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{MsiCustomer1.lastname}}" stepKey="seeLastName1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Pending" stepKey="seeFirstName3"/>
 
-
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad19"/>
 
