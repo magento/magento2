@@ -17,9 +17,8 @@
             <title value="admin should be able to create a configurable product with attributes"/>
             <description value="admin should be able to create a configurable product with attributes"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-89941"/>
-            <group value="configurable"/>
-            <group value="product"/>
+            <testCaseId value="MC-84"/>
+            <group value="ConfigurableProduct"/>
         </annotations>
 
         <before>

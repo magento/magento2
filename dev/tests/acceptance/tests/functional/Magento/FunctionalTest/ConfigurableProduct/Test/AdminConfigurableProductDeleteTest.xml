@@ -16,9 +16,8 @@
             <stories value="Create, Read, Update, Delete"/>
             <title value="admin should be able to delete a configurable product"/>
             <description value="admin should be able to delete a configurable product"/>
-            <testCaseId value="MAGETWO-89921"/>
-            <group value="configurable"/>
-            <group value="product"/>
+            <testCaseId value="MC-87"/>
+            <group value="ConfigurableProduct"/>
         </annotations>
 
         <before>
@@ -67,9 +66,8 @@
             <stories value="Create, Read, Update, Delete"/>
             <title value="admin should be able to mass delete configurable products"/>
             <description value="admin should be able to mass delete configurable products"/>
-            <testCaseId value="MAGETWO-89922"/>
-            <group value="configurable"/>
-            <group value="product"/>
+            <testCaseId value="MC-99"/>
+            <group value="ConfigurableProduct"/>
         </annotations>
 
         <before>

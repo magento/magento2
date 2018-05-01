@@ -16,9 +16,8 @@
             <stories value="Search"/>
             <title value="admin should be able to search for a configurable product"/>
             <description value="admin should be able to search for a configurable product"/>
-            <testCaseId value="MAGETWO-89920"/>
-            <group value="configurable"/>
-            <group value="product"/>
+            <testCaseId value="MC-100"/>
+            <group value="ConfigurableProduct"/>
         </annotations>
 
         <before>
@@ -53,9 +52,8 @@
             <title value="admin should be able to filter by type configurable product"/>
             <stories value="Search"/>
             <description value="admin should be able to filter by type configurable product"/>
-            <testCaseId value="MAGETWO-90014"/>
-            <group value="configurable"/>
-            <group value="product"/>
+            <testCaseId value="MC-66"/>
+            <group value="ConfigurableProduct"/>
         </annotations>
 
         <before>
