@@ -82,7 +82,8 @@
         <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite3.name}}" stepKey="selectNewWebsite3"/>
         <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite4.name}}" stepKey="selectNewWebsite4"/>
 
-        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite5"/>
+        <click selector="#save-button" stepKey="clickOnSaveWebSite5"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
 
         <seeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeBasicWebbSiteSelected1"/>
         <seeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite2.name}}" stepKey="seeBasicWebbSiteSelected2"/>
