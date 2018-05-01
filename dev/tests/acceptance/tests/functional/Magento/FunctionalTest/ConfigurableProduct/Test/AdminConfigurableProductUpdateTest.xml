@@ -16,9 +16,8 @@
             <stories value="Create, Read, Update, Delete"/>
             <title value="admin should be able to bulk update attributes of configurable products"/>
             <description value="admin should be able to bulk update attributes of configurable products"/>
-            <testCaseId value="MAGETWO-89923"/>
-            <group value="configurable"/>
-            <group value="product"/>
+            <testCaseId value="MC-88"/>
+            <group value="ConfigurableProduct"/>
         </annotations>
 
         <before>
