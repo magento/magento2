@@ -51,10 +51,42 @@ class BatchProviderTest extends \PHPUnit\Framework\TestCase
     public function getBatchesDataProvider()
     {
         return [
-            [200, 600, [['from' => 1, 'to' => 200], ['from' => 201, 'to' => 400], ['from' => 401, 'to' => 600]]],
-            [200, 555, [['from' => 1, 'to' => 200], ['from' => 201, 'to' => 400], ['from' => 401, 'to' => 555]]],
-            [200, 10, [['from' => 1, 'to' => 10]]],
-            [200, 0, []],
+            [
+                100,
+                200,
+                [
+                    ['limit' => 100, 'offset' => 0],
+                    ['limit' => 100, 'offset' => 100]
+                ]
+
+            ],
+            [
+                30,
+                66,
+                [
+                    ['limit' => 30, 'offset' => 0],
+                    ['limit' => 30, 'offset' => 30],
+                    ['limit' => 30, 'offset' => 60]
+                ]
+            ],
+            [
+                200,
+                50,
+                [
+                    ['limit' => 200, 'offset' => 0],
+                    ['limit' => 200, 'offset' => 50],
+                    ['limit' => 200, 'offset' => 100],
+                    ['limit' => 200, 'offset' => 150],
+                    ['limit' => 200, 'offset' => 200]
+                ]
+            ],
+            [
+                100,
+                100,
+                [
+                    ['limit' => 100, 'offset' => 0]
+                ]
+            ]
         ];
     }
 
@@ -63,12 +95,12 @@ class BatchProviderTest extends \PHPUnit\Framework\TestCase
         $selectMock = $this->createMock(Select::class);
         $adapterMock = $this->createMock(AdapterInterface::class);
 
-        $selectMock->expects($this->once())->method('where')->with('(entity_id BETWEEN 10 AND 100)')->willReturnSelf();
-        $adapterMock->expects($this->atLeastOnce())->method('quote')->willReturnArgument(0);
+        $selectMock->expects($this->once())->method('order')->with('entity_id')->willReturnSelf();
+        $selectMock->expects($this->once())->method('limit')->with(100, 0)->willReturnSelf();
         $adapterMock->expects($this->once())->method('fetchCol')->with($selectMock, [])->willReturn([1, 2, 3]);
         $this->assertEquals(
             [1, 2, 3],
-            $this->model->getBatchIds($adapterMock, $selectMock, ['from' => 10, 'to' => 100])
+            $this->model->getBatchIds($adapterMock, $selectMock, ['limit' => 100, 'offset' => 0])
         );
     }
 }
