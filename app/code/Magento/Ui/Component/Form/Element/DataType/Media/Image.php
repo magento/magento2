@@ -65,7 +65,7 @@ class Image extends Media
     {
         // dynamically set max file size based on php ini config if not present in XML
         $maxFileSize = min(array_filter([
-            $this->getConfiguration()['maxFileSize'] ?? null,
+            $this->getConfiguration()['maxFileSize'] ?? 0,
             $this->fileSize->getMaxFileSize()
         ]));
 
