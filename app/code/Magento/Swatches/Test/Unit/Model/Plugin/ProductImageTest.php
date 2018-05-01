@@ -77,7 +77,11 @@ class ProductImageTest extends \PHPUnit\Framework\TestCase
             ->method('getParams')
             ->willReturn($expected['getParams']);
 
-        $this->getFilterArray($expected);
+        $this->eavConfigMock
+            ->method('getEntityAttributes')
+            ->with('catalog_product')
+            ->willReturn(['color' => $this->attributeMock]);
+
         $this->canReplaceImageWithSwatch($expected);
         $this->swatchesHelperMock
             ->expects($this->exactly($expected['loadVariationByFallback_count']))
@@ -92,24 +96,6 @@ class ProductImageTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->pluginModel->beforeGetImage($productImageMock, $this->productMock, $expected['page_handle']);
         $this->assertEquals([$this->productMock, $expected['page_handle'], []], $result);
-    }
-
-    protected function getFilterArray($expected)
-    {
-        $this->eavConfigMock
-            ->method('getEntityAttributeCodes')
-            ->with('catalog_product')
-            ->willReturn($expected['attribute_codes_array']);
-
-        $this->eavConfigMock
-            ->method('getAttribute')
-            ->with('catalog_product', $expected['attribute_code'])
-            ->willReturn($this->attributeMock);
-
-        $this->attributeMock
-            ->expects($this->exactly($expected['getId_count']))
-            ->method('getId')
-            ->willReturn($expected['getId']);
     }
 
     protected function canReplaceImageWithSwatch($expected)
@@ -152,7 +138,6 @@ class ProductImageTest extends \PHPUnit\Framework\TestCase
                 [
                     'page_handle' => 'category_page_grid',
                     'getParams' => ['color' => 31],
-                    'attribute_codes_array' => ['color'],
                     'attribute_code' => 'color',
                     'getId_count' => 1,
                     'getId' => 332,
@@ -171,7 +156,6 @@ class ProductImageTest extends \PHPUnit\Framework\TestCase
                 [
                     'page_handle' => 'category_page_grid',
                     'getParams' => ['color' => 31],
-                    'attribute_codes_array' => ['color'],
                     'attribute_code' => 'color',
                     'getId_count' => 1,
                     'getId' => 332,
@@ -190,7 +174,6 @@ class ProductImageTest extends \PHPUnit\Framework\TestCase
                 [
                     'page_handle' => 'category_page_grid',
                     'getParams' => ['color' => 31],
-                    'attribute_codes_array' => ['color'],
                     'attribute_code' => 'color',
                     'getId_count' => 1,
                     'getId' => 332,

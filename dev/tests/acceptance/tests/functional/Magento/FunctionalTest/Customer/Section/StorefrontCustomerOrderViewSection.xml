@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerOrderViewSection">
+        <element name="orderTitle" type="text" selector=".page-title span"/>
+        <element name="myOrdersTable" type="text" selector="#my-orders-table"/>
+        <element name="subtotal" type="text" selector=".subtotal .amount"/>
+        <element name="paymentMethod" type="text" selector=".payment-method dt"/>
+    </section>
+</sections>
