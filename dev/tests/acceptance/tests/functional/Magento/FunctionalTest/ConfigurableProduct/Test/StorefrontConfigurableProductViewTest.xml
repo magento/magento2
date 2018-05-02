@@ -8,9 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-
-
-    <test name="StorefrontGridViewTest">
+    <test name="StorefrontConfigurableProductGridViewTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Storefront"/>
@@ -46,7 +44,7 @@
         <see selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="{{colorProductAttribute1.price}}" stepKey="seePrice"/>
     </test>
 
-    <test name="StorefrontListViewTest">
+    <test name="StorefrontConfigurableProductListViewTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Storefront"/>
@@ -84,7 +82,7 @@
         <see selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="{{colorProductAttribute1.price}}" stepKey="seePrice"/>
     </test>
 
-    <test name="StorefrontAddToCartTest">
+    <test name="StorefrontConfigurableProductAddToCartTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Storefront"/>
@@ -124,6 +122,4 @@
             <actualResult type="string">{$grabUrl}</actualResult>
         </assertContains>
     </test>
-
-
 </tests>

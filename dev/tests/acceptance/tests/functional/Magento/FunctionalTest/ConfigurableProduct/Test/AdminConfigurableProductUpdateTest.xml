@@ -8,8 +8,6 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-
-
     <test name="AdminConfigurableProductBulkUpdateTest">
         <annotations>
             <features value="ConfigurableProduct"/>
@@ -71,6 +69,4 @@
         <waitForPageLoad stepKey="wait5"/>
         <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeDescription3"/>
     </test>
-
-
 </tests>
