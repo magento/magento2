@@ -12,9 +12,9 @@
         <annotations>
             <features value="Persistent"/>
             <title value="Guest Checkout with Enabled Persistent"/>
-            <description value="Checkout data must be restored after page checkout  reload."/>
+            <description value="Checkout data must be restored after page checkout reload."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-XXXXX"/>
+            <testCaseId value="MAGETWO-91015"/>
             <group value="persistent"/>
         </annotations>
         <before>
@@ -80,6 +80,5 @@
         <see stepKey="seeShipToState" selector="{{ShipToSection.shippingInformation}}" userInput="{{CustomerAddressSimple.state}}" />
         <see stepKey="seeShipToPostcode" selector="{{ShipToSection.shippingInformation}}" userInput="{{CustomerAddressSimple.postcode}}" />
         <see stepKey="seeShipToTelephone" selector="{{ShipToSection.shippingInformation}}" userInput="{{CustomerAddressSimple.telephone}}" />
-
     </test>
 </tests>
