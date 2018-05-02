@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
@@ -44,13 +45,23 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
         $expectedProductData,
         $initialProductData
     ) {
+        /** @var \PHPUnit_Framework_MockObject_MockObject | Product $productMockMap */
         $productMockMap = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->setMethods(['getData', 'getAttributes'])
             ->getMock();
 
         if (!empty($initialProductData)) {
             $productMockMap->expects($this->any())->method('getData')->willReturnMap($initialProductData);
+        }
+
+        if ($useDefaults) {
+            $productMockMap
+                ->expects($this->once())
+                ->method('getAttributes')
+                ->willReturn(
+                    $this->getProductAttributesMock($useDefaults)
+                );
         }
 
         $actualProductData = $this->model->prepareProductAttributes($productMockMap, $requestProductData, $useDefaults);
@@ -169,7 +180,7 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
                     'description' => 'descr modified'
                 ],
                 'initialProductData' => [
-                    ['name', null,'testName2'],
+                    ['name', null, 'testName2'],
                     ['sku', null, 'testSku2'],
                     ['price', null, '101'],
                     ['description', null, 'descr text']
@@ -180,7 +191,8 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
                     'name' => 'testName3',
                     'sku' => 'testSku3',
                     'price' => '103',
-                    'special_price' => '100'
+                    'special_price' => '100',
+                    'description' => 'descr modified',
                 ],
                 'useDefaults' => [
                     'description' => '1'
@@ -190,14 +202,38 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
                     'sku' => 'testSku3',
                     'price' => '103',
                     'special_price' => '100',
+                    'description' => false
                 ],
                 'initialProductData' => [
-                    ['name', null,'testName2'],
+                    ['name', null, 'testName2'],
                     ['sku', null, 'testSku2'],
                     ['price', null, '101'],
                     ['description', null, 'descr text']
                 ]
             ],
         ];
+    }
+
+    /**
+     * @param array $useDefaults
+     * @return array
+     */
+    private function getProductAttributesMock(array $useDefaults): array
+    {
+        $returnArray = [];
+        foreach ($useDefaults as $attributecode => $isDefault) {
+            if ($isDefault === '1') {
+                /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute | \PHPUnit_Framework_MockObject_MockObject $attribute */
+                $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+                    ->disableOriginalConstructor()
+                    ->getMock();
+                $attribute->expects($this->any())
+                    ->method('getBackendType')
+                    ->willReturn('varchar');
+
+                $returnArray[$attributecode] = $attribute;
+            }
+        }
+        return $returnArray;
     }
 }
