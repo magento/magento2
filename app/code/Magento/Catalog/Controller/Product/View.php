@@ -76,7 +76,10 @@ class View extends \Magento\Catalog\Controller\Product
         $productId = (int) $this->getRequest()->getParam('id');
         $specifyOptions = $this->getRequest()->getParam('options');
 
-        if ($this->getRequest()->isPost() && $this->getRequest()->getParam(self::PARAM_NAME_URL_ENCODED)) {
+        if (!$this->_request->getParam('___from_store')
+            && $this->_request->isPost()
+            && $this->_request->getParam(self::PARAM_NAME_URL_ENCODED)
+        ) {
             $product = $this->_initProduct();
             if (!$product) {
                 return $this->noProductRedirect();

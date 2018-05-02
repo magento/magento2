@@ -2078,6 +2078,13 @@ class InstallSchema implements InstallSchemaInterface
                 'Is Disabled'
             )
             ->addIndex(
+                $installer->getIdxName(
+                    'catalog_product_entity_media_gallery_value',
+                    ['entity_id', 'value_id', 'store_id']
+                ),
+                ['entity_id', 'value_id', 'store_id']
+            )
+            ->addIndex(
                 $installer->getIdxName('catalog_product_entity_media_gallery_value', ['store_id']),
                 ['store_id']
             )

@@ -241,7 +241,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->processorFacade);
         $this->processorFacade
             ->expects($this->once())
-            ->method('process')
+            ->method('processWithLockTarget')
             ->with(
                 'dev/debug/debug_logging',
                 0,
