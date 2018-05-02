@@ -12,7 +12,7 @@
         <element name="name" type="input" selector=".admin__control-text[name='general[name]']"/>
     </section>
     <section name="AdminEditStockSalesChannelsSection">
-        <element name="websites" type="select" selector="select[name='sales_channels[website]']"/>
+        <element name="websites" type="multiselect" selector="sales_channels[website]"/>
     </section>
     <section name="AdminEditStockSourcesSection">
         <element name="assignSources" type="button" selector="button[data-index='assign_sources_button']" timeout="30"/>
