@@ -307,7 +307,8 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($rateTitles)
             ->willThrowException($expectedException);
         $this->rateRegistryMock->expects($this->never())->method('registerTaxRate')->with($rateMock);
-        $this->expectException($exceptionType, $exceptionMessage);
+        $this->expectException($exceptionType);
+        $this->expectExceptionMessage($exceptionMessage);
         $this->model->save($rateMock);
     }
 
