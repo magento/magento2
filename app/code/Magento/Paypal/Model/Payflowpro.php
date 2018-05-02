@@ -13,6 +13,7 @@ use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Quote\Model\Quote;
@@ -647,6 +648,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param DataObject $response
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Payment\Gateway\Command\CommandException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      */
     public function processErrors(DataObject $response)
@@ -658,9 +660,9 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         } elseif ($response->getResultCode() != self::RESPONSE_CODE_APPROVED &&
             $response->getResultCode() != self::RESPONSE_CODE_FRAUDSERVICE_FILTER
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(__($response->getRespmsg()));
+            throw new CommandException(__($response->getRespmsg()));
         } elseif ($response->getOrigresult() == self::RESPONSE_CODE_DECLINED_BY_FILTER) {
-            throw new \Magento\Framework\Exception\LocalizedException(__($response->getRespmsg()));
+            throw new CommandException(__($response->getRespmsg()));
         }
     }
 
