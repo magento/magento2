@@ -29,26 +29,11 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <!-- START OF STOCK ASSIGNMENT -->
-        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnStockListPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">
+        <actionGroup ref="AdminGoToStockPageAssignStockToSourceAndMainWebsite" stepKey="goToStockPageAssignStockToSource1">
             <argument name="keyword" value="$$createStock1.stock[name]$$"/>
+            <argument name="stock_name" value="$$createStock1.stock[name]$$"/>
+            <argument name="source_name" value="$$createSource1.source[name]$$"/>
         </actionGroup>
-
-        <click selector="{{AdminGridRow.editByValue($$createStock1.stock[name]$$)}}" stepKey="clickOnFirstRow1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
-
-        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="clickOnMainWebsite1"/>
-        <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSources1"/>
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword2">
-            <argument name="keyword" value="$$createSource1.source[name]$$"/>
-        </actionGroup>
-        <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource2"/>
-        <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDone1"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinue1"/>
-        <!-- END OF STOCK ASSIGNMENT -->
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>

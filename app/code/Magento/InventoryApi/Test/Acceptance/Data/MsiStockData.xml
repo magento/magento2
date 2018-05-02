@@ -14,8 +14,10 @@
     </entity>
     <entity name="BasicMsiStock1" type="stock">
         <data key="name" unique="suffix">Basic MSI Stock 1 </data>
+        <data key="website">Main Website</data>
     </entity>
     <entity name="BasicMsiStock2" type="stock">
         <data key="name" unique="suffix">Basic MSI Stock 2 </data>
+        <data key="website">Main Website</data>
     </entity>
 </entities>
