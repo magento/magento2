@@ -88,8 +88,9 @@
 
     <test name="AdminConfigurableProductFilterByTypeTest">
         <annotations>
-            <title value="admin should be able to filter by type configurable product"/>
+            <features value="ConfigurableProduct"/>
             <stories value="Search"/>
+            <title value="admin should be able to filter by type configurable product"/>
             <description value="admin should be able to filter by type configurable product"/>
             <testCaseId value="MC-66"/>
             <group value="ConfigurableProduct"/>
