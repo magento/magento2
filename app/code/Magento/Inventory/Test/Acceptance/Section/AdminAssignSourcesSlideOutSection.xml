@@ -11,6 +11,7 @@
     <section name="AdminAssignSourcesSlideOutSection">
         <element name="cancel" type="button" selector=".product_form_product_form_sources_assign_sources_modal button.action-secondary" timeout="30"/>
         <element name="done" type="button" selector=".product_form_product_form_sources_assign_sources_modal button.action-primary" timeout="30"/>
+        <element name="inventory_done" type="button" selector=".inventory_stock_form_inventory_stock_form_sources_assign_sources_modal button.action-primary" timeout="30"/>
 
         <element name="defaultSourceCheckbox" type="checkbox" selector="#idscheckdefault"/>
     </section>

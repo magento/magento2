@@ -27,15 +27,10 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPage1"/>
-
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="searchForSource1">
-            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <argument name="value" value="$$createFullSource1.source[source_code]$$"/>
+        <actionGroup ref="AdminGoToSourceGridFilterResultsByInputEditSource" stepKey="goToSourceGridFilterResultsByInputEditSource1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createFullSource1.source[source_code]$$"/>
         </actionGroup>
-
-        <click selector="{{AdminGridRow.editByValue($$createFullSource1.source[source_code]$$)}}" stepKey="clickOnEdit1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad0"/>
 
         <fillField userInput="{{FullSource2.name}}" selector="{{AdminEditSourceGeneralSection.name}}" stepKey="fillNameField2"/>
         <checkOption selector="{{AdminEditSourceGeneralSection.isEnabled}}" stepKey="checkIsEnabled2"/>
@@ -81,13 +76,11 @@
         <seeInField selector="{{AdminEditSourceAddressDataSection.street}}" userInput="{{FullSource2.street}}" stepKey="seeStreetInField1"/>
         <seeInField selector="{{AdminEditSourceAddressDataSection.postcode}}" userInput="{{FullSource2.postcode}}" stepKey="seePostcodeInField1"/>
 
-        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPage2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
-
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
-            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <argument name="value" value="FullSource1.source_code"/>
+        <actionGroup ref="AdminGoToSourceGridFilterResultsByInput" stepKey="goToSourceGridFilterResultsByInput1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createFullSource1.source[source_code]$$"/>
         </actionGroup>
+
 
         <see userInput="{{FullSource1.source_code}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow2"/>
         <see userInput="{{FullSource2.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow2"/>

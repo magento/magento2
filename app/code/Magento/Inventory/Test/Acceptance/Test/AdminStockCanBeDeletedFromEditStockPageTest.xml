@@ -22,19 +22,15 @@
         <before>
             <createData entity="_defaultStock" stepKey="createStock1"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockListPage1"/>
-            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">
-            <argument name="keyword" value="$$createStock1.stock[name]$$"/>
+        <actionGroup ref="AdminGoToStockGridFilterResultsByInputEditStock" stepKey="goToStockGridFilterResultsByInputEditStock1">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createStock1.stock[name]$$"/>
         </actionGroup>
-
-        <click selector="{{AdminGridRow.editByValue($$createStock1.stock[name]$$)}}" stepKey="clickOnEditForDefaultStock1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
         <click selector="#delete" stepKey="clickOnDelete1"/>
         <waitForPageLoad time="5" stepKey="waitForPageLoad2"/>

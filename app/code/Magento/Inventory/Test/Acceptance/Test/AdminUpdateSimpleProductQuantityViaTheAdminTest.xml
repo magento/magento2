@@ -33,12 +33,9 @@
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
         </after>
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
-            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="$$simpleProduct1.product[sku]$$"/>
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInput" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
         </actionGroup>
 
         <see selector="{{AdminGridRow.rowOne}}" userInput="$$simpleProduct1.product[name]$$" stepKey="seeProductNameInGrid1"/>
@@ -58,12 +55,9 @@
         <click selector="{{AdminGridMainControls.save}}" stepKey="clickOnSaveWebSite2"/>
         <seeInField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="50" stepKey="seeOldQuantityValue3"/>
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
-
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">
-            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="$$simpleProduct1.product[sku]$$"/>
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInput" stepKey="goToProductGridFilterResultsByInputEditProduct2">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
         </actionGroup>
 
         <see selector="{{AdminGridRow.rowOne}}" userInput="$$simpleProduct1.product[name]$$" stepKey="seeProductNameInGrid2"/>
