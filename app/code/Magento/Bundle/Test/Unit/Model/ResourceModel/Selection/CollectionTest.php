@@ -115,7 +115,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $itemTableName = 'cataloginventory_stock_item';
         $this->entity->expects($this->exactly(2))
             ->method('getTable')
-            ->willReturnOnConsecutiveCalls($itemTableName, $statusTableName);
+            ->willReturnMap([
+                ['cataloginventory_stock_item', $itemTableName],
+                ['cataloginventory_stock_status', $statusTableName],
+            ]);
         $this->select->expects($this->exactly(2))
             ->method('joinInner')
             ->withConsecutive(
@@ -131,18 +134,22 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 ]
             )->willReturnSelf();
         $this->select
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('where')
-            ->with(
-                '('
-                . 'selection.selection_can_change_qty'
-                . ' or '
-                . 'selection.selection_qty <= stock.qty'
-                . ' or '
-                .'stock_item.manage_stock = 0'
-                . ') and stock.stock_status = 1'
-            )
-            ->willReturnSelf();
+            ->withConsecutive(
+                [
+                    '('
+                    . 'selection.selection_can_change_qty > 0'
+                    . ' or '
+                    . 'selection.selection_qty <= stock.qty'
+                    . ' or '
+                    .'stock_item.manage_stock = 0'
+                    . ')',
+                ],
+                [
+                    'stock.stock_status = 1',
+                ]
+            )->willReturnSelf();
 
         $this->assertEquals($this->model, $this->model->addQuantityFilter());
     }

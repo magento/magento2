@@ -184,13 +184,15 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             )
             ->where(
                 '('
-                . 'selection.selection_can_change_qty'
+                . 'selection.selection_can_change_qty > 0'
                 . ' or '
                 . 'selection.selection_qty <= stock.qty'
                 . ' or '
                 .'stock_item.manage_stock = 0'
-                . ') and stock.stock_status = 1'
-            );
+                . ')'
+            )
+            ->where('stock.stock_status = 1');
+
         return $this;
     }
 
