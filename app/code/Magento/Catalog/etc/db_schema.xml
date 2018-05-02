@@ -1639,7 +1639,7 @@
             <column name="product_id"/>
             <column name="store_id"/>
         </constraint>
-        <index name="CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID" indexType="btree">
+        <index name="CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID" indexType="hash">
             <column name="product_id"/>
             <column name="category_id"/>
             <column name="store_id"/>
