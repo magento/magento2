@@ -31,7 +31,9 @@ class AttributeFilter
         $attributeList = $product->getAttributes();
         foreach ($productData as $attributeCode => $attributeValue) {
             if (!isset($useDefaults[$attributeCode]) || $useDefaults[$attributeCode] === '1') {
-                $productData = $this->prepareUselessAttributes($product, $attributeCode, $attributeValue, $productData);
+                if ($attributeValue === '' && (bool)$product->getData($attributeCode) === (bool)$attributeValue) {
+                    unset($productData[$attributeCode]);
+                }
             }
 
             if (isset($useDefaults[$attributeCode]) && $useDefaults[$attributeCode] === '1') {
@@ -43,6 +45,12 @@ class AttributeFilter
         return $productData;
     }
 
+    /**
+     * @param Product $product
+     * @param string $attributeCode
+     * @param array $productData
+     * @return array
+     */
     private function prepareConfigData(Product $product, $attributeCode, array $productData): array
     {
         // UI component sends value even if field is disabled, so 'Use Config Settings' must be reset to false
@@ -53,19 +61,12 @@ class AttributeFilter
         return $productData;
     }
 
-    private function prepareUselessAttributes(
-        Product $product,
-        $attributeCode,
-        $attributeValue,
-        array $productData
-    ): array {
-        if ($attributeValue === '' && (bool)$product->getData($attributeCode) === (bool)$attributeValue) {
-            unset($productData[$attributeCode]);
-        }
-
-        return $productData;
-    }
-
+    /**
+     * @param array $attributeList
+     * @param string $attributeCode
+     * @param array $productData
+     * @return array
+     */
     private function prepareDefaultData(array $attributeList, $attributeCode, array $productData): array
     {
         if (isset($attributeList[$attributeCode])) {
