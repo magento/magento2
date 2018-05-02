@@ -29,12 +29,12 @@ class AttributeFilter
     public function prepareProductAttributes(Product $product, array $productData, array $useDefaults): array
     {
         $attributeList = $product->getAttributes();
-
         foreach ($productData as $attributeCode => $attributeValue) {
-            $considerUseDefaultsAttribute = !isset($useDefaults[$attributeCode]) || $useDefaults[$attributeCode] === '1';
-
-            if ($considerUseDefaultsAttribute) {
+            if (!isset($useDefaults[$attributeCode]) || $useDefaults[$attributeCode] === '1') {
                 $productData = $this->prepareUselessAttributes($product, $attributeCode, $attributeValue, $productData);
+            }
+
+            if (isset($useDefaults[$attributeCode]) && $useDefaults[$attributeCode] === '1') {
                 $productData = $this->prepareDefaultData($attributeList, $attributeCode, $productData);
                 $productData = $this->prepareConfigData($product, $attributeCode, $productData);
             }
@@ -68,18 +68,18 @@ class AttributeFilter
 
     private function prepareDefaultData(array $attributeList, $attributeCode, array $productData): array
     {
-        $productData[$attributeCode] = null;
         if (isset($attributeList[$attributeCode])) {
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $attributeList[$attributeCode];
             $attributeType = $attribute->getBackendType();
-            $attribute->setIsRequired(false);
             // For non-numberic types set the attributeValue to 'false' to trigger their removal from the db
             if ($attributeType === 'varchar' || $attributeType === 'text' || $attributeType === 'datetime') {
+                $attribute->setIsRequired(false);
                 $productData[$attributeCode] = false;
+            } else {
+                $productData[$attributeCode] = null;
             }
         }
         return $productData;
     }
-
 }
