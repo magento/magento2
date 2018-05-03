@@ -10,12 +10,5 @@
         <referenceContainer name="content">
             <block class="Magento\InventoryShipping\Block\Adminhtml\Order\View\ShipButton" name="sales_order_view_ship_button"/>
         </referenceContainer>
-        <referenceBlock name="sales_order_tabs">
-            <block class="Magento\InventoryShipping\Block\Adminhtml\Order\View\Tab\SourceSelection" name="order_tab_source_selection" template="Magento_InventoryShipping::order/view/tab/source_selection.phtml"/>
-            <action method="addTab">
-                <argument name="name" xsi:type="string">order_source_selection</argument>
-                <argument name="block" xsi:type="string">order_tab_source_selection</argument>
-            </action>
-        </referenceBlock>
     </body>
 </page>
