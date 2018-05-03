@@ -74,10 +74,6 @@ class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
         $this->productMock->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $productAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $attributeMock =  $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['setStoreId', 'getData', 'setData', 'getSource', 'hasData'])
@@ -109,6 +105,6 @@ class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->swatchAttributeProvider->provide($this->productMock);
 
-        $this->assertEquals([1 => $productAttributeMock], $result);
+        $this->assertEquals([1 => $attributeMock], $result);
     }
 }
