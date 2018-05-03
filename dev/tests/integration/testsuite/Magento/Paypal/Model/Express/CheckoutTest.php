@@ -465,7 +465,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    private function getExportedData()
+    private function getExportedData(): array
     {
         return [
             'email'      => 'customer@example.com',
