@@ -946,13 +946,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_getResource()->addCommitCallback([$this, 'reindex']);
         $this->reloadPriceInfo();
 
-        // Resize images for catalog product and save results to image cache
-        /** @var Product\Image\Cache $imageCache */
-        if (!$this->_appState->isAreaCodeEmulated()) {
-            $imageCache = $this->imageCacheFactory->create();
-            $imageCache->generate($this);
-        }
-
         return $result;
     }
 
@@ -1488,10 +1481,14 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getMediaGalleryImages()
     {
         $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        if (!$this->hasData('media_gallery_images') && is_array($this->getMediaGallery('images'))) {
-            $images = $this->_collectionFactory->create();
+        if (!$this->hasData('media_gallery_images')) {
+            $this->setData('media_gallery_images', $this->_collectionFactory->create());
+        }
+        if (!$this->getData('media_gallery_images')->count() && is_array($this->getMediaGallery('images'))) {
+            $images = $this->getData('media_gallery_images');
             foreach ($this->getMediaGallery('images') as $image) {
-                if ((isset($image['disabled']) && $image['disabled'])
+                if (!empty($image['disabled'])
+                    || !empty($image['removed'])
                     || empty($image['value_id'])
                     || $images->getItemById($image['value_id']) != null
                 ) {
