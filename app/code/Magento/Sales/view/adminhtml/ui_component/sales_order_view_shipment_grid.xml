@@ -34,7 +34,15 @@
     <listingToolbar name="listing_top">
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
-        <exportButton name="export_button"/>
+        <exportButton name="export_button">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="additionalParams" xsi:type="array">
+                        <item xsi:type="string" name="order_id">*</item>
+                    </item>
+                </item>
+            </argument>
+        </exportButton>
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
             <filterSelect name="store_id">

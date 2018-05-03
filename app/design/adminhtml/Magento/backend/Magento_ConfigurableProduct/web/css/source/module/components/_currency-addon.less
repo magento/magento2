@@ -18,10 +18,29 @@
 
 .currency-addon {
     position: relative;
+    border: 1px solid #adadad;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    display: inline-flex;
+    flex-flow: row nowrap;
+    width: 100%;
 
     .admin__control-text {
-        border-width: 1px 1px 1px 0;
-        padding-left: @currency-addon-symbol__width + .2;
+        appearence: none;
+        -webkit-flex-grow: 1;
+        flex-grow: 1;
+        -ms-flex-order: 1;
+        -webkit-order: 1;
+        order: 1;
+        -webkit-flex-shrink: 1;
+        flex-shrink: 1;
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: none;
+        vertical-align: top;
 
         &:focus {
             + .currency-symbol {
@@ -30,18 +49,29 @@
         }
     }
 
+    label.error {
+        position: absolute;
+        left: 0;
+        top: 33px;
+    }
+
     .currency-symbol {
         border: solid @currency-addon-symbol__border-color;
-        border-width: 0 0 0 1px;
+        border-width: 0;
         box-sizing: border-box;
         color: @currency-addon-symbol__color;
         height: @currency-addon-symbol__height;
-        left: 0;
         padding: 7px 0 0 @indent__xs;
-        position: absolute;
-        top: 0;
         transition: @smooth__border-color;
-        width: @currency-addon-symbol__width;
+        position: static;
+        -webkit-flex-basis: auto;
+        flex-basis: auto;
+        -webkit-flex-grow: 0;
+        flex-grow: 0;
+        -webkit-flex-shrink: 0;
+        flex-shrink: 0;
+        z-index: 1;
+        order: 0;
     }
 
     ._error & {
