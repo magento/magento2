@@ -27,7 +27,7 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <!-- Had to copy the "AdminDefaultStockCannotBeDeletedTest steps until I figure out how to post it. -->
+        <!-- Copy of "AdminDefaultStockCannotBeDeletedTest steps until we figure out how to post it via the Admin Form. -->
         <!-- START OF COPY -->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage1"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite1"/>
@@ -63,13 +63,10 @@
         <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiStoreView.name}}" stepKey="seeTheNewStoreView3"/>
         <!-- END OF COPY -->
 
-        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksListPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
-
-        <click selector="{{AdminGridRow.editByValue('Default Stock')}}" stepKey="clickOnEditForDefaultStock1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <actionGroup ref="AdminGoToStockGridFilterResultsByInputEditStock" stepKey="goToStockGridFilterResultsByInputEditStock1">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createStock1.stock[name]$$"/>
+        </actionGroup>
 
         <unselectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="unSelectNewWebsite1"/>
         <dontSeeOptionIsSelected selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="dontSeeBasicWebbSiteSelected1"/>
