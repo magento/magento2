@@ -14,7 +14,7 @@ use Magento\Framework\Module\Dir;
 /**
  * Allows to read all patches through the whole system
  */
-class PatchReader implements ReaderInterface
+class PatchReader
 {
     /**
      * Folder name, where patches are
@@ -102,21 +102,13 @@ class PatchReader implements ReaderInterface
     }
 
     /**
-     * @param null $moduleName
+     * @param string $moduleName
      * @return array
      */
-    public function read($moduleName = null)
+    public function read($moduleName)
     {
-        $patches = [];
-        if ($moduleName === null) {
-            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-                $patches += $this->getPatchClassesPerModule($moduleName, $modulePath);
-            }
-        } else {
-            $modulePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
-            $patches = $this->getPatchClassesPerModule($moduleName, $modulePath);
-        }
-
+        $modulePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+        $patches = $this->getPatchClassesPerModule($moduleName, $modulePath);
         return $patches;
     }
 }
