@@ -32,28 +32,20 @@
 
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropDown1"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct1"/>
-        <fillField userInput="{{SimpleMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName1"/>
-        <fillField userInput="{{SimpleMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSKU1"/>
-        <fillField userInput="{{SimpleMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice1"/>
-        <fillField userInput="{{SimpleMsiProduct.weight}}" selector="{{AdminProductFormSection.productWeight}}" stepKey="fillProductWeight1"/>
-        <fillField userInput="{{SimpleMsiProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillProductQuantity1"/>
+        <actionGroup ref="fillMainProductForm" stepKey="fillSimpleProductMain">
+            <argument name="product" value="SimpleMsiProduct"/>
+        </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createPreReqCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
-        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection1"/>
-        <fillField userInput="{{SimpleMsiProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillProductUrlKey1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
-
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="SimpleMsiProduct.sku"/>
         </actionGroup>
-
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns1"/>
         <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
-
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.name}}" stepKey="seeNameInFirstRow1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="seeSkuInFirstRow1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.price}}" stepKey="seePriceInFirstRow1"/>
@@ -64,14 +56,12 @@
         <!-- Go to storefront category page, assert product visibility -->
         <amOnPage url="{{StorefrontCategoryPage.url($$createPreReqCategory1.name$$)}}" stepKey="navigateToCategoryPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
-
         <see userInput="{{SimpleMsiProduct.name}}" stepKey="assertProductPresent1"/>
         <see userInput="{{SimpleMsiProduct.price}}" stepKey="assertProductPricePresent1"/>
 
         <!-- Go to storefront product page, assert product visibility -->
         <amOnPage url="{{SimpleMsiProduct.urlKey}}.html" stepKey="navigateToProductPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
-
         <seeInTitle userInput="{{SimpleMsiProduct.name}}" stepKey="assertProductNameTitle1"/>
         <see userInput="{{SimpleMsiProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName1"/>
         <see userInput="{{SimpleMsiProduct.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice1"/>
