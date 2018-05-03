@@ -30,11 +30,12 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
-        <!-- Add simple product to cart and navigate to checkout -->
-        <actionGroup stepKey="addProductNavigateToCheckout" ref="AddSimpleProductAndNavigateToCheckoutActionGroup">
+        <!-- Add simple product to cart -->
+        <actionGroup stepKey="addProductToCart1" ref="AddSimpleProductToCart">
             <argument name="product" value="$$createProduct$$"/>
-            <argument name="category" value="$$createCategory$$"/>
         </actionGroup>
+        <!-- Navigate to checkout -->
+        <actionGroup stepKey="addProductNavigateToCheckout" ref="NavigateToCheckoutActionGroup"/>
         <!-- Fill Shipping Address form -->
         <fillField selector="{{GuestCheckoutShippingSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
         <fillField selector="{{GuestCheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
