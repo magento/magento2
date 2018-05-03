@@ -10,9 +10,9 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="DeleteCategoriesTest">
         <annotations>
-            <features value="Delete categories"/>
-            <title value="Delete categories."/>
-            <description value="Delete Default Root Category and subcategories and vefify after products on storefront."/>
+            <features value="Catalog"/>
+            <title value="Admin should be able to delete the default root category and subcategories and still see products in the storefront"/>
+            <description value="Admin should be able to delete the default root category and subcategories and still see products in the storefront"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-46344"/>
             <group value="testNotIsolated"/>

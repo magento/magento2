@@ -10,10 +10,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreateProductDuplicateUrlkeyTest">
         <annotations>
-            <features value="Product Creation Negative"/>
-            <stories value="Error when try to save project with duplicate URL key"/>
-            <title value="Error when try to save project with duplicate URL key."/>
-            <description value="Error when try to save project with duplicate URL key."/>
+            <features value="Catalog"/>
+            <stories value="Errors"/>
+            <title value="Admin should see an error when trying to save a product with a duplicate URL key"/>
+            <description value="Admin should see an error when trying to save a product with a duplicate URL key"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-112"/>
             <group value="product"/>
