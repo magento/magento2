@@ -11,5 +11,6 @@
     <section name="AdminProductFormActionSection">
         <element name="saveButton" type="button" selector="#save-button" timeout="30"/>
         <element name="changeStoreButton" type="button" selector="#store-change-button"/>
+        <element name="selectStoreView" type="button" selector="//ul[@data-role='stores-list']/li/a[normalize-space(.)='{{var1}}']" timeout="10" parameterized="true"/>
     </section>
 </sections>
