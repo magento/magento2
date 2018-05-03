@@ -1472,8 +1472,8 @@
         <arguments>
             <argument name="operations" xsi:type="array">
                 <item name="recreate_table" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\ReCreateTable</item>
-                <item name="drop_table" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\DropTable</item>
                 <item name="create_table" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\CreateTable</item>
+                <item name="drop_table" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\DropTable</item>
                 <item name="drop_reference" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\DropReference</item>
                 <item name="modify_column" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\ModifyColumn</item>
                 <item name="add_column" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Operations\AddColumn</item>
@@ -1547,9 +1547,14 @@
             <argument name="schemaPatchReader" xsi:type="object">\Magento\Framework\Setup\Patch\SchemaPatchReader</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Setup\Declaration\Schema\Db\SchemaBuilder">
+    <type name="Magento\Framework\Setup\Patch\UpToDateData">
         <arguments>
-            <argument name="logger" xsi:type="object">\Magento\Framework\Setup\Patch\DataPatchReader</argument>
+            <argument name="dataPatchReader" xsi:type="object">\Magento\Framework\Setup\Patch\DataPatchReader</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Setup\Patch\UpToDateSchema">
+        <arguments>
+            <argument name="schemaReader" xsi:type="object">\Magento\Framework\Setup\Patch\SchemaPatchReader</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\MessageQueue\Config\CompositeReader">
@@ -1655,6 +1660,13 @@
             <argument name="publisherNameToConnectionMap" xsi:type="array">
                 <item name="amqp-magento" xsi:type="string">amqp</item>
                 <item name="db-magento-db" xsi:type="string">db</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Setup\Declaration\Schema\Operations\CreateTable">
+        <arguments>
+            <argument name="triggers" xsi:type="array">
+                <item name="migrateDataFromAnotherTable" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DDL\Triggers\MigrateDataFromAnotherTable</item>
             </argument>
         </arguments>
     </type>
