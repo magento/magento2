@@ -99,7 +99,7 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->validationResultMock = $this->getMockBuilder(ResultInterface::class)
-            ->setMethods(['isValid', 'getFailsDescription'])
+            ->setMethods(['isValid', 'getFailsDescription', 'getErrorCodes'])
             ->getMock();
 
         $this->responseValidatorMock = $this->getMockBuilder(PaymentNonceResponseValidator::class)
