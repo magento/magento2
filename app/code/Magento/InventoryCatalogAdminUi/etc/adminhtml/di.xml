@@ -46,4 +46,7 @@
     <type name="Magento\Catalog\Model\Product\Copier">
         <plugin name="copy_source_items" type="Magento\InventoryCatalogAdminUi\Plugin\Catalog\CopySourceItemsPlugin"/>
     </type>
+    <type name="Magento\InventoryAdminUi\Controller\Adminhtml\Stock\StockSourceLinkProcessor">
+        <plugin name="prevent_process_for_default_stock" type="Magento\InventoryCatalogAdminUi\Plugin\InventoryAdminUi\Stock\StockSaveProcessor\PreventProcessDefaultStockLinksPlugin"/>
+    </type>
 </config>
