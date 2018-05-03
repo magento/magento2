@@ -40,7 +40,7 @@ class UpdateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
             $this->_webApiCall($serviceInfo, ['stock' => $expectedData]);
         } else {
             $requestData = $expectedData;
@@ -66,7 +66,7 @@ class UpdateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+        $response = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['stockId' => $stockId]);
         self::assertArrayHasKey(StockInterface::STOCK_ID, $response);
