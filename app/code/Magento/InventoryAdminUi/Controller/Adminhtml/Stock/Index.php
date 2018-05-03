@@ -20,7 +20,7 @@ class Index extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Inventory::stock';
+    const ADMIN_RESOURCE = 'Magento_InventoryApi::stock';
 
     /**
      * @inheritdoc
@@ -29,7 +29,7 @@ class Index extends Action
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Magento_Inventory::stock')
+        $resultPage->setActiveMenu('Magento_InventoryApi::stock')
             ->addBreadcrumb(__('Sources'), __('List'));
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Stock'));
 

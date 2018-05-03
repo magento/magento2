@@ -27,7 +27,7 @@ class Save extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Inventory::stock';
+    const ADMIN_RESOURCE = 'Magento_InventoryApi::stock';
 
     /**
      * @var StockSaveProcessor

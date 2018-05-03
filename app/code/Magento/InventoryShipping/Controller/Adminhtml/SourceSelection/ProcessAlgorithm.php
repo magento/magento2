@@ -16,7 +16,7 @@ use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
-use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface;
+use Magento\InventorySourceSelection\Model\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
@@ -27,7 +27,7 @@ class ProcessAlgorithm extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Inventory::source';
+    const ADMIN_RESOURCE = 'Magento_InventoryApi::source';
 
     /**
      * @var StockByWebsiteIdResolver
@@ -138,6 +138,12 @@ class ProcessAlgorithm extends Action
                 }
             }
 
+            foreach ($this->sources as $value => $label) {
+                $result['sourceCodes'][] = [
+                    'value' => $value,
+                    'label' => $label
+                ];
+            }
             $resultJson->setData($result);
         }
 

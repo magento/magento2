@@ -11,6 +11,7 @@ use Magento\Shipping\Block\Adminhtml\Create\Form;
 
 /**
  * Render Inventory Block in adminhtml_order_shipment_new
+ * Should be deleted after merging https://github.com/magento/magento2/pull/14731
  */
 class AddInventoryBlockRenderPlugin
 {

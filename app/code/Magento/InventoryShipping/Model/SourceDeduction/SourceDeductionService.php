@@ -7,12 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model\SourceDeduction;
 
-use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface;
-use Magento\InventoryReservations\Model\ReservationBuilderInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
+use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -20,16 +24,6 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class SourceDeductionService implements SourceDeductionServiceInterface
 {
-    /**
-     * @var ReservationBuilderInterface
-     */
-    private $reservationBuilder;
-
-    /**
-     * @var AppendReservationsInterface
-     */
-    private $appendReservations;
-
     /**
      * @var SourceItemsSaveInterface
      */
@@ -46,24 +40,58 @@ class SourceDeductionService implements SourceDeductionServiceInterface
     private $getStockItemConfiguration;
 
     /**
-     * @param ReservationBuilderInterface $reservationBuilder
-     * @param AppendReservationsInterface $appendReservations
+     * @var StockByWebsiteIdResolver
+     */
+    private $stockByWebsiteIdResolver;
+
+    /**
+     * @var SalesChannelInterfaceFactory
+     */
+    private $salesChannelFactory;
+
+    /**
+     * @var ItemToSellInterfaceFactory
+     */
+    private $itemsToSellFactory;
+
+    /**
+     * @var WebsiteRepositoryInterface
+     */
+    private $websiteRepository;
+
+    /**
+     * @var PlaceReservationsForSalesEventInterface
+     */
+    private $placeReservationsForSalesEvent;
+
+    /**
      * @param SourceItemsSaveInterface $sourceItemsSave
      * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
+     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param SalesChannelInterfaceFactory $salesChannelFactory
+     * @param ItemToSellInterfaceFactory $itemsToSellFactory
+     * @param WebsiteRepositoryInterface $websiteRepository
+     * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
      */
     public function __construct(
-        ReservationBuilderInterface $reservationBuilder,
-        AppendReservationsInterface $appendReservations,
         SourceItemsSaveInterface $sourceItemsSave,
         GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku,
-        GetStockItemConfigurationInterface $getStockItemConfiguration
+        GetStockItemConfigurationInterface $getStockItemConfiguration,
+        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        SalesChannelInterfaceFactory $salesChannelFactory,
+        ItemToSellInterfaceFactory $itemsToSellFactory,
+        WebsiteRepositoryInterface $websiteRepository,
+        PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
     ) {
-        $this->reservationBuilder = $reservationBuilder;
-        $this->appendReservations = $appendReservations;
         $this->sourceItemsSave = $sourceItemsSave;
         $this->getSourceItemBySourceCodeAndSku = $getSourceItemBySourceCodeAndSku;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
+        $this->salesChannelFactory = $salesChannelFactory;
+        $this->itemsToSellFactory = $itemsToSellFactory;
+        $this->websiteRepository = $websiteRepository;
+        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
+        $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
     }
 
     /**
@@ -72,10 +100,11 @@ class SourceDeductionService implements SourceDeductionServiceInterface
     public function execute(SourceDeductionRequestInterface $sourceDeductionRequest): void
     {
         $sourceItemToSave = [];
-        $reservationsToBuild = [];
         $sourceCode = $sourceDeductionRequest->getSourceCode();
-        $stockId = $sourceDeductionRequest->getStockId();
+        $websiteId = $sourceDeductionRequest->getWebsiteId();
 
+        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+        $itemsToSell = [];
         foreach ($sourceDeductionRequest->getItems() as $item) {
             $itemSku = $item->getSku();
             $qty = $item->getQty();
@@ -92,23 +121,27 @@ class SourceDeductionService implements SourceDeductionServiceInterface
             if (($sourceItem->getQuantity() - $qty) >= 0) {
                 $sourceItem->setQuantity($sourceItem->getQuantity() - $qty);
                 $sourceItemToSave[] = $sourceItem;
-                $reservationsToBuild[$itemSku] = ($reservationsToBuild[$itemSku] ?? 0) + $qty;
+                $itemsToSell[] = $this->itemsToSellFactory->create([
+                    'sku' => $itemSku,
+                    'qty' => (float)$qty
+                ]);
             } else {
                 throw new LocalizedException(
                     __('Not all of your products are available in the requested quantity.')
                 );
             }
         }
-
-        $reservationToSave = [];
-        foreach ($reservationsToBuild as $sku => $reservationQty) {
-            $reservationToSave[] = $this->reservationBuilder
-                ->setSku($sku)
-                ->setQuantity($reservationQty)
-                ->setStockId($stockId)
-                ->build();
-        }
         $this->sourceItemsSave->execute($sourceItemToSave);
-        $this->appendReservations->execute($reservationToSave);
+
+        $salesEvent = $sourceDeductionRequest->getSalesEvent();
+
+        $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
+        $salesChannel = $this->salesChannelFactory->create([
+            'data' => [
+                'type' => SalesChannelInterface::TYPE_WEBSITE,
+                'code' => $websiteCode
+            ]
+        ]);
+        $this->placeReservationsForSalesEvent->execute($itemsToSell, $salesChannel, $salesEvent);
     }
 }

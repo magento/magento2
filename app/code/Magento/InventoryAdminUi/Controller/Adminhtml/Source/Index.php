@@ -20,7 +20,7 @@ class Index extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Inventory::source';
+    const ADMIN_RESOURCE = 'Magento_InventoryApi::source';
 
     /**
      * @inheritdoc
@@ -29,7 +29,7 @@ class Index extends Action
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Magento_Inventory::source')
+        $resultPage->setActiveMenu('Magento_InventoryApi::source')
             ->addBreadcrumb(__('Sources'), __('List'));
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Sources'));
 

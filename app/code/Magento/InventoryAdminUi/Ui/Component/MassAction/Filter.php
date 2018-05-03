@@ -40,7 +40,10 @@ class Filter
     {
         $this->filter->applySelectionOnTargetProvider();
         $component = $this->filter->getComponent();
+        $this->filter->prepareComponent($component);
+
         $dataProvider = $component->getContext()->getDataProvider();
+        $dataProvider->setLimit(0, false);
         $searchResult = $dataProvider->getSearchResult();
 
         return array_map(function (DocumentInterface $item) {

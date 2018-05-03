@@ -42,7 +42,7 @@ class GetDefaultSourceTest extends WebapiAbstract
                 'operation' => 'inventoryApiSourceRepositoryV1Get',
             ],
         ];
-        if (self::ADAPTER_REST == TESTS_WEB_API_ADAPTER) {
+        if (self::ADAPTER_REST === TESTS_WEB_API_ADAPTER) {
             $source = $this->_webApiCall($serviceInfo);
         } else {
             $source = $this->_webApiCall($serviceInfo, ['sourceCode' => $defaultSourceCode]);

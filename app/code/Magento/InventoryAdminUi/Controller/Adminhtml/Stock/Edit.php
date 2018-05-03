@@ -25,7 +25,7 @@ class Edit extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Inventory::stock';
+    const ADMIN_RESOURCE = 'Magento_InventoryApi::stock';
 
     /**
      * @var StockRepositoryInterface
@@ -55,7 +55,7 @@ class Edit extends Action
 
             /** @var Page $result */
             $result = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-            $result->setActiveMenu('Magento_Inventory::stock')
+            $result->setActiveMenu('Magento_InventoryApi::stock')
                 ->addBreadcrumb(__('Edit Stock'), __('Edit Stock'));
             $result->getConfig()
                 ->getTitle()

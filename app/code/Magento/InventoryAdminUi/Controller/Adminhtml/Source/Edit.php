@@ -25,7 +25,7 @@ class Edit extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Inventory::source';
+    const ADMIN_RESOURCE = 'Magento_InventoryApi::source';
 
     /**
      * @var SourceRepositoryInterface
@@ -55,7 +55,7 @@ class Edit extends Action
 
             /** @var Page $result */
             $result = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-            $result->setActiveMenu('Magento_Inventory::source')
+            $result->setActiveMenu('Magento_InventoryApi::source')
                 ->addBreadcrumb(__('Edit Source'), __('Edit Source'));
             $result->getConfig()
                 ->getTitle()

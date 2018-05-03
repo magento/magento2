@@ -94,7 +94,10 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
         if ($this->isMinSaleQuantityCheckFailed($stockItemConfiguration, $requestedQty)) {
             return $this->createErrorResult(
                 'is_correct_qty-min_sale_qty',
-                __('The requested qty is less than the minimun qty allowed in shopping cart')
+                __(
+                    'The fewest you may purchase is %1',
+                    $stockItemConfiguration->getMinSaleQty()
+                )
             );
         }
 
@@ -178,11 +181,8 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
         float $requestedQty
     ) : bool {
         // Qty Increments
-        if ($this->mathDivision->getExactDivision($requestedQty, $this->configuration->getQtyIncrements()) !== 0
-            || $this->mathDivision->getExactDivision(
-                $requestedQty,
-                $stockItemConfiguration->getQtyIncrements()
-            ) !== 0) {
+        $qtyIncrements = $stockItemConfiguration->getQtyIncrements();
+        if ($qtyIncrements !== (float)0 && $this->mathDivision->getExactDivision($requestedQty, $qtyIncrements) !== 0) {
             return true;
         }
         return false;

@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model\SourceDeduction\Request;
 
+use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
+
 /**
  * @inheritdoc
  */
@@ -15,7 +17,7 @@ class SourceDeductionRequest implements SourceDeductionRequestInterface
     /**
      * @var int
      */
-    private $stockId;
+    private $websiteId;
 
     /**
      * @var string
@@ -28,23 +30,30 @@ class SourceDeductionRequest implements SourceDeductionRequestInterface
     private $items;
 
     /**
-     * @param int $stockId
+     * @var SalesEventInterface
+     */
+    private $salesEvent;
+
+    /**
+     * @param int $websiteId
      * @param string $sourceCode
      * @param array $items
+     * @param SalesEventInterface $salesEvent
      */
-    public function __construct(int $stockId, string $sourceCode, array $items)
+    public function __construct(int $websiteId, string $sourceCode, array $items, SalesEventInterface $salesEvent)
     {
-        $this->stockId = $stockId;
+        $this->websiteId = $websiteId;
         $this->sourceCode = $sourceCode;
         $this->items = $items;
+        $this->salesEvent = $salesEvent;
     }
 
     /**
      * @inheritdoc
      */
-    public function getStockId(): int
+    public function getWebsiteId(): int
     {
-        return $this->stockId;
+        return $this->websiteId;
     }
 
     /**
@@ -61,5 +70,13 @@ class SourceDeductionRequest implements SourceDeductionRequestInterface
     public function getItems(): array
     {
         return $this->items;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSalesEvent(): SalesEventInterface
+    {
+        return $this->salesEvent;
     }
 }

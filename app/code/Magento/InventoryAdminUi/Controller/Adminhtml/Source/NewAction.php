@@ -21,7 +21,7 @@ class NewAction extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Inventory::source';
+    const ADMIN_RESOURCE = 'Magento_InventoryApi::source';
 
     /**
      * @inheritdoc
@@ -30,7 +30,7 @@ class NewAction extends Action
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Magento_Inventory::source');
+        $resultPage->setActiveMenu('Magento_InventoryApi::source');
         $resultPage->getConfig()->getTitle()->prepend(__('New Source'));
 
         return $resultPage;

@@ -6,34 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface" type="Magento\InventoryShipping\Model\SourceSelection\Request\InventoryRequest"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface" type="Magento\InventoryShipping\Model\SourceSelection\Request\ItemRequest"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface" type="Magento\InventoryShipping\Model\SourceSelection\SourceSelectionAlgorithm"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\GetSourceSelectionAlgorithmListInterface" type="Magento\InventoryShipping\Model\SourceSelection\GetSourceSelectionAlgorithmList"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface" type="Magento\InventoryShipping\Model\SourceSelection\Result\SourceSelectionItem"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface" type="Magento\InventoryShipping\Model\SourceSelection\Result\SourceSelectionResult"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface" type="Magento\InventoryShipping\Model\SourceSelection\SourceSelectionService"/>
-    <preference for="Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface" type="Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCode"/>
     <preference for="Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterface" type="Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeduct"/>
     <preference for="Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface" type="Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequest"/>
     <preference for="Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface" type="Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionService"/>
-    <type name="Magento\InventoryShipping\Model\SourceSelection\SourceSelectionService">
-        <arguments>
-            <argument name="sourceSelectionMethods" xsi:type="array">
-                <item name="priority" xsi:type="string">Magento\InventoryShipping\Model\SourceSelection\Algorithms\PriorityBasedAlgorithm</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\InventoryShipping\Model\SourceSelection\GetSourceSelectionAlgorithmList">
-        <arguments>
-            <argument name="availableAlgorithms" xsi:type="array">
-                <item name="priority" xsi:type="array">
-                    <item xsi:type="string" name="code">priority</item>
-                    <item xsi:type="string" name="title">Algorithm which provides Source Selections based on predefined priority of Source</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Sales\Model\Order\ShipmentFactory">
         <plugin name="assign_source_code_to_shipment" type="Magento\InventoryShipping\Plugin\Sales\Shipment\AssignSourceCodeToShipmentPlugin"/>
     </type>
@@ -44,5 +19,8 @@
     </type>
     <type name="Magento\Shipping\Block\Adminhtml\Create\Form">
         <plugin name="assign_source_codde_to_shipment" type="Magento\InventoryShipping\Plugin\Sales\Shipment\Block\Adminhtml\Create\AddInventoryBlockRenderPlugin"/>
+    </type>
+    <type name="Magento\Shipping\Block\Adminhtml\Create">
+        <plugin name="back_button_url" type="Magento\InventoryShipping\Plugin\Sales\Shipment\Block\Adminhtml\BackButtonUrlOnNewShipmentPagePlugin"/>
     </type>
 </config>

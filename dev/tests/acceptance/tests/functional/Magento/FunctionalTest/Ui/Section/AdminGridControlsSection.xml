@@ -29,17 +29,24 @@
         <element name="cancel" type="button" selector="button[data-action='grid-filter-cancel']" timeout="30"/>
         <element name="clearAll" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] button[data-action='grid-filter-reset']" timeout="5"/>
     </section>
-    <!-- TODO: "Default View" drop down menu -->
+    <section name="AdminGridDefaultViewControls">
+        <element name="defaultView" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-bookmarks" timeout="5"/>
+        <element name="viewByName" type="button" selector="//a[@class='action-dropdown-menu-link'][contains(text(), '{{var1}}')]" parameterized="true" timeout="5"/>
+        <element name="saveViewAs" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .action-dropdown-menu-item-last a" timeout="5"/>
+        <element name="viewName" type="input" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] ._edit input"/>
+        <element name="save" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] ._edit button" timeout="30"/>
+    </section>
     <section name="AdminGridColumnsControls">
-        <element name="columns" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns"/>
+        <element name="columns" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns" timeout="5"/>
 
-        <element name="columnName" type="button" selector="//label[contains(text(), '{{var1}}')]" parameterized="true" timeout="1"/>
+        <element name="columnName" type="button" selector="//label[contains(text(), '{{var1}}')]" parameterized="true" timeout="5"/>
 
         <element name="reset" type="button" selector="//div[@class='admin__action-dropdown-menu-footer']/div/button[contains(text(), 'Reset')]" timeout="5"/>
         <element name="cancel" type="button" selector="//div[@class='admin__action-dropdown-menu-footer']/div/button[contains(text(), 'Cancel')]" timeout="5"/>
     </section>
     <section name="AdminGridActionsMenu">
         <element name="dropDown" type="select" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .action-select" timeout="30"/>
+        <element name="delete" type="select" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .action-menu-items li" timeout="5"/>
     </section>
     <section name="AdminGridRowsPerPage">
         <element name="count" type="select" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .selectmenu-value input" timeout="30"/>
