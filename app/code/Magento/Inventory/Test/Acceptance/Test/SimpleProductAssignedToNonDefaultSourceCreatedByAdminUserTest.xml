@@ -23,7 +23,6 @@
             <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
             <createData entity="_minimalSource" stepKey="createSource1"/>
             <createData entity="BasicMsiStock1" stepKey="createStock1"/>
-
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
             <waitForPageLoad stepKey="waitForPageLoad1"/>
 
@@ -83,7 +82,6 @@
         <actionGroup ref="FillMainProductFormInMultiSourceMode" stepKey="fillMainProductFieldsInAdmin">
             <argument name="product" value="SimpleMsiProduct"/>
         </actionGroup>
-
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" stepKey="searchAndSelectCategory"/>
 
         <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources1"/>
@@ -93,7 +91,6 @@
         </actionGroup>
         <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createSource1.source[source_code]$$)}}" stepKey="clickOnCheckbox1"/>
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone1"/>
-
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSourceIdInGrid1"/>
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSourceNameInGrid1"/>
 
@@ -105,10 +102,8 @@
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="SimpleMsiProduct.sku"/>
         </actionGroup>
-
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns1"/>
         <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
-
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.name}}" stepKey="seeNameInFirstRow1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="seeSkuInFirstRow1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.price}}" stepKey="seePriceInFirstRow1"/>
