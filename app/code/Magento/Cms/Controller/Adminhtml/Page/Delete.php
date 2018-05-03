@@ -6,6 +6,8 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
+use Magento\Backend\App\Action\Context;
+
 class Delete extends \Magento\Backend\App\Action
 {
     /**
@@ -15,6 +17,23 @@ class Delete extends \Magento\Backend\App\Action
      */
     const ADMIN_RESOURCE = 'Magento_Cms::page_delete';
 
+    /**
+     * @var \Magento\Cms\Model\Page
+     */
+    private $_cmsPage;
+    
+    /**
+     * @param Context $context
+     * @param \Magento\Cms\Model\Page $cmsPage
+     */
+    public function __construct(
+        Context $context,
+        \Magento\Cms\Model\Page $cmsPage
+    ) {
+        parent::__construct($context);
+        $this->_cmsPage = $cmsPage ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Cms\Model\Page::class);
+    }
+    
     /**
      * Delete action
      *
@@ -30,7 +49,7 @@ class Delete extends \Magento\Backend\App\Action
             $title = "";
             try {
                 // init model and delete
-                $model = $this->_objectManager->create(\Magento\Cms\Model\Page::class);
+                $model = $this->_cmsPage;
                 $model->load($id);
                 $title = $model->getTitle();
                 $model->delete();
