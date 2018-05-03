@@ -331,13 +331,14 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks response failures behaviour.
      *
-     * @param bool $responseCode
+     * @param int $responseCode
      * @param int $failuresHandlerCalls
+     * @return void
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider checkResponseCodeFailureDataProvider
      */
-    public function testCheckResponseCodeFailure($responseCode, $failuresHandlerCalls)
+    public function testCheckResponseCodeFailure(int $responseCode, int $failuresHandlerCalls)
     {
         $reasonText = 'reason text';
 
@@ -375,12 +376,12 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function checkResponseCodeFailureDataProvider()
+    public function checkResponseCodeFailureDataProvider(): array
     {
         return [
             ['responseCode' => Directpost::RESPONSE_CODE_DECLINED, 1],
             ['responseCode' => Directpost::RESPONSE_CODE_ERROR, 1],
-            ['responseCode' => 999999, 0]
+            ['responseCode' => 999999, 0],
         ];
     }
 

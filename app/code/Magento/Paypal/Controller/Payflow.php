@@ -87,7 +87,7 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
         $errorMsg = trim(strip_tags($errorMsg));
         $order = $this->_checkoutSession->getLastRealOrder();
         if ($order->getId()) {
-            $this->paymentFailures->handle($order->getQuoteId(), $errorMsg);
+            $this->paymentFailures->handle((int)$order->getQuoteId(), $errorMsg);
         }
 
         $gotoSection = false;

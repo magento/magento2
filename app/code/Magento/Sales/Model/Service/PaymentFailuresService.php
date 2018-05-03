@@ -18,10 +18,8 @@ use Magento\Store\Model\Store;
 
 /**
  * Service is responsible for handling failed payment transactions.
- * It depends on Stores > Configuration > Sales > Checkout > Payment Failed Emails
- * configuration.
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * It depends on Stores > Configuration > Sales > Checkout > Payment Failed Emails configuration.
  */
 class PaymentFailuresService implements PaymentFailuresInterface
 {
@@ -80,14 +78,12 @@ class PaymentFailuresService implements PaymentFailuresInterface
      * @param string $message
      * @param string $checkoutType
      * @return PaymentFailuresInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\MailException
      */
     public function handle(
-        $cartId,
-        $message,
-        $checkoutType = 'onepage'
-    ) {
+        int $cartId,
+        string $message,
+        string $checkoutType = 'onepage'
+    ): PaymentFailuresInterface {
         $this->inlineTranslation->suspend();
         $quote = $this->cartRepository->get($cartId);
 
@@ -228,10 +224,9 @@ class PaymentFailuresService implements PaymentFailuresInterface
     {
         $items = [];
         foreach ($quote->getAllVisibleItems() as $item) {
-            /* @var $item \Magento\Quote\Model\Quote\Item */
-            $itemData = $item->getProduct()->getName() . '  x ' . $item->getQty() . '  ';
-            $itemData .= $quote->getCurrency()->getStoreCurrencyCode() . ' ' .
-                $item->getProduct()->getFinalPrice($item->getQty());
+            $itemData = $item->getProduct()->getName() . '  x ' . $item->getQty() . '  ' .
+                        $quote->getCurrency()->getStoreCurrencyCode() . ' ' .
+                        $item->getProduct()->getFinalPrice($item->getQty());
             $items[] = $itemData;
         }
 

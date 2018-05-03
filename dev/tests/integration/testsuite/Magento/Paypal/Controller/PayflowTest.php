@@ -39,14 +39,14 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected function setUp()
     {
-        parent::setup();
+        parent::setUp();
 
         /** @var FilterBuilder $filterBuilder */
         $filterBuilder = $this->_objectManager->get(FilterBuilder::class);
         $filters = [
             $filterBuilder->setField(OrderInterface::INCREMENT_ID)
                 ->setValue('100000001')
-                ->create()
+                ->create(),
         ];
 
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
@@ -109,6 +109,7 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @magentoConfigFixture current_store payment/paypal_payflow/active 1
      * @magentoConfigFixture current_store paypal/general/business_account merchant_2012050718_biz@example.com
+     * @return void
      */
     public function testCancelAction()
     {

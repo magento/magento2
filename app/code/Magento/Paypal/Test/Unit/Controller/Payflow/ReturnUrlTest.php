@@ -148,8 +148,8 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context->expects($this->any())->method('getView')->will($this->returnValue($this->view));
-        $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
+        $this->context->expects($this->any())->method('getView')->willReturn($this->view);
+        $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
 
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()

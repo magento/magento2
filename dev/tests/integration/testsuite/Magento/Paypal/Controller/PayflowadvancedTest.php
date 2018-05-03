@@ -39,14 +39,14 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
      */
     protected function setUp()
     {
-        parent::setup();
+        parent::setUp();
 
         /** @var FilterBuilder $filterBuilder */
         $filterBuilder = $this->_objectManager->get(FilterBuilder::class);
         $filters = [
             $filterBuilder->setField(OrderInterface::INCREMENT_ID)
                 ->setValue('100000001')
-                ->create()
+                ->create(),
         ];
 
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */

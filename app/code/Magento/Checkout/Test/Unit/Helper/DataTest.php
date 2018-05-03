@@ -138,8 +138,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testSendPaymentFailedEmail()
     {
         $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+            ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
+        $quoteMock->expects($this->any())->method('getId')->willReturn(1);
 
         $this->assertSame($this->_helper, $this->_helper->sendPaymentFailedEmail($quoteMock, 'test message'));
     }

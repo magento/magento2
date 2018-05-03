@@ -203,7 +203,7 @@ class OrderService implements OrderManagementInterface
             //commit
         } catch (\Exception $e) {
             if ($e instanceof CommandException) {
-                $this->paymentFailures->handle($order->getQuoteId(), __($e->getMessage()));
+                $this->paymentFailures->handle((int)$order->getQuoteId(), __($e->getMessage()));
             }
             throw $e;
             //rollback;

@@ -19,8 +19,8 @@ interface PaymentFailuresInterface
      * @return PaymentFailuresInterface
      */
     public function handle(
-        $cartId,
-        $errorMessage,
-        $checkoutType = 'onepage'
-    );
+        int $cartId,
+        string $errorMessage,
+        string $checkoutType = 'onepage'
+    ): PaymentFailuresInterface;
 }

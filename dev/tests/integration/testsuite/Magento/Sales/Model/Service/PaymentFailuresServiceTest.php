@@ -26,9 +26,9 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
     private $quote;
 
     /**
-     * @var string
+     * @var CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $quoteId = 'test01';
+    private $cartRepositoryMock;
 
     /**
      * @inheritdoc
@@ -36,21 +36,15 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->quote = Bootstrap::getObjectManager()->create(Quote::class);
-        $this->quote->load($this->quoteId, 'reserved_order_id');
-
-        $cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
+        $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMockForAbstractClass();
 
-        $cartRepositoryMock->method('get')
-            ->with($this->quoteId)
-            ->willReturn($this->quote);
-
         $this->paymentFailures = Bootstrap::getObjectManager()->create(
             PaymentFailuresInterface::class,
             [
-                'cartRepository' => $cartRepositoryMock,
+                'cartRepository' => $this->cartRepositoryMock,
             ]
         );
     }
@@ -68,7 +62,12 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
         $errorMessage = __('Transaction declined.');
         $checkoutType = 'custom_checkout';
 
-        $this->paymentFailures->handle($this->quoteId, $errorMessage);
+        $this->quote->load('test01', 'reserved_order_id');
+        $this->cartRepositoryMock->method('get')
+            ->with($this->quote->getId())
+            ->willReturn($this->quote);
+
+        $this->paymentFailures->handle((int)$this->quote->getId(), $errorMessage);
 
         $paymentReflection = new \ReflectionClass($this->paymentFailures);
         $templateTimeMethod = $paymentReflection->getMethod('getLocaleDate');

@@ -221,7 +221,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         string $message,
         string $checkoutType = 'onepage'
     ): \Magento\Checkout\Helper\Data {
-        $this->paymentFailures->handle($checkout->getId(), $message, $checkoutType);
+        $this->paymentFailures->handle((int)$checkout->getId(), $message, $checkoutType);
 
         return $this;
     }

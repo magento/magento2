@@ -6,11 +6,8 @@
 namespace Magento\Authorizenet\Model;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\TransparentInterface;
-use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Magento\Sales\Api\PaymentFailuresInterface;
 
 /**
  * Authorize.net DirectPost payment method model.
@@ -104,7 +101,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     protected $response;
 
     /**
-     * @var OrderSender
+     * @var \Magento\Sales\Model\Order\Email\Sender\OrderSender
      */
     protected $orderSender;
 
@@ -126,7 +123,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     private $psrLogger;
 
     /**
-     * @var PaymentFailuresInterface
+     * @var \Magento\Sales\Api\PaymentFailuresInterface
      */
     private $paymentFailures;
 
@@ -153,12 +150,12 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
-     * @param OrderSender $orderSender
+     * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param PaymentFailuresInterface|null $paymentFailures
+     * @param \Magento\Sales\Api\PaymentFailuresInterface|null $paymentFailures
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -175,7 +172,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         \Magento\Authorizenet\Model\Directpost\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Directpost\Response\Factory $responseFactory,
         TransactionService $transactionService,
-        ZendClientFactory $httpClientFactory,
+        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
@@ -184,7 +181,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        PaymentFailuresInterface $paymentFailures = null
+        \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null
     ) {
         $this->orderFactory = $orderFactory;
         $this->storeManager = $storeManager;
@@ -194,7 +191,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         $this->transactionRepository = $transactionRepository;
         $this->_code = static::METHOD_CODE;
         $this->paymentFailures = $paymentFailures ? : ObjectManager::getInstance()
-            ->get(PaymentFailuresInterface::class);
+            ->get(\Magento\Sales\Api\PaymentFailuresInterface::class);
 
         parent::__construct(
             $context,
@@ -647,7 +644,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             case self::RESPONSE_CODE_ERROR:
                 $errorMessage = $this->dataHelper->wrapGatewayError($this->getResponse()->getXResponseReasonText());
                 $order = $this->getOrderFromResponse();
-                $this->paymentFailures->handle($order->getQuoteId(), $errorMessage);
+                $this->paymentFailures->handle((int)$order->getQuoteId(), $errorMessage);
                 throw new \Magento\Framework\Exception\LocalizedException($errorMessage);
             default:
                 throw new \Magento\Framework\Exception\LocalizedException(

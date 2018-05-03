@@ -155,7 +155,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      */
     protected function _processPaypalApiError($exception)
     {
-        $this->paymentFailures->handle($this->_getCheckoutSession()->getQuoteId(), $exception->getMessage());
+        $this->paymentFailures->handle((int)$this->_getCheckoutSession()->getQuoteId(), $exception->getMessage());
 
         switch ($exception->getCode()) {
             case ApiProcessableException::API_MAX_PAYMENT_ATTEMPTS_EXCEEDED:
