@@ -96,16 +96,4 @@ class SwatchAttributesProvider
         }
         return $this->attributesPerProduct[$product->getId()];
     }
-
-    /**
-     * This method introduced only for the case when customer already has converted attribute.
-     *
-     * @param $productAttribute
-     * @return bool
-     * @deprecated
-     */
-    private function hasSwatchAttribute($productAttribute)
-    {
-        return $this->swatchesHelper->isSwatchAttribute($productAttribute);
-    }
 }

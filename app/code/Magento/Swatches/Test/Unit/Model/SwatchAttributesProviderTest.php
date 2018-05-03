@@ -56,9 +56,6 @@ class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', 'getTypeId']);
         $this->swatchTypeChecker = $this->createMock(SwatchAttributeType::class);
-
-//        $this->swatchHelper = (new ObjectManager($this))
-//            ->getObject(\Magento\Swatches\Helper\Data::class);
         $this->swatchHelper = $this->createPartialMock(
             \Magento\Swatches\Helper\Data::class,
             ['isSwatchAttribute']
