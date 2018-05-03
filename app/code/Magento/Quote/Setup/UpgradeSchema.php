@@ -120,6 +120,15 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ['type' => Table::TYPE_TEXT, 'length' => 255]
             );
         }
+        if (version_compare($context->getVersion(), '2.0.8', '<')) {
+            $connection = $setup->getConnection(self::$connectionName);
+            $connection->modifyColumn(
+                $setup->getTable('quote', self::$connectionName),
+                'remote_ip',
+                ['type' => Table::TYPE_TEXT, 'length' => 45]
+            );
+        }
+
         $setup->endSetup();
     }
 }
