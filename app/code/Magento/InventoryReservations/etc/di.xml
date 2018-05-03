@@ -9,11 +9,11 @@
     <preference for="Magento\InventoryReservationsApi\Api\AppendReservationsInterface" type="Magento\InventoryReservations\Model\AppendReservations"/>
     <preference for="Magento\InventoryReservationsApi\Api\Data\ReservationInterface" type="Magento\InventoryReservations\Model\Reservation"/>
     <preference for="Magento\InventoryReservationsApi\Api\ReservationBuilderInterface" type="Magento\InventoryReservations\Model\ReservationBuilder"/>
-    <preference for="Magento\InventoryReservations\Model\CleanupReservationsInterface" type="Magento\InventoryReservations\Model\ResourceModel\CleanupReservations"/>
+    <preference for="Magento\InventoryReservationsApi\Module\CleanupReservationsInterface" type="Magento\InventoryReservations\Model\ResourceModel\CleanupReservations"/>
+    <preference for="Magento\InventoryReservationsApi\Module\GetReservationsQuantityInterface" type="Magento\InventoryReservations\Model\ResourceModel\GetReservationsQuantity"/>
     <type name="Magento\InventoryReservations\Model\ResourceModel\CleanupReservations">
         <arguments>
             <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
         </arguments>
     </type>
-    <preference for="Magento\InventoryReservations\Model\GetReservationsQuantityInterface" type="Magento\InventoryReservations\Model\ResourceModel\GetReservationsQuantity"/>
 </config>

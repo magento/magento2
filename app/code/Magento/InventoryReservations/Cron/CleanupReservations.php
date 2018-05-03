@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservations\Cron;
 
-use Magento\InventoryReservations\Model\CleanupReservationsInterface;
+use Magento\InventoryReservationsApi\Module\CleanupReservationsInterface;
 
 /**
  * Cron job precessing of reservations cleanup
