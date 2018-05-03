@@ -154,6 +154,15 @@ class ValidationTest extends WebapiAbstract
      */
     public function failedValidationDataProvider(): array
     {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            $nonExistedSourceCodeError = [
+                'message' => 'Could not save Source Item',
+                'errors' => [],
+            ];
+        } else {
+            $nonExistedSourceCodeError = ['message' => 'Could not save Source Item'];
+        }
+
         return [
             'null_' . SourceItemInterface::SKU => [
                 SourceItemInterface::SKU,
@@ -278,9 +287,7 @@ class ValidationTest extends WebapiAbstract
             'not_exists_' . SourceItemInterface::SOURCE_CODE => [
                 SourceItemInterface::SOURCE_CODE,
                 'not-existed-source-code',
-                [
-                    'message' => 'Could not save Source Item',
-                ],
+                $nonExistedSourceCodeError,
             ],
             'with_whitespaces_' . SourceItemInterface::SOURCE_CODE => [
                 SourceItemInterface::SOURCE_CODE,
@@ -310,7 +317,7 @@ class ValidationTest extends WebapiAbstract
      */
     public function testFailedValidationOnCreateRelatedOnlyForRest(string $field, $value, array $expectedErrorData)
     {
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
             $this->markTestSkipped(
                 'Test works only for REST adapter because in SOAP one parameters would be converted'
                 . ' into zero (zero is allowed input value)'
@@ -344,7 +351,8 @@ class ValidationTest extends WebapiAbstract
                 '',
                 [
                     'message' => 'Error occurred during "' . SourceItemInterface::QUANTITY
-                        . '" processing. Invalid type for value: "". Expected Type: "float".',
+                        . '" processing. The "" value\'s type is invalid. The "float" type was expected. '
+                        . 'Verify and try again.',
                 ],
             ],
             'string_' . SourceItemInterface::QUANTITY => [
@@ -352,7 +360,8 @@ class ValidationTest extends WebapiAbstract
                 'test',
                 [
                     'message' => 'Error occurred during "' . SourceItemInterface::QUANTITY
-                        . '" processing. Invalid type for value: "test". Expected Type: "float".',
+                        . '" processing. The "test" value\'s type is invalid. The "float" type was expected. '
+                        . 'Verify and try again.',
                 ],
             ],
             'array_' . SourceItemInterface::SOURCE_CODE => [
@@ -360,7 +369,8 @@ class ValidationTest extends WebapiAbstract
                 [],
                 [
                     'message' => 'Error occurred during "' . SourceItemInterface::SOURCE_CODE
-                        . '" processing. Invalid type for value: "array". Expected Type: "string".',
+                        . '" processing. The "array" value\'s type is invalid. The "string" type was expected. '
+                        . 'Verify and try again.',
                 ],
             ],
         ];
@@ -373,7 +383,14 @@ class ValidationTest extends WebapiAbstract
     public function testCreateWithEmptyData()
     {
         $sourceItems = [];
-        $expectedErrorData = ['message' => 'Input data is empty'];
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            $expectedErrorData = [
+                'message' => 'Input data is empty',
+                'errors' => [],
+            ];
+        } else {
+            $expectedErrorData = ['message' => 'Input data is empty'];
+        }
 
         $serviceInfo = [
             'rest' => [

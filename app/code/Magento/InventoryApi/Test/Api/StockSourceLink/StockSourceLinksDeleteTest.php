@@ -63,7 +63,7 @@ class StockSourceLinksDeleteTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME_DELETE . 'Execute',
             ],
         ];
-        (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+        (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['links' => $linksForDelete]);
 
