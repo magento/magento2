@@ -13,7 +13,7 @@
             <argument name="deleteButton" xsi:type="object">Magento\InventoryAdminUi\Ui\Component\Control\Stock\DeleteButton</argument>
         </arguments>
     </type>
-    <type name="Magento\Inventory\Ui\DataProvider\StockDataProvider">
-        <plugin name="sales_channel_data" type="Magento\InventorySalesAdminUi\Plugin\Inventory\Ui\StockDataProvider\SalesChannels" />
+    <type name="Magento\InventoryAdminUi\Ui\DataProvider\StockDataProvider">
+        <plugin name="sales_channel_data" type="Magento\InventorySalesAdminUi\Plugin\InventoryAdminUi\Ui\StockDataProvider\SalesChannels" />
     </type>
 </config>

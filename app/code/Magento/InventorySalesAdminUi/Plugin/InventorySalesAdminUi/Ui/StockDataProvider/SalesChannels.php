@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySalesAdminUi\Plugin\Inventory\Ui\StockDataProvider;
+namespace Magento\InventorySalesAdminUi\Plugin\InventoryAdminUi\Ui\StockDataProvider;
 
 use Magento\CatalogInventory\Model\Stock\StockRepository;
-use Magento\Inventory\Ui\DataProvider\StockDataProvider;
+use Magento\InventoryAdminUi\Ui\DataProvider\StockDataProvider;
 use Magento\InventorySales\Model\GetAssignedSalesChannelsForStockInterface;
 
 /**
