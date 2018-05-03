@@ -42,16 +42,13 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testGetDefaultGroupWithNonDefaultStoreId()
     {
-        $this->objectManager->removeSharedInstance('Magento\TestFramework\App\Config');
-        $this->objectManager->removeSharedInstance('Magento\Framework\App\Config\ScopeConfigInterface');
-
         /** @var \Magento\Store\Model\StoreManagerInterface  $storeManager */
         $storeManager = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface');
-        $nonDefaultStore = $storeManager->getStore('secondstore');
+        $nonDefaultStore = $storeManager->getStore('fixturestore');
         $nonDefaultStoreId = $nonDefaultStore->getId();
         /** @var \Magento\Framework\App\MutableScopeConfig $scopeConfig */
         $scopeConfig = $this->objectManager->get('Magento\Framework\App\MutableScopeConfig');
@@ -59,7 +56,7 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Model\GroupManagement::XML_PATH_DEFAULT_ID,
             2,
             ScopeInterface::SCOPE_STORE,
-            'secondstore'
+            'fixturestore'
         );
         $testGroup = ['id' => 2, 'code' => 'Wholesale', 'tax_class_id' => 3, 'tax_class_name' => 'Retail Customer'];
         $this->assertDefaultGroupMatches($testGroup, $nonDefaultStoreId);
