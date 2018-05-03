@@ -75,6 +75,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         ];
         $url = $this->_model->getUrl('path', $routeParams);
         $this->assertContains('/param4/' . $paramEncoder->encode('a4==') . '/', $url);
+
+        $url = $this->_model->getUrl('route/controller/action/id/100');
+        $this->assertContains('id/100', $url);
     }
 
     /**
