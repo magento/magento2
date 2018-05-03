@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Validator\Test\Unit;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -53,8 +55,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->_defaultTranslator = \Magento\Framework\Validator\AbstractValidator::getDefaultTranslator();
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_directoryList = $this->_objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
-        $this->_fileIterator = $this->_objectManager->get('Magento\Framework\Config\FileIteratorFactory');
+        $this->_directoryList = new \Magento\Framework\App\Filesystem\DirectoryList(BP);
+        $this->_fileIterator = $this->iteratorFactory = $this->getMock('Magento\Framework\Config\FileIteratorFactory', [], [], '', false);
+        //$this->_fileIterator = $this->_objectManager->get('Magento\Framework\Config\FileIteratorFactory');
         $this->_validatorConfig = $this->getMockBuilder(
             'Magento\Framework\Validator\Config'
         )->setMethods(
