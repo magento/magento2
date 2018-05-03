@@ -41,15 +41,14 @@
 
         <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksListPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-
         <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">
             <argument name="keyword" value="$$createStock1.stock[name]$$"/>
         </actionGroup>
         <click selector="{{AdminGridRow.editByValue($$createStock1.stock[name]$$)}}" stepKey="clickOnEditForDefaultStock2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
-
         <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{customWebsite.name}}" stepKey="SelectWebsiteAsSalesChannel"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad3"/>
+
         <see userInput="Delete" selector="{{AdminEditStockActionsSection.delete}}" stepKey="seeDeleteButton"/>
         <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveStock1"/>
         <dontSee userInput="Delete" selector="{{AdminEditStockActionsSection.delete}}" stepKey="dontSeeDeleteButton"/>

@@ -19,6 +19,7 @@
         <waitForPageLoad stepKey="waitForPageLoad2" time="10"/>
         <see userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="verifyThatCorrectWebsiteFound"/>
         <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clickEditExistingWebsite"/>
+
         <click selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="clickDeleteWebsiteButtonOnEditStorePage"/>
         <selectOption userInput="No" selector="{{AdminStoresDeleteWebsiteSection.createDbBackup}}" stepKey="setCreateDbBackupToNo"/>
         <click selector="{{AdminStoresDeleteWebsiteSection.deleteButton}}" stepKey="clickDeleteButtonOnDeleteWebsitePage"/>
