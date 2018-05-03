@@ -475,6 +475,23 @@ class Config
         );
         return $this;
     }
+    
+    /**
+     * Adjust metadata content url
+     *
+     * @param string $content
+     * @return string $content
+     */
+    public function getMetaUrl($content)
+    {
+        $parsed = parse_url($content);
+
+        if (empty($parsed['scheme'])) {
+            return $this->assetRepo->getUrl($content);
+        }
+
+        return $content;
+    }
 
     /**
      * Set additional element attribute
