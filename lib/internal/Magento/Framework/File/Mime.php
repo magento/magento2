@@ -71,7 +71,8 @@ class Mime
         'css' => 'text/css',
         'js' => 'application/javascript',
         'json' => 'application/json',
-        'xml' => 'application/xml',
+        'xml'  => 'application/xml',
+        'svg' => 'image/svg+xml',
     ];
 
     /**
