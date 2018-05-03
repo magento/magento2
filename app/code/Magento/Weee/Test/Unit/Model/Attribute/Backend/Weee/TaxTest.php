@@ -80,7 +80,8 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($taxes));
 
         // Exception caught
-        $this->expectException('Exception', $expected);
+        $this->expectException('Exception');
+        $this->expectExceptionMessage($expected);
         $modelMock->validate($productMock);
     }
 
