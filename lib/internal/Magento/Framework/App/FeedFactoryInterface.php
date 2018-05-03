@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App;
 
 /**
@@ -24,5 +26,5 @@ interface FeedFactoryInterface
      * @param string $format
      * @return FeedInterface
      */
-    public function create(array $data, $format = self::FORMAT_RSS) : FeedInterface;
+    public function create(array $data, string $format = self::FORMAT_RSS) : FeedInterface;
 }

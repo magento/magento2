@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -46,7 +48,7 @@ class FeedFactory implements FeedFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create(array $data, $format = FeedFactoryInterface::FORMAT_RSS) : FeedInterface
+    public function create(array $data, string $format = FeedFactoryInterface::FORMAT_RSS) : FeedInterface
     {
         if (!isset($this->formats[$format])) {
             throw new \Magento\Framework\Exception\InputException(
