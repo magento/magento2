@@ -14,6 +14,9 @@ use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class IsCorrectQtyConditionTest extends TestCase
 {
     /**
