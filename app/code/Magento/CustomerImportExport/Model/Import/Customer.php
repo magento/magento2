@@ -423,7 +423,7 @@ class Customer extends AbstractCustomer
             // create
             $entityRow['group_id'] = empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'];
             $entityRow['store_id'] = empty($rowData[self::COLUMN_STORE])
-                ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+                ? \Magento\Store\Model\Store::DEFAULT_STORE_ID : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
             $entityRow['created_at'] = $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
