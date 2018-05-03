@@ -20,6 +20,7 @@
                     <?= $block->escapeHtml($block->getName()) ?><br>
                     <?= $block->escapeHtml($block->getCustomer()->getEmail()) ?><br>
                 </p>
+                <?= $block->getChildHtml('customer.account.dashboard.info.extra'); ?>
             </div>
             <div class="box-actions">
                 <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('customer/account/edit')) ?>">
@@ -43,8 +44,6 @@
                             <?= $block->escapeHtml(__('You aren\'t subscribed to our newsletter.')) ?>
                         <?php endif; ?>
                     </p>
-                    <?php /* Extensions placeholder */ ?>
-                    <?= $block->getChildHtml('customer.account.dashboard.info.extra') ?>
                 </div>
                 <div class="box-actions">
                     <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('newsletter/manage')) ?>"><span><?= $block->escapeHtml(__('Edit')) ?></span></a>
