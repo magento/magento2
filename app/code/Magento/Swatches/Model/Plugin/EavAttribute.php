@@ -279,7 +279,6 @@ class EavAttribute
         }
     }
 
-
     /**
      * Clean swatch option values after switching to the dropdown type.
      *
