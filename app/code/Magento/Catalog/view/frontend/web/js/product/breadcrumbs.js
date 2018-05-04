@@ -13,6 +13,7 @@ define([
 
         $.widget('mage.breadcrumbs', widget, {
             options: {
+                baseUrl: '',
                 categoryUrlSuffix: '',
                 useCategoryPathInUrl: false,
                 product: '',
@@ -195,7 +196,7 @@ define([
                     }
 
                     // prevent double home link, when menu has link to the home
-                    if (categoryUrl === BASE_URL) {
+                    if (categoryUrl === this.options.baseUrl) {
                         categoryUrl = '';
                     }
                 }
