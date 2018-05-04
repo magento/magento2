@@ -58,7 +58,7 @@
             </actionGroup>
             <click selector="{{AdminGridRow.editByValue($$createSource1.source[source_code]$$)}}" stepKey="clickOnEdit1"/>
             <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
-            <checkOption selector="{{AdminEditSourceGeneralSection.isEnabled}}" stepKey="checkIsEnabled1"/>
+            <click selector="{{AdminEditSourceGeneralSection.IsEnabledLabel}}" stepKey="disableSource1"/>
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
 
             <comment userInput=" Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment1"/>
@@ -75,7 +75,7 @@
             <comment userInput="Set 'Notify for Quantity Below' to use system value by default." stepKey="revertNotifyQtyBelowComment1"/>
             <amOnPage url="{{AdminCatalogInventoryConfigPage.url}}" stepKey="amOnCatalogInventoryConfigPage1"/>
             <conditionalClick  selector="{{ProductStockOptionsSection.ProductStockOptions}}" dependentSelector="{{ProductStockOptionsSection.CheckIfTabExpand}}" visible="true" stepKey="expandProductStockOptions1"/>
-            <checkOption selector="{{ProductStockOptionsSection.NotifyStockQtySystemValue}}" stepKey="disableNotifyQtySystemValue1"/>
+            <checkOption selector="{{ProductStockOptionsSection.NotifyStockQtySystemValue}}" stepKey="enableNotifyQtySystemValue1"/>
             <click selector="{{ProductStockOptionsSection.Save}}" stepKey="saveConfiguration1"/>
 
             <waitForPageLoad time="10" stepKey="waitForPageLoad8"/>
