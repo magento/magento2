@@ -9,7 +9,7 @@ namespace Magento\Inventory\Test\Integration\Stock;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
-use Magento\InventoryAdminUi\Controller\Adminhtml\Stock\StockSourceLinkProcessor;
+use Magento\InventoryAdminUi\Model\Stock\StockSourceLinkProcessor;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\TestFramework\Helper\Bootstrap;

@@ -18,6 +18,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryAdminUi\Model\Stock\StockSaveProcessor;
 
 /**
  * Save Controller

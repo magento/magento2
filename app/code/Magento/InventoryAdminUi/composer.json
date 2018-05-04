@@ -5,6 +5,7 @@
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-inventory-api": "*",
+        "magento/module-inventory": "*",
         "magento/module-backend": "*",
         "magento/module-directory": "*",
         "magento/module-shipping": "*",

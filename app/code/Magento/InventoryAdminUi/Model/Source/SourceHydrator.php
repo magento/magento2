@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryAdminUi\Controller\Adminhtml\Source;
+namespace Magento\InventoryAdminUi\Model\Source;
 
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryApi\Api\Data\SourceInterface;

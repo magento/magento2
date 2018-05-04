@@ -10,7 +10,7 @@ namespace Magento\InventorySales\Test\Integration\StockManagement;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventoryReservations\Model\CleanupReservationsInterface;
+use Magento\InventoryReservationsApi\Module\CleanupReservationsInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;

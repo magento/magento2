@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryAdminUi\Controller\Adminhtml\Stock;
+namespace Magento\InventoryAdminUi\Model\Stock;
 
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;

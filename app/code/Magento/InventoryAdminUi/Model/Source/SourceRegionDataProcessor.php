@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryAdminUi\Controller\Adminhtml\Source;
+namespace Magento\InventoryAdminUi\Model\Source;
 
 /**
  * Prepare region data. Specified for form structure

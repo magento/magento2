@@ -18,6 +18,7 @@ use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\InventoryAdminUi\Model\Source\SourceHydrator;
 
 /**
  * Save Controller
