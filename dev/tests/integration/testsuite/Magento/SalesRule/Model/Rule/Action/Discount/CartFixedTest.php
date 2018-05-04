@@ -105,7 +105,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepository::class);
         $product = Bootstrap::getObjectManager()->create(Product::class);
         $product->setTypeId('simple')
-            ->setAttributeSetId(4)
+            ->setAttributeSetId($product->getDefaultAttributeSetId())
             ->setWebsiteIds([1])
             ->setName($name)
             ->setSku(uniqid($name))
