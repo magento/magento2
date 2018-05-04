@@ -10,7 +10,7 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {
-    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context): void
+    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
 
@@ -21,7 +21,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $setup->endSetup();
     }
 
-    private function addSequenceMetaStoreIdForeignKey(SchemaSetupInterface $setup): void
+    private function addSequenceMetaStoreIdForeignKey(SchemaSetupInterface $setup)
     {
         $setup->getConnection()->addForeignKey(
             $setup->getFkName('sales_sequence_meta', 'store_id', 'store', 'store_id'),
