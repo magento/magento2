@@ -31,7 +31,7 @@ class AttributeFilter
             $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === "1";
             if ($value === '' && $considerUseDefaultsAttribute) {
                 /** @var $product Product */
-                if ((bool)$product->getData($attribute) === (bool)$value) {
+                if ((bool)$product->getData($attribute) === false) {
                     unset($productData[$attribute]);
                 }
             }
