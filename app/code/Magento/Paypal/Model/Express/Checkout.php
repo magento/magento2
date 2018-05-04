@@ -809,7 +809,9 @@ class Checkout
             case \Magento\Sales\Model\Order::STATE_PROCESSING:
             case \Magento\Sales\Model\Order::STATE_COMPLETE:
             case \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW:
-                $this->orderSender->send($order);
+                if (!$order->getEmailSent()) {
+                    $this->orderSender->send($order);
+                }
                 $this->_checkoutSession->start();
                 break;
             default:

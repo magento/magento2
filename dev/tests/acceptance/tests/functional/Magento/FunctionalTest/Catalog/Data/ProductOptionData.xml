@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ProductOptionField" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">10</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionArea" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionArea</data>
+        <data key="type">area</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">2</data>
+        <data key="price">10</data>
+        <data key="price_type">percent</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionFile" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionFile</data>
+        <data key="type">file</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">3</data>
+        <data key="price">9.99</data>
+        <data key="price_type">fixed</data>
+        <data key="file_extension">png, jpg, gif</data>
+        <data key="image_size_x">0</data>
+        <data key="image_size_y">0</data>
+    </entity>
+    <entity name="ProductOptionDropDown" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionDropDown</data>
+        <data key="type">drop_down</data>
+        <data key="sort_order">4</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductOptionValueDropdown1</requiredEntity>
+        <requiredEntity type="product_option_value">ProductOptionValueDropdown2</requiredEntity>
+    </entity>
+    <entity name="ProductOptionRadiobutton" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionRadioButtons</data>
+        <data key="type">radio</data>
+        <data key="sort_order">5</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductOptionValueRadioButtons1</requiredEntity>
+        <requiredEntity type="product_option_value">ProductOptionValueRadioButtons2</requiredEntity>
+    </entity>
+    <entity name="ProductOptionCheckbox" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionCheckbox</data>
+        <data key="type">checkbox</data>
+        <data key="sort_order">6</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductOptionValueCheckbox</requiredEntity>
+    </entity>
+    <entity name="ProductOptionMultiSelect" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionMultiSelect</data>
+        <data key="type">multiple</data>
+        <data key="sort_order">7</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductOptionValueMultiSelect1</requiredEntity>
+        <requiredEntity type="product_option_value">ProductOptionValueMultiSelect2</requiredEntity>
+    </entity>
+    <entity name="ProductOptionDate" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionDate</data>
+        <data key="type">date</data>
+        <data key="sort_order">8</data>
+        <data key="is_require">true</data>
+        <data key="price">1234</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionDateTime" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionDateTime</data>
+        <data key="type">date_time</data>
+        <data key="sort_order">9</data>
+        <data key="is_require">true</data>
+        <data key="price">0.00</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionTime" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionTime</data>
+        <data key="type">time</data>
+        <data key="sort_order">10</data>
+        <data key="is_require">true</data>
+        <data key="price">0.00</data>
+        <data key="price_type">percent</data>
+    </entity>
+</entities>
