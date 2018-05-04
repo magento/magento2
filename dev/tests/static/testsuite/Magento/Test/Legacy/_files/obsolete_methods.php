@@ -6,7 +6,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreStart
+// @codingStandardsIgnoreFile
 
 return [
     ['__get', 'Magento\Framework\DataObject'],
@@ -2567,4 +2567,5 @@ return [
             'configure',
             'Magento\Framework\MessageQueue\ConsumerInterface'
         ],
+    ['isOrderIncrementIdUsed', 'Magento\Quote\Model\ResourceModel\Quote', 'Magento\Sales\Model\OrderIncrementIdChecker::isIncrementIdUsed'],
 ];
