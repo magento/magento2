@@ -514,18 +514,20 @@ class SessionManager implements SessionManagerInterface
         if ($this->isSessionExists()) {
             //regenerate the session
             session_regenerate_id();
-            $new_session_id = session_id();
+            $newSessionId = session_id();
 
-            $_SESSION['new_session_id'] = $new_session_id;
+            $_SESSION['new_session_id'] = $newSessionId;
 
             // Set destroy timestamp
             $_SESSION['destroyed'] = time();
 
             // Write and close current session;
             session_commit();
-            $oldSession = $_SESSION;   //called after destroy - see destroy!
+            
+            //called after destroy()
+            $oldSession = $_SESSION;
             // Start session with new session ID
-            session_id($new_session_id);
+            session_id($newSessionId);
             ini_set('session.use_strict_mode', 0);
             session_start();
             ini_set('session.use_strict_mode', 1);
