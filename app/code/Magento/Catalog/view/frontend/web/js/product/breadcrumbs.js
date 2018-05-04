@@ -193,6 +193,11 @@ define([
                     if (categoryUrl.indexOf('?') > 0) {
                         categoryUrl = categoryUrl.substr(0, categoryUrl.indexOf('?'));
                     }
+
+                    // prevent double home link, when menu has link to the home
+                    if (categoryUrl === BASE_URL) {
+                        categoryUrl = '';
+                    }
                 }
 
                 return categoryUrl;
