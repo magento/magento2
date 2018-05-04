@@ -19,6 +19,7 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
  * Tests the different cases of consumers running by ConsumersRunner
  *
  * {@inheritdoc}
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 {
