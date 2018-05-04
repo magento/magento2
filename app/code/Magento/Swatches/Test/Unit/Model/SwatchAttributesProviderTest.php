@@ -31,11 +31,6 @@ class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
     private $swatchAttributeCodes;
 
     /**
-     * @var \Magento\Swatches\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $swatchHelper;
-
-    /**
      * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $productMock;
@@ -56,10 +51,6 @@ class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', 'getTypeId']);
         $this->swatchTypeChecker = $this->createMock(SwatchAttributeType::class);
-        $this->swatchHelper = $this->createPartialMock(
-            \Magento\Swatches\Helper\Data::class,
-            ['isSwatchAttribute']
-        );
 
         $this->swatchAttributeProvider = (new ObjectManager($this))->getObject(SwatchAttributesProvider::class, [
             'typeConfigurable' => $this->typeConfigurable,

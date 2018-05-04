@@ -19,10 +19,6 @@ use Magento\Framework\App\ObjectManager;
 class SwatchAttributesProvider
 {
     /**
-     * @var \Magento\Swatches\Helper\Data
-     */
-    protected $swatchesHelper;
-    /**
      * @var Configurable
      */
     private $typeConfigurable;
@@ -48,18 +44,15 @@ class SwatchAttributesProvider
      *
      * @param Configurable         $typeConfigurable
      * @param SwatchAttributeCodes $swatchAttributeCodes
-     * @param SwatchesHelper|null    $swatchHelper
      * @param SwatchAttributeType|null $swatchTypeChecker
      */
     public function __construct(
         Configurable $typeConfigurable,
         SwatchAttributeCodes $swatchAttributeCodes,
-        SwatchesHelper $swatchHelper = null,
         SwatchAttributeType $swatchTypeChecker = null
     ) {
         $this->typeConfigurable = $typeConfigurable;
         $this->swatchAttributeCodes = $swatchAttributeCodes;
-        $this->swatchesHelper = $swatchHelper ?: ObjectManager::getInstance()->create(SwatchesHelper::class);
         $this->swatchTypeChecker = $swatchTypeChecker
             ?: ObjectManager::getInstance()->create(SwatchAttributeType::class);
     }
