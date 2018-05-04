@@ -9,7 +9,6 @@ namespace Magento\Swatches\Model;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
-use Magento\Swatches\Helper\Data as SwatchesHelper;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 
@@ -42,7 +41,7 @@ class SwatchAttributesProvider
     /**
      * SwatchAttributesProvider constructor.
      *
-     * @param Configurable         $typeConfigurable
+     * @param Configurable $typeConfigurable
      * @param SwatchAttributeCodes $swatchAttributeCodes
      * @param SwatchAttributeType|null $swatchTypeChecker
      */
