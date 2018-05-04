@@ -10,7 +10,7 @@ namespace Magento\InventorySales\Test\Integration\IsProductSalableForRequestedQt
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
-use Magento\InventoryReservations\Model\CleanupReservationsInterface;
+use Magento\InventoryReservationsApi\Module\CleanupReservationsInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
