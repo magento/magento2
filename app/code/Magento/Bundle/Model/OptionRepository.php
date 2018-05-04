@@ -177,8 +177,6 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     ) {
         $savedOption = $this->optionSave->save($product, $option);
 
-        $product->setIsRelationsChanged(true);
-
         $this->productRepository->save($product);
 
         return $savedOption->getOptionId();

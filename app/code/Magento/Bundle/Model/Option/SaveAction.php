@@ -113,6 +113,8 @@ class SaveAction
             $this->linkManagement->addChild($bundleProduct, $option->getOptionId(), $linkedProduct);
         }
 
+        $bundleProduct->setIsRelationsChanged(true);
+
         return $option;
     }
 
