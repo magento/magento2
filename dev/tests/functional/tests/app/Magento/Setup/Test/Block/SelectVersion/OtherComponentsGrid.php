@@ -12,6 +12,9 @@ use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
 use Magento\Setup\Test\Block\SelectVersion\OtherComponentsGrid\Item;
 
+/**
+ * Perform OtherComponentsGrid block.
+ */
 class OtherComponentsGrid extends Block
 {
     /**
@@ -30,9 +33,12 @@ class OtherComponentsGrid extends Block
     private $selectedPackages = [];
 
     /**
-     * @param $packages
+     * Set version of the packages.
+     *
+     * @param array $packages
+     * @return void
      */
-    public function setVersions(array $packages)
+    public function setVersions(array $packages) : void
     {
         foreach ($packages as $package) {
             $selector = sprintf($this->itemComponent, $package['name']);
@@ -50,24 +56,29 @@ class OtherComponentsGrid extends Block
      *
      * @return array
      */
-    public function getSelectedPackages()
+    public function getSelectedPackages() : array
     {
         return $this->selectedPackages;
     }
 
     /**
+     * Set pager size.
+     *
      * @param int $count
+     * @return void
      */
-    public function setItemsPerPage($count)
+    public function setItemsPerPage(int $count) : void
     {
         $this->_rootElement->find($this->perPage, Locator::SELECTOR_CSS, 'select')->setValue($count);
     }
 
     /**
+     * Get component block.
+     *
      * @param ElementInterface $element
      * @return Item
      */
-    private function getComponentRow($element)
+    private function getComponentRow(ElementInterface $element) : Item
     {
         return $this->blockFactory->create(
             Item::class,

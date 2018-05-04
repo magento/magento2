@@ -34,7 +34,7 @@ class Item extends Block
      *
      * @param string $version
      */
-    public function setVersion($version)
+    public function setVersion(string $version)
     {
         $this->_rootElement->find($this->version, Locator::SELECTOR_CSS, 'select')->setValue($version);
     }

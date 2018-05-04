@@ -21,7 +21,7 @@ class AssertVersionAndEditionCheck extends AbstractConstraint
      * @param array $upgrade
      * @return void
      */
-    public function processAssert(SetupWizard $setupWizard, array $upgrade)
+    public function processAssert(SetupWizard $setupWizard, array $upgrade) :void
     {
         $message = "We're ready to upgrade {$upgrade['package']} to {$upgrade['version']}.";
         if ($upgrade['otherComponents'] === 'Yes' && isset($upgrade['selectedPackages'])) {
