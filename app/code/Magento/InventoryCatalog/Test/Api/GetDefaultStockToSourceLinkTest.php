@@ -42,15 +42,15 @@ class GetDefaultStockToSourceLinkTest extends WebapiAbstract
         $defaultSourceCode = $this->defaultSourceProvider->getCode();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/inventory/stock/get-assigned-sources/' . $defaultStockId,
+                'resourcePath' => '/V1/inventory/get-sources-assigned-to-stock-ordered-by-priority/' . $defaultStockId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
-                'service' => 'inventoryApiGetAssignedSourcesForStockV1',
-                'operation' => 'inventoryApiStockRepositoryV1Get',
+                'service' => 'inventoryApiGetSourcesAssignedToStockOrderedByPriorityV1',
+                'operation' => 'inventoryApiGetSourcesAssignedToStockOrderedByPriorityV1Execute',
             ],
         ];
-        if (self::ADAPTER_REST == TESTS_WEB_API_ADAPTER) {
+        if (self::ADAPTER_REST === TESTS_WEB_API_ADAPTER) {
             $source = $this->_webApiCall($serviceInfo);
         } else {
             $source = $this->_webApiCall($serviceInfo, ['stockId' => $defaultStockId]);
