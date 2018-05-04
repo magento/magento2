@@ -92,6 +92,8 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      * @throws ValidationException
      *
      * @dataProvider productsInStockDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testAddInStockProductToQuote(
         string $sku,
@@ -143,6 +145,8 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      * @throws ValidationException
      *
      * @dataProvider notSalableProductsDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testAddOutOffStockProductToQuote(
         string $sku,

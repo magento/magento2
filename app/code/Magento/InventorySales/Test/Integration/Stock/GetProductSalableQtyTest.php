@@ -67,6 +67,8 @@ class GetProductSalableQtyTest extends TestCase
      * @param float $qty
      *
      * @dataProvider getProductQuantityProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testGetProductQuantity(string $sku, int $stockId, float $qty)
     {
@@ -98,6 +100,8 @@ class GetProductSalableQtyTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @magentoDbIsolation disabled
      */
     public function testGetProductQuantityIfReservationsArePresent()
     {

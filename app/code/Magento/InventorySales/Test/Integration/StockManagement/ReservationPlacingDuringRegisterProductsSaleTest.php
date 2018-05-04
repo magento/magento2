@@ -153,6 +153,8 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
+     *
+     * @magentoDbIsolation disabled
      */
     public function testRegisterProductsSale()
     {

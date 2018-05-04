@@ -55,6 +55,8 @@ class AddStockStatusToProductsTest extends TestCase
      * @dataProvider addStockStatusToProductsDataProvider
      * @param string $storeCode
      * @param array $productsData
+     *
+     * @magentoDbIsolation disabled
      */
     public function testAddStockStatusToProducts(string $storeCode, array $productsData)
     {

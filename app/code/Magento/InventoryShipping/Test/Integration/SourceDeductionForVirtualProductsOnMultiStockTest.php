@@ -95,6 +95,8 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_eu_website.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_virtual_products.php
+     *
+     * @magentoDbIsolation disabled
      */
     public function testSourceDeductionWhileInvoicingWholeOrderedQty()
     {
@@ -139,6 +141,8 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_eu_website.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_virtual_products.php
+     *
+     * @magentoDbIsolation disabled
      */
     public function testSourceDeductionWhileInvoicingPartialOrderedQty()
     {

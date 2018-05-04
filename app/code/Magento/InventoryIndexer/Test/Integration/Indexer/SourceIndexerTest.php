@@ -62,6 +62,8 @@ class SourceIndexerTest extends TestCase
      * @param array|null $expectedData
      *
      * @dataProvider reindexRowDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testReindexRow(string $sku, int $stockId, $expectedData)
     {
@@ -101,6 +103,8 @@ class SourceIndexerTest extends TestCase
      * @param array|null $expectedData
      *
      * @dataProvider reindexListDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testReindexList(string $sku, int $stockId, $expectedData)
     {
@@ -124,6 +128,8 @@ class SourceIndexerTest extends TestCase
      * @param array|null $expectedData
      *
      * @dataProvider reindexListDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testReindexAll(string $sku, int $stockId, $expectedData)
     {

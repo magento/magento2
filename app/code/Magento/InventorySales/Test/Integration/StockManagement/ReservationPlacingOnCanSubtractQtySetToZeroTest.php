@@ -56,6 +56,8 @@ class ReservationPlacingOnCanSubtractQtySetToZeroTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoConfigFixture default_store cataloginventory/options/can_subtract 0
+     * 
+     * @magentoDbIsolation disabled
      */
     public function testPlacingReservationOnCanSubtractQtySetToZero()
     {

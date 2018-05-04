@@ -51,6 +51,8 @@ class InvalidateAfterEnablingOrDisablingSourceTest extends TestCase
      * @param string $sourceCode
      * @param bool $enable
      * @param bool $expectedValid
+     *
+     * @magentoDbIsolation disabled
      */
     public function testIndexerInvalidation(string $sourceCode, bool $enable, bool $expectedValid)
     {
@@ -128,6 +130,8 @@ class InvalidateAfterEnablingOrDisablingSourceTest extends TestCase
      * @param string $sourceCode
      * @param bool $enable
      * @param bool $expectedValid
+     *
+     * @magentoDbIsolation disabled
      */
     public function testIndexerInvalidationIfSourceDoesNotHaveSourceItems(
         string $sourceCode,
