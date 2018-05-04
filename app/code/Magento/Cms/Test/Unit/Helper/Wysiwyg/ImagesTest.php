@@ -379,10 +379,8 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCurrentPathThrowException()
     {
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            'The directory PATH/wysiwyg is not writable by server.'
-        );
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The directory PATH is not writable by server.');
 
         $this->directoryWriteMock->expects($this->once())
             ->method('isExist')

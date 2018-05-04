@@ -255,7 +255,8 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveWithValidateCategoryException($error, $expectedException, $expectedExceptionMessage)
     {
-        $this->expectException($expectedException, $expectedExceptionMessage);
+        $this->expectException($expectedException);
+        $this->expectExceptionMessage($expectedExceptionMessage);
         $categoryId = 5;
         $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $this->extensibleDataObjectConverterMock
@@ -284,7 +285,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 true, \Magento\Framework\Exception\CouldNotSaveException::class,
-                'Could not save category: Attribute "ValidateCategoryTest" is required.',
+                'Could not save category: The "ValidateCategoryTest" attribute is required. Enter and try again.'
             ], [
                 'Something went wrong', \Magento\Framework\Exception\CouldNotSaveException::class,
                 'Could not save category: Something went wrong'

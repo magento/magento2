@@ -11,6 +11,7 @@ use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -536,6 +537,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
+     * @deprecated this variable isn't used anymore.
      */
     protected $_stockResItemFac;
 
@@ -705,6 +707,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $catalogConfig;
 
     /**
+     * Stock Item Importer
+     *
+     * @var StockItemImporterInterface
+     */
+    private $stockItemImporter;
+
+    /**
      * @var ImageTypeProcessor
      */
     private $imageTypeProcessor;
@@ -752,12 +761,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param TransactionManagerInterface $transactionManager
      * @param Product\TaxClassProcessor $taxClassProcessor
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Catalog\Model\Product\Url $productUrl
      * @param array $data
      * @param array $dateAttrCodes
      * @param CatalogConfig $catalogConfig
      * @param ImageTypeProcessor $imageTypeProcessor
      * @param MediaGalleryProcessor $mediaProcessor
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param StockItemImporterInterface|null $stockItemImporter
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -802,7 +812,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         array $dateAttrCodes = [],
         CatalogConfig $catalogConfig = null,
         ImageTypeProcessor $imageTypeProcessor = null,
-        MediaGalleryProcessor $mediaProcessor = null
+        MediaGalleryProcessor $mediaProcessor = null,
+        StockItemImporterInterface $stockItemImporter = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -836,7 +847,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->catalogConfig = $catalogConfig ?: ObjectManager::getInstance()->get(CatalogConfig::class);
         $this->imageTypeProcessor = $imageTypeProcessor ?: ObjectManager::getInstance()->get(ImageTypeProcessor::class);
         $this->mediaProcessor = $mediaProcessor ?: ObjectManager::getInstance()->get(MediaGalleryProcessor::class);
-
+        $this->stockItemImporter = $stockItemImporter ?: ObjectManager::getInstance()
+            ->get(StockItemImporterInterface::class);
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -852,7 +864,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ) ? $data['option_entity'] : $optionFactory->create(
             ['data' => ['product_entity' => $this]]
         );
-
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus()
@@ -1693,7 +1704,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $storeId = !empty($rowData[self::COL_STORE])
                     ? $this->getStoreIdByCode($rowData[self::COL_STORE])
                     : Store::DEFAULT_STORE_ID;
-                if (isset($rowData['_media_is_disabled'])) {
+                if (isset($rowData['_media_is_disabled']) && strlen(trim($rowData['_media_is_disabled']))) {
                     $disabledImages = array_flip(
                         explode($this->getMultipleValueSeparator(), $rowData['_media_is_disabled'])
                     );
@@ -2129,9 +2140,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveStockItem()
     {
-        /** @var $stockResource \Magento\CatalogInventory\Model\ResourceModel\Stock\Item */
-        $stockResource = $this->_stockResItemFac->create();
-        $entityTable = $stockResource->getMainTable();
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $stockData = [];
             $productIdsToReindex = [];
@@ -2159,6 +2167,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         array_intersect_key($rowData, $this->defaultStockData),
                         $row
                     );
+                    $row['sku'] = $sku;
 
                     if ($this->stockConfiguration->isQty(
                         $this->skuProcessor->getNewSku($sku)['type_id']
@@ -2186,7 +2195,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             // Insert rows
             if (!empty($stockData)) {
-                $this->_connection->insertOnDuplicate($entityTable, array_values($stockData));
+                $this->stockItemImporter->import($stockData);
             }
 
             $this->reindexProducts($productIdsToReindex);

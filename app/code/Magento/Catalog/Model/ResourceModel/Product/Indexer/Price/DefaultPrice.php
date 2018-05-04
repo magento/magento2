@@ -361,18 +361,26 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         );
         $currentDate = $connection->getDatePartSql('cwd.website_date');
 
+        $maxUnsignedBigint = '~0';
         $specialFromDate = $connection->getDatePartSql($specialFrom);
         $specialToDate = $connection->getDatePartSql($specialTo);
-
-        $specialFromUse = $connection->getCheckSql("{$specialFromDate} <= {$currentDate}", '1', '0');
-        $specialToUse = $connection->getCheckSql("{$specialToDate} >= {$currentDate}", '1', '0');
-        $specialFromHas = $connection->getCheckSql("{$specialFrom} IS NULL", '1', "{$specialFromUse}");
-        $specialToHas = $connection->getCheckSql("{$specialTo} IS NULL", '1', "{$specialToUse}");
-        $finalPrice = $connection->getCheckSql(
-            "{$specialFromHas} > 0 AND {$specialToHas} > 0" . " AND {$specialPrice} < {$price}",
+        $specialFromExpr = "{$specialFrom} IS NULL OR {$specialFromDate} <= {$currentDate}";
+        $specialToExpr = "{$specialTo} IS NULL OR {$specialToDate} >= {$currentDate}";
+        $specialPriceExpr = $connection->getCheckSql(
+            "{$specialPrice} IS NOT NULL AND {$specialFromExpr} AND {$specialToExpr}",
             $specialPrice,
-            $price
+            $maxUnsignedBigint
         );
+        $tierPrice = new \Zend_Db_Expr('tp.min_price');
+        $tierPriceExpr = $connection->getIfNullSql(
+            $tierPrice,
+            $maxUnsignedBigint
+        );
+        $finalPrice = $connection->getLeastSql([
+            $price,
+            $specialPriceExpr,
+            $tierPriceExpr,
+        ]);
 
         $select->columns(
             [
@@ -380,8 +388,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 'price' => $connection->getIfNullSql($finalPrice, 0),
                 'min_price' => $connection->getIfNullSql($finalPrice, 0),
                 'max_price' => $connection->getIfNullSql($finalPrice, 0),
-                'tier_price' => new \Zend_Db_Expr('tp.min_price'),
-                'base_tier' => new \Zend_Db_Expr('tp.min_price'),
+                'tier_price' => $tierPrice,
+                'base_tier' => $tierPrice,
             ]
         );
 

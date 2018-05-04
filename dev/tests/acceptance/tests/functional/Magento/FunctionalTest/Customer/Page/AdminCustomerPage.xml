@@ -8,8 +8,8 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="AdminCustomerPage" url="/customer/index/" area="admin" module="Customer">
-        <section name="AdminCustomerMainActionsSection"/>
+    <page name="AdminCustomerPage" url="/customer/index/" area="admin" module="Magento_Customer">
+        <section name="AdminCustomerGridMainActionsSection"/>
         <section name="AdminCustomerMessagesSection"/>
         <section name="AdminCustomerGridSection"/>
         <section name="AdminCustomerFiltersSection"/>

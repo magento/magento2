@@ -777,11 +777,9 @@ class OauthTest extends \PHPUnit\Framework\TestCase
      */
     public function testMissingParamForBuildAuthorizationHeader($expectedMessage, $request)
     {
-        $this->expectException(
-            \Magento\Framework\Oauth\OauthInputException::class,
-            $expectedMessage,
-            0
-        );
+        $this->expectException(\Magento\Framework\Oauth\OauthInputException::class);
+        $this->expectExceptionMessage($expectedMessage);
+        $this->expectExceptionCode(0);
 
         $requestUrl = 'http://www.example.com/endpoint';
         $this->_oauth->buildAuthorizationHeader($request, $requestUrl);

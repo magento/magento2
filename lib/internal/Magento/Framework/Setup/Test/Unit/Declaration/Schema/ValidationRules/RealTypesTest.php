@@ -32,7 +32,16 @@ class RealTypesTest extends \PHPUnit\Framework\TestCase
 
     public function testValidate()
     {
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf-8',
+            ''
+        );
         $okColumn = new Real('decimal', 'decimal', $table, 10, 5);
         $invalidColumn = new Real('float', 'float', $table, 5, 10);
         $table->addColumns([$okColumn, $invalidColumn]);
