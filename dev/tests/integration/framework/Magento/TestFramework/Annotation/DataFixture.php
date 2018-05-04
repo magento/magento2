@@ -171,8 +171,13 @@ class DataFixture
                 require $fixture;
             }
         } catch (\Exception $e) {
-            throw new \Exception(
-                sprintf("Error in fixture: %s.\n %s", json_encode($fixture), $e->getMessage()),
+            throw new \PHPUnit_Framework_Exception(
+                sprintf(
+                    "Error in fixture: %s.\n %s\n %s",
+                    json_encode($fixture),
+                    $e->getMessage(),
+                    $e->getTraceAsString()
+                ),
                 500,
                 $e
             );
