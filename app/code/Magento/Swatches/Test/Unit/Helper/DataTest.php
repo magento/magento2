@@ -364,8 +364,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->imageHelperMock->expects($this->any())
             ->method('init')
             ->willReturnMap([
-                [$this->productMock, 'product_page_image_large_no_frame', [], $this->imageHelperMock],
-                [$this->productMock, 'product_page_image_medium_no_frame', [], $this->imageHelperMock],
+                [$this->productMock, 'product_page_image_large', [], $this->imageHelperMock],
+                [$this->productMock, 'product_page_image_medium', [], $this->imageHelperMock],
                 [$this->productMock, 'product_page_image_small', [], $this->imageHelperMock],
             ]);
 
