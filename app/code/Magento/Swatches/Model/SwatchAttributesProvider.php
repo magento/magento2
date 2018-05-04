@@ -39,6 +39,8 @@ class SwatchAttributesProvider
     private $swatchTypeChecker;
 
     /**
+     * SwatchAttributesProvider constructor.
+     *
      * @param Configurable $typeConfigurable
      * @param SwatchAttributeCodes $swatchAttributeCodes
      * @param SwatchAttributeType|null $swatchTypeChecker
