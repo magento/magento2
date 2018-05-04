@@ -192,7 +192,6 @@ class SessionManager implements SessionManagerInterface
             if (isset($_SESSION['destroyed'])) {
                 if ($_SESSION['destroyed'] < time() - 300) {
                     $this->destroy(['clear_storage' => true]);
-
                 }
             }
             $this->validator->validate($this);
