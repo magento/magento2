@@ -9,7 +9,6 @@ namespace Magento\InventoryApi\Test\Api;
 
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\Framework\Webapi\Exception;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -66,7 +65,7 @@ class SourceItemsDeleteTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Execute',
             ],
         ];
-        (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+        (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['sourceItems' => $sourceItemsForDelete]);
 

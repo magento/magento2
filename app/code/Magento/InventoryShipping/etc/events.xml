@@ -9,6 +9,9 @@
     <event name="sales_shipment_item_save_after">
         <observer name="inventory_sales_source_deduction_processor" instance="Magento\InventoryShipping\Observer\SourceDeductionProcessor"/>
     </event>
+    <event name="sales_order_invoice_save_after">
+        <observer name="inventory_sales_virtual_source_deduction_processor" instance="Magento\InventoryShipping\Observer\VirtualSourceDeductionProcessor"/>
+    </event>
     <event name="controller_action_predispatch_adminhtml_order_shipment_new">
         <observer name="inventory_shipping_check_data_before_load_new_shipment" instance="Magento\InventoryShipping\Observer\NewShipmentLoadBefore"/>
     </event>

@@ -37,7 +37,7 @@ class DeleteTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'DeleteById',
             ],
         ];
-        (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+        (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['stockId' => $stockIdToDelete]);
 
@@ -63,17 +63,17 @@ class DeleteTest extends WebapiAbstract
 
         $expectedMessage = 'Stock with id "%value" does not exist.';
         try {
-            (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+            (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
                 ? $this->_webApiCall($serviceInfo)
                 : $this->_webApiCall($serviceInfo, ['stockId' => $deletedStockId]);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
-            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
                 $errorData = $this->processRestExceptionResult($e);
                 self::assertEquals($expectedMessage, $errorData['message']);
                 self::assertEquals($deletedStockId, $errorData['parameters']['value']);
                 self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
-            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault($e, $expectedMessage, 'env:Sender', ['value' => $deletedStockId]);
             } else {
