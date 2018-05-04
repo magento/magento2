@@ -30,7 +30,7 @@ class AssertVersionAndEditionCheck extends AbstractConstraint
             }
         }
         $actualMessage = $setupWizard->getSystemUpgrade()->getUpgradeMessage();
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             $message,
             $actualMessage,
             "Updater application check is incorrect: \n"
