@@ -28,7 +28,7 @@ class AttributeFilter
     public function prepareProductAttributes(Product $product, array $productData, array $useDefaults)
     {
         foreach ($productData as $attribute => $value) {
-            $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === "1";
+            $considerUseDefaultsAttribute = isset($useDefaults[$attribute]) && $useDefaults[$attribute] === "1";
             if ($value === '' && $considerUseDefaultsAttribute) {
                 /** @var $product Product */
                 if ((bool)$product->getData($attribute) === (bool)$value) {
