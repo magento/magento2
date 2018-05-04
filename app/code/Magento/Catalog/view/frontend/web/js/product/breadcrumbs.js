@@ -13,7 +13,7 @@ define([
 
         $.widget('mage.breadcrumbs', widget, {
             options: {
-                baseUrl: '',
+                categoryPathRegex: /(nav\-)[0-9]+(\-[0-9]+)+/gi,
                 categoryUrlSuffix: '',
                 useCategoryPathInUrl: false,
                 product: '',
@@ -137,7 +137,7 @@ define([
                 }
 
                 classes = menuItem.parent().attr('class');
-                classNav = classes.match(/(nav\-)[0-9]+(\-[0-9]+)+/gi);
+                classNav = classes.match(this.options.categoryPathRegex);
 
                 if (classNav) {
                     classNav = classNav[0];
@@ -164,10 +164,20 @@ define([
             _resolveCategoryMenuItem: function () {
                 var categoryUrl = this._resolveCategoryUrl(),
                     menu = $(this.options.menuContainer),
-                    categoryMenuItem = null;
+                    categoryMenuItem = null,
+                    isCategoryMenuItem;
 
                 if (categoryUrl && menu.length) {
                     categoryMenuItem = menu.find('a[href="' + categoryUrl + '"]');
+
+                    // Check if this is a category (Not a link to contacts, homepage, etc)
+                    isCategoryMenuItem = categoryMenuItem.parent('li')
+                        .attr('class')
+                        .match(this.options.categoryPathRegex);
+
+                    if (!isCategoryMenuItem) {
+                        categoryMenuItem = null;
+                    }
                 }
 
                 return categoryMenuItem;
@@ -193,11 +203,6 @@ define([
 
                     if (categoryUrl.indexOf('?') > 0) {
                         categoryUrl = categoryUrl.substr(0, categoryUrl.indexOf('?'));
-                    }
-
-                    // prevent double home link, when menu has link to the home
-                    if (categoryUrl === this.options.baseUrl) {
-                        categoryUrl = '';
                     }
                 }
 

@@ -9,7 +9,6 @@ $viewModel = $block->getData('viewModel');
 ?>
 <div class="breadcrumbs" data-mage-init='{
     "breadcrumbs": {
-        "baseUrl": "<?= $block->getBaseUrl(); ?>",
         "categoryUrlSuffix": "<?= $block->escapeHtml($viewModel->getCategoryUrlSuffix()); ?>",
         "useCategoryPathInUrl": <?= (int)$viewModel->isCategoryUsedInProductUrl(); ?>,
         "product": "<?= $block->escapeHtml($viewModel->getProductName()); ?>"
