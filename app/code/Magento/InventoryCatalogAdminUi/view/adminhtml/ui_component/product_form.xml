@@ -7,6 +7,11 @@
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <fieldset name="sources" sortOrder="5" component="Magento_InventoryCatalogAdminUi/js/product/form/source-items">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="advancedInventoryButtonIndex" xsi:type="string">advanced_inventory_button</item>
+            </item>
+        </argument>
         <settings>
             <label translate="true">Sources</label>
             <collapsible>true</collapsible>
