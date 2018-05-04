@@ -11,9 +11,9 @@
     <test name="AdminOutOfStockThresholdAppliedToSimpleInAdvancedInventoryOnProductPageTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Out-of-Stock Threshold applied to Simple product in Configuration page in admin"/>
-            <title value="Out-of-Stock Threshold applied to Simple product in Configuration page in admin"/>
-            <description value="Out-of-Stock Threshold applied to Simple product in Configuration page in admin"/>
+            <stories value="Out-of-Stock Threshold applied to Simple product on Product page in admin"/>
+            <title value="Out-of-Stock Threshold applied to Simple product on Product page in admin"/>
+            <description value="Out-of-Stock Threshold applied to Simple product on Product page in admin"/>
             <testCaseId value="960"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
