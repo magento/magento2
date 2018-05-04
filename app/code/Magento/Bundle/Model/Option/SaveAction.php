@@ -156,4 +156,38 @@ class SaveAction
             $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
         }
     }
+
+    /**
+     * Computes the difference between given arrays.
+     *
+     * @param \Magento\Bundle\Api\Data\LinkInterface[] $firstArray
+     * @param \Magento\Bundle\Api\Data\LinkInterface[] $secondArray
+     *
+     * @return array
+     */
+    private function compareLinks(array $firstArray, array $secondArray)
+    {
+        $result = [];
+
+        $firstArrayIds = [];
+        $firstArrayMap = [];
+
+        $secondArrayIds = [];
+
+        foreach ($firstArray as $item) {
+            $firstArrayIds[] = $item->getId();
+
+            $firstArrayMap[$item->getId()] = $item;
+        }
+
+        foreach ($secondArray as $item) {
+            $secondArrayIds[] = $item->getId();
+        }
+
+        foreach (array_diff($firstArrayIds, $secondArrayIds) as $id) {
+            $result[] = $firstArrayMap[$id];
+        }
+
+        return $result;
+    }
 }
