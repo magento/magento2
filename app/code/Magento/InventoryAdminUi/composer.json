@@ -7,9 +7,11 @@
         "magento/module-inventory-api": "*",
         "magento/module-inventory": "*",
         "magento/module-backend": "*",
-        "magento/module-directory": "*",
         "magento/module-shipping": "*",
         "magento/module-ui": "*"
+    },
+    "suggest": {
+        "magento/module-directory": "*"
     },
     "type": "magento2-module",
     "license": [
