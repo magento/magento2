@@ -9,8 +9,7 @@
         "magento/module-backend": "*",
         "magento/module-directory": "*",
         "magento/module-shipping": "*",
-        "magento/module-ui": "*",
-        "magento/inventory": "*"
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [

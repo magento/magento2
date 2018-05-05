@@ -13,6 +13,9 @@
     "magento/module-inventory-configuration": "*",
     "magento/module-inventory-indexer": "*"
   },
+  "suggest": {
+    "magento/module-inventory-admin-ui": "*"
+  },
   "type": "magento2-module",
   "license": [
     "OSL-3.0",
