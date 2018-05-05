@@ -55,7 +55,8 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
     {
         // Rule applied to entire shipment should not overwrite flat or table rate shipping prices
         // Only rules applied to specific items should modify those prices (MAGETWO-63844)
-        $this->executeTestFlow(5, 10);
+        // The product has free shipping so both prices should be 0 PR#15013
+        $this->executeTestFlow(0, 0);
     }
 
     /**
