@@ -29,11 +29,8 @@ class AttributeFilter
     {
         foreach ($productData as $attribute => $value) {
             $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === "1";
-            if ($value === '' && $considerUseDefaultsAttribute) {
-                /** @var $product Product */
-                if ((bool)$product->getData($attribute) === false) {
-                    unset($productData[$attribute]);
-                }
+            if ($value === '' && $considerUseDefaultsAttribute && !$product->getData($attribute)) {
+                unset($productData[$attribute]);
             }
         }
         return $productData;
