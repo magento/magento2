@@ -495,6 +495,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);
             }
+            if ($product->getStoreId() != 0) {
+                $product->unsetData('media_gallery');
+                $product->unsetData('image');
+                $product->unsetData('small_image');
+                $product->unsetData('swatch_image');
+                $product->unsetData('thumbnail');
+            }
             unset($this->instances[$product->getSku()]);
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->save($product);
