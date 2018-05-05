@@ -394,7 +394,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                             ? $rowData[self::COL_TIER_PRICE] : 0,
                         'percentage_value' => $rowData[self::COL_TIER_PRICE_TYPE] === self::TIER_PRICE_TYPE_PERCENT
                             ? $rowData[self::COL_TIER_PRICE] : null,
-                        'website_id' => $this->getWebsiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
+                        'website_id' => $this->getWebSiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
                     ];
                 }
             }

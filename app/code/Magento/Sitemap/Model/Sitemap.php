@@ -44,6 +44,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     const TYPE_URL = 'url';
 
     /**
+     * Last mode date min value
+     */
+    const LAST_MOD_MIN_VAL = '0000-01-01 00:00:00';
+
+    /**
      * Real file path
      *
      * @var string
@@ -158,6 +163,13 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected $_cacheTag = true;
 
     /**
+     * Last mode min timestamp value
+     *
+     * @var int
+     */
+    private $lastModMinTsVal;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -261,6 +273,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         /** @var $helper \Magento\Sitemap\Helper\Data */
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
+        $this->_storeManager->setCurrentStore($storeId);
 
         $this->addSitemapItem(new DataObject(
             [
@@ -601,7 +614,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getCurrentSitemapFilename($index)
     {
-        return self::INDEX_FILE_PREFIX . '-' . $this->getStoreId() . '-' . $index . '.xml';
+        return str_replace('.xml', '', $this->getSitemapFilename()) . '-' . $this->getStoreId() . '-' . $index . '.xml';
     }
 
     /**
@@ -661,7 +674,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getFormattedLastmodDate($date)
     {
-        return date('c', strtotime($date));
+        if ($this->lastModMinTsVal === null) {
+            $this->lastModMinTsVal = strtotime(self::LAST_MOD_MIN_VAL);
+        }
+        $timestamp = max(strtotime($date), $this->lastModMinTsVal);
+        return date('c', $timestamp);
     }
 
     /**

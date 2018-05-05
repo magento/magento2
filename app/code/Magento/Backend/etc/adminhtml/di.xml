@@ -152,4 +152,20 @@
             <argument name="defaultClass" xsi:type="string">Magento\Backend\Block\Template</argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Block\GlobalSearch">
+        <arguments>
+            <argument name="entityResources" xsi:type="array">
+                <item name="Products" xsi:type="string">Magento_Catalog::products</item>
+                <item name="Orders" xsi:type="string">Magento_Sales::sales_order</item>
+                <item name="Customers" xsi:type="string">Magento_Customer::manage</item>
+                <item name="Pages" xsi:type="string">Magento_Cms::page</item>
+            </argument>
+            <argument name="entityPaths" xsi:type="array">
+                <item name="Products" xsi:type="string">catalog/product/index/</item>
+                <item name="Orders" xsi:type="string">sales/order/index/</item>
+                <item name="Customers" xsi:type="string">customer/index/index</item>
+                <item name="Pages" xsi:type="string">cms/page/index/</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

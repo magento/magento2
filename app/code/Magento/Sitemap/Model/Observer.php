@@ -19,6 +19,8 @@ class Observer
 
     /**
      * Cronjob expression configuration
+     *
+     * @deprecated Use \Magento\Cron\Model\Config\Backend\Sitemap::CRON_STRING_PATH instead.
      */
     const XML_PATH_CRON_EXPR = 'crontab/default/jobs/generate_sitemaps/schedule/cron_expr';
 
@@ -113,7 +115,6 @@ class Observer
                 $sitemap->generateXml();
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
-                throw $e;
             }
         }
 
@@ -122,8 +123,7 @@ class Observer
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
-            $translate = $this->_translateModel->getTranslateInline();
-            $this->_translateModel->setTranslateInline(false);
+            $this->inlineTranslation->suspend();
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_scopeConfig->getValue(

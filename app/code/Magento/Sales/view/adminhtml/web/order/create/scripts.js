@@ -55,7 +55,8 @@ define([
                     }
                 });
 
-                var searchButton = new ControlButton(jQuery.mage.__('Add Products')),
+                var searchButtonId = 'add_products',
+                    searchButton = new ControlButton(jQuery.mage.__('Add Products'), searchButtonId),
                     searchAreaId = this.getAreaId('search');
                 searchButton.onClick = function() {
                     $(searchAreaId).show();
@@ -74,7 +75,7 @@ define([
 
                     this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function(proceed) {
                         proceed();
-                        if ($(searchAreaId) && !$(searchAreaId).visible()) {
+                        if ($(searchAreaId) && !$(searchAreaId).visible() && !$(searchButtonId)) {
                             this.addControlButton(searchButton);
                         }
                     });
@@ -324,12 +325,12 @@ define([
                 data = this.serializeData(this.billingAddressContainer);
             } else {
                 data = this.serializeData(this.shippingAddressContainer);
-                areasToLoad.push('shipping_method');
             }
+            areasToLoad.push('shipping_method');
             data = data.toObject();
             data['shipping_as_billing'] = flag ? 1 : 0;
             data['reset_shipping'] = 1;
-            this.loadArea( areasToLoad, true, data);
+            this.loadArea(areasToLoad, true, data);
         },
 
         resetShippingMethod : function(data){
@@ -1394,12 +1395,15 @@ define([
         _label: '',
         _node: null,
 
-        initialize: function(label){
+        initialize: function(label, id){
             this._label = label;
             this._node = new Element('button', {
                 'class': 'action-secondary action-add',
                 'type':  'button'
             });
+            if (typeof id !== 'undefined') {
+                this._node.setAttribute('id', id)
+            }
         },
 
         onClick: function(){

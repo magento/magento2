@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SamplePerson" type="samplePerson">
+        <data key="foo">foo</data>
+        <data key="bar">bar</data>
+        <data key="lastName">Doe</data>
+        <data key="email" unique="prefix">.email@gmail.com</data>
+    </entity>
+    <entity name="OverrideDefaultPerson" type="samplePerson">
+        <data key="foo">fizz</data>
+        <data key="bar">buzz</data>
+    </entity>
+    <entity name="AppearanceMinHeightProperty" type="min_height_property">
+        <data key="name">Minimum Height</data>
+        <data key="section">appearance</data>
+        <data key="fieldName">min_height</data>
+    </entity>
+    <entity name="AssertThis" type="samplePerson">
+        <data key="firstname">Well</data>
+        <data key="lastname">Done</data>
+        <data key="email" unique="prefix">.email@gmail.com</data>
+    </entity>
+</entities>

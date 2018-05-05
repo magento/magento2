@@ -94,7 +94,8 @@ class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($this->bookmarkMock)
             ->willThrowException(new \Exception($exceptionMessage));
-        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class, __($exceptionMessage));
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage($exceptionMessage);
         $this->bookmarkRepository->save($this->bookmarkMock);
     }
 
@@ -143,7 +144,8 @@ class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('delete')
             ->with($this->bookmarkMock)
             ->willThrowException(new \Exception($exceptionMessage));
-        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class, __($exceptionMessage));
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+        $this->expectExceptionMessage($exceptionMessage);
         $this->assertTrue($this->bookmarkRepository->delete($this->bookmarkMock));
     }
 

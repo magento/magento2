@@ -1,0 +1,28 @@
+{
+    "description": "Magento 2 (Open Source) Functional Tests",
+    "type": "project",
+    "version": "1.0.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@github.com:magento/magento2-functional-testing-framework.git"
+        }
+    ],
+    "require": {
+        "magento/magento2-functional-testing-framework": "~2.2.0",
+        "php": "~7.0.13|~7.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\": "tests/functional/Magento"
+        }
+    },
+    "prefer-stable": true
+}

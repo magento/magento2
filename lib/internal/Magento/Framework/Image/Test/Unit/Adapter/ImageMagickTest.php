@@ -58,7 +58,8 @@ class ImageMagickTest extends \PHPUnit\Framework\TestCase
      */
     public function testWatermark($imagePath, $expectedMessage)
     {
-        $this->expectException('LogicException', $expectedMessage);
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage($expectedMessage);
         $this->imageMagic->watermark($imagePath);
     }
 
