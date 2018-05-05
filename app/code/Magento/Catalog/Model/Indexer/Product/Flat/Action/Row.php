@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder;
 use Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Class Row reindex action
@@ -22,6 +24,10 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @var Eraser
      */
     protected $flatItemEraser;
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -32,6 +38,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param FlatTableBuilder $flatTableBuilder
      * @param Indexer $flatItemWriter
      * @param Eraser $flatItemEraser
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -41,7 +48,8 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         TableBuilder $tableBuilder,
         FlatTableBuilder $flatTableBuilder,
         Indexer $flatItemWriter,
-        Eraser $flatItemEraser
+        Eraser $flatItemEraser,
+        MetadataPool $metadataPool
     ) {
         parent::__construct(
             $resource,
@@ -53,6 +61,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         );
         $this->flatItemWriter = $flatItemWriter;
         $this->flatItemEraser = $flatItemEraser;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -75,18 +84,45 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
             if ($tableExists) {
                 $this->flatItemEraser->removeDeletedProducts($ids, $store->getId());
             }
-            if (isset($ids[0])) {
-                if (!$tableExists) {
-                    $this->_flatTableBuilder->build(
-                        $store->getId(),
-                        [$ids[0]],
-                        $this->_valueFieldSuffix,
-                        $this->_tableDropSuffix,
-                        false
-                    );
+
+            /* @var $status \Magento\Eav\Model\Entity\Attribute */
+            $status = $this->_productIndexerHelper->getAttribute('status');
+            $statusTable = $status->getBackendTable();
+            $statusConditions = [
+                'store_id IN(0,' . (int)$store->getId() . ')',
+                'attribute_id = ' . (int)$status->getId(),
+                'entity_id = ' . (int)$id
+            ];
+            $select = $this->_connection->select();
+            $select->from(
+                $statusTable,
+                ['value']
+            )->where(
+                implode(' AND ', $statusConditions)
+            )->order(
+                'store_id DESC'
+            );
+            $result = $this->_connection->query($select);
+            $status = $result->fetch(1);
+
+            if ($status['value'] == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
+                if (isset($ids[0])) {
+                    if (!$tableExists) {
+                        $this->_flatTableBuilder->build(
+                            $store->getId(),
+                            [$ids[0]],
+                            $this->_valueFieldSuffix,
+                            $this->_tableDropSuffix,
+                            false
+                        );
+                    }
+                    $this->flatItemWriter->write($store->getId(), $ids[0], $this->_valueFieldSuffix);
                 }
-                $this->flatItemWriter->write($store->getId(), $ids[0], $this->_valueFieldSuffix);
+            } else {
+                $this->flatItemEraser->deleteProductsFromStore($id, $store->getId());
             }
+
+
         }
         return $this;
     }
