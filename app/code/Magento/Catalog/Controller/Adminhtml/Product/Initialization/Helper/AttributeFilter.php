@@ -32,6 +32,7 @@ class AttributeFilter
                 unset($productData[$attribute]);
             }
         }
+        
         return $productData;
     }
 
