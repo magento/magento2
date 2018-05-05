@@ -7,7 +7,7 @@
         "magento/module-inventory-api": "*",
         "magento/module-backend": "*",
         "magento/module-directory": "*",
-        "magento/module-shipping": "*",
+        "magento/module-shipping": "*"
     },
     "type": "magento2-module",
     "license": [
