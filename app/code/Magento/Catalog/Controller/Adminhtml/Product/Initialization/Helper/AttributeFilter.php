@@ -35,17 +35,17 @@ class AttributeFilter
         return $productData;
     }
 
-	/**
-	 * @param $product
-	 * @param $useDefaults
-	 * @param $attribute
-	 * @param $value
-	 * @return bool
-	 */
+    /**
+     * @param $product
+     * @param $useDefaults
+     * @param $attribute
+     * @param $value
+     * @return bool
+     */
     protected function attributeShouldNotBeUpdated(Product $product, $useDefaults, $attribute, $value)
     {
-	    $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === "1";
+        $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === "1";
 
-	    return ($value === '' && $considerUseDefaultsAttribute && !$product->getData($attribute));
+        return ($value === '' && $considerUseDefaultsAttribute && !$product->getData($attribute));
     }
 }
