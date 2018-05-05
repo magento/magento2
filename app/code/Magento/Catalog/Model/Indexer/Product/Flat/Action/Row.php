@@ -7,8 +7,6 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder;
 use Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Class Row reindex action
@@ -24,10 +22,6 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @var Eraser
      */
     protected $flatItemEraser;
-    /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -38,7 +32,6 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param FlatTableBuilder $flatTableBuilder
      * @param Indexer $flatItemWriter
      * @param Eraser $flatItemEraser
-     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -48,8 +41,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         TableBuilder $tableBuilder,
         FlatTableBuilder $flatTableBuilder,
         Indexer $flatItemWriter,
-        Eraser $flatItemEraser,
-        MetadataPool $metadataPool
+        Eraser $flatItemEraser
     ) {
         parent::__construct(
             $resource,
@@ -61,7 +53,6 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         );
         $this->flatItemWriter = $flatItemWriter;
         $this->flatItemEraser = $flatItemEraser;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
