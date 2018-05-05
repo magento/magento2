@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateValidationRule" dataType="validation_rule" type="create">
         <field key="key">string</field>
@@ -16,4 +16,4 @@
         <field key="key">string</field>
         <field key="value">string</field>
     </operation>
-</config>
+</operations>

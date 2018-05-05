@@ -28,6 +28,34 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
     protected $capture = '[name="invoice[capture_case]"]';
 
     /**
+     * Refund Shipping css selector.
+     *
+     * @var string
+     */
+    private $refundShippingSelector = '//input[@id=\'shipping_amount\']';
+
+    /**
+     * Adjustment Refund css selector.
+     *
+     * @var string
+     */
+    private $adjustmentRefundSelector = '//input[@id=\'adjustment_positive\']';
+
+    /**
+     * Adjustment Fee css selector.
+     *
+     * @var string
+     */
+    private $adjustmentFeeSelector = '//input[@id=\'adjustment_negative\']';
+
+    /**
+     * 'Update Totals button css selector.
+     *
+     * @var string
+     */
+    private $updateTotalsSelector = '.update-totals-button';
+
+    /**
      * Submit invoice.
      *
      * @return void
@@ -56,5 +84,45 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
     public function setCaptureOption($option)
     {
         $this->_rootElement->find($this->capture, Locator::SELECTOR_CSS, 'select')->setValue($option);
+    }
+
+    /**
+     * Get Refund Shipping input element.
+     *
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    public function getRefundShippingElement()
+    {
+        return $this->_rootElement->find($this->refundShippingSelector, Locator::SELECTOR_XPATH);
+    }
+
+    /**
+     * Get Adjustment Refund input element.
+     *
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    public function getAdjustmentRefundElement()
+    {
+        return $this->_rootElement->find($this->adjustmentRefundSelector, Locator::SELECTOR_XPATH);
+    }
+
+    /**
+     * Get Adjustment Fee input element.
+     *
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    public function getAdjustmentFeeElement()
+    {
+        return $this->_rootElement->find($this->adjustmentFeeSelector, Locator::SELECTOR_XPATH);
+    }
+
+    /**
+     * Click update totals button.
+     *
+     * @return void
+     */
+    public function clickUpdateTotals()
+    {
+        $this->_rootElement->find($this->updateTotalsSelector)->click();
     }
 }

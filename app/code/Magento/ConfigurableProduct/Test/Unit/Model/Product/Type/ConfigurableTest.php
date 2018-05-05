@@ -379,7 +379,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                     ['_cache_instance_used_product_attributes', null, []]
                 ]
             );
-
+        $this->catalogConfig->expects($this->any())->method('getProductAttributes')->willReturn([]);
         $productCollection->expects($this->atLeastOnce())->method('addAttributeToSelect')->willReturnSelf();
         $productCollection->expects($this->once())->method('setProductFilter')->willReturnSelf();
         $productCollection->expects($this->atLeastOnce())->method('setFlag')->willReturnSelf();
@@ -508,17 +508,34 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetConfigurableAttributes()
+    public function testGetConfigurableAttributesNewProduct()
     {
         $configurableAttributes = '_cache_instance_configurable_attributes';
 
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(['getData', 'hasData', 'setData'])
+            ->setMethods(['hasData', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $product->expects($this->once())->method('hasData')->with($configurableAttributes)->willReturn(false);
+        $product->expects($this->once())->method('getId')->willReturn(null);
+
+        $this->assertEquals([], $this->model->getConfigurableAttributes($product));
+    }
+
+        public function testGetConfigurableAttributes()
+    {
+        $configurableAttributes = '_cache_instance_configurable_attributes';
+
+        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(['getData', 'hasData', 'setData', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $product->expects($this->once())->method('hasData')->with($configurableAttributes)->willReturn(false);
+        $product->expects($this->once())->method('getId')->willReturn(1);
 
         $attributeCollection = $this->getMockBuilder(Collection::class)
             ->setMethods(['setProductFilter', 'orderByPosition', 'load'])

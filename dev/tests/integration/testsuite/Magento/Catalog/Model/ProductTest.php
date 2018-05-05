@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -106,8 +108,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\App\CacheInterface::class
         )->save(
             'test',
-            'catalog_product_999',
-            ['catalog_product_999']
+            'cat_p_999',
+            ['cat_p_999']
         );
         // potential bug: it cleans by cache tags, generated from its ID, which doesn't make much sense
         $this->_model->setId(999)->cleanCache();
@@ -115,7 +117,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Framework\App\CacheInterface::class
             )->load(
-                'catalog_product_999'
+                'cat_p_999'
             )
         );
     }
@@ -585,5 +587,46 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
         $stockItem = $product->getExtensionAttributes()->getStockItem();
         $this->assertEquals(false, $stockItem->getIsInStock());
+    }
+
+    /**
+     * Check stock status changing if backorders functionality enabled
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
+     * @dataProvider productWithBackordersDataProvider
+     * @param int $qty
+     * @param int $stockStatus
+     * @param bool $expectedStockStatus
+     */
+    public function testSaveWithBackordersEnabled(int $qty, int $stockStatus, bool $expectedStockStatus)
+    {
+        $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->assertEquals(false, $stockItem->getIsInStock());
+        $stockData = [
+            'backorders' => 1,
+            'qty' => $qty,
+            'is_in_stock' => $stockStatus
+        ];
+        $product->setStockData($stockData);
+        $product->save();
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+
+        $this->assertEquals($expectedStockStatus, $stockItem->getIsInStock());
+    }
+
+    /**
+     * DataProvider for the testSaveWithBackordersEnabled()
+     * @return array
+     */
+    public function productWithBackordersDataProvider(): array
+    {
+        return [
+            [0, 0, false],
+            [0, 1, true],
+            [-1, 0, false],
+            [-1, 1, true],
+            [1, 1, true],
+        ];
     }
 }
