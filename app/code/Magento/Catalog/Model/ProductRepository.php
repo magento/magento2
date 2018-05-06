@@ -495,13 +495,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);
             }
-            if ($product->getStoreId() != 0) {
-                $product->unsetData('media_gallery');
-                $product->unsetData('image');
-                $product->unsetData('small_image');
-                $product->unsetData('swatch_image');
-                $product->unsetData('thumbnail');
-            }
+
+            $this->filterImageData($product);
+
             unset($this->instances[$product->getSku()]);
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->save($product);
@@ -539,6 +535,28 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         unset($this->instances[$product->getSku()]);
         unset($this->instancesById[$product->getId()]);
         return $this->get($product->getSku(), false, $product->getStoreId());
+    }
+
+    /**
+     * @param $product
+     */
+    protected function filterImageData($product)
+    {
+        if ($product->getStoreId() != 0) {
+            if ($mediaGallery = $product->getData('media_gallery')) {
+                if (isset($mediaGallery['images'])) {
+                    foreach ($mediaGallery['images'] as $key => $image) {
+                        unset($mediaGallery['images'][$key]['position']);
+                        unset($mediaGallery['images'][$key]['position_default']);
+                    }
+                }
+            }
+            $product->setData('media_gallery', $mediaGallery);
+            $product->unsetData('image');
+            $product->unsetData('small_image');
+            $product->unsetData('swatch_image');
+            $product->unsetData('thumbnail');
+        }
     }
 
     /**
