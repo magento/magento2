@@ -10,6 +10,7 @@ namespace Magento\Framework\Encryption;
  * Class encapsulates cryptographic algorithm
  *
  * @api
+ * @deprecated
  */
 class Crypt
 {
