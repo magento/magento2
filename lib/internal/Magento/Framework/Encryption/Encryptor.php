@@ -6,8 +6,11 @@
 namespace Magento\Framework\Encryption;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Encryption\Adapter\EncryptionAdapterInterface;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Encryption\Adapter\Sodium;
+use Magento\Framework\Encryption\Adapter\Mcrypt;
 
 /**
  * Class Encryptor provides basic logic for hashing strings and encrypting/decrypting misc data
@@ -56,7 +59,9 @@ class Encryptor implements EncryptorInterface
 
     const CIPHER_RIJNDAEL_256 = 2;
 
-    const CIPHER_LATEST = 2;
+    const CIPHER_AEAD_CHACHA20POLY1305 = 3;
+
+    const CIPHER_LATEST = 3;
     /**#@-*/
 
     /**
@@ -108,6 +113,7 @@ class Encryptor implements EncryptorInterface
     private $random;
 
     /**
+     * Encryptor constructor.
      * @param Random $random
      * @param DeploymentConfig $deploymentConfig
      */
@@ -133,7 +139,12 @@ class Encryptor implements EncryptorInterface
      */
     public function validateCipher($version)
     {
-        $types = [self::CIPHER_BLOWFISH, self::CIPHER_RIJNDAEL_128, self::CIPHER_RIJNDAEL_256];
+        $types = [
+            self::CIPHER_BLOWFISH,
+            self::CIPHER_RIJNDAEL_128,
+            self::CIPHER_RIJNDAEL_256,
+            self::CIPHER_AEAD_CHACHA20POLY1305,
+        ];
 
         $version = (int)$version;
         if (!in_array($version, $types, true)) {
@@ -260,14 +271,9 @@ class Encryptor implements EncryptorInterface
      */
     public function encrypt($data)
     {
-        $crypt = $this->getCrypt();
-        if (null === $crypt) {
-            return $data;
-        }
-        return $this->keyVersion . ':' . $this->cipher . ':' . (MCRYPT_MODE_CBC ===
-        $crypt->getMode() ? $crypt->getInitVector() . ':' : '') . base64_encode(
-            $crypt->encrypt((string)$data)
-        );
+        $crypt = new Sodium($this->keys[$this->keyVersion], $this->keyVersion);
+
+        return $crypt->encrypt($data);
     }
 
     /**
@@ -279,6 +285,7 @@ class Encryptor implements EncryptorInterface
      *
      * @param string $data
      * @return string
+     * @throws \Exception
      */
     public function decrypt($data)
     {
@@ -328,7 +335,7 @@ class Encryptor implements EncryptorInterface
      * Return crypt model, instantiate if it is empty
      *
      * @param string|null $key NULL value means usage of the default key specified on constructor
-     * @return \Magento\Framework\Encryption\Crypt
+     * @return EncryptionAdapterInterface
      * @throws \Exception
      */
     public function validateKey($key)
@@ -344,6 +351,7 @@ class Encryptor implements EncryptorInterface
      *
      * @param string $key
      * @return $this
+     * @throws \Exception
      */
     public function setNewKey($key)
     {
@@ -371,7 +379,8 @@ class Encryptor implements EncryptorInterface
      * @param string $key
      * @param int $cipherVersion
      * @param bool $initVector
-     * @return Crypt|null
+     * @return EncryptionAdapterInterface|null
+     * @throws \Exception
      */
     protected function getCrypt($key = null, $cipherVersion = null, $initVector = true)
     {
@@ -392,6 +401,10 @@ class Encryptor implements EncryptorInterface
         }
         $cipherVersion = $this->validateCipher($cipherVersion);
 
+        if ($cipherVersion >= self::CIPHER_AEAD_CHACHA20POLY1305) {
+            return new Sodium($key);
+        }
+
         if ($cipherVersion === self::CIPHER_RIJNDAEL_128) {
             $cipher = MCRYPT_RIJNDAEL_128;
             $mode = MCRYPT_MODE_ECB;
@@ -403,6 +416,6 @@ class Encryptor implements EncryptorInterface
             $mode = MCRYPT_MODE_ECB;
         }
 
-        return new Crypt($key, $cipher, $mode, $initVector);
+        return new Mcrypt($key, $cipher, $mode, $initVector);
     }
 }
