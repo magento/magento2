@@ -6,18 +6,11 @@
 
 namespace Magento\Framework\Config;
 
-use Magento\Framework\ObjectManagerInterface;
-
 /**
  * Tests Magento\Framework\Config\Convert
  */
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
     /**
      * @var Converter
      */
@@ -87,7 +80,6 @@ XML;
      */
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->converter = $this->objectManager->get(Converter::class);
+        $this->converter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Framework\Config\Converter::class);
     }
 }
