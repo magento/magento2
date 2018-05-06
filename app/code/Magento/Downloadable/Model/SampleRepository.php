@@ -227,7 +227,11 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
             'title' => $sample->getTitle(),
         ];
 
-        if ($sample->getSampleType() === 'file' && $sample->getSampleFile() === null) {
+        if (
+            $sample->getSampleType() === 'file'
+            && $sample->getSampleFile() === null
+            && $sample->getSampleFileContent() !== null
+        ) {
             $sampleData['file'] = $this->jsonEncoder->encode(
                 [
                     $this->fileContentUploader->upload($sample->getSampleFileContent(), 'sample'),
