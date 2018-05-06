@@ -35,14 +35,15 @@ class Sodium implements EncryptionAdapterInterface
      */
     public function encrypt($data)
     {
-        $cipherText = sodium_crypto_aead_chacha20poly1305_encrypt(
+        $nonce = random_bytes(SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES);
+        $cipherText = sodium_crypto_aead_chacha20poly1305_ietf_encrypt(
             (string)$data,
-            '',
-            random_bytes(SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES),
+            $nonce,
+            $nonce,
             $this->key
         );
 
-        return $this->keyVersion . ':' . Encryptor::CIPHER_AEAD_CHACHA20POLY1305 . ':' . base64_encode($cipherText);
+        return $this->keyVersion . ':' . Encryptor::CIPHER_AEAD_CHACHA20POLY1305 . ':' . base64_encode($nonce . $cipherText);
     }
 
     /**
@@ -51,12 +52,12 @@ class Sodium implements EncryptionAdapterInterface
      */
     public function decrypt($data)
     {
-        $nonce = mb_substr($data, 0, SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES, '8bit');
-        $payload = mb_substr($data, SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES, null, '8bit');
-        
-        return sodium_crypto_aead_chacha20poly1305_decrypt(
+        $nonce = mb_substr($data, 0, SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES, '8bit');
+        $payload = mb_substr($data, SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES, null, '8bit');
+
+        return sodium_crypto_aead_chacha20poly1305_ietf_decrypt(
             $payload,
-            '',
+            $nonce,
             $nonce,
             $this->key
         );
