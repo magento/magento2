@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 /** @var \Magento\Catalog\Model\CategoryFactory $factory */
 $factory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Catalog\Model\CategoryFactory::class

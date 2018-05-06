@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
 class CollectionTest extends \PHPUnit\Framework\TestCase
