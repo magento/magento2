@@ -25,7 +25,7 @@
         "magento/module-widget": "*"
     },
     "suggest": {
-        "magento/module-sales-rule-sample-data": "Sample Data version:100.3.*"
+        "magento/module-sales-rule-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

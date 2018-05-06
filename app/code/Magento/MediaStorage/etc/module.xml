@@ -6,5 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_MediaStorage" />
+    <module name="Magento_MediaStorage" >
+        <sequence>
+            <module name="Magento_Catalog"/>
+            <module name="Magento_Theme"/>
+        </sequence>
+    </module>
 </config>
