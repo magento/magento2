@@ -61,6 +61,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param int|null $id
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function execute($id = null)
     {
@@ -109,11 +110,10 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
                     }
                     $this->flatItemWriter->write($store->getId(), $ids[0], $this->_valueFieldSuffix);
                 }
-            } else {
+            }
+            if ($status['value'] == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED) {
                 $this->flatItemEraser->deleteProductsFromStore($id, $store->getId());
             }
-
-
         }
         return $this;
     }
