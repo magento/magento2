@@ -51,7 +51,8 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     {
         $sourceString = <<<'XML'
 <?xml version="1.0"?>
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
     <vars module="Magento_Test">    
         <var name="str">some string</var>  
         <var name="int-1">1</var>        
