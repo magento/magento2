@@ -79,7 +79,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
 
             /* @var $status \Magento\Eav\Model\Entity\Attribute */
             $status = $this->_productIndexerHelper->getAttribute('status');
-            $statusTable = $status->getBackendTable();
+            $statusTable = $status->getBackend()->getTable();
             $statusConditions = [
                 'store_id IN(0,' . (int)$store->getId() . ')',
                 'attribute_id = ' . (int)$status->getId(),
