@@ -545,7 +545,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($product->getStoreId() != 0) {
             if ($mediaGallery = $product->getData('media_gallery')) {
                 if (isset($mediaGallery['images'])) {
-                    foreach ($mediaGallery['images'] as $key => $image) {
+                    foreach (array_keys($mediaGallery['images']) as $key) {
                         unset($mediaGallery['images'][$key]['position']);
                         unset($mediaGallery['images'][$key]['position_default']);
                     }
