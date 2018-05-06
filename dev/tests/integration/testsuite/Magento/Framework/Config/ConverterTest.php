@@ -80,6 +80,7 @@ XML;
      */
     protected function setUp()
     {
-        $this->converter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Framework\Config\Converter::class);
+        $this->converter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+              ->create(\Magento\Framework\Config\Converter::class);
     }
 }
