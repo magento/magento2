@@ -5,13 +5,13 @@
 
 define([
     'Magento_Ui/js/form/element/select'
-], function (Abstract) {
+], function (Select) {
     'use strict';
 
-    return Abstract.extend({
+    return Select.extend({
         defaults: {
             links: {
-                value: null
+                value: false
             }
         },
 
@@ -37,7 +37,7 @@ define([
         setDifferedFromDefault: function () {
             this._super();
 
-            if (parseFloat(this.initialValue) !== parseFloat(this.value())) {
+            if (this.value() && parseFloat(this.initialValue) !== parseFloat(this.value())) {
                 this.source.set(this.dataScope, this.value());
             } else {
                 this.source.remove(this.dataScope);
