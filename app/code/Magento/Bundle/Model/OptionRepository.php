@@ -164,7 +164,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $optionCollection = $this->type->getOptionsCollection($product);
         $optionCollection->setIdFilter($optionId);
         $hasBeenDeleted = $this->delete($optionCollection->getFirstItem());
-        $this->productRepository->save($product);
+
         return $hasBeenDeleted;
     }
 
@@ -177,7 +177,8 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     ) {
         $savedOption = $this->optionSave->save($product, $option);
 
-        $this->productRepository->save($product);
+        $productToSave = $this->productRepository->get($product->getSku());
+        $this->productRepository->save($productToSave);
 
         return $savedOption->getOptionId();
     }
