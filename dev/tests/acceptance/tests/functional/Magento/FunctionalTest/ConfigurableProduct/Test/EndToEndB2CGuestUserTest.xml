@@ -50,12 +50,12 @@
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
             </createData>
             <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
-                <requiredEntity createDataKey="createConfigChildProduct1"/>
                 <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
             </createData>
             <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
-                <requiredEntity createDataKey="createConfigChildProduct2"/>
                 <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
             <createData entity="ApiProductAttributeMediaGalleryEntryTestImage" stepKey="createConfigProductImage">
                 <requiredEntity createDataKey="createConfigProduct"/>
@@ -141,8 +141,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartGrabConfigProductPageImageSrc2" stepKey="cartAssertConfigProductPageImageNotDefault2" after="cartGrabConfigProductPageImageSrc2"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddConfigProductToCart" after="cartAssertConfigProductPageImageNotDefault2">
             <argument name="product" value="$$createConfigProduct$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.three"/>
+            <argument name="productCount" value="3"/>
         </actionGroup>
 
         <!-- Check configurable product in minicart -->
