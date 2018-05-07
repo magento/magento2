@@ -58,8 +58,8 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
             parse_str($url['query'], $storeParsedQuery);
         }
 
-        $this->assertContains($storeCode, $result['data']['___store']);
-        $this->assertContains($storeCode, $storeParsedQuery['___store']);
-        $this->assertContains(ScopeInterface::SCOPE_DEFAULT, $storeParsedQuery['___from_store']);
+        $this->assertSame($storeCode, $result['data']['___store']);
+        $this->assertSame($storeCode, $storeParsedQuery['___store']);
+        $this->assertSame(ScopeInterface::SCOPE_DEFAULT, $storeParsedQuery['___from_store']);
     }
 }

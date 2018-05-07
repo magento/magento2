@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Store\Controller\Store;
 
 use Magento\Framework\App\Action\Action;
@@ -21,6 +23,7 @@ use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Switch current store view.
@@ -97,7 +100,8 @@ class SwitchAction extends Action
     }
 
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
+     * @throws NoSuchEntityException
      */
     public function execute()
     {
@@ -124,10 +128,13 @@ class SwitchAction extends Action
             ]);
         }
 
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect->setStatusHeader(302);
+
         if (isset($error)) {
             $this->messageManager->addError($error);
-            $this->getResponse()->setRedirect($redirectUrl);
-            return;
+            return $resultRedirect->setUrl($redirectUrl);
         }
 
         $defaultStoreView = $this->storeManager->getDefaultStoreView();
@@ -141,18 +148,17 @@ class SwitchAction extends Action
         if ($store->isUseStoreInUrl()) {
             // Change store code in redirect url
             if (strpos($redirectUrl, $currentActiveStore->getBaseUrl()) !== false) {
-                $this->getResponse()->setRedirect(
-                    str_replace(
+                $redirectUrl = str_replace(
                         $currentActiveStore->getBaseUrl(),
                         $store->getBaseUrl(),
                         $redirectUrl
-                    )
                 );
             } else {
-                $this->getResponse()->setRedirect($store->getBaseUrl());
+                $redirectUrl = $store->getBaseUrl();
             }
-        } else {
-            $this->getResponse()->setRedirect($redirectUrl);
         }
+        $resultRedirect->setUrl($redirectUrl);
+
+        return $resultRedirect;
     }
 }
