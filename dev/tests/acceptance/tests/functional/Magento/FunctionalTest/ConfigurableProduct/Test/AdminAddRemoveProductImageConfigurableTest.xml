@@ -72,12 +72,12 @@
             </createData>
 
             <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle1">
-                <requiredEntity createDataKey="childProductHandle1"/>
                 <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle1"/>
             </createData>
             <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle2">
-                <requiredEntity createDataKey="childProductHandle2"/>
                 <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle2"/>
             </createData>
         </before>
         <after>
@@ -127,7 +127,10 @@
         </actionGroup>
         <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid2"/>
         <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/>
+
+        <!-- Skip success message check when saving product because of bug MAGETWO-91177 -->
+        <!-- actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductFormAfterRemove"/>
 
         <!-- Assert product image not in admin product form -->
         <actionGroup ref="assertProductImageNotInAdminProductPage" stepKey="assertProductImageNotInAdminProductPage"/>
