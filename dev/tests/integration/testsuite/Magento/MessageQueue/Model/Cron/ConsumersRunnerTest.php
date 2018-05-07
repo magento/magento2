@@ -105,8 +105,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
                 $command = str_replace('bin/magento', 'dev/tests/integration/bin/magento', $command);
                 $command = $params . ' ' . $command;
 
-                // Added 2>&1 workaround to hide error messages until MAGETWO-90176 is fixed
-                return exec("{$command} >/dev/null 2>&1 &");
+                return exec("{$command} >/dev/null &");
             });
     }
 
