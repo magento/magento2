@@ -1672,4 +1672,9 @@
     </type>
     <!-- \Magento\Framework\MessageQueue\Bulk\PublisherPool is @api -->
     <virtualType name="Magento\Framework\MessageQueue\Bulk\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool" />
+    <type name="Magento\Framework\Session\Config">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
+        </arguments>
+    </type>
 </config>
