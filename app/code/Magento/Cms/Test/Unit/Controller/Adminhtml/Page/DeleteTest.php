@@ -61,7 +61,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $this->pageMock = $this->getMockBuilder(\Magento\Cms\Api\PageRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'delete', 'getTitle'])
+            ->setMethods(['delete', 'getTitle'])
             ->getMock();
 
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
@@ -114,9 +114,6 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Cms\Model\Page::class)
             ->willReturn($this->pageMock);
 
-        $this->pageMock->expects($this->once())
-            ->method('load')
-            ->with($this->pageId);
         $this->pageMock->expects($this->once())
             ->method('getTitle')
             ->willReturn($this->title);
@@ -177,9 +174,6 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Cms\Api\PageRepositoryInterface::class)
             ->willReturn($this->pageMock);
 
-        $this->pageMock->expects($this->once())
-            ->method('load')
-            ->with($this->pageId);
         $this->pageMock->expects($this->once())
             ->method('getTitle')
             ->willReturn($this->title);
