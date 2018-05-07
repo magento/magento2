@@ -180,7 +180,7 @@ class Quote extends AbstractDb
     public function isOrderIncrementIdUsed($orderIncrementId)
     {
         /** @var  \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
-        $adapter = $this->getConnection();
+        $adapter = $this->_resources->getConnection('sales');
         $bind = [':increment_id' => $orderIncrementId];
         /** @var \Magento\Framework\DB\Select $select */
         $select = $adapter->select();

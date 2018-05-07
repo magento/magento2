@@ -55,8 +55,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
     private $imageHelper;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject  */
-    private $urlBuilder;
+    /** @var \Magento\Catalog\Model\Product\Image\UrlBuilder|\PHPUnit_Framework_MockObject_MockObject  */
+    private $imageUrlBuilder;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $variationPricesMock;
@@ -78,7 +78,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->typeInstance = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
         $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->imageHelper = $this->createMock(\Magento\Catalog\Helper\Image::class);
-        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->imageUrlBuilder = $this->createMock(\Magento\Catalog\Model\Product\Image\UrlBuilder::class);
         $this->variationPricesMock = $this->createMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
         );
@@ -89,7 +89,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             [
                 'scopeConfig' => $this->scopeConfig,
                 'imageHelper' => $this->imageHelper,
-                'urlBuilder' => $this->urlBuilder,
+                'imageUrlBuilder' => $this->imageUrlBuilder,
                 'arrayUtils' => $this->arrayUtils,
                 'jsonEncoder' => $this->jsonEncoder,
                 'helper' => $this->helper,

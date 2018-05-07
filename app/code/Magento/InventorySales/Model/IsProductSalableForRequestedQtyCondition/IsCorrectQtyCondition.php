@@ -11,7 +11,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\Math\Division as MathDivision;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
-use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
+use Magento\InventoryReservationsApi\Module\GetReservationsQuantityInterface;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
@@ -94,7 +94,10 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
         if ($this->isMinSaleQuantityCheckFailed($stockItemConfiguration, $requestedQty)) {
             return $this->createErrorResult(
                 'is_correct_qty-min_sale_qty',
-                __('The requested qty is less than the minimun qty allowed in shopping cart')
+                __(
+                    'The fewest you may purchase is %1',
+                    $stockItemConfiguration->getMinSaleQty()
+                )
             );
         }
 

@@ -55,6 +55,8 @@ class AddStockStatusToSelectTest extends TestCase
      * @param int $expectedNotSalableCount
      *
      * @dataProvider addStockStatusToSelectDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testAddStockStatusToSelect(
         string $websiteCode,

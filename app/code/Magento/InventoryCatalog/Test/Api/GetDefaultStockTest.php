@@ -42,7 +42,7 @@ class GetDefaultStockTest extends WebapiAbstract
                 'operation' => 'inventoryApiStockRepositoryV1Get',
             ],
         ];
-        if (self::ADAPTER_REST == TESTS_WEB_API_ADAPTER) {
+        if (self::ADAPTER_REST === TESTS_WEB_API_ADAPTER) {
             $stock = $this->_webApiCall($serviceInfo);
         } else {
             $stock = $this->_webApiCall($serviceInfo, ['stockId' => $defaultStockId]);

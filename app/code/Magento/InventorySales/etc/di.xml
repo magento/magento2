@@ -131,6 +131,13 @@
     <type name="Magento\Sales\Api\OrderManagementInterface">
         <plugin name="inventory_reservations_placement" type="Magento\InventorySales\Plugin\Sales\OrderManagement\AppendReservationsAfterOrderPlacementPlugin"/>
     </type>
+    <!-- Return Processor -->
+    <preference for="Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefundInterface" type="Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefund" />
+    <preference for="Magento\InventorySales\Model\ReturnProcessor\Request\BackItemQtyRequestInterface" type="Magento\InventorySales\Model\ReturnProcessor\Request\BackItemQtyRequest" />
+    <preference for="Magento\InventorySales\Model\ReturnProcessor\ProcessRefundItemsInterface" type="Magento\InventorySales\Model\ReturnProcessor\ProcessRefundItems" />
+    <type name="Magento\SalesInventory\Model\Order\ReturnProcessor">
+        <plugin name="process_return_product_qty_on_credit_memo" type="Magento\InventorySales\Plugin\SalesInventory\ProcessReturnQtyOnCreditMemoPlugin" />
+    </type>
     <type name="Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface">
         <plugin name="stock_status_replacement" type="Magento\InventorySales\Plugin\CatalogInventory\Model\Spi\StockRegistryProvider\ReplaceStockStatus"/>
     </type>
