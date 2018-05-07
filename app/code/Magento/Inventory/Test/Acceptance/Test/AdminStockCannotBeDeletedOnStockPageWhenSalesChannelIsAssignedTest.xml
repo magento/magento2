@@ -31,7 +31,6 @@
             </actionGroup>
         </before>
         <after>
-            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
             <!-- todo temporary solution as it is impossible to parse website_id from the post request and as a consequence can not delete it via post-->
             <actionGroup ref="DeleteCustomWebsiteActionGroup" stepKey="DeleteWebsite">
                 <argument name="websiteName" value="$$createWebsite1.website[name]$$"/>
