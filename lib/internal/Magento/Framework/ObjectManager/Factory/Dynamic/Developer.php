@@ -25,7 +25,7 @@ class Developer extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
         $defaultArguments = $this->config->getArguments($requestedType);
         if (is_array($defaultArguments)) {
             if (count($arguments)) {
-                $arguments = array_replace($defaultArguments, $arguments);
+                $arguments = array_replace_recursive($defaultArguments, $arguments);
             } else {
                 $arguments = $defaultArguments;
             }
