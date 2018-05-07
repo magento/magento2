@@ -279,7 +279,7 @@
             <argument name="mainTable" xsi:type="string">theme</argument>
             <argument name="eventPrefix" xsi:type="string">theme_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">theme_collection</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Theme\Model\ResourceModel\Theme\Collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Theme\Model\ResourceModel\Theme</argument>
         </arguments>
     </type>
 </config>
