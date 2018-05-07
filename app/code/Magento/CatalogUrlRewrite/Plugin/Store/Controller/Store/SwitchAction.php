@@ -11,7 +11,6 @@ use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreResolverInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -20,6 +19,8 @@ use Magento\Store\Api\StoreRepositoryInterface;
 /**
  * Plugin makes connection between Store and UrlRewrite modules
  * because Magento\Store\Controller\Store\SwitchAction should not know about UrlRewrite module functionality
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitchAction
 {
@@ -49,11 +50,6 @@ class SwitchAction
     private $requestFactory;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var RedirectFactory
      */
     private $redirectFactory;
@@ -64,7 +60,6 @@ class SwitchAction
      * @param StoreRepositoryInterface $storeRepository
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param \Magento\Framework\HTTP\PhpEnvironment\RequestFactory $requestFactory
-     * @param StoreManagerInterface $storeManager
      * @param RedirectFactory $redirectFactory
      */
     public function __construct(
@@ -73,16 +68,13 @@ class SwitchAction
         StoreRepositoryInterface $storeRepository,
         \Magento\Framework\App\Response\RedirectInterface $redirect,
         \Magento\Framework\HTTP\PhpEnvironment\RequestFactory $requestFactory,
-        StoreManagerInterface $storeManager,
         RedirectFactory $redirectFactory
-    )
-    {
+    ) {
         $this->urlFinder = $urlFinder;
         $this->request = $request;
         $this->storeRepository = $storeRepository;
         $this->redirect = $redirect;
         $this->requestFactory = $requestFactory;
-        $this->storeManager = $storeManager;
         $this->redirectFactory = $redirectFactory;
     }
 
@@ -95,8 +87,7 @@ class SwitchAction
     public function afterExecute(
         \Magento\Store\Controller\Store\SwitchAction $subject,
         \Magento\Framework\Controller\ResultInterface $result
-    ): ResultInterface
-    {
+    ): ResultInterface {
         try {
             $url = $this->redirect->getRedirectUrl();
             $store = $this->storeRepository->getActiveStoreByCode(
@@ -113,7 +104,7 @@ class SwitchAction
         if ($fromStore = $request->getParam('___from_store')) {
             $urlPath = ltrim($request->getPathInfo(), '/');
             try {
-                $oldStoreId = $this->storeManager->getStore($fromStore)->getId();
+                $oldStoreId = $this->storeRepository->get($fromStore)->getId();
                 $oldRewrite = $this->urlFinder->findOneByData([
                     UrlRewrite::REQUEST_PATH => $urlPath,
                     UrlRewrite::STORE_ID => $oldStoreId,

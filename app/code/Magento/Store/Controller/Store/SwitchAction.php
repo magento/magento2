@@ -149,9 +149,9 @@ class SwitchAction extends Action
             // Change store code in redirect url
             if (strpos($redirectUrl, $currentActiveStore->getBaseUrl()) !== false) {
                 $redirectUrl = str_replace(
-                        $currentActiveStore->getBaseUrl(),
-                        $store->getBaseUrl(),
-                        $redirectUrl
+                    $currentActiveStore->getBaseUrl(),
+                    $store->getBaseUrl(),
+                    $redirectUrl
                 );
             } else {
                 $redirectUrl = $store->getBaseUrl();
