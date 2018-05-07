@@ -43,6 +43,8 @@ class Sodium implements EncryptionAdapterInterface
             $this->key
         );
 
+        sodium_memzero($data);
+
         return $this->keyVersion . ':' . Encryptor::CIPHER_AEAD_CHACHA20POLY1305 . ':' . base64_encode($nonce . $cipherText);
     }
 
@@ -55,11 +57,16 @@ class Sodium implements EncryptionAdapterInterface
         $nonce = mb_substr($data, 0, SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES, '8bit');
         $payload = mb_substr($data, SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES, null, '8bit');
 
-        return sodium_crypto_aead_chacha20poly1305_ietf_decrypt(
+        $plainText = sodium_crypto_aead_chacha20poly1305_ietf_decrypt(
             $payload,
             $nonce,
             $nonce,
             $this->key
         );
+
+        sodium_memzero($data);
+        sodium_memzero($nonce);
+
+        return $plainText;
     }
 }
