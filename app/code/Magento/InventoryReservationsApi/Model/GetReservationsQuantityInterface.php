@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservationsApi\Module;
+namespace Magento\InventoryReservationsApi\Model;
 
 /**
  * Responsible for retrieving Reservation Quantity (without stock data)
