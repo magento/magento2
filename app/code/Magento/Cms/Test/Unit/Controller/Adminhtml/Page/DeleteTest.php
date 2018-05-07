@@ -111,7 +111,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with(\Magento\Cms\Model\Page::class)
+            ->with(\Magento\Cms\Api\PageRepositoryInterface::class)
             ->willReturn($this->pageMock);
 
         $this->pageMock->expects($this->once())
