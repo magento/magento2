@@ -439,7 +439,7 @@
             <argument name="mainTable" xsi:type="string">customer_group</argument>
             <argument name="eventPrefix" xsi:type="string">customer_group_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">customer_group_collection</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Group\Collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Group</argument>
         </arguments>
     </type>
 </config>
