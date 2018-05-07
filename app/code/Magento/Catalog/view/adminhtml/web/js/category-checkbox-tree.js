@@ -168,7 +168,7 @@ define([
                 }
 
                 if (parent && config && config.length) {
-                    for (i = 0; i < config.length; i++) {
+                    for (var i = 0; i < config.length; i++) {
                         categoryLoader.processCategoryTree(parent, config, i);
                     }
                 }
