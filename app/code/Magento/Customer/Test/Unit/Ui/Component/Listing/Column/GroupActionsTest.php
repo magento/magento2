@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Customer\Ui\Component\Listing\Column\GroupActions;
@@ -33,6 +36,11 @@ class GroupActionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $urlBuilder;
 
+    /**
+     * SetUp method
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);

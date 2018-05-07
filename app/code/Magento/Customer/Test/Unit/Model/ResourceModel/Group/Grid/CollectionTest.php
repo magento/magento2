@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Group\Grid;
 
 use Magento\Customer\Model\ResourceModel\Group\Grid\Collection;
@@ -67,6 +70,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
+    /**
+     * SetUp method
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->entityFactoryMock = $this->getMockBuilder(EntityFactoryInterface::class)
