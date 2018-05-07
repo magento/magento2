@@ -25,7 +25,7 @@ class GeneratePatchCommand extends Command
     /**
      * Command arguments and options
      */
-    const COMMAND_NAME = 'dev:generate:patch';
+    const COMMAND_NAME = 'setup:db-declaration:generate-patch';
     const MODULE_NAME = 'module';
     const INPUT_KEY_IS_REVERTABLE = 'revertable';
     const INPUT_KEY_PATCH_TYPE = 'type';

@@ -45,20 +45,20 @@ class InstallCommand extends AbstractSetupCommand
      * List of comma-separated module names. That must be enabled during installation.
      * Available magic param all.
      */
-    const INPUT_KEY_ENABLE_MODULES = 'enable_modules';
+    const INPUT_KEY_ENABLE_MODULES = 'enable-modules';
 
     /**
      * List of comma-separated module names. That must be avoided during installation.
      * List of comma-separated module names. That must be avoided during installation.
      * Avaiable magic param all.
      */
-    const INPUT_KEY_DISABLE_MODULES = 'disable_modules';
+    const INPUT_KEY_DISABLE_MODULES = 'disable-modules';
 
     /**
      * If this flag is enabled, than all your old scripts with format:
      * InstallSchema, UpgradeSchema will be converted to new db_schema.xml format.
      */
-    const CONVERT_OLD_SCRIPTS_KEY = 'convert_old_scripts';
+    const CONVERT_OLD_SCRIPTS_KEY = 'convert-old-scripts';
 
     /**
      * Parameter indicating command for interactive setup

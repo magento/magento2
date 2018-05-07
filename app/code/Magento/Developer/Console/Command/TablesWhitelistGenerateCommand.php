@@ -72,7 +72,7 @@ class TablesWhitelistGenerateCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('declaration:generate:whitelist')
+        $this->setName('setup:db-declaration:generate-whitelist')
             ->setDescription(
                 'Generate whitelist of tables and columns that are allowed to be edited by declaration installer'
             )

@@ -14,7 +14,7 @@ class Request
     /**
      * Option to enable dump functionality for safe mode.
      */
-    const DUMP_ENABLE_OPTIONS = "dump_enable";
+    const DUMP_ENABLE_OPTIONS = "dump";
 
     /**
      * @var  bool

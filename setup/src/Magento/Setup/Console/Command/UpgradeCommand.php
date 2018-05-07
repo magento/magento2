@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
+use Magento\Framework\Setup\Declaration\Schema\Request;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -102,6 +103,12 @@ class UpgradeCommand extends AbstractSetupCommand
                 InputOption::VALUE_OPTIONAL,
                 'Magento Installation will be run in dry-run mode',
                 false
+            ),
+            new InputOption(
+                Request::DUMP_ENABLE_OPTIONS,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Should removed columns be dumped or recovered columns data reverted.'
             ),
         ];
         $this->setName('setup:upgrade')
