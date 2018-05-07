@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
+use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
@@ -81,26 +82,36 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
             if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
                 continue;
             }
-            $this->setDataToLegacyStockItem->execute(
-                $sourceItem->getSku(),
-                (float)$sourceItem->getQuantity(),
-                (int)$sourceItem->getStatus()
-            );
-            $this->setDataToLegacyStockStatus->execute(
-                $sourceItem->getSku(),
-                (float)$sourceItem->getQuantity(),
-                (int)$sourceItem->getStatus()
-            );
-            /**
-             * We need to call setDataToLegacyStockStatus second time because we don't have On Save re-indexation
-             * as cataloginventory_stock_item table updated with plane SQL queries
-             * Thus, initially we put the raw data there, and after that persist the calculated value
-             */
-            $this->setDataToLegacyStockStatus->execute(
-                $sourceItem->getSku(),
-                (float)$sourceItem->getQuantity(),
-                (int)$this->isProductSalable->execute($sourceItem->getSku(), $this->defaultStockProvider->getId())
-            );
+            try {
+                $this->setDataToLegacyStockItem->execute(
+                    $sourceItem->getSku(),
+                    (float)$sourceItem->getQuantity(),
+                    (int)$sourceItem->getStatus()
+                );
+                $this->setDataToLegacyStockStatus->execute(
+                    $sourceItem->getSku(),
+                    (float)$sourceItem->getQuantity(),
+                    (int)$sourceItem->getStatus()
+                );
+                /**
+                 * We need to call setDataToLegacyStockStatus second time because we don't have On Save re-indexation
+                 * as cataloginventory_stock_item table updated with plane SQL queries
+                 * Thus, initially we put the raw data there, and after that persist the calculated value
+                 */
+                $this->setDataToLegacyStockStatus->execute(
+                    $sourceItem->getSku(),
+                    (float)$sourceItem->getQuantity(),
+                    (int)$this->isProductSalable->execute($sourceItem->getSku(), $this->defaultStockProvider->getId())
+                );
+            } catch (InputException $e) {
+                /**
+                 * We need to catch InputException here and leave an empty catch body, this is because in-line with
+                 * MSI issue #889 https://github.com/magento-engcom/msi/issues/889 We are removing SKU validation
+                 * and we will allow MSI to work with SKUs not in Catalog. Empty Catch is not best practise and is a
+                 * code smell but we will eventually remove the need to set Legacy Data which throws the InputException
+                 * this will happen when CatalogInventory is dismantled and removed. This plugin will then be removed.
+                 */
+            }
         }
     }
 }

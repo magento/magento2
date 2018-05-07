@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
 use Magento\CatalogInventory\Model\Stock\Status;
+use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
@@ -65,8 +66,18 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
             if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
                 continue;
             }
-            $this->setDataToLegacyStockItem->execute($sourceItem->getSku(), 0, 0);
-            $this->setDataToLegacyStockStatus->execute($sourceItem->getSku(), 0, Status::STATUS_OUT_OF_STOCK);
+            try {
+                $this->setDataToLegacyStockItem->execute($sourceItem->getSku(), 0, 0);
+                $this->setDataToLegacyStockStatus->execute($sourceItem->getSku(), 0, Status::STATUS_OUT_OF_STOCK);
+            } catch (InputException $e) {
+                /**
+                 * We need to catch InputException here and leave an empty catch body, this is because, in-line with
+                 * MSI issue #889 https://github.com/magento-engcom/msi/issues/889, we are removing SKU validation
+                 * and we will allow MSI to work with SKUs not in Catalog. Empty Catch is not best practise and is a
+                 * code smell but we will eventually remove the need to set Legacy Data which throws the InputException
+                 * this will happen when CatalogInventory is dismantled and removed. This plugin will then be removed.
+                 */
+            }
         }
     }
 }
