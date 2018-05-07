@@ -81,16 +81,17 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
             if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
                 continue;
             }
-            $this->setDataToLegacyStockItem->execute(
-                $sourceItem->getSku(),
-                (float)$sourceItem->getQuantity(),
-                (int)$sourceItem->getStatus()
-            );
             $this->setDataToLegacyStockStatus->execute(
                 $sourceItem->getSku(),
                 (float)$sourceItem->getQuantity(),
                 (int)$sourceItem->getStatus()
             );
+
+            $isSalable = (int)$this->isProductSalable->execute(
+                $sourceItem->getSku(),
+                $this->defaultStockProvider->getId()
+            );
+
             /**
              * We need to call setDataToLegacyStockStatus second time because we don't have On Save re-indexation
              * as cataloginventory_stock_item table updated with plane SQL queries
@@ -99,7 +100,13 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
             $this->setDataToLegacyStockStatus->execute(
                 $sourceItem->getSku(),
                 (float)$sourceItem->getQuantity(),
-                (int)$this->isProductSalable->execute($sourceItem->getSku(), $this->defaultStockProvider->getId())
+                $isSalable
+            );
+
+            $this->setDataToLegacyStockItem->execute(
+                $sourceItem->getSku(),
+                (float)$sourceItem->getQuantity(),
+                $isSalable
             );
         }
     }
