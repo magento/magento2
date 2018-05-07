@@ -239,18 +239,14 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             ],
             '',
             false,
-            false,
+            true,
             true,
             [
-                'getId', '_getResource'
+                'getId', '_getResource', 'getFrontendLabelFactory'
             ]
         );
 
         $labelFactoryMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory::class);
-        $reflection = new \ReflectionClass($model);
-        $reflectionProperty = $reflection->getProperty('frontendLabelFactory');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($model, $labelFactoryMock);
 
         $resourceModel->expects($this->once())->method('getStoreLabelsByAttributeId')
             ->with(1)
@@ -261,6 +257,7 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(1);
         $model->expects($this->once())->method('_getResource')->willReturn($resourceModel);
+        $model->expects($this->once())->method('getFrontendLabelFactory')->willReturn($labelFactoryMock);
 
         $labelMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\FrontendLabel::class);
         $labelMock->expects($this->once())->method('getData')->willReturn($assocArray);

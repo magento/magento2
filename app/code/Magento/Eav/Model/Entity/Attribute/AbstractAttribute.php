@@ -120,17 +120,17 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory
-     */
-    protected $frontendLabelFactory;
-
-    /**
      * Serializer Instance.
      *
      * @var Json
      * @since 100.2.0
      */
     protected $serializer;
+
+    /**
+     * @var \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory
+     */
+    private $frontendLabelFactory;
 
     /**
      * Array of attribute types that have empty string as a possible value.
@@ -819,10 +819,20 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         $labels = [];
         foreach($this->_getResource()->getStoreLabelsByAttributeId($this->getId()) as $storeId => $label){
-            $labels[] = $this->frontendLabelFactory->create(['data' => ['store_id' => $storeId, 'label' => $label]]);
+            $labels[] = $this->getFrontendLabelFactory()->create(['data' => ['store_id' => $storeId, 'label' => $label]]);
         }
 
         $this->setFrontendLabels($labels);
+    }
+
+    /**
+     * Returns the frontend label factory
+     *
+     * @return FrontendLabelFactory|mixed
+     */
+    public function getFrontendLabelFactory()
+    {
+        return $this->frontendLabelFactory;
     }
 
     /**
