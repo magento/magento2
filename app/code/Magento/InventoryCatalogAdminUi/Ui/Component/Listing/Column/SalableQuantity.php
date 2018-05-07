@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalogAdminUi\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\InventoryCatalog\Model\GetSalableQuantityDataBySku;
+use Magento\InventoryCatalogAdminUi\Model\GetSalableQuantityDataBySku;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 use Magento\Ui\Component\Listing\Columns\Column;

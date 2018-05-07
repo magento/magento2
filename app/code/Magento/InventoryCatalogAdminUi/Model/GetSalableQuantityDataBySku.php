@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model;
+namespace Magento\InventoryCatalogAdminUi\Model;
 
 use Magento\Inventory\Model\ResourceModel\GetAssignedStockIdsBySku;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
