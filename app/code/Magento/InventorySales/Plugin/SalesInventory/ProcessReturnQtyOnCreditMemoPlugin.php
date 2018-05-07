@@ -12,7 +12,7 @@ use Magento\InventorySales\Model\ReturnProcessor\ProcessRefundItemsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
 
 class ProcessReturnQtyOnCreditMemoPlugin

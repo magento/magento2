@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model;
+namespace Magento\InventoryCatalogApi\Model;
 
 use Magento\Framework\Exception\InputException;
 

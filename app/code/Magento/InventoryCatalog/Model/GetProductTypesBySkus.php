@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Model;
 
 use Magento\Framework\Exception\InputException;
 use Magento\InventoryCatalog\Model\ResourceModel\GetProductTypesBySkus as GetProductTypesBySkusResourceModel;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 
 /**
  * @inheritdoc

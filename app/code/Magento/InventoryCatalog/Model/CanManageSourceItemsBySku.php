@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalog\Model;
 
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 
 /**
