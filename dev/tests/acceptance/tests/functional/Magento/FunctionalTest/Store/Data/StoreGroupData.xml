@@ -21,7 +21,7 @@
         <data key="store_action">add</data>
         <data key="store_type">group</data>
     </entity>
-    <entity name="customStoreGroupCustomWebsite" type="group">
+    <entity name="CustomStoreGroupCustomWebsite" type="group">
         <data key="group_id">null</data>
         <data key="name" unique="suffix">Store Group Custom Website</data>
         <data key="code" unique="suffix">store_group_custom_website</data>

@@ -12,11 +12,11 @@
             <argument name="websiteName" defaultValue="customWebsite.name"/>
         </arguments>
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnTheStorePage"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton1"/>
-        <waitForPageLoad stepKey="waitForPageLoad1" time="10"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterResetButtonClicked" time="10"/>
         <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillSearchWebsiteField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton" />
-        <waitForPageLoad stepKey="waitForPageLoad2" time="10"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterSearch" time="10"/>
         <see userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="verifyThatCorrectWebsiteFound"/>
         <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clickEditExistingWebsite"/>
 

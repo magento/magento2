@@ -12,9 +12,9 @@
             <argument name="Website" defaultValue="_defaultWebsite"/>
         </arguments>
         <amOnPage url="{{AdminSystemStoreGroupPage.url}}" stepKey="navigateToNewStoreGroup"/>
-        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <waitForPageLoad stepKey="waitForStoreGroupPageLoad" />
 
-        <!--Create Store Group-->
+        <comment userInput="Creating Store Group" stepKey="storeGroupCreationComment" />
         <selectOption selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{Website.name}}" stepKey="selectWebsite" />
         <fillField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{customStoreGroupCustomWebsite.name}}" stepKey="enterStoreGroupName" />
         <fillField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{customStoreGroupCustomWebsite.code}}" stepKey="enterStoreGroupCode" />
