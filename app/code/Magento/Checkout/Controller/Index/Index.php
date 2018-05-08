@@ -51,18 +51,16 @@ class Index extends \Magento\Checkout\Controller\Onepage
      */
     private function isSecureRequest(): bool
     {
-        $secure = false;
         $request = $this->getRequest();
 
-        if ($request->isSecure()) {
-            $secure = true;
-        }
+        $referrer = $request->getHeader('referer');
+        $secure = false;
 
-        if ($request->getHeader('referer')) {
-            $scheme = parse_url($request->getHeader('referer'), PHP_URL_SCHEME);
+        if ($referrer) {
+            $scheme = parse_url($referrer, PHP_URL_SCHEME);
             $secure = $scheme === 'https';
         }
 
-        return $secure;
+        return $secure && $request->isSecure();
     }
 }
