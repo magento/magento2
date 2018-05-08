@@ -34,29 +34,26 @@ class CategoryTest extends GraphQlAbstract
     public function testCategoriesSubtree($categoryId, $expectedResponse)
     {
         $query = <<<QUERY
-  {
-  categories(
-    filter: {root_category_id: $categoryId}) {
-    category_tree {
-      id
-      level
-     name
-      path
-     product_count
-      children {
+{
+  category(
+    id: {$categoryId}) {
+    id
+    level
+    name
+    path
+    product_count
+    children {
         id
-       name
+        name
         level
-        is_active
         path
         children {
-          id
-          name
-          level
-          description
-          path
+            id
+            name
+            level
+            description
+            path
         }
-      }
     }
   }
 }
@@ -76,49 +73,15 @@ QUERY;
     {
         return [
             [
-                'category_id' => 3,
-                'expected_subtree' => [
-                    'categories' => [
-                        'category_tree' => [
-                            'id' => 3,
-                            'level' => 2,
-                            'name' => 'Category 1',
-                            'path' => '1/2/3',
-                            'product_count' => 0,
-                            'children' => [
-                                [
-                                    'id' => 4,
-                                    'name' => 'Category 1.1',
-                                    'level' => 3,
-                                    'is_active' => true,
-                                    'path' => '1/2/3/4',
-                                    'children' => [
-                                        [
-                                            'id' => 5,
-                                            'name' => 'Category 1.1.1',
-                                            'level' => 4,
-                                            'description' => null,
-                                            'path' => '1/2/3/4/5',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ]
-            ],
-            [
                 'category_id' => 6,
                 'expected_subtree' => [
-                    'categories' => [
-                        'category_tree' => [
-                            'id' => 6,
-                            'level' => 2,
-                            'name' => 'Category 2',
-                            'path' => '1/2/6',
-                            'product_count' => 0,
-                            'children' => []
-                        ],
+                    'category' => [
+                        'id' => 6,
+                        'level' => 2,
+                        'name' => 'Category 2',
+                        'path' => '1/2/6',
+                        'product_count' => 0,
+                        'children' => []
                     ],
                 ]
             ]
@@ -181,6 +144,7 @@ QUERY;
 
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
+        var_dump($response['category']['children']);
         $responseDataObject = new DataObject($response);
         //Some sort of smoke testing
         self::assertEquals(

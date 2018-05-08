@@ -634,8 +634,8 @@ QUERY;
         foreach ($categoryIds as $index => $value) {
             $categoryIds[$index] = [ 'id' => (int)$value];
         }
-        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Category_ids must not be empty");
-        $this->assertNotNull($response['products']['items'][0]['categories'], "categoy_ids must not be null");
+        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
+        $this->assertNotNull($response['products']['items'][0]['categories'], "categories must not be null");
         $this->assertEquals($categoryIds, $response['products']['items'][0]['categories']);
         /** @var MetadataPool $metaData */
         $metaData = ObjectManager::getInstance()->get(MetadataPool::class);
@@ -674,14 +674,12 @@ QUERY;
        sku
        name
        type_id
-       category_ids
        categories{
           name
           id
           path
           children_count
           product_count
-          is_active
         }
       }
        total_count
@@ -712,7 +710,6 @@ QUERY;
             foreach ($categoryIds as $index => $value) {
                 $categoryIds[$index] = (int)$value;
             }
-            $this->assertEquals($response['products']['items'][$itemIndex]['category_ids'], $categoryIds);
             $categoryInResponse = array_map(
                 null,
                 $categoryIds,
@@ -730,7 +727,6 @@ QUERY;
                         'path' => $category->getPath(),
                         'children_count' => $category->getChildrenCount(),
                         'product_count' => $category->getProductCount(),
-                        'is_active' => $category->getIsActive(),
                     ]
                 );
             }
@@ -1146,7 +1142,6 @@ QUERY;
            ... on PhysicalProductInterface {
                weight
            }
-           category_ids
        }
    }
 }
@@ -1180,7 +1175,6 @@ QUERY;
       {
        sku
        name
-       category_ids
       }
        total_count
         

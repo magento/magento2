@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 use GraphQL\Language\AST\FieldNode;
 use Magento\CatalogGraphQl\Model\Category\DepthCalculator;
+use Magento\CatalogGraphQl\Model\Category\Hydrator;
 use Magento\CatalogGraphQl\Model\Category\LevelCalculator;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -53,24 +54,32 @@ class CategoryTree
     private $metadata;
 
     /**
+     * @var Hydrator
+     */
+    private $hydrator;
+
+    /**
      * @param CollectionFactory $collectionFactory
      * @param AttributesJoiner $attributesJoiner
      * @param DepthCalculator $depthCalculator
      * @param LevelCalculator $levelCalculator
      * @param MetadataPool $metadata
+     * @param Hydrator $hydrator
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         AttributesJoiner $attributesJoiner,
         DepthCalculator $depthCalculator,
         LevelCalculator $levelCalculator,
-        MetadataPool $metadata
+        MetadataPool $metadata,
+        Hydrator $hydrator
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->attributesJoiner = $attributesJoiner;
         $this->depthCalculator = $depthCalculator;
         $this->levelCalculator = $levelCalculator;
         $this->metadata = $metadata;
+        $this->hydrator = $hydrator;
     }
 
     /**
@@ -109,9 +118,11 @@ class CategoryTree
             $category = $iterator->current();
             $iterator->next();
             $nextCategory = $iterator->current();
-            $tree[$category->getId()] = $this->hydrateCategory($category);
+            $tree[$category->getId()] = $this->hydrator->hydrateCategory($category);
             if ($nextCategory && (int) $nextCategory->getLevel() !== (int) $category->getLevel()) {
                 $tree[$category->getId()]['children'] = $this->processTree($iterator);
+            } else {
+                $tree[$category->getId()]['children'] = null;
             }
         }
 

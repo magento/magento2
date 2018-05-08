@@ -49,7 +49,6 @@ class ProductViewTest extends GraphQlAbstract
             id
             categories {
                name
-               is_active
                url_path
                available_sort_by
                level
