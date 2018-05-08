@@ -121,8 +121,6 @@ class CategoryTree
             $tree[$category->getId()] = $this->hydrator->hydrateCategory($category);
             if ($nextCategory && (int) $nextCategory->getLevel() !== (int) $category->getLevel()) {
                 $tree[$category->getId()]['children'] = $this->processTree($iterator);
-            } else {
-                $tree[$category->getId()]['children'] = null;
             }
         }
 
