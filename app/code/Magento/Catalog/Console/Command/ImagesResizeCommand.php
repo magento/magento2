@@ -6,8 +6,10 @@
 namespace Magento\Catalog\Console\Command;
 
 use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
@@ -88,13 +90,13 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
+        $this->appState->setAreaCode(Area::AREA_GLOBAL);
 
         try {
             $count = $this->productImage->getCountAllProductImages();
             if (!$count) {
                 $output->writeln("<info>No product images to resize</info>");
-                return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+                return Cli::RETURN_SUCCESS;
             }
 
             $productImages = $this->productImage->getAllProductImages();
@@ -126,11 +128,10 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
                 $progress->setMessage($originalImageName);
                 $progress->advance();
             }
-            
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
             // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
 
         $output->write("\n");
@@ -178,27 +179,26 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     }
 
     /**
-    * Get view images data from themes
-    * @param array $themes
-    * @return array
-    */
+     * Get view images data from themes
+     * @param array $themes
+     * @return array
+     */
     private function getViewImages(array $themes): array
     {
-       $viewImages = [];
-       /** @var \Magento\Theme\Model\Theme $theme */
-       foreach ($themes as $theme) {
-           $config = $this->viewConfig->getViewConfig([
-               'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-               'themeModel' => $theme,
-           ]);
-           $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
-           foreach ($images as $imageId => $imageData) {
-               $uniqIndex = $this->getUniqImageIndex($imageData);
-               $imageData['id'] = $imageId;
-               $viewImages[$uniqIndex] = $imageData;
-           }
-       }
-       return $viewImages;
+        $viewImages = [];
+        foreach ($themes as $theme) {
+            $config = $this->viewConfig->getViewConfig([
+                'area' => Area::AREA_FRONTEND,
+                'themeModel' => $theme,
+            ]);
+            $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
+            foreach ($images as $imageId => $imageData) {
+                $uniqIndex = $this->getUniqImageIndex($imageData);
+                $imageData['id'] = $imageId;
+                $viewImages[$uniqIndex] = $imageData;
+            }
+        }
+        return $viewImages;
     }
 
     /**
