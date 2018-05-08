@@ -37,16 +37,21 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * App isolation is enabled to protect next tests from polluted registry by getUrl().
      *
+     * @param string $routePath
      * @param array $requestParams
      * @param string $expectedResult
      * @param array|null $routeParams
      * @dataProvider getUrlDataProvider
      * @magentoAppIsolation enabled
      */
-    public function testGetUrl(array $requestParams, string $expectedResult, array $routeParams = null)
-    {
+    public function testGetUrl(
+        string $routePath,
+        array $requestParams,
+        string $expectedResult,
+        array $routeParams = null
+    ) {
         $this->request->setParams($requestParams);
-        $url = $this->_model->getUrl('adminhtml/auth/login', $routeParams);
+        $url = $this->_model->getUrl($routePath, $routeParams);
         $this->assertContains($expectedResult, $url);
     }
 
@@ -62,10 +67,12 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         return [
             [
+                'routePath' => 'adminhtml/auth/login',
                 'requestParams' => [],
                 'expectedResult'=> 'admin/auth/login/key/',
             ],
             [
+                'routePath' => 'adminhtml/auth/login',
                 'requestParams' => [],
                 'expectedResult'=> '/param1/a1==/',
                 'routeParams' => [
@@ -74,6 +81,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             [
+                'routePath' => 'adminhtml/auth/login',
                 'requestParams' => [],
                 'expectedResult'=> '/param1/a1==/',
                 'routeParams' => [
@@ -82,6 +90,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             [
+                'routePath' => 'adminhtml/auth/login',
                 'requestParams' => ['param2' => 'a2=='],
                 'expectedResult'=> '/param2/a2==/',
                 'routeParams' => [
@@ -90,6 +99,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             [
+                'routePath' => 'adminhtml/auth/login',
                 'requestParams' => [],
                 'expectedResult' => '/param3/' . $escaper->encodeUrlParam('a3==') . '/',
                 'routeParams' => [
@@ -98,12 +108,18 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             [
+                'routePath' => 'adminhtml/auth/login',
                 'requestParams' => ['param4' => 'a4=='],
                 'expectedResult' => '/param4/' . $escaper->encodeUrlParam('a4==') . '/',
                 'routeParams' => [
                     '_current' => true,
                     '_escape_params' => true,
                 ],
+            ],
+            [
+                'routePath' => 'route/controller/action/id/100',
+                'requestParams' => [],
+                'expectedResult' => 'id/100',
             ],
         ];
     }

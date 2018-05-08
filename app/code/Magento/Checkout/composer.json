@@ -27,7 +27,7 @@
         "magento/module-cookie": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.3",
+    "version": "100.2.4",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
