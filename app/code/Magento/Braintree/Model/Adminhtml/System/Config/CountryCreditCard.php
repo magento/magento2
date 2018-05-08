@@ -56,6 +56,13 @@ class CountryCreditCard extends Value
     public function beforeSave()
     {
         $value = $this->getValue();
+        if (!is_array($value)) {
+            try {
+                $value = unserialize($value);
+            } catch (\InvalidArgumentException $e) {
+                $value = [];
+            }
+        }
         $result = [];
         foreach ($value as $data) {
             if (empty($data['country_id']) || empty($data['cc_types'])) {
