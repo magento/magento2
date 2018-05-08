@@ -40,9 +40,9 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
             foreach ($value as $item) {
                 $this->assertContains($item, $html);
             }
-        } else {
-            $this->assertContains($value, $html);
+            return;
         }
+        $this->assertContains($value, $html);
     }
 
     public function getElementHtmlDataProvider()
