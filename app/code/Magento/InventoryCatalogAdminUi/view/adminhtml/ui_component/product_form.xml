@@ -230,4 +230,17 @@
             </argument>
         </container>
     </fieldset>
+    <modal name="advanced_inventory_modal">
+        <fieldset name="stock_data">
+            <container name="container_is_in_stock">
+                <field name="is_in_stock">
+                    <settings>
+                        <links>
+                            <link name="value">ns = ${ $.ns }, index = quantity_and_stock_status:value</link>
+                        </links>
+                    </settings>
+                </field>
+            </container>
+        </fieldset>
+    </modal>
 </form>
