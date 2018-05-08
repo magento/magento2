@@ -12,7 +12,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
@@ -30,7 +30,7 @@ class ProcessAlgorithm extends Action
     const ADMIN_RESOURCE = 'Magento_InventoryApi::source';
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
@@ -66,7 +66,7 @@ class ProcessAlgorithm extends Action
 
     /**
      * @param Context $context
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
@@ -75,7 +75,7 @@ class ProcessAlgorithm extends Action
      */
     public function __construct(
         Context $context,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         ItemRequestInterfaceFactory $itemRequestFactory,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
         SourceSelectionServiceInterface $sourceSelectionService,
@@ -108,7 +108,7 @@ class ProcessAlgorithm extends Action
 
             //TODO: maybe need to add exception when websiteId empty
             $websiteId = $postRequest['websiteId'] ?? 1;
-            $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+            $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
 
             $result = $requestItems = [];
             foreach ($requestData as $data) {

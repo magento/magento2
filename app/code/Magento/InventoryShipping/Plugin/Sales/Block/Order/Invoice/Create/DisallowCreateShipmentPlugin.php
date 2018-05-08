@@ -10,7 +10,7 @@ namespace Magento\InventoryShipping\Plugin\Sales\Block\Order\Invoice\Create;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Form;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 
 /**
  * Disallow create shipment in multi source mode
@@ -23,18 +23,18 @@ class DisallowCreateShipmentPlugin
     private $getSourcesAssignedToStockOrderedByPriority;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
     /**
      * DisallowCreateShipment constructor.
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      */
     public function __construct(
         GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
     ) {
         $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
@@ -49,7 +49,7 @@ class DisallowCreateShipmentPlugin
     {
         try {
             $websiteId = $subject->getOrder()->getStore()->getWebsiteId();
-            $stockId = $this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+            $stockId = $this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
             $sources = $this->getSourcesAssignedToStockOrderedByPriority->execute((int)$stockId);
             if (count($sources) > 1) {
                 return false;

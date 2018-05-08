@@ -12,7 +12,7 @@ use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Api\Data\ShipmentExtensionFactory;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 
@@ -29,7 +29,7 @@ class AssignSourceCodeToShipmentPlugin
     private $shipmentExtensionFactory;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
@@ -42,13 +42,13 @@ class AssignSourceCodeToShipmentPlugin
      * AssignSourceCodeToShipmentPlugin constructor.
      * @param RequestInterface $request
      * @param ShipmentExtensionFactory $shipmentExtensionFactory
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      */
     public function __construct(
         RequestInterface $request,
         ShipmentExtensionFactory $shipmentExtensionFactory,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
     ) {
         $this->request = $request;
@@ -71,7 +71,7 @@ class AssignSourceCodeToShipmentPlugin
         $sourceCode = $this->request->getParam('sourceCode');
         if (empty($sourceCode)) {
             $websiteId = $order->getStore()->getWebsiteId();
-            $stockId = $this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+            $stockId = $this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
             $sources = $this->getSourcesAssignedToStockOrderedByPriority->execute((int)$stockId);
             //TODO: need ro rebuild this logic | create separate service
             if (!empty($sources) && count($sources) == 1) {
