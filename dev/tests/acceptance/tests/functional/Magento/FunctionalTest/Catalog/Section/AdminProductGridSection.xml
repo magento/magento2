@@ -12,5 +12,6 @@
         <element name="productGridElement1" type="input" selector="#addselector" />
         <element name="productGridElement2" type="text" selector="#addselector" />
         <element name="firstRow" type="button" selector="tr.data-row:nth-of-type(1)"/>
+        <element name="productGridXRowYColumnButton" type="input" selector="table.data-grid tr.data-row:nth-child({{row}}) td:nth-child({{column}})" parameterized="true" timeout="30"/>
     </section>
 </sections>

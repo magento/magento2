@@ -10,6 +10,7 @@ define([
     'use strict';
 
     return function (widget) {
+
         $.widget('mage.breadcrumbs', widget, {
             options: {
                 categoryUrlSuffix: '',
@@ -26,9 +27,9 @@ define([
                 menu = $(this.options.menuContainer).data('mageMenu');
 
                 if (typeof menu === 'undefined') {
-                    $(this.options.menuContainer).on('menucreate', function () {
-                        this._super();
-                    }.bind(this));
+                    this._on($(this.options.menuContainer), {
+                        'menucreate': this._super
+                    });
                 } else {
                     this._super();
                 }

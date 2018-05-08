@@ -8,6 +8,7 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\EntityManager\EventManager;
 use Magento\Store\Model\StoreManagerInterface;
@@ -256,7 +257,15 @@ class EavTest extends AbstractModifierTest
         $this->searchResultsMock = $this->getMockBuilder(SearchResultsInterface::class)
             ->getMockForAbstractClass();
         $this->eavAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['load', 'getAttributeGroupCode', 'getApplyTo', 'getFrontendInput', 'getAttributeCode'])
+            ->setMethods([
+                'load',
+                'getAttributeGroupCode',
+                'getApplyTo',
+                'getFrontendInput',
+                'getAttributeCode',
+                'usesSource',
+                'getSource'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
@@ -450,38 +459,51 @@ class EavTest extends AbstractModifierTest
     }
 
     /**
-     * @param int $productId
+     * @param int|null $productId
      * @param bool $productRequired
-     * @param string $attrValue
+     * @param string|null $attrValue
      * @param array $expected
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      * @dataProvider setupAttributeMetaDataProvider
      */
-    public function testSetupAttributeMetaDefaultAttribute($productId, $productRequired, $attrValue, $expected)
-    {
-        $configPath =  'arguments/data/config';
+    public function testSetupAttributeMetaDefaultAttribute(
+        $productId,
+        $productRequired,
+        $attrValue,
+        $expected
+    ) {
+        $configPath = 'arguments/data/config';
         $groupCode = 'product-details';
         $sortOrder = '0';
+        $attributeOptions = [
+            ['value' => 1, 'label' => 'Int label'],
+            ['value' => 1.5, 'label' => 'Float label'],
+            ['value' => true, 'label' => 'Boolean label'],
+            ['value' => 'string', 'label' => 'String label'],
+            ['value' => ['test1', 'test2'], 'label' => 'Array label']
+        ];
+        $attributeOptionsExpected = [
+            ['value' => '1', 'label' => 'Int label'],
+            ['value' => '1.5', 'label' => 'Float label'],
+            ['value' => '1', 'label' => 'Boolean label'],
+            ['value' => 'string', 'label' => 'String label'],
+            ['value' => ['test1', 'test2'], 'label' => 'Array label']
+        ];
 
-        $this->productMock->expects($this->any())
-            ->method('getId')
+        $this->productMock->method('getId')
             ->willReturn($productId);
 
-        $this->productAttributeMock->expects($this->any())
-            ->method('getIsRequired')
+        $this->productAttributeMock->method('getIsRequired')
             ->willReturn($productRequired);
 
-        $this->productAttributeMock->expects($this->any())
-            ->method('getDefaultValue')
+        $this->productAttributeMock->method('getDefaultValue')
             ->willReturn('required_value');
 
-        $this->productAttributeMock->expects($this->any())
-            ->method('getAttributeCode')
+        $this->productAttributeMock->method('getAttributeCode')
             ->willReturn('code');
 
-        $this->productAttributeMock->expects($this->any())
-            ->method('getValue')
+        $this->productAttributeMock->method('getValue')
             ->willReturn('value');
 
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
@@ -489,16 +511,23 @@ class EavTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $attributeMock->expects($this->any())
-            ->method('getValue')
+        $attributeMock->method('getValue')
             ->willReturn($attrValue);
 
-        $this->productMock->expects($this->any())
-            ->method('getCustomAttribute')
+        $this->productMock->method('getCustomAttribute')
             ->willReturn($attributeMock);
+        $this->eavAttributeMock->method('usesSource')
+            ->willReturn(true);
 
-        $this->arrayManagerMock->expects($this->any())
-            ->method('set')
+        $attributeSource = $this->getMockBuilder(SourceInterface::class)
+            ->getMockForAbstractClass();
+        $attributeSource->method('getAllOptions')
+            ->willReturn($attributeOptions);
+
+        $this->eavAttributeMock->method('getSource')
+            ->willReturn($attributeSource);
+
+        $this->arrayManagerMock->method('set')
             ->with(
                 $configPath,
                 [],
@@ -506,16 +535,24 @@ class EavTest extends AbstractModifierTest
             )
             ->willReturn($expected);
 
-        $this->arrayManagerMock->expects($this->any())
+        $this->arrayManagerMock->expects($this->once())
             ->method('merge')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                $this->callback(
+                    function ($value) use ($attributeOptionsExpected) {
+                        return $value['options'] === $attributeOptionsExpected;
+                    }
+                )
+            )
             ->willReturn($expected);
 
-        $this->arrayManagerMock->expects($this->any())
-            ->method('get')
+        $this->arrayManagerMock->method('get')
             ->willReturn([]);
 
-        $this->arrayManagerMock->expects($this->any())
-            ->method('exists');
+        $this->arrayManagerMock->method('exists')
+            ->willReturn(true);
 
         $this->assertEquals(
             $expected,
