@@ -35,7 +35,7 @@
             <actionGroup ref="DeleteCustomWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="$$createWebsite1.website[name]$$"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
         <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksListPage"/>
