@@ -5,47 +5,72 @@
  */
 namespace Magento\Catalog\Console\Command;
 
+use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
+use Magento\Framework\App\State;
+use Magento\Catalog\Helper\Image as ImageHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\View\ConfigInterface as ViewConfig;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
+use Magento\Catalog\Model\Product\Image;
+use Magento\Catalog\Model\Product\ImageFactory as ProductImageFactory;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Magento\Framework\ObjectManagerInterface;
 
 class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
-    protected $appState;
+    private $appState;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var ProductImage
      */
-    protected $productCollectionFactory;
+    private $productImage;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ViewConfig
      */
-    protected $productRepository;
+    private $viewConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Image\CacheFactory
+     * @var ThemeCollection
      */
-    protected $imageCacheFactory;
+    private $themeCollection;
 
     /**
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\Product\Image\CacheFactory $imageCacheFactory
+     * @var ProductImageFactory
+     */
+    private $productImageFactory;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @param State $appState
+     * @param ProductImage $productImage
+     * @param ViewConfig $viewConfig
+     * @param ThemeCollection $themeCollection
+     * @param ProductImageFactory $productImageFactory
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        \Magento\Framework\App\State $appState,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Product\Image\CacheFactory $imageCacheFactory
+        State $appState,
+        ProductImage $productImage,
+        ViewConfig $viewConfig,
+        ThemeCollection $themeCollection,
+        ProductImageFactory $productImageFactory,
+        ObjectManagerInterface $objectManager
     ) {
         $this->appState = $appState;
-        $this->productCollectionFactory = $productCollectionFactory;
-        $this->productRepository = $productRepository;
-        $this->imageCacheFactory = $imageCacheFactory;
+        $this->productImage = $productImage;
+        $this->viewConfig = $viewConfig;
+        $this->themeCollection = $themeCollection;
+        $this->productImageFactory = $productImageFactory;
+        $this->objectManager = $objectManager;
         parent::__construct();
     }
 
@@ -65,34 +90,43 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     {
         $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
 
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
-        $productCollection = $this->productCollectionFactory->create();
-        $productIds = $productCollection->getAllIds();
-        if (!count($productIds)) {
-            $output->writeln("<info>No product images to resize</info>");
-            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-        }
-
-        $errorMessage = '';
         try {
-            foreach ($productIds as $productId) {
-                try {
-                    /** @var \Magento\Catalog\Model\Product $product */
-                    $product = $this->productRepository->getById($productId);
-                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    continue;
-                }
-
-                try {
-                    /** @var \Magento\Catalog\Model\Product\Image\Cache $imageCache */
-                    $imageCache = $this->imageCacheFactory->create();
-                    $imageCache->generate($product);
-                } catch (\Magento\Framework\Exception\RuntimeException $e) {
-                    $errorMessage = $e->getMessage();
-                }
-
-                $output->write(".");
+            $count = $this->productImage->getCountAllProductImages();
+            if (!$count) {
+                $output->writeln("<info>No product images to resize</info>");
+                return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
             }
+
+            $productImages = $this->productImage->getAllProductImages();
+
+            $themes = $this->themeCollection->loadRegisteredThemes();
+            $viewImages = $this->getViewImages($themes->getItems());
+
+            /** @var ProgressBar $progress */
+            $progress = $this->objectManager->create(ProgressBar::class, [
+                'output' => $output,
+                'max' => $count
+            ]);
+            $progress->setFormat(
+                "%current%/%max% [%bar%] %percent:3s%% %elapsed% %memory:6s% \t| <info>%message%</info>"
+            );
+
+            if ($output->getVerbosity() !== OutputInterface::VERBOSITY_NORMAL) {
+                $progress->setOverwrite(false);
+            }
+
+            foreach ($productImages as $image) {
+                $originalImageName = $image['filepath'];
+
+                foreach ($viewImages as $viewImage) {
+                    $image = $this->makeImage($originalImageName, $viewImage);
+                    $image->resize();
+                    $image->saveFile();
+                }
+                $progress->setMessage($originalImageName);
+                $progress->advance();
+            }
+            
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
             // we must have an exit code higher than zero to indicate something was wrong
@@ -102,10 +136,80 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         $output->write("\n");
         $output->writeln("<info>Product images resized successfully.</info>");
 
-        if ($errorMessage !== '') {
-            $output->writeln("<comment>{$errorMessage}</comment>");
+        return 0;
+    }
+
+    /**
+     * Make image
+     * @param string $originalImagePath
+     * @param array $imageParams
+     * @return Image
+     */
+    private function makeImage(string $originalImagePath, array $imageParams): Image
+    {
+        $image = $this->productImageFactory->create();
+
+        if (isset($imageParams['height'])) {
+            $image->setHeight($imageParams['height']);
+        }
+        if (isset($imageParams['width'])) {
+            $image->setWidth($imageParams['width']);
+        }
+        if (isset($imageParams['aspect_ratio'])) {
+            $image->setKeepAspectRatio($imageParams['aspect_ratio']);
+        }
+        if (isset($imageParams['frame'])) {
+            $image->setKeepFrame($imageParams['frame']);
+        }
+        if (isset($imageParams['transparency'])) {
+            $image->setKeepTransparency($imageParams['transparency']);
+        }
+        if (isset($imageParams['constrain'])) {
+            $image->setConstrainOnly($imageParams['constrain']);
+        }
+        if (isset($imageParams['background'])) {
+            $image->setBackgroundColor($imageParams['background']);
         }
 
-        return 0;
+        $image->setDestinationSubdir($imageParams['type']);
+        $image->setBaseFile($originalImagePath);
+
+        return $image;
+    }
+
+    /**
+    * Get view images data from themes
+    * @param array $themes
+    * @return array
+    */
+    private function getViewImages(array $themes): array
+    {
+       $viewImages = [];
+       /** @var \Magento\Theme\Model\Theme $theme */
+       foreach ($themes as $theme) {
+           $config = $this->viewConfig->getViewConfig([
+               'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+               'themeModel' => $theme,
+           ]);
+           $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
+           foreach ($images as $imageId => $imageData) {
+               $uniqIndex = $this->getUniqImageIndex($imageData);
+               $imageData['id'] = $imageId;
+               $viewImages[$uniqIndex] = $imageData;
+           }
+       }
+       return $viewImages;
+    }
+
+    /**
+     * Get uniq image index
+     * @param array $imageData
+     * @return string
+     */
+    private function getUniqImageIndex(array $imageData): string
+    {
+        ksort($imageData);
+        unset($imageData['type']);
+        return md5(json_encode($imageData));
     }
 }
