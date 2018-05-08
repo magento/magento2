@@ -10,9 +10,9 @@ type Query {
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
      ): Products
      @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes")
-    categories (
-        filter: CategoryFilterInput @doc(description: "Filter for categories")
-    ): Categories
+    category (
+        id: Int @doc(description: "Id of the category")
+    ): CategoryTree
     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
 }
 
@@ -263,9 +263,6 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     new_from_date: String @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     new_to_date: String @doc(description: "The end date for new product listings") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     tier_price: Float @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached")
-    custom_layout_update: String @doc(description: "XML code that is applied as a layout update to the product page")
-    custom_layout: String @doc(description: "The name of a custom layout")
-    category_ids: [Int] @doc(description: "An array of category IDs the product belongs to")
     options_container: String @doc(description: "If the product has multiple options, determines where they appear on the product page")
     image_label: String @doc(description: "The label assigned to a product image")
     small_image_label: String @doc(description: "The label assigned to a product's small image")
@@ -300,11 +297,7 @@ type CustomizableAreaValue @doc(description: "CustomizableAreaValue defines the 
     max_characters: Int @doc(description: "The maximum number of characters that can be entered for this customizable option")
 }
 
-type Categories @doc(description: "Categories aggregates the category tree of a product") {
-    category_tree: CategoryTree @doc(description: "Tree of categories")
-}
-
-type CategoryTree implements CategoryInterface @doc(description: "Category Tree") {
+type CategoryTree implements CategoryInterface @doc(description: "Category Tree implementation") {
     children: [CategoryTree] @doc(description: "Child categories tree") @resolve(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
 }
 
@@ -376,7 +369,6 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
     path_in_store: String @doc(description: "Category path in store")
     url_key: String @doc(description: "The url key assigned to the category")
     url_path: String @doc(description: "The url path assigned to the category")
-    is_active: Boolean @doc(description: "Indicates whether the category is enabled")
     position: Int @doc(description: "The position of the category relative to other categories at the same level in tree")
     level: Int @doc(description: "Indicates the depth of the category within the tree")
     created_at: String @doc(description: "Timestamp indicating when the category was created")
@@ -410,10 +402,6 @@ type Products @doc(description: "The Products object is the top-level object ret
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query")
     total_count: Int @doc(description: "The number of products returned")
     filters: [LayerFilter] @doc(description: "Layered navigation filters array")
-}
-
-input CategoryFilterInput @doc(description: "Identifies which category attributes to search for and return.") {
-    root_category_id: Int @doc(description: "Id of the root category in the category tree to use as the starting point of your search.")
 }
 
 input ProductFilterInput @doc(description: "ProductFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {

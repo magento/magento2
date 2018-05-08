@@ -616,7 +616,9 @@ QUERY;
      sku
      name
      attribute_set_id
-     category_ids
+     categories {
+        id
+     }
    }
  }
 }
@@ -630,11 +632,11 @@ QUERY;
         $product = $productRepository->get('simple333');
         $categoryIds  = $product->getCategoryIds();
         foreach ($categoryIds as $index => $value) {
-            $categoryIds[$index] = (int)$value;
+            $categoryIds[$index] = [ 'id' => (int)$value];
         }
-        $this->assertNotEmpty($response['products']['items'][0]['category_ids'], "Category_ids must not be empty");
-        $this->assertNotNull($response['products']['items'][0]['category_ids'], "categoy_ids must not be null");
-        $this->assertEquals($categoryIds, $response['products']['items'][0]['category_ids']);
+        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Category_ids must not be empty");
+        $this->assertNotNull($response['products']['items'][0]['categories'], "categoy_ids must not be null");
+        $this->assertEquals($categoryIds, $response['products']['items'][0]['categories']);
         /** @var MetadataPool $metaData */
         $metaData = ObjectManager::getInstance()->get(MetadataPool::class);
         $linkField = $metaData->getMetadata(ProductInterface::class)->getLinkField();

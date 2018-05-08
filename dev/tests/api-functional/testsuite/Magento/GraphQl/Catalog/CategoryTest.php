@@ -23,6 +23,109 @@ class CategoryTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories_no_products.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @param int $categoryId
+     * @param array $expectedResponse
+     *
+     * @dataProvider categorySubtreeTestDataProvider
+     */
+    public function testCategoriesSubtree($categoryId, $expectedResponse)
+    {
+        $query = <<<QUERY
+  {
+  categories(
+    filter: {root_category_id: $categoryId}) {
+    category_tree {
+      id
+      level
+     name
+      path
+     product_count
+      children {
+        id
+       name
+        level
+        is_active
+        path
+        children {
+          id
+          name
+          level
+          description
+          path
+        }
+      }
+    }
+  }
+}
+QUERY;
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
+        );
+        $customerToken = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $this->assertEquals($expectedResponse, $response);
+    }
+
+    public function categorySubtreeTestDataProvider()
+    {
+        return [
+            [
+                'category_id' => 3,
+                'expected_subtree' => [
+                    'categories' => [
+                        'category_tree' => [
+                            'id' => 3,
+                            'level' => 2,
+                            'name' => 'Category 1',
+                            'path' => '1/2/3',
+                            'product_count' => 0,
+                            'children' => [
+                                [
+                                    'id' => 4,
+                                    'name' => 'Category 1.1',
+                                    'level' => 3,
+                                    'is_active' => true,
+                                    'path' => '1/2/3/4',
+                                    'children' => [
+                                        [
+                                            'id' => 5,
+                                            'name' => 'Category 1.1.1',
+                                            'level' => 4,
+                                            'description' => null,
+                                            'path' => '1/2/3/4/5',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+            [
+                'category_id' => 6,
+                'expected_subtree' => [
+                    'categories' => [
+                        'category_tree' => [
+                            'id' => 6,
+                            'level' => 2,
+                            'name' => 'Category 2',
+                            'path' => '1/2/6',
+                            'product_count' => 0,
+                            'children' => []
+                        ],
+                    ],
+                ]
+            ]
+        ];
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -32,13 +135,10 @@ class CategoryTest extends GraphQlAbstract
         $rootCategoryId = 2;
         $query = <<<QUERY
 {
-  categories(filter: {root_category_id: {$rootCategoryId}}) {
-    category_tree {
+  category(id: {$rootCategoryId}) {
       id
       level
-      is_active
       description
-      all_children
       path
       path_in_store
       product_count
@@ -46,7 +146,6 @@ class CategoryTest extends GraphQlAbstract
       url_path
       children {
         id
-        is_active
         description
         available_sort_by
         default_sort_by
@@ -54,7 +153,6 @@ class CategoryTest extends GraphQlAbstract
         level
         children {
           id
-          is_active
           filter_price_range
           description
           image
@@ -71,7 +169,6 @@ class CategoryTest extends GraphQlAbstract
         }
       }
     }
-  }
 }
 QUERY;
 
@@ -88,31 +185,31 @@ QUERY;
         //Some sort of smoke testing
         self::assertEquals(
             'Ololo',
-            $responseDataObject->getData('categories/category_tree/children/7/children/1/description')
+            $responseDataObject->getData('category/children/7/children/1/description')
         );
         self::assertEquals(
             'default-category',
-            $responseDataObject->getData('categories/category_tree/url_key')
+            $responseDataObject->getData('category/url_key')
         );
         self::assertEquals(
             [],
-            $responseDataObject->getData('categories/category_tree/children/0/available_sort_by')
+            $responseDataObject->getData('category/children/0/available_sort_by')
         );
         self::assertEquals(
             'name',
-            $responseDataObject->getData('categories/category_tree/children/0/default_sort_by')
+            $responseDataObject->getData('category/children/0/default_sort_by')
         );
         self::assertCount(
             8,
-            $responseDataObject->getData('categories/category_tree/children')
+            $responseDataObject->getData('category/children')
         );
         self::assertCount(
             2,
-            $responseDataObject->getData('categories/category_tree/children/7/children')
+            $responseDataObject->getData('category/children/7/children')
         );
         self::assertEquals(
             5,
-            $responseDataObject->getData('categories/category_tree/children/7/children/1/children/0/id')
+            $responseDataObject->getData('category/children/7/children/1/children/0/id')
         );
     }
 }
