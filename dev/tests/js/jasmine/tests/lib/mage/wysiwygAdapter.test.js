@@ -29,8 +29,8 @@ define([
         /**
          * Tests encoding and decoding directives
          *
-         * @param {string} decodedHtml
-         * @param {string} encodedHtml
+         * @param {String} decodedHtml
+         * @param {String} encodedHtml
          */
         function runTests(decodedHtml, encodedHtml) {
             var encodedHtmlWithForwardSlashInImgSrc = encodedHtml.replace(/src="((?:(?!"|\\\?).)*)/, 'src="$1/');
