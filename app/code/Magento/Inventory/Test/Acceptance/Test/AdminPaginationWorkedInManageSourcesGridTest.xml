@@ -49,28 +49,26 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheManageSourcePage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheManageSourcePage"/>
+        <waitForPageLoad time="30" stepKey="waitForAdminManageSourcePageLoad"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+        <waitForPageLoad time="30" stepKey="waitFilterCleared"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <!--TODO Change this to scalar when MQE-498 is implemented-->
-            <argument name="value" value="TemporaryConsts.special_source"/>
+            <argument name="value" value="special_source"/>
         </actionGroup>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
-        <actionGroup ref="adminDataGridSelectPerPage" stepKey="select20SourcesPerPage1">
-            <!--TODO Change this to scalar when MQE-498 is implemented-->
-            <argument name="perPage" value="TemporaryConsts.twenty"/>
+        <waitForPageLoad time="30" stepKey="waitFilterApplied"/>
+        <actionGroup ref="adminDataGridSelectPerPage" stepKey="select20SourcesPerPage">
+            <argument name="perPage" value="20"/>
         </actionGroup>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
-        <see selector="{{AdminDataGridPaginationSection.totalPages}}" userInput="2" stepKey="seeTotalPages1"/>
-        <seeNumberOfElements selector="{{AdminManageSourcesGridBody.dataRows}}" userInput="20" stepKey="seeNumberOfRows1"/>
+        <waitForPageLoad time="30" stepKey="waitSelectPerPageApplied"/>
+        <see selector="{{AdminDataGridPaginationSection.totalPages}}" userInput="2" stepKey="seeTotalPages"/>
+        <seeNumberOfElements selector="{{AdminManageSourcesGridBody.dataRows}}" userInput="20" stepKey="checkNumberOfRowsOnFirstPage"/>
         <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="goToNextPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
-        <seeNumberOfElements selector="{{AdminManageSourcesGridBody.dataRows}}" userInput="2" stepKey="seeNumberOfRows2"/>
+        <waitForPageLoad time="30" stepKey="waitNextGridPageOpened"/>
+        <seeNumberOfElements selector="{{AdminManageSourcesGridBody.dataRows}}" userInput="2" stepKey="checkNumberOfRowsOnSecondPage"/>
         <click selector="{{AdminDataGridPaginationSection.previousPage}}" stepKey="goTopreviousPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
-        <seeNumberOfElements selector="{{AdminManageSourcesGridBody.dataRows}}" userInput="20" stepKey="seeNumberOfRows3"/>
+        <waitForPageLoad time="30" stepKey="waitPrevGridPageOpened"/>
+        <seeNumberOfElements selector="{{AdminManageSourcesGridBody.dataRows}}" userInput="20" stepKey="checkNumberOfRowsOnFirstPageAgain"/>
     </test>
 </tests>

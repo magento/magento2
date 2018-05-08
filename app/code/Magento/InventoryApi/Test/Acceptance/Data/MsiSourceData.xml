@@ -75,7 +75,7 @@
         <data key="postcode">QC G2E 6J5</data>
         <data key="use_default_carrier_config">1</data>
     </entity>
-    <!-- Please don't use this entity in your tests -->
+    <!-- Please don't use this entity in your tests otherwise AdminPaginationWorkedInManageSourcesGridTest will fail -->
     <entity name="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" type="source">
         <data key="id_field_name">source_code</data>
         <data key="name" unique="suffix">Special Source </data>
