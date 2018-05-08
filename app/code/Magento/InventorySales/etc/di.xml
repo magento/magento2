@@ -138,7 +138,4 @@
     <type name="Magento\SalesInventory\Model\Order\ReturnProcessor">
         <plugin name="process_return_product_qty_on_credit_memo" type="Magento\InventorySales\Plugin\SalesInventory\ProcessReturnQtyOnCreditMemoPlugin" />
     </type>
-    <type name="Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface">
-        <plugin name="stock_status_replacement" type="Magento\InventorySales\Plugin\CatalogInventory\Model\Spi\StockRegistryProvider\ReplaceStockStatus"/>
-    </type>
 </config>
