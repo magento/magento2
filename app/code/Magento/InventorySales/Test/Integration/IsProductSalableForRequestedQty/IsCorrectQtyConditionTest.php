@@ -79,7 +79,7 @@ class IsCorrectQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithMissingConfigurationDataProvider
-     * 
+     *
      * @magentoDbIsolation disabled
      */
     public function testExecuteWithMissingConfiguration(
@@ -119,7 +119,7 @@ class IsCorrectQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithUseConfigMinSaleQtyDataProvider
-     * 
+     *
      * @magentoDbIsolation disabled
      */
     public function testExecuteWithUseConfigMinSaleQty(
@@ -176,7 +176,7 @@ class IsCorrectQtyConditionTest extends TestCase
      *
      * @return void
      * @dataProvider executeWithMinSaleQtyDataProvider
-     * 
+     *
      * @magentoDbIsolation disabled
      */
     public function testExecuteWithMinSaleQty(
@@ -235,7 +235,7 @@ class IsCorrectQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithUseConfigMaxSaleQtyDataProvider
-     * 
+     *
      * @magentoDbIsolation disabled
      */
     public function testExecuteWithUseConfigMaxSaleQty(
@@ -295,7 +295,7 @@ class IsCorrectQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithMaxSaleQtyDataProvider
-     * 
+     *
      * @magentoDbIsolation disabled
      */
     public function testExecuteWithMaxSaleQty(
@@ -357,7 +357,7 @@ class IsCorrectQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithUseConfigQtyIncrementsDataProvider
-     * 
+     *
      * @magentoDbIsolation disabled
      */
     public function testExecuteWithUseConfigQtyIncrements(
@@ -419,7 +419,7 @@ class IsCorrectQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithQtyIncrementsDataProvider
-     * 
+     *
      * @magentoDbIsolation disabled
      */
     public function testExecuteWithQtyIncrements(

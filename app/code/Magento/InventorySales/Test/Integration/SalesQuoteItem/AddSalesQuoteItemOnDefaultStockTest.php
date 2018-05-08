@@ -12,7 +12,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
-use Magento\InventoryReservationsApi\Module\CleanupReservationsInterface;
+use Magento\InventoryReservationsApi\Model\CleanupReservationsInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
