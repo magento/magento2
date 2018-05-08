@@ -11,8 +11,8 @@
     "magento/module-ui": "*",
     "magento/module-inventory-catalog-api": "*",
     "magento/module-inventory-configuration": "*",
-    "magento/module-inventory-indexer": "*",
-    "magento/module-inventory-sales-api": "*"
+    "magento/module-inventory-configuration-api": "*",
+    "magento/module-inventory-indexer": "*"
   },
   "suggest": {
     "magento/module-inventory-admin-ui": "*"

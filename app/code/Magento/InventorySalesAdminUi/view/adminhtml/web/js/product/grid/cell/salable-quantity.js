@@ -9,7 +9,7 @@ define([
 
     return Column.extend({
         defaults: {
-            bodyTmpl: 'Magento_InventoryCatalogAdminUi/product/grid/cell/salable-quantity.html'
+            bodyTmpl: 'Magento_InventorySalesAdminUi/product/grid/cell/salable-quantity.html'
         },
 
         /**

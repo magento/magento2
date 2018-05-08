@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalogAdminUi\Ui\DataProvider\Product\Form\Modifier;
+namespace Magento\InventorySalesAdminUi\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\InventoryCatalogAdminUi\Model\GetSalableQuantityDataBySku;
+use Magento\InventorySalesAdminUi\Model\GetSalableQuantityDataBySku;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 

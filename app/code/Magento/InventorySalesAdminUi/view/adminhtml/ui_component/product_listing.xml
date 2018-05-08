@@ -8,8 +8,8 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <columns name="product_columns">
         <column name="salable_quantity"
-                class="Magento\InventoryCatalogAdminUi\Ui\Component\Listing\Column\SalableQuantity"
-                component="Magento_InventoryCatalogAdminUi/js/product/grid/cell/salable-quantity"
+                class="Magento\InventorySalesAdminUi\Ui\Component\Listing\Column\SalableQuantity"
+                component="Magento_InventorySalesAdminUi/js/product/grid/cell/salable-quantity"
                 sortOrder="77">
             <settings>
                 <filter>false</filter>
