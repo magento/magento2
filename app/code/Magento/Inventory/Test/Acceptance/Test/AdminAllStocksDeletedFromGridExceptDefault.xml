@@ -20,15 +20,28 @@
         </annotations>
 
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- need to delete all stocks previously created -->
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnStockGridPageToDeleteAllNeedlesslyStocks"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridLoadToDeleteAllNeedlesslyStocks"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAllFilters"/>
+            <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdownToDeleteAllNeedlesslyStocks"/>
+            <click selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGridToDeleteAllNeedlesslyStocks"/>
+            <click selector="{{AdminGridSelectRows.bulkActionDropdown}}" stepKey="clickActionDropdownToDeleteAllNeedlesslyStocks"/>
+            <click selector="{{AdminGridSelectRows.bulkActionOption('Delete')}}" stepKey="clickDeleteActionToDeleteAllNeedlesslyStocks"/>
+            <waitForElementVisible selector="{{AdminGridConfirmActionSection.title}}" stepKey="waitForConfirmModalToDeleteAllNeedlesslyStocks"/>
+            <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="confirmStocksDeleteToDeleteAllNeedlesslyStocks"/>
+
             <createData entity="BasicMsiStock1" stepKey="createStock1"/>
             <createData entity="BasicMsiStock2" stepKey="createStock2"/>
-            <createData entity="BasicMsiStock3" stepKey="createStock3"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnStockListPage1"/>
-            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+            <createData entity="BasicMsiStock2" stepKey="createStock3"/>
+
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnStockGridPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridLoad"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
         <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
@@ -36,9 +49,9 @@
         <click selector="{{AdminGridSelectRows.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
         <click selector="{{AdminGridSelectRows.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
         <waitForElementVisible selector="{{AdminGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
-        <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+        <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="confirmStocksDelete"/>
 
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted 3 Stock(s)." stepKey="seeSuccessDeleteMessage1"/>
-        <see selector="{{AdminMessagesSection.errorMessage}}" userInput="[ID: 1] Default Stock could not be deleted." stepKey="seeErrorDeleteMessage1"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted 3 Stock(s)." stepKey="seeSuccessDeleteMessage"/>
+        <see selector="{{AdminMessagesSection.errorMessage}}" userInput="[ID: 1] Default Stock could not be deleted." stepKey="seeErrorDeleteMessage"/>
     </test>
 </tests>

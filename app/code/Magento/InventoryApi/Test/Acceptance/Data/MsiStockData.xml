@@ -18,7 +18,4 @@
     <entity name="BasicMsiStock2" type="stock">
         <data key="name" unique="suffix">Basic MSI Stock 2 </data>
     </entity>
-    <entity name="BasicMsiStock3" type="stock">
-        <data key="name" unique="suffix">Basic MSI Stock 3 </data>
-    </entity>
 </entities>
