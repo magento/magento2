@@ -16,8 +16,8 @@
 
         <comment userInput="Creating Store Group" stepKey="storeGroupCreationComment" />
         <selectOption selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{Website.name}}" stepKey="selectWebsite" />
-        <fillField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{customStoreGroupCustomWebsite.name}}" stepKey="enterStoreGroupName" />
-        <fillField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{customStoreGroupCustomWebsite.code}}" stepKey="enterStoreGroupCode" />
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{CustomStoreGroupCustomWebsite.name}}" stepKey="enterStoreGroupName" />
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{CustomStoreGroupCustomWebsite.code}}" stepKey="enterStoreGroupCode" />
         <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="Default Category"  stepKey="setRootCategory" />
         <click selector="{{AdminNewStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup" />
         <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>

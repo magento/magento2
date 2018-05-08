@@ -27,13 +27,13 @@
                 <argument name="Website" value="customWebsite"/>
             </actionGroup>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
-                <argument name="StoreGroup" value="customStoreGroupCustomWebsite"/>
+                <argument name="StoreGroup" value="CustomStoreGroupCustomWebsite"/>
             </actionGroup>
         </before>
         <after>
             <!-- todo temporary solution as it is impossible to parse website_id from the post request and as a consequence can not delete it via post-->
             <actionGroup ref="DeleteCustomWebsiteActionGroup" stepKey="deleteWebsite">
-                <argument name="websiteName" value="$$createWebsite1.website[name]$$"/>
+                <argument name="websiteName" value="$$createCustomWebsite.website[name]$$"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
@@ -41,9 +41,9 @@
         <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksListPage"/>
         <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
         <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchStockByKeyword">
-            <argument name="keyword" value="$$createStock1.stock[name]$$"/>
+            <argument name="keyword" value="$$createCustomStock.stock[name]$$"/>
         </actionGroup>
-        <click selector="{{AdminGridRow.editByValue($$createStock1.stock[name]$$)}}" stepKey="clickOnEditForCustomStock"/>
+        <click selector="{{AdminGridRow.editByValue($$createCustomStock.stock[name]$$)}}" stepKey="clickOnEditForCustomStock"/>
         <waitForPageLoad time="30" stepKey="waitForDefaultStockPageLoad"/>
         <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{customWebsite.name}}" stepKey="selectCustomWebsiteAsSalesChannel"/>
 
