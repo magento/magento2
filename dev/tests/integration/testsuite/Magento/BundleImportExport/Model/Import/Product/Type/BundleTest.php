@@ -5,14 +5,14 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
-use Magento\Framework\App\Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\ImportExport\Model\Import;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BundleTest extends \PHPUnit\Framework\TestCase
+class BundleTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * Bundle product test Name
@@ -41,9 +41,22 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      */
     protected $optionSkuList = ['Simple 1', 'Simple 2', 'Simple 3'];
 
+    public static function setUpBeforeClass()
+    {
+        $db = Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
+
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
     }
 
@@ -122,6 +135,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      * @return void
      */
@@ -178,5 +192,13 @@ class BundleTest extends \PHPUnit\Framework\TestCase
                 }
             }
         }
+    }
+
+    /**
+     * teardown
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 }

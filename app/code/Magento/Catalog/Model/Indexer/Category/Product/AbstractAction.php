@@ -411,8 +411,11 @@ abstract class AbstractAction
      * @param int $range
      * @return Select[]
      */
-    protected function prepareSelectsByRange(Select $select, $field, $range = self::RANGE_CATEGORY_STEP)
-    {
+    protected function prepareSelectsByRange(
+        Select $select,
+        string $field,
+        int $range = self::RANGE_CATEGORY_STEP
+    ) {
         if ($this->isRangingNeeded()) {
             $iterator = $this->queryGenerator->generate(
                 $field,
