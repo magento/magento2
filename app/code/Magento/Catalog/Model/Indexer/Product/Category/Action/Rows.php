@@ -6,12 +6,17 @@
 namespace Magento\Catalog\Model\Indexer\Product\Category\Action;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Indexer\CacheContext;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Reindex products categories.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
@@ -29,32 +34,31 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private $cacheContext;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|null
+     * @var EventManagerInterface|null
      */
     private $eventManager;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Config $config
-     * @param \Magento\Framework\DB\Query\Generator|null $queryGenerator
-     * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
+     * @param ResourceConnection $resource
+     * @param StoreManagerInterface $storeManager
+     * @param Config $config
+     * @param QueryGenerator|null $queryGenerator
+     * @param MetadataPool|null $metadataPool
      * @param CacheContext|null $cacheContext
-     * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
+     * @param EventManagerInterface|null $eventManager
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Config $config,
-        \Magento\Framework\DB\Query\Generator $queryGenerator = null,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        ResourceConnection $resource,
+        StoreManagerInterface $storeManager,
+        Config $config,
+        QueryGenerator $queryGenerator = null,
+        MetadataPool $metadataPool = null,
         CacheContext $cacheContext = null,
-        \Magento\Framework\Event\ManagerInterface $eventManager = null
+        EventManagerInterface $eventManager = null
     ) {
         parent::__construct($resource, $storeManager, $config, $queryGenerator, $metadataPool);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
-        $this->eventManager = $eventManager ?:
-            ObjectManager::getInstance()->get(\Magento\Framework\Event\ManagerInterface::class);
+        $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManagerInterface::class);
     }
 
     /**
@@ -152,10 +156,12 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function removeEntries()
     {
-        $this->connection->delete(
-            $this->getMainTable(),
-            ['product_id IN (?)' => $this->limitationByProducts]
-        );
+        foreach ($this->storeManager->getStores() as $store) {
+            $this->connection->delete(
+                $this->getIndexTable($store->getId()),
+                ['product_id IN (?)' => $this->limitationByProducts]
+            );
+        };
     }
 
     /**
@@ -167,7 +173,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected function getNonAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
         $select = parent::getNonAnchorCategoriesSelect($store);
-
         return $select->where('ccp.product_id IN (?) OR relation.child_id IN (?)', $this->limitationByProducts);
     }
 
@@ -206,19 +211,24 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     }
 
     /**
-     * Returns a list of category ids which are assigned to product ids in the index.
+     * Returns a list of category ids which are assigned to product ids in the index
      *
-     * @param array $productIds
      * @return \Magento\Framework\Indexer\CacheContext
      */
     private function getCategoryIdsFromIndex(array $productIds)
     {
-        $categoryIds = $this->connection->fetchCol(
-            $this->connection->select()
-                ->from($this->getMainTable(), ['category_id'])
-                ->where('product_id IN (?)', $productIds)
-                ->distinct()
-        );
+        $categoryIds = [];
+        foreach ($this->storeManager->getStores() as $store) {
+            $categoryIds = array_merge(
+                $categoryIds,
+                $this->connection->fetchCol(
+                    $this->connection->select()
+                        ->from($this->getIndexTable($store->getId()), ['category_id'])
+                        ->where('product_id IN (?)', $productIds)
+                        ->distinct()
+                )
+            );
+        };
         $parentCategories = $categoryIds;
         foreach ($categoryIds as $categoryId) {
             $parentIds = explode('/', $this->getPathFromCategoryId($categoryId));
