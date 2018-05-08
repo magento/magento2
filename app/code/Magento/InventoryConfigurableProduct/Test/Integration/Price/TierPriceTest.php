@@ -81,6 +81,8 @@ class TierPriceTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @return void
+     *
+     * @magentoDbIsolation disabled
      */
     // @codingStandardsIgnoreEnd
     public function testResolvePrice()
@@ -126,6 +128,8 @@ class TierPriceTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @return void
+     *
+     * @magentoDbIsolation disabled
      */
     // @codingStandardsIgnoreEnd
     public function testResolvePriceIfChildWithTierPriceIsOutOfStock()

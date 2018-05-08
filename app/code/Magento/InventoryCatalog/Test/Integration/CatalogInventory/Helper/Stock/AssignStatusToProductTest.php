@@ -61,6 +61,8 @@ class AssignStatusToProductTest extends TestCase
      * @dataProvider assignStatusToProductDataProvider
      * @param string $storeCode
      * @param array $productsData
+     *
+     * @magentoDbIsolation disabled
      */
     public function testAssignStatusToProductIfStatusParameterIsNotPassed(string $storeCode, array $productsData)
     {
@@ -87,6 +89,8 @@ class AssignStatusToProductTest extends TestCase
      * @dataProvider assignStatusToProductDataProvider
      * @param string $storeCode
      * @param array $productsData
+     *
+     * @magentoDbIsolation disabled
      */
     public function testAssignStatusToProductIfStatusParameterIsPassed(string $storeCode, array $productsData)
     {

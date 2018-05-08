@@ -64,6 +64,8 @@ class ApplyStockConditionToSelectTest extends TestCase
      * @return void
      *
      * @dataProvider executeDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testExecute($store, $expectedSize)
     {

@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="DeleteCustomStoreActionGroup">
@@ -17,6 +18,7 @@
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
         <see userInput="{{storeGroupName}}" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="verifyThatCorrectStoreGroupFound"/>
         <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
         <click selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="clickDeleteStoreGroupButtonOnEditStorePage"/>
         <selectOption userInput="No" selector="{{AdminStoresDeleteStoreGroupSection.createDbBackup}}" stepKey="setCreateDbBackupToNo"/>
         <click selector="{{AdminStoresDeleteStoreGroupSection.deleteStoreGroupButton}}" stepKey="clickDeleteStoreGroupButtonOnDeleteStorePage"/>

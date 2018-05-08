@@ -41,6 +41,8 @@ class GetStockItemDataTest extends TestCase
      * @param array|null $expectedData
      *
      * @dataProvider getStockItemDataDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testGetStockItemData(string $sku, int $stockId, $expectedData)
     {

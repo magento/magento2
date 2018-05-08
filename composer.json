@@ -166,6 +166,7 @@
         "magento/module-instant-purchase": "*",
         "magento/module-integration": "*",
         "magento/module-inventory": "*",
+        "magento/module-inventory-admin-ui": "*",
         "magento/module-inventory-api": "*",
         "magento/module-inventory-bundle": "*",
         "magento/module-inventory-cache": "*",

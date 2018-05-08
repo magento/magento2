@@ -11,6 +11,7 @@
     <actionGroup name="AdminCreateStoreViewActionGroup">
         <arguments>
             <argument name="StoreGroup" defaultValue="_defaultStoreGroup"/>
+            <argument name="customStore" defaultValue="customStore"/>
         </arguments>
         <amOnPage url="{{AdminSystemStoreViewPage.url}}" stepKey="navigateToNewStoreView"/>
         <waitForPageLoad stepKey="waitForPageLoad1" />

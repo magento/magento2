@@ -13,7 +13,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
-use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
+use Magento\InventoryReservationsApi\Module\GetReservationsQuantityInterface;
 use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Api\Data\InvoiceItemCreationInterfaceFactory;
 use Magento\Sales\Api\Data\OrderInterface;
