@@ -75,12 +75,7 @@
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveStock2"/>
 
             <!-- Set out of stock threshold to use system value. -->
-            <amOnPage url="{{AdminCatalogInventoryConfigPage.url}}" stepKey="amOnCatalogInventoryConfigPage1"/>
-            <conditionalClick  selector="{{ProductStockOptionsSection.ProductStockOptions}}" dependentSelector="{{ProductStockOptionsSection.CheckIfTabExpand}}" visible="true" stepKey="expandProductStockOptions1"/>
-            <checkOption selector="{{ProductStockOptionsSection.OutOfStockThresholdSystemValue}}" stepKey="enableOutOfStockThresholdSystemValue1"/>
-            <click selector="{{ProductStockOptionsSection.Save}}" stepKey="saveConfiguration1"/>
-
-            <waitForPageLoad time="10" stepKey="waitForPageLoad9"/>
+            <magentoCLI command="config:set cataloginventory/item_options/min_qty 1" stepKey="setMinQty1"/>
 
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
@@ -141,12 +136,7 @@
         <see userInput="{{SimpleMsiProduct.price}}" stepKey="assertProductPricePresent1"/>
 
         <!-- Set out of stock threshold in admin configuration. -->
-        <amOnPage url="{{AdminCatalogInventoryConfigPage.url}}" stepKey="AmOnCatalogInventoryConfigPage1"/>
-        <conditionalClick  selector="{{ProductStockOptionsSection.ProductStockOptions}}" dependentSelector="{{ProductStockOptionsSection.CheckIfTabExpand}}" visible="true" stepKey="expandProductStockOptions1"/>
-        <uncheckOption selector="{{ProductStockOptionsSection.OutOfStockThresholdSystemValue}}" stepKey="disableOutOfStockThresholdSystemValue1"/>
-        <fillField selector="{{ProductStockOptionsSection.OutOfStockThresholdValue}}" userInput="101" stepKey="setOutOfStockThreshold1"/>
-        <click selector="{{ProductStockOptionsSection.Save}}" stepKey="saveConfiguration1"/>
-        <see userInput="You saved the configuration." stepKey="seeSuccessMessage1"/>
+        <magentoCLI command="config:set cataloginventory/item_options/min_qty 101" stepKey="setMinQty2"/>
         <magentoCLI command="indexer:reindex" stepKey="runIndexerReindex1" />
 
         <!-- Go to storefront category page, assert product isn't visible. -->
