@@ -26,13 +26,14 @@ class ImagesResizeCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoDbIsolation disabled
      */
     public function testExecute()
     {
-        // Execute command
-        $return = $this->tester->execute([]);
-        self::assertEquals(0, $return);
+        $returnStatus = $this->tester->execute([]);
+        $returnData = $this->tester->getDisplay();
+        self::assertContains('Product images resized successfully', $returnData);
+        self::assertEquals(0, $returnStatus);
     }
 }
