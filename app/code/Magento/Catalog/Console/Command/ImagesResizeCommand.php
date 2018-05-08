@@ -10,6 +10,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Framework\Console\Cli;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
@@ -17,9 +18,8 @@ use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Catalog\Model\Product\Image;
 use Magento\Catalog\Model\Product\ImageFactory as ProductImageFactory;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Magento\Framework\ObjectManagerInterface;
 
-class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
+class ImagesResizeCommand extends Command
 {
     /**
      * @var State
@@ -47,32 +47,24 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     private $productImageFactory;
 
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @param State $appState
      * @param ProductImage $productImage
      * @param ViewConfig $viewConfig
      * @param ThemeCollection $themeCollection
      * @param ProductImageFactory $productImageFactory
-     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         State $appState,
         ProductImage $productImage,
         ViewConfig $viewConfig,
         ThemeCollection $themeCollection,
-        ProductImageFactory $productImageFactory,
-        ObjectManagerInterface $objectManager
+        ProductImageFactory $productImageFactory
     ) {
         $this->appState = $appState;
         $this->productImage = $productImage;
         $this->viewConfig = $viewConfig;
         $this->themeCollection = $themeCollection;
         $this->productImageFactory = $productImageFactory;
-        $this->objectManager = $objectManager;
         parent::__construct();
     }
 
@@ -104,11 +96,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
             $themes = $this->themeCollection->loadRegisteredThemes();
             $viewImages = $this->getViewImages($themes->getItems());
 
-            /** @var ProgressBar $progress */
-            $progress = $this->objectManager->create(ProgressBar::class, [
-                'output' => $output,
-                'max' => $count
-            ]);
+            $progress = new ProgressBar($output, $count);
             $progress->setFormat(
                 "%current%/%max% [%bar%] %percent:3s%% %elapsed% %memory:6s% \t| <info>%message%</info>"
             );
