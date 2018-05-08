@@ -56,7 +56,7 @@ class GetSourcesAssignedToStockOrderedByPriorityTest extends WebapiAbstract
      */
     public function testGetAssignedSourcesWithNotNumericStockId()
     {
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
             $this->markTestSkipped(
                 'Test works only for REST adapter because in SOAP one stock_id would be converted'
                 . ' into zero (zero is allowed input for service ner mind it\'s illigible value as'
@@ -75,7 +75,10 @@ class GetSourcesAssignedToStockOrderedByPriorityTest extends WebapiAbstract
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
             $errorData = $this->processRestExceptionResult($e);
-            self::assertEquals('Invalid type for value: "not_numeric". Expected Type: "int".', $errorData['message']);
+            self::assertEquals(
+                'The "not_numeric" value\'s type is invalid. The "int" type was expected. Verify and try again.',
+                $errorData['message']
+            );
             self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
         }
     }

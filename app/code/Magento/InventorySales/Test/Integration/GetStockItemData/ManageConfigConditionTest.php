@@ -43,6 +43,8 @@ class ManageConfigConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithManageStockFalseDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testExecuteWithManageStockFalse(string $sku, int $stockId, $expectedData)
     {

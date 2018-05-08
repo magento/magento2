@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Test\Integration\StockManagement;
 
-use Magento\InventoryReservations\Model\CleanupReservationsInterface;
-use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
+use Magento\InventoryReservationsApi\Module\CleanupReservationsInterface;
+use Magento\InventoryReservationsApi\Module\GetReservationsQuantityInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -33,6 +33,8 @@ class ReservationPlacingOnUseConfigManageStockSetToZeroTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     *
+     * @magentoDbIsolation disabled
      */
     public function testPlacingReservationOnUseConfigManageStockSetToZero()
     {

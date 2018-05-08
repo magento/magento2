@@ -10,13 +10,12 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\Price.
- *
- * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_advanced.php
  */
 class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_advanced.php
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture default/catalog/search/engine mysql
      * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
@@ -88,7 +87,8 @@ class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_advanced.php
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture default/catalog/search/engine mysql
      * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
