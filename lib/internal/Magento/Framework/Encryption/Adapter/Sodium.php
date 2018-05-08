@@ -43,7 +43,9 @@ class Sodium implements EncryptionAdapterInterface
             $this->key
         );
 
-        return $this->keyVersion . ':' . Encryptor::CIPHER_AEAD_CHACHA20POLY1305 . ':' . base64_encode($nonce . $cipherText);
+        return $this->keyVersion .
+            ':' . Encryptor::CIPHER_AEAD_CHACHA20POLY1305 .
+            ':' . base64_encode($nonce . $cipherText);
     }
 
     /**

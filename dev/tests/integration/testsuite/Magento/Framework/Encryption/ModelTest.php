@@ -40,7 +40,10 @@ class ModelTest extends \PHPUnit\Framework\TestCase
     public function testValidateKey()
     {
         $validKey = md5(uniqid());
-        $this->assertInstanceOf(\Magento\Framework\Encryption\Crypt::class, $this->_model->validateKey($validKey));
+        $this->assertInstanceOf(
+            \Magento\Framework\Encryption\Adapter\EncryptionAdapterInterface::class,
+            $this->_model->validateKey($validKey)
+        );
     }
 
     public function testGetValidateHash()

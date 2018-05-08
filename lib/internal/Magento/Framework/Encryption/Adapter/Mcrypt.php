@@ -26,7 +26,7 @@ class Mcrypt implements EncryptionAdapterInterface
 
     /**
      * Mcrypt constructor.
-     * @param $key
+     * @param string $key
      * @param string $cipher
      * @param string $mode
      * @param bool $initVector
@@ -137,7 +137,9 @@ class Mcrypt implements EncryptionAdapterInterface
      */
     public function encrypt($data)
     {
-        throw new \Exception((string)__('Mcrypt cannot be used for encryption. Use Sodium instead'));
+        throw new \Exception(
+            (string)new \Magento\Framework\Phrase('Mcrypt cannot be used for encryption. Use Sodium instead')
+        );
     }
 
     /**
