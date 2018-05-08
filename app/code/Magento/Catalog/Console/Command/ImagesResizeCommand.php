@@ -19,6 +19,9 @@ use Magento\Catalog\Model\Product\Image;
 use Magento\Catalog\Model\Product\ImageFactory as ProductImageFactory;
 use Symfony\Component\Console\Helper\ProgressBar;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImagesResizeCommand extends Command
 {
     /**
