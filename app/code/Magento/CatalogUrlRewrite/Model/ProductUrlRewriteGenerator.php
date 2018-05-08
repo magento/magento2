@@ -77,6 +77,10 @@ class ProductUrlRewriteGenerator
      * @var ProductScopeRewriteGenerator
      */
     private $productScopeRewriteGenerator;
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @param \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator
@@ -85,6 +89,7 @@ class ProductUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator,
@@ -92,7 +97,8 @@ class ProductUrlRewriteGenerator
         CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator,
         ObjectRegistryFactory $objectRegistryFactory,
         StoreViewService $storeViewService,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->canonicalUrlRewriteGenerator = $canonicalUrlRewriteGenerator;
         $this->currentUrlRewritesRegenerator = $currentUrlRewritesRegenerator;
@@ -100,6 +106,7 @@ class ProductUrlRewriteGenerator
         $this->objectRegistryFactory = $objectRegistryFactory;
         $this->storeViewService = $storeViewService;
         $this->storeManager = $storeManager;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -133,9 +140,17 @@ class ProductUrlRewriteGenerator
 
         $storeId = $product->getStoreId();
 
-        $productCategories = $product->getCategoryCollection()
-            ->addAttributeToSelect('url_key')
-            ->addAttributeToSelect('url_path');
+        $productUseCategoryUrl = $this->scopeConfig->isSetFlag(
+            'catalog/seo/product_use_categories',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        $productCategories = [];
+        if ($productUseCategoryUrl) {
+            $productCategories = $product->getCategoryCollection()
+                ->addAttributeToSelect('url_key')
+                ->addAttributeToSelect('url_path');
+        }
 
         $urls = $this->isGlobalScope($storeId)
             ? $this->generateForGlobalScope($productCategories, $product, $rootCategoryId)
