@@ -16,7 +16,7 @@ class GetSourceSelectionAlgorithmListTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/source-selection-algorithm-list';
-    const SERVICE_NAME = 'InventorySourceSelectionApiGetSourceSelectionAlgorithmListV1';
+    const SERVICE_NAME = 'inventorySourceSelectionApiGetSourceSelectionAlgorithmListV1';
     /**#@-*/
 
     public function testGetSourceSelectionAlgorithmList()

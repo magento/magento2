@@ -43,7 +43,7 @@ class GetListTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+        $response = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, $requestData);
 

@@ -7,6 +7,7 @@
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Constraints;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
@@ -72,6 +73,12 @@ class ForeignKey implements DbDefinitionProcessorInterface
      */
     public function fromDefinition(array $data)
     {
+        if (!isset($data['Create Table'])) {
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase('Can`t read foreign keys from current database')
+            );
+        }
+
         $createMySQL = $data['Create Table'];
         $ddl = [];
         $regExp  = '#,\s*CONSTRAINT\s*`([^`]*)`\s*FOREIGN KEY\s*?\(`([^`]*)`\)\s*'

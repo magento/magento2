@@ -13,8 +13,8 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class GetSourceItemConfigurationTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/inventory/source-item-configuration';
-    const SERVICE_NAME = 'InventoryLowQuantityNotificationApiGetSourceItemConfigurationV1';
+    const RESOURCE_PATH = '/V1/inventory/low-quantity-notification';
+    const SERVICE_NAME = 'inventoryLowQuantityNotificationApiGetSourceItemConfigurationV1';
 
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
@@ -46,6 +46,6 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
 
         self::assertEquals($sourceCode, $sourceItemConfiguration[SourceItemConfigurationInterface::SOURCE_CODE]);
         self::assertEquals($sku, $sourceItemConfiguration[SourceItemConfigurationInterface::SKU]);
-        self::assertEquals(1000, $sourceItemConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
+        self::assertEquals(5.6, $sourceItemConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
     }
 }

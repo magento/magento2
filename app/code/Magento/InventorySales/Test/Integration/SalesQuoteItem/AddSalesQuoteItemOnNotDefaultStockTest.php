@@ -16,7 +16,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventoryReservations\Model\CleanupReservationsInterface;
+use Magento\InventoryReservationsApi\Model\CleanupReservationsInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote;
@@ -92,6 +92,8 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      * @throws ValidationException
      *
      * @dataProvider productsInStockDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testAddInStockProductToQuote(
         string $sku,
@@ -143,6 +145,8 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      * @throws ValidationException
      *
      * @dataProvider notSalableProductsDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testAddOutOffStockProductToQuote(
         string $sku,
