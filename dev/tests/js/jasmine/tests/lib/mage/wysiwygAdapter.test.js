@@ -26,6 +26,12 @@ define([
 
     describe('wysiwygAdapter', function () {
         describe('encoding and decoding directives', function () {
+            /**
+             * Tests encoding and decoding directives
+             *
+             * @param decodedHtml
+             * @param encodedHtml
+             */
             function runTests(decodedHtml, encodedHtml) {
                 var encodedHtmlWithForwardSlashInImgSrc = encodedHtml.replace(/src="((?:(?!"|\\\?).)*)/, 'src="$1/');
 
