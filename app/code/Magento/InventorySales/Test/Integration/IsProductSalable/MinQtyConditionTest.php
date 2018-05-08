@@ -43,7 +43,7 @@ class MinQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithMinQtyDataProvider
-     * 
+     *
      * @magentoDbIsolation disabled
      */
     public function testExecuteWithMinQty(string $sku, int $stockId, bool $expectedResult)
