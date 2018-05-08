@@ -7,8 +7,8 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-    <!--Fill main fields in create product form-->
     <actionGroup name="FillMainProductFormInMultiSourceMode">
+        <comment userInput="Fill main fields in create product form" stepKey="basicComment" />
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
         </arguments>
