@@ -81,7 +81,7 @@ class Dependency
         $suggests = array_merge($suggests, $this->getSuggestsFromModules());
         foreach ($suggests as $name => $version) {
             if (strpos($version, self::SAMPLE_DATA_SUGGEST) === 0) {
-                $installExtensions[$name] = substr($version, strlen(self::SAMPLE_DATA_SUGGEST));
+                $installExtensions[$name] = trim(substr($version, strlen(self::SAMPLE_DATA_SUGGEST)));
             }
         }
         return $installExtensions;

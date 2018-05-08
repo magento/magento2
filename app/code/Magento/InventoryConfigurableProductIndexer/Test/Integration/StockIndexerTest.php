@@ -98,6 +98,8 @@ class StockIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProductIndexer/Test/_files/source_items_configurable_multiple.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     *
+     * @magentoDbIsolation disabled
      */
     // @codingStandardsIgnoreEnd
     public function testReindexList()
@@ -126,6 +128,8 @@ class StockIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProductIndexer/Test/_files/source_items_configurable_multiple.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     *
+     * @magentoDbIsolation disabled
      */
     // @codingStandardsIgnoreEnd
     public function testReindexListSetAllSimplesOutOfStock()
@@ -167,6 +171,8 @@ class StockIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProductIndexer/Test/_files/source_items_configurable_multiple.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     *
+     * @magentoDbIsolation disabled
      */
     // @codingStandardsIgnoreEnd
     public function testReindexListSetAllEuSimplesOutOfStock()

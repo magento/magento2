@@ -62,6 +62,8 @@ class AddStockDataToCollectionTest extends TestCase
      * @return void
      *
      * @dataProvider addStockDataToCollectionDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testAddStockDataToCollection(string $store, int $expectedSize, bool $isFilterInStock)
     {

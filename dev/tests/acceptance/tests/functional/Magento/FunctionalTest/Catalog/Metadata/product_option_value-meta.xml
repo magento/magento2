@@ -11,7 +11,7 @@
     <operation name="CreateProductOptionValue" dataType="product_option_value" type="create">
         <field key="title">string</field>
         <field key="sort_order">integer</field>
-        <field key="price">integer</field>
+        <field key="price">number</field>
         <field key="price_type">string</field>
         <field key="sku">string</field>
         <field key="option_type_id">integer</field>
@@ -19,7 +19,7 @@
     <operation name="UpdateProductOptionValue" dataType="product_option_value" type="update">
         <field key="title">string</field>
         <field key="sort_order">integer</field>
-        <field key="price">integer</field>
+        <field key="price">number</field>
         <field key="price_type">string</field>
         <field key="sku">string</field>
         <field key="option_type_id">integer</field>

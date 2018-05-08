@@ -33,6 +33,18 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     ];
 
     /**
+     * Table options mapping
+     *
+     * @var array
+     */
+    private $tableOptions = [
+        'charset' => 'DEFAULT CHARSET',
+        'collation' => 'DEFAULT COLLATE',
+        'engine' => 'ENGINE',
+        'comment' => 'COMMENT'
+    ];
+
+    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
@@ -48,20 +60,21 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     private $dryRunLogger;
 
     /**
-     * Constructor.
-     *
      * @param ResourceConnection $resourceConnection
      * @param StatementFactory $statementFactory
      * @param DryRunLogger $dryRunLogger
+     * @param array $tableOptions
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         StatementFactory $statementFactory,
-        DryRunLogger $dryRunLogger
+        DryRunLogger $dryRunLogger,
+        array $tableOptions = []
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->statementFactory = $statementFactory;
         $this->dryRunLogger = $dryRunLogger;
+        $this->tableOptions = array_replace($this->tableOptions, $tableOptions);
     }
 
     /**
@@ -70,9 +83,11 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     public function createTable($tableName, $resource, array $definition, array $options)
     {
         $sql = sprintf(
-            "(\n%s\n) ENGINE=%s %s",
+            "(\n%s\n) ENGINE=%s DEFAULT CHARSET=%s DEFAULT COLLATE=%s %s",
             implode(", \n", $definition),
             $options['engine'],
+            $options['charset'],
+            $options['collation'],
             isset($options['comment']) ? sprintf('COMMENT="%s"', $options['comment']) : ''
         );
 
@@ -157,7 +172,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
             $tableName,
             $tableName,
             self::ALTER_TYPE,
-            sprintf("%s='%s'", strtoupper($optionName), $optionValue),
+            sprintf("%s='%s'", $this->tableOptions[$optionName], $optionValue),
             $resource
         );
     }
