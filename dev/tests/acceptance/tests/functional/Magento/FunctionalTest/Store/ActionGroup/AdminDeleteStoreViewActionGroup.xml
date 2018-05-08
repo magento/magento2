@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteStoreViewActionGroup">
+        <arguments>
+            <argument name="customStore" defaultValue="customStore"/>
+        </arguments>
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
         <waitForPageLoad stepKey="waitStoreIndexPageLoad" />
         <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>

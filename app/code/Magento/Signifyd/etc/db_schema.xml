@@ -7,7 +7,7 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="signifyd_case" resource="default" engine="innodb" comment="signifyd_case">
+    <table name="signifyd_case" resource="sales" engine="innodb" comment="signifyd_case">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Entity_id"/>
         <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="true" identity="false"
@@ -36,7 +36,7 @@
             <column name="case_id"/>
         </constraint>
     </table>
-    <table name="sales_order_grid" resource="default" comment="Sales Flat Order Grid">
+    <table name="sales_order_grid" resource="sales" comment="Sales Flat Order Grid">
         <column xsi:type="varchar" name="signifyd_guarantee_status" nullable="true" length="32"/>
     </table>
 </schema>

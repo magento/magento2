@@ -28,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
  * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
  * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+ *
+ * @magentoDbIsolation disabled
  */
 class FulltextTest extends TestCase
 {

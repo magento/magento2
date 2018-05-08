@@ -20,7 +20,7 @@
     },
     "suggest": {
         "magento/module-translation": "*",
-        "magento/module-theme-sample-data": "Sample Data version:100.3.*",
+        "magento/module-theme-sample-data": "*",
         "magento/module-deploy": "*",
         "magento/module-directory": "*"
     },
