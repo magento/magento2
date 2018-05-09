@@ -233,6 +233,6 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
             ->with('from@example.com', 'name')
             ->willReturnSelf();
 
-        $this->model->setFromByStore($sender, $store);
+        $this->builder->setFromByStore($sender, $store);
     }
 }
