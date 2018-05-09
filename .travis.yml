@@ -15,11 +15,13 @@ language: php
 php:
   - 7.0
   - 7.1
+git:
+  depth: 5
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
     - INTEGRATION_SETS=3
-    - NODE_JS_VERSION=6
+    - NODE_JS_VERSION=8
     - MAGENTO_HOST_NAME="magento2.travis"
   matrix:
     - TEST_SUITE=unit
