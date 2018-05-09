@@ -303,7 +303,9 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
             (int)$this->stockConfiguration->getNotifyStockQty($storeId),
             $this->_getInventoryItemField('notify_stock_qty')
         );
-        $this->getSelect()->where($this->_getInventoryItemField('qty') . ' < ?', $notifyStockExpr);
+        $this->getSelect()
+            ->where($this->_getInventoryItemField('qty') . ' < ?', $notifyStockExpr)
+            ->orWhere($this->_getInventoryItemField('qty') . ' IS NULL');
         return $this;
     }
 }
