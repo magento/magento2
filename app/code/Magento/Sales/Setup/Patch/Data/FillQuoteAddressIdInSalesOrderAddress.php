@@ -93,27 +93,27 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
     public function fillQuoteAddressIdInSalesOrderAddress()
     {
         $addressCollection = $this->addressCollectionFactory->create();
+        $addressCollection->addFieldToFilter('quote_address_id', ['null' => true]);
+
         /** @var \Magento\Sales\Model\Order\Address $orderAddress */
         foreach ($addressCollection as $orderAddress) {
-            if (!$orderAddress->getData('quote_address_id')) {
-                $orderId = $orderAddress->getParentId();
-                $addressType = $orderAddress->getAddressType();
+            $orderId = $orderAddress->getParentId();
+            $addressType = $orderAddress->getAddressType();
 
-                /** @var \Magento\Sales\Model\Order $order */
-                $order = $this->orderFactory->create()->load($orderId);
-                $quoteId = $order->getQuoteId();
-                $quote = $this->quoteFactory->create()->load($quoteId);
+            /** @var \Magento\Sales\Model\Order $order */
+            $order = $this->orderFactory->create()->load($orderId);
+            $quoteId = $order->getQuoteId();
+            $quote = $this->quoteFactory->create()->load($quoteId);
 
-                if ($addressType == \Magento\Sales\Model\Order\Address::TYPE_SHIPPING) {
-                    $quoteAddressId = $quote->getShippingAddress()->getId();
-                    $orderAddress->setData('quote_address_id', $quoteAddressId);
-                } elseif ($addressType == \Magento\Sales\Model\Order\Address::TYPE_BILLING) {
-                    $quoteAddressId = $quote->getBillingAddress()->getId();
-                    $orderAddress->setData('quote_address_id', $quoteAddressId);
-                }
-
-                $orderAddress->save();
+            if ($addressType == \Magento\Sales\Model\Order\Address::TYPE_SHIPPING) {
+                $quoteAddressId = $quote->getShippingAddress()->getId();
+                $orderAddress->setData('quote_address_id', $quoteAddressId);
+            } elseif ($addressType == \Magento\Sales\Model\Order\Address::TYPE_BILLING) {
+                $quoteAddressId = $quote->getBillingAddress()->getId();
+                $orderAddress->setData('quote_address_id', $quoteAddressId);
             }
+
+            $orderAddress->save();
         }
     }
 
