@@ -340,7 +340,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Get post parameters
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return string
+     * @return array
      */
     public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
     {
