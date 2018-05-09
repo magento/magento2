@@ -22,19 +22,19 @@
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory1"/>
             <createData entity="FullSource1" stepKey="createSource1"/>
-            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
             <deleteData createDataKey="createPreReqCategory1" stepKey="deletePreReqCategory1"/>
         </after>
-
-        <actionGroup ref="AdminGoToStockPageAssignStockToSourceAndMainWebsite" stepKey="goToStockPageAssignStockToSource1">
-            <argument name="keyword" value="$$createStock1.stock[name]$$"/>
-            <argument name="stock_name" value="$$createStock1.stock[name]$$"/>
-            <argument name="source_name" value="$$createSource1.source[name]$$"/>
-        </actionGroup>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad"/>

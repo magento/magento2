@@ -22,7 +22,13 @@
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory1"/>
             <createData entity="FullSource1" stepKey="createSource1"/>
-            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
@@ -30,17 +36,11 @@
             <deleteData createDataKey="createPreReqCategory1" stepKey="deletePreReqCategory1"/>
         </after>
 
-        <actionGroup ref="AdminGoToStockPageAssignStockToSourceAndMainWebsite" stepKey="goToStockPageAssignStockToSource1">
-            <argument name="keyword" value="$$createStock1.stock[name]$$"/>
-            <argument name="stock_name" value="$$createStock1.stock[name]$$"/>
-            <argument name="source_name" value="$$createSource1.source[name]$$"/>
-        </actionGroup>
-
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnTheAddProductToggle1"/>
         <click selector="{{AdminProductGridActionSection.addTypeProduct('configurable')}}" stepKey="clickOnAddConfigurableProduct1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
 
         <fillField userInput="{{ConfigurableMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName1"/>
         <fillField userInput="{{ConfigurableMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice1"/>
@@ -49,12 +49,12 @@
         <fillField userInput="{{ConfigurableMsiProduct.weight}}" selector="{{AdminConfigurableProductFormSection.productWeight}}" stepKey="fillProductWeight1"/>
 
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createPreReqCategory1.name$$]"  stepKey="searchAndSelectCategory1"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
 
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton1"/>
         <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30" stepKey="waitForGridPresent1"/>
 
-        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
         <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="clickOnTheColorAttribute1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
 

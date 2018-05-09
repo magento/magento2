@@ -26,6 +26,8 @@
             <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         </before>
         <after>
+            <conditionalClick selector="{{AdminGridColumnsControls.columns}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" visible="false" stepKey="clickOnColumnsIfNotOpen1"/>
+            <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 

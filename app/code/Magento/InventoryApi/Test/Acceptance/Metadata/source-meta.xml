@@ -32,7 +32,7 @@
         </object>
     </operation>
     <operation name="DeleteSource" dataType="source" type="delete"
-               auth="adminOauth" url="/V1/inventory/source/{id}" method="DELETE">
+               auth="adminOauth" url="/V1/inventory/source/{source_code}" method="DELETE">
         <contentType>application/json</contentType>
     </operation>
 </operations>

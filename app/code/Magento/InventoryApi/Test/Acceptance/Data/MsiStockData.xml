@@ -20,4 +20,14 @@
         <data key="name" unique="suffix">Basic MSI Stock 2 </data>
         <data key="website">Main Website</data>
     </entity>
+    <entity name="BasicMsiStockWithMainWebsite1" type="stock">
+        <data key="name" unique="suffix">Basic MSI Stock 1 </data>
+        <data key="website">Main Website</data>
+        <requiredEntity type="stock_extension_attribute">MsiStockWebsite1</requiredEntity>
+    </entity>
+    <entity name="BasicMsiStockWithMainWebsite2" type="stock">
+        <data key="name" unique="suffix">Basic MSI Stock 2 </data>
+        <data key="website">Main Website</data>
+        <requiredEntity type="stock_extension_attribute">MsiStockWebsite1</requiredEntity>
+    </entity>
 </entities>

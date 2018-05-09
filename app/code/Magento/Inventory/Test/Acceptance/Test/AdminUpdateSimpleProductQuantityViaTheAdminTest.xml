@@ -21,10 +21,17 @@
         
         <before>
             <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
             <createData entity="SimpleMsiProduct" stepKey="simpleProduct1">
                 <requiredEntity createDataKey="simpleCategory1"/>
             </createData>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
