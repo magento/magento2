@@ -31,8 +31,8 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $objectManagerMock;
 
-    /** @var \Magento\Cms\Api\PageRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject $pageMock */
-    protected $pageMock;
+    /** @var \Magento\Cms\Api\PageRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject $pageMockRepository */
+    protected $pageMockRepository;
 
     /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $eventManagerMock;
@@ -59,9 +59,9 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ['getParam']
         );
 
-        $this->pageMock = $this->getMockBuilder(\Magento\Cms\Api\PageRepositoryInterface::class)
+        $this->pageMockRepository = $this->getMockBuilder(\Magento\Cms\Api\PageRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['delete', 'getTitle', 'deleteById', 'getList', 'getById', 'save'])
+            ->setMethods(['delete', 'getTitle'])
             ->getMock();
 
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
@@ -112,12 +112,12 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Cms\Api\PageRepositoryInterface::class)
-            ->willReturn($this->pageMock);
+            ->willReturn($this->pageMockRepository);
 
-        $this->pageMock->expects($this->once())
+        $this->pageMockRepository->expects($this->once())
             ->method('getTitle')
             ->willReturn($this->title);
-        $this->pageMock->expects($this->once())
+        $this->pageMockRepository->expects($this->once())
             ->method('delete');
 
         $this->messageManagerMock->expects($this->once())
@@ -172,12 +172,12 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Cms\Api\PageRepositoryInterface::class)
-            ->willReturn($this->pageMock);
+            ->willReturn($this->pageMockRepository);
 
-        $this->pageMock->expects($this->once())
+        $this->pageMockRepository->expects($this->once())
             ->method('getTitle')
             ->willReturn($this->title);
-        $this->pageMock->expects($this->once())
+        $this->pageMockRepository->expects($this->once())
             ->method('delete')
             ->willThrowException(new \Exception(__($errorMsg)));
 
