@@ -320,7 +320,6 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
         $senderValues = ['name' => $sender, 'email' => $sender];
-
         $storeIds = [1, 2];
 
         $this->senderResolverMock
