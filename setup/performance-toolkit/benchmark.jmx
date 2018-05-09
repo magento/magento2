@@ -40720,7 +40720,7 @@ if (totalCount == null) {
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"{\n  categories(id: 4) {\n    category {\n      id\n      level\n      description\n      path\n      path_in_store\n      url_key\n      url_path\n      children {\n        id\n        description\n        default_sort_by\n        children {\n          id\n          description\n          level\n          children {\n            level\n            id\n            children {\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"{\n  category(id: 1) {\n      name\n      id\n      level\n      description\n      path\n      path_in_store\n      url_key\n      url_path\n      children {\n        id\n        description\n        default_sort_by\n        children {\n          id\n          description\n          level\n          children {\n            level\n            id\n            children {\n              id\n            }\n          }\n        }\n      }\n  }\n}","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -40743,12 +40743,32 @@ if (totalCount == null) {
     </HTTPSamplerProxy>
     <hashTree>
       <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
-        <stringProp name="VAR">graphql_category_query_category_tree</stringProp>
-        <stringProp name="JSONPATH">$.data.categories.category_tree</stringProp>
+        <stringProp name="VAR">graphql_category_query_name</stringProp>
+        <stringProp name="JSONPATH">$.data.category.name</stringProp>
         <stringProp name="DEFAULT"/>
         <stringProp name="VARIABLE"/>
         <stringProp name="SUBJECT">BODY</stringProp>
       </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="BeanShell Assertion" enabled="true">
+        <stringProp name="BeanShellAssertion.query">String name = vars.get("graphql_category_query_name");
+if (name == null) {
+	Failure = true;
+	FailureMessage = "Not Expected \"children\" to be null";
+} else {
+	if (!name.equals("Root Catalog")) {
+		Failure = true;
+		FailureMessage = "Expected \"name\" to equal \"Root Catalog\", Actual: " + name;
+	} else {
+		Failure = false;
+	}
+}
+</stringProp>
+        <stringProp name="BeanShellAssertion.filename"/>
+        <stringProp name="BeanShellAssertion.parameters"/>
+        <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+      </BeanShellAssertion>
+      <hashTree/>
     </hashTree>
   </hashTree>
   </hashTree>
