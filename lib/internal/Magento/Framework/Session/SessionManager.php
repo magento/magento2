@@ -5,6 +5,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Session;
 
 use Magento\Framework\Session\Config\ConfigInterface;
@@ -512,7 +515,7 @@ class SessionManager implements SessionManagerInterface
         }
 
         if ($this->isSessionExists()) {
-            //regenerate the session
+            // Regenerate the session
             session_regenerate_id();
             $newSessionId = session_id();
 
@@ -523,8 +526,7 @@ class SessionManager implements SessionManagerInterface
 
             // Write and close current session;
             session_commit();
-            
-            //called after destroy()
+            // Called after destroy()
             $oldSession = $_SESSION;
             // Start session with new session ID
             session_id($newSessionId);
