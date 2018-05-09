@@ -227,8 +227,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
             'title' => $sample->getTitle(),
         ];
 
-        if (
-            $sample->getSampleType() === 'file'
+        if ($sample->getSampleType() === 'file'
             && $sample->getSampleFile() === null
             && $sample->getSampleFileContent() !== null
         ) {
