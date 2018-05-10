@@ -70,6 +70,11 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
     public function getValue()
     {
         $basePrice = parent::getValue();
+        
+        if ($basePrice === false) {
+            return $basePrice;
+        }
+
         return $this->item
             ? $basePrice + $this->configuredOptions->getItemOptionsValue($basePrice, $this->item)
             : $basePrice;
