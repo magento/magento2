@@ -5,9 +5,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Session;
 
 use Magento\Framework\Session\Config\ConfigInterface;
@@ -18,6 +15,11 @@ use Magento\Framework\Session\Config\ConfigInterface;
  */
 class SessionManager implements SessionManagerInterface
 {
+   /**
+    * Session destroyed threshold in seconds
+    */
+    const SESSION_DESTROYED_THRESHOLD = 300;
+    
     /**
      * Default options when a call destroy()
      *
@@ -196,7 +198,7 @@ class SessionManager implements SessionManagerInterface
             $this->setSessionId($sid);
             session_start();
             if (isset($_SESSION['destroyed'])) {
-                if ($_SESSION['destroyed'] < time() - 300) {
+                if ($_SESSION['destroyed'] < time() - self::SESSION_DESTROYED_THRESHOLD) {
                     $this->destroy(['clear_storage' => true]);
                 }
             }
@@ -514,25 +516,21 @@ class SessionManager implements SessionManagerInterface
             return $this;
         }
 
+        // @codingStandardsIgnoreStart
         if ($this->isSessionExists()) {
             // Regenerate the session
             session_regenerate_id();
             $newSessionId = session_id();
-
             $_SESSION['new_session_id'] = $newSessionId;
-
             // Set destroy timestamp
             $_SESSION['destroyed'] = time();
-
             // Write and close current session;
             session_commit();
             // Called after destroy()
             $oldSession = $_SESSION;
             // Start session with new session ID
             session_id($newSessionId);
-            ini_set('session.use_strict_mode', 0);
             session_start();
-            ini_set('session.use_strict_mode', 1);
             $_SESSION = $oldSession;
             // New session does not need them
             unset($_SESSION['destroyed']);
@@ -540,6 +538,7 @@ class SessionManager implements SessionManagerInterface
         } else {
             session_start();
         }
+        // @codingStandardsIgnoreEnd
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
 
         if ($this->sessionConfig->getUseCookies()) {
