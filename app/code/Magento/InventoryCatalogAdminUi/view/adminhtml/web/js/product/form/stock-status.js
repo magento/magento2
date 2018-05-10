@@ -5,13 +5,13 @@
 
 define([
     'Magento_Ui/js/form/element/select'
-], function (Abstract) {
+], function (Select) {
     'use strict';
 
-    return Abstract.extend({
+    return Select.extend({
         defaults: {
             links: {
-                value: null
+                value: false
             }
         },
 
