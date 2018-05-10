@@ -80,7 +80,6 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-
         $this->templateContainerMock->expects($this->once())
             ->method('getTemplateId')
             ->will($this->returnValue($templateId));
