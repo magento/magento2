@@ -37,7 +37,7 @@ class ImageExtractor implements TypeDataExtractorInterface
                 } elseif ($attributeTagName === 'width' || $attributeTagName === 'height') {
                     $nodeValue = intval($attribute->nodeValue);
                 } else {
-                    $nodeValue = $attribute->nodeValue;
+                    $nodeValue = !in_array($attribute->nodeValue, ['false', '0']);
                 }
                 $result[$mediaParentTag][$moduleNameImage][Image::MEDIA_TYPE_CONFIG_NODE][$imageId][$attribute->tagName]
                     = $nodeValue;

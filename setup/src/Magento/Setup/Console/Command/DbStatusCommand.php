@@ -5,10 +5,13 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Composer\Package\Version\VersionParser;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
-use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\Setup\Declaration\Schema\UpToDateDeclarativeSchema;
+use Magento\Framework\Setup\OldDbValidator;
+use Magento\Framework\Setup\Patch\UpToDateData;
+use Magento\Framework\Setup\Patch\UpToDateSchema;
+use Magento\Framework\Setup\UpToDateValidatorInterface;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,6 +41,11 @@ class DbStatusCommand extends AbstractSetupCommand
     private $deploymentConfig;
 
     /**
+     * @var UpToDateValidatorInterface[]
+     */
+    private $upToDateValidators = [];
+
+    /**
      * Inject dependencies
      *
      * @param ObjectManagerProvider $objectManagerProvider
@@ -47,6 +55,16 @@ class DbStatusCommand extends AbstractSetupCommand
     {
         $this->objectManagerProvider = $objectManagerProvider;
         $this->deploymentConfig = $deploymentConfig;
+        /**
+         * As DbStatucCommand is in setup and all validators are part of the framework, we can`t configure
+         * this command with dependency injection and we need to inject each validator manually
+         */
+        $this->upToDateValidators = [
+            $this->objectManagerProvider->get()->get(UpToDateDeclarativeSchema::class),
+            $this->objectManagerProvider->get()->get(UpToDateSchema::class),
+            $this->objectManagerProvider->get()->get(UpToDateData::class),
+            $this->objectManagerProvider->get()->get(OldDbValidator::class),
+        ];
         parent::__construct();
     }
 
@@ -71,43 +89,19 @@ class DbStatusCommand extends AbstractSetupCommand
             );
             return Cli::RETURN_FAILURE;
         }
-        /** @var DbVersionInfo $dbVersionInfo */
-        $dbVersionInfo = $this->objectManagerProvider->get()
-            ->get(\Magento\Framework\Module\DbVersionInfo::class);
-        $outdated = $dbVersionInfo->getDbVersionErrors();
-        if (!empty($outdated)) {
-            $output->writeln("<info>The module code base doesn't match the DB schema and data.</info>");
-            $versionParser = new VersionParser();
-            $codebaseUpdateNeeded = false;
-            foreach ($outdated as $row) {
-                if (!$codebaseUpdateNeeded && $row[DbVersionInfo::KEY_CURRENT] !== 'none') {
-                    // check if module code base update is needed
-                    $currentVersion = $versionParser->parseConstraints($row[DbVersionInfo::KEY_CURRENT]);
-                    $requiredVersion = $versionParser->parseConstraints('>' . $row[DbVersionInfo::KEY_REQUIRED]);
-                    if ($requiredVersion->matches($currentVersion)) {
-                        $codebaseUpdateNeeded = true;
-                    };
-                }
-                $output->writeln(sprintf(
-                    "<info>%20s %10s: %11s  ->  %-11s</info>",
-                    $row[DbVersionInfo::KEY_MODULE],
-                    $row[DbVersionInfo::KEY_TYPE],
-                    $row[DbVersionInfo::KEY_CURRENT],
-                    $row[DbVersionInfo::KEY_REQUIRED]
-                ));
-            }
-            if ($codebaseUpdateNeeded) {
-                $output->writeln(
-                    '<info>Some modules use code versions newer or older than the database. ' .
-                    "First update the module code, then run 'setup:upgrade'.</info>"
-                );
-                return Cli::RETURN_FAILURE;
-            }
 
-            $output->writeln(
-                "<info>Run 'setup:upgrade' to update your DB schema and data.</info>"
-            );
-            return static::EXIT_CODE_UPGRADE_REQUIRED;
+        $outDated = false;
+
+        foreach ($this->upToDateValidators as $validator) {
+            if (!$validator->isUpToDate()) {
+                $output->writeln(sprintf('<info>%s</info>', $validator->getNotUpToDateMessage()));
+                $outDated = true;
+            }
+        }
+
+        if ($outDated) {
+            $output->writeln('<info>Run \'setup:upgrade\' to update your DB schema and data.</info>');
+            return self::EXIT_CODE_UPGRADE_REQUIRED;
         }
 
         $output->writeln(
