@@ -118,7 +118,9 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
                 $legacyStockItem->setIsInStock($isInStock);
                 $legacyStockItem->setQty((float)$sourceItem->getQuantity());
 
-                $isInStock = (int)$this->stockStateProvider->verifyStock($legacyStockItem);
+                if (false === $this->stockStateProvider->verifyStock($legacyStockItem)) {
+                    $isInStock = 0;
+                }
             }
 
             $this->setDataToLegacyStockItem->execute(
