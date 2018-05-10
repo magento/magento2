@@ -18,7 +18,9 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
+use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Set Qty and status for legacy CatalogInventory Stock Status and Stock Item DB tables,
@@ -62,6 +64,16 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
     private $indexerProcessor;
 
     /**
+     * @var IsSourceItemsAllowedForProductTypeInterface
+     */
+    private $isSourceItemsAllowedForProductType;
+
+    /**
+     * @var GetProductTypesBySkusInterface
+     */
+    private $getProductTypeBySku;
+
+    /**
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
      * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory
@@ -69,6 +81,8 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      * @param StockStateProviderInterface $stockStateProvider
      * @param Processor $indexerProcessor
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param GetProductTypesBySkusInterface $getProductTypeBySku
      */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
@@ -77,7 +91,9 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
         StockItemRepositoryInterface $legacyStockItemRepository,
         GetProductIdsBySkusInterface $getProductIdsBySkus,
         StockStateProviderInterface $stockStateProvider,
-        Processor $indexerProcessor
+        Processor $indexerProcessor,
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        GetProductTypesBySkusInterface $getProductTypeBySku
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->setDataToLegacyStockItem = $setDataToLegacyStockItem;
@@ -86,6 +102,8 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
         $this->getProductIdsBySkus = $getProductIdsBySkus;
         $this->stockStateProvider = $stockStateProvider;
         $this->indexerProcessor = $indexerProcessor;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->getProductTypeBySku = $getProductTypeBySku;
     }
 
     /**
@@ -102,6 +120,7 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
             if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
                 continue;
             }
+
             $sku = $sourceItem->getSku();
 
             try {
@@ -111,9 +130,18 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
                 continue;
             }
 
-            $isInStock = (int)$sourceItem->getStatus();
+            $typeId = $this->getProductTypeBySku->execute([$sku])[$sku];
+            if (false === $this->isSourceItemsAllowedForProductType->execute($typeId)) {
+                continue;
+            }
 
             $legacyStockItem = $this->getLegacyStockItem($productId);
+            if (null === $legacyStockItem) {
+                continue;
+            }
+
+            $isInStock = (int)$sourceItem->getStatus();
+
             if ($legacyStockItem->getManageStock()) {
                 $legacyStockItem->setIsInStock($isInStock);
                 $legacyStockItem->setQty((float)$sourceItem->getQuantity());
@@ -138,9 +166,9 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
 
     /**
      * @param int $productId
-     * @return StockItemInterface
+     * @return null|StockItemInterface
      */
-    private function getLegacyStockItem(int $productId): StockItemInterface
+    private function getLegacyStockItem(int $productId): ?StockItemInterface
     {
         $searchCriteria = $this->legacyStockItemCriteriaFactory->create();
 
@@ -149,7 +177,7 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
 
         $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
         if ($stockItemCollection->getTotalCount() === 0) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
+            return null;
         }
 
         $stockItems = $stockItemCollection->getItems();
