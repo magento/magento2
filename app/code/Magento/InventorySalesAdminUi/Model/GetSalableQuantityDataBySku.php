@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesAdminUi\Model;
 
-use Magento\Inventory\Model\ResourceModel\GetAssignedStockIdsBySku;
+use Magento\InventorySalesAdminUi\Model\ResourceModel\GetAssignedStockIdsBySku;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 

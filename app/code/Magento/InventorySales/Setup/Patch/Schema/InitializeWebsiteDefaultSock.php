@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Setup\Patch\Schema;
 
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
-use Magento\InventoryCatalog\Setup\Patch\Schema\InitializeDefaultStock;
 use Magento\InventorySales\Setup\Operation\AssignWebsiteToDefaultStock;
 use Magento\Store\Setup\Patch\Schema\InitializeStoresAndWebsites;
 
@@ -40,8 +39,7 @@ class InitializeWebsiteDefaultSock implements SchemaPatchInterface
     public static function getDependencies()
     {
         return [
-            InitializeStoresAndWebsites::class,
-            InitializeDefaultStock::class,
+            InitializeStoresAndWebsites::class
         ];
     }
 

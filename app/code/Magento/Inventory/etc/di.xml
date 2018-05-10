@@ -86,4 +86,10 @@
             <argument name="stockSourceLinkValidator" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain</argument>
         </arguments>
     </type>
+    <type name="Magento\InventorySalesAdminUi\Model\ResourceModel\GetAssignedStockIdsBySku">
+        <arguments>
+            <argument name="sourceItemTableName" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
+            <argument name="stockSourceLinkTableName" xsi:type="const">Magento\Inventory\Model\ResourceModel\StockSourceLink::TABLE_NAME_STOCK_SOURCE_LINK</argument>
+        </arguments>
+    </type>
 </config>

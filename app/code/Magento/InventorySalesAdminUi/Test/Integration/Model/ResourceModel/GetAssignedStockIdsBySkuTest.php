@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration\Model\ResourceModel;
+namespace Magento\InventorySalesAdminUi\Test\Integration\Model\ResourceModel;
 
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Inventory\Model\ResourceModel\GetAssignedStockIdsBySku;
+use Magento\InventorySalesAdminUi\Model\ResourceModel\GetAssignedStockIdsBySku;
 
 class GetAssignedStockIdsBySkuTest extends TestCase
 {
