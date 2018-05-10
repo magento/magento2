@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\ResourceModel;
+namespace Magento\InventorySalesAdminUi\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -22,12 +22,28 @@ class GetAssignedStockIdsBySku
     private $resource;
 
     /**
+     * @var string
+     */
+    private $sourceItemTableName;
+
+    /**
+     * @var string
+     */
+    private $stockSourceLinkTableName;
+
+    /**
      * @param ResourceConnection $resource
+     * @param string $sourceItemTableName
+     * @param string $stockSourceLinkTableName
      */
     public function __construct(
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        string $sourceItemTableName,
+        string $stockSourceLinkTableName
     ) {
         $this->resource = $resource;
+        $this->sourceItemTableName = $sourceItemTableName;
+        $this->stockSourceLinkTableName = $stockSourceLinkTableName;
     }
 
     /**
@@ -37,8 +53,8 @@ class GetAssignedStockIdsBySku
     public function execute(string $sku): array
     {
         $connection = $this->resource->getConnection();
-        $sourceItemTable = $this->resource->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
-        $stockSourceLinkTable = $this->resource->getTableName(StockSourceLink::TABLE_NAME_STOCK_SOURCE_LINK);
+        $sourceItemTable = $this->resource->getTableName($this->sourceItemTableName);
+        $stockSourceLinkTable = $this->resource->getTableName($this->stockSourceLinkTableName);
 
         $select = $connection->select()
             ->from(
