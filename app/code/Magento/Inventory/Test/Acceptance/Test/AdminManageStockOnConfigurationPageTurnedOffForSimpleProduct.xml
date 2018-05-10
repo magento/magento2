@@ -71,11 +71,8 @@
             <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
 
-            <comment userInput="Set 'Manage Stock' to use system value by default." stepKey="revertManageStockConfigurationComment"/>
-            <amOnPage url="{{AdminCatalogInventoryConfigPage.url}}" stepKey="navigateToCatalogInventoryConfigurationPage"/>
-            <conditionalClick  selector="{{ProductStockOptionsSection.ProductStockOptions}}" dependentSelector="{{ProductStockOptionsSection.CheckIfTabExpand}}" visible="true" stepKey="expandProductStockOptionsTab"/>
-            <checkOption selector="{{ProductStockOptionsSection.ManageStockSystemValue}}" stepKey="enableManageStockSystemValue"/>
-            <click selector="{{ProductStockOptionsSection.Save}}" stepKey="saveManageStockConfiguration"/>
+            <comment userInput="Enable 'Manage Stock' configuration." stepKey="revertManageStockConfigurationComment"/>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableMangeStock"/>
 
             <comment userInput="Perform reindex and cache flush after save stock related config." stepKey="reindexCacheFlushComment"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
@@ -136,18 +133,14 @@
         <dontSee userInput="{{SimpleMsiProduct.name}}" stepKey="checkProductNameIsAbsentOnCategoryPage"/>
         <dontSee userInput="{{SimpleMsiProduct.price}}" stepKey="checkProductPriceIsAbsentOnCategoryPage"/>
 
-        <comment userInput="Change config value for 'Manage Stock'." stepKey="disableMangeStockComment"/>
-        <amOnPage url="{{AdminCatalogInventoryConfigPage.url}}" stepKey="navigateToAdminSystemConfigPage"/>
-        <conditionalClick  selector="{{ProductStockOptionsSection.ProductStockOptions}}" dependentSelector="{{ProductStockOptionsSection.CheckIfTabExpand}}" visible="true" stepKey="expandProductStockOptions"/>
-        <uncheckOption selector="{{ProductStockOptionsSection.ManageStockSystemValue}}" stepKey="disableManageStockSystemValue"/>
-        <selectOption selector="{{ProductStockOptionsSection.ManageStockValue}}" userInput="No" stepKey="setManageStockToNo"/>
-        <click selector="{{ProductStockOptionsSection.Save}}" stepKey="saveStockConfiguration"/>
-        <see userInput="You saved the configuration." stepKey="checkMessageAfterStockConfigurationSaved"/>
+        <comment userInput="Disable 'Manage Stock' configuration." stepKey="disableMangeStockComment"/>
+        <magentoCLI command="config:set cataloginventory/item_options/manage_stock 0" stepKey="disableManageStock"/>
+
         <comment userInput="Perform reindex and cache flush after save stock related config." stepKey="reindexAndCacheFlushAfterStockConfigurationSaved"/>
         <magentoCLI command="indexer:reindex" stepKey="performReindexAfterConfigurationIsSaved"/>
         <magentoCLI command="cache:flush" stepKey="cleanCacheAfterConfigurationIsSaved"/>
 
-        <comment userInput="Check, product presents on category page after stock configuration was changed." stepKey="checkProductIsBackToCategoryPageComment"/>
+        <comment userInput="Check, product presents on category page after 'Manage Stock' has been disabled." stepKey="checkProductIsBackToCategoryPageComment"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToProductCategoryPage"/>
         <waitForPageLoad time="30" stepKey="waitForCategoryViewPageLoadToCheckProductIsBack"/>
         <see userInput="{{SimpleMsiProduct.name}}" stepKey="checkProductNameIsBackToCategoryPage"/>
