@@ -148,6 +148,10 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
         $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, Stock::DEFAULT_STOCK_ID);
 
         $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
+        if ($stockItemCollection->getTotalCount() === 0) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
+        }
+
         $stockItems = $stockItemCollection->getItems();
         $stockItem = reset($stockItems);
         return $stockItem;
