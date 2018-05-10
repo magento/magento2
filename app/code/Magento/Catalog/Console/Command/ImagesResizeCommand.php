@@ -5,8 +5,12 @@
  */
 namespace Magento\Catalog\Console\Command;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Image\CacheFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Framework\Console\Cli;
@@ -27,7 +31,25 @@ class ImagesResizeCommand extends Command
     /**
      * @var State
      */
-    private $appState;
+    protected $appState;
+
+    /**
+     * @deprecated
+     * @var CollectionFactory
+     */
+    protected $productCollectionFactory;
+
+    /**
+     * @deprecated
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
+     * @deprecated
+     * @var CacheFactory
+     */
+    protected $imageCacheFactory;
 
     /**
      * @var ProductImage
@@ -51,6 +73,9 @@ class ImagesResizeCommand extends Command
 
     /**
      * @param State $appState
+     * @param CollectionFactory $productCollectionFactory
+     * @param ProductRepositoryInterface $productRepository
+     * @param CacheFactory $imageCacheFactory
      * @param ProductImage $productImage
      * @param ViewConfig $viewConfig
      * @param ThemeCollection $themeCollection
@@ -58,16 +83,23 @@ class ImagesResizeCommand extends Command
      */
     public function __construct(
         State $appState,
-        ProductImage $productImage,
-        ViewConfig $viewConfig,
-        ThemeCollection $themeCollection,
-        ProductImageFactory $productImageFactory
+        CollectionFactory $productCollectionFactory,
+        ProductRepositoryInterface $productRepository,
+        CacheFactory $imageCacheFactory,
+        ProductImage $productImage = null,
+        ViewConfig $viewConfig = null,
+        ThemeCollection $themeCollection = null,
+        ProductImageFactory $productImageFactory = null
     ) {
         $this->appState = $appState;
-        $this->productImage = $productImage;
-        $this->viewConfig = $viewConfig;
-        $this->themeCollection = $themeCollection;
-        $this->productImageFactory = $productImageFactory;
+        $this->productCollectionFactory = $productCollectionFactory;
+        $this->productRepository = $productRepository;
+        $this->imageCacheFactory = $imageCacheFactory;
+        $this->productImage = $productImage ?: ObjectManager::getInstance()->get(ProductImage::class);
+        $this->viewConfig = $viewConfig ?: ObjectManager::getInstance()->get(ViewConfig::class);
+        $this->themeCollection = $themeCollection ?: ObjectManager::getInstance()->get(ThemeCollection::class);
+        $this->productImageFactory = $productImageFactory
+            ?: ObjectManager::getInstance()->get(ProductImageFactory::class);
         parent::__construct();
     }
 
