@@ -47,7 +47,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
     /**
      * @var MathDivision
      */
-    protected $mathDivision;
+    private $mathDivision;
 
     /**
      * @var ProductSalabilityErrorInterfaceFactory

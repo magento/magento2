@@ -17,12 +17,12 @@ class IsSingleSourceModeTest extends TestCase
     /**
      * @var IsSingleSourceModeInterface
      */
-    protected $isSingleSourceMode;
+    private $isSingleSourceMode;
 
     /**
      * @var SourceRepositoryInterface
      */
-    protected $sourceRepository;
+    private $sourceRepository;
 
     /**
      * @inheritdoc
