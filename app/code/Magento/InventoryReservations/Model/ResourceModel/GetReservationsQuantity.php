@@ -9,7 +9,7 @@ namespace Magento\InventoryReservations\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
-use Magento\InventoryReservationsApi\Module\GetReservationsQuantityInterface;
+use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
 
 /**
  * @inheritdoc
