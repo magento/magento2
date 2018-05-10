@@ -7,6 +7,8 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Item;
 
 /**
  * Quote item resource collection
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
@@ -38,7 +40,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @var \Magento\Quote\Model\Quote\Config
      */
     protected $_quoteConfig;
-
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|null
