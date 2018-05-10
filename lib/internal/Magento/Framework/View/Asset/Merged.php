@@ -50,7 +50,6 @@ class Merged implements \Iterator
      */
     protected $isInitialized = false;
 
-
     /**
      * Merged constructor.
      *
