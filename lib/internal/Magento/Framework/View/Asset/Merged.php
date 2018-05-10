@@ -50,10 +50,14 @@ class Merged implements \Iterator
      */
     protected $isInitialized = false;
 
+
     /**
+     * Merged constructor.
+     *
      * @param \Psr\Log\LoggerInterface $logger
      * @param MergeStrategyInterface $mergeStrategy
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage
      * @param MergeableInterface[] $assets
      * @throws \InvalidArgumentException
      */
