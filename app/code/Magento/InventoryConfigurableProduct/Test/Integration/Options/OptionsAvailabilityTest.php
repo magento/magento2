@@ -68,6 +68,8 @@ class OptionsAvailabilityTest extends TestCase
      * @param string $storeCode
      * @param int $expected
      * @return void
+     *
+     * @magentoDbIsolation disabled
      */
     public function testGetSalableOptions(string $storeCode, int $expected)
     {

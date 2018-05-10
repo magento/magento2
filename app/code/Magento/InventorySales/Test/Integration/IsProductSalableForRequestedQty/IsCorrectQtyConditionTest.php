@@ -14,6 +14,9 @@ use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class IsCorrectQtyConditionTest extends TestCase
 {
     /**
@@ -76,6 +79,8 @@ class IsCorrectQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithMissingConfigurationDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testExecuteWithMissingConfiguration(
         string $sku,
@@ -114,6 +119,8 @@ class IsCorrectQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithUseConfigMinSaleQtyDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testExecuteWithUseConfigMinSaleQty(
         string $sku,
@@ -169,6 +176,8 @@ class IsCorrectQtyConditionTest extends TestCase
      *
      * @return void
      * @dataProvider executeWithMinSaleQtyDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testExecuteWithMinSaleQty(
         string $sku,
@@ -226,6 +235,8 @@ class IsCorrectQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithUseConfigMaxSaleQtyDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testExecuteWithUseConfigMaxSaleQty(
         string $sku,
@@ -284,6 +295,8 @@ class IsCorrectQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithMaxSaleQtyDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testExecuteWithMaxSaleQty(
         string $sku,
@@ -333,6 +346,70 @@ class IsCorrectQtyConditionTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @magentoConfigFixture current_store cataloginventory/item_options/enable_qty_increments 1
+     * @magentoConfigFixture current_store cataloginventory/item_options/qty_increments 3
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param int $requestedQty
+     * @param bool $expectedResult
+     *
+     * @return void
+     *
+     * @dataProvider executeWithUseConfigQtyIncrementsDataProvider
+     *
+     * @magentoDbIsolation disabled
+     */
+    public function testExecuteWithUseConfigQtyIncrements(
+        string $sku,
+        int $stockId,
+        int $requestedQty,
+        bool $expectedResult
+    ): void {
+        $result = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $requestedQty);
+        $this->assertEquals($expectedResult, $result->isSalable());
+    }
+
+    /**
+     * @return array
+     */
+    public function executeWithUseConfigQtyIncrementsDataProvider(): array
+    {
+        return [
+            ['SKU-1', 10, 1, false],
+            ['SKU-1', 10, 3, true],
+            ['SKU-1', 10, 6, true],
+            ['SKU-1', 10, 9, false],
+            ['SKU-2', 10, 1, false],
+            ['SKU-2', 10, 3, false],
+            ['SKU-3', 10, 1, false],
+            ['SKU-3', 10, 3, false],
+            ['SKU-1', 20, 1, false],
+            ['SKU-1', 20, 3, false],
+            ['SKU-2', 20, 1, false],
+            ['SKU-2', 20, 3, true],
+            ['SKU-2', 20, 6, false],
+            ['SKU-3', 20, 1, false],
+            ['SKU-3', 20, 3, false],
+            ['SKU-1', 30, 1, false],
+            ['SKU-1', 30, 3, true],
+            ['SKU-1', 30, 6, true],
+            ['SKU-1', 30, 9, false],
+            ['SKU-2', 30, 1, false],
+            ['SKU-2', 30, 3, true],
+            ['SKU-2', 30, 6, false],
+            ['SKU-3', 30, 1, false],
+            ['SKU-3', 30, 3, false],
+        ];
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @param string $sku
      * @param int $stockId
@@ -342,6 +419,8 @@ class IsCorrectQtyConditionTest extends TestCase
      * @return void
      *
      * @dataProvider executeWithQtyIncrementsDataProvider
+     *
+     * @magentoDbIsolation disabled
      */
     public function testExecuteWithQtyIncrements(
         string $sku,

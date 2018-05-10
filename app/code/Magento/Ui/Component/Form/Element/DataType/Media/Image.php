@@ -72,7 +72,7 @@ class Image extends Media
                 'config' => [
                     'maxFileSize' => $maxFileSize,
                     'mediaGallery' => [
-                        'openDialogUrl' => $this->getContext()->getUrl('cms/wysiwyg_images/index'),
+                        'openDialogUrl' => $this->getContext()->getUrl('cms/wysiwyg_images/index', ['_secure' => true]),
                         'openDialogTitle' => $this->getConfiguration()['openDialogTitle'] ?? __('Insert Images...'),
                         'initialOpenSubpath' => $this->getConfiguration()['initialMediaGalleryOpenSubpath'],
                         'storeId' => $this->storeManager->getStore()->getId(),
