@@ -41,6 +41,11 @@ class Merged implements \Iterator
     protected $contentType;
 
     /**
+     * @var StorageInterface
+     */
+    private $versionStorage;
+
+    /**
      * @var bool
      */
     protected $isInitialized = false;
@@ -56,11 +61,13 @@ class Merged implements \Iterator
         \Psr\Log\LoggerInterface $logger,
         MergeStrategyInterface $mergeStrategy,
         \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage,
         array $assets
     ) {
         $this->logger = $logger;
         $this->mergeStrategy = $mergeStrategy;
         $this->assetRepo = $assetRepo;
+        $this->versionStorage = $versionStorage;
 
         if (!$assets) {
             throw new \InvalidArgumentException('At least one asset has to be passed for merging.');
@@ -116,6 +123,12 @@ class Merged implements \Iterator
             $paths[] = $asset->getPath();
         }
         $paths = array_unique($paths);
+
+        $version=$this->versionStorage->load();
+        if ($version) {
+            $paths[]=$version;
+        }
+
         $filePath = md5(implode('|', $paths)) . '.' . $this->contentType;
         return $this->assetRepo->createArbitrary($filePath, self::getRelativeDir());
     }
