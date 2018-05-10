@@ -11,7 +11,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\Math\Division as MathDivision;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
-use Magento\InventoryReservationsApi\Module\GetReservationsQuantityInterface;
+use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
@@ -47,7 +47,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
     /**
      * @var MathDivision
      */
-    protected $mathDivision;
+    private $mathDivision;
 
     /**
      * @var ProductSalabilityErrorInterfaceFactory
