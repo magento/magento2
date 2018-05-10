@@ -13,9 +13,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class SourceItemConfigurationsSaveTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/inventory/source-item-configuration';
-    const SERVICE_NAME_GET = 'InventoryLowQuantityNotificationApiGetSourceItemConfigurationV1';
-    const SERVICE_NAME_SAVE = 'InventoryLowQuantityNotificationApiSourceItemConfigurationsSaveV1';
+    const RESOURCE_PATH = '/V1/inventory/low-quantity-notification';
+    const SERVICE_NAME_GET = 'inventoryLowQuantityNotificationApiGetSourceItemConfigurationV1';
+    const SERVICE_NAME_SAVE = 'inventoryLowQuantityNotificationApiSourceItemConfigurationsSaveV1';
 
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php

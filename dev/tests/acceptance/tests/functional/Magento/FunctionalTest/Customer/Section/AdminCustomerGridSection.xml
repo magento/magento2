@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCustomerGridSection">
         <element name="customerGrid" type="text" selector="table[data-role='grid']"/>
+        <element name="firstRowEditLink" type="text" selector="tr[data-repeat-index='0'] .action-menu-item" timeout="30"/>
     </section>
 </sections>

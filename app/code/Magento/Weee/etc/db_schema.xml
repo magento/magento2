@@ -48,7 +48,7 @@
             <column name="attribute_id"/>
         </index>
     </table>
-    <table name="quote_item" resource="quote" comment="Sales Flat Quote Item">
+    <table name="quote_item" resource="checkout" comment="Sales Flat Quote Item">
         <column xsi:type="text" name="weee_tax_applied" nullable="true" comment="Weee Tax Applied"/>
         <column xsi:type="decimal" name="weee_tax_applied_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Applied Amount"/>

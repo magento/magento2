@@ -19,7 +19,7 @@ class SourceSelectionServiceTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/source-selection-algorithm-result';
-    const SERVICE_NAME = 'InventorySourceSelectionApiSourceSelectionServiceV1';
+    const SERVICE_NAME = 'inventorySourceSelectionApiSourceSelectionServiceV1';
     /**#@-*/
 
     /**

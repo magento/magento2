@@ -192,10 +192,10 @@ class ValidationTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, ['stock' => $data]);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
-            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
                 self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
                 self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
-            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
                 $expectedWrappedErrors = [];
                 foreach ($expectedErrorData['errors'] as $error) {
