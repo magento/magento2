@@ -49,6 +49,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->setMethods(
                 [
                     'emulateDesign',
+                    'setForcedArea',
                     'loadDefault',
                     'getTemplateText',
                     'revertDesign',
@@ -76,6 +77,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->templateFactory->expects($this->once())->method('create');
         $this->designConfig->expects($this->any())->method('getScope')->willReturn('default');
         $this->template->expects($this->once())->method('emulateDesign');
+        $this->template->expects($this->once())->method('setForcedArea')->with($templateId);
         $this->template->expects($this->once())->method('loadDefault')->with($templateId);
         $this->template->expects($this->once())->method('getTemplateText');
         $this->template->expects($this->once())->method('revertDesign');
