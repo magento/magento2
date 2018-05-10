@@ -129,7 +129,9 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
             $productIds[] = $productId;
         }
 
-        $this->indexerProcessor->reindexList($productIds);
+        if ($productIds) {
+            $this->indexerProcessor->reindexList($productIds);
+        }
     }
 
     /**
