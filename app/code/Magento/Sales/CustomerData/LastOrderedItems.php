@@ -7,11 +7,15 @@ namespace Magento\Sales\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Returns information for "Recently Ordered" widget.
  * It contains list of 5 salable products from the last placed order.
  * Qty of products to display is limited by LastOrderedItems::SIDEBAR_ORDER_LIMIT constant.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LastOrderedItems implements SectionSourceInterface
 {
@@ -61,12 +65,18 @@ class LastOrderedItems implements SectionSourceInterface
     private $productRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param ProductRepositoryInterface $productRepository
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
@@ -74,7 +84,8 @@ class LastOrderedItems implements SectionSourceInterface
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        LoggerInterface $logger = null
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_orderConfig = $orderConfig;
@@ -82,6 +93,7 @@ class LastOrderedItems implements SectionSourceInterface
         $this->stockRegistry = $stockRegistry;
         $this->_storeManager = $storeManager;
         $this->productRepository = $productRepository;
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -118,12 +130,17 @@ class LastOrderedItems implements SectionSourceInterface
             /** @var \Magento\Sales\Model\Order\Item $item */
             foreach ($order->getParentItemsRandomCollection($limit) as $item) {
                 /** @var \Magento\Catalog\Model\Product $product */
-                $product = $this->productRepository->getById(
-                    $item->getProductId(),
-                    false,
-                    $this->_storeManager->getStore()->getId()
-                );
-                if ($product && in_array($website, $product->getWebsiteIds())) {
+                try {
+                    $product = $this->productRepository->getById(
+                        $item->getProductId(),
+                        false,
+                        $this->_storeManager->getStore()->getId()
+                    );
+                } catch (NoSuchEntityException $noEntityException) {
+                    $this->logger->critical($noEntityException);
+                    continue;
+                }
+                if (isset($product) && in_array($website, $product->getWebsiteIds())) {
                     $url = $product->isVisibleInSiteVisibility() ? $product->getProductUrl() : null;
                     $items[] = [
                         'id' => $item->getId(),
@@ -152,7 +169,7 @@ class LastOrderedItems implements SectionSourceInterface
                 $orderItem->getStore()->getWebsiteId()
             );
             return $stockItem->getIsInStock();
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $noEntityException) {
+        } catch (NoSuchEntityException $noEntityException) {
             return false;
         }
     }

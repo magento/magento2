@@ -8,9 +8,11 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="OrderDetailsPage" url="/sales/order/view/order_id/" area="admin" module="Sales">
+    <page name="OrderDetailsPage" url="/sales/order/view/order_id/" area="admin" module="Magento_Sales">
         <section name="OrderDetailsMainActionsSection"/>
         <section name="OrderDetailsInformationSection"/>
         <section name="OrderDetailsMessagesSection"/>
+        <section name="AdminOrderItemsOrderedSection"/>
+        <section name="AdminOrderTotalSection" />
     </page>
 </pages>
