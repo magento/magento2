@@ -54,7 +54,7 @@
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSource"/>
             <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSources">
                 <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-                <argument name="value" value="_minimalSource.source_code"/>
+                <argument name="value" value="$$createCustomSource.source[source_code]$$"/>
             </actionGroup>
             <click selector="{{AdminGridRow.editByValue($$createCustomSource.source[source_code]$$)}}" stepKey="clickOnEditCustomSource"/>
             <waitForPageLoad time="30" stepKey="waitForSourceEditPageLoad"/>
