@@ -6,15 +6,20 @@
 
 namespace Magento\CatalogUrlRewrite\Plugin\Store\Controller\Store;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
+use Magento\Framework\Session\Generic;
+use Magento\Framework\Session\SidResolverInterface;
 
 /**
  * Plugin makes connection between Store and UrlRewrite modules
@@ -55,12 +60,30 @@ class SwitchAction
     private $redirectFactory;
 
     /**
+     * @var UrlHelper
+     */
+    private $urlHelper;
+
+    /**
+     * @var \Magento\Framework\Session\Generic
+     */
+    private $session;
+
+    /**
+     * @var \Magento\Framework\Session\SidResolverInterface
+     */
+    private $sidResolver;
+
+    /**
      * @param UrlFinderInterface $urlFinder
      * @param HttpRequest $request
      * @param StoreRepositoryInterface $storeRepository
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param \Magento\Framework\HTTP\PhpEnvironment\RequestFactory $requestFactory
      * @param RedirectFactory $redirectFactory
+     * @param UrlHelper $urlHelper
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
@@ -68,7 +91,10 @@ class SwitchAction
         StoreRepositoryInterface $storeRepository,
         \Magento\Framework\App\Response\RedirectInterface $redirect,
         \Magento\Framework\HTTP\PhpEnvironment\RequestFactory $requestFactory,
-        RedirectFactory $redirectFactory
+        RedirectFactory $redirectFactory,
+        UrlHelper $urlHelper = null,
+        \Magento\Framework\Session\Generic $session = null,
+        \Magento\Framework\Session\SidResolverInterface $sidResolver = null
     ) {
         $this->urlFinder = $urlFinder;
         $this->request = $request;
@@ -76,6 +102,9 @@ class SwitchAction
         $this->redirect = $redirect;
         $this->requestFactory = $requestFactory;
         $this->redirectFactory = $redirectFactory;
+        $this->urlHelper = $urlHelper ?: ObjectManager::getInstance()->get(UrlHelper::class);
+        $this->session = $session ?: ObjectManager::getInstance()->get(Generic::class);
+        $this->sidResolver = $sidResolver ?: ObjectManager::getInstance()->get(SidResolverInterface::class);
     }
 
     /**
@@ -90,6 +119,7 @@ class SwitchAction
     ): ResultInterface {
         try {
             $url = $this->redirect->getRedirectUrl();
+            /** @var Store $store */
             $store = $this->storeRepository->getActiveStoreByCode(
                 $this->request->getParam(StoreResolverInterface::PARAM_NAME)
             );
@@ -101,7 +131,19 @@ class SwitchAction
         $request = $this->requestFactory->create(['uri' => $url]);
 
         // works only for catalog urls
-        if ($fromStore = $request->getParam('___from_store')) {
+        $query = [];
+        $urlParts = parse_url($url);
+        parse_str($urlParts['query'], $query);
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->redirectFactory->create();
+
+        if ($fromStore = $query['___from_store']) {
+            // remove SID, ___from_store, ___store from target url
+            $sidName = $this->sidResolver->getSessionIdQueryParam($this->session);
+            $url = $this->urlHelper->removeRequestParam($url, $sidName);
+            $url = $this->urlHelper->removeRequestParam($url, '___from_store');
+            $url = $this->urlHelper->removeRequestParam($url, StoreResolverInterface::PARAM_NAME);
+
             $urlPath = ltrim($request->getPathInfo(), '/');
             try {
                 $oldStoreId = $this->storeRepository->get($fromStore)->getId();
@@ -123,18 +165,11 @@ class SwitchAction
                     UrlRewrite::STORE_ID => $store->getId(),
                 ]);
                 if (null === $currentRewrite) {
-                    /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-                    $resultRedirect = $this->redirectFactory->create();
-                    $result = $resultRedirect->setPath('', [
-                        '_scope' => $store->getCode(),
-                        '_query' => [
-                            '___from_store' => $fromStore,
-                            '___store' => $request->getParam('___store'),
-                        ]]);
+                    return $resultRedirect->setUrl($store->getBaseUrl());
                 }
             }
         }
 
-        return $result;
+        return $resultRedirect->setUrl($url);
     }
 }

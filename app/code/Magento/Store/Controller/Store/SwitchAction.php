@@ -122,11 +122,7 @@ class SwitchAction extends Action
 
         $redirectUrl = $this->_redirect->getRedirectUrl();
         $sidName = $this->sidResolver->getSessionIdQueryParam($this->session);
-        if ($this->sidResolver->getUseSessionInUrl()) {
-            $redirectUrl = $this->urlHelper->addRequestParam($redirectUrl, [
-                $sidName => $this->session->getSessionId()
-            ]);
-        }
+        $redirectUrl = $this->urlHelper->removeRequestParam($redirectUrl, $sidName);
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
