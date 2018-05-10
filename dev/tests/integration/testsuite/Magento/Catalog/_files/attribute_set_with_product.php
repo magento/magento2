@@ -14,7 +14,5 @@ try {
     $product = $productRepository->get('simple', true, null, true);
     $product->setAttributeSetId($attributeSet->getId());
     $productRepository->save($product);
-
 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
 }
-
