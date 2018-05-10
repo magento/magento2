@@ -12,7 +12,6 @@ define([
     'use strict';
 
     return function (config) {
-
         var tree,
             options = {
                 dataUrl: config.dataUrl,
@@ -20,7 +19,7 @@ define([
                 rootVisible: config.rootVisible,
                 useAjax: config.useAjax,
                 currentNodeId: config.currentNodeId,
-                jsFormObject: config.jsFormObject,
+                jsFormObject: window[config.jsFormObject],
                 name: config.name,
                 checked: config.checked,
                 allowDrop: config.allowDrop,
@@ -62,8 +61,8 @@ define([
              */
             loadTree: function (config, firstLoad) {// eslint-disable-line no-shadow
                 parameters = config.parameters,
-                data = config.data,
-                root = new Ext.tree.TreeNode(parameters);// eslint-disable-line no-undef
+                    data = config.data,
+                    root = new Ext.tree.TreeNode(parameters);// eslint-disable-line no-undef
 
                 if (typeof parameters.rootVisible != 'undefined') {
                     this.rootVisible = parameters.rootVisible * 1;
@@ -181,6 +180,7 @@ define([
              * @returns {Object}
              */
             categoryLoader.buildHashChildren = function (hash, node) {// eslint-disable-line no-shadow
+                var i = 0;
                 // eslint-disable-next-line no-extra-parens
                 if ((node.childNodes.length > 0) || (node.loaded === false && node.loading === false)) {
                     hash.children = [];

@@ -39,11 +39,12 @@
         <waitForPageLoad stepKey="waitCatalogPriceRulePageLoad"/>
         <!-- Open Conditions section and select Categories condition -->
         <click selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="openConditionsSection"/>
+        <scrollTo selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="scrollToConditionsTab"/>
         <click selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="createNewRule"/>
         <selectOption selector="{{PriceRuleConditionsSection.rulesDropdown}}" userInput="Magento\SalesRule\Model\Rule\Condition\Product\Found" stepKey="selectProductAttributes"/>
         <waitForAjaxLoad stepKey="ajaxLoad1"/>
         <waitForElement selector="{{PriceRuleConditionsSection.addProductAttributesButton}}" stepKey="wait1"/>
-        <scrollTo selector="{{PriceRuleConditionsSection.addProductAttributesButton}}" stepKey="scroll1"/>
+        <scrollTo selector="{{PriceRuleConditionsSection.addProductAttributesButton}}" stepKey="scrollToAddProductAttributeButton"/>
         <click selector="{{PriceRuleConditionsSection.addProductAttributesButton}}" stepKey="clickToshowAttributes"/>
         <selectOption selector="{{PriceRuleConditionsSection.productAttributesDropdown}}" userInput="Magento\SalesRule\Model\Rule\Condition\Product|category_ids" stepKey="selectCategoryAttribute"/>
         <waitForAjaxLoad stepKey="ajaxLoad2"/>
