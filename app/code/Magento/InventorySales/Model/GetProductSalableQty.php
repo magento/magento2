@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model;
 
-use Magento\InventoryReservationsApi\Module\GetReservationsQuantityInterface;
+use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
 /**

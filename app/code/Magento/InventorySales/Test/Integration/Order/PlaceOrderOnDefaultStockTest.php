@@ -25,7 +25,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
-use Magento\InventoryReservationsApi\Module\CleanupReservationsInterface;
+use Magento\InventoryReservationsApi\Model\CleanupReservationsInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
