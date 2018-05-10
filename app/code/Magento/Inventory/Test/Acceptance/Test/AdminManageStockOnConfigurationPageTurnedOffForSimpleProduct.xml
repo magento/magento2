@@ -57,7 +57,7 @@
             </actionGroup>
             <click selector="{{AdminGridRow.editByValue($$customSource.source[source_code]$$)}}" stepKey="clickEditCustomSource"/>
             <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad"/>
-            <click selector="{{AdminEditSourceGeneralSection.IsEnabledLabel}}" stepKey="disableCustomSource"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableCustomSource"/>
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSource"/>
 
             <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
