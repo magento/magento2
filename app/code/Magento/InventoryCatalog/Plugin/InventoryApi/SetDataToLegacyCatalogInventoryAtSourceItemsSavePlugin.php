@@ -105,7 +105,7 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
             $sku = $sourceItem->getSku();
 
             try {
-                $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+                $productId = (int)$this->getProductIdsBySkus->execute([$sku])[$sku];
             } catch (InputException $e) {
                 // Saving source item data for not existed product
                 continue;
