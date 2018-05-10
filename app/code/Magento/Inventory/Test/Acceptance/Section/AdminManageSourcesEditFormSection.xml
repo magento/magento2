@@ -12,6 +12,7 @@
         <element name="name" type="input" selector="input[name='general[name]']"/>
         <element name="code" type="input" selector="input[name='general[source_code]']"/>
         <element name="isEnabled" type="checkbox" selector="input[name='general[enabled]']"/>
+        <element name="isEnabledLabel" type="text" selector="input[name='general[enabled]']+label"/>
         <element name="description" type="textarea" selector="textarea[name='general[description]']"/>
         <element name="latitude" type="input" selector="input[name='general[latitude]']"/>
         <element name="longitude" type="input" selector="input[name='general[longitude]']"/>
