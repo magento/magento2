@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\Product\TierPrice;
+namespace Magento\Catalog\Model\Product\Attribute\Backend\TierPrice;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -78,23 +78,28 @@ class SaveHandler implements ExtensionInterface
         $attribute = $this->attributeRepository->get('tier_price');
         $priceRows = $entity->getData($attribute->getName());
         if (null !== $priceRows) {
+            if (!is_array($priceRows)) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Something went wrong while processing the request.')
+                );
+            }
             $websiteId = $this->storeManager->getStore($entity->getStoreId())->getWebsiteId();
             $isGlobal = $attribute->isScopeGlobal() || $websiteId === 0;
             $identifierField = $this->metadataPoll->getMetadata(ProductInterface::class)->getLinkField();
-            $priceRows = array_filter((array)$priceRows);
+            $priceRows = array_filter($priceRows);
             $productId = $entity->getData($identifierField);
 
             // prepare and save data
             foreach ($priceRows as $data) {
                 $isPriceWebsiteGlobal = (int)$data['website_id'] === 0;
-                if (($isGlobal === $isPriceWebsiteGlobal)
+                if ($isGlobal === $isPriceWebsiteGlobal
                     || !empty($data['price_qty'])
                     || isset($data['cust_group'])
                 ) {
                     $tierPrice = $this->prepareTierPrice($data);
                     $price = new \Magento\Framework\DataObject($tierPrice);
                     $price->setData(
-                        $this->metadataPoll->getMetadata(ProductInterface::class)->getLinkField(),
+                        $identifierField,
                         $productId
                     );
                     $this->tierPriceResource->savePriceData($price);
@@ -130,21 +135,21 @@ class SaveHandler implements ExtensionInterface
     private function getPercentage(array $priceRow)
     {
         return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
-            ? $priceRow['percentage_value']
+            ? (int)$priceRow['percentage_value']
             : null;
     }
 
     /**
      * Prepare tier price data by provided price row data
      *
-     * @param $data
+     * @param array $data
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function prepareTierPrice(array $data): array
     {
         $useForAllGroups = (int)$data['cust_group'] === $this->groupManagement->getAllCustomersGroup()->getId();
-        $customerGroupId = !$useForAllGroups ? $data['cust_group'] : 0;
+        $customerGroupId = $useForAllGroups ? 0 : $data['cust_group'];
         $tierPrice = array_merge(
             $this->getAdditionalFields($data),
             [
