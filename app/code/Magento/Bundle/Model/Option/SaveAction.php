@@ -160,7 +160,7 @@ class SaveAction
     }
 
     /**
-     * Computes the difference between given arrays.
+     * Compute the difference between given arrays.
      *
      * @param \Magento\Bundle\Api\Data\LinkInterface[] $firstArray
      * @param \Magento\Bundle\Api\Data\LinkInterface[] $secondArray
