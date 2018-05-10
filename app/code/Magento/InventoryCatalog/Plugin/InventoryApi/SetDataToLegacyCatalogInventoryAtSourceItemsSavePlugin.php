@@ -25,6 +25,9 @@ use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInter
 /**
  * Set Qty and status for legacy CatalogInventory Stock Status and Stock Item DB tables,
  * if corresponding MSI SourceItem assigned to Default Source has been saved
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * TODO: https://github.com/magento-engcom/msi/pull/1082/
  */
 class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
 {
