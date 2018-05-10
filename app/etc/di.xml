@@ -284,7 +284,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\FeedFactory">
+    <type name="Magento\Framework\App\FeedFactory">
         <arguments>
             <argument name="formats" xsi:type="array">
                 <item name="rss" xsi:type="string">Magento\Framework\App\Feed</item>

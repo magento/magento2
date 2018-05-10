@@ -21,11 +21,11 @@ class Feed implements FeedInterface
 
     /**
      * Feed constructor.
-     * @param array $feeds
+     * @param array $data
      */
-    public function __construct(array $feeds)
+    public function __construct(array $data)
     {
-        $this->feeds = $feeds;
+        $this->feeds = $data;
     }
 
     /**

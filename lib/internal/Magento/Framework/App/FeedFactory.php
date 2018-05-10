@@ -65,7 +65,7 @@ class FeedFactory implements FeedFactoryInterface
         try {
             return $this->objectManager->create(
                 $this->formats[$format],
-                $data
+                ['data' => $data]
             );
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
