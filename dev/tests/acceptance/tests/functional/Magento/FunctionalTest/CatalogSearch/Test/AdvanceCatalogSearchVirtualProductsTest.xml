@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchVirtualProductByNameTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Advanced catalog search for virtual products"/>
+            <title value="Advanced catalog search for virtual products by product name"/>
+            <description value="Advanced catalog search for virtual products by product name"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-137"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <before>
+            <createData entity="ApiVirtualProductWithDescription" stepKey="createProductOne"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+        </after>
+
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameActionGroup" stepKey="search">
+            <argument name="name" value="$$createProductOne.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+    </test>
+    <test name="AdvanceCatalogSearchVirtualProductBySkuTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Advanced catalog search for virtual products"/>
+            <title value="Advanced catalog search for virtual products by product sku"/>
+            <description value="Advanced catalog search for virtual products by product sku"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-162"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <before>
+            <createData entity="ApiVirtualProductWithDescription" stepKey="createProductOne"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+        </after>
+
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductSkuActionGroup" stepKey="search">
+            <argument name="sku" value="$$createProductOne.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+    </test>
+
+    <test name="AdvanceCatalogSearchVirtualProductByDescriptionTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Advanced catalog search for virtual products"/>
+            <title value="Advanced catalog search for virtual products by product description"/>
+            <description value="Advanced catalog search for virtual products by product description"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-163"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <before>
+            <createData entity="ApiVirtualProductWithDescription" stepKey="createProductOne"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+        </after>
+
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByDescriptionActionGroup" stepKey="search">
+            <argument name="description" value="$$createProductOne.custom_attributes[description]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+    </test>
+
+    <test name="AdvanceCatalogSearchVirtualProductByShortDescriptionTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Advanced catalog search for virtual products"/>
+            <title value="Advanced catalog search for virtual products by product short description"/>
+            <description value="Advanced catalog search for virtual products by product short description"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-164"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <before>
+            <createData entity="ApiVirtualProductWithDescription" stepKey="createProductOne"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+        </after>
+
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByShortDescriptionActionGroup" stepKey="search">
+            <argument name="shortDescription" value="$$createProductOne.custom_attributes[short_description]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+    </test>
+
+    <test name="AdvanceCatalogSearchVirtualProductByPriceTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Advanced catalog search for virtual products"/>
+            <title value="Advanced catalog search for virtual products by product price"/>
+            <description value="Advanced catalog search for virtual products by price"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-165"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <before>
+            <createData entity="ApiVirtualProductWithDescription" stepKey="createProductOne"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+        </after>
+
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="search">
+            <argument name="name" value="$$createProductOne.name$$"/>
+            <argument name="priceFrom" value="$$createProductOne.price$$"/>
+            <argument name="priceTo" value="$$createProductOne.price$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+    </test>
+</tests>
