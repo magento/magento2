@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfigurableProduct\Test\Integration\CatalogInventory\Spi\StockRegistryProvider;
+namespace Magento\InventoryConfigurableProduct\Test\Integration\CatalogInventory\Model\Spi\StockRegistryProvider;
 
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterface;
