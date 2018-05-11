@@ -41,7 +41,7 @@ class Merged implements \Iterator
     protected $contentType;
 
     /**
-     * @var StorageInterface
+     * @var \Magento\Framework\App\View\Deployment\Version\StorageInterface
      */
     private $versionStorage;
 
