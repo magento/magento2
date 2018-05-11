@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * \Iterator that aggregates one or more assets and provides a single public file with equivalent behavior
  */
@@ -56,21 +58,23 @@ class Merged implements \Iterator
      * @param \Psr\Log\LoggerInterface $logger
      * @param MergeStrategyInterface $mergeStrategy
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage
      * @param MergeableInterface[] $assets
+     * @param \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage
      * @throws \InvalidArgumentException
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         MergeStrategyInterface $mergeStrategy,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage,
-        array $assets
+        array $assets,
+        \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage = null
     ) {
         $this->logger = $logger;
         $this->mergeStrategy = $mergeStrategy;
         $this->assetRepo = $assetRepo;
-        $this->versionStorage = $versionStorage;
+        $this->versionStorage = $versionStorage ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\App\View\Deployment\Version\StorageInterface::class
+        );
 
         if (!$assets) {
             throw new \InvalidArgumentException('At least one asset has to be passed for merging.');
@@ -127,9 +131,9 @@ class Merged implements \Iterator
         }
         $paths = array_unique($paths);
 
-        $version=$this->versionStorage->load();
+        $version = $this->versionStorage->load();
         if ($version) {
-            $paths[]=$version;
+            $paths[] = $version;
         }
 
         $filePath = md5(implode('|', $paths)) . '.' . $this->contentType;
