@@ -316,7 +316,7 @@ class EmailNotification implements EmailNotificationInterface
     {
         $storeId = $customer->getStoreId();
         if (!$storeId) {
-            $storeId = $this->getWebsiteStoreId($customer);;
+            $storeId = $this->getWebsiteStoreId($customer);
         }
 
         $customerEmailData = $this->getFullCustomerObject($customer);
