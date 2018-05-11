@@ -34,6 +34,7 @@ class DetailsTest extends \PHPUnit\Framework\TestCase
         $failedRetriable = 23;
         $failedNotRetriable = 45;
         $open = 303;
+        $rejected = 0;
 
         $expectedResult = [
             'operations_total' => $completed + $failedRetriable + $failedNotRetriable + $open,
@@ -41,6 +42,8 @@ class DetailsTest extends \PHPUnit\Framework\TestCase
             'operations_failed' => $failedRetriable + $failedNotRetriable,
             'failed_retriable' => $failedRetriable,
             'failed_not_retriable' => $failedNotRetriable,
+            'rejected' => $rejected,
+            'open' => $open,
         ];
 
         $this->bulkStatusMock->method('getOperationsCountByBulkIdAndStatus')
@@ -49,6 +52,7 @@ class DetailsTest extends \PHPUnit\Framework\TestCase
                 [$uuid, OperationInterface::STATUS_TYPE_RETRIABLY_FAILED, $failedRetriable],
                 [$uuid, OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED, $failedNotRetriable],
                 [$uuid, OperationInterface::STATUS_TYPE_OPEN, $open],
+                [$uuid, OperationInterface::STATUS_TYPE_REJECTED, $rejected],
             ]);
 
         $result = $this->model->getDetails($uuid);

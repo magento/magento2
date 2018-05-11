@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\Layer;
  *
  * @magentoDataFixture Magento/Catalog/_files/categories.php
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryTest extends \PHPUnit\Framework\TestCase

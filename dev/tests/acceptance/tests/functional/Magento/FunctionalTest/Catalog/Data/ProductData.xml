@@ -148,4 +148,31 @@
         <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
     </entity>
+    <entity name="_newDefaultProduct" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">testproductname</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">testurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="productWithOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionDropDown</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionRadiobutton</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionCheckbox</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionMultiSelect</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionDate</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionTime</requiredEntity>
+    </entity>
 </entities>

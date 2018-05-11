@@ -52,5 +52,28 @@
       "some_unique_key": true,
       "some_foreign_key": true
     }
+  },
+  "store": {
+    "column": {
+      "store_owner_id": true,
+      "store_owner": true
+    },
+    "constraint": {
+      "STORE_OWNER_ID_REFERENCE": true
+    }
+  },
+  "store_owner": {
+    "column": {
+      "owner_id": true,
+      "label": true
+    },
+    "constraint": {
+      "": true
+    }
+  },
+  "some_table": {
+    "column": {
+      "some_column": true
+    }
   }
 }
