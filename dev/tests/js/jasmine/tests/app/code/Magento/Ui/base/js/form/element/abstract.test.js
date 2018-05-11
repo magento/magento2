@@ -5,19 +5,47 @@
 
 /*eslint max-nested-callbacks: 0*/
 define([
-    'Magento_Ui/js/form/element/abstract'
-], function (Abstract) {
+    'squire'
+], function (Squire) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/abstract', function () {
-        var params, model;
-
-        beforeEach(function () {
+        var injector = new Squire(),
+            providerMock = {
+                get: jasmine.createSpy(),
+                set: jasmine.createSpy()
+            },
+            mocks = {
+                'Magento_Ui/js/lib/registry/registry': {
+                    /** Method stub. */
+                    get: function () {
+                        return providerMock;
+                    },
+                    create: jasmine.createSpy(),
+                    set: jasmine.createSpy(),
+                    async: jasmine.createSpy()
+                },
+                '/mage/utils/wrapper': jasmine.createSpy()
+            },
+            dataScope = 'abstract',
             params = {
-                dataScope: 'abstract'
-            };
-            model = new Abstract(params);
-            model.source = jasmine.createSpyObj('model.source', ['set']);
+                provider: 'provName',
+                name: '',
+                index: 'testIndex',
+                dataScope: dataScope
+            },
+            model;
+
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Ui/js/form/element/abstract',
+                'knockoutjs/knockout-es5'
+            ], function (Constr) {
+                model = new Constr(params);
+
+                done();
+            });
         });
 
         describe('initialize method', function () {
@@ -52,6 +80,7 @@ define([
                 spyOn(model, 'getInitialValue').and.returnValue(expectedValue);
                 expect(model.setInitialValue()).toEqual(model);
                 expect(model.getInitialValue).toHaveBeenCalled();
+                expect(model.source.set).toHaveBeenCalledWith('data.use_default.' + model.index, 0);
                 expect(model.value()).toEqual(expectedValue);
             });
         });

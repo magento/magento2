@@ -449,7 +449,7 @@ define([
          */
         toggleUseDefault: function (state) {
             this.disabled(state);
-            this.source.set('data.use_default.' + this.index, (state ? 1 : 0));
+            this.source.set('data.use_default.' + this.index, Number(state));
         },
 
         /**
