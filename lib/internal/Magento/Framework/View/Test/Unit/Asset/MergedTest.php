@@ -82,7 +82,8 @@ class MergedTest extends \PHPUnit\Framework\TestCase
     public function testConstructorNothingToMerge()
     {
         new \Magento\Framework\View\Asset\Merged(
-            $this->logger, $this->mergeStrategy,
+            $this->logger,
+            $this->mergeStrategy,
             $this->assetRepo,
             [],
             $this->versionStorage
