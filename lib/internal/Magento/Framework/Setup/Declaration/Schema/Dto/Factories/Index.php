@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Factories;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -28,16 +29,24 @@ class Index implements FactoryInterface
     private $className;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * Constructor.
      *
      * @param ObjectManagerInterface $objectManager
-     * @param string                 $className
+     * @param ResourceConnection $resourceConnection
+     * @param string $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
+        ResourceConnection $resourceConnection,
         $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Index::class
     ) {
         $this->objectManager = $objectManager;
+        $this->resourceConnection = $resourceConnection;
         $this->className = $className;
     }
 
@@ -49,6 +58,19 @@ class Index implements FactoryInterface
         if (!isset($data['indexType'])) {
             $data['indexType'] = self::DEFAULT_INDEX_TYPE;
         }
+
+        $nameWithoutPrefix = $data['name'];
+
+        if ($this->resourceConnection->getTablePrefix()) {
+            $nameWithoutPrefix = $this->resourceConnection
+                ->getConnection($data['table']->getResource())
+                ->getIndexName(
+                    $data['table']->getNameWithoutPrefix(),
+                    $data['column'],
+                    $data['type']
+                );
+        }
+        $data['nameWithoutPrefix'] = $nameWithoutPrefix;
 
         return $this->objectManager->create($this->className, $data);
     }

@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Declaration;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Setup\Exception;
@@ -276,6 +277,38 @@ class SchemaBuilder
     }
 
     /**
+     * @param string $name
+     * @param Table $table
+     * @param array $columns
+     * @param string $type
+     * @return string
+     */
+    private function getFullIndexName(
+        string $name,
+        Table $table,
+        array $columns,
+        string $type = AdapterInterface::INDEX_TYPE_INDEX
+    ) {
+        if (AdapterInterface::INDEX_TYPE_PRIMARY === $type) {
+            return $name;
+        }
+
+        $tableName = $table->getName();
+        $tableIsReplica = preg_match('#(?<table_name>\S+)_replica$#i', $table->getName(), $matches);
+
+        if ($tableIsReplica) {
+            $tableName = $matches['table_name'];
+        }
+
+        return $this->resourceConnection
+            ->getIdxName(
+                $tableName,
+                $columns,
+                $type
+            );
+    }
+
+    /**
      * Convert and instantiate index objects.
      *
      * @param  array    $tableData
@@ -296,6 +329,20 @@ class SchemaBuilder
                 continue;
             }
 
+            /**
+             * Temporary solution.
+             */
+            $indexType = AdapterInterface::INDEX_TYPE_INDEX;
+            if ($indexData['indexType'] === AdapterInterface::INDEX_TYPE_FULLTEXT) {
+                $indexType = $indexData['indexType'];
+            }
+
+            $indexData['name'] = $this->getFullIndexName(
+                $indexData['name'],
+                $table,
+                $indexData['column'],
+                $indexType
+            );
             $indexData = $this->processGenericData($indexData, $resource, $table);
             $indexData['columns'] = $this->convertColumnNamesToObjects($indexData['column'], $table);
             $index = $this->elementFactory->create('index', $indexData);
@@ -354,9 +401,22 @@ class SchemaBuilder
                     $constraintData['referenceColumn'],
                     $constraintData['referenceTable']
                 );
+                $constraintData['name'] = $this->resourceConnection
+                    ->getFkName(
+                        $table->getName(),
+                        $constraintData['column']->getName(),
+                        $constraintData['referenceTable']->getName(),
+                        $constraintData['referenceColumn']->getName()
+                    );
                 $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
                 $constraints[$constraint->getName()] = $constraint;
             } else {
+                $constraintData['name'] = $this->getFullIndexName(
+                    $constraintData['name'],
+                    $table,
+                    $constraintData['column'],
+                    $constraintData['type']
+                );
                 $constraintData['columns'] = $this->convertColumnNamesToObjects($constraintData['column'], $table);
                 $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
                 $constraints[$constraint->getName()] = $constraint;

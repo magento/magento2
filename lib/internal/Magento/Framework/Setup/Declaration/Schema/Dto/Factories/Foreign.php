@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Factories;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -28,16 +29,24 @@ class Foreign implements FactoryInterface
     private $className;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * Constructor.
      *
      * @param ObjectManagerInterface $objectManager
-     * @param string                 $className
+     * @param ResourceConnection $resourceConnection
+     * @param string $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
+        ResourceConnection $resourceConnection,
         $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference::class
     ) {
         $this->objectManager = $objectManager;
+        $this->resourceConnection = $resourceConnection;
         $this->className = $className;
     }
 
@@ -49,6 +58,20 @@ class Foreign implements FactoryInterface
         if (!isset($data['onDelete'])) {
             $data['onDelete'] = self::DEFAULT_ON_DELETE;
         }
+
+        $nameWithoutPrefix = $data['name'];
+
+        if ($this->resourceConnection->getTablePrefix()) {
+            $nameWithoutPrefix = $this->resourceConnection
+                ->getConnection($data['table']->getResource())
+                ->getForeignKeyName(
+                    $data['table']->getNameWithoutPrefix(),
+                    $data['column']->getName(),
+                    $data['referenceTable']->getNameWithoutPrefix(),
+                    $data['referenceColumn']->getName()
+                );
+        }
+        $data['nameWithoutPrefix'] = $nameWithoutPrefix;
 
         return $this->objectManager->create($this->className, $data);
     }

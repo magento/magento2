@@ -7,10 +7,10 @@
 namespace Magento\Framework\Setup\Declaration\Schema\Diff;
 
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
-use Magento\Framework\Setup\Declaration\Schema\Operations\AddComplexElement;
 use Magento\Framework\Setup\Declaration\Schema\Operations\ModifyColumn;
 
 /**
@@ -91,12 +91,14 @@ class TableDiff
             if ($elementHistory->getNew() instanceof Column) {
                 $column = $elementHistory->getNew();
                 $references = $generatedTable->getReferenceConstraints();
-                $declaredReferences = $declaredTable->getReferenceConstraints();
+                $declaredReferences = $this->getElementsListByNameWithoutPrefix(
+                    $declaredTable->getReferenceConstraints()
+                );
 
                 foreach ($references as $reference) {
                     /** In case when we have foreign key on column, that should be modified */
                     if ($reference->getColumn()->getName() === $column->getName() &&
-                        isset($declaredReferences[$reference->getName()])
+                        isset($declaredReferences[$reference->getNameWithoutPrefix()])
                     ) {
                         /**
                          * Lets disable foreign key and enable it again
@@ -104,13 +106,31 @@ class TableDiff
                          * we will drop key, modify column, add key
                          */
                         $diff = $this->diffManager->registerRemoval($diff, [$reference]);
-                        $diff = $this->diffManager->registerCreation($diff, $reference);
+                        $diff = $this->diffManager
+                            ->registerCreation(
+                                $diff,
+                                $declaredReferences[$reference->getNameWithoutPrefix()]
+                            );
                     }
                 }
             }
         }
 
         return $diff;
+    }
+
+    /**
+     * @param Constraint[]|Index[] $elements
+     * @return array
+     */
+    private function getElementsListByNameWithoutPrefix(array $elements)
+    {
+        $elementsList = [];
+        foreach ($elements as $key => $element) {
+            $elementsList[$element->getNameWithoutPrefix()] = $element;
+        }
+
+        return $elementsList;
     }
 
     /**
@@ -144,6 +164,11 @@ class TableDiff
             if ($elementType === self::INDEX_DIFF_TYPE) {
                 $generatedElements = $this->excludeAutoIndexes($generatedTable, $generatedElements);
                 $declaredElements = $this->excludeAutoIndexes($declaredTable, $declaredElements);
+            }
+            
+            if (self::CONSTRAINT_DIFF_TYPE === $elementType) {
+                $generatedElements = $this->getElementsListByNameWithoutPrefix($generatedElements);
+                $declaredElements = $this->getElementsListByNameWithoutPrefix($declaredElements);
             }
 
             foreach ($declaredElements as $elementName => $element) {

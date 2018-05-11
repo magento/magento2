@@ -23,11 +23,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class TablesWhitelistGenerateCommand extends Command
 {
     /**
-     * Whitelist file name.
-     */
-    const GENERATED_FILE_NAME = 'db_schema_whitelist.json';
-
-    /**
      * Module name key, that will be used in whitelist generate command.
      */
     const MODULE_NAME_KEY = 'module-name';
