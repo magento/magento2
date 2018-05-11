@@ -48,6 +48,13 @@ define([
         );
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Catalog/js/product/breadcrumbs', function () {
         it('mixin is applied to Magento_Theme/js/view/breadcrumbs', function () {
             var breadcrumbMixins = defaultContext.config.config.mixins['Magento_Theme/js/view/breadcrumbs'];
