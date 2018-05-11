@@ -73,7 +73,7 @@ define([
         });
 
         describe('Parent config properties are propagated', function () {
-            it('disabled property is set on child', function () {
+            it('sets the disabled property on the child element', function () {
                 var params = {
                     dataScope: 'urlInput',
                     disabled: true,
@@ -92,7 +92,7 @@ define([
                 expect(component.urlTypes.url.disabled).toBe(true);
             });
 
-            it('visible property is set on child', function () {
+            it('sets the visible property on the child element', function () {
                 var params = {
                     dataScope: 'urlInput',
                     visible: false,
