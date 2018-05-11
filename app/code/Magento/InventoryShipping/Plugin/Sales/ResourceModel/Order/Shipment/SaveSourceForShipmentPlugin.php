@@ -10,7 +10,7 @@ namespace Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment;
 use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryShipping\Model\ResourceModel\ShipmentSource\SaveShipmentSource;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
-use Magento\InventoryCatalog\Model\DefaultSourceProvider;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 
 class SaveSourceForShipmentPlugin
 {
@@ -20,17 +20,17 @@ class SaveSourceForShipmentPlugin
     private $saveShipmentSource;
 
     /**
-     * @var DefaultSourceProvider
+     * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
 
     /**
      * @param SaveShipmentSource $saveShipmentSource
-     * @param DefaultSourceProvider $defaultSourceProvider
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
      */
     public function __construct(
         SaveShipmentSource $saveShipmentSource,
-        DefaultSourceProvider $defaultSourceProvider
+        DefaultSourceProviderInterface $defaultSourceProvider
     ) {
         $this->saveShipmentSource = $saveShipmentSource;
         $this->defaultSourceProvider = $defaultSourceProvider;

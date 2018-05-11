@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\InventoryCatalog\Model\GetProductTypesBySkus;
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

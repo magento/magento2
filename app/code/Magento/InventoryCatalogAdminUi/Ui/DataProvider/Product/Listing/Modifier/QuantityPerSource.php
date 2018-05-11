@@ -11,7 +11,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Listing\Columns\Column;

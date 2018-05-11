@@ -9,8 +9,8 @@ namespace Magento\InventoryConfiguration\Model;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
-use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
 

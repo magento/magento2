@@ -11,8 +11,8 @@ use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 
 class AssignToDefaultStockDefaultSourceValidator implements StockSourceLinkValidatorInterface
 {

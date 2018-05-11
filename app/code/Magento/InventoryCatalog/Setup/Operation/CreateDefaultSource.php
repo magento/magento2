@@ -11,7 +11,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryCatalog\Model\DefaultSourceProvider;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 
 /**
  * Create default source during installation
@@ -19,7 +19,7 @@ use Magento\InventoryCatalog\Model\DefaultSourceProvider;
 class CreateDefaultSource
 {
     /**
-     * @var DefaultSourceProvider
+     * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
 
@@ -39,13 +39,13 @@ class CreateDefaultSource
     private $sourceRepository;
 
     /**
-     * @param DefaultSourceProvider $defaultSourceProvider
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param SourceInterfaceFactory $sourceFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param SourceRepositoryInterface $sourceRepository
      */
     public function __construct(
-        DefaultSourceProvider $defaultSourceProvider,
+        DefaultSourceProviderInterface $defaultSourceProvider,
         SourceInterfaceFactory $sourceFactory,
         DataObjectHelper $dataObjectHelper,
         SourceRepositoryInterface $sourceRepository

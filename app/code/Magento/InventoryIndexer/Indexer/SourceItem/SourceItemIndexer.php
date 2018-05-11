@@ -12,7 +12,7 @@ use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 

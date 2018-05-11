@@ -10,8 +10,8 @@ namespace Magento\InventoryCatalog\Setup\Operation;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterfaceFactory;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 
 /**
  * Assign default source to default stock

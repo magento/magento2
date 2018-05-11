@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Api;
+namespace Magento\InventoryCatalogApi\Api;
 
 /**
  * Service returns Default Source Id

@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalogAdminUi\Ui\Component\Listing\Column;
+namespace Magento\InventorySalesAdminUi\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\InventoryCatalog\Model\GetSalableQuantityDataBySku;
-use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventorySalesAdminUi\Model\GetSalableQuantityDataBySku;
+use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 

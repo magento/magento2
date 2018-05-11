@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurableProductAdminUi\Plugin\Block;
 
 use Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix;
-use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventoryConfigurableProduct\Model\GetQuantityInformationPerSource;
 
 /**
