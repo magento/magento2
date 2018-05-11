@@ -147,4 +147,155 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($price);
         $this->assertEquals(4, count($price));
     }
+
+    /**
+     * @dataProvider saveExistingProductDataProvider
+     * @param array $tierPricesData
+     * @param $tierPriceCount
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function testSaveExistingProduct(array $tierPricesData, $tierPriceCount)
+    {
+        /** @var $product \Magento\Catalog\Model\Product */
+        $product = $this->productRepository->get('simple', true);
+        $tierPrices = [];
+        foreach ($tierPricesData as $tierPrice) {
+            $tierPrices[] = $this->tierPriceFactory->create([
+                'data' => $tierPrice
+            ]);
+        }
+        $product->setTierPrices($tierPrices);
+        $product = $this->productRepository->save($product);
+        $this->assertEquals($tierPriceCount, count($product->getTierPrice()));
+        $this->assertEquals(0, $product->getData('tier_price_changed'));
+    }
+
+    /**
+     * @return array
+     */
+    public function saveExistingProductDataProvider(): array
+    {
+        return [
+            'same' => [
+                [
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 2, 'value' => 8],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 5, 'value' => 5],
+                    ['website_id' => 0, 'customer_group_id' => 0, 'qty' => 3, 'value' => 5],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 0,
+                        'qty' => 10,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
+                    ],
+                ],
+                4,
+            ],
+            'update one' => [
+                [
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 2, 'value' => 8],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 5, 'value' => 5],
+                    ['website_id' => 0, 'customer_group_id' => 0, 'qty' => 3, 'value' => 5],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 0,
+                        'qty' => 10,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 10])
+                    ],
+                ],
+                4,
+            ],
+            'delete one' => [
+                [
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 5, 'value' => 5],
+                    ['website_id' => 0, 'customer_group_id' => 0, 'qty' => 3, 'value' => 5],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 0,
+                        'qty' => 10,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
+                    ],
+                ],
+                3,
+            ],
+            'add one' => [
+                [
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 2, 'value' => 8],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 5, 'value' => 5],
+                    ['website_id' => 0, 'customer_group_id' => 0, 'qty' => 3, 'value' => 5],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 32000,
+                        'qty' => 20,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 90])
+                    ],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 0,
+                        'qty' => 10,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
+                    ],
+                ],
+                5,
+            ],
+            'delete all' => [[], 0,],
+        ];
+    }
+
+    /**
+     * @dataProvider saveNewProductDataProvider
+     * @param array $tierPricesData
+     * @param $tierPriceCount
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function testSaveNewProduct(array $tierPricesData, $tierPriceCount)
+    {
+        /** @var $product \Magento\Catalog\Model\Product */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\Product::class);
+        $product->isObjectNew(true);
+        $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
+            ->setAttributeSetId(4)
+            ->setName('Simple Product New')
+            ->setSku('simple product new')
+            ->setPrice(10);
+        $tierPrices = [];
+        foreach ($tierPricesData as $tierPrice) {
+            $tierPrices[] = $this->tierPriceFactory->create([
+                'data' => $tierPrice
+            ]);
+        }
+        $product->setTierPrices($tierPrices);
+        $product = $this->productRepository->save($product);
+        $this->assertEquals($tierPriceCount, count($product->getTierPrice()));
+        $this->assertEquals(0, $product->getData('tier_price_changed'));
+    }
+
+    /**
+     * @return array
+     */
+    public function saveNewProductDataProvider(): array
+    {
+        return [
+            [
+                [
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 2, 'value' => 8],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 5, 'value' => 5],
+                    ['website_id' => 0, 'customer_group_id' => 0, 'qty' => 3, 'value' => 5],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 0,
+                        'qty' => 10,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
+                    ],
+                ],
+                4,
+            ],
+        ];
+    }
 }
