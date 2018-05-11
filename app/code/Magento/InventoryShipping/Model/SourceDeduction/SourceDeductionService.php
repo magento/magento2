@@ -16,7 +16,7 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
 use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -40,7 +40,7 @@ class SourceDeductionService implements SourceDeductionServiceInterface
     private $getStockItemConfiguration;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
@@ -68,7 +68,7 @@ class SourceDeductionService implements SourceDeductionServiceInterface
      * @param SourceItemsSaveInterface $sourceItemsSave
      * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param SalesChannelInterfaceFactory $salesChannelFactory
      * @param ItemToSellInterfaceFactory $itemsToSellFactory
      * @param WebsiteRepositoryInterface $websiteRepository
@@ -78,7 +78,7 @@ class SourceDeductionService implements SourceDeductionServiceInterface
         SourceItemsSaveInterface $sourceItemsSave,
         GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku,
         GetStockItemConfigurationInterface $getStockItemConfiguration,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         SalesChannelInterfaceFactory $salesChannelFactory,
         ItemToSellInterfaceFactory $itemsToSellFactory,
         WebsiteRepositoryInterface $websiteRepository,
@@ -103,7 +103,7 @@ class SourceDeductionService implements SourceDeductionServiceInterface
         $sourceCode = $sourceDeductionRequest->getSourceCode();
         $websiteId = $sourceDeductionRequest->getWebsiteId();
 
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+        $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
         $itemsToSell = [];
         foreach ($sourceDeductionRequest->getItems() as $item) {
             $itemSku = $item->getSku();

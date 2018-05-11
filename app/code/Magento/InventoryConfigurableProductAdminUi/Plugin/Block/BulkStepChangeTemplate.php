@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurableProductAdminUi\Plugin\Block;
 
 use Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk;
-use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 
 /**
  * Change template if not single store mode.

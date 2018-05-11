@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalogAdminUi\Plugin\InventoryAdminUi\Stock\StockSaveProcessor;
 
 use Magento\InventoryAdminUi\Model\Stock\StockSourceLinkProcessor;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 
 /**
  * Prevent process of source links related to default stock.

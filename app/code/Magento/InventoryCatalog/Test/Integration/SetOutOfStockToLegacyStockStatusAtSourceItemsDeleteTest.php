@@ -16,7 +16,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 

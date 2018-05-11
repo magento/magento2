@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Test\Integration;
 
-use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
+use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

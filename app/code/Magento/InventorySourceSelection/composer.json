@@ -6,8 +6,8 @@
     "magento/framework": "*",
     "magento/module-inventory-source-selection-api": "*",
     "magento/module-inventory-api": "*",
-    "magento/module-inventory-sales": "*",
-    "magento/module-inventory-catalog": "*",
+    "magento/module-inventory-sales-api": "*",
+    "magento/module-inventory-catalog-api": "*",
     "magento/module-sales": "*"
   },
   "type": "magento2-module",

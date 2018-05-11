@@ -10,7 +10,7 @@ namespace Magento\InventoryCatalogAdminUi\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**

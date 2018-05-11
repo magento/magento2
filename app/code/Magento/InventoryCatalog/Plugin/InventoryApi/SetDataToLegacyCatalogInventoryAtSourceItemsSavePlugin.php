@@ -10,11 +10,11 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockStatus;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 
 /**
  * Set Qty and status for legacy CatalogInventory Stock Status and Stock Item DB tables,

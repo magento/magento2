@@ -10,7 +10,7 @@ namespace Magento\InventoryShipping\Setup\Operation;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
-use Magento\InventoryCatalog\Model\DefaultSourceProvider;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 
 class AssignDefaultSourceToShipments
 {
@@ -26,17 +26,17 @@ class AssignDefaultSourceToShipments
     private $resourceConnection;
 
     /**
-     * @var DefaultSourceProvider
+     * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param DefaultSourceProvider $defaultSourceProvider
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DefaultSourceProvider $defaultSourceProvider
+        DefaultSourceProviderInterface $defaultSourceProvider
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->defaultSourceProvider = $defaultSourceProvider;

@@ -11,7 +11,7 @@ use Magento\CatalogInventory\Model\Stock\Status;
 use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockStatus;
 use Psr\Log\LoggerInterface;

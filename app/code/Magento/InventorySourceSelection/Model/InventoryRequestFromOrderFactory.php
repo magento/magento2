@@ -13,8 +13,8 @@ use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
+use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 
 class InventoryRequestFromOrderFactory
 {
@@ -29,7 +29,7 @@ class InventoryRequestFromOrderFactory
     private $inventoryRequestFactory;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
@@ -42,13 +42,13 @@ class InventoryRequestFromOrderFactory
      * InventoryRequestFactory constructor.
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      */
     public function __construct(
         ItemRequestInterfaceFactory $itemRequestFactory,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         GetSkusByProductIdsInterface $getSkusByProductIds
     ) {
         $this->itemRequestFactory = $itemRequestFactory;
@@ -65,7 +65,7 @@ class InventoryRequestFromOrderFactory
     {
         $requestItems = [];
         $websiteId = $order->getStore()->getWebsiteId();
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+        $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
 
         /** @var OrderItemInterface|OrderItem $orderItem */
         foreach ($order->getItems() as $orderItem) {

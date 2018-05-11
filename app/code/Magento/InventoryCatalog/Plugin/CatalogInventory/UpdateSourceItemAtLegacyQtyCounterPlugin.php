@@ -13,8 +13,8 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 
 /**
  * Class provides around Plugin on Magento\CatalogInventory\Model\ResourceModel::correctItemsQty

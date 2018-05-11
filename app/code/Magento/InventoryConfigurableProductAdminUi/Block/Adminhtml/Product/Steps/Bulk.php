@@ -27,17 +27,17 @@ class Bulk extends \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bu
     /**
      * @var \Magento\Framework\Config\DataInterfaceFactory
      */
-    protected $configFactory;
+    private $configFactory;
 
     /**
      * @var \Magento\Framework\Config\DataInterfaceFactory
      */
-    protected $uiComponentFactory;
+    private $uiComponentFactory;
 
     /**
      * @var ContextFactory
      */
-    protected $contextFactory;
+    private $contextFactory;
 
     /**
      * @param Context $context

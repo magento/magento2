@@ -8,7 +8,7 @@
         "magento/module-import-export": "*",
         "magento/module-inventory-api": "*",
         "magento/module-inventory": "*",
-        "magento/module-inventory-catalog": "*",
+        "magento/module-inventory-catalog-api": "*",
         "magento/module-store": "*"
     },
     "suggest": {

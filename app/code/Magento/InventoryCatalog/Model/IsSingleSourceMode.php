@@ -10,6 +10,7 @@ namespace Magento\InventoryCatalog\Model;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 
 /**
  * @inheritdoc
@@ -19,7 +20,7 @@ class IsSingleSourceMode implements IsSingleSourceModeInterface
     /**
      * @var SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var SourceRepositoryInterface
