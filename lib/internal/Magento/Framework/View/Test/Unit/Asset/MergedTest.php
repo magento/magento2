@@ -12,6 +12,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Framework\View\Asset\MergeableInterface;
 use Magento\Framework\View\Asset\MergeStrategyInterface;
+use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 
 /**
  * Class MergedTest
@@ -43,6 +44,11 @@ class MergedTest extends \PHPUnit\Framework\TestCase
      */
     private $assetRepo;
 
+    /**
+     * @var StorageInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $versionStorage;
+
     protected function setUp()
     {
         $this->assetJsOne = $this->getMockForAbstractClass(MergeableInterface::class);
@@ -66,6 +72,7 @@ class MergedTest extends \PHPUnit\Framework\TestCase
         $this->assetRepo = $this->getMockBuilder(AssetRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->versionStorage = $this->createMock(StorageInterface::class);
     }
 
     /**
@@ -74,7 +81,7 @@ class MergedTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructorNothingToMerge()
     {
-        new \Magento\Framework\View\Asset\Merged($this->logger, $this->mergeStrategy, $this->assetRepo, []);
+        new \Magento\Framework\View\Asset\Merged($this->logger, $this->mergeStrategy, $this->assetRepo, $this->versionStorage, []);
     }
 
     /**
@@ -89,6 +96,7 @@ class MergedTest extends \PHPUnit\Framework\TestCase
             'logger' => $this->logger,
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
+            'versionStorage' => $this->versionStorage,
             'assets' => [$this->assetJsOne, $assetUrl],
         ]);
     }
@@ -108,6 +116,7 @@ class MergedTest extends \PHPUnit\Framework\TestCase
             'logger' => $this->logger,
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
+            'versionStorage' => $this->versionStorage,
             'assets' => [$this->assetJsOne, $assetCss],
         ]);
     }
@@ -123,6 +132,7 @@ class MergedTest extends \PHPUnit\Framework\TestCase
             'logger' => $this->logger,
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
+            'versionStorage' => $this->versionStorage,
             'assets' => $assets,
         ]);
 
@@ -157,6 +167,7 @@ class MergedTest extends \PHPUnit\Framework\TestCase
             'logger' => $this->logger,
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
+            'versionStorage' => $this->versionStorage,
             'assets' => [$this->assetJsOne, $this->assetJsTwo, $assetBroken],
         ]);
 
