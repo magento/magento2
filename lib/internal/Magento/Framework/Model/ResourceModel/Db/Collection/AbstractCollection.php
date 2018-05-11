@@ -476,12 +476,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         return $this->getResource()->getTable($table);
     }
 
-    /**
-     * Retrieve all ids for collection
-     *
-     * @return array
-     */
-    public function getAllIds()
+    protected function _getAllIdsSelect()
     {
         $idsSelect = clone $this->getSelect();
         $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
@@ -490,7 +485,17 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
 
         $idsSelect->columns($this->getResource()->getIdFieldName(), 'main_table');
-        return $this->getConnection()->fetchCol($idsSelect, $this->_bindParams);
+        return $idsSelect;
+    }
+
+    /**
+     * Retrieve all ids for collection
+     *
+     * @return array
+     */
+    public function getAllIds()
+    {
+        return $this->getConnection()->fetchCol($this->_getAllIdsSelect(), $this->_bindParams);
     }
 
     /**
