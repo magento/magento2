@@ -80,7 +80,7 @@ class SaveHandler implements ExtensionInterface
         if (null !== $priceRows) {
             if (!is_array($priceRows)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Something went wrong while processing the request.')
+                    __('Tier prices data should be array, but actually other type is received')
                 );
             }
             $websiteId = $this->storeManager->getStore($entity->getStoreId())->getWebsiteId();
