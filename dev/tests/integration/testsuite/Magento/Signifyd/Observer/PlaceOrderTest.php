@@ -12,6 +12,8 @@ use Magento\Framework\Event\Observer;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
@@ -101,6 +103,44 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $this->creationService->expects(self::once())
             ->method('createForOrder')
             ->with(self::equalTo($order->getEntityId()));
+
+        $event = $this->objectManager->create(
+            Event::class,
+            [
+                'data' => ['order' => $order]
+            ]
+        );
+
+        /** @var Observer $observer */
+        $observer = $this->objectManager->get(Observer::class);
+        $observer->setEvent($event);
+
+        $this->placeOrder->execute($observer);
+    }
+
+    /**
+     * Signifyd is enabled for default store.
+     * Checks a test case when order placed with website where signifyd is disabled.
+     *
+     * @covers \Magento\Signifyd\Observer\PlaceOrder::execute
+     * @magentoDataFixture Magento/Signifyd/_files/order_with_customer_and_two_simple_products.php
+     * @magentoDataFixture Magento/Signifyd/_files/website_configuration.php
+     */
+    public function testExecuteWithWebsiteConfiguration()
+    {
+        /** @var StoreRepositoryInterface $storeRepository */
+        $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
+        $store = $storeRepository->get('test_second_store');
+
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager->setCurrentStore($store->getId());
+
+        $order = $this->getOrder('100000001');
+        $order->setStoreId($store->getId());
+
+        $this->creationService->expects(self::never())
+            ->method('createForOrder');
 
         $event = $this->objectManager->create(
             Event::class,
