@@ -145,9 +145,6 @@
                 <item name="dev" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
                 <item name="general/locale/code" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::DISABLED</item>
             </argument>
-            <argument name="exemptions" xsi:type="array">
-                <item name="dev/debug/debug_logging" xsi:type="string"/>
-            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout\Generator\Block">

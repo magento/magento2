@@ -51,6 +51,57 @@
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
-        <data key="file">logo.png</data>
+        <data key="file">magento-logo.png</data>
+    </entity>
+    <entity name="productWithDescription" type="product">
+        <data key="sku" unique="suffix">testProductWithDescriptionSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">testProductWithDescriptionName</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">testproductwithdescriptionurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
+    </entity>
+    <entity name="productWithOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionDropDown</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionRadiobutton</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionCheckbox</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionMultiSelect</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionDate</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionTime</requiredEntity>
+    </entity>
+    <entity name="VirtualProduct" type="product">
+        <data key="sku" unique="suffix">virtualproduct</data>
+        <data key="type_id">virtual</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="price">99.99</data>
+        <data key="quantity">250</data>
+        <data key="weight">0</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="VirtualProduct" type="product">
+        <data key="sku" unique="suffix">virtualproduct</data>
+        <data key="type_id">virtual</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="price">99.99</data>
+        <data key="quantity">250</data>
+        <data key="weight">0</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
 </entities>

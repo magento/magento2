@@ -15,11 +15,15 @@ $registry->register('isSecureArea', true);
 
 $productSkuList = ['simple_product_1', 'simple_product_2'];
 foreach ($productSkuList as $sku) {
-    /** @var $product \Magento\Catalog\Model\Product */
-    $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
-    $product->loadByAttribute('sku', $sku);
-    if ($product->getId()) {
-        $product->delete();
+    try {
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get($sku, true);
+        if ($product->getId()) {
+            $productRepository->delete($product);
+        }
+    } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        //Product already removed
     }
 }
 
