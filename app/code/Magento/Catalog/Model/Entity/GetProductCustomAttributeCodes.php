@@ -58,7 +58,6 @@ class GetProductCustomAttributeCodes implements GetCustomAttributeCodesInterface
             return $this->getAttributesForSet($attributeSetId);
         }
 
-
         return $this->getAttributes($metadataService);
     }
 

@@ -117,7 +117,14 @@ class GetProductCustomAttributeCodesTest extends TestCase
 
         $result->expects($this->once())
             ->method('getItems')
-            ->willReturn([$this->getMockAttribute('test_code'), $this->getMockAttribute('another_code'), $this->getMockAttribute('sku'), $this->getMockAttribute('price')]);
+            ->willReturn(
+                [
+                    $this->getMockAttribute('test_code'),
+                    $this->getMockAttribute('another_code'),
+                    $this->getMockAttribute('sku'),
+                    $this->getMockAttribute('price')
+                ]
+            );
 
         $this->assertEquals(
             ['test_code', 'another_code'],
@@ -136,7 +143,9 @@ class GetProductCustomAttributeCodesTest extends TestCase
             ->with('attribute_set_id', 100, 'eq')
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($this->getMockSearchCriteria());
+        $this->searchCriteriaBuilder->expects($this->once())
+            ->method('create')
+            ->willReturn($this->getMockSearchCriteria());
 
         $result = $this->getMockBuilder(ProductAttributeSearchResultsInterface::class)
             ->setMethods(['getItems'])
@@ -172,7 +181,9 @@ class GetProductCustomAttributeCodesTest extends TestCase
             ->with('attribute_set_id', 101, 'eq')
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($this->getMockSearchCriteria());
+        $this->searchCriteriaBuilder->expects($this->once())
+            ->method('create')
+            ->willReturn($this->getMockSearchCriteria());
 
         $result = $this->getMockBuilder(ProductAttributeSearchResultsInterface::class)
             ->setMethods(['getItems'])
