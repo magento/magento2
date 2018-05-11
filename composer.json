@@ -182,6 +182,7 @@
         "magento/module-inventory-grouped-product": "*",
         "magento/module-inventory-import-export": "*",
         "magento/module-inventory-indexer": "*",
+        "magento/module-inventory-multi-dimensional-indexer": "*",
         "magento/module-inventory-low-quantity-notification": "*",
         "magento/module-inventory-low-quantity-notification-api": "*",
         "magento/module-inventory-product-alert": "*",
