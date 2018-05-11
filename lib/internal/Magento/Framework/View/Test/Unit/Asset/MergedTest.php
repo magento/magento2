@@ -84,8 +84,8 @@ class MergedTest extends \PHPUnit\Framework\TestCase
         new \Magento\Framework\View\Asset\Merged(
             $this->logger, $this->mergeStrategy,
             $this->assetRepo,
-            $this->versionStorage,
-            []
+            [],
+            $this->versionStorage
         );
     }
 
