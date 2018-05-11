@@ -259,7 +259,7 @@ class UpdateHandler implements ExtensionInterface
             $this->getAdditionalFields($data),
             [
                 'website_id' => $data['website_id'],
-                'all_groups' => $useForAllGroups ? 1 : 0,
+                'all_groups' => (int)$useForAllGroups,
                 'customer_group_id' => $customerGroupId,
                 'value' => $data['price'] ?? null,
                 'qty' => (int)$data['price_qty']
