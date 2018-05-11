@@ -77,7 +77,7 @@ class UpdateHandler implements ExtensionInterface
         $priceRows = $entity->getData($attribute->getName());
         if (null !== $priceRows) {
             if (!is_array($priceRows)) {
-                throw new \Magento\Framework\Exception\RuntimeException(
+                throw new \Magento\Framework\Exception\InputException(
                     __('Tier prices data should be array, but actually other type is received')
                 );
             }

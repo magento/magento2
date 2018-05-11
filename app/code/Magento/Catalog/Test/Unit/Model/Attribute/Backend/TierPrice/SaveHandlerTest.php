@@ -151,7 +151,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Tier prices data should be array, but actually other type is received
      */
     public function testExecuteWithException()
