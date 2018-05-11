@@ -28,14 +28,25 @@ class AttributeFilter
     public function prepareProductAttributes(Product $product, array $productData, array $useDefaults)
     {
         foreach ($productData as $attribute => $value) {
-            $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === "1";
-            if ($value === '' && $considerUseDefaultsAttribute) {
-                /** @var $product Product */
-                if ((bool)$product->getData($attribute) === (bool)$value) {
-                    unset($productData[$attribute]);
-                }
+            if ($this->isAttributeShouldNotBeUpdated($product, $useDefaults, $attribute, $value)) {
+                unset($productData[$attribute]);
             }
         }
+
         return $productData;
+    }
+
+    /**
+     * @param Product $product
+     * @param $useDefaults
+     * @param $attribute
+     * @param $value
+     * @return bool
+     */
+    private function isAttributeShouldNotBeUpdated(Product $product, $useDefaults, $attribute, $value)
+    {
+        $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === "1";
+
+        return ($value === '' && $considerUseDefaultsAttribute && !$product->getData($attribute));
     }
 }
