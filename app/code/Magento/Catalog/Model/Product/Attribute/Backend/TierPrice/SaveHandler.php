@@ -72,6 +72,7 @@ class SaveHandler implements ExtensionInterface
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function execute($entity, $arguments = [])
     {
@@ -79,7 +80,7 @@ class SaveHandler implements ExtensionInterface
         $priceRows = $entity->getData($attribute->getName());
         if (null !== $priceRows) {
             if (!is_array($priceRows)) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new \Magento\Framework\Exception\RuntimeException(
                     __('Tier prices data should be array, but actually other type is received')
                 );
             }
