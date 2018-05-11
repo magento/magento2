@@ -3,6 +3,8 @@
  * See COPYING.txt for license details.
  */
 
+/* global Ext, varienWindowOnload, varienElementMethods */
+
 define([
     'jquery',
     'prototype',
@@ -32,14 +34,12 @@ define([
             parameters = {},
             root = {},
             len = 0,
-            key = '',
-            i = 0;
+            key = '';
 
-        /* eslint-disable */
         /**
          * Fix ext compatibility with prototype 1.6
          */
-        Ext.lib.Event.getTarget = function (e) {// eslint-disable-line no-undef
+        Ext.lib.Event.getTarget = function (e) {
             var ee = e.browserEvent || e;
 
             return ee.target ? Event.element(ee) : null;
@@ -47,24 +47,23 @@ define([
 
         /**
          * @param {Object} el
-         * @param {Object} config
+         * @param {Object} nodeConfig
          */
-        Ext.tree.TreePanel.Enhanced = function (el, config) {// eslint-disable-line no-undef
-            Ext.tree.TreePanel.Enhanced.superclass.constructor.call(this, el, config);// eslint-disable-line no-undef
+        Ext.tree.TreePanel.Enhanced = function (el, nodeConfig) {
+            Ext.tree.TreePanel.Enhanced.superclass.constructor.call(this, el, nodeConfig);
         };
 
-        Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {// eslint-disable-line no-undef
-            /* eslint-enable */
+        Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
             /**
-             * @param {Object} config
+             * @param {Object} treeConfig
              * @param {Boolean} firstLoad
              */
-            loadTree: function (config, firstLoad) {// eslint-disable-line no-shadow
-                parameters = config.parameters,
-                    data = config.data,
-                    root = new Ext.tree.TreeNode(parameters);// eslint-disable-line no-undef
+            loadTree: function (treeConfig, firstLoad) {
+                parameters = treeConfig.parameters,
+                    data = treeConfig.data,
+                    root = new Ext.tree.TreeNode(parameters);
 
-                if (typeof parameters.rootVisible != 'undefined') {
+                if (typeof parameters.rootVisible !== 'undefined') {
                     this.rootVisible = parameters.rootVisible * 1;
                 }
 
@@ -90,7 +89,7 @@ define([
         });
 
         jQuery(function () {
-            var categoryLoader = new Ext.tree.TreeLoader({// eslint-disable-line no-undef
+            var categoryLoader = new Ext.tree.TreeLoader({
                 dataUrl: config.dataUrl
             });
 
@@ -110,19 +109,19 @@ define([
             };
 
             /**
-             * @param {Object} config
+             * @param {Object} nodeConfig
              * @returns {Object}
              */
-            categoryLoader.createNode = function (config) {// eslint-disable-line no-shadow
+            categoryLoader.createNode = function (nodeConfig) {
                 var node;
 
-                config.uiProvider = Ext.tree.CheckboxNodeUI;// eslint-disable-line no-undef
+                nodeConfig.uiProvider = Ext.tree.CheckboxNodeUI;
 
-                if (config.children && !config.children.length) {
-                    delete config.children;
-                    node = new Ext.tree.AsyncTreeNode(config);// eslint-disable-line no-undef
+                if (nodeConfig.children && !nodeConfig.children.length) {
+                    delete nodeConfig.children;
+                    node = new Ext.tree.AsyncTreeNode(nodeConfig);
                 } else {
-                    node = new Ext.tree.TreeNode(config);// eslint-disable-line no-undef
+                    node = new Ext.tree.TreeNode(nodeConfig);
                 }
 
                 return node;
@@ -130,22 +129,22 @@ define([
 
             /**
              * @param {Object} parent
-             * @param {Object} config
+             * @param {Object} nodeConfig
              * @param {Integer} i
              */
-            categoryLoader.processCategoryTree = function (parent, config, i) {// eslint-disable-line no-shadow
+            categoryLoader.processCategoryTree = function (parent, nodeConfig, i) {
                 var node,
                     _node = {};
 
-                config[i].uiProvider = Ext.tree.CheckboxNodeUI;// eslint-disable-line no-undef
+                nodeConfig[i].uiProvider = Ext.tree.CheckboxNodeUI;
 
-                _node = Object.clone(config[i]);
+                _node = Object.clone(nodeConfig[i]);
 
                 if (_node.children && !_node.children.length) {
                     delete _node.children;
-                    node = new Ext.tree.AsyncTreeNode(_node);// eslint-disable-line no-undef
+                    node = new Ext.tree.AsyncTreeNode(_node);
                 } else {
-                    node = new Ext.tree.TreeNode(config[i]);// eslint-disable-line no-undef
+                    node = new Ext.tree.TreeNode(nodeConfig[i]);
                 }
                 parent.appendChild(node);
                 node.loader = node.getOwnerTree().loader;
@@ -157,18 +156,19 @@ define([
 
             /**
              * @param {Object} parent
-             * @param {Object} config
+             * @param {Object} nodeConfig
              * @returns {void}
              */
-            categoryLoader.buildCategoryTree = function (parent, config) {// eslint-disable-line no-shadow
-                var i = 0;
-                if (!config) {
+            categoryLoader.buildCategoryTree = function (parent, nodeConfig) {
+                var j = 0;
+
+                if (!nodeConfig) {
                     return null;
                 }
 
-                if (parent && config && config.length) {
-                    for (i = 0; i < config.length; i++) {
-                        categoryLoader.processCategoryTree(parent, config, i);
+                if (parent && nodeConfig && nodeConfig.length) {
+                    for (j = 0; j < nodeConfig.length; j++) {
+                        categoryLoader.processCategoryTree(parent, nodeConfig, j);
                     }
                 }
             };
@@ -179,19 +179,15 @@ define([
              * @param {Object} node
              * @returns {Object}
              */
-            categoryLoader.buildHashChildren = function (hash, node) {// eslint-disable-line no-shadow
-                var i = 0;
-                // eslint-disable-next-line no-extra-parens
-                if ((node.childNodes.length > 0) || (node.loaded === false && node.loading === false)) {
+            categoryLoader.buildHashChildren = function (hash, node) {
+                var j = 0;
+
+                if (node.childNodes.length > 0 || node.loaded === false && node.loading === false) {
                     hash.children = [];
 
-                    for (i = 0, len = node.childNodes.length; i < len; i++) {
-                        /* eslint-disable */
-                        if (!hash.children) {
-                            hash.children = [];
-                        }
-                        /* eslint-enable */
-                        hash.children.push(this.buildHash(node.childNodes[i]));
+                    for (j = 0, len = node.childNodes.length; j < len; j++) {
+                        hash.children = hash.children ? hash.children : [];
+                        hash.children.push(this.buildHash(node.childNodes[j]));
                     }
                 }
 
@@ -231,7 +227,6 @@ define([
                 treeLoader.baseParams.id = node.attributes.id;
             });
 
-            /* eslint-disable */
             categoryLoader.on('load', function () {
                 varienWindowOnload();
             });
@@ -271,7 +266,6 @@ define([
             tree.loadTree({
                 parameters: parameters, data: options.treeJson
             }, true);
-            /* eslint-enable */
         });
     };
 });
