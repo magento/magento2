@@ -10,7 +10,7 @@ namespace Magento\InventoryShipping\Ui\Component\Control\SourceSelection;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Ui\Component\Control\Container;
 use Magento\InventorySourceSelectionApi\Api\GetSourceSelectionAlgorithmListInterface;
-use Magento\InventorySourceSelection\Model\GetDefaultSourceSelectionAlgorithmCodeInterface;
+use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 
 class AlgorithmSelectionButton implements ButtonProviderInterface
 {

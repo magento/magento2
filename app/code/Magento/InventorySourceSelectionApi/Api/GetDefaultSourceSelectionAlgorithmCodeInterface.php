@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceSelection\Model;
+namespace Magento\InventorySourceSelectionApi\Api;
 
 /**
  * Service returns Default Source Selection Algorithm Code
