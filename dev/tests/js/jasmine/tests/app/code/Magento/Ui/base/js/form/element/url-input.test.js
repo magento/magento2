@@ -72,5 +72,46 @@ define([
             });
         });
 
+
+        describe('Parent config properties are propagated', function () {
+            it('disabled property is set on child', function () {
+                var params = {
+                    dataScope: 'urlInput',
+                    disabled: true,
+                    urlTypes: {
+                        url: {
+                            label: 'Test label',
+                            component: 'Magento_Ui/js/form/element/abstract',
+                            template: 'ui/form/element/input',
+                            sortOrder: 40
+                        }
+                    }
+                };
+
+                component = new UrlInput(params);
+                expect(component.disabled()).toBe(true);
+                expect(component.urlTypes.url.disabled).toBe(true);
+            });
+
+            it('visible property is set on child', function () {
+                var params = {
+                    dataScope: 'urlInput',
+                    visible: false,
+                    urlTypes: {
+                        url: {
+                            label: 'Test label',
+                            component: 'Magento_Ui/js/form/element/abstract',
+                            template: 'ui/form/element/input',
+                            sortOrder: 40
+                        }
+                    }
+                };
+
+                component = new UrlInput(params);
+                expect(component.visible()).toBe(false);
+                expect(component.urlTypes.url.visible).toBe(false);
+            });
+        });
+
     });
 });
