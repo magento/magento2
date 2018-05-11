@@ -72,7 +72,6 @@ define([
             });
         });
 
-
         describe('Parent config properties are propagated', function () {
             it('disabled property is set on child', function () {
                 var params = {
