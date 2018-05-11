@@ -45,7 +45,7 @@ class CollectionFactory
      * @param array $data
      * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-    public function create(array $data = array())
+    public function create(array $data = [])
     {
         return $this->objectManager->create(
             ($this->catalogCategoryFlatState->isAvailable()) ? Flat\Collection::class : Collection::class,
