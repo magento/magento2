@@ -7,6 +7,7 @@ define([
     'squire'
 ], function (Squire) {
     'use strict';
+
     describe('Magento_Ui/js/form/element/date', function () {
         var injector = new Squire(),
             mocks = {
