@@ -220,7 +220,7 @@ define([
 
         /**
          * Re-init PayPal Auth Flow
-         * @param {Function} callback Optional callback
+         * @param {Function} callback - Optional callback
          */
         reInitPayPal: function (callback) {
             if (Braintree.checkout) {
