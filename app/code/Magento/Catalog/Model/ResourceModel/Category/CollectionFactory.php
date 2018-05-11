@@ -16,7 +16,7 @@ class CollectionFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * Catalog category flat state
