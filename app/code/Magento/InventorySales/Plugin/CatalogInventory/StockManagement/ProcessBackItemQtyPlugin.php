@@ -12,8 +12,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
+use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
+use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 
 /**

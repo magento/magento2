@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservationsApi\Api\Data;
+namespace Magento\InventoryReservationsApi\Model;
 
 /**
  * The entity responsible for reservations, created to keep inventory amount (product quantity) up-to-date.
