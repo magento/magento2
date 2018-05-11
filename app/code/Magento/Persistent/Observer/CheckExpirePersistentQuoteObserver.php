@@ -4,6 +4,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
@@ -51,12 +54,27 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     protected $_persistentData = null;
 
     /**
+     * Request
+     *
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    private $request;
+
+    /**
+     * Checkout Page path
+     *
+     * @var string
+     */
+    private $checkoutPagePath = 'checkout';
+
+    /**
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Persistent\Model\QuoteManager $quoteManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -64,7 +82,8 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         \Magento\Persistent\Model\QuoteManager $quoteManager,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $this->_persistentSession = $persistentSession;
         $this->quoteManager = $quoteManager;
@@ -72,6 +91,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         $this->_checkoutSession = $checkoutSession;
         $this->_eventManager = $eventManager;
         $this->_persistentData = $persistentData;
+        $this->request = $request;
     }
 
     /**
@@ -90,12 +110,32 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             !$this->_persistentSession->isPersistent() &&
             !$this->_customerSession->isLoggedIn() &&
             $this->_checkoutSession->getQuoteId() &&
-            !$observer->getControllerAction() instanceof \Magento\Checkout\Controller\Onepage
-            // persistent session does not expire on onepage checkout page to not spoil customer group id
+            !$this->isRequestFromCheckoutPage($this->request)
+            // persistent session does not expire on onepage checkout page
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
             $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
         }
+    }
+
+    /**
+     * Check current request is coming from onepage checkout page.
+     *
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return bool
+     */
+    private function isRequestFromCheckoutPage(\Magento\Framework\App\RequestInterface $request): bool
+    {
+        $requestUri = (string)$request->getRequestUri();
+        $refererUri = (string)$request->getServer('HTTP_REFERER');
+
+        /** @var bool $isCheckoutPage */
+        $isCheckoutPage = (
+            false !== strpos($requestUri, $this->checkoutPagePath) ||
+            false !== strpos($refererUri, $this->checkoutPagePath)
+        );
+
+        return $isCheckoutPage;
     }
 }
