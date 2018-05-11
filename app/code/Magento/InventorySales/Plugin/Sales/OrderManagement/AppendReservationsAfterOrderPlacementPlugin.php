@@ -18,7 +18,7 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
 use Magento\InventorySales\Model\CheckItemsQuantity;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 
 class AppendReservationsAfterOrderPlacementPlugin
 {
@@ -58,7 +58,7 @@ class AppendReservationsAfterOrderPlacementPlugin
     private $checkItemsQuantity;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
@@ -70,7 +70,7 @@ class AppendReservationsAfterOrderPlacementPlugin
      * @param SalesEventInterfaceFactory $salesEventFactory
      * @param ItemToSellInterfaceFactory $itemsToSellFactory
      * @param CheckItemsQuantity $checkItemsQuantity
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      */
     public function __construct(
         PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent,
@@ -80,7 +80,7 @@ class AppendReservationsAfterOrderPlacementPlugin
         SalesEventInterfaceFactory $salesEventFactory,
         ItemToSellInterfaceFactory $itemsToSellFactory,
         CheckItemsQuantity $checkItemsQuantity,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
     ) {
         $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
         $this->getSkusByProductIds = $getSkusByProductIds;
@@ -118,7 +118,7 @@ class AppendReservationsAfterOrderPlacementPlugin
 
         $websiteId = (int)$order->getStore()->getWebsiteId();
         $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+        $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
 
         $this->checkItemsQuantity->execute($itemsBySku, $stockId);
 

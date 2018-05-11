@@ -138,4 +138,5 @@
     <type name="Magento\SalesInventory\Model\Order\ReturnProcessor">
         <plugin name="process_return_product_qty_on_credit_memo" type="Magento\InventorySales\Plugin\SalesInventory\ProcessReturnQtyOnCreditMemoPlugin" />
     </type>
+    <preference for="Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface" type="Magento\InventorySales\Model\StockByWebsiteIdResolver"/>
 </config>

@@ -9,7 +9,7 @@ namespace Magento\InventoryShipping\Model;
 
 use Magento\Framework\Exception\InputException;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
@@ -40,20 +40,20 @@ class InventoryRequestFromInvoiceFactory
     private $inventoryRequestFactory;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
     /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param ItemRequestInterfaceFactory $itemRequestFactory
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
         ItemRequestInterfaceFactory $itemRequestFactory,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         InventoryRequestInterfaceFactory $inventoryRequestFactory
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
@@ -71,7 +71,7 @@ class InventoryRequestFromInvoiceFactory
     {
         $order = $invoice->getOrder();
         $websiteId = $order->getStore()->getWebsiteId();
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+        $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
 
         /** @var InventoryRequestInterface $inventoryRequest */
         return $this->inventoryRequestFactory->create([
