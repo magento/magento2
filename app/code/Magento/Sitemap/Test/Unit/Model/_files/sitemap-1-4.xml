@@ -14,18 +14,18 @@
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
         <image:image>
-            <image:loc>http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/i/m/image1.png</image:loc>
+            <image:loc>http://store.com/pub/media/catalog/product/cache/10f519365b01716ddb90abc57de5a837/i/m/image1.png</image:loc>
             <image:title>Product &amp; &gt; title &lt; &quot;</image:title>
             <image:caption>caption &amp; &gt; title &lt; &quot;</image:caption>
         </image:image>
         <image:image>
-            <image:loc>http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/i/m/image_no_caption.png</image:loc>
+            <image:loc>http://store.com/pub/media/catalog/product/cache/10f519365b01716ddb90abc57de5a837/i/m/image_no_caption.png</image:loc>
             <image:title>Product &amp; &gt; title &lt; &quot;</image:title>
         </image:image>
         <PageMap xmlns="http://www.google.com/schemas/sitemap-pagemap/1.0">
             <DataObject type="thumbnail">
                 <Attribute name="name" value="Product &amp; &gt; title &lt; &quot;"/>
-                <Attribute name="src" value="http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/t/h/thumbnail.jpg"/>
+                <Attribute name="src" value="http://store.com/pub/media/catalog/product/cache/10f519365b01716ddb90abc57de5a837/t/h/thumbnail.jpg"/>
             </DataObject>
         </PageMap>
     </url>
