@@ -52,12 +52,6 @@
         <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableLink">
             <argument name="link" value="downloadableLink"/>
         </actionGroup>
-        <actionGroup ref="addDownloadableSampleFile" stepKey="addDownloadSampleFile">
-            <argument name="sample" value="downloadableSampleFile"/>
-        </actionGroup>
-        <actionGroup ref="addDownloadableSampleUrl" stepKey="addDownloadableSampleUrl">
-            <argument name="sample" value="downloadableSampleUrl"/>
-        </actionGroup>
 
         <!--Save product-->
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
