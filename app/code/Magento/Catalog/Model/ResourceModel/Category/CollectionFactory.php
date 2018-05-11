@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
 /**
@@ -42,14 +47,8 @@ class CollectionFactory
      */
     public function create(array $data = array())
     {
-        if ($this->catalogCategoryFlatState->isAvailable()) {
-            return $this->objectManager->create(
-                \Magento\Catalog\Model\ResourceModel\Category\Flat\Collection::class,
-                $data
-            );
-        }
         return $this->objectManager->create(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class,
+            ($this->catalogCategoryFlatState->isAvailable()) ? Flat\Collection::class : Collection::class,
             $data
         );
     }
