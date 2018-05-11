@@ -101,8 +101,8 @@ class MergedTest extends \PHPUnit\Framework\TestCase
             'logger' => $this->logger,
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
-            'versionStorage' => $this->versionStorage,
             'assets' => [$this->assetJsOne, $assetUrl],
+            'versionStorage' => $this->versionStorage,
         ]);
     }
 
@@ -121,8 +121,8 @@ class MergedTest extends \PHPUnit\Framework\TestCase
             'logger' => $this->logger,
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
-            'versionStorage' => $this->versionStorage,
             'assets' => [$this->assetJsOne, $assetCss],
+            'versionStorage' => $this->versionStorage,
         ]);
     }
 
@@ -137,8 +137,8 @@ class MergedTest extends \PHPUnit\Framework\TestCase
             'logger' => $this->logger,
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
-            'versionStorage' => $this->versionStorage,
             'assets' => $assets,
+            'versionStorage' => $this->versionStorage,
         ]);
 
         $mergedAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
@@ -172,8 +172,8 @@ class MergedTest extends \PHPUnit\Framework\TestCase
             'logger' => $this->logger,
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
-            'versionStorage' => $this->versionStorage,
             'assets' => [$this->assetJsOne, $this->assetJsTwo, $assetBroken],
+            'versionStorage' => $this->versionStorage,
         ]);
 
         $this->logger->expects($this->once())->method('critical')->with($this->identicalTo($mergeError));
