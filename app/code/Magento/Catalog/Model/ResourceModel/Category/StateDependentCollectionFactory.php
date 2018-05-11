@@ -7,9 +7,9 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
 /**
- * Factory class for category collection
+ * Factory class for state dependent category collection
  */
-class CollectionFactory
+class StateDependentCollectionFactory
 {
     /**
      * Object Manager instance
