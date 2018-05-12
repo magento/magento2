@@ -71,7 +71,7 @@
     <preference for="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksSave"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksDelete"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
-    <preference for="Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface" type="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain"/>
+    <preference for="Magento\InventoryApi\Api\StockSourceLinkValidatorInterface" type="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain"/>
     <type name="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">

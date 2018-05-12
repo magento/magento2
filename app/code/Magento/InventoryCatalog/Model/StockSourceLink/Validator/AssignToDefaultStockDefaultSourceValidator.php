@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalog\Model\StockSourceLink\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface;
+use Magento\InventoryApi\Api\StockSourceLinkValidatorInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
@@ -51,9 +51,19 @@ class AssignToDefaultStockDefaultSourceValidator implements StockSourceLinkValid
      */
     public function validate(StockSourceLinkInterface $link): ValidationResult
     {
+        $defaultStockId = $this->defaultStockProvider->getId();
+        $defaultSourceCode = $this->defaultSourceProvider->getCode();
+        $linkStockId = $link->getStockId();
+        $linkSourceCode = $link->getSourceCode();
+        $initialAssign = false;
+        if ($defaultStockId === $linkStockId
+        && $defaultSourceCode === $linkSourceCode) {
+            $initialAssign = true;
+        }
+
         $errors = [];
-        if ($link->getStockId() === $this->defaultStockProvider->getId()
-        || $link->getSourceCode() === $this->defaultSourceProvider->getCode()) {
+        if (!$initialAssign && $linkStockId === $defaultStockId
+        || $linkSourceCode === $defaultSourceCode) {
             $errors[] = __('Can not save link related to Default Source or Default Stock');
         }
 
