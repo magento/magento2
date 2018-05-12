@@ -10,7 +10,6 @@ namespace Magento\InventoryCache\Model\ResourceModel;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Inventory\Model\ResourceModel\SourceItem;
 
 /**
  * Provides product ids related to specified source items ids.
@@ -28,15 +27,33 @@ class GetProductIdsBySourceItemIds
     private $metadataPool;
 
     /**
+     * @var string
+     */
+    private $tableNameSourceItem;
+
+    /**
+     * @var string
+     */
+    private $sourceItemIdFieldName;
+
+    /**
      * GetProductIdsByStockIds constructor.
      *
      * @param ResourceConnection $resource
      * @param MetadataPool $metadataPool
+     * @param string $tableNameSourceItem
+     * @param string $sourceItemIdFieldName
      */
-    public function __construct(ResourceConnection $resource, MetadataPool $metadataPool)
-    {
+    public function __construct(
+        ResourceConnection $resource,
+        MetadataPool $metadataPool,
+        $tableNameSourceItem,
+        $sourceItemIdFieldName
+    ) {
         $this->resource = $resource;
         $this->metadataPool = $metadataPool;
+        $this->tableNameSourceItem = $tableNameSourceItem;
+        $this->sourceItemIdFieldName = $sourceItemIdFieldName;
     }
 
     /**
@@ -50,13 +67,13 @@ class GetProductIdsBySourceItemIds
     {
         $productLinkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $connection = $this->resource->getConnection();
-        $sourceItemTable = $this->resource->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
+        $sourceItemTable = $this->resource->getTableName($this->tableNameSourceItem);
         $select = $connection->select()
             ->from(
                 ['source_items_table' => $sourceItemTable],
                 []
             )->where(
-                SourceItem::ID_FIELD_NAME . ' IN (?)',
+                $this->sourceItemIdFieldName . ' IN (?)',
                 $sourceItemIds
             )->join(
                 ['product_table' => $this->resource->getTableName('catalog_product_entity')],
