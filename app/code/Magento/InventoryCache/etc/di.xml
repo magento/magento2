@@ -12,4 +12,10 @@
     <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
         <plugin name="invalidate_products_cache" type="Magento\InventoryCache\Plugin\InventoryIndexer\Indexer\Source\SourceItemIndexer\CacheFlush"/>
     </type>
+    <type name="Magento\InventoryCache\Model\ResourceModel\GetProductIdsBySourceItemIds">
+        <arguments>
+            <argument name="tableNameSourceItem" xsi:type="string">inventory_source_item</argument>
+            <argument name="sourceItemIdFieldName" xsi:type="string">source_item_id</argument>
+        </arguments>
+    </type>
 </config>
