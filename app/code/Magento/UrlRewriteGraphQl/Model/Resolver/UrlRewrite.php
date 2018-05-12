@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * UrlRewrite field resolver, used for GraphQL request processing.
@@ -34,20 +35,29 @@ class UrlRewrite implements ResolverInterface
      * @var ValueFactory
      */
     private $valueFactory;
+    
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
+    
 
     /**
      * @param UrlFinderInterface $urlFinder
      * @param StoreManagerInterface $storeManager
      * @param ValueFactory $valueFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
         StoreManagerInterface $storeManager,
-        ValueFactory $valueFactory
+        ValueFactory $valueFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->urlFinder = $urlFinder;
         $this->storeManager = $storeManager;
         $this->valueFactory = $valueFactory;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -63,8 +73,19 @@ class UrlRewrite implements ResolverInterface
         $result = function () {
             return null;
         };
+        
         if (isset($args['url'])) {
-            $urlRewrite = $this->findCanonicalUrl($args['url']);
+            $url = $args['url'];
+            if (substr($url, 0, 1) === '/' && $url !== '/') {
+                $url = ltrim($url, '/');
+            } else if ($url === '/') {
+                $homePageIdentifier = $this->scopeConfig->getValue(
+                    \Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE,
+                    ScopeInterface::SCOPE_STORE
+                );
+                $url = $homePageIdentifier;
+            }
+            $urlRewrite = $this->findCanonicalUrl($url);
             if ($urlRewrite) {
                 $urlRewriteReturnArray = [
                     'id' => $urlRewrite->getEntityId(),
@@ -96,6 +117,7 @@ class UrlRewrite implements ResolverInterface
         if (!$urlRewrite) {
             $urlRewrite = $this->findUrlFromTargetPath($requestPath);
         }
+        
         return $urlRewrite;
     }
 
