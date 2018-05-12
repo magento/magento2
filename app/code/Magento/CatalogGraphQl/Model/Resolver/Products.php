@@ -70,6 +70,7 @@ class Products implements ResolverInterface
      * @param Filter $filterQuery
      * @param ValueFactory $valueFactory
      * @param \Magento\Catalog\Model\Config $catalogConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
