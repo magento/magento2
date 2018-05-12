@@ -511,6 +511,15 @@ QUERY;
         {
           page_size
           current_page
+          sort_fields 
+          {
+            default
+            options 
+            {
+                key
+                label
+            }
+          }
         }
     }
 }
@@ -530,6 +539,10 @@ QUERY;
         $this->assertProductItems($filteredChildProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
         $this->assertEquals(1, $response['products']['page_info']['current_page']);
+        $this->assertArrayHasKey('sort_fields', $response['products']['page_info']);
+        $this->assertArrayHasKey('options', $response['products']['page_info']['sort_fields']);
+        $this->assertArrayHasKey('default', $response['products']['page_info']['sort_fields']);
+        $this->assertEquals('position', $response['products']['page_info']['sort_fields']['default']);
     }
 
     /**
