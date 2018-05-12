@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 
 use \Magento\Catalog\Model\Product;
@@ -43,7 +46,7 @@ class AttributeFilter
      * @param $value
      * @return bool
      */
-    private function isAttributeShouldNotBeUpdated(Product $product, $useDefaults, $attribute, $value)
+    private function isAttributeShouldNotBeUpdated(Product $product, $useDefaults, $attribute, $value) : bool
     {
         $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === "1";
 
