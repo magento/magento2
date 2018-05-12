@@ -62,8 +62,8 @@ class AssignToDefaultStockDefaultSourceValidator implements StockSourceLinkValid
         }
 
         $errors = [];
-        if (!$initialAssign && $linkStockId === $defaultStockId
-        || $linkSourceCode === $defaultSourceCode) {
+        if (!$initialAssign && ($linkStockId === $defaultStockId
+        || $linkSourceCode === $defaultSourceCode)) {
             $errors[] = __('Can not save link related to Default Source or Default Stock');
         }
 
