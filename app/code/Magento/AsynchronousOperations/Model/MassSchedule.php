@@ -56,7 +56,7 @@ class MassSchedule
     private $operationRepository;
 
     /**
-     * @var \Magento\Webapi\Model\Authorization\TokenUserContext
+     * @var \Magento\Authorization\Model\UserContextInterface
      */
     private $userContext;
 
