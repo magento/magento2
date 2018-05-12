@@ -5,14 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceSelection\Model;
+namespace Magento\InventorySourceSelectionApi\Model;
 
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\GetSourceSelectionAlgorithmListInterface;
 
 /**
- * @inheritdoc
+ * {@inheritdoc}
+ *
+ * @api
  */
 class GetSourceSelectionAlgorithmList implements GetSourceSelectionAlgorithmListInterface
 {
@@ -46,14 +48,13 @@ class GetSourceSelectionAlgorithmList implements GetSourceSelectionAlgorithmList
     {
         $algorithmsList = [];
         foreach ($this->availableAlgorithms as $data) {
-            $algorithmsList[] = $this->sourceSelectionAlgorithmFactory->create(
-                [
-                    'code' => $data['code'],
-                    'title' => $data['title'],
-                    'description' => $data['description']
-                ]
-            );
+            $algorithmsList[] = $this->sourceSelectionAlgorithmFactory->create([
+                'code' => $data['code'],
+                'title' => $data['title'],
+                'description' => $data['description']
+            ]);
         }
+
         return $algorithmsList;
     }
 }

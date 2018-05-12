@@ -11,7 +11,7 @@ use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\InventorySourceSelection\Model\GetDefaultSourceSelectionAlgorithmCodeInterface;
+use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 
 class SourceSelectionServiceTest extends WebapiAbstract
 {
