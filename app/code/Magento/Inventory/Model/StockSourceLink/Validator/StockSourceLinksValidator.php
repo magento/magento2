@@ -10,6 +10,7 @@ namespace Magento\Inventory\Model\StockSourceLink\Validator;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\StockSourceLinkValidatorInterface;
 
 /**
  * Responsible for Stock Source links validation
