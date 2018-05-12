@@ -17,6 +17,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 class Config extends \Magento\Eav\Model\Config
 {
     const XML_PATH_LIST_DEFAULT_SORT_BY = 'catalog/frontend/default_sort_by';
+    const XML_PATH_SEARCH_LIST_DEFAULT_SORT_BY = 'catalog/search/default_sort_by';
 
     /**
      * @var mixed
@@ -492,5 +493,21 @@ class Config extends \Magento\Eav\Model\Config
     public function getProductListDefaultSortBy($store = null)
     {
         return $this->_scopeConfig->getValue(self::XML_PATH_LIST_DEFAULT_SORT_BY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+    }
+
+    /**
+     * Retrieve Search Product List Default Sort By
+     *
+     * @param mixed $store
+     * @return string
+     */
+    public function getSearchProductListDefaultSortBy($store = null)
+    {
+        $configValue = $this->_scopeConfig->getValue(
+            self::XML_PATH_SEARCH_LIST_DEFAULT_SORT_BY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+        return $configValue ? $configValue : 'relevance';
     }
 }
