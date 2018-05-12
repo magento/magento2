@@ -14,8 +14,8 @@
     </type>
     <type name="Magento\InventoryCache\Model\ResourceModel\GetProductIdsBySourceItemIds">
         <arguments>
-            <argument name="tableNameSourceItem" xsi:type="string">inventory_source_item</argument>
-            <argument name="sourceItemIdFieldName" xsi:type="string">source_item_id</argument>
+            <argument name="tableNameSourceItem" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
+            <argument name="sourceItemIdFieldName" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::ID_FIELD_NAME</argument>
         </arguments>
     </type>
 </config>
