@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\OptionSource;
+namespace Magento\InventoryAdminUi\Model\OptionSource;
 
 use Magento\Directory\Model\ResourceModel\Region\CollectionFactory;
 use Magento\Framework\Data\OptionSourceInterface;
