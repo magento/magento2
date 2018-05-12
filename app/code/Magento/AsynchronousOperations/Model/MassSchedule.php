@@ -18,6 +18,7 @@ use Magento\Framework\Bulk\BulkManagementInterface;
 use Magento\Framework\Exception\BulkException;
 use Psr\Log\LoggerInterface;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepository;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Class MassSchedule used for adding multiple entities as Operations to Bulk Management with the status tracking
@@ -55,6 +56,11 @@ class MassSchedule
     private $operationRepository;
 
     /**
+     * @var \Magento\Webapi\Model\Authorization\TokenUserContext
+     */
+    private $userContext;
+
+    /**
      * Initialize dependencies.
      *
      * @param IdentityGeneratorInterface $identityService
@@ -70,7 +76,8 @@ class MassSchedule
         AsyncResponseInterfaceFactory $asyncResponseFactory,
         BulkManagementInterface $bulkManagement,
         LoggerInterface $logger,
-        OperationRepository $operationRepository
+        OperationRepository $operationRepository,
+        UserContextInterface $userContext
     ) {
         $this->identityService = $identityService;
         $this->itemStatusInterfaceFactory = $itemStatusInterfaceFactory;
@@ -78,6 +85,7 @@ class MassSchedule
         $this->bulkManagement = $bulkManagement;
         $this->logger = $logger;
         $this->operationRepository = $operationRepository;
+        $this->userContext = $userContext;
     }
 
     /**
@@ -94,6 +102,10 @@ class MassSchedule
     public function publishMass($topicName, array $entitiesArray, $groupId = null, $userId = null)
     {
         $bulkDescription = __('Topic %1', $topicName);
+
+        if ($userId == null) {
+            $userId = $this->userContext->getUserId();
+        }
 
         if ($groupId == null) {
             $groupId = $this->identityService->generateId();

@@ -10,7 +10,6 @@
     },
     "constraint": {
       "PRIMARY": true,
-      "MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID": true,
       "MAGENTO_BULK_UUID": true
     }
   },

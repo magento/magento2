@@ -14,7 +14,7 @@
         <column xsi:type="varbinary" name="uuid" nullable="true" length="39"
                 comment="Bulk UUID (can be exposed to reference bulk entity)"/>
         <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="ID of the user that performed an action"/>
+                comment="ID of the WebAPI user that performed an action"/>
         <column xsi:type="varchar" name="description" nullable="true" length="255" comment="Bulk Description"/>
         <column xsi:type="int" name="operation_count" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Total number of operations scheduled within this bulk"/>
@@ -23,8 +23,6 @@
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID" table="magento_bulk"
-                    column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
         <constraint xsi:type="unique" name="MAGENTO_BULK_UUID">
             <column name="uuid"/>
         </constraint>
