@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Webapi;
 
-use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
+use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
@@ -68,7 +68,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $serviceTypeToEntityTypeMap;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ConfigInterface
+     * @var ConfigInterface
      */
     private $config;
 
@@ -80,7 +80,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param AttributeValueFactory $attributeValueFactory
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param MethodsMap $methodsMap
-     * @param \Magento\Framework\ObjectManager\ConfigInterface $config
+     * @param ConfigInterface $config
      * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
      */
     public function __construct(
@@ -89,7 +89,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         AttributeValueFactory $attributeValueFactory,
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         MethodsMap $methodsMap,
-        \Magento\Framework\ObjectManager\ConfigInterface $config,
+        ConfigInterface $config = null,
         ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null
     ) {
         $this->typeProcessor = $typeProcessor;
@@ -99,7 +99,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->methodsMap = $methodsMap;
         $this->serviceTypeToEntityTypeMap = $serviceTypeToEntityTypeMap
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ServiceTypeToEntityTypeMap::class);
-        $this->config = $config;
+        $this->config = $config
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ConfigInterface::class);
     }
 
     /**
