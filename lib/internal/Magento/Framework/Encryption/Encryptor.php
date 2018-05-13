@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\Encryption;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -124,7 +127,7 @@ class Encryptor implements EncryptorInterface
         $this->random = $random;
 
         // load all possible keys
-        $this->keys = preg_split('/\s+/s', trim($deploymentConfig->get(self::PARAM_CRYPT_KEY)));
+        $this->keys = preg_split('/\s+/s', trim((string)$deploymentConfig->get(self::PARAM_CRYPT_KEY)));
         $this->keyVersion = count($this->keys) - 1;
     }
 
@@ -183,7 +186,7 @@ class Encryptor implements EncryptorInterface
      */
     public function hash($data, $version = self::HASH_VERSION_LATEST)
     {
-        return hash($this->hashVersionMap[$version], $data);
+        return hash($this->hashVersionMap[$version], (string)$data);
     }
 
     /**

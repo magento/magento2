@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Encryption;
 
 /**
@@ -63,7 +65,7 @@ class Crypt
             // @codingStandardsIgnoreStart
             $maxKeySize = @mcrypt_enc_get_key_size($this->_handle);
             // @codingStandardsIgnoreEnd
-            if (strlen($key) > $maxKeySize) {
+            if (strlen((string)$key) > $maxKeySize) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase('Key must not exceed %1 bytes.', [$maxKeySize])
                 );

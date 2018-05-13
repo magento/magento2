@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Magento\EncryptionKey\Setup\Patch\Data;
 
 use Magento\Framework\Setup\Patch\DataPatchInterface;

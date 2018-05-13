@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Encryption\Adapter;
 
 use Magento\Framework\Encryption\Encryptor;
