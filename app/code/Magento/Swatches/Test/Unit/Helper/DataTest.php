@@ -7,7 +7,9 @@ namespace Magento\Swatches\Test\Unit\Helper;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Swatches\Model\ResourceModel\Swatch\Collection;
 use Magento\Swatches\Model\SwatchAttributesProvider;
+use Magento\Swatches\Model\SwatchAttributeType;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -50,13 +52,18 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\ProductRepositoryInterface */
     protected $productRepoMock;
 
-    /** @var   \PHPUnit_Framework_MockObject_MockObject|MetadataPool*/
+    /** @var   \PHPUnit_Framework_MockObject_MockObject|MetadataPool */
     private $metaDataPoolMock;
 
     /**
      * @var SwatchAttributesProvider|\PHPUnit_Framework_MockObject_MockObject
      */
     private $swatchAttributesProvider;
+
+    /**
+     * @var SwatchAttributeType|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $swatchTypeCheckerMock;
 
     protected function setUp()
     {
@@ -115,6 +122,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->swatchAttributesProvider = $this->getMockBuilder(SwatchAttributesProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->swatchTypeCheckerMock = $this->getMockBuilder(SwatchAttributeType::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isVisualSwatch', 'isTextSwatch', 'isSwatchAttribute'])
+            ->getMock();
 
         $this->swatchHelperObject = $this->objectManager->getObject(
             \Magento\Swatches\Helper\Data::class,
@@ -127,6 +138,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'imageHelper' => $this->imageHelperMock,
                 'serializer' => $serializer,
                 'swatchAttributesProvider' => $this->swatchAttributesProvider,
+                'swatchTypeChecker' => $this->swatchTypeCheckerMock,
             ]
         );
         $this->objectManager->setBackwardCompatibleProperty(
@@ -240,8 +252,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     'small_image' => '/m/a/magento.png',
                     'thumbnail' => '/m/a/magento.png',
                     'swatch_image' => '/m/a/magento.png', //important
-                ], \Magento\Catalog\Model\Product::class,
-                ['color' => 31]
+                ],
+                \Magento\Catalog\Model\Product::class,
+                ['color' => 31],
             ],
             [
                 [
@@ -250,7 +263,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     'thumbnail' => '/m/a/magento.png',
                 ],
                 false,
-                ['size' => 31]
+                ['size' => 31],
             ],
         ];
     }
@@ -302,8 +315,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     'small_image' => '/m/a/magento.png',
                     'thumbnail' => '/m/a/magento.png',
                     'swatch_image' => '/m/a/magento.png',
-                ], \Magento\Catalog\Model\Product::class,
-                ['color' => 31]
+                ],
+                \Magento\Catalog\Model\Product::class,
+                ['color' => 31],
             ],
             [
                 [
@@ -312,20 +326,30 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     'swatch_image' => '/m/a/magento.png',
                 ],
                 false,
-                ['size' => 31]
+                ['size' => 31],
             ],
         ];
     }
 
     public function testLoadFirstVariationWithImageNoProduct()
     {
+        $this->swatchAttributesProvider
+            ->method('provide')
+            ->with($this->productMock)
+            ->willReturn([]);
         $result = $this->swatchHelperObject->loadVariationByFallback($this->productMock, ['color' => 31]);
+
         $this->assertFalse($result);
     }
 
     public function testLoadVariationByFallbackWithoutProduct()
     {
+        $this->swatchAttributesProvider
+            ->method('provide')
+            ->with($this->productMock)
+            ->willReturn([]);
         $result = $this->swatchHelperObject->loadFirstVariationWithImage($this->productMock, ['color' => 31]);
+
         $this->assertFalse($result);
     }
 
@@ -340,8 +364,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->imageHelperMock->expects($this->any())
             ->method('init')
             ->willReturnMap([
-                [$this->productMock, 'product_page_image_large_no_frame', [], $this->imageHelperMock],
-                [$this->productMock, 'product_page_image_medium_no_frame', [], $this->imageHelperMock],
+                [$this->productMock, 'product_page_image_large', [], $this->imageHelperMock],
+                [$this->productMock, 'product_page_image_medium', [], $this->imageHelperMock],
                 [$this->productMock, 'product_page_image_small', [], $this->imageHelperMock],
             ]);
 
@@ -608,21 +632,36 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'option_id' => 35,
                 'id' => 423,
             ],
+            [
+                'type' => 0,
+                'store_id' => 0,
+                'value' => 'test2',
+                'option_id' => 35,
+                'id' => 424,
+            ]
         ];
 
-        $swatchMock->expects($this->at(0))->method('offsetGet')->with('type')->willReturn(1);
-        $swatchMock->expects($this->at(1))->method('offsetGet')->with('option_id')->willReturn(35);
-        $swatchMock->expects($this->at(2))->method('getData')->with('')->willReturn($optionsData[0]);
+        $swatchMock->expects($this->at(0))->method('offsetGet')->with('type')
+            ->willReturn($optionsData[0]['type']);
+        $swatchMock->expects($this->at(1))->method('offsetGet')->with('option_id')
+            ->willReturn($optionsData[0]['option_id']);
+        $swatchMock->expects($this->at(2))->method('getData')->with('')
+            ->willReturn($optionsData[0]);
+        $swatchMock->expects($this->at(3))->method('offsetGet')->with('type')
+            ->willReturn($optionsData[1]['type']);
+        $swatchMock->expects($this->at(4))->method('offsetGet')->with('store_id')
+            ->willReturn($optionsData[1]['store_id']);
+        $swatchMock->expects($this->at(5))->method('offsetGet')->with('store_id')
+            ->willReturn($optionsData[1]['store_id']);
+        $swatchMock->expects($this->at(6))->method('offsetGet')->with('option_id')
+            ->willReturn($optionsData[1]['option_id']);
+        $swatchMock->expects($this->at(7))->method('getData')->with('')
+            ->willReturn($optionsData[1]);
 
-        $swatchCollectionMock = $this->objectManager->getCollectionMock(
-            \Magento\Swatches\Model\ResourceModel\Swatch\Collection::class,
-            [
-                $swatchMock,
-            ]
-        );
-        $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
-
+        $swatchCollectionMock = $this->objectManager
+            ->getCollectionMock(Collection::class, [$swatchMock, $swatchMock]);
         $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->will($this->returnSelf());
+        $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
@@ -664,7 +703,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $swatchMock->expects($this->at(9))->method('getData')->with('')->willReturn($optionsData[1]);
 
         $swatchCollectionMock = $this->objectManager->getCollectionMock(
-            \Magento\Swatches\Model\ResourceModel\Swatch\Collection::class,
+            Collection::class,
             [
                 $swatchMock,
                 $swatchMock,
@@ -700,7 +739,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $swatchMock->expects($this->at(4))->method('getData')->with('')->willReturn($optionsData);
 
         $swatchCollectionMock = $this->objectManager->getCollectionMock(
-            \Magento\Swatches\Model\ResourceModel\Swatch\Collection::class,
+            Collection::class,
             [
                 $swatchMock,
             ]
@@ -724,17 +763,19 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider dataIsVisualSwatch
+     * @param bool $boolResult
+     * @return void
+     * @dataProvider dataIsSwatch
      */
-    public function testIsVisualSwatch($swatchType, $boolResult)
+    public function testIsVisualSwatch(bool $boolResult) : void
     {
-        $this->attributeMock->method('hasData')->with('swatch_input_type')->willReturn(true);
-        $this->attributeMock
+        $this->swatchTypeCheckerMock
             ->expects($this->once())
-            ->method('getData')
-            ->with('swatch_input_type')
-            ->willReturn($swatchType);
+            ->method('isVisualSwatch')
+            ->with($this->attributeMock)
+            ->willReturn($boolResult);
         $result = $this->swatchHelperObject->isVisualSwatch($this->attributeMock);
+
         if ($boolResult) {
             $this->assertTrue($result);
         } else {
@@ -742,99 +783,32 @@ class DataTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function dataIsVisualSwatch()
+    /**
+     * @return array
+     */
+    public function dataIsSwatch() : array
     {
         return [
-            [
-                'visual',
-                true,
-            ],
-            [
-                'some_other_type',
-                false,
-            ],
+            [true],
+            [false],
         ];
     }
 
     /**
-     * @dataProvider dataForIsVisualSwatchType
+     * @param bool $boolResult
+     * @return void
+     * @dataProvider dataIsSwatch
      */
-    public function testIsVisualSwatchFalse($data, $count, $swatchType, $boolResult)
+    public function testIsTextSwatch(bool $boolResult) : void
     {
-        $this->attributeMock->method('hasData')->with('swatch_input_type')->willReturn(false);
-
-        $this->attributeMock->expects($this->exactly(2))
-            ->method('getData')
-            ->withConsecutive(
-                ['additional_data'],
-                ['swatch_input_type']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $data,
-                $swatchType
-            );
-
-        $this->attributeMock
-            ->expects($this->exactly($count['setData']))
-            ->method('setData');
-
-        $result = $this->swatchHelperObject->isVisualSwatch($this->attributeMock);
-        if ($boolResult) {
-            $this->assertTrue($result);
-        } else {
-            $this->assertFalse($result);
-        }
-    }
-
-    public function dataForIsVisualSwatchType()
-    {
-        $additionalData = [
-            'swatch_input_type' => 'visual',
-            'update_product_preview_image' => 1,
-            'use_product_image_for_swatch' => 0
-        ];
-        return [
-            [
-                json_encode($additionalData),
-                [
-                    'getData' => 1,
-                    'setData' => 3,
-                ],
-                'visual',
-                true,
-            ],
-            [
-                null,
-                [
-                    'getData' => 1,
-                    'setData' => 0,
-                ],
-                'some_other_type',
-                false,
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider dataForIsTextSwatchType
-     */
-    public function testIsTextSwatchFalse($data, $count, $swatchType, $boolResult)
-    {
-        $this->attributeMock->method('hasData')->with('swatch_input_type')->willReturn(false);
-
-        $this->attributeMock->expects($this->exactly(2))->method('getData')->withConsecutive(
-            ['additional_data'],
-            ['swatch_input_type']
-        )->willReturnOnConsecutiveCalls(
-            $data,
-            $swatchType
-        );
-
-        $this->attributeMock
-            ->expects($this->exactly($count['setData']))
-            ->method('setData');
+        $this->swatchTypeCheckerMock
+            ->expects($this->once())
+            ->method('isTextSwatch')
+            ->with($this->attributeMock)
+            ->willReturn($boolResult);
 
         $result = $this->swatchHelperObject->isTextSwatch($this->attributeMock);
+
         if ($boolResult) {
             $this->assertTrue($result);
         } else {
@@ -842,79 +816,18 @@ class DataTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function dataForIsTextSwatchType()
-    {
-        $additionalData = [
-            'swatch_input_type' => 'text',
-            'update_product_preview_image' => 1,
-            'use_product_image_for_swatch' => 0
-        ];
-        return [
-            [
-                json_encode($additionalData),
-                [
-                    'getData' => 1,
-                    'setData' => 3,
-                ],
-                'text',
-                true,
-            ],
-            [
-                null,
-                [
-                    'getData' => 1,
-                    'setData' => 0,
-                ],
-                'some_other_type',
-                false,
-            ],
-        ];
-    }
-
     /**
-     * @dataProvider dataIsTextSwatch
+     * @param bool $boolResult
+     * @return void
+     * @dataProvider dataIsSwatch
      */
-    public function testIsTextSwatch($swatchType, $boolResult)
+    public function testIsSwatchAttribute(bool $boolResult) : void
     {
-        $this->attributeMock->method('hasData')->with('swatch_input_type')->willReturn(true);
-        $this->attributeMock
+        $this->swatchTypeCheckerMock
             ->expects($this->once())
-            ->method('getData')
-            ->with('swatch_input_type')
-            ->willReturn($swatchType);
-        $result = $this->swatchHelperObject->isTextSwatch($this->attributeMock);
-        if ($boolResult) {
-            $this->assertTrue($result);
-        } else {
-            $this->assertFalse($result);
-        }
-    }
-
-    public function dataIsTextSwatch()
-    {
-        return [
-            [
-                'text',
-                true,
-            ],
-            [
-                'some_other_type',
-                false,
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider dataIsSwatchAttribute
-     */
-    public function testIsSwatchAttribute($times, $swatchType, $boolResult)
-    {
-        $this->attributeMock->method('hasData')->with('swatch_input_type')->willReturn(true);
-        $this->attributeMock
-            ->expects($this->exactly($times))
-            ->method('getData')
-            ->with('swatch_input_type')
-            ->willReturn($swatchType);
+            ->method('isSwatchAttribute')
+            ->with($this->attributeMock)
+            ->willReturn($boolResult);
 
         $result = $this->swatchHelperObject->isSwatchAttribute($this->attributeMock);
         if ($boolResult) {
@@ -922,26 +835,5 @@ class DataTest extends \PHPUnit\Framework\TestCase
         } else {
             $this->assertFalse($result);
         }
-    }
-
-    public function dataIsSwatchAttribute()
-    {
-        return [
-            [
-                1,
-                'visual',
-                true,
-            ],
-            [
-                2,
-                'text',
-                true,
-            ],
-            [
-                2,
-                'some_other_type',
-                false,
-            ],
-        ];
     }
 }
