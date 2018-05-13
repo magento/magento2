@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Setup\Operation;
 
-use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterfaceFactory;
+use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 
@@ -34,26 +34,26 @@ class AssignDefaultSourceToDefaultStock
     private $stockSourceLinkFactory;
 
     /**
-     * @var SaveMultiple
+     * @var StockSourceLinksSaveInterface
      */
-    private $saveMultiple;
+    private $stockSourceLinksSave;
 
     /**
      * @param DefaultStockProviderInterface $defaultStockProvider
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param StockSourceLinkInterfaceFactory $stockSourceLinkFactory
-     * @param SaveMultiple $saveMultiple
+     * @param StockSourceLinksSaveInterface $stockSourceLinksSave
      */
     public function __construct(
         DefaultStockProviderInterface $defaultStockProvider,
         DefaultSourceProviderInterface $defaultSourceProvider,
         StockSourceLinkInterfaceFactory $stockSourceLinkFactory,
-        SaveMultiple $saveMultiple
+        StockSourceLinksSaveInterface $stockSourceLinksSave
     ) {
         $this->defaultStockProvider = $defaultStockProvider;
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->stockSourceLinkFactory = $stockSourceLinkFactory;
-        $this->saveMultiple = $saveMultiple;
+        $this->stockSourceLinksSave = $stockSourceLinksSave;
     }
 
     /**
@@ -70,7 +70,6 @@ class AssignDefaultSourceToDefaultStock
         $link->setSourceCode($this->defaultSourceProvider->getCode());
         $link->setPriority(1);
 
-        //Avoid default stock validation for source links during installation.
-        $this->saveMultiple->execute([$link]);
+        $this->stockSourceLinksSave->execute([$link]);
     }
 }
