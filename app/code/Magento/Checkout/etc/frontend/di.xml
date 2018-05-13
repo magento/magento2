@@ -81,6 +81,7 @@
                 <item name="custom_price" xsi:type="string">custom_price</item>
             </argument>
         </arguments>
+    </type>
     <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
         <arguments>
             <argument name="configurationsMap" xsi:type="array">
