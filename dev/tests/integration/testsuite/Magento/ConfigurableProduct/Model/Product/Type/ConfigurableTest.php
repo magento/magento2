@@ -518,12 +518,16 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $this->productRepository->save($product);
 
+        //Check grouped array, ex
+        //array(group => array(ids))
+        $resultArray[$product->getId()] = $oneChildId;
+        // Check alternative format for backward compatibility
+        $resultArray[0] = [
+            $oneChildId => $oneChildId
+        ];
+
         self::assertEquals(
-            [
-                [
-                    $oneChildId => $oneChildId
-                ]
-            ],
+            $resultArray,
             $this->model->getChildrenIds($this->product->getId())
         );
     }

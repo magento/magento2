@@ -174,10 +174,10 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $parentId
         );
 
-        $childrenIds = [];
+        $childrenIds = [[]];
         foreach ($connection->fetchAll($select) as $row) {
             $childrenIds[$row['parent_id']][] = $row['product_id'];
-            // Alternative declaration format for backward compatibility
+            // Alternative format for backward compatibility
             $childrenIds[0][$row['product_id']] = $row['product_id'];
         }
 
