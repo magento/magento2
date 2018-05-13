@@ -57,7 +57,6 @@ class SodiumChachaPatch implements DataPatchInterface
         $this->moduleDataSetup->startSetup();
 
         $this->reEncryptSystemConfigurationValues();
-        $this->reEncryptCreditCardNumbers();
 
         $this->moduleDataSetup->endSetup();
     }
@@ -108,22 +107,6 @@ class SodiumChachaPatch implements DataPatchInterface
                     ['config_id = ?' => (int)$configId]
                 );
             }
-        }
-    }
-
-    private function reEncryptCreditCardNumbers()
-    {
-        $table = $this->moduleDataSetup->getTable('sales_order_payment');
-        $select = $this->moduleDataSetup->getConnection()->select()->from($table, ['entity_id', 'cc_number_enc']);
-
-        $attributeValues = $this->moduleDataSetup->getConnection()->fetchPairs($select);
-        // save new values
-        foreach ($attributeValues as $valueId => $value) {
-            $this->moduleDataSetup->getConnection()->update(
-                $table,
-                ['cc_number_enc' => $this->encryptor->encrypt($this->encryptor->decrypt($value))],
-                ['entity_id = ?' => (int)$valueId]
-            );
         }
     }
 }
