@@ -20,6 +20,7 @@ define([
          * @param {Object} data
          */
         saveData = function (data) {
+            data['data_persistence'] = true;
             storage.set(cacheKey, data);
         },
 
