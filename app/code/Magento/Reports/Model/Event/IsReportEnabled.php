@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Model\Event;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -45,7 +47,7 @@ class IsReportEnabled
      * @return string
      * @throws InputException
      */
-    private function getConfigPathByEventType(string $reportEventType): ?string
+    private function getConfigPathByEventType(string $reportEventType): string
     {
         $typeToPathMap = [
             Event::EVENT_PRODUCT_VIEW => 'reports/options/product_view_enabled',
