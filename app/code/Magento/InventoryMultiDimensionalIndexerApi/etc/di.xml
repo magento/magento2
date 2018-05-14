@@ -6,13 +6,13 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\InventoryMultiDimensionalIndexer\Model\IndexNameResolver">
+    <type name="Magento\InventoryMultiDimensionalIndexerApi\Model\IndexNameResolver">
         <arguments>
             <argument name="indexScopeResolver" xsi:type="object">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</argument>
         </arguments>
     </type>
-    <preference for="Magento\InventoryMultiDimensionalIndexer\Model\IndexTableSwitcherInterface" type="Magento\InventoryMultiDimensionalIndexer\Model\IndexTableSwitcher" />
-    <preference for="Magento\InventoryMultiDimensionalIndexer\Model\IndexNameResolverInterface" type="Magento\InventoryMultiDimensionalIndexer\Model\IndexNameResolver" />
+    <preference for="Magento\InventoryMultiDimensionalIndexerApi\Model\IndexTableSwitcherInterface" type="Magento\InventoryMultiDimensionalIndexerApi\Model\IndexTableSwitcher" />
+    <preference for="Magento\InventoryMultiDimensionalIndexerApi\Model\IndexNameResolverInterface" type="Magento\InventoryMultiDimensionalIndexerApi\Model\IndexNameResolver" />
 
 </config>
 

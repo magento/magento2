@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryMultiDimensionalIndexer\Model\Alias;
-use Magento\InventoryMultiDimensionalIndexer\Model\IndexNameBuilder;
-use Magento\InventoryMultiDimensionalIndexer\Model\IndexNameResolver;
+use Magento\InventoryMultiDimensionalIndexerApi\Model\Alias;
+use Magento\InventoryMultiDimensionalIndexerApi\Model\IndexNameBuilder;
+use Magento\InventoryMultiDimensionalIndexerApi\Model\IndexNameResolver;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**

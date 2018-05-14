@@ -1,10 +1,10 @@
 # Inventory
 
-**InventoryMultiDimensionalIndexer**
+**InventoryMultiDimensionalIndexerApi**
 
 MultiDimensionalIndexer
 =======
-The InventoryMultiDimensionalIndexer provides functionality of multi-dimension index creation and
+The InventoryMultiDimensionalIndexerApi provides functionality of multi-dimension index creation and
 handling.
 
 Library introduces a set of extension points which split monolithic index by specified Dimension (Scope), creating 

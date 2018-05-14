@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Test\Integration\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryMultiDimensionalIndexer\Model\Alias;
-use Magento\InventoryMultiDimensionalIndexer\Model\IndexNameBuilder;
+use Magento\InventoryMultiDimensionalIndexerApi\Model\Alias;
+use Magento\InventoryMultiDimensionalIndexerApi\Model\IndexNameBuilder;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
