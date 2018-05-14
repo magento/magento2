@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\InventoryApi\Api;
+namespace Magento\InventoryApi\Model;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;

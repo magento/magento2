@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\MultiDimensionalIndexer;
+namespace Magento\InventoryMultiDimensionalIndexerApi\Model;
 
 /**
  * Logic for switching active and replica index tables by IndexName object

@@ -10,7 +10,7 @@ namespace Magento\Inventory\Model\Source\Command;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
-use Magento\Inventory\Model\Source\Validator\SourceValidatorInterface;
+use Magento\InventoryApi\Model\SourceValidatorInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Psr\Log\LoggerInterface;
 

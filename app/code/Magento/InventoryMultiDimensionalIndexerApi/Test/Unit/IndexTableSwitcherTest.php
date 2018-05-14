@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Framework\Test\Unit\MultiDimensionalIndexer;
+namespace Magento\InventoryMultiDimensionalIndexerApi\Test\Unit;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\MultiDimensionalIndexer\IndexName;
-use Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface;
-use Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcher;
+use Magento\InventoryMultiDimensionalIndexerApi\Model\IndexName;
+use Magento\InventoryMultiDimensionalIndexerApi\Model\IndexNameResolverInterface;
+use Magento\InventoryMultiDimensionalIndexerApi\Model\IndexTableSwitcher;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 

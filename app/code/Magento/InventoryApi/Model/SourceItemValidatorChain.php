@@ -5,17 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\Source\Validator;
+namespace Magento\InventoryApi\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Chain of validators. Extension point for new validators via di configuration
+ * Chain of validators for source item. Extension point for new validators via di configuration
+ *
+ * @api
  */
-class ValidatorChain implements SourceValidatorInterface
+class SourceItemValidatorChain implements SourceItemValidatorInterface
 {
     /**
      * @var ValidationResultFactory
@@ -23,13 +25,13 @@ class ValidatorChain implements SourceValidatorInterface
     private $validationResultFactory;
 
     /**
-     * @var SourceValidatorInterface[]
+     * @var SourceItemValidatorInterface[]
      */
     private $validators;
 
     /**
      * @param ValidationResultFactory $validationResultFactory
-     * @param SourceValidatorInterface[] $validators
+     * @param SourceItemValidatorInterface[] $validators
      * @throws LocalizedException
      */
     public function __construct(
@@ -39,9 +41,9 @@ class ValidatorChain implements SourceValidatorInterface
         $this->validationResultFactory = $validationResultFactory;
 
         foreach ($validators as $validator) {
-            if (!$validator instanceof SourceValidatorInterface) {
+            if (!$validator instanceof SourceItemValidatorInterface) {
                 throw new LocalizedException(
-                    __('Source Validator must implement SourceValidatorInterface.')
+                    __('Source item Validator must implement SourceItemValidatorInterface.')
                 );
             }
         }
@@ -51,11 +53,11 @@ class ValidatorChain implements SourceValidatorInterface
     /**
      * @inheritdoc
      */
-    public function validate(SourceInterface $source): ValidationResult
+    public function validate(SourceItemInterface $sourceItem): ValidationResult
     {
         $errors = [];
         foreach ($this->validators as $validator) {
-            $validationResult = $validator->validate($source);
+            $validationResult = $validator->validate($sourceItem);
 
             if (!$validationResult->isValid()) {
                 $errors = array_merge($errors, $validationResult->getErrors());

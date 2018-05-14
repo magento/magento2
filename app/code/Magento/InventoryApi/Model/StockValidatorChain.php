@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\Stock\Validator;
+namespace Magento\InventoryApi\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResult;
@@ -14,8 +14,10 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 
 /**
  * Chain of validators. Extension point for new validators via di configuration
+ *
+ * @api
  */
-class ValidatorChain implements StockValidatorInterface
+class StockValidatorChain implements StockValidatorInterface
 {
     /**
      * @var ValidationResultFactory

@@ -10,7 +10,7 @@ namespace Magento\Inventory\Model\Stock\Command;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Inventory\Model\ResourceModel\Stock as StockResourceModel;
-use Magento\Inventory\Model\Stock\Validator\StockValidatorInterface;
+use Magento\InventoryApi\Model\StockValidatorInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Psr\Log\LoggerInterface;
 
