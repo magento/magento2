@@ -51,6 +51,11 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\Tes
     protected $productCompModelMock;
 
     /**
+     * @var \Magento\Reports\Model\Event\IsReportEnabled|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $isReportEnabledMock;
+
+    /**
      * {@inheritDoc}
      */
     protected function setUp()
@@ -98,13 +103,19 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\Tes
             ->setMethods(['save'])
             ->getMock();
 
+        $this->isReportEnabledMock = $this->getMockBuilder(\Magento\Reports\Model\Event\IsReportEnabled::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['execute'])
+            ->getMock();
+
         $this->observer = $objectManager->getObject(
             \Magento\Reports\Observer\CatalogProductCompareAddProductObserver::class,
             [
                 'productCompFactory' => $this->productCompFactoryMock,
                 'customerSession' => $this->customerSessionMock,
                 'customerVisitor' => $this->customerVisitorMock,
-                'eventSaver' => $this->eventSaverMock
+                'eventSaver' => $this->eventSaverMock,
+                'isReportEnabled' => $this->isReportEnabledMock
             ]
         );
     }
@@ -127,6 +138,7 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\Tes
         ];
         $observerMock = $this->getObserverMock($productId);
 
+        $this->isReportEnabledMock->expects($this->once())->method('execute')->willReturn(true);
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn($isLoggedIn);
         $this->customerSessionMock->expects($this->any())->method('getCustomerId')->willReturn($customerId);
 

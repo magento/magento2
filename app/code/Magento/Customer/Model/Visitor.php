@@ -6,7 +6,8 @@
 
 namespace Magento\Customer\Model;
 
-use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestSafetyInterface;
 
 /**
  * Class Visitor
@@ -68,6 +69,11 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     protected $indexerRegistry;
 
     /**
+     * @var RequestSafetyInterface
+     */
+    private $requestSafety;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Session\SessionManagerInterface $session
@@ -95,7 +101,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
         array $ignores = [],
-        array $data = []
+        array $data = [],
+        RequestSafetyInterface $requestSafety = null
     ) {
         $this->session = $session;
         $this->httpHeader = $httpHeader;
@@ -105,6 +112,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         $this->scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
         $this->indexerRegistry = $indexerRegistry;
+        $this->requestSafety = $requestSafety ?? ObjectManager::getInstance()->get(RequestSafetyInterface::class);
     }
 
     /**
@@ -136,6 +144,18 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * @return bool
+     */
+    private function isSkipRequestLogging()
+    {
+        // do not handle visitor session for safe methods (e.g. GET request)
+        if ($this->requestSafety->isSafeMethod()) {
+            return true;
+        }
+        return $this->skipRequestLogging;
+    }
+
+    /**
      * Initialization visitor by request
      *
      * Used in event "controller_action_predispatch"
@@ -145,7 +165,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function initByRequest($observer)
     {
-        if ($this->skipRequestLogging || $this->isModuleIgnored($observer)) {
+        if ($this->isSkipRequestLogging() || $this->isModuleIgnored($observer)) {
             return $this;
         }
 
@@ -177,7 +197,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function saveByRequest($observer)
     {
-        if ($this->skipRequestLogging || $this->isModuleIgnored($observer)) {
+        if ($this->isSkipRequestLogging() || $this->isModuleIgnored($observer)) {
             return $this;
         }
 
