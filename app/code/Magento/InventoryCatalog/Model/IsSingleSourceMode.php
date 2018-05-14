@@ -19,7 +19,7 @@ class IsSingleSourceMode implements IsSingleSourceModeInterface
     /**
      * @var SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var SourceRepositoryInterface
