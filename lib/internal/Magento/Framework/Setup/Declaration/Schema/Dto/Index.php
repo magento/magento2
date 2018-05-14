@@ -133,10 +133,12 @@ class Index extends GenericElement implements
     }
 
     /**
+     * Retrieve the index name which is calculated without table prefix.
+     *
      * @return string
      */
     public function getNameWithoutPrefix()
     {
-        return $this->nameWithoutPrefix ?: $this->getName();
+        return $this->nameWithoutPrefix;
     }
 }

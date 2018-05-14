@@ -120,13 +120,15 @@ class TableDiff
     }
 
     /**
+     * Switches keys of the array on the element name without prefix.
+     *
      * @param Constraint[]|Index[] $elements
      * @return array
      */
     private function getElementsListByNameWithoutPrefix(array $elements)
     {
         $elementsList = [];
-        foreach ($elements as $key => $element) {
+        foreach ($elements as $element) {
             $elementsList[$element->getNameWithoutPrefix()] = $element;
         }
 
@@ -166,7 +168,7 @@ class TableDiff
                 $declaredElements = $this->excludeAutoIndexes($declaredTable, $declaredElements);
             }
             
-            if (self::CONSTRAINT_DIFF_TYPE === $elementType) {
+            if (in_array($elementType, [self::CONSTRAINT_DIFF_TYPE, self::INDEX_DIFF_TYPE], true)) {
                 $generatedElements = $this->getElementsListByNameWithoutPrefix($generatedElements);
                 $declaredElements = $this->getElementsListByNameWithoutPrefix($declaredElements);
             }

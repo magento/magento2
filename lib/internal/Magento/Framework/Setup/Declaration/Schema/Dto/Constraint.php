@@ -51,7 +51,7 @@ class Constraint extends GenericElement implements
         string $name,
         string $type,
         Table $table,
-        string $nameWithoutPrefix = ''
+        string $nameWithoutPrefix
     ) {
         parent::__construct($name, $type);
         $this->table = $table;
@@ -77,10 +77,12 @@ class Constraint extends GenericElement implements
     }
 
     /**
+     * Retrieve the constraint name which is calculated without table prefix.
+     *
      * @return string
      */
     public function getNameWithoutPrefix()
     {
-        return $this->nameWithoutPrefix ?: $this->getName();
+        return $this->nameWithoutPrefix;
     }
 }

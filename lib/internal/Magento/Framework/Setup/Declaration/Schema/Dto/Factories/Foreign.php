@@ -71,6 +71,7 @@ class Foreign implements FactoryInterface
                     $data['referenceColumn']->getName()
                 );
         }
+
         $data['nameWithoutPrefix'] = $nameWithoutPrefix;
 
         return $this->objectManager->create($this->className, $data);

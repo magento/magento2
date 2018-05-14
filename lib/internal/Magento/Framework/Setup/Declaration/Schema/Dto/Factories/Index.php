@@ -70,6 +70,7 @@ class Index implements FactoryInterface
                     $data['type']
                 );
         }
+
         $data['nameWithoutPrefix'] = $nameWithoutPrefix;
 
         return $this->objectManager->create($this->className, $data);

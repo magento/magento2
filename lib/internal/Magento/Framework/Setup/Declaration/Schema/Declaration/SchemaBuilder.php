@@ -277,6 +277,8 @@ class SchemaBuilder
     }
 
     /**
+     * Provides the full index name based on the prefix value.
+     *
      * @param string $name
      * @param Table $table
      * @param array $columns
@@ -293,6 +295,10 @@ class SchemaBuilder
             return $name;
         }
 
+        /**
+         * Replica tables should be identical to the original -
+         * indexes and constraints must use the original table name to calculate their own names.
+         */
         $tableName = $table->getName();
         $tableIsReplica = preg_match('#(?<table_name>\S+)_replica$#i', $table->getName(), $matches);
 
@@ -331,6 +337,7 @@ class SchemaBuilder
 
             /**
              * Temporary solution.
+             * @see MAGETWO-91365
              */
             $indexType = AdapterInterface::INDEX_TYPE_INDEX;
             if ($indexData['indexType'] === AdapterInterface::INDEX_TYPE_FULLTEXT) {
@@ -401,6 +408,9 @@ class SchemaBuilder
                     $constraintData['referenceColumn'],
                     $constraintData['referenceTable']
                 );
+                /**
+                 * Calculation of the full name of Foreign Key based on the prefix value.
+                 */
                 $constraintData['name'] = $this->resourceConnection
                     ->getFkName(
                         $table->getName(),
