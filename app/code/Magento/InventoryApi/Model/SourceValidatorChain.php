@@ -5,17 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\SourceItem\Validator;
+namespace Magento\InventoryApi\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Model\SourceValidatorInterface;
 
 /**
- * Chain of validators for source item. Extension point for new validators via di configuration
+ * Chain of validators. Extension point for new validators via di configuration
+ *
+ * @api
  */
-class ValidatorChain implements SourceItemValidatorInterface
+class SourceValidatorChain implements SourceValidatorInterface
 {
     /**
      * @var ValidationResultFactory
@@ -23,13 +26,13 @@ class ValidatorChain implements SourceItemValidatorInterface
     private $validationResultFactory;
 
     /**
-     * @var SourceItemValidatorInterface[]
+     * @var SourceValidatorInterface[]
      */
     private $validators;
 
     /**
      * @param ValidationResultFactory $validationResultFactory
-     * @param SourceItemValidatorInterface[] $validators
+     * @param SourceValidatorInterface[] $validators
      * @throws LocalizedException
      */
     public function __construct(
@@ -39,9 +42,9 @@ class ValidatorChain implements SourceItemValidatorInterface
         $this->validationResultFactory = $validationResultFactory;
 
         foreach ($validators as $validator) {
-            if (!$validator instanceof SourceItemValidatorInterface) {
+            if (!$validator instanceof SourceValidatorInterface) {
                 throw new LocalizedException(
-                    __('Source item Validator must implement SourceItemValidatorInterface.')
+                    __('Source Validator must implement SourceValidatorInterface.')
                 );
             }
         }
@@ -51,11 +54,11 @@ class ValidatorChain implements SourceItemValidatorInterface
     /**
      * @inheritdoc
      */
-    public function validate(SourceItemInterface $sourceItem): ValidationResult
+    public function validate(SourceInterface $source): ValidationResult
     {
         $errors = [];
         foreach ($this->validators as $validator) {
-            $validationResult = $validator->validate($sourceItem);
+            $validationResult = $validator->validate($source);
 
             if (!$validationResult->isValid()) {
                 $errors = array_merge($errors, $validationResult->getErrors());

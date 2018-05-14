@@ -11,6 +11,7 @@ use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Inventory\Model\OptionSource\SourceItemStatus;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Model\SourceItemValidatorInterface;
 
 /**
  * Check that status is valid

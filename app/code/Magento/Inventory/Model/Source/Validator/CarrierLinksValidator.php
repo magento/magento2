@@ -11,6 +11,7 @@ use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\Shipping\Model\Config;
+use Magento\InventoryApi\Model\SourceValidatorInterface;
 
 /**
  * Check that carrier links is valid

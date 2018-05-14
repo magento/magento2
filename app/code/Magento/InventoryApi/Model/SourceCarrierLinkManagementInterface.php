@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model;
+namespace Magento\InventoryApi\Model;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
 

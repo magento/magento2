@@ -5,22 +5,22 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\Stock\Validator;
+namespace Magento\InventoryApi\Model;
 
 use Magento\Framework\Validation\ValidationResult;
-use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Responsible for Stock validation
+ * Responsible for Source validation
  * Extension point for base validation
  *
  * @api
  */
-interface StockValidatorInterface
+interface SourceValidatorInterface
 {
     /**
-     * @param StockInterface $stock
+     * @param SourceInterface $source
      * @return ValidationResult
      */
-    public function validate(StockInterface $stock): ValidationResult;
+    public function validate(SourceInterface $source): ValidationResult;
 }
