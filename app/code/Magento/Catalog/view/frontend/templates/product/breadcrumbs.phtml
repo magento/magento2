@@ -11,7 +11,7 @@ $viewModel = $block->getData('viewModel');
     "breadcrumbs": {
         "categoryUrlSuffix": "<?= $block->escapeHtml($viewModel->getCategoryUrlSuffix()); ?>",
         "useCategoryPathInUrl": <?= (int)$viewModel->isCategoryUsedInProductUrl(); ?>,
-        "product": "<?= $block->escapeHtml($viewModel->getProductName()); ?>"
+        "product": "<?= $block->escapeHtml($block->escapeJsQuote($viewModel->getProductName(), '"')); ?>"
     }
 }'>
 </div>
