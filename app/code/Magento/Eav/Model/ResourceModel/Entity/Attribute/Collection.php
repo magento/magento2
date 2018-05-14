@@ -28,7 +28,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @var bool
      */
-    protected $_inAllAttributeSetsFilterApplied = false;
+    protected $_setFilterApplied = false;
 
     /**
      * @var \Magento\Eav\Model\Config
@@ -231,7 +231,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 ->group('entity_attribute.attribute_id')
                 ->having('count = ' . count($setIds));
 
-            $this->_inAllAttributeSetsFilterApplied = true;
+            $this->_setFilterApplied = true;
         }
 
         //$this->getSelect()->distinct(true);
@@ -501,10 +501,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $idsSelect = parent::_getAllIdsSelect();
 
-        if ($this->_inAllAttributeSetsFilterApplied) {
-            $idsSelect->columns(array(
-                'count' => new \Zend_Db_Expr('COUNT(*)')), 'main_table'
-            );
+        if ($this->_setFilterApplied) {
+            $idsSelect->columns(['count' => new \Zend_Db_Expr('COUNT(*)')], 'main_table');
         }
 
         return $idsSelect;
