@@ -9,15 +9,11 @@
 define([
     'jquery',
     'underscore'
-], function ($, _) {
+    './adapter/buttons'
+], function ($, _, buttons) {
     'use strict';
 
-    var buttons = {
-            'reset':            '#reset',
-            'save':             '#save',
-            'saveAndContinue':  '#save_and_continue'
-        },
-        selectorPrefix = '',
+    var selectorPrefix = '',
         eventPrefix;
 
     /**
