@@ -10,7 +10,6 @@ namespace Magento\InventoryConfigurableProduct\Model\ResourceModel\Product;
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\DB\Select;
-use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
@@ -32,11 +31,6 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     private $stockConfig;
 
     /**
-     * @var GetStockIdForCurrentWebsite
-     */
-    private $getStockIdForCurrentWebsite;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -49,20 +43,17 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     /**
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param StockConfigurationInterface $stockConfig
-     * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
      * @param StoreManagerInterface $storeManager
      * @param StockResolverInterface $stockResolver
      */
     public function __construct(
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         StockConfigurationInterface $stockConfig,
-        GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
         StoreManagerInterface $storeManager,
         StockResolverInterface $stockResolver
     ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->stockConfig = $stockConfig;
-        $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
     }

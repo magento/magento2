@@ -9,7 +9,7 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 
 use Magento\CatalogInventory\Api\RegisterProductSaleInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;

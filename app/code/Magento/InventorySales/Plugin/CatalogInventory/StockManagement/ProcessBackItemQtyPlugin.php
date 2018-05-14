@@ -9,12 +9,12 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
+use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 
 /**
  * Class provides around Plugin on \Magento\CatalogInventory\Model\StockManagement::backItemQty
@@ -27,7 +27,7 @@ class ProcessBackItemQtyPlugin
     private $getSkusByProductIds;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
@@ -53,7 +53,7 @@ class ProcessBackItemQtyPlugin
 
     /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param ReservationBuilderInterface $reservationBuilder
      * @param AppendReservationsInterface $appendReservations
      * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
@@ -61,7 +61,7 @@ class ProcessBackItemQtyPlugin
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         ReservationBuilderInterface $reservationBuilder,
         AppendReservationsInterface $appendReservations,
         IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
@@ -96,7 +96,7 @@ class ProcessBackItemQtyPlugin
         $productType = $this->getProductTypesBySkus->execute([$productSku])[$productSku];
 
         if (true === $this->isSourceItemsAllowedForProductType->execute($productType)) {
-            $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$scopeId)->getStockId();
+            $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$scopeId)->getStockId();
             $reservation = $this->reservationBuilder
                 ->setSku($productSku)
                 ->setQuantity((float)$qty)

@@ -194,7 +194,7 @@
             <formElements>
                 <select>
                     <settings>
-                        <options class="Magento\Inventory\Model\OptionSource\RegionSource"/>
+                        <options class="Magento\InventoryAdminUi\Model\OptionSource\RegionSource"/>
                         <filterBy>
                             <field>country_id</field>
                             <target>${ $.provider }:${ $.parentScope }.country_id</target>
@@ -273,7 +273,7 @@
             <formElements>
                 <multiselect>
                     <settings>
-                        <options class="Magento\Inventory\Model\OptionSource\CarrierSource"/>
+                        <options class="Magento\InventoryAdminUi\Model\OptionSource\CarrierSource"/>
                     </settings>
                 </multiselect>
             </formElements>

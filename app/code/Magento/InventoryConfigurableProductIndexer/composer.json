@@ -7,7 +7,7 @@
         "magento/module-catalog": "*",
         "magento/module-inventory": "*",
         "magento/module-inventory-api": "*",
-        "magento/module-inventory-catalog": "*",
+        "magento/module-inventory-catalog-api": "*",
         "magento/module-inventory-indexer": "*"
     },
     "type": "magento2-module",

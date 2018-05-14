@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDe
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 
 /**
  * Prevent deleting of Default Stock

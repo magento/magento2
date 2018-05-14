@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Api\StockSourceLink;
 
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Webapi\Model\Soap\Fault;

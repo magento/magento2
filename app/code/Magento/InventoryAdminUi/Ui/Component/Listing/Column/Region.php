@@ -9,7 +9,7 @@ namespace Magento\InventoryAdminUi\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Inventory\Model\OptionSource\RegionSource;
+use Magento\InventoryAdminUi\Model\OptionSource\RegionSource;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**

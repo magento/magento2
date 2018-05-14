@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
+use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 
 /**
  * Set data to legacy cataloginventory_stock_item table via plain MySql query

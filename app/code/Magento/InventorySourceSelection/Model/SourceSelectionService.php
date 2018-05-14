@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
+use Magento\InventorySourceSelectionApi\Model\SourceSelectionInterface;
 
 class SourceSelectionService implements SourceSelectionServiceInterface
 {

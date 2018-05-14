@@ -16,4 +16,14 @@
     <type name="Magento\InventoryAdminUi\Ui\DataProvider\StockDataProvider">
         <plugin name="sales_channel_data" type="Magento\InventorySalesAdminUi\Plugin\InventoryAdminUi\Ui\StockDataProvider\SalesChannels" />
     </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="salable_quantity" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventorySalesAdminUi\Ui\DataProvider\Product\Form\Modifier\SalableQuantity</item>
+                    <item name="sortOrder" xsi:type="number">300</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

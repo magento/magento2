@@ -10,7 +10,7 @@ namespace Magento\InventoryCatalogAdminUi\Ui\Component\AssignSources;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\Ui\Component\Container;
 
 class Record extends Container
