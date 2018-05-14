@@ -207,7 +207,7 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     public function getGridUrl()
     {
         return $this->getUrl(
-            'catalog_rule/*/chooser',
+            '*/*/chooser',
             ['_current' => true, 'current_grid_id' => $this->getId(), 'collapse' => null]
         );
     }

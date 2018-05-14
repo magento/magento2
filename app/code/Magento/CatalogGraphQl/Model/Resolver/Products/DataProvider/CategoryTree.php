@@ -8,14 +8,15 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 use GraphQL\Language\AST\FieldNode;
+use Magento\CatalogGraphQl\Model\Category\DepthCalculator;
+use Magento\CatalogGraphQl\Model\Category\Hydrator;
+use Magento\CatalogGraphQl\Model\Category\LevelCalculator;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\AttributesJoiner;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
  * Category tree data provider
@@ -38,47 +39,47 @@ class CategoryTree
     private $attributesJoiner;
 
     /**
-     * @var ResourceConnection
+     * @var DepthCalculator
      */
-    private $resourceConnection;
+    private $depthCalculator;
 
     /**
-     * @var Category
+     * @var LevelCalculator
      */
-    private $resourceCategory;
+    private $levelCalculator;
 
     /**
-     * @var CustomAttributesFlattener
+     * @var MetadataPool
      */
-    private $customAttributesFlattener;
+    private $metadata;
 
     /**
-     * @var DataObjectProcessor
+     * @var Hydrator
      */
-    private $dataObjectProcessor;
+    private $hydrator;
 
     /**
      * @param CollectionFactory $collectionFactory
      * @param AttributesJoiner $attributesJoiner
-     * @param ResourceConnection $resourceConnection
-     * @param Category $resourceCategory
-     * @param CustomAttributesFlattener $customAttributesFlattener
-     * @param DataObjectProcessor $dataObjectProcessor
+     * @param DepthCalculator $depthCalculator
+     * @param LevelCalculator $levelCalculator
+     * @param MetadataPool $metadata
+     * @param Hydrator $hydrator
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         AttributesJoiner $attributesJoiner,
-        ResourceConnection $resourceConnection,
-        Category $resourceCategory,
-        CustomAttributesFlattener $customAttributesFlattener,
-        DataObjectProcessor $dataObjectProcessor
+        DepthCalculator $depthCalculator,
+        LevelCalculator $levelCalculator,
+        MetadataPool $metadata,
+        Hydrator $hydrator
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->attributesJoiner = $attributesJoiner;
-        $this->resourceConnection = $resourceConnection;
-        $this->resourceCategory = $resourceCategory;
-        $this->customAttributesFlattener = $customAttributesFlattener;
-        $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->depthCalculator = $depthCalculator;
+        $this->levelCalculator = $levelCalculator;
+        $this->metadata = $metadata;
+        $this->hydrator = $hydrator;
     }
 
     /**
@@ -91,13 +92,17 @@ class CategoryTree
         $categoryQuery = $resolveInfo->fieldASTs[0];
         $collection = $this->collectionFactory->create();
         $this->joinAttributesRecursively($collection, $categoryQuery);
-        $depth = $this->calculateDepth($categoryQuery);
-        $level = $this->getLevelByRootCategoryId($rootCategoryId);
+        $depth = $this->depthCalculator->calculate($categoryQuery);
+        $level = $this->levelCalculator->calculate($rootCategoryId);
         //Search for desired part of category tree
+        $collection->addPathFilter(sprintf('.*/%s/[/0-9]*$', $rootCategoryId));
         $collection->addFieldToFilter('level', ['gt' => $level]);
         $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
         $collection->setOrder('level');
-        $collection->getSelect()->orWhere($this->resourceCategory->getLinkField() . ' = ?', $rootCategoryId);
+        $collection->getSelect()->orWhere(
+            $this->metadata->getMetadata(CategoryInterface::class)->getLinkField() . ' = ?',
+            $rootCategoryId
+        );
         return $this->processTree($collection->getIterator());
     }
 
@@ -113,43 +118,13 @@ class CategoryTree
             $category = $iterator->current();
             $iterator->next();
             $nextCategory = $iterator->current();
-            $tree[$category->getId()] = $this->hydrateCategory($category);
+            $tree[$category->getId()] = $this->hydrator->hydrateCategory($category);
             if ($nextCategory && (int) $nextCategory->getLevel() !== (int) $category->getLevel()) {
                 $tree[$category->getId()]['children'] = $this->processTree($iterator);
             }
         }
 
         return $tree;
-    }
-
-    /**
-     * Hydrate and flatten category object to flat array
-     *
-     * @param CategoryInterface $category
-     * @return array
-     */
-    private function hydrateCategory(CategoryInterface $category) : array
-    {
-        $categoryData = $this->dataObjectProcessor->buildOutputDataArray($category, CategoryInterface::class);
-        $categoryData['id'] = $category->getId();
-        $categoryData['product_count'] = $category->getProductCount();
-        $categoryData['all_children'] = $category->getAllChildren();
-        $categoryData['children'] = [];
-        $categoryData['available_sort_by'] = $category->getAvailableSortBy();
-        return $this->customAttributesFlattener->flaternize($categoryData);
-    }
-
-    /**
-     * @param int $rootCategoryId
-     * @return int
-     */
-    private function getLevelByRootCategoryId(int $rootCategoryId) : int
-    {
-        $connection = $this->resourceConnection->getConnection();
-        $select = $connection->select()
-            ->from($connection->getTableName('catalog_category_entity'), 'level')
-            ->where($this->resourceCategory->getLinkField() . " = ?", $rootCategoryId);
-        return (int) $connection->fetchOne($select);
     }
 
     /**
@@ -170,21 +145,5 @@ class CategoryTree
         foreach ($subSelection as $node) {
             $this->joinAttributesRecursively($collection, $node);
         }
-    }
-
-    /**
-     * @param FieldNode $fieldNode
-     * @return int
-     */
-    private function calculateDepth(FieldNode $fieldNode) : int
-    {
-        $selections = $fieldNode->selectionSet->selections ?? [];
-        $depth = count($selections) ? 1 : 0;
-        $childrenDepth = [0];
-        foreach ($selections as $node) {
-            $childrenDepth[] = $this->calculateDepth($node);
-        }
-
-        return $depth + max($childrenDepth);
     }
 }
