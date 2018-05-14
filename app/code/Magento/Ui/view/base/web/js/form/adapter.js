@@ -8,7 +8,7 @@
  */
 define([
     'jquery',
-    'underscore'
+    'underscore',
     'Magento_Ui/js/form/adapter/buttons'
 ], function ($, _, buttons) {
     'use strict';
