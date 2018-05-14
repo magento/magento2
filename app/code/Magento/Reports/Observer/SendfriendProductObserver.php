@@ -19,19 +19,19 @@ class SendfriendProductObserver implements ObserverInterface
     protected $eventSaver;
 
     /**
-     * @var Event\IsReportEnabled
+     * @var \Magento\Reports\Model\ReportStatus
      */
-    private $isReportEnabled;
+    private $reportStatus;
 
     /**
      * @param EventSaver $eventSaver
      */
     public function __construct(
         EventSaver $eventSaver,
-        \Magento\Reports\Model\Event\IsReportEnabled $isReportEnabled
+        \Magento\Reports\Model\ReportStatus $reportStatus
     ) {
         $this->eventSaver = $eventSaver;
-        $this->isReportEnabled = $isReportEnabled;
+        $this->reportStatus = $reportStatus;
     }
 
     /**
@@ -42,8 +42,8 @@ class SendfriendProductObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if (!$this->isReportEnabled->execute(Event::EVENT_PRODUCT_SEND)) {
-            return ;
+        if (!$this->reportStatus->isReportEnabled(Event::EVENT_PRODUCT_SEND)) {
+            return;
         }
 
         $this->eventSaver->save(

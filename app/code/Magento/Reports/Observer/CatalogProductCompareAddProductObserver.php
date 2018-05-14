@@ -34,29 +34,29 @@ class CatalogProductCompareAddProductObserver implements ObserverInterface
     protected $eventSaver;
 
     /**
-     * @var \Magento\Reports\Model\Event\IsReportEnabled
+     * @var \Magento\Reports\Model\ReportStatus
      */
-    private $isReportEnabled;
+    private $reportStatus;
 
     /**
      * @param \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param EventSaver $eventSaver
-     * @param Event\IsReportEnabled $isReportEnabled
+     * @param \Magento\Reports\Model\ReportStatus $reportStatus
      */
     public function __construct(
         \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
         EventSaver $eventSaver,
-        \Magento\Reports\Model\Event\IsReportEnabled $isReportEnabled
+        \Magento\Reports\Model\ReportStatus $reportStatus
     ) {
         $this->_productCompFactory = $productCompFactory;
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
         $this->eventSaver = $eventSaver;
-        $this->isReportEnabled = $isReportEnabled;
+        $this->reportStatus = $reportStatus;
     }
 
     /**
@@ -69,8 +69,8 @@ class CatalogProductCompareAddProductObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if (!$this->isReportEnabled->execute(Event::EVENT_PRODUCT_COMPARE)) {
-            return ;
+        if (!$this->reportStatus->isReportEnabled(Event::EVENT_PRODUCT_COMPARE)) {
+            return;
         }
         $productId = $observer->getEvent()->getProduct()->getId();
         $viewData = ['product_id' => $productId];

@@ -5,16 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Reports\Model\Event;
+namespace Magento\Reports\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Reports\Model\Event;
 
 /**
  * Is report for specified event type is enabled in system configuration
  */
-class IsReportEnabled
+class ReportStatus
 {
     /**
      * @var ScopeConfigInterface
@@ -36,7 +35,7 @@ class IsReportEnabled
      * @return bool
      * @throws InputException
      */
-    public function execute(string $reportEventType): bool
+    public function isReportEnabled(string $reportEventType): bool
     {
         return (bool)$this->scopeConfig->getValue('reports/options/enabled')
             && (bool)$this->scopeConfig->getValue($this->getConfigPathByEventType($reportEventType));

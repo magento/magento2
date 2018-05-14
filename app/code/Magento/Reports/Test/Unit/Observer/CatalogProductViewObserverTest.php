@@ -61,9 +61,9 @@ class CatalogProductViewObserverTest extends \PHPUnit\Framework\TestCase
     protected $productIndexFactoryMock;
 
     /**
-     * @var \Magento\Reports\Model\Event\IsReportEnabled|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\ReportStatus|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $isReportEnabledMock;
+    private $reportStatusMock;
 
     /**
      * {@inheritDoc}
@@ -132,9 +132,9 @@ class CatalogProductViewObserverTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['save'])
             ->getMock();
 
-        $this->isReportEnabledMock = $this->getMockBuilder(\Magento\Reports\Model\Event\IsReportEnabled::class)
+        $this->reportStatusMock = $this->getMockBuilder(\Magento\Reports\Model\ReportStatus::class)
             ->disableOriginalConstructor()
-            ->setMethods(['execute'])
+            ->setMethods(['isReportEnabled'])
             ->getMock();
 
         $this->observer = $objectManager->getObject(
@@ -145,7 +145,7 @@ class CatalogProductViewObserverTest extends \PHPUnit\Framework\TestCase
                 'customerSession' => $this->customerSessionMock,
                 'customerVisitor' => $this->customerVisitorMock,
                 'eventSaver' => $this->eventSaverMock,
-                'isReportEnabled' => $this->isReportEnabledMock
+                'reportStatus' => $this->reportStatusMock
             ]
         );
     }
@@ -172,7 +172,7 @@ class CatalogProductViewObserverTest extends \PHPUnit\Framework\TestCase
             'store_id' => $storeId,
         ];
 
-        $this->isReportEnabledMock->expects($this->once())->method('execute')->willReturn(true);
+        $this->reportStatusMock->expects($this->once())->method('isReportEnabled')->willReturn(true);
         $this->storeMock->expects($this->any())->method('getId')->willReturn($storeId);
 
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn(true);
@@ -209,7 +209,7 @@ class CatalogProductViewObserverTest extends \PHPUnit\Framework\TestCase
             'store_id' => $storeId,
         ];
 
-        $this->isReportEnabledMock->expects($this->once())->method('execute')->willReturn(true);
+        $this->reportStatusMock->expects($this->once())->method('isReportEnabled')->willReturn(true);
         $this->storeMock->expects($this->any())->method('getId')->willReturn($storeId);
 
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn(false);

@@ -40,6 +40,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     protected $httpHeader;
 
     /**
+     * Skip logging during request. Do not use this property directly, but use self::isSkipRequestLogging instead
+     *
      * @var bool
      */
     protected $skipRequestLogging = false;
@@ -144,11 +146,12 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Check if we can log request fot event. Additionally prevent logging for safe methods (e.g. GET request)
+     *
      * @return bool
      */
     private function isSkipRequestLogging()
     {
-        // do not handle visitor session for safe methods (e.g. GET request)
         if ($this->requestSafety->isSafeMethod()) {
             return true;
         }

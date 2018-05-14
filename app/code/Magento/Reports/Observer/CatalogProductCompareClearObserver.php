@@ -18,19 +18,19 @@ class CatalogProductCompareClearObserver implements ObserverInterface
     protected $_productCompFactory;
 
     /**
-     * @var \Magento\Reports\Model\Event\IsReportEnabled
+     * @var \Magento\Reports\Model\ReportStatus
      */
-    private $isReportEnabled;
+    private $reportStatus;
 
     /**
      * @param \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory
      */
     public function __construct(
         \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory,
-        \Magento\Reports\Model\Event\IsReportEnabled $isReportEnabled
+        \Magento\Reports\Model\ReportStatus $reportStatus
     ) {
         $this->_productCompFactory = $productCompFactory;
-        $this->isReportEnabled = $isReportEnabled;
+        $this->reportStatus = $reportStatus;
     }
 
     /**
@@ -44,8 +44,8 @@ class CatalogProductCompareClearObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if (!$this->isReportEnabled->execute(\Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW)) {
-            return ;
+        if (!$this->reportStatus->isReportEnabled(\Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW)) {
+            return;
         }
 
         $this->_productCompFactory->create()->calculate();

@@ -51,9 +51,9 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\Tes
     protected $productCompModelMock;
 
     /**
-     * @var \Magento\Reports\Model\Event\IsReportEnabled|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\ReportStatus|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $isReportEnabledMock;
+    private $reportStatusMock;
 
     /**
      * {@inheritDoc}
@@ -103,9 +103,9 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\Tes
             ->setMethods(['save'])
             ->getMock();
 
-        $this->isReportEnabledMock = $this->getMockBuilder(\Magento\Reports\Model\Event\IsReportEnabled::class)
+        $this->reportStatusMock = $this->getMockBuilder(\Magento\Reports\Model\ReportStatus::class)
             ->disableOriginalConstructor()
-            ->setMethods(['execute'])
+            ->setMethods(['isReportEnabled'])
             ->getMock();
 
         $this->observer = $objectManager->getObject(
@@ -115,7 +115,7 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\Tes
                 'customerSession' => $this->customerSessionMock,
                 'customerVisitor' => $this->customerVisitorMock,
                 'eventSaver' => $this->eventSaverMock,
-                'isReportEnabled' => $this->isReportEnabledMock
+                'reportStatus' => $this->reportStatusMock
             ]
         );
     }
@@ -138,7 +138,7 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\Tes
         ];
         $observerMock = $this->getObserverMock($productId);
 
-        $this->isReportEnabledMock->expects($this->once())->method('execute')->willReturn(true);
+        $this->reportStatusMock->expects($this->once())->method('isReportEnabled')->willReturn(true);
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn($isLoggedIn);
         $this->customerSessionMock->expects($this->any())->method('getCustomerId')->willReturn($customerId);
 

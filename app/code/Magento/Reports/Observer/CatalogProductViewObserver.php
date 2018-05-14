@@ -39,9 +39,9 @@ class CatalogProductViewObserver implements ObserverInterface
     protected $eventSaver;
 
     /**
-     * @var \Magento\Reports\Model\Event\IsReportEnabled
+     * @var \Magento\Reports\Model\ReportStatus
      */
-    private $isReportEnabled;
+    private $reportStatus;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -56,14 +56,14 @@ class CatalogProductViewObserver implements ObserverInterface
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
         EventSaver $eventSaver,
-        \Magento\Reports\Model\Event\IsReportEnabled $isReportEnabled
+        \Magento\Reports\Model\ReportStatus $reportStatus
     ) {
         $this->_storeManager = $storeManager;
         $this->_productIndxFactory = $productIndxFactory;
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
         $this->eventSaver = $eventSaver;
-        $this->isReportEnabled = $isReportEnabled;
+        $this->reportStatus = $reportStatus;
     }
 
     /**
@@ -74,8 +74,8 @@ class CatalogProductViewObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if (!$this->isReportEnabled->execute(Event::EVENT_PRODUCT_VIEW)) {
-            return ;
+        if (!$this->reportStatus->isReportEnabled(Event::EVENT_PRODUCT_VIEW)) {
+            return;
         }
 
         $productId = $observer->getEvent()->getProduct()->getId();
