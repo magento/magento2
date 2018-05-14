@@ -12,8 +12,8 @@
         <annotations>
             <features value="CatalogSearch"/>
             <stories value="Advanced catalog search for virtual products"/>
-            <title value="Advanced catalog search for virtual products by product name"/>
-            <description value="Advanced catalog search for virtual products by product name"/>
+            <title value="Guest customer should be able to find virtual products by product name in advanced catalog search"/>
+            <description value="Guest customer should be able to find virtual products by product name in advanced catalog search"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-137"/>
             <group value="CatalogSearch"/>
@@ -31,13 +31,14 @@
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$createProductOne.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
     </test>
     <test name="AdvanceCatalogSearchVirtualProductBySkuTest">
         <annotations>
             <features value="CatalogSearch"/>
             <stories value="Advanced catalog search for virtual products"/>
-            <title value="Advanced catalog search for virtual products by product sku"/>
-            <description value="Advanced catalog search for virtual products by product sku"/>
+            <title value="Guest customer should be able to find virtual products by product sku in advanced catalog search"/>
+            <description value="Guest customer should be able to find virtual products by product sku in advanced catalog search"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-162"/>
             <group value="CatalogSearch"/>
@@ -55,14 +56,15 @@
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$createProductOne.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
     </test>
 
     <test name="AdvanceCatalogSearchVirtualProductByDescriptionTest">
         <annotations>
             <features value="CatalogSearch"/>
             <stories value="Advanced catalog search for virtual products"/>
-            <title value="Advanced catalog search for virtual products by product description"/>
-            <description value="Advanced catalog search for virtual products by product description"/>
+            <title value="Guest customer should be able to find virtual products by product description in advanced catalog search"/>
+            <description value="Guest customer should be able to find virtual products by product description in advanced catalog search"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-163"/>
             <group value="CatalogSearch"/>
@@ -80,14 +82,15 @@
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$createProductOne.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
     </test>
 
     <test name="AdvanceCatalogSearchVirtualProductByShortDescriptionTest">
         <annotations>
             <features value="CatalogSearch"/>
             <stories value="Advanced catalog search for virtual products"/>
-            <title value="Advanced catalog search for virtual products by product short description"/>
-            <description value="Advanced catalog search for virtual products by product short description"/>
+            <title value="Guest customer should be able to find virtual products by product short description in advanced catalog search"/>
+            <description value="Guest customer should be able to find virtual products by product short description in advanced catalog search"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-164"/>
             <group value="CatalogSearch"/>
@@ -105,14 +108,15 @@
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$createProductOne.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
     </test>
 
     <test name="AdvanceCatalogSearchVirtualProductByPriceTest">
         <annotations>
             <features value="CatalogSearch"/>
             <stories value="Advanced catalog search for virtual products"/>
-            <title value="Advanced catalog search for virtual products by product price"/>
-            <description value="Advanced catalog search for virtual products by price"/>
+            <title value="Guest customer should be able to find virtual products by product price in advanced catalog search"/>
+            <description value="Guest customer should be able to find virtual products by product price in advanced catalog search"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-165"/>
             <group value="CatalogSearch"/>
@@ -132,5 +136,6 @@
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$createProductOne.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
     </test>
 </tests>
