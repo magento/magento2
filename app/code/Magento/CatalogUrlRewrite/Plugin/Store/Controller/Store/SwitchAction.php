@@ -77,7 +77,8 @@ class SwitchAction
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(\Magento\Store\Controller\Store\SwitchAction $subject) {
+    public function afterExecute(\Magento\Store\Controller\Store\SwitchAction $subject)
+    {
         try {
             $location = $this->response->getHeader('Location');
             $url = $location ? $location->getUri() : null;
