@@ -11,7 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryApi\Api\StockSourceLinkValidatorInterface;
+use Magento\InventoryApi\Model\StockSourceLinkValidatorInterface;
 
 /**
  * Chain of validators for stock source link. Extension point for new validators via di configuration
