@@ -95,12 +95,6 @@ class IndexerTableSwapperTest extends \PHPUnit\Framework\TestCase
             ->method('getTableName')
             ->with($this->stringStartsWith($originalTableName . '__temp'))
             ->willReturn($temporaryTableName);
-        $this->adapterInterfaceMock->expects($this->once())
-            ->method('createTable')
-            ->willReturn($this->statementInterfaceMock);
-        $this->adapterInterfaceMock->expects($this->once())
-            ->method('createTableByDdl')
-            ->willReturn($this->tableMock);
 
         $this->assertEquals(
             $temporaryTableName,
