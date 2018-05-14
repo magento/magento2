@@ -19,12 +19,21 @@ class AssertReleaseNotificationPopupExist extends AbstractConstraint
      * @param Dashboard $dashboard
      * @return void
      */
-    public function processAssert(Dashboard $dashboard)
+    public function processAssert(Dashboard $dashboard, string $releaseContentVersion)
     {
-        \PHPUnit_Framework_Assert::assertTrue(
-            $dashboard->getReleaseNotificationBlock()->isVisible(),
-            "Release Notification Popup is absent on dashboard."
+        $currVersion = str_replace('Magento ver.', '', $dashboard->getApplicationVersion()->getVersion());
+        $value = version_compare(
+            $currVersion,
+            $releaseContentVersion,
+            '<='
         );
+
+        if(!$value) {
+            \PHPUnit_Framework_Assert::assertTrue(
+                $dashboard->getReleaseNotificationBlock()->isVisible(),
+                "Release Notification Popup is absent on dashboard."
+            );
+        }
     }
 
     /**
