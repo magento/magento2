@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\InventoryConfigurationApi\Model\GetAllowedProductTypesForSourceItemManagementInterface;
 
 /**
  * @inheritdoc
  */
-class IsSourceItemsAllowedForProductType implements IsSourceItemsAllowedForProductTypeInterface
+class GetAllowedProductTypesForSourceItemManagement implements GetAllowedProductTypesForSourceItemManagementInterface
 {
     /**
      * @var StockConfigurationInterface
@@ -30,8 +31,8 @@ class IsSourceItemsAllowedForProductType implements IsSourceItemsAllowedForProdu
     /**
      * @inheritdoc
      */
-    public function execute(string $productType): bool
+    public function execute(): array
     {
-        return in_array($productType, array_keys(array_filter($this->stockConfiguration->getIsQtyTypeIds())), true);
+        return array_keys(array_filter($this->stockConfiguration->getIsQtyTypeIds()));
     }
 }

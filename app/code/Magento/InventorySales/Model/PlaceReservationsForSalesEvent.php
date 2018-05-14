@@ -14,7 +14,7 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 
 /**
@@ -43,29 +43,29 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
     private $getProductTypesBySkus;
 
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
-    private $isSourceItemsAllowedForProductType;
+    private $isSourceItemManagementAllowedForProductType;
 
     /**
      * @param ReservationBuilderInterface $reservationBuilder
      * @param AppendReservationsInterface $appendReservations
      * @param StockResolverInterface $stockResolver
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      */
     public function __construct(
         ReservationBuilderInterface $reservationBuilder,
         AppendReservationsInterface $appendReservations,
         StockResolverInterface $stockResolver,
         GetProductTypesBySkusInterface $getProductTypesBySkus,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
     ) {
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
         $this->stockResolver = $stockResolver;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
     }
 
     /**
@@ -89,7 +89,7 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
         $reservations = [];
         /** @var ItemToSellInterface $item */
         foreach ($items as $item) {
-            if (true === $this->isSourceItemsAllowedForProductType->execute($productTypes[$item->getSku()])) {
+            if (true === $this->isSourceItemManagementAllowedForProductType->execute($productTypes[$item->getSku()])) {
                 $reservations[] = $this->reservationBuilder
                     ->setSku($item->getSku())
                     ->setQuantity((float)$item->getQuantity())

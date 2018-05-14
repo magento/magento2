@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
 /**
  * Quantity modifier on CatalogInventory Product Editing Form
@@ -34,27 +34,27 @@ class Quantity extends AbstractModifier
     private $locator;
 
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
-    private $isSourceItemsAllowedForProductType;
+    private $isSourceItemManagementAllowedForProductType;
 
     /**
      * CatalogInventory constructor.
      * @param ArrayManager $arrayManager
      * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param LocatorInterface $locator
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      */
     public function __construct(
         ArrayManager $arrayManager,
         IsSingleSourceModeInterface $isSingleSourceMode,
         LocatorInterface $locator,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
     ) {
         $this->arrayManager = $arrayManager;
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->locator = $locator;
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
     }
 
     /**
@@ -78,7 +78,7 @@ class Quantity extends AbstractModifier
 
         $product = $this->locator->getProduct();
 
-        if ($this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
+        if ($this->isSourceItemManagementAllowedForProductType->execute($product->getTypeId()) === false) {
             return $meta;
         }
 

@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Model;
+namespace Magento\InventoryConfigurationApi\Model;
 
 /**
  * Get allowed product types for source items management
  *
  * @api
  */
-interface GetAllowedProductTypesForSourceItemsInterface
+interface GetAllowedProductTypesForSourceItemManagementInterface
 {
     /**
      * @return array

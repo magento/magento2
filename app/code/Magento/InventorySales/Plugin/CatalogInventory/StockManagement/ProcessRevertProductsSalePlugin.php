@@ -12,7 +12,7 @@ use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
@@ -43,9 +43,9 @@ class ProcessRevertProductsSalePlugin
     private $appendReservations;
 
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
-    private $isSourceItemsAllowedForProductType;
+    private $isSourceItemManagementAllowedForProductType;
 
     /**
      * @var GetProductTypesBySkusInterface
@@ -57,7 +57,7 @@ class ProcessRevertProductsSalePlugin
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param ReservationBuilderInterface $reservationBuilder
      * @param AppendReservationsInterface $appendReservations
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      */
     public function __construct(
@@ -65,14 +65,14 @@ class ProcessRevertProductsSalePlugin
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         ReservationBuilderInterface $reservationBuilder,
         AppendReservationsInterface $appendReservations,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypesBySkus
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
     }
 
@@ -100,7 +100,7 @@ class ProcessRevertProductsSalePlugin
 
         $reservations = [];
         foreach ($productSkus as $productId => $sku) {
-            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
+            if (false === $this->isSourceItemManagementAllowedForProductType->execute($productTypes[$sku])) {
                 continue;
             }
             $reservations[] = $this->reservationBuilder
