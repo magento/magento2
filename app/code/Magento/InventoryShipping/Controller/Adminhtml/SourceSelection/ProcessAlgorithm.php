@@ -16,7 +16,7 @@ use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
-use Magento\InventorySourceSelection\Model\GetDefaultSourceSelectionAlgorithmCodeInterface;
+use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**

@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model;
 
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
+use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
+use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;

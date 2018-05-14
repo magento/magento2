@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryReservations\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
+use Magento\InventoryReservationsApi\Model\ReservationInterface;
 use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
 
 /**

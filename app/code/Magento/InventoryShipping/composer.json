@@ -6,15 +6,14 @@
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-inventory-api": "*",
-        "magento/module-inventory-sales-api": "*",
         "magento/module-inventory-catalog-api": "*",
+        "magento/module-inventory-configuration-api": "*",
+        "magento/module-inventory-sales-api": "*",
         "magento/module-inventory-source-selection-api": "*",
-        "magento/module-inventory-source-selection": "*",
         "magento/module-sales": "*",
         "magento/module-shipping": "*",
-        "magento/module-ui": "*",
-        "magento/module-inventory-configuration-api": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [

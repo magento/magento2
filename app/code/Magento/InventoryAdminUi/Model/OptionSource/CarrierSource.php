@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\OptionSource;
+namespace Magento\InventoryAdminUi\Model\OptionSource;
 
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Shipping\Model\Config;

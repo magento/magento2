@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservations\Model;
 
-use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
+use Magento\InventoryReservationsApi\Model\ReservationInterface;
 
 /**
  * {@inheritdoc}

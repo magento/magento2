@@ -60,4 +60,9 @@
     <type name="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface">
         <plugin name="prevent_delete_default_stock_links" type="Magento\InventoryCatalog\Plugin\InventoryApi\StockSourceLinksDelete\PreventDeleteDefaultStockLinksPlugin"/>
     </type>
+    <type name="Magento\InventoryCatalog\Setup\Operation\UpdateInventorySourceItem">
+        <arguments>
+            <argument name="tableNameSourceItem" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
+        </arguments>
+    </type>
 </config>

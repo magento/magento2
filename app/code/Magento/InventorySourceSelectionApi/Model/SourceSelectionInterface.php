@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceSelection\Model;
+namespace Magento\InventorySourceSelectionApi\Model;
 
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
