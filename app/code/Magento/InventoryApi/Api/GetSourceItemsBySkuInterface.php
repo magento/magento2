@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\SourceItem\Command;
+namespace Magento\InventoryApi\Api;
 
 use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
 

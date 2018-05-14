@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
-use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
+use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Sales\Api\ShipOrderInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;

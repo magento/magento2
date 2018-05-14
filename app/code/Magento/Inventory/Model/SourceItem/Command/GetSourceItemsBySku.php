@@ -10,6 +10,7 @@ namespace Magento\Inventory\Model\SourceItem\Command;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
+use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 
 /**

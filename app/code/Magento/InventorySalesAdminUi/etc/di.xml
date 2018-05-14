@@ -6,10 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\InventorySalesAdminUi\Model\ResourceModel\GetAssignedStockIdsBySku">
-        <arguments>
-            <argument name="sourceItemTableName" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
-            <argument name="stockSourceLinkTableName" xsi:type="const">Magento\Inventory\Model\ResourceModel\StockSourceLink::TABLE_NAME_STOCK_SOURCE_LINK</argument>
-        </arguments>
-    </type>
+    <preference for="Magento\InventorySalesAdminUi\Model\GetStockSourceLinksBySourceCodeInterface" type="Magento\InventorySalesAdminUi\Model\GetStockSourceLinksBySourceCode"/>
 </config>
