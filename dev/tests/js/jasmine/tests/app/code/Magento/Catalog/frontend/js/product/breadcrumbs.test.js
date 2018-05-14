@@ -13,7 +13,6 @@ define([
 
     var injector = new Squire(),
         widget,
-        parentWidget,
         menuContainer,
         mocks = {
             'Magento_Theme/js/model/breadcrumb-list': jasmine.createSpyObj(['push'])
@@ -44,7 +43,6 @@ define([
                 'Magento_Theme/js/view/breadcrumbs'
             ], function (mixin, breadcrumb) {
                 widget = mixin(breadcrumb);
-                parentWidget = breadcrumb;
                 done();
             }
         );
