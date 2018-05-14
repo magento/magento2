@@ -227,6 +227,7 @@ class ProductViewTest extends GraphQlAbstract
             updated_at
             url_key
             url_path
+            canonical_url
             websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
@@ -271,6 +272,10 @@ QUERY;
         self::assertEquals(
             'Filter category',
             $responseObject->getData('products/items/0/categories/2/name')
+        );
+        self::assertEquals(
+            $product->getUrlModel()->getUrl($product, ['_ignore_category' => true, '_nosid' => true]),
+            $responseObject->getData('products/items/0/canonical_url')
         );
     }
 

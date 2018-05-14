@@ -14,6 +14,9 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
+/**
+ * Resolve data for product canonical URL
+ */
 class CanonicalUrl implements ResolverInterface
 {
     /**
@@ -31,15 +34,7 @@ class CanonicalUrl implements ResolverInterface
     }
 
     /**
-     * Fetches the data from persistence models and format it according to the GraphQL schema.
-     *
-     * @param \Magento\Framework\GraphQl\Config\Element\Field $field
-     * @param $context
-     * @param ResolveInfo $info
-     * @param array|null $value
-     * @param array|null $args
-     * @throws \Exception
-     * @return Value
+     * {@inheritdoc}
      */
     public function resolve(
         Field $field,
