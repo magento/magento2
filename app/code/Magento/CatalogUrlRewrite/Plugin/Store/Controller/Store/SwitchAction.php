@@ -7,8 +7,6 @@
 namespace Magento\CatalogUrlRewrite\Plugin\Store\Controller\Store;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreResolverInterface;
@@ -17,15 +15,12 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Framework\Url\Helper\Data as UrlHelper;
-use Magento\Framework\Session\Generic;
-use Magento\Framework\Session\SidResolverInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\App\ResponseInterface;
 
 /**
  * Plugin makes connection between Store and UrlRewrite modules
  * because Magento\Store\Controller\Store\SwitchAction should not know about UrlRewrite module functionality
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitchAction
 {
@@ -45,105 +40,57 @@ class SwitchAction
     private $storeRepository;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface
-     */
-    private $redirect;
-
-    /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\RequestFactory
      */
     private $requestFactory;
 
     /**
-     * @var RedirectFactory
+     * @var ResponseInterface|HttpResponse
      */
-    private $redirectFactory;
-
-    /**
-     * @var UrlHelper
-     */
-    private $urlHelper;
-
-    /**
-     * @var \Magento\Framework\Session\Generic
-     */
-    private $session;
-
-    /**
-     * @var \Magento\Framework\Session\SidResolverInterface
-     */
-    private $sidResolver;
+    private $response;
 
     /**
      * @param UrlFinderInterface $urlFinder
      * @param HttpRequest $request
      * @param StoreRepositoryInterface $storeRepository
-     * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param \Magento\Framework\HTTP\PhpEnvironment\RequestFactory $requestFactory
-     * @param RedirectFactory $redirectFactory
-     * @param UrlHelper $urlHelper
-     * @param \Magento\Framework\Session\Generic $session
-     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\App\ResponseInterface $response
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
         HttpRequest $request,
         StoreRepositoryInterface $storeRepository,
-        \Magento\Framework\App\Response\RedirectInterface $redirect,
         \Magento\Framework\HTTP\PhpEnvironment\RequestFactory $requestFactory,
-        RedirectFactory $redirectFactory,
-        UrlHelper $urlHelper = null,
-        \Magento\Framework\Session\Generic $session = null,
-        \Magento\Framework\Session\SidResolverInterface $sidResolver = null
+        ResponseInterface $response = null
     ) {
         $this->urlFinder = $urlFinder;
         $this->request = $request;
         $this->storeRepository = $storeRepository;
-        $this->redirect = $redirect;
         $this->requestFactory = $requestFactory;
-        $this->redirectFactory = $redirectFactory;
-        $this->urlHelper = $urlHelper ?: ObjectManager::getInstance()->get(UrlHelper::class);
-        $this->session = $session ?: ObjectManager::getInstance()->get(Generic::class);
-        $this->sidResolver = $sidResolver ?: ObjectManager::getInstance()->get(SidResolverInterface::class);
+        $this->response = $response ?: ObjectManager::getInstance()->get(ResponseInterface::class);
     }
 
     /**
      * @param \Magento\Store\Controller\Store\SwitchAction $subject
-     * @param \Magento\Framework\Controller\ResultInterface $result
-     * @return ResultInterface
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(
-        \Magento\Store\Controller\Store\SwitchAction $subject,
-        \Magento\Framework\Controller\ResultInterface $result
-    ): ResultInterface {
+    public function afterExecute(\Magento\Store\Controller\Store\SwitchAction $subject) {
         try {
-            $url = $this->redirect->getRedirectUrl();
+            $location = $this->response->getHeader('Location');
+            $url = $location ? $location->getUri() : null;
             /** @var Store $store */
             $store = $this->storeRepository->getActiveStoreByCode(
                 $this->request->getParam(StoreResolverInterface::PARAM_NAME)
             );
         } catch (LocalizedException $e) {
-            return $result;
+            return;
         }
 
         /** @var \Magento\Framework\HTTP\PhpEnvironment\Request $request */
         $request = $this->requestFactory->create(['uri' => $url]);
 
-        // works only for catalog urls
-        $query = [];
-        $urlParts = parse_url($url);
-        parse_str($urlParts['query'], $query);
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->redirectFactory->create();
-
-        if ($fromStore = $query['___from_store']) {
-            // remove SID, ___from_store, ___store from target url
-            $sidName = $this->sidResolver->getSessionIdQueryParam($this->session);
-            $url = $this->urlHelper->removeRequestParam($url, $sidName);
-            $url = $this->urlHelper->removeRequestParam($url, '___from_store');
-            $url = $this->urlHelper->removeRequestParam($url, StoreResolverInterface::PARAM_NAME);
-
+        if ($fromStore = $this->request->getParam('___from_store')) {
             $urlPath = ltrim($request->getPathInfo(), '/');
             try {
                 $oldStoreId = $this->storeRepository->get($fromStore)->getId();
@@ -165,11 +112,11 @@ class SwitchAction
                     UrlRewrite::STORE_ID => $store->getId(),
                 ]);
                 if (null === $currentRewrite) {
-                    return $resultRedirect->setUrl($store->getBaseUrl());
+                    /** @var \Magento\Framework\App\Response\Http $response */
+                    return $this->response->setRedirect($store->getBaseUrl());
                 }
             }
         }
-
-        return $resultRedirect->setUrl($url);
+        return $this->response->setRedirect($url);
     }
 }

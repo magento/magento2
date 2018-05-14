@@ -235,9 +235,9 @@ class Switcher extends \Magento\Framework\View\Element\Template
     {
         $data[\Magento\Store\Api\StoreResolverInterface::PARAM_NAME] = $store->getCode();
 
-        // We need fromStore as true because it will enable proper URL rewriting during store switching.
-        $urlPath = $store->getCurrentUrl(true);
+        $urlPath = $store->getCurrentUrl(false);
         $data[ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl($urlPath);
+        $data['___from_store'] = $this->_storeManager->getStore()->getCode();
 
         $url = $this->getUrl('stores/store/switch', ['_scope' => $store->getCode()]);
         if ($this->_sidResolver->getUseSessionInUrl()) {

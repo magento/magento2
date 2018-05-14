@@ -23,7 +23,7 @@ use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Store\Api\StoreResolverInterface;
 
 /**
  * Switch current store view.
@@ -100,7 +100,7 @@ class SwitchAction extends Action
     }
 
     /**
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
      * @throws NoSuchEntityException
      */
     public function execute()
@@ -120,17 +120,17 @@ class SwitchAction extends Action
             $error = __('Requested store is not found');
         }
 
+        // Remove SID, ___from_store, ___store from url
         $redirectUrl = $this->_redirect->getRedirectUrl();
         $sidName = $this->sidResolver->getSessionIdQueryParam($this->session);
         $redirectUrl = $this->urlHelper->removeRequestParam($redirectUrl, $sidName);
-
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $resultRedirect->setStatusHeader(302);
+        $redirectUrl = $this->urlHelper->removeRequestParam($redirectUrl, '___from_store');
+        $redirectUrl = $this->urlHelper->removeRequestParam($redirectUrl, StoreResolverInterface::PARAM_NAME);
 
         if (isset($error)) {
             $this->messageManager->addError($error);
-            return $resultRedirect->setUrl($redirectUrl);
+            $this->getResponse()->setRedirect($redirectUrl);
+            return;
         }
 
         $defaultStoreView = $this->storeManager->getDefaultStoreView();
@@ -153,8 +153,6 @@ class SwitchAction extends Action
                 $redirectUrl = $store->getBaseUrl();
             }
         }
-        $resultRedirect->setUrl($redirectUrl);
-
-        return $resultRedirect;
+        $this->getResponse()->setRedirect($redirectUrl);
     }
 }
