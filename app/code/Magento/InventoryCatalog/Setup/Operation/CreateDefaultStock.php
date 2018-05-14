@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalog\Setup\Operation;
 
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 

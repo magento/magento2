@@ -9,8 +9,8 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi\StockSourceLinksDelete;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 
 /**
  * Prevent deleting links related to default stock.

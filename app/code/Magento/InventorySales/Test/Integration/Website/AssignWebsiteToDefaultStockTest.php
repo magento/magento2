@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Test\Integration\Website;
 
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;

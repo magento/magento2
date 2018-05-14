@@ -11,8 +11,8 @@ use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 

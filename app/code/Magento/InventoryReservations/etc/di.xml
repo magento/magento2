@@ -6,11 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventoryReservationsApi\Api\AppendReservationsInterface" type="Magento\InventoryReservations\Model\AppendReservations"/>
-    <preference for="Magento\InventoryReservationsApi\Api\Data\ReservationInterface" type="Magento\InventoryReservations\Model\Reservation"/>
-    <preference for="Magento\InventoryReservationsApi\Api\ReservationBuilderInterface" type="Magento\InventoryReservations\Model\ReservationBuilder"/>
-    <preference for="Magento\InventoryReservationsApi\Module\CleanupReservationsInterface" type="Magento\InventoryReservations\Model\ResourceModel\CleanupReservations"/>
-    <preference for="Magento\InventoryReservationsApi\Module\GetReservationsQuantityInterface" type="Magento\InventoryReservations\Model\ResourceModel\GetReservationsQuantity"/>
+    <preference for="Magento\InventoryReservationsApi\Model\AppendReservationsInterface" type="Magento\InventoryReservations\Model\AppendReservations"/>
+    <preference for="Magento\InventoryReservationsApi\Model\ReservationInterface" type="Magento\InventoryReservations\Model\Reservation"/>
+    <preference for="Magento\InventoryReservationsApi\Model\ReservationBuilderInterface" type="Magento\InventoryReservations\Model\ReservationBuilder"/>
+    <preference for="Magento\InventoryReservationsApi\Model\CleanupReservationsInterface" type="Magento\InventoryReservations\Model\ResourceModel\CleanupReservations"/>
+    <preference for="Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface" type="Magento\InventoryReservations\Model\ResourceModel\GetReservationsQuantity"/>
     <type name="Magento\InventoryReservations\Model\ResourceModel\CleanupReservations">
         <arguments>
             <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>

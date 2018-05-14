@@ -5,13 +5,10 @@
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-inventory-api": "*",
-        "magento/module-inventory": "*",
         "magento/module-backend": "*",
         "magento/module-shipping": "*",
+        "magento/module-directory": "*",
         "magento/module-ui": "*"
-    },
-    "suggest": {
-        "magento/module-directory": "*"
     },
     "type": "magento2-module",
     "license": [

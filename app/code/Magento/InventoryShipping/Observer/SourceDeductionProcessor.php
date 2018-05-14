@@ -12,8 +12,8 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface;
 use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterfaceFactory;
-use Magento\InventoryCatalog\Model\DefaultSourceProvider;
-use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 
 /**
@@ -32,7 +32,7 @@ class SourceDeductionProcessor implements ObserverInterface
     private $sourceDeductionService;
 
     /**
-     * @var DefaultSourceProvider
+     * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
 
@@ -54,7 +54,7 @@ class SourceDeductionProcessor implements ObserverInterface
     /**
      * @param SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory
      * @param SourceDeductionServiceInterface $sourceDeductionService
-     * @param DefaultSourceProvider $defaultSourceProvider
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param SalesEventInterfaceFactory $salesEventFactory
      * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param GetItemsToDeduct $getItemsToDeduct
@@ -62,7 +62,7 @@ class SourceDeductionProcessor implements ObserverInterface
     public function __construct(
         SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory,
         SourceDeductionServiceInterface $sourceDeductionService,
-        DefaultSourceProvider $defaultSourceProvider,
+        DefaultSourceProviderInterface $defaultSourceProvider,
         SalesEventInterfaceFactory $salesEventFactory,
         IsSingleSourceModeInterface $isSingleSourceMode,
         GetItemsToDeduct $getItemsToDeduct

@@ -12,8 +12,8 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventoryShipping\Model\ResourceModel\ShipmentSource\GetSourceCodeByShipmentId;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -30,7 +30,7 @@ class GetShippedItemsPerSourceByPriority
     private $getSkusByProductIds;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
@@ -42,13 +42,13 @@ class GetShippedItemsPerSourceByPriority
     /**
      * @param GetSourceCodeByShipmentId $getSourceCodeByShipmentId
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      */
     public function __construct(
         GetSourceCodeByShipmentId $getSourceCodeByShipmentId,
         GetSkusByProductIdsInterface $getSkusByProductIds,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
     ) {
         $this->getSourceCodeByShipmentId = $getSourceCodeByShipmentId;
@@ -124,7 +124,7 @@ class GetShippedItemsPerSourceByPriority
     {
         $sourcesByPriority = [];
         try {
-            $stockId = (int)$this->stockByWebsiteIdResolver->get($websiteId)->getStockId();
+            $stockId = (int)$this->stockByWebsiteIdResolver->execute($websiteId)->getStockId();
             $assignedSourcesToStock = $this->getSourcesAssignedToStockOrderedByPriority->execute($stockId);
         } catch (LocalizedException $e) {
             $assignedSourcesToStock = [];

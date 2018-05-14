@@ -20,7 +20,7 @@ class SkuValidator implements ValidatorInterface
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var ValidationResultFactory

@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Test\Integration\StockManagement;
 
-use Magento\InventoryReservationsApi\Module\CleanupReservationsInterface;
-use Magento\InventoryReservationsApi\Module\GetReservationsQuantityInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
+use Magento\InventoryReservationsApi\Model\CleanupReservationsInterface;
+use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
+use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
+use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -56,7 +56,7 @@ class ReservationPlacingOnCanSubtractQtySetToZeroTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoConfigFixture default_store cataloginventory/options/can_subtract 0
-     * 
+     *
      * @magentoDbIsolation disabled
      */
     public function testPlacingReservationOnCanSubtractQtySetToZero()

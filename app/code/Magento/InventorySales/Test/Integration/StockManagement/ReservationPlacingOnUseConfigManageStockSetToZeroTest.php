@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Test\Integration\StockManagement;
 
-use Magento\InventoryReservationsApi\Module\CleanupReservationsInterface;
-use Magento\InventoryReservationsApi\Module\GetReservationsQuantityInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
+use Magento\InventoryReservationsApi\Model\CleanupReservationsInterface;
+use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
+use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
+use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

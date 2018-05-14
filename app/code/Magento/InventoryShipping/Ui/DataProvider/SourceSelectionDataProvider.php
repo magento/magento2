@@ -13,7 +13,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Model\Order\Item;
 use Magento\Ui\DataProvider\AbstractDataProvider;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\InventoryShipping\Ui\DataProvider\GetSourcesByStockIdSkuAndQty;
@@ -31,7 +31,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     private $orderRepository;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
@@ -56,7 +56,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      * @param string $requestFieldName
      * @param RequestInterface $request
      * @param OrderRepository $orderRepository
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param GetSourcesByStockIdSkuAndQty $getSourcesByStockIdSkuAndQty
      * @param array $meta
@@ -69,7 +69,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
         $requestFieldName,
         RequestInterface $request,
         OrderRepository $orderRepository,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         GetStockItemConfigurationInterface $getStockItemConfiguration,
         GetSourcesByStockIdSkuAndQty $getSourcesByStockIdSkuAndQty,
         array $meta = [],
@@ -105,7 +105,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->orderRepository->get($orderId);
         $websiteId = $order->getStore()->getWebsiteId();
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+        $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
 
         foreach ($order->getAllItems() as $orderItem) {
             if ($orderItem->getIsVirtual()
