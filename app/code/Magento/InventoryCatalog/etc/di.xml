@@ -60,4 +60,12 @@
     <type name="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface">
         <plugin name="prevent_delete_default_stock_links" type="Magento\InventoryCatalog\Plugin\InventoryApi\StockSourceLinksDelete\PreventDeleteDefaultStockLinksPlugin"/>
     </type>
+    <type name="Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem">
+        <arguments>
+            <argument name="sourceItemsSave" xsi:type="object">Magento\InventoryCatalog\Model\SourceItem\SourceItemsSave</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryCatalog\Model\SourceItem\SourceItemsSave">
+        <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save" disabled="true"/>
+    </type>
 </config>
