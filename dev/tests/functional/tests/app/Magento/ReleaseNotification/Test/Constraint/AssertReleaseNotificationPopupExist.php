@@ -28,7 +28,7 @@ class AssertReleaseNotificationPopupExist extends AbstractConstraint
             '<='
         );
 
-        if(!$value) {
+        if (!$value) {
             \PHPUnit_Framework_Assert::assertTrue(
                 $dashboard->getReleaseNotificationBlock()->isVisible(),
                 "Release Notification Popup is absent on dashboard."
