@@ -21,6 +21,8 @@ use Magento\Framework\App\ResponseInterface;
 /**
  * Plugin makes connection between Store and UrlRewrite modules
  * because Magento\Store\Controller\Store\SwitchAction should not know about UrlRewrite module functionality
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitchAction
 {
