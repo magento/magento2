@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\MultiDimensionalIndexer;
+namespace Magento\InventoryMultiDimensionalIndexerApi\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Alias Factory
+ * Dimension Factory
  *
  * @api
  */
-class AliasFactory
+class DimensionFactory
 {
     /**
      * @var ObjectManagerInterface
@@ -31,10 +31,10 @@ class AliasFactory
 
     /**
      * @param array $arguments
-     * @return Alias
+     * @return Dimension
      */
-    public function create(array $arguments = []): Alias
+    public function create(array $arguments = []): Dimension
     {
-        return $this->objectManager->create(Alias::class, $arguments);
+        return $this->objectManager->create(Dimension::class, $arguments);
     }
 }
