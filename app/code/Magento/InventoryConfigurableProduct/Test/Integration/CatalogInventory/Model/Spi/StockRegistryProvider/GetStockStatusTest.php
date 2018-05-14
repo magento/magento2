@@ -16,7 +16,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Inventory\Model\SourceItem\Command\SourceItemsSave;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
+use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
