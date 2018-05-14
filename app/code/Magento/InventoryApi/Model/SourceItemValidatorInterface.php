@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\SourceItem\Validator;
+namespace Magento\InventoryApi\Model;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
