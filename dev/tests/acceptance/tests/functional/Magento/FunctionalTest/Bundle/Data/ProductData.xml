@@ -17,5 +17,6 @@
         <data key="optionInputType1">checkbox</data>
         <data key="defaultQuantity">10</data>
         <data key="status">1</data>
+        <data key="urlKey" unique="suffix">bundleproduct</data>
     </entity>
 </entities>
