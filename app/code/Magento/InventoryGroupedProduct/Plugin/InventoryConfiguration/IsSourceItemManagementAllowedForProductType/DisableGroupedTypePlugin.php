@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryGroupedProduct\Plugin\InventoryConfiguration\IsSourceItemsAllowedForProductType;
+namespace Magento\InventoryGroupedProduct\Plugin\InventoryConfiguration\IsSourceItemManagementAllowedForProductType;
 
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
 /**
  * Disable Source items management for grouped product type.
@@ -16,14 +16,14 @@ use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInter
 class DisableGroupedTypePlugin
 {
     /**
-     * @param IsSourceItemsAllowedForProductTypeInterface $subject
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $subject
      * @param callable $proceed
      * @param string $productType
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
-        IsSourceItemsAllowedForProductTypeInterface $subject,
+        IsSourceItemManagementAllowedForProductTypeInterface $subject,
         callable $proceed,
         string $productType
     ): bool {
