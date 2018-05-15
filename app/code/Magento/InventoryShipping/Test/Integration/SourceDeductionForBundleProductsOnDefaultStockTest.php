@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
-use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
+use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Sales\Api\ShipOrderInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
@@ -108,11 +108,11 @@ class SourceDeductionForBundleProductsOnDefaultStockTest extends TestCase
         $this->shipOrder->execute($order->getEntityId(), $items);
 
         /** @var SourceItemInterface $sourceItem */
-        $sourceItem = current($this->getSourceItemBySku->execute('SKU-1')->getItems());
+        $sourceItem = current($this->getSourceItemBySku->execute('SKU-1'));
         self::assertEquals(8, $sourceItem->getQuantity());
 
         /** @var SourceItemInterface $sourceItem */
-        $sourceItem = current($this->getSourceItemBySku->execute('SKU-3')->getItems());
+        $sourceItem = current($this->getSourceItemBySku->execute('SKU-3'));
         self::assertEquals(28, $sourceItem->getQuantity());
 
         $salableQty = $this->getProductSalableQty->execute('SKU-1', $this->defaultStockProvider->getId());
@@ -147,11 +147,11 @@ class SourceDeductionForBundleProductsOnDefaultStockTest extends TestCase
         $this->shipOrder->execute($order->getEntityId(), [$shipmentItemCreation]);
 
         /** @var SourceItemInterface $sourceItem */
-        $sourceItem = current($this->getSourceItemBySku->execute('SKU-2')->getItems());
+        $sourceItem = current($this->getSourceItemBySku->execute('SKU-2'));
         self::assertEquals(10, $sourceItem->getQuantity());
 
         /** @var SourceItemInterface $sourceItem */
-        $sourceItem = current($this->getSourceItemBySku->execute('SKU-3')->getItems());
+        $sourceItem = current($this->getSourceItemBySku->execute('SKU-3'));
         self::assertEquals(18, $sourceItem->getQuantity());
 
         $salableQty = $this->getProductSalableQty->execute('SKU-2', $this->defaultStockProvider->getId());

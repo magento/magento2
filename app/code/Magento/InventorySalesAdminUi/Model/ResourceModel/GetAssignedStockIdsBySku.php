@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesAdminUi\Model\ResourceModel;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
+use Magento\InventorySalesAdminUi\Model\GetStockSourceLinksBySourceCode;
 
 /**
  * Get all stocks Ids by sku
@@ -17,33 +16,25 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 class GetAssignedStockIdsBySku
 {
     /**
-     * @var ResourceConnection
+     * @var GetSourceItemsBySkuInterface
      */
-    private $resource;
+    private $getSourceItemsBySku;
 
     /**
-     * @var string
+     * @var GetStockSourceLinksBySourceCode
      */
-    private $sourceItemTableName;
+    private $getStockSourceLinksBySourceCode;
 
     /**
-     * @var string
-     */
-    private $stockSourceLinkTableName;
-
-    /**
-     * @param ResourceConnection $resource
-     * @param string $sourceItemTableName
-     * @param string $stockSourceLinkTableName
+     * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
+     * @param GetStockSourceLinksBySourceCode $getStockSourceLinksBySourceCode
      */
     public function __construct(
-        ResourceConnection $resource,
-        string $sourceItemTableName,
-        string $stockSourceLinkTableName
+        GetSourceItemsBySkuInterface $getSourceItemsBySku,
+        GetStockSourceLinksBySourceCode $getStockSourceLinksBySourceCode
     ) {
-        $this->resource = $resource;
-        $this->sourceItemTableName = $sourceItemTableName;
-        $this->stockSourceLinkTableName = $stockSourceLinkTableName;
+        $this->getSourceItemsBySku = $getSourceItemsBySku;
+        $this->getStockSourceLinksBySourceCode = $getStockSourceLinksBySourceCode;
     }
 
     /**
@@ -52,24 +43,16 @@ class GetAssignedStockIdsBySku
      */
     public function execute(string $sku): array
     {
-        $connection = $this->resource->getConnection();
-        $sourceItemTable = $this->resource->getTableName($this->sourceItemTableName);
-        $stockSourceLinkTable = $this->resource->getTableName($this->stockSourceLinkTableName);
+        $sourceItems = $this->getSourceItemsBySku->execute($sku);
 
-        $select = $connection->select()
-            ->from(
-                ['source_item' => $sourceItemTable],
-                []
-            )->join(
-                ['stock_source_link' => $stockSourceLinkTable],
-                'source_item.'. SourceItemInterface::SOURCE_CODE .' = stock_source_link.'
-                . StockSourceLinkInterface::SOURCE_CODE,
-                [StockSourceLinkInterface::STOCK_ID]
-            )->where(
-                'source_item.' . SourceItemInterface::SKU . ' = ?',
-                $sku
-            )->distinct(true);
+        $stocksIds = [];
+        foreach ($sourceItems as $sourceItem) {
+            $stockSourceLinks = $this->getStockSourceLinksBySourceCode->execute($sourceItem->getSourceCode());
+            foreach ($stockSourceLinks as $stockSourceLink) {
+                $stocksIds[] = (int)$stockSourceLink->getStockId();
+            }
+        }
 
-        return $connection->fetchCol($select);
+        return array_unique($stocksIds);
     }
 }

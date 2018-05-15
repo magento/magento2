@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalogAdminUi\Ui\DataProvider\Product\Listing\Modifi
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
+use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
@@ -85,7 +85,7 @@ class QuantityPerSource extends AbstractModifier
      */
     private function getSourceItemsData(string $sku): array
     {
-        $sourceItems = $this->getSourceItemsBySku->execute($sku)->getItems();
+        $sourceItems = $this->getSourceItemsBySku->execute($sku);
 
         $sourceItemsData = [];
         foreach ($sourceItems as $sourceItem) {
