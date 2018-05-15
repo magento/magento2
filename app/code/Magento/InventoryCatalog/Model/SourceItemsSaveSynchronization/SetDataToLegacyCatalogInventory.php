@@ -21,7 +21,7 @@ use Magento\InventoryCatalogApi\Model\SourceItemsSaveSynchronizationInterface;
 /**
  * Set Qty and status for legacy CatalogInventory Stock Item table
  */
-class SetDataToLegacyCatalogInventory implements SourceItemsSaveSynchronizationInterface
+class SetDataToLegacyCatalogInventory
 {
     /**
      * @var SetDataToLegacyStockItem

@@ -9,15 +9,15 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\SetDataToLegacyCatalogInventory;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
-use Magento\InventoryCatalogApi\Model\SourceItemsSaveSynchronizationInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
 /**
- * Synchronization between legacy Stock Item with Source Item
+ * Synchronization between legacy Stock Items and saved Source Items
  */
-class SourceItemsSaveSynchronizationPlugin
+class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
 {
     /**
      * @var DefaultSourceProviderInterface
@@ -35,26 +35,26 @@ class SourceItemsSaveSynchronizationPlugin
     private $getProductTypeBySku;
 
     /**
-     * @var SourceItemsSaveSynchronizationInterface
+     * @var SetDataToLegacyCatalogInventory
      */
-    private $sourceItemSynchronization;
+    private $setDataToLegacyCatalogInventory;
 
     /**
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
-     * @param SourceItemsSaveSynchronizationInterface $sourceItemsSaveSynchronization
+     * @param SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory
      */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypeBySku,
-        SourceItemsSaveSynchronizationInterface $sourceItemsSaveSynchronization
+        SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->getProductTypeBySku = $getProductTypeBySku;
-        $this->sourceItemSynchronization = $sourceItemsSaveSynchronization;
+        $this->setDataToLegacyCatalogInventory = $setDataToLegacyCatalogInventory;
     }
 
     /**
@@ -82,6 +82,6 @@ class SourceItemsSaveSynchronizationPlugin
             $sourceItemsForSynchronization[] = $sourceItem;
         }
 
-        $this->sourceItemSynchronization->execute($sourceItemsForSynchronization);
+        $this->setDataToLegacyCatalogInventory->execute($sourceItemsForSynchronization);
     }
 }
