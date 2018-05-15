@@ -30,16 +30,14 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
-        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <!-- Add simple product to cart -->
+        <actionGroup stepKey="addProductToCart1" ref="AddSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
         <see selector="{{StorefrontMiniCartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
-        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickCart"/>
-        <click selector="{{StorefrontMiniCartSection.goToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <!-- Navigate to checkout -->
+        <actionGroup stepKey="addProductNavigateToCheckout" ref="NavigateToCheckoutActionGroup"/>
         <fillField selector="{{GuestCheckoutShippingSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
         <fillField selector="{{GuestCheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{GuestCheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
@@ -63,7 +61,7 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
-        <amOnPage url="{{OrdersPage.url}}" stepKey="onOrdersPage"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>
         <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
         <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
