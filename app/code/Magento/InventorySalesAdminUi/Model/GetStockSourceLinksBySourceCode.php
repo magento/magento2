@@ -9,7 +9,6 @@ namespace Magento\InventorySalesAdminUi\Model;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 
 /**
@@ -41,13 +40,13 @@ class GetStockSourceLinksBySourceCode
 
     /**
      * @param string $sourceCode
-     * @return StockSourceLinkSearchResultsInterface
+     * @return StockSourceLinkInterface[]
      */
-    public function execute(string $sourceCode): StockSourceLinkSearchResultsInterface
+    public function execute(string $sourceCode): array
     {
         $this->searchCriteriaBuilder->addFilter(StockSourceLinkInterface::SOURCE_CODE, $sourceCode);
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
-        return $this->getStockSourceLinksInterface->execute($searchCriteria);
+        return $this->getStockSourceLinksInterface->execute($searchCriteria)->getItems();
     }
 }

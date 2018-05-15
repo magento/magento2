@@ -43,13 +43,11 @@ class GetAssignedStockIdsBySku
      */
     public function execute(string $sku): array
     {
-        $sourceItems = $this->getSourceItemsBySku->execute($sku)
-            ->getItems();
+        $sourceItems = $this->getSourceItemsBySku->execute($sku);
 
         $stocksIds = [];
         foreach ($sourceItems as $sourceItem) {
-            $stockSourceLinks = $this->getStockSourceLinksBySourceCode->execute($sourceItem->getSourceCode())
-                ->getItems();
+            $stockSourceLinks = $this->getStockSourceLinksBySourceCode->execute($sourceItem->getSourceCode());
             foreach ($stockSourceLinks as $stockSourceLink) {
                 $stocksIds[] = (int)$stockSourceLink->getStockId();
             }

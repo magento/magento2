@@ -141,7 +141,7 @@ class StockIndexerTest extends TestCase
             $sku = $child->getSku();
             $sourceItems = $this->getSourceItemsBySku->execute($sku);
             $changesSourceItems = [];
-            foreach ($sourceItems->getItems() as $sourceItem) {
+            foreach ($sourceItems as $sourceItem) {
                 $sourceItem->setStatus(SourceItemInterface::STATUS_OUT_OF_STOCK);
                 $changesSourceItems[] = $sourceItem;
             }

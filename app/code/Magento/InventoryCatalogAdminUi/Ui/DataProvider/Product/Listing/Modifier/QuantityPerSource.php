@@ -85,7 +85,7 @@ class QuantityPerSource extends AbstractModifier
      */
     private function getSourceItemsData(string $sku): array
     {
-        $sourceItems = $this->getSourceItemsBySku->execute($sku)->getItems();
+        $sourceItems = $this->getSourceItemsBySku->execute($sku);
 
         $sourceItemsData = [];
         foreach ($sourceItems as $sourceItem) {
