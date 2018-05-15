@@ -16,6 +16,9 @@
         <element name="currentVariationsPriceCells" type="textarea" selector=".admin__control-fields[data-index='price_container']"/>
         <element name="currentVariationsQuantityCells" type="textarea" selector=".admin__control-fields[data-index='quantity_container']"/>
         <element name="currentVariationsAttributesCells" type="textarea" selector=".admin__control-fields[data-index='attributes']"/>
+        <element name="actionsBtn" type="button" selector="(//button[@class='action-select']/span[contains(text(), 'Select')])[{{var1}}]" parameterized="true"/>
+        <element name="removeProductBtn" type="button" selector="//a[text()='Remove Product']"/>
+        <element name="disableProductBtn" type="button" selector="//a[text()='Disable Product']"/>
     </section>
     <section name="AdminConfigurableProductFormSection">
         <element name="productWeight" type="input" selector=".admin__control-text[name='product[weight]']"/>
