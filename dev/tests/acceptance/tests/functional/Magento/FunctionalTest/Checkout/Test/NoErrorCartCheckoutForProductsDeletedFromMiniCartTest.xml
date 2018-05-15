@@ -15,8 +15,8 @@
             <title value="Delete product from Checkout"/>
             <description value="No error from cart should be thrown for product deleted from minicart"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-72094"/>
-            <group value="thampy"/>
+            <testCaseId value="MAGETWO-91451"/>
+            <group value="checkout"/>
         </annotations>
         <!-- Preconditions  -->
         <before>
