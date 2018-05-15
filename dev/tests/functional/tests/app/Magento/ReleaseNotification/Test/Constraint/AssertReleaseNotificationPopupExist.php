@@ -17,6 +17,7 @@ class AssertReleaseNotificationPopupExist extends AbstractConstraint
      * Assert that release notificationt popup is visible on dashboard
      *
      * @param Dashboard $dashboard
+     * @param string $releaseContentVersion
      * @return void
      */
     public function processAssert(Dashboard $dashboard, string $releaseContentVersion)
