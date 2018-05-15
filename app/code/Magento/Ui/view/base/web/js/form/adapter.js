@@ -9,8 +9,8 @@ define([
 ], function ($, _, buttons) {
     'use strict';
 
-    var selectorPrefix = '';
-    var eventPrefix;
+    var selectorPrefix = '',
+        eventPrefix;
 
     /**
      * Initialize listener.
