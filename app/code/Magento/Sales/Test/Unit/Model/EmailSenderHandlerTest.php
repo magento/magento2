@@ -40,7 +40,6 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected $entityCollection;
 
-
     /**
      * Global configuration storage mock.
      *
@@ -81,7 +80,9 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->globalConfig = $this->createMock(\Magento\Framework\App\Config::class);
 
-        $this->identityContainerMock = $this->createMock(\Magento\Sales\Model\Order\Email\Container\IdentityInterface::class);
+        $this->identityContainerMock = $this->createMock(
+            \Magento\Sales\Model\Order\Email\Container\IdentityInterface::class
+        );
 
         $this->object = $objectManager->getObject(
             \Magento\Sales\Model\EmailSenderHandler::class,
