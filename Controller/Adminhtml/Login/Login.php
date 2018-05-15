@@ -23,7 +23,7 @@ class Login extends \Magento\Backend\App\Action
         $customerId = (int) $this->getRequest()->getParam('customer_id');
 
         $login = $this->_objectManager
-            ->create('\Magefan\LoginAsCustomer\Model\Login')
+            ->create(\Magefan\LoginAsCustomer\Model\Login::class)
             ->setCustomerId($customerId);
 
         $login->deleteNotUsed();
@@ -39,9 +39,14 @@ class Login extends \Magento\Backend\App\Action
         $user = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser();
         $login->generate($user->getId());
 
-        $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
-            ->getStore($customer->getStoreId());
-        $url = $this->_objectManager->get('Magento\Framework\Url')
+        $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $customerStoreId = $storeManager->getStore();
+
+        if (null === $customerStoreId) {
+            $store = $storeManager->getDefaultStoreView();
+        }
+
+        $url = $this->_objectManager->get(\Magento\Framework\Url::class)
             ->setScope($store);
 
         $redirectUrl = $url->getUrl('loginascustomer/login/index', ['secret' => $login->getSecret(), '_nosid' => true]);
