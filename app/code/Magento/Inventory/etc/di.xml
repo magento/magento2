@@ -12,7 +12,6 @@
     <preference for="Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface" type="Magento\Inventory\Model\SourceCarrierLink"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Inventory\Model\SourceSearchResults"/>
     <preference for="Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface" type="Magento\Inventory\Model\Source\Command\GetSourcesAssignedToStockOrderedByPriority"/>
-    <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
     <preference for="Magento\InventoryApi\Api\GetSourceItemsBySkuInterface" type="Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySku"/>
     <preference for="Magento\InventoryApi\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
     <preference for="Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface" type="Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySku"/>
