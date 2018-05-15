@@ -20,7 +20,7 @@ use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
 /**
  * Set Qty and status for legacy CatalogInventory Stock Status and Stock Item DB tables,
@@ -67,7 +67,7 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
     private $indexerProcessor;
 
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
     private $isSourceItemsAllowedForProductType;
 
@@ -84,7 +84,7 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      * @param StockStateProviderInterface $stockStateProvider
      * @param Processor $indexerProcessor
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
      */
     public function __construct(
@@ -95,7 +95,7 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
         GetProductIdsBySkusInterface $getProductIdsBySkus,
         StockStateProviderInterface $stockStateProvider,
         Processor $indexerProcessor,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypeBySku
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;

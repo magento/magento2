@@ -15,7 +15,7 @@ use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
 /**
  * Set to zero Qty and status to ‘Out of Stock’ for legacy CatalogInventory Stock Status and Stock Item DB tables,
@@ -44,7 +44,7 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
     private $indexerProcessor;
 
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
     private $isSourceItemsAllowedForProductType;
 
@@ -58,7 +58,7 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
      * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      * @param Processor $indexerProcessor
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
      */
     public function __construct(
@@ -66,7 +66,7 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
         SetDataToLegacyStockItem $setDataToLegacyStockItem,
         GetProductIdsBySkusInterface $getProductIdsBySkus,
         Processor $indexerProcessor,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypeBySku
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
