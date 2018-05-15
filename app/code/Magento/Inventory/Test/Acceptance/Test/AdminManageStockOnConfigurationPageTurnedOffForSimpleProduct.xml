@@ -53,7 +53,7 @@
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter"/>
             <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterCustomSourceBySourceCode">
                 <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-                <argument name="value" value="_minimalSource.source_code"/>
+                <argument name="value" value="$$customSource.source[source_code]$$"/>
             </actionGroup>
             <click selector="{{AdminGridRow.editByValue($$customSource.source[source_code]$$)}}" stepKey="clickEditCustomSource"/>
             <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad"/>
@@ -118,7 +118,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditProduct"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySku">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="SimpleMsiProduct.sku"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
         </actionGroup>
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumns"/>
         <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
