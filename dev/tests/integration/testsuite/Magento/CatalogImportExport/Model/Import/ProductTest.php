@@ -1920,6 +1920,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testImportWithDifferentSkuCase()
     {
+        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/889');
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
