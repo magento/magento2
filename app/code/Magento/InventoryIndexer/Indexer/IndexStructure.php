@@ -10,9 +10,9 @@ namespace Magento\InventoryIndexer\Indexer;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\MultiDimensionalIndexer\IndexName;
-use Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface;
-use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
+use Magento\InventoryMultiDimensionalIndexerApi\Model\IndexName;
+use Magento\InventoryMultiDimensionalIndexerApi\Model\IndexNameResolverInterface;
+use Magento\InventoryMultiDimensionalIndexerApi\Model\IndexStructureInterface;
 
 /**
  * @inheritdoc

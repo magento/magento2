@@ -12,7 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Listing\Columns\Column;
 
@@ -27,9 +27,9 @@ class QuantityPerSource extends AbstractModifier
     private $isSingleSourceMode;
 
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
-    private $isSourceItemsAllowedForProductType;
+    private $isSourceItemManagementAllowedForProductType;
 
     /**
      * @var SourceRepositoryInterface
@@ -43,18 +43,18 @@ class QuantityPerSource extends AbstractModifier
 
     /**
      * @param IsSingleSourceModeInterface $isSingleSourceMode
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param SourceRepositoryInterface $sourceRepository
      * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
      */
     public function __construct(
         IsSingleSourceModeInterface $isSingleSourceMode,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         SourceRepositoryInterface $sourceRepository,
         GetSourceItemsBySkuInterface $getSourceItemsBySku
     ) {
         $this->isSingleSourceMode = $isSingleSourceMode;
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->sourceRepository = $sourceRepository;
         $this->getSourceItemsBySku = $getSourceItemsBySku;
     }
@@ -69,9 +69,9 @@ class QuantityPerSource extends AbstractModifier
         }
 
         foreach ($data['items'] as &$item) {
-            $item['quantity_per_source'] = $this->isSourceItemsAllowedForProductType->execute($item['type_id']) === true
-                    ? $this->getSourceItemsData($item['sku'])
-                    : [];
+            $item['quantity_per_source'] = $this->isSourceItemManagementAllowedForProductType->execute(
+                $item['type_id']
+            ) === true ? $this->getSourceItemsData($item['sku']) : [];
         }
         unset($item);
 
