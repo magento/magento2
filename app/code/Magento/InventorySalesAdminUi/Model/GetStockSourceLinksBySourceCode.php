@@ -13,9 +13,9 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 
 /**
- * @inheritdoc
+ * Sugar service for find StockSourceLinks by source code
  */
-class GetStockSourceLinksBySourceCode implements GetStockSourceLinksBySourceCodeInterface
+class GetStockSourceLinksBySourceCode
 {
     /**
      * @var GetStockSourceLinksInterface
@@ -40,7 +40,8 @@ class GetStockSourceLinksBySourceCode implements GetStockSourceLinksBySourceCode
     }
 
     /**
-     * @inheritdoc
+     * @param string $sourceCode
+     * @return StockSourceLinkSearchResultsInterface
      */
     public function execute(string $sourceCode): StockSourceLinkSearchResultsInterface
     {

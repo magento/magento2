@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventorySalesAdminUi\Model\ResourceModel;
 
 use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
-use Magento\InventorySalesAdminUi\Model\GetStockSourceLinksBySourceCodeInterface;
+use Magento\InventorySalesAdminUi\Model\GetStockSourceLinksBySourceCode;
 
 /**
  * Get all stocks Ids by sku
@@ -21,17 +21,17 @@ class GetAssignedStockIdsBySku
     private $getSourceItemsBySku;
 
     /**
-     * @var GetStockSourceLinksBySourceCodeInterface
+     * @var GetStockSourceLinksBySourceCode
      */
     private $getStockSourceLinksBySourceCode;
 
     /**
      * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
-     * @param GetStockSourceLinksBySourceCodeInterface $getStockSourceLinksBySourceCode
+     * @param GetStockSourceLinksBySourceCode $getStockSourceLinksBySourceCode
      */
     public function __construct(
         GetSourceItemsBySkuInterface $getSourceItemsBySku,
-        GetStockSourceLinksBySourceCodeInterface $getStockSourceLinksBySourceCode
+        GetStockSourceLinksBySourceCode $getStockSourceLinksBySourceCode
     ) {
         $this->getSourceItemsBySku = $getSourceItemsBySku;
         $this->getStockSourceLinksBySourceCode = $getStockSourceLinksBySourceCode;
