@@ -34,14 +34,14 @@ class Mcrypt implements EncryptionAdapterInterface
      * @param string $key
      * @param string $cipher
      * @param string $mode
-     * @param bool $initVector
+     * @param string $initVector
      * @throws \Exception
      */
     public function __construct(
-        $key,
-        $cipher = MCRYPT_BLOWFISH,
-        $mode = MCRYPT_MODE_ECB,
-        $initVector = false
+        string $key,
+        string $cipher = MCRYPT_BLOWFISH,
+        string $mode = MCRYPT_MODE_ECB,
+        string $initVector = null
     ) {
         $this->cipher = $cipher;
         $this->mode = $mode;
@@ -108,7 +108,7 @@ class Mcrypt implements EncryptionAdapterInterface
      *
      * @return string
      */
-    public function getCipher()
+    public function getCipher(): string
     {
         return $this->cipher;
     }
@@ -118,7 +118,7 @@ class Mcrypt implements EncryptionAdapterInterface
      *
      * @return string
      */
-    public function getMode()
+    public function getMode(): string
     {
         return $this->mode;
     }
@@ -128,7 +128,7 @@ class Mcrypt implements EncryptionAdapterInterface
      *
      * @return string
      */
-    public function getInitVector()
+    public function getInitVector(): string
     {
         return $this->initVector;
     }
@@ -140,7 +140,7 @@ class Mcrypt implements EncryptionAdapterInterface
      * @return string
      * @throws \Exception
      */
-    public function encrypt($data)
+    public function encrypt(string $data): string
     {
         throw new \Exception(
             (string)new \Magento\Framework\Phrase('Mcrypt cannot be used for encryption. Use Sodium instead')
@@ -153,7 +153,7 @@ class Mcrypt implements EncryptionAdapterInterface
      * @param string $data
      * @return string
      */
-    public function decrypt($data)
+    public function decrypt(string $data): string
     {
         if (strlen($data) == 0) {
             return $data;
