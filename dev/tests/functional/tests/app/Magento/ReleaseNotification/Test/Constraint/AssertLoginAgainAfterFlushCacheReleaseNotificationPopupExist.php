@@ -44,9 +44,8 @@ class AssertLoginAgainAfterFlushCacheReleaseNotificationPopupExist extends Abstr
             ['user' => $user]
         )->run();
 
-        $currVersion = str_replace('Magento ver.', '', $dashboard->getApplicationVersion()->getVersion());
         $value = version_compare(
-            $currVersion,
+            $dashboard->getApplicationVersion()->getVersion(),
             $releaseContentVersion,
             '<='
         );

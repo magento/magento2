@@ -21,9 +21,8 @@ class AssertReleaseNotificationPopupExist extends AbstractConstraint
      */
     public function processAssert(Dashboard $dashboard, string $releaseContentVersion)
     {
-        $currVersion = str_replace('Magento ver.', '', $dashboard->getApplicationVersion()->getVersion());
         $value = version_compare(
-            $currVersion,
+            $dashboard->getApplicationVersion()->getVersion(),
             $releaseContentVersion,
             '<='
         );
