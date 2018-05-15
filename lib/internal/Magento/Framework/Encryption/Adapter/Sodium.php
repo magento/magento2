@@ -6,6 +6,9 @@ namespace Magento\Framework\Encryption\Adapter;
 
 use Magento\Framework\Encryption\Encryptor;
 
+/**
+ * Sodium adapter for encrypting and decrypting strings
+ */
 class Sodium implements EncryptionAdapterInterface
 {
     /**
@@ -32,8 +35,10 @@ class Sodium implements EncryptionAdapterInterface
     }
 
     /**
-     * @param $data
-     * @return string
+     * Encrypt a string
+     *
+     * @param string $data
+     * @return string string
      */
     public function encrypt($data)
     {
@@ -51,6 +56,8 @@ class Sodium implements EncryptionAdapterInterface
     }
 
     /**
+     * Decrypt a string
+     *
      * @param string $data
      * @return string
      */

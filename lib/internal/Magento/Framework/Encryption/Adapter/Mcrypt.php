@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Encryption\Adapter;
 
+/**
+ * Mcrypt adapter for decrypting values using legacy ciphers
+ */
 class Mcrypt implements EncryptionAdapterInterface
 {
     /**
@@ -131,7 +134,7 @@ class Mcrypt implements EncryptionAdapterInterface
     }
 
     /**
-     * Encrypt a data
+     * Encrypt a string
      *
      * @param  string $data String to encrypt
      * @return string
@@ -145,6 +148,8 @@ class Mcrypt implements EncryptionAdapterInterface
     }
 
     /**
+     * Decrypt a string
+     *
      * @param string $data
      * @return string
      */

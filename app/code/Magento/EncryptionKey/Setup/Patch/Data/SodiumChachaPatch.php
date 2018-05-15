@@ -7,8 +7,7 @@ namespace Magento\EncryptionKey\Setup\Patch\Data;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
- * Class SodiumChachaPatch
- * @package Magento\EncryptionKey\Setup\Patch
+ * Migrate encrypted configuration values to the latest cipher
  */
 class SodiumChachaPatch implements DataPatchInterface
 {
@@ -33,7 +32,6 @@ class SodiumChachaPatch implements DataPatchInterface
     private $scope;
 
     /**
-     * SodiumChachaPatch constructor.
      * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\Config\Model\Config\Structure\Proxy $structure
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
