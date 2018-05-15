@@ -30,34 +30,36 @@
             </createData>
         </before>
         <after>
-            <deleteData createDataKey="subcategory1" stepKey="deleteCategory1" />
-            <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/auth/logout/" stepKey="amOnLogoutPage" />
+            <deleteData createDataKey="subcategory1" stepKey="deleteCategory1"/>
+            <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
         <!-- Login as admin and open page for creation new Price Rule -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-        <amOnPage stepKey="openCatalogPriceRulePage" url="{{PriceRuleNewPage.url}}" />
+        <amOnPage url="{{PriceRuleNewPage.url}}" stepKey="openCatalogPriceRulePage"/>
         <waitForPageLoad stepKey="waitCatalogPriceRulePageLoad"/>
         <!-- Open Conditions section and select Categories condition -->
-        <click stepKey="openConditionsSection" selector="{{PriceRuleConditionsSection.conditionsTab}}" />
-        <click stepKey="createNewRule" selector="{{PriceRuleConditionsSection.createNewRule}}" />
-        <selectOption stepKey="selectProductAttributes" selector="{{PriceRuleConditionsSection.rulesDropdown}}" userInput="Magento\SalesRule\Model\Rule\Condition\Product\Found" />
+        <click selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="openConditionsSection"/>
+        <scrollTo selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="scrollToConditionsTab"/>
+        <click selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="createNewRule"/>
+        <selectOption selector="{{PriceRuleConditionsSection.rulesDropdown}}" userInput="Magento\SalesRule\Model\Rule\Condition\Product\Found" stepKey="selectProductAttributes"/>
         <waitForAjaxLoad stepKey="ajaxLoad1"/>
-        <waitForElement stepKey="wait1" selector="{{PriceRuleConditionsSection.addProductAttributesButton}}" />
-        <click stepKey="clickToshowAttributes" selector="{{PriceRuleConditionsSection.addProductAttributesButton}}"/>
-        <selectOption stepKey="selectCategoryAttribute" selector="{{PriceRuleConditionsSection.productAttributesDropdown}}" userInput="Magento\SalesRule\Model\Rule\Condition\Product|category_ids" />
+        <waitForElement selector="{{PriceRuleConditionsSection.addProductAttributesButton}}" stepKey="wait1"/>
+        <scrollTo selector="{{PriceRuleConditionsSection.addProductAttributesButton}}" stepKey="scrollToAddProductAttributeButton"/>
+        <click selector="{{PriceRuleConditionsSection.addProductAttributesButton}}" stepKey="clickToshowAttributes"/>
+        <selectOption selector="{{PriceRuleConditionsSection.productAttributesDropdown}}" userInput="Magento\SalesRule\Model\Rule\Condition\Product|category_ids" stepKey="selectCategoryAttribute"/>
         <waitForAjaxLoad stepKey="ajaxLoad2"/>
         <!-- Select categories chooser -->
-        <waitForElement stepKey="wait2" selector="{{PriceRuleConditionsSection.changeCategoriesButton}}" />
-        <click stepKey="changeCategories" selector="{{PriceRuleConditionsSection.changeCategoriesButton}}" />
-        <click stepKey="showCategoriesChooser" selector="{{PriceRuleConditionsSection.categoriesChooser}}" />
+        <waitForElement selector="{{PriceRuleConditionsSection.changeCategoriesButton}}" stepKey="wait2"/>
+        <click selector="{{PriceRuleConditionsSection.changeCategoriesButton}}" stepKey="changeCategories"/>
+        <click selector="{{PriceRuleConditionsSection.categoriesChooser}}" stepKey="showCategoriesChooser"/>
         <waitForAjaxLoad stepKey="ajaxLoad3"/>
         <!-- Click on categories to check that the deepest subcategory is clickable -->
         <waitForElement selector="{{PriceRuleConditionsSection.treeRoot}}" stepKey="wait3"/>
-        <click stepKey="openLatestTreeNode1" selector="{{PriceRuleConditionsSection.lastTreeNode}}" />
-        <click stepKey="openLatestTreeNode2" selector="{{PriceRuleConditionsSection.lastTreeNode}}" />
-        <click stepKey="openLatestTreeNode3" selector="{{PriceRuleConditionsSection.lastTreeNode}}" />
+        <click selector="{{PriceRuleConditionsSection.lastTreeNode}}" stepKey="openLatestTreeNode1"/>
+        <click selector="{{PriceRuleConditionsSection.lastTreeNode}}" stepKey="openLatestTreeNode2"/>
+        <click selector="{{PriceRuleConditionsSection.lastTreeNode}}" stepKey="openLatestTreeNode3"/>
         <waitForAjaxLoad stepKey="ajaxLoad4"/>
         <waitForElement selector="{{PriceRuleConditionsSection.subcategory4level}}" stepKey="wait4"/>
-        <click stepKey="openLatestTreeNode4" selector="{{PriceRuleConditionsSection.subcategory4level}}" />
+        <click selector="{{PriceRuleConditionsSection.subcategory4level}}" stepKey="openLatestTreeNode4"/>
     </test>
 </tests>
