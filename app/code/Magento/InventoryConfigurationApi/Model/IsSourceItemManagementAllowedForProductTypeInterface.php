@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Model;
+namespace Magento\InventoryConfigurationApi\Model;
 
 /**
- * Is allowed management of  source items for specific product type
+ * Is allowed management of source items for specific product type
  *
  * @api
  */
-interface IsSourceItemsAllowedForProductTypeInterface
+interface IsSourceItemManagementAllowedForProductTypeInterface
 {
     /**
      * @param string $productType
