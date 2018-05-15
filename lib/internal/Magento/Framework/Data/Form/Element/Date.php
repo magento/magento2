@@ -88,6 +88,10 @@ class Date extends AbstractElement
             return $this;
         }
 
+	    if (strlen($value)<=1) {
+		    $this->_value = '';
+		    return $this;
+	    }
         try {
             $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
         } catch (\Exception $e) {
