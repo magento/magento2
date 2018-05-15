@@ -17,21 +17,13 @@ class Sodium implements EncryptionAdapterInterface
     private $key;
 
     /**
-     * @var int
-     */
-    private $keyVersion;
-
-    /**
      * Sodium constructor.
      * @param string $key
-     * @param int|null $keyVersion
      */
     public function __construct(
-        string $key,
-        int $keyVersion = null
+        string $key
     ) {
         $this->key = $key;
-        $this->keyVersion = $keyVersion;
     }
 
     /**
@@ -50,9 +42,7 @@ class Sodium implements EncryptionAdapterInterface
             $this->key
         );
 
-        return $this->keyVersion .
-            ':' . Encryptor::CIPHER_AEAD_CHACHA20POLY1305 .
-            ':' . base64_encode($nonce . $cipherText);
+        return $nonce . $cipherText;
     }
 
     /**

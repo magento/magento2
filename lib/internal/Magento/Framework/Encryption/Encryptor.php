@@ -274,9 +274,11 @@ class Encryptor implements EncryptorInterface
      */
     public function encrypt($data)
     {
-        $crypt = new Sodium($this->keys[$this->keyVersion], $this->keyVersion);
+        $crypt = new Sodium($this->keys[$this->keyVersion]);
 
-        return $crypt->encrypt($data);
+        return $this->keyVersion .
+            ':' . self::CIPHER_AEAD_CHACHA20POLY1305 .
+            ':' . base64_encode($crypt->encrypt($data));
     }
 
     /**
