@@ -13,7 +13,7 @@ use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
-use Magento\InventorySales\Model\GetStockItemDataInterface;
+use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**

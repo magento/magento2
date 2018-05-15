@@ -9,7 +9,7 @@ namespace Magento\InventorySalesAdminUi\Plugin\InventoryAdminUi\Ui\StockDataProv
 
 use Magento\CatalogInventory\Model\Stock\StockRepository;
 use Magento\InventoryAdminUi\Ui\DataProvider\StockDataProvider;
-use Magento\InventorySales\Model\GetAssignedSalesChannelsForStockInterface;
+use Magento\InventorySalesApi\Model\GetAssignedSalesChannelsForStockInterface;
 
 /**
  * Customize stock form. Add sales channels data

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryGroupedProduct\Plugin\InventoryConfiguration\IsSourceItemManagementAllowedForProductType;
+namespace Magento\InventoryGroupedProduct\Plugin\InventoryConfigurationApi\IsSourceItemManagementAllowedForProductType;
 
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;

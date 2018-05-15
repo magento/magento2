@@ -10,6 +10,7 @@ namespace Magento\InventorySales\Model;
 use Magento\InventorySales\Model\ResourceModel\GetAssignedSalesChannelsDataForStock;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
+use Magento\InventorySalesApi\Model\GetAssignedSalesChannelsForStockInterface;
 
 /**
  * @inheritdoc

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model;
+namespace Magento\InventorySalesApi\Model;
 
 /**
  * Delete link between Stock and Sales Channel (Service Provider Interface - SPI)

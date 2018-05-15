@@ -12,7 +12,7 @@ use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 use Magento\InventoryIndexer\Model\ResourceModel\GetStockItemData;
-use Magento\InventorySales\Model\GetStockItemDataInterface;
+use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\InventoryIndexer\Test\Integration\Indexer\RemoveIndexData;
