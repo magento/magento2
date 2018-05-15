@@ -106,7 +106,7 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
     }
 
     /**
-     * Update auto generated Specific Coupon if it's rule changed
+     * Update auto generated Specific Coupon if its rule changed
      *
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return $this
