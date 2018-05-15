@@ -33,7 +33,7 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
      */
     public function __construct(
         ConfigInterface $config,
-        array $additionalAttributes = ['min_price', 'max_price']
+        array $additionalAttributes = ['min_price', 'max_price', 'category_ids']
     ) {
         $this->config = $config;
         $this->additionalAttributes = $additionalAttributes;
