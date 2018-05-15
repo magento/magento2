@@ -79,8 +79,7 @@ class OrderSave
         foreach ($taxesForItems as $taxesArray) {
             foreach ($taxesArray['applied_taxes'] as $rates) {
                 if (isset($rates['extension_attributes'])) {
-                    /** @var \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $taxRates */
-                    $taxRates = $rates['extension_attributes']->getRates();
+                    $taxRates = $rates['extension_attributes']['rates'];
                     if (is_array($taxRates)) {
                         if (count($taxRates) == 1) {
                             $ratesIdQuoteItemId[$rates['id']][] = [
@@ -124,8 +123,7 @@ class OrderSave
         foreach ($taxes as $row) {
             $id = $row['id'];
             if (isset($row['extension_attributes'])) {
-                /** @var \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $taxRates */
-                $taxRates = $row['extension_attributes']->getRates();
+                $taxRates = $row['extension_attributes']['rates'];
                 if (is_array($taxRates)) {
                     foreach ($taxRates as $tax) {
                         if ($row['percent'] == null) {
