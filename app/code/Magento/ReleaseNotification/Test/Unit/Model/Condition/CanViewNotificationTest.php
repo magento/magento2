@@ -150,6 +150,8 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             [true, '2.3.0', '2.2.0', '2.3.0'],
             [false, '2.2.2', '2.2.2', '2.2.2'],
             [false, '2.2.5', '2.2.4', '2.2.4'],
+            [true, '2.2.6', '2.2.5', '2.2.6'],
+            [true, '2.2.7', '2.2.6', '2.2.7'],
         ];
     }
 }
