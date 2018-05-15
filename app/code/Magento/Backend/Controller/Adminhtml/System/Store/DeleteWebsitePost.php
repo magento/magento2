@@ -7,6 +7,7 @@
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
@@ -15,13 +16,22 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
      */
     public function execute()
     {
-        $itemId = $this->getRequest()->getParam('item_id');
+        /** @var HttpRequest $request */
+        $request = $this->getRequest();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
+        $redirectResult = $this->resultFactory->create(
+            ResultFactory::TYPE_REDIRECT
+        );
+        if (!$request->isPost()) {
+            $this->messageManager->addErrorMessage(
+                __('Something went wrong. Please try again.')
+            );
+            return $redirectResult->setPath('adminhtml/*/');
+        }
+
+        $itemId = $request->getParam('item_id');
         $model = $this->_objectManager->create('Magento\Store\Model\Website');
         $model->load($itemId);
-
-        /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
-        $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-
         if (!$model) {
             $this->messageManager->addError(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
