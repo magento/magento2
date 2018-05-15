@@ -30,7 +30,7 @@
                 nullable="true"/>
         <column xsi:type="smallint" name="int_disabled_auto_increment" default="0" identity="false" padding="12"
                 unsigned="true" nullable="true"/>
-        <constraint xsi:type="unique" name="unique_null_key">
+        <constraint xsi:type="unique" name="AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE">
             <column name="int_auto_increment_with_nullable"/>
         </constraint>
     </table>
@@ -53,14 +53,15 @@
         <column xsi:type="boolean" name="boolean"/>
         <column xsi:type="varbinary" name="varbinary_rename" default="10101" disabled="true"/>
         <!--Constraints-->
-        <constraint xsi:type="unique" name="some_unique_key">
+        <constraint xsi:type="unique" name="TEST_TABLE_SMALLINT_BIGINT">
             <column name="smallint"/>
             <column name="bigint"/>
         </constraint>
-        <constraint xsi:type="foreign" name="some_foreign_key" column="tinyint" table="test_table"
+        <constraint xsi:type="foreign" name="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
+                    column="tinyint" table="test_table"
                     referenceTable="reference_table" referenceColumn="tinyint_ref" onDelete="NO ACTION"/>
         <!--Indexes-->
-        <index name="speedup_index" indexType="btree">
+        <index name="TEST_TABLE_TINYINT_BIGINT" indexType="btree">
             <column name="tinyint"/>
             <column name="bigint"/>
         </index>

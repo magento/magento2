@@ -77,7 +77,7 @@ class BCMultiModuleTest extends SetupTestCase
         //Check if declaration is applied
         $indexes = $this->dbSchemaReader->readIndexes('test_table', 'default');
         self::assertCount(1, $indexes);
-        self::assertArrayHasKey('speedup_index', $indexes);
+        self::assertArrayHasKey('TEST_TABLE_TINYINT_BIGINT', $indexes);
         //Check UpgradeSchema old format, that modify declaration
         $columns = $this->dbSchemaReader->readColumns('test_table', 'default');
         $floatColumn = $columns['float'];
