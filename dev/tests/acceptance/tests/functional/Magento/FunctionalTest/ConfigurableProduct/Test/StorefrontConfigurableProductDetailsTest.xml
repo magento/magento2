@@ -14,7 +14,7 @@
             <stories value="Storefront configurable product details"/>
             <title value="Guest customer should see the basic configurable product details in product view"/>
             <description value="Guest customer should see the basic configurable product details in product view"/>
-            <severity value="CRITICAL"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MC-77"/>
             <group value="ConfigurableProduct"/>
         </annotations>
@@ -55,7 +55,7 @@
             <stories value="Storefront configurable product details"/>
             <title value="Guest customer should see configurable product options in product view"/>
             <description value="Guest customer should see configurable product options in product view"/>
-            <severity value="CRITICAL"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MC-92"/>
             <group value="ConfigurableProduct"/>
         </annotations>
@@ -88,5 +88,43 @@
         <selectOption userInput="{{colorProductAttribute3.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption3"/>
         <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel3"/>
         <see userInput="3.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice3"/>
+    </test>
+
+    <test name="StorefrontConfigurableProductCanAddToCartTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Storefront configurable product details"/>
+            <title value="Guest customer should be able to add configurable product to cart after an option is selected in product view"/>
+            <description value="Guest customer should be able to add configurable product to cart after an option is selected in product view"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-97"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Verify configurable product details in storefront product view -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="wait"/>
+        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
+        <selectOption userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="waitForAddToCartVisible"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
     </test>
 </tests>
