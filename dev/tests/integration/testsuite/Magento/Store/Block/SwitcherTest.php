@@ -60,6 +60,6 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame($storeCode, $result['data']['___store']);
         $this->assertSame($storeCode, $storeParsedQuery['___store']);
-        $this->assertSame(ScopeInterface::SCOPE_DEFAULT, $storeParsedQuery['___from_store']);
+        $this->assertSame(ScopeInterface::SCOPE_DEFAULT, $result['data']['___from_store']);
     }
 }

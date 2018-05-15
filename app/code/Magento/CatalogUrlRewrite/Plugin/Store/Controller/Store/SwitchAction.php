@@ -82,6 +82,9 @@ class SwitchAction
         try {
             $location = $this->response->getHeader('Location');
             $url = $location ? $location->getUri() : null;
+            if ($url === null) {
+                return;
+            }
             /** @var Store $store */
             $store = $this->storeRepository->getActiveStoreByCode(
                 $this->request->getParam(StoreResolverInterface::PARAM_NAME)
@@ -95,6 +98,12 @@ class SwitchAction
 
         if ($fromStore = $this->request->getParam('___from_store')) {
             $urlPath = ltrim($request->getPathInfo(), '/');
+
+            if ($store->isUseStoreInUrl()) {
+                // Remove store code in redirect url for correct rewrite search
+                $urlPath = str_replace($store->getCode() . '/','', $urlPath);
+            }
+
             try {
                 $oldStoreId = $this->storeRepository->get($fromStore)->getId();
                 $oldRewrite = $this->urlFinder->findOneByData([
@@ -116,7 +125,7 @@ class SwitchAction
                 ]);
                 if (null === $currentRewrite) {
                     /** @var \Magento\Framework\App\Response\Http $response */
-                    return $this->response->setRedirect($store->getBaseUrl());
+                    $url = $store->getBaseUrl();
                 }
             }
         }
