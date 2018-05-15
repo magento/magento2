@@ -11,6 +11,7 @@ use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\InventoryApi\Model\SourceValidatorInterface;
 
 /**
  * Check that default source always enabled
