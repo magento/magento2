@@ -40,8 +40,6 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     protected $httpHeader;
 
     /**
-     * Skip logging during request. Do not use this property directly, but use self::isSkipRequestLogging instead
-     *
      * @var bool
      */
     protected $skipRequestLogging = false;
@@ -146,19 +144,6 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Check if we can log request fot event. Additionally prevent logging for safe methods (e.g. GET request)
-     *
-     * @return bool
-     */
-    private function isSkipRequestLogging()
-    {
-        if ($this->requestSafety->isSafeMethod()) {
-            return true;
-        }
-        return $this->skipRequestLogging;
-    }
-
-    /**
      * Initialization visitor by request
      *
      * Used in event "controller_action_predispatch"
@@ -168,7 +153,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function initByRequest($observer)
     {
-        if ($this->isSkipRequestLogging() || $this->isModuleIgnored($observer)) {
+        if ($this->skipRequestLogging || $this->isModuleIgnored($observer)) {
             return $this;
         }
 
@@ -181,6 +166,10 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
         $this->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
 
+        // prevent saving Visitor for safe methods, e.g. GET request
+        if ($this->requestSafety->isSafeMethod()) {
+            return $this;
+        }
         if (!$this->getId()) {
             $this->setSessionId($this->session->getSessionId());
             $this->save();
@@ -200,7 +189,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function saveByRequest($observer)
     {
-        if ($this->isSkipRequestLogging() || $this->isModuleIgnored($observer)) {
+        // prevent saving Visitor for safe methods, e.g. GET request
+        if ($this->skipRequestLogging || $this->requestSafety->isSafeMethod() || $this->isModuleIgnored($observer)) {
             return $this;
         }
 
