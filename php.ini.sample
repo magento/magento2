@@ -5,7 +5,7 @@
 
 ; adjust memory limit
 
-memory_limit = 64M
+memory_limit = 756M
 
 max_execution_time = 18000
 
