@@ -9,11 +9,12 @@ define([
     'Magento_Customer/js/customer-data',
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
+    'underscore',
     'jquery/ui',
     'mage/decorate',
     'mage/collapsible',
     'mage/cookies'
-], function ($, authenticationPopup, customerData, alert, confirm) {
+], function ($, authenticationPopup, customerData, alert, confirm, _) {
     'use strict';
 
     $.widget('mage.sidebar', {
@@ -241,11 +242,13 @@ define([
          * @private
          */
         _removeItemAfter: function (elem) {
-            var productData = customerData.get('cart')().items.find(function (item) {
+            var productData = _.find(customerData.get('cart')().items, function (item) {
                 return Number(elem.data('cart-item')) === Number(item['item_id']);
             });
 
-            $(document).trigger('ajax:removeFromCart', productData['product_sku']);
+            if (!_.isUndefined(productData)) {
+                $(document).trigger('ajax:removeFromCart', productData['product_sku']);
+            }
         },
 
         /**
