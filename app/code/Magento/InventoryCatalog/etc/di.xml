@@ -17,8 +17,8 @@
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
-        <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
+        <plugin name="source_items_save_synchronization"
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\SourceItemsSaveSynchronizationPlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
         <plugin name="set_to_zero_legacy_catalog_inventory_at_source_items_delete"
@@ -71,7 +71,7 @@
         </arguments>
     </type>
     <type name="Magento\InventoryCatalog\Model\SourceItem\SourceItemsSave">
-        <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save" disabled="true"/>
+        <plugin name="source_items_save_synchronization" disabled="true"/>
     </type>
     <type name="Magento\InventoryCatalogApi\Model\SourceItemsSaveSynchronizationChain">
         <arguments>

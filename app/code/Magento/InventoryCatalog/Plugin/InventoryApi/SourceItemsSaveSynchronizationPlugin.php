@@ -17,7 +17,7 @@ use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProd
 /**
  * Synchronization between legacy Stock Item with Source Item
  */
-class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
+class SourceItemsSaveSynchronizationPlugin
 {
     /**
      * @var DefaultSourceProviderInterface
