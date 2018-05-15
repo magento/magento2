@@ -9,10 +9,10 @@ namespace Magento\InventoryCatalog\Model\StockSourceLink\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface;
+use Magento\InventoryApi\Model\StockSourceLinkValidatorInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 
 class AssignToDefaultStockDefaultSourceValidator implements StockSourceLinkValidatorInterface
 {
@@ -51,12 +51,53 @@ class AssignToDefaultStockDefaultSourceValidator implements StockSourceLinkValid
      */
     public function validate(StockSourceLinkInterface $link): ValidationResult
     {
+        $initialAssignment = $this->isInitialAssignment($link);
+        $linkContainDefaultSourceOrStock = $this->isLinkContainDefaultSourceOrStock($link);
         $errors = [];
-        if ($link->getStockId() === $this->defaultStockProvider->getId()
-        || $link->getSourceCode() === $this->defaultSourceProvider->getCode()) {
+        if (!$initialAssignment && $linkContainDefaultSourceOrStock) {
             $errors[] = __('Can not save link related to Default Source or Default Stock');
         }
 
         return $this->validationResultFactory->create(['errors' => $errors]);
+    }
+
+    /**
+     * Checks whether StockSourceLink represents assignment of Default Source on Default Stock
+     *
+     * @param StockSourceLinkInterface $link
+     * @return bool
+     */
+    private function isInitialAssignment(StockSourceLinkInterface $link)
+    {
+        $defaultStockId = $this->defaultStockProvider->getId();
+        $defaultSourceCode = $this->defaultSourceProvider->getCode();
+        $linkStockId = $link->getStockId();
+        $linkSourceCode = $link->getSourceCode();
+        $initialAssignment = false;
+        if ($defaultStockId === $linkStockId && $defaultSourceCode === $linkSourceCode) {
+            $initialAssignment = true;
+        }
+        return $initialAssignment;
+    }
+
+    /**
+     * Checks whether StockSourceLink contains reference to Default Source or Default Stock,
+     * which is currently forbidden (just initial assignment of Default Source on Default Stock allowed), as
+     * Default Source -> Default Stock linkage used to represent Single Source Mode
+     *
+     * @param StockSourceLinkInterface $link
+     * @return bool
+     */
+    private function isLinkContainDefaultSourceOrStock(StockSourceLinkInterface $link)
+    {
+        $defaultStockId = $this->defaultStockProvider->getId();
+        $defaultSourceCode = $this->defaultSourceProvider->getCode();
+        $linkStockId = $link->getStockId();
+        $linkSourceCode = $link->getSourceCode();
+        $linkContainDefaultSourceOrStock = false;
+        if ($linkStockId === $defaultStockId || $linkSourceCode === $defaultSourceCode) {
+            $linkContainDefaultSourceOrStock = true;
+        }
+        return $linkContainDefaultSourceOrStock;
     }
 }

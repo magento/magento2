@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model;
 
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -15,7 +15,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 class IsMultiSourceMode
 {
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
@@ -31,12 +31,12 @@ class IsMultiSourceMode
 
     /**
      * isMultiSourceMode constructor.
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param GetStockSourceLinksInterface $getStockSourceLinks
      */
     public function __construct(
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         GetStockSourceLinksInterface $getStockSourceLinks
     ) {
@@ -53,7 +53,7 @@ class IsMultiSourceMode
      */
     public function execute(int $websiteId):bool
     {
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+        $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
             ->create();

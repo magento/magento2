@@ -15,6 +15,7 @@
         <section name="AdminEditSourceContactInfoSection"/>
         <section name="AdminEditSourceAddressDataSection"/>
         <section name="AdminEditSourceCarriersSection"/>
+        <section name="AdminManageSourcesGridBody"/>
         <section name="AdminManageSourcesGridControls"/>
         <section name="AdminManageSourcesGridFilterControls"/>
         <section name="AdminManageSourcesGridColumnControls"/>

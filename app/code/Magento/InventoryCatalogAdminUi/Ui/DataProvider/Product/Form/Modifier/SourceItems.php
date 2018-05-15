@@ -15,9 +15,9 @@ use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryCatalog\Model\CanManageSourceItemsBySku;
-use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventoryCatalogAdminUi\Model\CanManageSourceItemsBySku;
+use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
 /**
  * Product form modifier. Add to form source data
@@ -25,9 +25,9 @@ use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInter
 class SourceItems extends AbstractModifier
 {
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
-    private $isSourceItemsAllowedForProductType;
+    private $isSourceItemManagementAllowedForProductType;
 
     /**
      * @var IsSingleSourceModeInterface
@@ -55,7 +55,7 @@ class SourceItems extends AbstractModifier
     private $canManageSourceItemsBySku;
 
     /**
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
@@ -63,14 +63,14 @@ class SourceItems extends AbstractModifier
      * @param CanManageSourceItemsBySku $canManageSourceItemsBySku
      */
     public function __construct(
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         IsSingleSourceModeInterface $isSingleSourceMode,
         LocatorInterface $locator,
         CollectionFactory $sourceItemCollectionFactory,
         ResourceConnection $resourceConnection,
         CanManageSourceItemsBySku $canManageSourceItemsBySku
     ) {
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->locator = $locator;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
@@ -86,7 +86,7 @@ class SourceItems extends AbstractModifier
         $product = $this->locator->getProduct();
 
         if ($this->isSingleSourceMode->execute() === true
-            || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false
+            || $this->isSourceItemManagementAllowedForProductType->execute($product->getTypeId()) === false
             || null === $product->getId()
         ) {
             return $data;
@@ -135,7 +135,7 @@ class SourceItems extends AbstractModifier
         $product = $this->locator->getProduct();
 
         if ($this->isSingleSourceMode->execute() === true
-            || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
+            || $this->isSourceItemManagementAllowedForProductType->execute($product->getTypeId()) === false) {
             return $meta;
         }
 

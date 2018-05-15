@@ -13,7 +13,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryCatalogAdminUi\Observer\SourceItemsProcessor;
 
 /**

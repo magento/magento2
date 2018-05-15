@@ -11,7 +11,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Sales\Model\Order\Shipment\Item;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterfaceFactory;
 
 class GetItemsToDeduct

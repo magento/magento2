@@ -13,6 +13,6 @@
     <preference for="Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\SaveStockItemConfiguration"/>
     <preference for="Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\StockItemConfiguration"/>
     <!-- Product types -->
-    <preference for="Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface" type="Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductType"/>
-    <preference for="Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemsInterface" type="Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItems"/>
+    <preference for="Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface" type="Magento\InventoryConfiguration\Model\IsSourceItemManagementAllowedForProductType"/>
+    <preference for="Magento\InventoryConfigurationApi\Model\GetAllowedProductTypesForSourceItemManagementInterface" type="Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemManagement"/>
 </config>

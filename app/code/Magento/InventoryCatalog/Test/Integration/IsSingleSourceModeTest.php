@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

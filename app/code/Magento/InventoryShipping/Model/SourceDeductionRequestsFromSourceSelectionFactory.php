@@ -71,6 +71,9 @@ class SourceDeductionRequestsFromSourceSelectionFactory
     {
         $itemsPerSource = [];
         foreach ($sourceSelectionItems as $sourceSelectionItem) {
+            if ($sourceSelectionItem->getQtyToDeduct() < 0.000001) {
+                continue;
+            }
             if (!isset($itemsPerSource[$sourceSelectionItem->getSourceCode()])) {
                 $itemsPerSource[$sourceSelectionItem->getSourceCode()] = [];
             }

@@ -7,7 +7,7 @@
     "magento/module-grouped-product": "*"
   },
   "suggest": {
-    "magento/module-inventory-configuration": "*"
+    "magento/module-inventory-configuration-api": "*"
   },
   "type": "magento2-module",
   "license": [

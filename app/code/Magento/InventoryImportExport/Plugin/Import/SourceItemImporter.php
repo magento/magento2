@@ -11,7 +11,7 @@ use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 
 class SourceItemImporter
 {

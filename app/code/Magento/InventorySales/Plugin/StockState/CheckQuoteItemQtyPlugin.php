@@ -13,7 +13,7 @@ use Magento\Framework\DataObject\Factory as ObjectFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\FormatInterface;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ProductSalabilityError;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;

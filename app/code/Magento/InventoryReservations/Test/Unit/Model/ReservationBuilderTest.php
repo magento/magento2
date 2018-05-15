@@ -13,7 +13,7 @@ use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryReservations\Model\ReservationBuilder;
 use Magento\InventoryReservations\Model\SnakeToCamelCaseConverter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
+use Magento\InventoryReservationsApi\Model\ReservationInterface;
 use PHPUnit\Framework\TestCase;
 
 class ReservationBuilderTest extends TestCase

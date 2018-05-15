@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableCondition;
 
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductType;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
@@ -36,9 +36,9 @@ class IsSalableWithReservationsCondition implements IsProductSalableInterface
     private $getStockItemConfiguration;
 
     /**
-     * @var IsSourceItemsAllowedForProductType
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
-    private $isSourceItemsAllowedForProductType;
+    private $isSourceItemManagementAllowedForProductType;
 
     /**
      * @var GetProductTypesBySkusInterface
@@ -49,20 +49,20 @@ class IsSalableWithReservationsCondition implements IsProductSalableInterface
      * @param GetStockItemDataInterface $getStockItemData
      * @param GetReservationsQuantityInterface $getReservationsQuantity
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
-     * @param IsSourceItemsAllowedForProductType $isSourceItemsAllowedForProductType
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      */
     public function __construct(
         GetStockItemDataInterface $getStockItemData,
         GetReservationsQuantityInterface $getReservationsQuantity,
         GetStockItemConfigurationInterface $getStockItemConfiguration,
-        IsSourceItemsAllowedForProductType $isSourceItemsAllowedForProductType,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypesBySkus
     ) {
         $this->getStockItemData = $getStockItemData;
         $this->getReservationsQuantity = $getReservationsQuantity;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
     }
 
@@ -78,7 +78,7 @@ class IsSalableWithReservationsCondition implements IsProductSalableInterface
         }
 
         $productType = $this->getProductTypesBySkus->execute([$sku])[$sku];
-        if (false === $this->isSourceItemsAllowedForProductType->execute($productType)) {
+        if (false === $this->isSourceItemManagementAllowedForProductType->execute($productType)) {
             return (bool)$stockItemData[GetStockItemDataInterface::IS_SALABLE];
         }
 

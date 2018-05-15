@@ -24,7 +24,7 @@
         <plugin name="check_quote_item_qty" type="Magento\InventorySales\Plugin\StockState\CheckQuoteItemQtyPlugin"/>
         <plugin name="suggest_qty" type="Magento\InventorySales\Plugin\StockState\SuggestQtyPlugin"/>
     </type>
-    <type name="Magento\InventoryReservationsApi\Api\AppendReservationsInterface">
+    <type name="Magento\InventoryReservationsApi\Model\AppendReservationsInterface">
         <plugin name="prevent_append_reservation_on_not_manage_items_in_stock" type="Magento\InventorySales\Plugin\InventoryReservationsApi\PreventAppendReservationOnNotManageItemsInStockPlugin"/>
     </type>
     <!-- Sales Event -->
@@ -138,4 +138,5 @@
     <type name="Magento\SalesInventory\Model\Order\ReturnProcessor">
         <plugin name="process_return_product_qty_on_credit_memo" type="Magento\InventorySales\Plugin\SalesInventory\ProcessReturnQtyOnCreditMemoPlugin" />
     </type>
+    <preference for="Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface" type="Magento\InventorySales\Model\StockByWebsiteIdResolver"/>
 </config>

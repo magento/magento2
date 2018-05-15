@@ -10,6 +10,7 @@ namespace Magento\Inventory\Model\Stock\Validator;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Model\StockValidatorInterface;
 
 /**
  * Check that name is valid

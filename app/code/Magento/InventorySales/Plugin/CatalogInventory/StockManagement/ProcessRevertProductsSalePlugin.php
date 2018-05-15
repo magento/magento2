@@ -10,12 +10,12 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
-use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
+use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
+use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 
 /**
  * Class provides around Plugin on \Magento\CatalogInventory\Model\StockManagement::revertProductsSale
@@ -28,7 +28,7 @@ class ProcessRevertProductsSalePlugin
     private $getSkusByProductIds;
 
     /**
-     * @var StockByWebsiteIdResolver
+     * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
 
@@ -43,9 +43,9 @@ class ProcessRevertProductsSalePlugin
     private $appendReservations;
 
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
-    private $isSourceItemsAllowedForProductType;
+    private $isSourceItemManagementAllowedForProductType;
 
     /**
      * @var GetProductTypesBySkusInterface
@@ -54,25 +54,25 @@ class ProcessRevertProductsSalePlugin
 
     /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
-     * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param ReservationBuilderInterface $reservationBuilder
      * @param AppendReservationsInterface $appendReservations
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         ReservationBuilderInterface $reservationBuilder,
         AppendReservationsInterface $appendReservations,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypesBySkus
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
     }
 
@@ -94,13 +94,13 @@ class ProcessRevertProductsSalePlugin
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
 
-        $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+        $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
         $productTypes = $this->getProductTypesBySkus->execute(array_values($productSkus));
 
         $reservations = [];
         foreach ($productSkus as $productId => $sku) {
-            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
+            if (false === $this->isSourceItemManagementAllowedForProductType->execute($productTypes[$sku])) {
                 continue;
             }
             $reservations[] = $this->reservationBuilder

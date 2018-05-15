@@ -7,8 +7,7 @@
         "magento/module-catalog-inventory": "*",
         "magento/module-catalog": "*",
         "magento/module-inventory-api": "*",
-        "magento/module-inventory-catalog": "*",
-        "magento/module-inventory-configuration": "*",
+        "magento/module-inventory-catalog-api": "*",
         "magento/module-inventory-configuration-api": "*",
         "magento/module-inventory-reservations-api": "*",
         "magento/module-inventory-sales-api": "*",
@@ -16,6 +15,9 @@
         "magento/module-sales-inventory": "*",
         "magento/module-store": "*",
         "magento/module-sales": "*"
+    },
+    "suggest": {
+        "magento/module-inventory-catalog": "*"
     },
     "require-dev": {
         "magento/module-inventory-indexer": "*"
