@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * An integrity test that searches for references to static files and asserts that they are resolved via fallback
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StaticFilesTest extends \PHPUnit\Framework\TestCase
 {
@@ -54,7 +55,6 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
-
 
     protected function setUp()
     {
