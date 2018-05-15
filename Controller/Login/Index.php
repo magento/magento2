@@ -52,7 +52,7 @@ class Index extends \Magento\Framework\App\Action\Action
         }
 
         $login = $this->_objectManager
-            ->create('\Magefan\LoginAsCustomer\Model\Login')
+            ->create(\Magefan\LoginAsCustomer\Model\Login::class)
             ->loadNotUsed($secret);
 
         if ($login->getId()) {

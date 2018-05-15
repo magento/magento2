@@ -26,7 +26,7 @@ class Index extends \Magento\Backend\App\Action
         }
 
         $this->_objectManager
-            ->create('\Magefan\LoginAsCustomer\Model\Login')
+            ->create(\Magefan\LoginAsCustomer\Model\Login::class)
             ->deleteNotUsed();
 
         $this->_view->loadLayout();
