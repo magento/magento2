@@ -73,4 +73,14 @@
     <type name="Magento\InventoryCatalog\Model\SourceItem\SourceItemsSave">
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save" disabled="true"/>
     </type>
+    <type name="Magento\InventoryCatalogApi\Model\SourceItemsSaveSynchronizationChain">
+        <arguments>
+            <argument name="definitions" xsi:type="array">
+                <item name="set_data_to_legacy_catalog_inventory" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">100</item>
+                    <item name="object" xsi:type="object">Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\SetDataToLegacyCatalogInventory</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
