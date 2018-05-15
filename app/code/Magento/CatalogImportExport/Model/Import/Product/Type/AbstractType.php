@@ -290,7 +290,7 @@ abstract class AbstractType
                 array_keys(self::$commonAttributesCache),
                 self::$invAttributesCache
             );
-            if ($unknownAttributeIds) {
+            if ($unknownAttributeIds || $this->_forcedAttributesCodes) {
                 $this->attachAttributesById($attributeSetName, $attributeIds);
             }
         }
@@ -317,8 +317,11 @@ abstract class AbstractType
     protected function attachAttributesById($attributeSetName, $attributeIds)
     {
         foreach ($this->_prodAttrColFac->create()->addFieldToFilter(
-            'main_table.attribute_id',
-            ['in' => $attributeIds]
+            ['main_table.attribute_id', 'main_table.attribute_code'],
+            [
+                ['in' => $attributeIds],
+                ['in' => $this->_forcedAttributesCodes]
+            ]
         ) as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
             $attributeId = $attribute->getId();
