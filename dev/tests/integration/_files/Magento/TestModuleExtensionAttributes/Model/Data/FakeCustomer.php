@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Wonderland\Model\Data;
+namespace Magento\TestModuleExtensionAttributes\Model\Data;
 
 /**
  * Class Customer
  *
  */
 class FakeCustomer extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Wonderland\Api\Data\FakeCustomerInterface
+    \Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerInterface
 {
     /**
      * Get email address
@@ -121,7 +122,7 @@ class FakeCustomer extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Wonderland\Api\Data\FakeCustomerExtensionInterface|null
+     * @return \Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -131,11 +132,11 @@ class FakeCustomer extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Wonderland\Api\Data\FakeCustomerExtensionInterface $extensionAttributes
+     * @param \Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Wonderland\Api\Data\FakeCustomerExtensionInterface $extensionAttributes
+        \Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

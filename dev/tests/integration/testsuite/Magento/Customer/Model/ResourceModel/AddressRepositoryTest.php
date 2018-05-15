@@ -166,6 +166,11 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedNewAddress = $this->_expectedAddresses[1];
         $expectedNewAddress->setId($savedAddress->getId());
         $expectedNewAddress->setRegion($this->_expectedAddresses[1]->getRegion());
+
+        // Trigger extension attributes object generation
+        $savedAddress->getExtensionAttributes();
+        $savedAddress->getRegion()->getExtensionAttributes();
+
         $this->assertEquals($expectedNewAddress, $savedAddress);
     }
 
