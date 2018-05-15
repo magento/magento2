@@ -45,10 +45,10 @@ class PreventDisableValidator implements SourceValidatorInterface
     public function validate(SourceInterface $source): ValidationResult
     {
         $sourceCode = (string)$source->getSourceCode();
-        if ($sourceCode != $this->defaultSourceProvider->getCode()) {
+        if ($sourceCode !== $this->defaultSourceProvider->getCode()) {
             return $this->validationResultFactory->create(['errors' => []]);
         }
-        $value = (bool)$source->getEnabled();
+        $value = (bool)$source->isEnabled();
         if (!$value) {
             $errors[] = __('Default source can not be disabled.');
         } else {
