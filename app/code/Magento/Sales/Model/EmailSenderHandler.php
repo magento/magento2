@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
 
 /**
  * Sales emails sending
@@ -44,7 +44,7 @@ class EmailSenderHandler
     protected $globalConfig;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Container\IdentityInterface
+     * @var IdentityInterface
      */
     private $identityContainer;
 
@@ -53,21 +53,31 @@ class EmailSenderHandler
      * @param \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource
      * @param \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param \Magento\Sales\Model\Order\Email\Container\IdentityInterface|null $identityContainer
+     * @param IdentityInterface|null $identityContainer
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         \Magento\Sales\Model\Order\Email\Sender $emailSender,
         \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource,
         \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        \Magento\Sales\Model\Order\Email\Container\IdentityInterface $identityContainer = null
+        IdentityInterface $identityContainer = null
     ) {
         $this->emailSender = $emailSender;
         $this->entityResource = $entityResource;
         $this->entityCollection = $entityCollection;
         $this->globalConfig = $globalConfig;
-        $this->identityContainer = $identityContainer ?: ObjectManager::getInstance()
-            ->get(\Magento\Sales\Model\Order\Email\Container\IdentityInterface::class);
+        $this->identityContainer = $identityContainer;
+
+        if (!$identityContainer instanceof IdentityInterface) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Instance of the %s is expected, got %s instead',
+                    IdentityInterface::class,
+                    $identityContainer ?: get_class($identityContainer)
+                )
+            );
+        }
     }
 
     /**
@@ -80,7 +90,8 @@ class EmailSenderHandler
             $this->entityCollection->addFieldToFilter('send_email', ['eq' => 1]);
             $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
 
-            $stores = $this->getEntityStores(clone $this->entityCollection);
+            /** @var \Magento\Store\Api\Data\StoreInterface[] $stores */
+            $stores = $this->getEntityStores($this->entityCollection);
 
             foreach ($stores as $store) {
                 $this->identityContainer->setStore($store);
@@ -116,7 +127,7 @@ class EmailSenderHandler
 
         /** @var \Magento\Sales\Model\EntityInterface $item */
         foreach ($entityCollection->getItems() as $item) {
-            $stores []= $item->getOrder()->getStore();
+            $stores[]= $item->getOrder()->getStore();
         }
 
         return $stores;
