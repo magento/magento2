@@ -56,4 +56,10 @@
             <argument name="dimensionName" xsi:type="string">stock_</argument>
         </arguments>
     </type>
+    <type name="Magento\InventoryIndexer\Model\ResourceModel\GetProductIdsBySourceItemIds">
+        <arguments>
+            <argument name="tableNameSourceItem" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
+            <argument name="sourceItemIdFieldName" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::ID_FIELD_NAME</argument>
+        </arguments>
+    </type>
 </config>
