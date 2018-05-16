@@ -423,8 +423,8 @@ class Installer
         $deploymentConfig = $this->deploymentConfigReader->load();
         $currentModules = isset($deploymentConfig[ConfigOptionsListConstants::KEY_MODULES])
             ? $deploymentConfig[ConfigOptionsListConstants::KEY_MODULES] : [];
-        $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES);
-        $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);
+        $enable = $this->readListOfModules($all, $request, InstallCommand::INPUT_KEY_ENABLE_MODULES);
+        $disable = $this->readListOfModules($all, $request, InstallCommand::INPUT_KEY_DISABLE_MODULES);
         $result = [];
         foreach ($all as $module) {
             if ((isset($currentModules[$module]) && !$currentModules[$module])) {
