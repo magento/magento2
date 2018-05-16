@@ -241,7 +241,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      *
      * @param Table $table
      * @param array $columns
-     * @param string|null $nameWithoutPrefix
+     * @param string $nameWithoutPrefix
      * @return Internal
      */
     private function createPrimaryConstraint(Table $table, array $columns, $nameWithoutPrefix = 'PRIMARY')
