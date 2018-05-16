@@ -112,10 +112,11 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                 'expectedOptions' => [
                     'keep-generated' => false,
                     'convert-old-scripts' => false,
-                    'magento-init-params' => '',
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
+                    'dump' => null,
+                    'magento-init-params' => '',
                 ]
             ],
             [
@@ -129,10 +130,11 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                 'expectedOptions' => [
                     'keep-generated' => true,
                     'convert-old-scripts' => false,
-                    'magento-init-params' => '',
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
+                    'dump' => null,
+                    'magento-init-params' => '',
                 ]
             ],
             [
@@ -142,10 +144,11 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                 'expectedOptions' => [
                     'keep-generated' => false,
                     'convert-old-scripts' => false,
-                    'magento-init-params' => '',
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
+                    'dump' => null,
+                    'magento-init-params' => '',
                 ]
             ],
             [
@@ -155,10 +158,11 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                 'expectedOptions' => [
                     'keep-generated' => false,
                     'convert-old-scripts' => false,
-                    'magento-init-params' => '',
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
+                    'dump' => null,
+                    'magento-init-params' => '',
                 ]
             ],
         ];
