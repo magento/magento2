@@ -66,9 +66,9 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface
+     * @return \Magento\Framework\GraphQl\Query\Resolver\ContextInterface
      */
-    public function getExtensionAttributes() : \Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface
+    public function getExtensionAttributes() : \Magento\Framework\GraphQl\Query\Resolver\ContextInterface
     {
         return $this->_getExtensionAttributes();
     }
@@ -76,11 +76,11 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface $extensionAttributes
+     * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $extensionAttributes
      * @return ContextInterface
      */
     public function setExtensionAttributes(
-        \Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface $extensionAttributes
+        \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $extensionAttributes
     ) : ContextInterface {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
