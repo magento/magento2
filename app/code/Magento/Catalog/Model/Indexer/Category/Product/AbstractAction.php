@@ -597,7 +597,7 @@ abstract class AbstractAction
         if (empty($this->tempTreeIndexTableName)) {
             $this->tempTreeIndexTableName = $this->connection->getTableName('temp_catalog_category_tree_index')
                 . '_'
-                . substr(md5(time() . rand(0, 999999999)), 0, 8);
+                . substr(md5(time() . random_int(0, 999999999)), 0, 8);
         }
 
         return $this->tempTreeIndexTableName;
