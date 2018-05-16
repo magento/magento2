@@ -47,6 +47,29 @@ class GetProductTypesBySkus
                 $skus
             );
 
-        return $connection->fetchPairs($select);
+        $result = [];
+        foreach ($connection->fetchPairs($select) as $sku => $productType) {
+            $result[$this->getResultKey((string)$sku, $skus)] = $productType;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return correct key for result array in GetProductTypesBySkus
+     * Allows for different case sku to be passed in search array
+     * with original cased sku to be passed back in result array
+     *
+     * @param string $sku
+     * @param array $productSkuList
+     * @return string
+     */
+    private function getResultKey(string $sku, array $productSkuList): string
+    {
+        $key = array_search(strtolower($sku), array_map('strtolower', $productSkuList));
+        if ($key !== false) {
+            $sku = $productSkuList[$key];
+        }
+        return $sku;
     }
 }
