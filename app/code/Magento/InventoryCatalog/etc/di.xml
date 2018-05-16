@@ -77,7 +77,7 @@
         <plugin name="replace_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Spi\StockRegistryProvider\GetStockStatusPlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Api\StockRegistryInterface">
-        <plugin name="replace_stock_status_configuration_for_product_id" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\GetStockStatusPlugin"/>
+        <plugin name="adapt_get_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetStockStatusPlugin"/>
         <plugin name="replace_stock_status_configuration_for_product_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\GetStockStatusBySkuPlugin"/>
         <plugin name="replace_stock_status_for_product_id" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\GetProductStockStatusPlugin"/>
         <plugin name="replace_stock_status_for_product_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\GetProductStockStatusBySkuPlugin"/>

@@ -49,13 +49,7 @@ class GetSkusByProductIds implements GetSkusByProductIdsInterface
             );
         }
 
-        $skuByIds = array_map(
-            function ($sku) {
-                return (string)$sku;
-            },
-            $skuByIds
-        );
-
+        $skuByIds = array_map('strval', $skuByIds);
         return $skuByIds;
     }
 }
