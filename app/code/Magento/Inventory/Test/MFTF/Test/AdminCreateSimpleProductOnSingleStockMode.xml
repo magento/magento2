@@ -13,10 +13,11 @@
             <features value="Multi-Source Inventory"/>
             <stories value="Create simple product visible on frontend on single stock mode"/>
             <title value="Simple Product created and visible on frontend"/>
-            <description value="You should be able to create a New Product via the Admin, and see it on frontend as  in stock."/>
+            <description value="You should be able to create a New Product via the Admin, and see it on frontend as in stock."/>
             <testCaseId value="953"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="single_stock_mode"/>
         </annotations>
 
         <before>
@@ -42,7 +43,7 @@
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="SimpleMsiProduct.sku"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
         </actionGroup>
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
         <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>

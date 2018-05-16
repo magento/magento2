@@ -17,18 +17,11 @@
             <testCaseId value="483"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="single_stock_mode"/>
         </annotations>
 
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory1"/>
-            <createData entity="FullSource1" stepKey="createSource1"/>
-            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
-
-            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
-                <requiredEntity createDataKey="createStock1"/>
-                <requiredEntity createDataKey="createSource1"/>
-            </createData>
-
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
@@ -50,27 +43,13 @@
         <fillField userInput="{{SimpleMsiProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillProductUrlKey1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
-        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
-        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSource1"/>
-
-        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminManageSourcesGridFilterControls.dropDown}}" visible="true" stepKey="clearTheFiltersIfPresent1"/>
-        <waitForPageLoad time="5" stepKey="waitForPageLoad2"/>
-
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
-            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <argument name="value" value="$$createSource1.source[source_code]$$"/>
-        </actionGroup>
-        <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource1"/>
-        <click selector=".product_form_product_form_sources_assign_sources_modal .action-primary" stepKey="clickOnDone2"/>
-
-        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillSourceQtyField1"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillSourceQtyField1"/>
 
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="SimpleMsiProduct.sku"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
         </actionGroup>
 
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns1"/>
