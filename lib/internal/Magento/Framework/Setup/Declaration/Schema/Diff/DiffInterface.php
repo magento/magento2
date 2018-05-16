@@ -7,9 +7,6 @@
 namespace Magento\Framework\Setup\Declaration\Schema\Diff;
 
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
-use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
-use Magento\Framework\Setup\Declaration\Schema\ElementHistory;
-use Magento\Framework\Setup\Declaration\Schema\Request;
 
 /**
  * DiffInterface is type of classes, that holds all information

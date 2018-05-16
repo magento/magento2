@@ -10,7 +10,6 @@ namespace Magento\Setup\Console\Command;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
-use Magento\Framework\Setup\Declaration\Schema\Request;
 use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
@@ -156,12 +155,6 @@ class InstallCommand extends AbstractSetupCommand
                 null,
                 InputOption::VALUE_NONE,
                 'Use sample data'
-            ),
-            new InputOption(
-                Request::DUMP_ENABLE_OPTIONS,
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Should removed columns be dumped or recovered columns data reverted.'
             ),
             new InputOption(
                 self::INPUT_KEY_ENABLE_MODULES,
