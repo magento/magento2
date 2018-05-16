@@ -100,7 +100,7 @@ class SwitchAction
 
             if ($store->isUseStoreInUrl()) {
                 // Remove store code in redirect url for correct rewrite search
-                $storeCode = $store->getCode() . '/';
+                $storeCode = preg_quote($store->getCode() . '/', '/');
                 $pattern = "@^($storeCode)@";
                 $urlPath = preg_replace($pattern, '', $urlPath);
             }
