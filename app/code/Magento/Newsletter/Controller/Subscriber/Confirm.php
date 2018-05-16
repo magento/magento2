@@ -31,7 +31,8 @@ class Confirm extends \Magento\Newsletter\Controller\Subscriber
                 $this->messageManager->addError(__('This is an invalid subscription ID.'));
             }
         }
-
-        $this->getResponse()->setRedirect($this->_storeManager->getStore()->getBaseUrl());
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setUrl($this->_storeManager->getStore()->getBaseUrl());
+        return $resultRedirect;
     }
 }
