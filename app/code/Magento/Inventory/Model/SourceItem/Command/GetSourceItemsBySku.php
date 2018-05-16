@@ -9,7 +9,7 @@ namespace Magento\Inventory\Model\SourceItem\Command;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
+use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 
 /**
@@ -42,12 +42,12 @@ class GetSourceItemsBySku implements GetSourceItemsBySkuInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $sku): SourceItemSearchResultsInterface
+    public function execute(string $sku): array
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SKU, $sku)
             ->create();
 
-        return $this->sourceItemRepository->getList($searchCriteria);
+        return $this->sourceItemRepository->getList($searchCriteria)->getItems();
     }
 }

@@ -9,6 +9,7 @@ namespace Magento\InventorySales\Model;
 
 use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
+use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
 
 /**
  * @inheritdoc

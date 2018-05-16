@@ -10,15 +10,13 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventoryCatalog\Model\SourceItemsSaveSynchronization\SetDataToLegacyCatalogInventory;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
-use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockStatus;
-use Magento\InventorySalesApi\Api\IsProductSalableInterface;
-use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
 /**
- * Set Qty and status for legacy CatalogInventory Stock Status and Stock Item DB tables,
- * if corresponding MSI SourceItem assigned to Default Source has been saved
+ * Synchronization between legacy Stock Items and saved Source Items
  */
 class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
 {
@@ -28,44 +26,36 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
     private $defaultSourceProvider;
 
     /**
-     * @var SetDataToLegacyStockItem
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
-    private $setDataToLegacyStockItem;
+    private $isSourceItemsAllowedForProductType;
 
     /**
-     * @var SetDataToLegacyStockStatus
+     * @var GetProductTypesBySkusInterface
      */
-    private $setDataToLegacyStockStatus;
+    private $getProductTypeBySku;
 
     /**
-     * @var IsProductSalableInterface
+     * @var SetDataToLegacyCatalogInventory
      */
-    private $isProductSalable;
-
-    /**
-     * @var DefaultStockProviderInterface
-     */
-    private $defaultStockProvider;
+    private $setDataToLegacyCatalogInventory;
 
     /**
      * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
-     * @param SetDataToLegacyStockStatus $setDataToLegacyStockStatus
-     * @param IsProductSalableInterface $isProductSalable
-     * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param GetProductTypesBySkusInterface $getProductTypeBySku
+     * @param SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory
      */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
-        SetDataToLegacyStockItem $setDataToLegacyStockItem,
-        SetDataToLegacyStockStatus $setDataToLegacyStockStatus,
-        IsProductSalableInterface $isProductSalable,
-        DefaultStockProviderInterface $defaultStockProvider
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        GetProductTypesBySkusInterface $getProductTypeBySku,
+        SetDataToLegacyCatalogInventory $setDataToLegacyCatalogInventory
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->setDataToLegacyStockItem = $setDataToLegacyStockItem;
-        $this->setDataToLegacyStockStatus = $setDataToLegacyStockStatus;
-        $this->isProductSalable = $isProductSalable;
-        $this->defaultStockProvider = $defaultStockProvider;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->getProductTypeBySku = $getProductTypeBySku;
+        $this->setDataToLegacyCatalogInventory = $setDataToLegacyCatalogInventory;
     }
 
     /**
@@ -73,45 +63,26 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
      * @param void $result
      * @param SourceItemInterface[] $sourceItems
      * @return void
-     * @see SourceItemsSaveInterface::execute
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(SourceItemsSaveInterface $subject, $result, array $sourceItems)
+    public function afterExecute(SourceItemsSaveInterface $subject, $result, array $sourceItems): void
     {
+        $sourceItemsForSynchronization = [];
         foreach ($sourceItems as $sourceItem) {
             if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
                 continue;
             }
-            try {
-                $this->setDataToLegacyStockItem->execute(
-                    $sourceItem->getSku(),
-                    (float)$sourceItem->getQuantity(),
-                    (int)$sourceItem->getStatus()
-                );
-                $this->setDataToLegacyStockStatus->execute(
-                    $sourceItem->getSku(),
-                    (float)$sourceItem->getQuantity(),
-                    (int)$sourceItem->getStatus()
-                );
-                /**
-                 * We need to call setDataToLegacyStockStatus second time because we don't have On Save re-indexation
-                 * as cataloginventory_stock_item table updated with plane SQL queries
-                 * Thus, initially we put the raw data there, and after that persist the calculated value
-                 */
-                $this->setDataToLegacyStockStatus->execute(
-                    $sourceItem->getSku(),
-                    (float)$sourceItem->getQuantity(),
-                    (int)$this->isProductSalable->execute($sourceItem->getSku(), $this->defaultStockProvider->getId())
-                );
-            } catch (InputException $e) {
-                /**
-                 * We need to catch InputException here and leave an empty catch body, this is because in-line with
-                 * MSI issue #889 https://github.com/magento-engcom/msi/issues/889 We are removing SKU validation
-                 * and we will allow MSI to work with SKUs not in Catalog. Empty Catch is not best practise and is a
-                 * code smell but we will eventually remove the need to set Legacy Data which throws the InputException
-                 * this will happen when CatalogInventory is dismantled and removed. This plugin will then be removed.
-                 */
+
+            $sku = $sourceItem->getSku();
+            $typeId = $this->getProductTypeBySku->execute([$sku])[$sku];
+
+            if (false === $this->isSourceItemsAllowedForProductType->execute($typeId)) {
+                continue;
             }
+
+            $sourceItemsForSynchronization[] = $sourceItem;
         }
+
+        $this->setDataToLegacyCatalogInventory->execute($sourceItemsForSynchronization);
     }
 }

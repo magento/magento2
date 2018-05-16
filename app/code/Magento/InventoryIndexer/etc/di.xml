@@ -49,7 +49,7 @@
         <plugin name="invalidate_after_stock_source_links_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\InvalidateAfterStockSourceLinksDeletePlugin"/>
     </type>
     <!-- Stock Item -->
-    <preference for="Magento\InventorySales\Model\GetStockItemDataInterface" type="Magento\InventoryIndexer\Model\ResourceModel\GetStockItemData"/>
+    <preference for="Magento\InventorySalesApi\Model\GetStockItemDataInterface" type="Magento\InventoryIndexer\Model\ResourceModel\GetStockItemData"/>
     <preference for="Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface" type="Magento\InventoryIndexer\Model\StockIndexTableNameResolver"/>
     <type name="Magento\InventoryIndexer\Model\StockIndexTableNameResolver">
         <arguments>

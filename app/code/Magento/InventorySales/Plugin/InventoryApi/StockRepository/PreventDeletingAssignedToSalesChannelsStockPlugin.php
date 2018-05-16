@@ -9,7 +9,7 @@ namespace Magento\InventorySales\Plugin\InventoryApi\StockRepository;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventorySales\Model\GetAssignedSalesChannelsForStockInterface;
+use Magento\InventorySalesApi\Model\GetAssignedSalesChannelsForStockInterface;
 
 /**
  * Prevent deleting of Stock which assigned at least one Sales Channel

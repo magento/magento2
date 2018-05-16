@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventorySales\Model\ReplaceSalesChannelsForStockInterface;
+use Magento\InventorySalesApi\Model\ReplaceSalesChannelsForStockInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**

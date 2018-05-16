@@ -14,7 +14,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
 /**
  * Class provides around Plugin on \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::save
@@ -28,9 +28,9 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     private $resourceConnection;
 
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
      */
-    private $isSourceItemsAllowedForProductType;
+    private $isSourceItemManagementAllowedForProductType;
 
     /**
      * @var UpdateSourceItemBasedOnLegacyStockItem
@@ -50,20 +50,20 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     /**
      * @param UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem
      * @param ResourceConnection $resourceConnection
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      */
     public function __construct(
         UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem,
         ResourceConnection $resourceConnection,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypeBySku,
         GetSkusByProductIdsInterface $getSkusByProductIds
     ) {
         $this->updateSourceItemBasedOnLegacyStockItem = $updateSourceItemBasedOnLegacyStockItem;
         $this->resourceConnection = $resourceConnection;
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->getProductTypeBySku = $getProductTypeBySku;
         $this->getSkusByProductIds = $getSkusByProductIds;
     }
@@ -86,7 +86,7 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
             $proceed($legacyStockItem);
 
             $typeId = $this->getTypeId($legacyStockItem);
-            if ($this->isSourceItemsAllowedForProductType->execute($typeId)) {
+            if ($this->isSourceItemManagementAllowedForProductType->execute($typeId)) {
                 $this->updateSourceItemBasedOnLegacyStockItem->execute($legacyStockItem);
             }
 

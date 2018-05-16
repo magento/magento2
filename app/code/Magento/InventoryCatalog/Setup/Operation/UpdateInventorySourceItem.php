@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Setup\Operation;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -30,15 +29,23 @@ class UpdateInventorySourceItem
     private $defaultSourceProvider;
 
     /**
+     * @var string
+     */
+    private $tableNameSourceItem;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param DefaultSourceProviderInterface $defaultSourceProvider
+     * @param string $tableNameSourceItem
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DefaultSourceProviderInterface $defaultSourceProvider
+        DefaultSourceProviderInterface $defaultSourceProvider,
+        $tableNameSourceItem
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->defaultSourceProvider = $defaultSourceProvider;
+        $this->tableNameSourceItem = $tableNameSourceItem;
     }
 
     /**
@@ -48,7 +55,7 @@ class UpdateInventorySourceItem
     public function execute(ModuleDataSetupInterface $setup)
     {
         $defaultSourceCode = $this->defaultSourceProvider->getCode();
-        $sourceItemTable = $setup->getTable(SourceItem::TABLE_NAME_SOURCE_ITEM);
+        $sourceItemTable = $setup->getTable($this->tableNameSourceItem);
         $legacyStockItemTable = $setup->getTable('cataloginventory_stock_item');
         $productTable = $setup->getTable('catalog_product_entity');
 
