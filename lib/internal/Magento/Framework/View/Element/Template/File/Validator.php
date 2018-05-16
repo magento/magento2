@@ -34,6 +34,11 @@ class Validator
     protected $_filesystem;
 
     /**
+     * @var \Magento\Framework\Filesystem\Io\File
+     */
+    protected $_file;
+
+    /**
      * Allow symlinks flag
      *
      * @var bool
@@ -72,17 +77,20 @@ class Validator
      * Class constructor
      *
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem\Io\File $file
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
      * @param ComponentRegistrar $componentRegistrar
      * @param string|null $scope
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Filesystem\Io\File $file,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface,
         ComponentRegistrar $componentRegistrar,
         $scope = null
     ) {
         $this->_filesystem = $filesystem;
+        $this->_file = $file;
         $this->_isAllowSymlinks = $scopeConfigInterface->getValue(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK, $scope);
         $this->_themesDir = $componentRegistrar->getPaths(ComponentRegistrar::THEME);
         $this->moduleDirs = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
@@ -110,7 +118,7 @@ class Validator
                     || $this->isPathInDirectories($filename, $this->moduleDirs)
                     || $this->isPathInDirectories($filename, $this->_themesDir)
                     || $this->_isAllowSymlinks)
-                && $this->getRootDirectory()->isFile($this->getRootDirectory()->getRelativePath($filename));
+                && $this->isFileExists($filename);
         }
         return $this->_templatesValidationResults[$filename];
     }
@@ -136,15 +144,11 @@ class Validator
     }
 
     /**
-     * Instantiates filesystem directory
-     *
-     * @return \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @param $filename
+     * @return bool
      */
-    protected function getRootDirectory()
+    protected function isFileExists($filename)
     {
-        if (null === $this->directory) {
-            $this->directory = $this->_filesystem->getDirectoryRead(DirectoryList::ROOT);
-        }
-        return $this->directory;
+        return $this->_file->fileExists($filename);
     }
 }
