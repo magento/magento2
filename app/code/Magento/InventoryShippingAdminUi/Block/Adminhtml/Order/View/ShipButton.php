@@ -10,7 +10,7 @@ namespace Magento\InventoryShippingAdminUi\Block\Adminhtml\Order\View;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\Registry;
-use Magento\InventoryShipping\Model\IsMultiSourceMode;
+use Magento\InventoryShippingAdminUi\Model\IsWebsiteInMultiSourceMode;
 
 /**
  * Update order_ship button to redirect to Source Selection page
@@ -25,25 +25,25 @@ class ShipButton extends Container
     private $registry;
 
     /**
-     * @var IsMultiSourceMode
+     * @var IsWebsiteInMultiSourceMode
      */
-    private $isMultiSourceMode;
+    private $isWebsiteInMultiSourceMode;
 
     /**
      * @param Context $context
      * @param Registry $registry
-     * @param IsMultiSourceMode $isMultiSourceMode
+     * @param IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
-        IsMultiSourceMode $isMultiSourceMode,
+        IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->registry = $registry;
-        $this->isMultiSourceMode = $isMultiSourceMode;
+        $this->isWebsiteInMultiSourceMode = $isWebsiteInMultiSourceMode;
     }
 
     /**
@@ -55,7 +55,7 @@ class ShipButton extends Container
 
         $order = $this->registry->registry('current_order');
         $websiteId = (int)$order->getStore()->getWebsiteId();
-        if ($this->isMultiSourceMode->execute($websiteId)) {
+        if ($this->isWebsiteInMultiSourceMode->execute($websiteId)) {
             $this->buttonList->update(
                 'order_ship',
                 'onclick',

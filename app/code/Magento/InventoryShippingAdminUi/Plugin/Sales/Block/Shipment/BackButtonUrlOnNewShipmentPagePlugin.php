@@ -8,22 +8,22 @@ declare(strict_types=1);
 namespace Magento\InventoryShippingAdminUi\Plugin\Sales\Block\Shipment;
 
 use Magento\Shipping\Block\Adminhtml\Create;
-use Magento\InventoryShipping\Model\IsMultiSourceMode;
+use Magento\InventoryShippingAdminUi\Model\IsWebsiteInMultiSourceMode;
 
 class BackButtonUrlOnNewShipmentPagePlugin
 {
     /**
-     * @var IsMultiSourceMode
+     * @var IsWebsiteInMultiSourceMode
      */
-    private $isMultiSourceMode;
+    private $isWebsiteInMultiSourceMode;
 
     /**
-     * @param IsMultiSourceMode $isMultiSourceMode
+     * @param IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode
      */
     public function __construct(
-        IsMultiSourceMode $isMultiSourceMode
+        IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode
     ) {
-        $this->isMultiSourceMode = $isMultiSourceMode;
+        $this->isWebsiteInMultiSourceMode = $isWebsiteInMultiSourceMode;
     }
 
     /**
@@ -38,7 +38,7 @@ class BackButtonUrlOnNewShipmentPagePlugin
         }
 
         $websiteId = (int)$subject->getShipment()->getOrder()->getStore()->getWebsiteId();
-        if ($this->isMultiSourceMode->execute($websiteId)) {
+        if ($this->isWebsiteInMultiSourceMode->execute($websiteId)) {
             return $subject->getUrl(
                 'inventoryshipping/SourceSelection/index',
                 [

@@ -11,7 +11,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Sales\Model\OrderRepository;
-use Magento\InventoryShipping\Model\IsMultiSourceMode;
+use Magento\InventoryShippingAdminUi\Model\IsWebsiteInMultiSourceMode;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -26,9 +26,9 @@ class NewShipmentLoadBefore implements ObserverInterface
     private $orderRepository;
 
     /**
-     * @var IsMultiSourceMode
+     * @var IsWebsiteInMultiSourceMode
      */
-    private $isMultiSourceMode;
+    private $isWebsiteInMultiSourceMode;
 
     /**
      * @var RedirectInterface
@@ -37,16 +37,16 @@ class NewShipmentLoadBefore implements ObserverInterface
 
     /**
      * @param OrderRepository $orderRepository
-     * @param IsMultiSourceMode $isMultiSourceMode
+     * @param IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode
      * @param RedirectInterface $redirect
      */
     public function __construct(
         OrderRepository $orderRepository,
-        IsMultiSourceMode $isMultiSourceMode,
+        IsWebsiteInMultiSourceMode $isWebsiteInMultiSourceMode,
         RedirectInterface $redirect
     ) {
         $this->orderRepository = $orderRepository;
-        $this->isMultiSourceMode = $isMultiSourceMode;
+        $this->isWebsiteInMultiSourceMode = $isWebsiteInMultiSourceMode;
         $this->redirect = $redirect;
     }
 
@@ -68,7 +68,7 @@ class NewShipmentLoadBefore implements ObserverInterface
             $orderId = $request->getParam('order_id');
             $order = $this->orderRepository->get($orderId);
             $websiteId = (int)$order->getStore()->getWebsiteId();
-            if ($this->isMultiSourceMode->execute($websiteId)) {
+            if ($this->isWebsiteInMultiSourceMode->execute($websiteId)) {
                 $this->redirect->redirect(
                     $controller->getResponse(),
                     'inventoryshipping/SourceSelection/index',

@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model;
+namespace Magento\InventoryShippingAdminUi\Model;
 
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
-class IsMultiSourceMode
+class IsWebsiteInMultiSourceMode
 {
     /**
      * @var StockByWebsiteIdResolverInterface
@@ -46,7 +46,7 @@ class IsMultiSourceMode
     }
 
     /**
-     * Check if is Multi Source Mode for website Id
+     * Check if website in Multi Source Mode
      *
      * @param int $websiteId
      * @return bool
