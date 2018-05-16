@@ -81,7 +81,6 @@
             <argument name="filter_value" value="$$createFullSource1.source[source_code]$$"/>
         </actionGroup>
 
-
         <see userInput="{{FullSource1.source_code}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow2"/>
         <see userInput="{{FullSource2.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow2"/>
         <see userInput="Enabled" selector="{{AdminGridRow.rowOne}}" stepKey="seeIsEnabledInRow2"/>

@@ -98,7 +98,7 @@
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsOnProductGrid">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="SimpleMsiProduct.sku"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
         </actionGroup>
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
         <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>

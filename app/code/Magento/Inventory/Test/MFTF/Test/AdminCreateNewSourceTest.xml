@@ -85,7 +85,7 @@
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <argument name="value" value="FullSource1.source_code"/>
+            <argument name="value" value="$$createSource1.source[source_code]$$"/>
         </actionGroup>
 
         <see userInput="{{FullSource1.source_code}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>

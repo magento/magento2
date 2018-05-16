@@ -20,7 +20,7 @@
         </annotations>
         
         <before>
-            <createData entity="_defaultStock" stepKey="createStock1"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>

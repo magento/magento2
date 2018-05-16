@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminStockCannotBeDeletedOnStockPageWhenSalesChannelIsAssignedTest">
@@ -21,7 +22,7 @@
         <before>
             <createData entity="BasicMsiStock1" stepKey="createCustomStock"/>
             <createData entity="customWebsite" stepKey="createCustomWebsite"/>
-            <!-- todo temporary solution as it is impossible to parse website_id from the post request and as a consequence can not create store group via post-->
+            <!-- todo temporary solution as it is impossible to parse website_id from the post request and as a consequence can not create store group via post -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCreateStoreGroupActionGroup" stepKey="createStoreGroup">
                 <argument name="Website" value="customWebsite"/>
@@ -31,7 +32,7 @@
             </actionGroup>
         </before>
         <after>
-            <!-- todo temporary solution as it is impossible to parse website_id from the post request and as a consequence can not delete it via post-->
+            <!-- todo temporary solution as it is impossible to parse website_id from the post request and as a consequence can not delete it via post -->
             <actionGroup ref="DeleteCustomWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="$$createCustomWebsite.website[name]$$"/>
             </actionGroup>
