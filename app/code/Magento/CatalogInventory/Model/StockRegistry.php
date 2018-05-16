@@ -171,13 +171,7 @@ class StockRegistry implements StockRegistryInterface
         $productId = $this->resolveProductId($productSku);
         $websiteId = $stockItem->getWebsiteId() ?: null;
         $origStockItem = $this->getStockItem($productId, $websiteId);
-
         $data = $stockItem->getData();
-        $origData = $origStockItem->getData();
-        if ($data === $origData) {
-            return $stockItem->getItemId();
-        }
-
         if ($origStockItem->getItemId()) {
             unset($data['item_id']);
         }

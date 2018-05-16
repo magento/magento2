@@ -100,14 +100,34 @@ class SaveInventoryDataObserver implements ObserverInterface
     public function execute(EventObserver $observer)
     {
         $product = $observer->getEvent()->getProduct();
-        $stockItem = $this->getStockItemToBeUpdated($product);
-
         if ($product->getStockData() !== null) {
+            $stockItem = $this->getStockItemToBeUpdated($product);
             $stockData = $this->getStockData($product);
-            $stockItem->addData($stockData);
+
+            if ($this->isStockDataChanged($stockItem, $stockData)) {
+                $stockItem->addData($stockData);
+                $this->stockItemValidator->validate($product, $stockItem);
+                $this->stockRegistry->updateStockItemBySku($product->getSku(), $stockItem);
+            }
         }
-        $this->stockItemValidator->validate($product, $stockItem);
-        $this->stockRegistry->updateStockItemBySku($product->getSku(), $stockItem);
+    }
+
+    /**
+     * Check is stock item data changed
+     *
+     * @param Item $stockItem
+     * @param array $stockData
+     * @return bool
+     */
+    private function isStockDataChanged(Item $stockItem, array $stockData)
+    {
+        foreach ($stockData as $field => $value) {
+            if ($stockItem->getData($field) !== $value) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
