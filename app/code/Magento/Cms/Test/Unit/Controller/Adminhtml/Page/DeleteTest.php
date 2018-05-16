@@ -61,7 +61,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $this->pageMockRepository = $this->getMockBuilder(\Magento\Cms\Api\PageRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['delete', 'getTitle'])
+            ->setMethods()
             ->getMock();
 
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
