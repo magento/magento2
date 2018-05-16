@@ -11,7 +11,7 @@ use Exception;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Inventory\Model\SourceCarrierLinkManagementInterface;
+use Magento\InventoryApi\Model\SourceCarrierLinkManagementInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**

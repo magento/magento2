@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
+use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
 use Magento\Inventory\Model\SourceItem\Command\SourceItemsSave;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
@@ -24,7 +24,7 @@ $skuList = ['simple_11', 'simple_21', 'simple_31'];
 foreach ($skuList as $sku) {
     $sourceItems = $getSourceItemsBySku->execute($sku);
     $changesSourceItems = [];
-    foreach ($sourceItems->getItems() as $sourceItem) {
+    foreach ($sourceItems as $sourceItem) {
         $sourceItem->setStatus(SourceItemInterface::STATUS_OUT_OF_STOCK);
         $changesSourceItems[] = $sourceItem;
     }

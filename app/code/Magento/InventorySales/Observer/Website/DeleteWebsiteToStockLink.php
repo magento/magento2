@@ -9,7 +9,7 @@ namespace Magento\InventorySales\Observer\Website;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\InventorySales\Model\DeleteSalesChannelToStockLinkInterface;
+use Magento\InventorySalesApi\Model\DeleteSalesChannelToStockLinkInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\Website;

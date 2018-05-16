@@ -11,7 +11,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
-use Magento\InventorySales\Model\GetAssignedStockIdForWebsiteInterface;
+use Magento\InventorySalesApi\Model\GetAssignedStockIdForWebsiteInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\Store\Api\Data\WebsiteInterface;

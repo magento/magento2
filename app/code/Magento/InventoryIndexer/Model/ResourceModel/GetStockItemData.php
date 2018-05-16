@@ -10,7 +10,7 @@ namespace Magento\InventoryIndexer\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
-use Magento\InventorySales\Model\GetStockItemDataInterface;
+use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 
 /**

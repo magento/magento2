@@ -8,7 +8,8 @@
         "magento/module-inventory": "*",
         "magento/module-inventory-api": "*",
         "magento/module-inventory-catalog-api": "*",
-        "magento/module-inventory-indexer": "*"
+        "magento/module-inventory-indexer": "*",
+        "magento/module-inventory-multi-dimensional-indexer-api": "*"
     },
     "type": "magento2-module",
     "license": [
