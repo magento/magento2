@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model;
+namespace Magento\InventorySalesApi\Model;
 
 /**
  * Get assigned Stock id for Website (Service Provider Interface - SPI)

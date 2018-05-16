@@ -10,7 +10,7 @@ namespace Magento\InventorySales\Plugin\InventoryApi\StockRepository;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventorySales\Model\ReplaceSalesChannelsForStockInterface;
+use Magento\InventorySalesApi\Model\ReplaceSalesChannelsForStockInterface;
 use Psr\Log\LoggerInterface;
 
 /**

@@ -10,7 +10,7 @@ namespace Magento\InventorySales\Plugin\InventoryApi\StockRepository;
 use Magento\Framework\Exception\StateException;
 use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventorySales\Model\GetAssignedSalesChannelsForStockInterface;
+use Magento\InventorySalesApi\Model\GetAssignedSalesChannelsForStockInterface;
 use Psr\Log\LoggerInterface;
 
 /**

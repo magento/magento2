@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventorySales\Model\GetAssignedStockIdForWebsiteInterface;
+use Magento\InventorySalesApi\Model\GetAssignedStockIdForWebsiteInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
