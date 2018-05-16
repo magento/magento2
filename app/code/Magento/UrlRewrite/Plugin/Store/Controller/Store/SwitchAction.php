@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogUrlRewrite\Plugin\Store\Controller\Store;
+namespace Magento\UrlRewrite\Plugin\Store\Controller\Store;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -19,8 +19,7 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
 
 /**
- * Plugin makes connection between Store and UrlRewrite modules
- * because Magento\Store\Controller\Store\SwitchAction should not know about UrlRewrite module functionality
+ * Plugin handles url rewrites for redirect url
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -101,11 +100,9 @@ class SwitchAction
 
             if ($store->isUseStoreInUrl()) {
                 // Remove store code in redirect url for correct rewrite search
-                $urlPath = str_replace(
-                    $store->getCode() . '/',
-                    '',
-                    $urlPath
-                );
+                $storeCode = $store->getCode() . '/';
+                $pattern = "@^($storeCode)@";
+                $urlPath = preg_replace($pattern, '', $urlPath);
             }
 
             try {
@@ -113,10 +110,6 @@ class SwitchAction
                 $oldRewrite = $this->urlFinder->findOneByData([
                     UrlRewrite::REQUEST_PATH => $urlPath,
                     UrlRewrite::STORE_ID => $oldStoreId,
-                    UrlRewrite::ENTITY_TYPE => [
-                        \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE,
-                        \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator::ENTITY_TYPE,
-                    ]
                 ]);
             } catch (NoSuchEntityException $exception) {
                 $oldRewrite = null;

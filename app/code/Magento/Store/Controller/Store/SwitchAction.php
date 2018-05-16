@@ -105,7 +105,6 @@ class SwitchAction extends Action
      */
     public function execute()
     {
-        $currentActiveStore = $this->storeManager->getStore();
         $storeCode = $this->_request->getParam(
             StoreResolver::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
@@ -141,18 +140,6 @@ class SwitchAction extends Action
             $this->storeCookieManager->setStoreCookie($store);
         }
 
-        if ($store->isUseStoreInUrl()) {
-            // Change store code in redirect url
-            if (strpos($redirectUrl, $currentActiveStore->getBaseUrl()) !== false) {
-                $redirectUrl = str_replace(
-                    $currentActiveStore->getBaseUrl(),
-                    $store->getBaseUrl(),
-                    $redirectUrl
-                );
-            } else {
-                $redirectUrl = $store->getBaseUrl();
-            }
-        }
         $this->getResponse()->setRedirect($redirectUrl);
     }
 }

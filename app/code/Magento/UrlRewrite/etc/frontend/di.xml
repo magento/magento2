@@ -17,4 +17,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Store\Controller\Store\SwitchAction">
+        <plugin name="store_switcher_plugin" type="Magento\UrlRewrite\Plugin\Store\Controller\Store\SwitchAction"/>
+    </type>
 </config>
