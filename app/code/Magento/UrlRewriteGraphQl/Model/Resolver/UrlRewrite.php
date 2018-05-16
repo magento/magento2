@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Cms\Helper\Page;
 
 /**
  * UrlRewrite field resolver, used for GraphQL request processing.
@@ -41,7 +42,6 @@ class UrlRewrite implements ResolverInterface
      */
     private $scopeConfig;
     
-
     /**
      * @param UrlFinderInterface $urlFinder
      * @param StoreManagerInterface $storeManager
@@ -80,7 +80,7 @@ class UrlRewrite implements ResolverInterface
                 $url = ltrim($url, '/');
             } else if ($url === '/') {
                 $homePageIdentifier = $this->scopeConfig->getValue(
-                    \Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE,
+                    Page::XML_PATH_HOME_PAGE,
                     ScopeInterface::SCOPE_STORE
                 );
                 $url = $homePageIdentifier;

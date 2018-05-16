@@ -272,4 +272,46 @@ QUERY;
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertNull($response['urlResolver']);
     }
+    
+    /**
+     * Test for category entity with leading slash
+     */
+    public function testCategoryUrlWithLeadingSlash()
+    {
+        $productSku = 'p002';
+        $urlPath2 = 'cat-1.html';
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku, false, null, true);
+        $storeId  = $product->getStoreId();
+        
+        /** @var  UrlFinderInterface $urlFinder */
+        $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
+        $actualUrls = $urlFinder->findOneByData(
+            [
+                'request_path' => $urlPath,
+                'store_id' => $storeId
+            ]
+        );
+        $categoryId = $actualUrls->getEntityId();
+        $targetPath = $actualUrls->getTargetPath();
+        $expectedType = $actualUrls->getEntityType();
+        
+        $query
+        = <<<QUERY
+{
+  urlResolver(url:"/{$urlPath2}")
+  {
+   id
+   canonical_url
+   type
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayHasKey('urlResolver', $response);
+        $this->assertEquals($categoryId, $response['urlResolver']['id']);
+        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+    }
 }
