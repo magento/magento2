@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Developer\Console\Command;
 
@@ -89,7 +90,7 @@ class GeneratePatchCommand extends Command
      *
      * @return string
      */
-    private function getPatchTemplate()
+    private function getPatchTemplate() : string
     {
         return file_get_contents(__DIR__ . '/patch_template.php.dist');
     }
@@ -98,7 +99,7 @@ class GeneratePatchCommand extends Command
      * {@inheritdoc}
      * @throws \InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $moduleName = $input->getArgument(self::MODULE_NAME);
         $patchName = $input->getArgument(self::INPUT_KEY_PATCH_NAME);

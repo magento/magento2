@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
@@ -277,7 +279,7 @@ class InstallCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @return string[] Array of error messages
      */
-    public function validate(InputInterface $input)
+    public function validate(InputInterface $input) : array
     {
         $errors = [];
         $value = $input->getOption(self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX);
@@ -297,7 +299,7 @@ class InstallCommand extends AbstractSetupCommand
      * @param OutputInterface $output
      * @return string[] Array of inputs
      */
-    private function interactiveQuestions(InputInterface $input, OutputInterface $output)
+    private function interactiveQuestions(InputInterface $input, OutputInterface $output) : array
     {
         $helper = $this->getHelper('question');
         $configOptionsToValidate = [];

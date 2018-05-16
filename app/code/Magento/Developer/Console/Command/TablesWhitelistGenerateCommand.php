@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Developer\Console\Command;
 
 use Magento\Framework\Component\ComponentRegistrar;
@@ -122,7 +124,7 @@ class TablesWhitelistGenerateCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $moduleName = $input->getOption(self::MODULE_NAME_KEY);
 
@@ -149,7 +151,7 @@ class TablesWhitelistGenerateCommand extends Command
      * @param array $content
      * @return array
      */
-    private function selectNamesFromContent(array $content)
+    private function selectNamesFromContent(array $content) : array
     {
         $names = [];
         $types = ['column', 'index', 'constraint'];
