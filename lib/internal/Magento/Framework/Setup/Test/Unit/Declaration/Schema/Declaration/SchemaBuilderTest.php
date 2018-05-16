@@ -241,15 +241,16 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      *
      * @param Table $table
      * @param array $columns
+     * @param string|null $nameWithoutPrefix
      * @return Internal
      */
-    private function createPrimaryConstraint(Table $table, array $columns, $nameWithoutPrefix = null)
+    private function createPrimaryConstraint(Table $table, array $columns, $nameWithoutPrefix = 'PRIMARY')
     {
         return new Internal(
             'PRIMARY',
             'primary',
             $table,
-            $nameWithoutPrefix ?: 'PRIMARY',
+            $nameWithoutPrefix,
             $columns
         );
     }
@@ -260,7 +261,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      * @param string $indexName
      * @param Table $table
      * @param array $columns
-     * @param null $nameWithoutPrefix
+     * @param string|null $nameWithoutPrefix
      * @return Index
      */
     private function createIndex($indexName, Table $table, array $columns, $nameWithoutPrefix = null)
