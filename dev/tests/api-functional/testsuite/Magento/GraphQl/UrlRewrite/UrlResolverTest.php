@@ -289,7 +289,7 @@ QUERY;
         $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
         $actualUrls = $urlFinder->findOneByData(
             [
-                'request_path' => $urlPath,
+                'request_path' => $urlPath2,
                 'store_id' => $storeId
             ]
         );
