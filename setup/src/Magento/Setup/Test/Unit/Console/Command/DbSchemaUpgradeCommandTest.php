@@ -58,10 +58,10 @@ class DbSchemaUpgradeCommandTest extends \PHPUnit\Framework\TestCase
             [
                 'options' => [
                     '--magento-init-params' => '',
-                    '--convert_old_scripts' => false
+                    '--convert-old-scripts' => false
                 ],
                 'expectedOptions' => [
-                    'convert_old_scripts' => false,
+                    'convert-old-scripts' => false,
                     'magento-init-params' => '',
                 ]
             ],
