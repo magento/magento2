@@ -17,6 +17,7 @@
             <testCaseId value="950"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="multi_mode"/>
         </annotations>
 
         <before>
@@ -32,11 +33,11 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
             <!-- todo temporary solution as it is impossible to parse website_id from the post request and as a consequence can not delete it via post -->
             <actionGroup ref="DeleteCustomWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="$$createCustomWebsite.website[name]$$"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
         <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksListPage"/>

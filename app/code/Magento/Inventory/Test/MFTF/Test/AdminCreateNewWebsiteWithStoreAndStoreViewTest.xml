@@ -20,6 +20,7 @@
             <!-- SKIPPING DUE TO BUG #815 -->
             <!-- https://app.zenhub.com/workspace/o/magento-engcom/msi/issues/815 -->
             <group value="skip"/>
+            <group value="multi_mode"/>
         </annotations>
         
         <before>

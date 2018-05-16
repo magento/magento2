@@ -7,20 +7,22 @@
 -->
 
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Suite/etc/suiteSchema.xsd">
-    <suite name="MSI_Single_Stock_Mode">
+    <suite name="MSI_Single_Mode">
         <include>
-            <group name="single_stock_mode"/>
+            <group name="single_mode"/>
         </include>
         <exclude>
-            <group name="multi_stock_mode"/>
+            <group name="skip"/>
+            <group name="multi_mode"/>
         </exclude>
     </suite>
-    <suite name="MSI_Multi_Stock_Mode">
+    <suite name="MSI_Multi_Mode">
         <include>
-            <group name="msi"/>
+            <group name="multi_mode"/>
         </include>
         <exclude>
-            <group name="single_stock_mode"/>
+            <group name="skip"/>
+            <group name="single_mode"/>
         </exclude>
     </suite>
 </suites>
