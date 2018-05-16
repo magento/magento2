@@ -11,7 +11,7 @@
     <test name="AdminAddRemoveProductImageSimpleProductTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Simple Product Add/Remove Images"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
             <title value="Admin should be able to add/remove images for a Simple Product"/>
             <description value="Admin should be able to add/remove images for a Simple Product"/>
             <severity value="MAJOR"/>
