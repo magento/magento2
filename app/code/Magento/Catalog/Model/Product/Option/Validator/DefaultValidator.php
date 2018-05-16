@@ -132,11 +132,11 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      */
     protected function validateOptionValue(Option $option)
     {
-        return $this->isInRange($option->getPriceType(), $this->priceTypes) && !$this->isNegative($option->getPrice());
+        return $this->isInRange($option->getPriceType(), $this->priceTypes) && $this->isNumber($option->getPrice());
     }
 
     /**
-     * Check whether value is empty
+     * Check whether the value is empty
      *
      * @param mixed $value
      * @return bool
@@ -147,7 +147,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
     }
 
     /**
-     * Check whether value is in range
+     * Check whether the value is in range
      *
      * @param string $value
      * @param array $range
@@ -159,7 +159,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
     }
 
     /**
-     * Check whether value is not negative
+     * Check whether the value is negative
      *
      * @param string $value
      * @return bool
@@ -167,5 +167,16 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
     protected function isNegative($value)
     {
         return intval($value) < 0;
+    }
+
+    /**
+     * Check whether the value is a number
+     *
+     * @param string $value
+     * @return bool
+     */
+    protected function isNumber($value)
+    {
+        return is_numeric($value);
     }
 }

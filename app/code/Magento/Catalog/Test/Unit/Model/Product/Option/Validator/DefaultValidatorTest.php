@@ -129,11 +129,13 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
      * Data provider for testValidationNegativePrice
      * @return array
      */
-    public function validationNegativePriceDataProvider()
+    public function validationPriceDataProvider()
     {
         return [
             ['option_title', 'name 1.1', 'fixed', -12, new \Magento\Framework\DataObject(['store_id' => 1])],
             ['option_title', 'name 1.1', 'fixed', -12, new \Magento\Framework\DataObject(['store_id' => 0])],
+            ['option_title', 'name 1.1', 'fixed', 12, new \Magento\Framework\DataObject(['store_id' => 1])],
+            ['option_title', 'name 1.1', 'fixed', 12, new \Magento\Framework\DataObject(['store_id' => 0])]
         ];
     }
 
@@ -143,9 +145,9 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
      * @param $priceType
      * @param $price
      * @param $product
-     * @dataProvider validationNegativePriceDataProvider
+     * @dataProvider validationPriceDataProvider
      */
-    public function testValidationNegativePrice($title, $type, $priceType, $price, $product)
+    public function testValidationPrice($title, $type, $priceType, $price, $product)
     {
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getProduct'];
         $valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods);
@@ -155,10 +157,8 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
         $valueMock->expects($this->once())->method('getPrice')->will($this->returnValue($price));
         $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
 
-        $messages = [
-            'option values' => 'Invalid option value',
-        ];
-        $this->assertFalse($this->validator->isValid($valueMock));
+        $messages = [];
+        $this->assertTrue($this->validator->isValid($valueMock));
         $this->assertEquals($messages, $this->validator->getMessages());
     }
 }

@@ -923,7 +923,7 @@ class CustomOptions extends AbstractModifier
                         'addbeforePool' => $this->productOptionsPrice->prefixesToOptionArray(),
                         'sortOrder' => $sortOrder,
                         'validation' => [
-                            'validate-zero-or-greater' => true
+                            'validate-number' => true
                         ],
                     ],
                 ],
