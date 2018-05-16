@@ -13,7 +13,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventoryApi\Model\SourceItemsSaveWithoutLegacySynchronizationInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 
@@ -35,7 +35,7 @@ class UpdateSourceItemBasedOnLegacyStockItem
     private $sourceItemFactory;
 
     /**
-     * @var SourceItemsSaveInterface
+     * @var SourceItemsSaveWithoutLegacySynchronizationInterface
      */
     private $sourceItemsSave;
 
@@ -58,17 +58,16 @@ class UpdateSourceItemBasedOnLegacyStockItem
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceItemInterfaceFactory $sourceItemFactory
-     * @param SourceItemsSaveInterface $sourceItemsSave
+     * @param SourceItemsSaveWithoutLegacySynchronizationInterface $sourceItemsSave
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param ResourceConnection $resourceConnection
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
-
      */
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SourceItemInterfaceFactory $sourceItemFactory,
-        SourceItemsSaveInterface $sourceItemsSave,
+        SourceItemsSaveWithoutLegacySynchronizationInterface $sourceItemsSave,
         DefaultSourceProviderInterface $defaultSourceProvider,
         ResourceConnection $resourceConnection,
         GetSkusByProductIdsInterface $getSkusByProductIds

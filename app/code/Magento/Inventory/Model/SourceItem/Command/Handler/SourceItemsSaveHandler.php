@@ -5,20 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\SourceItem;
+namespace Magento\Inventory\Model\SourceItem\Command\Handler;
 
+use Exception;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Inventory\Model\ResourceModel\SourceItem\SaveMultiple;
 use Magento\Inventory\Model\SourceItem\Validator\SourceItemsValidator;
-use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * @inheritdoc
+ * Class SourceItemsSaveHandler
  */
-class SourceItemsSave implements SourceItemsSaveInterface
+class SourceItemsSaveHandler
 {
     /**
      * @var SourceItemsValidator
@@ -51,7 +52,13 @@ class SourceItemsSave implements SourceItemsSaveInterface
     }
 
     /**
-     * @inheritdoc
+     * Save Multiple Source item data
+     *
+     * @param SourceItemInterface[] $sourceItems
+     * @return void
+     * @throws InputException
+     * @throws ValidationException
+     * @throws CouldNotSaveException
      */
     public function execute(array $sourceItems)
     {
@@ -66,7 +73,7 @@ class SourceItemsSave implements SourceItemsSaveInterface
 
         try {
             $this->saveMultiple->execute($sourceItems);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save Source Item'), $e);
         }

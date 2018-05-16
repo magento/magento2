@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\SourceItem\Command;
 
 use Magento\Inventory\Model\SourceItem\Command\Handler\SourceItemsSaveHandler;
-use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventoryApi\Model\SourceItemsSaveWithoutLegacySynchronizationInterface;
 
 /**
  * @inheritdoc
  */
-class SourceItemsSave implements SourceItemsSaveInterface
+class SourceItemsSaveWithoutLegacySynchronization implements SourceItemsSaveWithoutLegacySynchronizationInterface
 {
     /**
      * @var SourceItemsSaveHandler

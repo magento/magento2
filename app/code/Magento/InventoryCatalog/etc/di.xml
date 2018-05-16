@@ -65,12 +65,4 @@
             <argument name="tableNameSourceItem" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
         </arguments>
     </type>
-    <type name="Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem">
-        <arguments>
-            <argument name="sourceItemsSave" xsi:type="object">Magento\InventoryCatalog\Model\SourceItem\SourceItemsSave</argument>
-        </arguments>
-    </type>
-    <type name="Magento\InventoryCatalog\Model\SourceItem\SourceItemsSave">
-        <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save" disabled="true"/>
-    </type>
 </config>

@@ -34,6 +34,9 @@
     <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
         <plugin name="reindex_after_source_items_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterSourceItemsSavePlugin"/>
     </type>
+    <type name="Magento\InventoryApi\Model\SourceItemsSaveWithoutLegacySynchronizationInterface">
+        <plugin name="reindex_after_source_items_save_without_legacy_synchronization" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterSourceItemsSavePlugin"/>
+    </type>
     <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
         <plugin name="reindex_after_source_items_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterSourceItemsDeletePlugin"/>
     </type>

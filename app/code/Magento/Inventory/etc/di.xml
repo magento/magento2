@@ -32,6 +32,7 @@
     <!-- Source Item -->
     <preference for="Magento\InventoryApi\Api\SourceItemRepositoryInterface" type="Magento\Inventory\Model\SourceItemRepository"/>
     <preference for="Magento\InventoryApi\Api\SourceItemsSaveInterface" type="Magento\Inventory\Model\SourceItem\Command\SourceItemsSave"/>
+    <preference for="Magento\InventoryApi\Model\SourceItemsSaveWithoutLegacySynchronizationInterface" type="Magento\Inventory\Model\SourceItem\Command\SourceItemsSaveWithoutLegacySynchronization"/>
     <preference for="Magento\InventoryApi\Api\SourceItemsDeleteInterface" type="Magento\Inventory\Model\SourceItem\Command\SourceItemsDelete"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemInterface" type="Magento\Inventory\Model\SourceItem"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface" type="Magento\Inventory\Model\SourceItemSearchResults"/>
