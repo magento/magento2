@@ -89,8 +89,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         AttributeValueFactory $attributeValueFactory,
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         MethodsMap $methodsMap,
-        ConfigInterface $config = null,
-        ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null
+        ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
+        ConfigInterface $config = null
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
