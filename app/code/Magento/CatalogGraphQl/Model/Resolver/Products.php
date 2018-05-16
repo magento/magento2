@@ -118,7 +118,6 @@ class Products implements ResolverInterface
             );
         }
 
-
         $data = [
             'total_count' => $searchResult->getTotalCount(),
             'items' => $searchResult->getProductsSearchResult(),
@@ -128,7 +127,6 @@ class Products implements ResolverInterface
                 'sort_fields' => [],
             ],
             'filters' => $this->filtersDataProvider->getData($layerType),
-            
         ];
 
         $result = function () use ($data) {
