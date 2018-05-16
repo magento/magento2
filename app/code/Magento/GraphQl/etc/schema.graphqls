@@ -39,6 +39,6 @@ type SortField {
 }
 
 type SortFields @doc(description: "SortFields contains a default value for sort fields and all available sort fields") {
-    default: String @doc(description: "Default value of sort fields")
-    options: [SortField] @doc(description: "Available sort fields")
+    default: String @doc(description: "Default value of sort fields") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\SortFieldDefault")
+    options: [SortField] @doc(description: "Available sort fields") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\SortFieldsOptions")
 }

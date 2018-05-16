@@ -53,24 +53,12 @@ class Products implements ResolverInterface
      * @var Layer\DataProvider\Filters
      */
     private $filtersDataProvider;
-    
-    /**
-     * @var \Magento\Catalog\Model\Config
-     */
-    private $catalogConfig;
-    
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
 
     /**
      * @param Builder $searchCriteriaBuilder
      * @param Search $searchQuery
      * @param Filter $filterQuery
      * @param ValueFactory $valueFactory
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
@@ -78,9 +66,7 @@ class Products implements ResolverInterface
         Filter $filterQuery,
         SearchFilter $searchFilter,
         ValueFactory $valueFactory,
-        \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
@@ -88,8 +74,6 @@ class Products implements ResolverInterface
         $this->searchFilter = $searchFilter;
         $this->valueFactory = $valueFactory;
         $this->filtersDataProvider = $filtersDataProvider;
-        $this->catalogConfig = $catalogConfig;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -134,25 +118,14 @@ class Products implements ResolverInterface
             );
         }
 
-        $options = $this->catalogConfig->getAttributeUsedForSortByArray();
-        
-        $sortFields = [
-            'default' => $this->catalogConfig->getProductListDefaultSortBy($this->storeManager->getStore()->getId()),
-            'options' => []
-        ];
-        
-        $sortFields['options'][] = ['key' => 'position', 'label' => 'Position'];
-        foreach ($this->catalogConfig->getAttributesUsedForSortBy() as $attribute) {
-            $sortFields['options'][] = ['key' => $attribute->getAttributeCode(), 'label' => $attribute->getStoreLabel()];
-        }
-        
+
         $data = [
             'total_count' => $searchResult->getTotalCount(),
             'items' => $searchResult->getProductsSearchResult(),
             'page_info' => [
                 'page_size' => $searchCriteria->getPageSize(),
                 'current_page' => $currentPage,
-                'sort_fields' => $sortFields,
+                'sort_fields' => [],
             ],
             'filters' => $this->filtersDataProvider->getData($layerType),
             
