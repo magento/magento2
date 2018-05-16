@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Model\Product\Option\Validator;
 
+use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 use Magento\Catalog\Model\Product\Option;
 
 class Select extends DefaultValidator
@@ -47,16 +48,25 @@ class Select extends DefaultValidator
         }
 
         $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        $productPrice = 0.0;
         if ($option->getProduct()) {
             $storeId = $option->getProduct()->getStoreId();
+            $productPrice = $option->getProduct()->getSpecialPrice() ?: $option->getProduct()->getPrice();
         }
         foreach ($values as $value) {
             if (isset($value['is_delete']) && (bool)$value['is_delete']) {
                 continue;
             }
-            $type = isset($value['price_type']) ? $value['price_type'] : null;
-            $price = isset($value['price']) ? $value['price'] : null;
-            $title = isset($value['title']) ? $value['title'] : null;
+            $type = $value['price_type'] ?? null;
+            $price = $value['price'] ?? 0.0;
+            $title = $value['title'] ?? null;
+
+            if ($type === ProductPriceOptionsInterface::VALUE_PERCENT) {
+                $price += 100.0;
+            } else {
+                $price += $productPrice;
+            }
+
             if (!$this->isValidOptionPrice($type, $price, $storeId)
                 || !$this->isValidOptionTitle($title, $storeId)
             ) {

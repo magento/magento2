@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Model\Product\Option\Validator;
 
+use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 use Magento\Catalog\Model\Product\Option;
 use Zend_Validate_Exception;
 
@@ -132,7 +133,15 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      */
     protected function validateOptionValue(Option $option)
     {
-        return $this->isInRange($option->getPriceType(), $this->priceTypes) && !$this->isNegative($option->getPrice());
+        $productPrice = 0.0;
+        if ($option->getPriceType() === ProductPriceOptionsInterface::VALUE_PERCENT) {
+            $productPrice = 100.0;
+        } elseif ($option->getProduct()) {
+            $productPrice = $option->getProduct()->getSpecialPrice() ?: $option->getProduct()->getPrice();
+        }
+
+        return $this->isInRange($option->getPriceType(), $this->priceTypes)
+            && !$this->isNegative($productPrice + $option->getPrice());
     }
 
     /**
