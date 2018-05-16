@@ -114,10 +114,10 @@ class Validator
         $filename = str_replace('\\', '/', $filename);
         if (!isset($this->_templatesValidationResults[$filename])) {
             $this->_templatesValidationResults[$filename] =
-                ($this->isPathInDirectories($filename, $this->_compiledDir)
+                ($this->_isAllowSymlinks
+                    || $this->isPathInDirectories($filename, $this->_compiledDir)
                     || $this->isPathInDirectories($filename, $this->moduleDirs)
-                    || $this->isPathInDirectories($filename, $this->_themesDir)
-                    || $this->_isAllowSymlinks)
+                    || $this->isPathInDirectories($filename, $this->_themesDir))
                 && $this->isFileExists($filename);
         }
         return $this->_templatesValidationResults[$filename];
