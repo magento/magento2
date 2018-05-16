@@ -25,7 +25,7 @@ class InstantPurchaseOption
     private $paymentToken;
 
     /**
-     * @var AddressIn
+     * @var Address
      */
     private $shippingAddress;
 
