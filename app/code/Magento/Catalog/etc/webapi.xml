@@ -385,6 +385,32 @@
             <resource ref="Magento_Catalog::categories" />
         </resources>
     </route>
+    <!-- Category multiple product link replace service -->
+    <route url="/V1/categories/:categoryId/multipleProductsReplace" method="POST">
+        <service class="Magento\Catalog\Api\CategoryLinkMultipleRepositoryInterface" method="replace" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId/multipleProductsReplace" method="PUT">
+        <service class="Magento\Catalog\Api\CategoryLinkMultipleRepositoryInterface" method="replace" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <!-- Category multiple product link save service -->
+    <route url="/V1/categories/:categoryId/multipleProductsSave" method="POST">
+        <service class="Magento\Catalog\Api\CategoryLinkMultipleRepositoryInterface" method="saveMultiple" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId/multipleProductsSave" method="PUT">
+        <service class="Magento\Catalog\Api\CategoryLinkMultipleRepositoryInterface" method="saveMultiple" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
 
     <!-- Product Website Links -->
     <route url="/V1/products/:sku/websites" method="POST">
