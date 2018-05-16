@@ -54,13 +54,14 @@ class CollectionProvider
         }
 
         foreach ($output as $item) {
-            $itemPosition = $item['position'];
-            if (!isset($sorterItems[$itemPosition])) {
-                $sorterItems[$itemPosition] = $item;
-            } else {
-                $newPosition = $itemPosition + 1;
-                $sorterItems[$newPosition] = $item;
+            $itemPosition = (int)$item['position'];
+            while (true) {
+                if (!isset($sorterItems[$itemPosition])) {
+                    break;
+                }
+                $itemPosition += 1;
             }
+            $sorterItems[$itemPosition] = $item;
         }
         ksort($sorterItems);
         return $sorterItems;
