@@ -12,11 +12,10 @@
         <annotations>
             <features value="Promote Products as Related"/>
             <stories value="Promote Products as Related"/>
-            <title value="Promote Products as Related"/>
-            <description value="You should be able to promote products as related via the admin."/>
+            <title value="Admin should be able to promote products as related"/>
+            <description value="Admin should be able to promote products as related"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-12392"/>
-            <useCaseId value="USECASE-114"/>
+            <testCaseId value="MC-116"/>
             <group value="configurable"/>
             <group value="product"/>
         </annotations>
@@ -82,7 +81,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simple1Handle" stepKey="deleteSimple1"/>
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2"/>
             <deleteData createDataKey="childProductHandle1" stepKey="deleteChild1"/>
@@ -99,7 +98,7 @@
         <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridSimple">
             <argument name="product" value="$$simple1Handle$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit"/>
+        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid"/>
         <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openRelatedProductTab"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
@@ -144,7 +143,7 @@
         <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridConfig">
             <argument name="product" value="$$baseConfigProductHandle$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit2"/>
+        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid2"/>
         <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openRelatedProductTab2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
 

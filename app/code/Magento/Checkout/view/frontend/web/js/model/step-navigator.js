@@ -66,7 +66,7 @@ define([
          * @param {*} sortOrder
          */
         registerStep: function (code, alias, title, isVisible, navigate, sortOrder) {
-            var hash;
+            var hash, active;
 
             if ($.inArray(code, this.validCodes) !== -1) {
                 throw new DOMException('Step code [' + code + '] already registered in step navigator');
@@ -86,6 +86,12 @@ define([
                 isVisible: isVisible,
                 navigate: navigate,
                 sortOrder: sortOrder
+            });
+            active = this.getActiveItemIndex();
+            steps.each(function (elem, index) {
+                if (active !== index) {
+                    elem.isVisible(false);
+                }
             });
             this.stepCodes.push(code);
             hash = window.location.hash.replace('#', '');
@@ -111,10 +117,14 @@ define([
         getActiveItemIndex: function () {
             var activeIndex = 0;
 
-            steps().sort(this.sortItems).forEach(function (element, index) {
+            steps().sort(this.sortItems).some(function (element, index) {
                 if (element.isVisible()) {
                     activeIndex = index;
+
+                    return true;
                 }
+
+                return false;
             });
 
             return activeIndex;

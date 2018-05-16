@@ -29,6 +29,13 @@ define([
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Catalog/js/product/storage/storage-service', function () {
         var config = {
                 namespace: 'namespace',
