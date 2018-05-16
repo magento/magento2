@@ -6,6 +6,10 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Persist product prices to index table.
  */
@@ -22,23 +26,32 @@ class RuleProductPricesPersistor
     private $dateFormat;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     * @var ActiveTableSwitcher
      */
     private $activeTableSwitcher;
 
     /**
+     * @var TableSwapper
+     */
+    private $tableSwapper;
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime $dateFormat
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
+     * @param ActiveTableSwitcher $activeTableSwitcher
+     * @param TableSwapper|null $tableSwapper
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime $dateFormat,
         \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
+        ActiveTableSwitcher $activeTableSwitcher,
+        TableSwapper $tableSwapper = null
     ) {
         $this->dateFormat = $dateFormat;
         $this->resource = $resource;
         $this->activeTableSwitcher = $activeTableSwitcher;
+        $this->tableSwapper = $tableSwapper ??
+            ObjectManager::getInstance()->get(TableSwapper::class);
     }
 
     /**
@@ -59,7 +72,7 @@ class RuleProductPricesPersistor
         $indexTable = $this->resource->getTableName('catalogrule_product_price');
         if ($useAdditionalTable) {
             $indexTable = $this->resource->getTableName(
-                $this->activeTableSwitcher->getAdditionalTableName('catalogrule_product_price')
+                $this->tableSwapper->getWorkingTableName('catalogrule_product_price')
             );
         }
 

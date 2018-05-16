@@ -340,7 +340,7 @@ class SchemaBuilder
              * @see MAGETWO-91365
              */
             $indexType = AdapterInterface::INDEX_TYPE_INDEX;
-            if ($indexData['indexType'] === AdapterInterface::INDEX_TYPE_FULLTEXT) {
+            if (isset($indexData['index_type']) && $indexData['indexType'] === AdapterInterface::INDEX_TYPE_FULLTEXT) {
                 $indexType = $indexData['indexType'];
             }
 

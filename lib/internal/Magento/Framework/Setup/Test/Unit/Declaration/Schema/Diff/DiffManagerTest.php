@@ -107,8 +107,8 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
             ''
         );
         $column = new Column('third', 'int', $table, 'Previous column');
-        $index = new Index('index_type', 'index', $table, [$column], 'btree');
-        $generatedIndex = new Index('index_type', 'index', $table, [$column], 'hash');
+        $index = new Index('index_type', 'index', $table, [$column], 'btree', 'index_type');
+        $generatedIndex = new Index('index_type', 'index', $table, [$column], 'hash', 'index_type');
         $diff->expects(self::exactly(2))
             ->method('register')
             ->withConsecutive([$generatedIndex, 'drop_element', $generatedIndex], [$index, 'add_complex_element']);
@@ -142,7 +142,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
             ''
         );
         $column = new Column('third', 'int', $table, 'Previous column');
-        $reference = new Reference('ref', 'foreign', $table, $column, $refTable, $column, 'CASCADE');
+        $reference = new Reference('ref', 'foreign', $table, 'ref', $column, $refTable, $column, 'CASCADE');
         $diff->expects(self::exactly(2))
             ->method('register')
             ->withConsecutive(
@@ -169,7 +169,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
             ''
         );
         $column = new Column('third', 'int', $table, 'Previous column');
-        $reference = new Reference('ref', 'foreign', $table, $column, $table, $column, 'CASCADE');
+        $reference = new Reference('ref', 'foreign', $table, 'ref', $column, $table, $column, 'CASCADE');
         $diff->expects(self::exactly(3))
             ->method('register')
             ->withConsecutive(
