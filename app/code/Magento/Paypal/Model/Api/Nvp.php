@@ -846,7 +846,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         $request = $this->_exportToRequest($this->_getExpressCheckoutDetailsRequest);
         $response = $this->call(self::GET_EXPRESS_CHECKOUT_DETAILS, $request);
         $this->_importFromResponse($this->_paymentInformationResponse, $response);
-        $this->_exportAddressses($response);
+        $this->_exportAddresses($response);
     }
 
     /**
@@ -1464,7 +1464,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param array $data
      * @return void
      */
-    protected function _exportAddressses($data)
+    protected function _exportAddresses($data)
     {
         $address = new \Magento\Framework\DataObject();
         \Magento\Framework\DataObject\Mapper::accumulateByMap($data, $address, $this->_billingAddressMap);
