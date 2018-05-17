@@ -13,8 +13,8 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Api\Data\ShipmentExtensionFactory;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 
 class AssignSourceCodeToShipmentPlugin
 {
@@ -39,22 +39,29 @@ class AssignSourceCodeToShipmentPlugin
     private $getSourcesAssignedToStockOrderedByPriority;
 
     /**
-     * AssignSourceCodeToShipmentPlugin constructor.
+     * @var DefaultSourceProviderInterface
+     */
+    private $defaultSourceProvider;
+
+    /**
      * @param RequestInterface $request
      * @param ShipmentExtensionFactory $shipmentExtensionFactory
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
      */
     public function __construct(
         RequestInterface $request,
         ShipmentExtensionFactory $shipmentExtensionFactory,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
-        GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
+        GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
+        DefaultSourceProviderInterface $defaultSourceProvider
     ) {
         $this->request = $request;
         $this->shipmentExtensionFactory = $shipmentExtensionFactory;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
+        $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**
@@ -76,6 +83,8 @@ class AssignSourceCodeToShipmentPlugin
             //TODO: need ro rebuild this logic | create separate service
             if (!empty($sources) && count($sources) == 1) {
                 $sourceCode = $sources[0]->getSourceCode();
+            } else {
+                $sourceCode = $this->defaultSourceProvider->getCode();
             }
         }
         $shipmentExtension = $shipment->getExtensionAttributes();

@@ -15,6 +15,7 @@ use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionReque
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
+use Magento\InventoryShipping\Model\GetItemsToDeduct;
 
 /**
  * Class SourceDeductionProcessor
@@ -82,18 +83,16 @@ class SourceDeductionProcessor implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        /** @var \Magento\Sales\Model\Order\Shipment\Item $shipmentItem */
-        $shipmentItem = $observer->getShipmentItem();
+        /** @var \Magento\Sales\Model\Order\Shipment $shipment */
+        $shipment = $observer->getEvent()->getShipment();
 
-        if ($shipmentItem->getOrigData('entity_id')) {
+        if ($shipment->getOrigData('entity_id')) {
             return;
         }
 
-        $shipment = $shipmentItem->getShipment();
-
         //TODO: I'm not sure that is good idea (with default source code)...
         if (!empty($shipment->getExtensionAttributes())
-            || $shipment->getExtensionAttributes()->getSourceCode()) {
+            || !empty($shipment->getExtensionAttributes()->getSourceCode())) {
             $sourceCode = $shipment->getExtensionAttributes()->getSourceCode();
         } elseif ($this->isSingleSourceMode->execute()) {
             $sourceCode = $this->defaultSourceProvider->getCode();
@@ -107,13 +106,21 @@ class SourceDeductionProcessor implements ObserverInterface
             'objectId' => $shipment->getOrderId()
         ]);
 
-        if ($items = $this->getItemsToDeduct->execute($shipmentItem)) {
+        /** @var \Magento\Sales\Model\Order\Shipment\Item $shipmentItem */
+        foreach ($shipment->getItems() as $shipmentItem) {
+            foreach ($this->getItemsToDeduct->execute($shipmentItem) as $item) {
+                $shipmentItems[] = $item;
+            }
+        }
+
+        if (!empty($shipmentItems)) {
             $sourceDeductionRequest = $this->sourceDeductionRequestFactory->create([
                 'websiteId' => $websiteId,
                 'sourceCode' => $sourceCode,
-                'items' => $items,
+                'items' => $shipmentItems,
                 'salesEvent' => $salesEvent
             ]);
+
             $this->sourceDeductionService->execute($sourceDeductionRequest);
         }
     }
