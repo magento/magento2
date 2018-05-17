@@ -12,4 +12,10 @@
     <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
         <plugin name="invalidate_products_cache" type="Magento\InventoryCache\Plugin\InventoryIndexer\Indexer\Source\SourceItemIndexer\CacheFlush"/>
     </type>
+    <type name="Magento\InventoryCache\Model\ResourceModel\GetProductIdsByStockIds">
+        <arguments>
+            <argument name="productSkuColumn" xsi:type="const">Magento\Catalog\Api\Data\ProductInterface::SKU</argument>
+            <argument name="productInterfaceClassName" xsi:type="const">Magento\Catalog\Api\Data\ProductInterface</argument>
+        </arguments>
+    </type>
 </config>

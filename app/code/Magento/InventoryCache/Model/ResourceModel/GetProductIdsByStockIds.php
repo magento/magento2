@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCache\Model\ResourceModel;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
@@ -45,24 +44,40 @@ class GetProductIdsByStockIds
     private $indexStructure;
 
     /**
+     * @var string
+     */
+    private $productSkuColumn;
+
+    /**
+     * @var string
+     */
+    private $productInterfaceClassName;
+
+    /**
      * @param ResourceConnection $resource
      * @param MetadataPool $metadataPool
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param DefaultStockProviderInterface $defaultStockProvider
      * @param IndexStructure $indexStructure
+     * @param $productSkuColumn
+     * @param $productInterfaceClassName
      */
     public function __construct(
         ResourceConnection $resource,
         MetadataPool $metadataPool,
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         DefaultStockProviderInterface $defaultStockProvider,
-        IndexStructure $indexStructure
+        IndexStructure $indexStructure,
+        $productSkuColumn,
+        $productInterfaceClassName
     ) {
         $this->resource = $resource;
         $this->metadataPool = $metadataPool;
         $this->defaultStockProvider = $defaultStockProvider;
         $this->indexStructure = $indexStructure;
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
+        $this->productSkuColumn = $productSkuColumn;
+        $this->productInterfaceClassName = $productInterfaceClassName;
     }
 
     /**
@@ -78,14 +93,14 @@ class GetProductIdsByStockIds
                 continue;
             }
             $stockIndexTableName = $this->stockIndexTableNameResolver->execute($stockId);
-            $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
+            $entityMetadata = $this->metadataPool->getMetadata($this->productInterfaceClassName);
             $linkField = $entityMetadata->getLinkField();
             $connection = $this->resource->getConnection();
             $sql = $connection->select()
                 ->from(['main' => $stockIndexTableName], [])
                 ->join(
                     ['product' => $this->resource->getTableName('catalog_product_entity')],
-                    'product.' . ProductInterface::SKU . '=main.' . ProductInterface::SKU,
+                    'product.' . $this->productSkuColumn . '=main.' . $this->productSkuColumn,
                     [$linkField]
                 );
 
