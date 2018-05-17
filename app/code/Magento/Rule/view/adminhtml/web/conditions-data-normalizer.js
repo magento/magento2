@@ -5,7 +5,8 @@
 
 define([
     'jquery',
-    'underscore'
+    'underscore',
+    'prototype'
 ], function ($, _) {
     'use strict';
 
