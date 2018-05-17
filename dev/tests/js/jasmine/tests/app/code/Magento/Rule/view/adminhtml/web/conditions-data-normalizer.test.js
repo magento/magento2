@@ -29,6 +29,7 @@ define([
                 foo: 'bar',
                 bar: 123
             });
+
             expect(normal.foo).toEqual('bar');
             expect(normal.bar).toEqual(123);
         });
@@ -38,6 +39,7 @@ define([
                 'foo[value]': 'bar',
                 'foo[name]': 123
             });
+
             expect(normal.foo.value).toEqual('bar');
             expect(normal.foo.name).toEqual(123);
         });
@@ -47,6 +49,7 @@ define([
                 'foo[prefix][value]': 'bar',
                 'foo[prefix][name]': 123
             });
+
             expect(normal.foo.prefix.value).toEqual('bar');
             expect(normal.foo.prefix.name).toEqual(123);
         });
@@ -57,6 +60,7 @@ define([
                 'foo[1][value]': 123,
                 'foo[1--1]': 321
             });
+
             expect(normal.foo['1'].name).toEqual('bar');
             expect(normal.foo['1'].value).toEqual(123);
             expect(normal.foo['1--1']).toEqual(321);
