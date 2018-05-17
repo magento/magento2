@@ -347,7 +347,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
         $item['cls'] = 'folder ' . ($node->getIsActive() ? 'active-category' : 'no-active-category');
         //$item['allowDrop'] = ($level<3) ? true : false;
-        $allowMove = $this->_isCategoryMoveable($node);
+        $allowMove = $this->_isCategoryMovable($node);
         $item['allowDrop'] = $allowMove;
         // disallow drag if it's first level and category is root of a store
         $item['allowDrag'] = $allowMove && ($node->getLevel() == 1 && $rootForStores ? false : true);
@@ -393,7 +393,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @param Node|array $node
      * @return bool
      */
-    protected function _isCategoryMoveable($node)
+    protected function _isCategoryMovable($node)
     {
         $options = new \Magento\Framework\DataObject(['is_moveable' => true, 'category' => $node]);
 
