@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration\InventoryCatalog\Model\Source\Validator;
+namespace Magento\InventoryCatalogApi\Test\Api;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-class PreventDisableValidatorTest extends WebapiAbstract
+class PreventDisableDefaultSourceTest extends WebapiAbstract
 {
     /**#@+
      * Service constants
