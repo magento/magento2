@@ -338,7 +338,7 @@ class DefaultType extends \Magento\Framework\DataObject
     {
         $option = $this->getOption();
 
-        return $this->_getChargableOptionPrice($option->getPrice(), $option->getPriceType() == 'percent', $basePrice);
+        return $this->_getChargeableOptionPrice($option->getPrice(), $option->getPriceType() == 'percent', $basePrice);
     }
 
     /**
@@ -392,14 +392,14 @@ class DefaultType extends \Magento\Framework\DataObject
     }
 
     /**
-     * Return final chargable price for option
+     * Return final chargeable price for option
      *
      * @param float $price Price of option
      * @param boolean $isPercent Price type - percent or fixed
      * @param float $basePrice For percent price type
      * @return float
      */
-    protected function _getChargableOptionPrice($price, $isPercent, $basePrice)
+    protected function _getChargeableOptionPrice($price, $isPercent, $basePrice)
     {
         if ($isPercent) {
             return $basePrice * $price / 100;
