@@ -111,24 +111,6 @@ class SaveInventoryDataObserver implements ObserverInterface
     }
 
     /**
-     * Check is stock item data changed
-     *
-     * @param Item $stockItem
-     * @param array $stockData
-     * @return bool
-     */
-    private function isStockDataChanged(Item $stockItem, array $stockData)
-    {
-        foreach ($stockData as $field => $value) {
-            if ($stockItem->getData($field) !== $value) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Return the stock item that needs to be updated
      *
      * @param Product $product

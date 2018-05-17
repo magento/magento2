@@ -73,7 +73,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
             ''
         );
         $stockStatus = $connection->getIfNullSql('website_stock.stock_status', 'default_stock.stock_status');
-        $select->where($stockStatus . ' = ?', 0);
+        $select->where($stockStatus . ' = ?', Stock::STOCK_OUT_OF_STOCK);
 
         $query = $select->deleteFromSelect('price_index');
         $connection->query($query);
