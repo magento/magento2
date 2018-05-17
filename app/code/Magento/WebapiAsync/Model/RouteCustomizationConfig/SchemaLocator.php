@@ -34,7 +34,8 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $this->schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_WebapiAsync') . '/route_customization.xsd';
+        $this->schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_WebapiAsync')
+            . '/route_customization.xsd';
     }
 
     /**

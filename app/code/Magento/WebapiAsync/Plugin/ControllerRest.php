@@ -34,8 +34,7 @@ class ControllerRest
     public function __construct(
         RouteCustomizationConfig $routeCustomizationConfig,
         PathProcessor $pathProcessor
-    )
-    {
+    ) {
         $this->routeCustomizationConfig = $routeCustomizationConfig;
         $this->pathProcessor = $pathProcessor;
     }
@@ -62,5 +61,4 @@ class ControllerRest
         }
         return [$request];
     }
-
 }

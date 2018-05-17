@@ -85,6 +85,4 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
         return mb_strlen((string) $endpoint) === 0 ? null : $endpoint;
     }
-
-
 }
