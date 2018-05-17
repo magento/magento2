@@ -16,7 +16,7 @@ use Magento\InventoryApi\Model\SourceValidatorInterface;
 /**
  * Check that default source always enabled
  */
-class PreventDisableValidator implements SourceValidatorInterface
+class DefaultSourceDisableValidator implements SourceValidatorInterface
 {
     /**
      * @var ValidationResultFactory
@@ -45,12 +45,10 @@ class PreventDisableValidator implements SourceValidatorInterface
      */
     public function validate(SourceInterface $source): ValidationResult
     {
-        $sourceCode = (string)$source->getSourceCode();
-        if ($sourceCode !== $this->defaultSourceProvider->getCode()) {
+        if ($source->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
             return $this->validationResultFactory->create(['errors' => []]);
         }
-        $value = (bool)$source->isEnabled();
-        if (!$value) {
+        if (!$source->isEnabled()) {
             $errors[] = __('Default source can not be disabled.');
         } else {
             $errors = [];

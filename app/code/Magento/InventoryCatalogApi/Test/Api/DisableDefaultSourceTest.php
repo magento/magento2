@@ -11,8 +11,10 @@ use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 
-class PreventDisableDefaultSourceTest extends WebapiAbstract
+class DisableDefaultSourceTest extends WebapiAbstract
 {
     /**#@+
      * Service constants
@@ -43,10 +45,10 @@ class PreventDisableDefaultSourceTest extends WebapiAbstract
         $data = $this->validData;
         $data[$field] = $value;
 
-        $sourceCode = 'default';
+        $defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceCode,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $defaultSourceProvider->getCode(),
                 'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -61,12 +63,11 @@ class PreventDisableDefaultSourceTest extends WebapiAbstract
      * SuppressWarnings was added due to a tests on different fail types and big size of data provider
      *
      * @return array
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function failedValidationDataProvider(): array
     {
         return [
-            'disabled_' . SourceInterface::SOURCE_CODE => [
+            'disabled_default_' . SourceInterface::SOURCE_CODE => [
                 SourceInterface::SOURCE_CODE,
                 false,
                 [

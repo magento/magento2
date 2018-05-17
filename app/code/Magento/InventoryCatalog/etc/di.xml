@@ -47,7 +47,7 @@
     <type name="Magento\InventoryApi\Model\SourceValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
-                <item name="enabled" xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\PreventDisableValidator</item>
+                <item name="default_source_disable_validator" xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\DefaultSourceDisableValidator</item>
             </argument>
         </arguments>
     </type>
