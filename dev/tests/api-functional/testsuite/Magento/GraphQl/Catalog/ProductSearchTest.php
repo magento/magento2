@@ -516,7 +516,7 @@ QUERY;
             default
             options 
             {
-                key
+                value
                 label
             }
           }
@@ -543,6 +543,9 @@ QUERY;
         $this->assertArrayHasKey('options', $response['products']['page_info']['sort_fields']);
         $this->assertArrayHasKey('default', $response['products']['page_info']['sort_fields']);
         $this->assertEquals('position', $response['products']['page_info']['sort_fields']['default']);
+        $this->assertArrayHasKey('value', $response['products']['page_info']['sort_fields']['options'][0]);
+        $this->assertArrayHasKey('label', $response['products']['page_info']['sort_fields']['options'][0]);
+        $this->assertEquals(['value'=>'position', 'label' => 'Position'], $response['products']['page_info']['sort_fields']['options'][0]);
     }
 
     /**

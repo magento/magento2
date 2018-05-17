@@ -14,9 +14,9 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * Retrieves the sort field default value
+ * Retrieves the sort fields data
  */
-class SortFieldDefault implements ResolverInterface
+class SortFields implements ResolverInterface
 {
     /**
      * @var ValueFactory
@@ -41,7 +41,8 @@ class SortFieldDefault implements ResolverInterface
     public function __construct(
         ValueFactory $valueFactory,
         \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\Category\Attribute\Source\Sortby $ss
     ) {
         $this->valueFactory = $valueFactory;
         $this->catalogConfig = $catalogConfig;
@@ -53,10 +54,20 @@ class SortFieldDefault implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
     {
-        $sortFieldDefault = $this->catalogConfig->getProductListDefaultSortBy($this->storeManager->getStore()->getId());
+        $sortFieldsOptions = [
+            ['value' => 'position', 'label' => 'Position']
+        ];
+        foreach ($this->catalogConfig->getAttributesUsedForSortBy() as $attribute) {
+            $sortFieldsOptions[] = ['value' => $attribute->getAttributeCode(), 'label' => $attribute->getStoreLabel()];
+        }
         
-        $result = function () use ($sortFieldDefault) {
-            return $sortFieldDefault;
+        $data = [
+            'default' => $this->catalogConfig->getProductListDefaultSortBy($this->storeManager->getStore()->getId()),
+            'options' => $sortFieldsOptions,
+        ];
+        
+        $result = function () use ($data) {
+            return $data;
         };
 
         return $this->valueFactory->create($result);
