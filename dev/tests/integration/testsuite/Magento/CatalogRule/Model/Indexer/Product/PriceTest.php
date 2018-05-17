@@ -9,7 +9,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\CatalogRule\Model\ResourceModel\Rule;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 
@@ -50,10 +49,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($rulePrice, $simpleProduct->getFinalPrice());
 
         $confProductId = 666;
-        $stockRegistry = Bootstrap::getObjectManager()->get(StockRegistryInterface::class);
-        $stockItem = $stockRegistry->getStockItem($confProductId);
-        $stockItem->setIsInStock(true);
-        $stockRegistry->updateStockItemBySku('configurable', $stockItem);
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $collection->addIdFilter($confProductId);
         $collection->addPriceData($customerGroupId, $websiteId);
@@ -75,13 +70,13 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $searchCriteria->setSortOrders([$sortOrder]);
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $searchResults = $productRepository->getList($searchCriteria);
-        $products = $searchResults->getItems();
+        /** @var \Magento\Catalog\Model\Product[] $products */
+        $products = array_values($searchResults->getItems());
+        $this->assertTrue($products[0]->getMinimalPrice() <= $products[1]->getMinimalPrice());
+        $this->assertTrue($products[1]->getMinimalPrice() <= $products[2]->getMinimalPrice());
 
-        /** @var \Magento\Catalog\Model\Product $product1 */
-        $product1 = array_values($products)[0];
-        $product1->setPriceCalculation(false);
-        $this->assertEquals('simple1', $product1->getSku());
-        $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product1->getId());
-        $this->assertEquals($rulePrice, $product1->getFinalPrice());
+        $products[0]->setPriceCalculation(false);
+        $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $products[0]->getId());
+        $this->assertEquals($rulePrice, $products[0]->getFinalPrice());
     }
 }
