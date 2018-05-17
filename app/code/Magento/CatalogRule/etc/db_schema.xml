@@ -60,7 +60,7 @@
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="rule_product_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="IDX_EAA51B56FF092A0DCB795D1CEF812B7B">
+        <constraint xsi:type="unique" name="UNQ_EAA51B56FF092A0DCB795D1CEF812B7B">
             <column name="rule_id"/>
             <column name="from_time"/>
             <column name="to_time"/>
@@ -198,7 +198,7 @@
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="rule_product_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="IDX_EAA51B56FF092A0DCB795D1CEF812B7B">
+        <constraint xsi:type="unique" name="UNQ_EAA51B56FF092A0DCB795D1CEF812B7B">
             <column name="rule_id"/>
             <column name="from_time"/>
             <column name="to_time"/>

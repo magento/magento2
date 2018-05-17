@@ -157,6 +157,17 @@ class TableDiff
             $this->diffManager->registerTableModification($declaredTable, $generatedTable, $diff);
         }
 
+        return $this->calculateDiff($declaredTable, $generatedTable, $diff);
+    }
+
+    /**
+     * @param Table|ElementInterface $declaredTable
+     * @param Table|ElementInterface $generatedTable
+     * @param Diff $diff
+     * @return Diff
+     */
+    private function calculateDiff(ElementInterface $declaredTable, ElementInterface $generatedTable, Diff $diff)
+    {
         $types = [self::COLUMN_DIFF_TYPE, self::CONSTRAINT_DIFF_TYPE, self::INDEX_DIFF_TYPE];
         //We do inspection for each element type
         foreach ($types as $elementType) {
@@ -167,7 +178,7 @@ class TableDiff
                 $generatedElements = $this->excludeAutoIndexes($generatedTable, $generatedElements);
                 $declaredElements = $this->excludeAutoIndexes($declaredTable, $declaredElements);
             }
-            
+
             if (in_array($elementType, [self::CONSTRAINT_DIFF_TYPE, self::INDEX_DIFF_TYPE], true)) {
                 $generatedElements = $this->getElementsListByNameWithoutPrefix($generatedElements);
                 $declaredElements = $this->getElementsListByNameWithoutPrefix($declaredElements);
@@ -196,6 +207,7 @@ class TableDiff
         }
 
         $diff = $this->turnOffForeignKeys($declaredTable, $generatedTable, $diff);
+
         return $diff;
     }
 }
