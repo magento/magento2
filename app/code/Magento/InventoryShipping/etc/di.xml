@@ -17,10 +17,4 @@
         <plugin name="LoadSourceForShipment" type="Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment\LoadSourceForShipmentPlugin"/>
         <plugin name="DeleteSourceForShipment" type="Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment\DeleteSourceForShipmentPlugin"/>
     </type>
-    <type name="Magento\Shipping\Block\Adminhtml\Create\Form">
-        <plugin name="assign_source_codde_to_shipment" type="Magento\InventoryShipping\Plugin\Sales\Shipment\Block\Adminhtml\Create\AddInventoryBlockRenderPlugin"/>
-    </type>
-    <type name="Magento\Shipping\Block\Adminhtml\Create">
-        <plugin name="back_button_url" type="Magento\InventoryShipping\Plugin\Sales\Shipment\Block\Adminhtml\BackButtonUrlOnNewShipmentPagePlugin"/>
-    </type>
 </config>
