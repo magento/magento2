@@ -534,10 +534,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function setForcedArea($templateId)
     {
-        if ($this->area) {
-            throw new \LogicException(__('Area is already set'));
+        if (!isset($this->area)) {
+            $this->area = $this->emailConfig->getTemplateArea($templateId);
         }
-        $this->area = $this->emailConfig->getTemplateArea($templateId);
         return $this;
     }
 
