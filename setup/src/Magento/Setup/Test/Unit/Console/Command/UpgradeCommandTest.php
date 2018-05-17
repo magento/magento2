@@ -115,7 +115,6 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
-                    'dump' => null,
                     'magento-init-params' => '',
                 ]
             ],
@@ -133,7 +132,6 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
-                    'dump' => null,
                     'magento-init-params' => '',
                 ]
             ],
@@ -147,7 +145,6 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
-                    'dump' => null,
                     'magento-init-params' => '',
                 ]
             ],
@@ -161,7 +158,6 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
-                    'dump' => null,
                     'magento-init-params' => '',
                 ]
             ],
