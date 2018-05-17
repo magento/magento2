@@ -219,6 +219,7 @@
             <xs:element name="checkbox" type="formElementCheckbox" maxOccurs="unbounded"/>
             <xs:element name="checkboxset" type="formElementCheckboxset" maxOccurs="unbounded"/>
             <xs:element name="email" type="formElementEmail" maxOccurs="unbounded"/>
+            <xs:element name="colorPicker" type="formElementColorPicker" maxOccurs="unbounded"/>
             <xs:element name="select" type="formElementSelect" maxOccurs="unbounded"/>
             <xs:element name="multiselect" type="formElementMultiselect" maxOccurs="unbounded"/>
             <xs:element name="text" type="formElementText" maxOccurs="unbounded"/>
