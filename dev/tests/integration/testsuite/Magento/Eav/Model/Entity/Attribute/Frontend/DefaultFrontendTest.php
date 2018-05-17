@@ -77,10 +77,11 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
             $this->cache->load($this->getCacheKey())
         );
     }
+
     /**
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
      */
-    public function testNotSetAttributeEntityValue()
+    public function testAttributeEntityValueNotSet()
     {
         $entity = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $entity->setStoreId(0);
