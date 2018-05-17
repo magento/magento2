@@ -9,9 +9,9 @@
     <preference for="Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface"
                 type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration"/>
     <preference for="Magento\InventoryLowQuantityNotificationApi\Api\SourceItemConfigurationsSaveInterface"
-                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Command\SaveMultiple"/>
+                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\SaveMultiple"/>
     <preference for="Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface"
-                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Command\Get"/>
+                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Get"/>
     <preference for="Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemConfigurationInterface"
-                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Command\Delete"/>
+                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Delete"/>
 </config>
