@@ -11,9 +11,9 @@
     <test name="StorefrontConfigurableProductBasicInfoTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="Storefront configurable product details"/>
-            <title value="Guest customer should see the basic configurable product details in product view"/>
-            <description value="Guest customer should see the basic configurable product details in product view"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should see basic Configurable Product details"/>
+            <description value="Guest customer should see basic Configurable Product details"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-77"/>
             <group value="ConfigurableProduct"/>
@@ -52,9 +52,9 @@
     <test name="StorefrontConfigurableProductOptionsTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="Storefront configurable product details"/>
-            <title value="Guest customer should see configurable product options in product view"/>
-            <description value="Guest customer should see configurable product options in product view"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should be able to see product configuration options"/>
+            <description value="Guest customer should be able to see product configuration options"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-92"/>
             <group value="ConfigurableProduct"/>
@@ -93,9 +93,9 @@
     <test name="StorefrontConfigurableProductCanAddToCartTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="Storefront configurable product details"/>
-            <title value="Guest customer should be able to add configurable product to cart after an option is selected in product view"/>
-            <description value="Guest customer should be able to add configurable product to cart after an option is selected in product view"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should be able to successfully add the product to the cart"/>
+            <description value="Guest customer should be able to successfully add the product to the cart"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-97"/>
             <group value="ConfigurableProduct"/>
@@ -131,9 +131,9 @@
     <test name="StorefrontConfigurableProductCantAddToCartTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="Storefront configurable product details"/>
-            <title value="Guest customer should not be able to add configurable product to cart if no option is selected in product view"/>
-            <description value="Guest customer should not be able to add configurable product to cart if no option is selected in product view"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should not be able to add the product to the cart if options are not selected"/>
+            <description value="Guest customer should not be able to add the product to the cart if options are not selected"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-81"/>
             <group value="ConfigurableProduct"/>
