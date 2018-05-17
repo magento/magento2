@@ -21,22 +21,6 @@ define([
             },
 
             /** @inheritdoc */
-            _init: function () {
-                var menu;
-
-                // render breadcrumbs after navigation menu is loaded.
-                menu = $(this.options.menuContainer).data('mageMenu');
-
-                if (typeof menu === 'undefined') {
-                    this._on($(this.options.menuContainer), {
-                        'menucreate': this._super
-                    });
-                } else {
-                    this._super();
-                }
-            },
-
-            /** @inheritdoc */
             _render: function () {
                 this._appendCatalogCrumbs();
                 this._super();
@@ -88,18 +72,10 @@ define([
              * @private
              */
             _getCategoryCrumb: function (menuItem) {
-                var categoryId,
-                    categoryName,
-                    categoryUrl;
-
-                categoryId = /(\d+)/i.exec(menuItem.attr('id'))[0];
-                categoryName = menuItem.text();
-                categoryUrl = menuItem.attr('href');
-
                 return {
-                    'name': 'category' + categoryId,
-                    'label': categoryName,
-                    'link': categoryUrl,
+                    'name': 'category',
+                    'label': menuItem.text(),
+                    'link': menuItem.attr('href'),
                     'title': ''
                 };
             },
