@@ -11,9 +11,9 @@
     <test name="AdvanceCatalogSearchVirtualProductByNameTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced catalog search for virtual products"/>
-            <title value="Guest customer should be able to find virtual products by product name in advanced catalog search"/>
-            <description value="Guest customer should be able to find virtual products by product name in advanced catalog search"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search virtual product with product name"/>
+            <description value="Guest customer should be able to advance search virtual product with product name"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-137"/>
             <group value="CatalogSearch"/>
@@ -36,9 +36,9 @@
     <test name="AdvanceCatalogSearchVirtualProductBySkuTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced catalog search for virtual products"/>
-            <title value="Guest customer should be able to find virtual products by product sku in advanced catalog search"/>
-            <description value="Guest customer should be able to find virtual products by product sku in advanced catalog search"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search virtual product with product sku"/>
+            <description value="Guest customer should be able to advance search virtual product with product sku"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-162"/>
             <group value="CatalogSearch"/>
@@ -62,9 +62,9 @@
     <test name="AdvanceCatalogSearchVirtualProductByDescriptionTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced catalog search for virtual products"/>
-            <title value="Guest customer should be able to find virtual products by product description in advanced catalog search"/>
-            <description value="Guest customer should be able to find virtual products by product description in advanced catalog search"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search virtual product with product description"/>
+            <description value="Guest customer should be able to advance search virtual product with product description"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-163"/>
             <group value="CatalogSearch"/>
@@ -88,9 +88,9 @@
     <test name="AdvanceCatalogSearchVirtualProductByShortDescriptionTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced catalog search for virtual products"/>
-            <title value="Guest customer should be able to find virtual products by product short description in advanced catalog search"/>
-            <description value="Guest customer should be able to find virtual products by product short description in advanced catalog search"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search virtual product with product short description"/>
+            <description value="Guest customer should be able to advance search virtual product with product short description"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-164"/>
             <group value="CatalogSearch"/>
@@ -114,9 +114,9 @@
     <test name="AdvanceCatalogSearchVirtualProductByPriceTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced catalog search for virtual products"/>
-            <title value="Guest customer should be able to find virtual products by product price in advanced catalog search"/>
-            <description value="Guest customer should be able to find virtual products by product price in advanced catalog search"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search virtual product with product price"/>
+            <description value="Guest customer should be able to advance search virtual product with product price"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-165"/>
             <group value="CatalogSearch"/>

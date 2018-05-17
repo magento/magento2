@@ -11,9 +11,9 @@
     <test name="AdvanceCatalogSearchSimpleProductByNameTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced catalog search for simple products"/>
-            <title value="Guest customer should be able to find simple products by product name in advanced catalog search"/>
-            <description value="Guest customer should be able to find simple products by product name in advanced catalog search"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search simple product with product name"/>
+            <description value="Guest customer should be able to advance search simple product with product name"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-132"/>
             <group value="CatalogSearch"/>
@@ -35,9 +35,9 @@
     <test name="AdvanceCatalogSearchSimpleProductBySkuTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced catalog search for simple products"/>
-            <title value="Guest customer should be able to find simple products by product sku in advanced catalog search"/>
-            <description value="Guest customer should be able to find simple products by product sku in advanced catalog search"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search simple product with product sku"/>
+            <description value="Guest customer should be able to advance search simple product with product sku"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-133"/>
             <group value="CatalogSearch"/>
@@ -61,9 +61,9 @@
     <test name="AdvanceCatalogSearchSimpleProductByDescriptionTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced catalog search for simple products"/>
-            <title value="Guest customer should be able to find simple products by product description in advanced catalog search"/>
-            <description value="Guest customer should be able to find simple products by product description in advanced catalog search"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search simple product with product description"/>
+            <description value="Guest customer should be able to advance search simple product with product description"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-134"/>
             <group value="CatalogSearch"/>
@@ -87,9 +87,9 @@
     <test name="AdvanceCatalogSearchSimpleProductByShortDescriptionTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced catalog search for simple products"/>
-            <title value="Guest customer should be able to find simple products by product short description in advanced catalog search"/>
-            <description value="Guest customer should be able to find simple products by product short description in advanced catalog search"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search simple product with product short description"/>
+            <description value="Guest customer should be able to advance search simple product with product short description"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-135"/>
             <group value="CatalogSearch"/>
@@ -113,9 +113,9 @@
     <test name="AdvanceCatalogSearchSimpleProductByPriceTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced catalog search for simple products"/>
-            <title value="Guest customer should be able to find simple products by product price in advanced catalog search"/>
-            <description value="Guest customer should be able to find simple products by product price in advanced catalog search"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search simple product with product price"/>
+            <description value="Guest customer should be able to advance search simple product with product price"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-136"/>
             <group value="CatalogSearch"/>
