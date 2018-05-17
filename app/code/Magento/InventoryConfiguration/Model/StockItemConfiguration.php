@@ -40,10 +40,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setIsQtyDecimal(bool $isQtyDecimal): StockItemConfigurationInterface
+    public function setIsQtyDecimal(bool $isQtyDecimal): void
     {
         $this->stockItem = $this->stockItem->setIsQtyDecimal($isQtyDecimal);
-        return $this;
     }
 
     /**
@@ -65,10 +64,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setUseConfigMinQty(bool $useConfigMinQty): StockItemConfigurationInterface
+    public function setUseConfigMinQty(bool $useConfigMinQty): void
     {
         $this->stockItem = $this->stockItem->setUseConfigMinQty($useConfigMinQty);
-        return $this;
     }
 
     /**
@@ -82,10 +80,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setMinQty(float $minQty): StockItemConfigurationInterface
+    public function setMinQty(float $minQty): void
     {
         $this->stockItem = $this->stockItem->setMinQty($minQty);
-        return $this;
     }
 
     /**
@@ -99,10 +96,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setUseConfigMinSaleQty(bool $useConfigMinSaleQty): StockItemConfigurationInterface
+    public function setUseConfigMinSaleQty(bool $useConfigMinSaleQty): void
     {
         $this->stockItem = $this->stockItem->setUseConfigMinSaleQty($useConfigMinSaleQty);
-        return $this;
     }
 
     /**
@@ -116,10 +112,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setMinSaleQty(float $minSaleQty): StockItemConfigurationInterface
+    public function setMinSaleQty(float $minSaleQty): void
     {
         $this->stockItem = $this->stockItem->setMinSaleQty($minSaleQty);
-        return $this;
     }
 
     /**
@@ -133,10 +128,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setUseConfigMaxSaleQty(bool $useConfigMaxSaleQty): StockItemConfigurationInterface
+    public function setUseConfigMaxSaleQty(bool $useConfigMaxSaleQty): void
     {
         $this->stockItem = $this->stockItem->setUseConfigMaxSaleQty($useConfigMaxSaleQty);
-        return $this;
     }
 
     /**
@@ -150,10 +144,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setMaxSaleQty(float $maxSaleQty): StockItemConfigurationInterface
+    public function setMaxSaleQty(float $maxSaleQty): void
     {
         $this->stockItem = $this->stockItem->setMaxSaleQty($maxSaleQty);
-        return $this;
     }
 
     /**
@@ -167,10 +160,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setUseConfigBackorders(bool $useConfigBackorders): StockItemConfigurationInterface
+    public function setUseConfigBackorders(bool $useConfigBackorders): void
     {
         $this->stockItem = $this->stockItem->setUseConfigBackorders($useConfigBackorders);
-        return $this;
     }
 
     /**
@@ -184,10 +176,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setBackorders(int $backOrders): StockItemConfigurationInterface
+    public function setBackorders(int $backOrders): void
     {
         $this->stockItem = $this->stockItem->setBackorders($backOrders);
-        return $this;
     }
 
     /**
@@ -201,10 +192,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setUseConfigNotifyStockQty(bool $useConfigNotifyStockQty): StockItemConfigurationInterface
+    public function setUseConfigNotifyStockQty(bool $useConfigNotifyStockQty): void
     {
         $this->stockItem = $this->stockItem->setUseConfigNotifyStockQty($useConfigNotifyStockQty);
-        return $this;
     }
 
     /**
@@ -218,10 +208,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setNotifyStockQty(float $notifyStockQty): StockItemConfigurationInterface
+    public function setNotifyStockQty(float $notifyStockQty): void
     {
         $this->stockItem = $this->stockItem->setNotifyStockQty($notifyStockQty);
-        return $this;
     }
 
     /**
@@ -235,10 +224,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setUseConfigQtyIncrements(bool $useConfigQtyIncrements): StockItemConfigurationInterface
+    public function setUseConfigQtyIncrements(bool $useConfigQtyIncrements): void
     {
         $this->stockItem = $this->stockItem->setUseConfigQtyIncrements($useConfigQtyIncrements);
-        return $this;
     }
 
     /**
@@ -256,10 +244,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setQtyIncrements(float $qtyIncrements): StockItemConfigurationInterface
+    public function setQtyIncrements(float $qtyIncrements): void
     {
         $this->stockItem = $this->stockItem->setQtyIncrements($qtyIncrements);
-        return $this;
     }
 
     /**
@@ -273,10 +260,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setUseConfigEnableQtyInc(bool $useConfigEnableQtyInc): StockItemConfigurationInterface
+    public function setUseConfigEnableQtyInc(bool $useConfigEnableQtyInc): void
     {
         $this->stockItem = $this->stockItem->setUseConfigEnableQtyInc($useConfigEnableQtyInc);
-        return $this;
     }
 
     /**
@@ -290,10 +276,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setEnableQtyIncrements(bool $enableQtyIncrements): StockItemConfigurationInterface
+    public function setEnableQtyIncrements(bool $enableQtyIncrements): void
     {
         $this->stockItem = $this->stockItem->setEnableQtyIncrements($enableQtyIncrements);
-        return $this;
     }
 
     /**
@@ -307,10 +292,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setUseConfigManageStock(bool $useConfigManageStock): StockItemConfigurationInterface
+    public function setUseConfigManageStock(bool $useConfigManageStock): void
     {
         $this->stockItem = $this->stockItem->setUseConfigManageStock($useConfigManageStock);
-        return $this;
     }
 
     /**
@@ -324,10 +308,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setManageStock(bool $manageStock): StockItemConfigurationInterface
+    public function setManageStock(bool $manageStock): void
     {
         $this->stockItem = $this->stockItem->setManageStock($manageStock);
-        return $this;
     }
 
     /**
@@ -336,16 +319,15 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     public function getLowStockDate(): string
     {
         $lowStockDate = $this->stockItem->getLowStockDate();
-        return null === $lowStockDate ? '': $lowStockDate;
+        return null === $lowStockDate ? '' : $lowStockDate;
     }
 
     /**
      * @inheritdoc
      */
-    public function setLowStockDate(string $lowStockDate): StockItemConfigurationInterface
+    public function setLowStockDate(string $lowStockDate): void
     {
         $this->stockItem = $this->stockItem->setLowStockDate($lowStockDate);
-        return $this;
     }
 
     /**
@@ -359,10 +341,9 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setIsDecimalDivided(bool $isDecimalDivided): StockItemConfigurationInterface
+    public function setIsDecimalDivided(bool $isDecimalDivided): void
     {
         $this->stockItem = $this->stockItem->setIsDecimalDivided($isDecimalDivided);
-        return $this;
     }
 
     /**
@@ -376,9 +357,8 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function setStockStatusChangedAuto(int $stockStatusChangedAuto): StockItemConfigurationInterface
+    public function setStockStatusChangedAuto(int $stockStatusChangedAuto): void
     {
         $this->stockItem = $this->stockItem->setStockStatusChangedAuto($stockStatusChangedAuto);
-        return $this;
     }
 }
