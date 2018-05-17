@@ -161,6 +161,8 @@ class TableDiff
     }
 
     /**
+     * Calculate the difference between tables.
+     *
      * @param Table|ElementInterface $declaredTable
      * @param Table|ElementInterface $generatedTable
      * @param Diff $diff
