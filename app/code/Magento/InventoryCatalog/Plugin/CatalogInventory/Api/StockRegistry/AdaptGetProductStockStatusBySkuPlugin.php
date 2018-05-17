@@ -17,7 +17,6 @@ use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 class AdaptGetProductStockStatusBySkuPlugin
 {
     /**
-    /**
      * @var GetStockIdForCurrentWebsite
      */
     private $getStockIdForCurrentWebsite;
