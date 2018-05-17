@@ -16,7 +16,6 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class ThemeValidator
 {
-
     /**
      * Store Manager
      *
