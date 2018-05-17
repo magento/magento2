@@ -11,7 +11,7 @@
     <test name="AdminCreateNewSourceTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Create New Source"/>
+            <stories value="Add Source"/>
             <title value="New Source created by Admin user"/>
             <description value="You should be able to create a New Source, via the Admin."/>
             <testCaseId value="482"/>

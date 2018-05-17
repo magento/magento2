@@ -11,7 +11,7 @@
     <test name="AdminFilterStocksInGridTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Filter Stocks in Grid"/>
+            <stories value="Filtering in a Grid"/>
             <title value="Filter Stocks on the Manage Stocks grid"/>
             <description value="You should be able to Filter the Stocks from the Manage Stocks grid."/>
             <testCaseId value="626"/>

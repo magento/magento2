@@ -11,7 +11,7 @@
     <test name="AdminStockCannotBeDeletedWhenSalesChannelIsAssignedTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Cannot Delete Stock when Sales Channel assigned"/>
+            <stories value="Delete Stock"/>
             <title value="Cannot Delete Stock when a Sales Channel is assigned"/>
             <description value="You should not be able to delete a Stock when a Sales Channel is assigned."/>
             <testCaseId value="798"/>

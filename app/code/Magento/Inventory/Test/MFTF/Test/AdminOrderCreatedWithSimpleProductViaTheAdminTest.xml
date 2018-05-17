@@ -11,7 +11,7 @@
     <test name="AdminOrderCreatedWithSimpleProductViaTheAdminTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Create an Order with a Simple Product"/>
+            <stories value="Add Order"/>
             <title value="Create an Order with a Simple Product via the Admin"/>
             <description value="You should be able to place an Order using a Simple Product that is assigned to a Source with a Stock."/>
             <testCaseId value="1008"/>

@@ -11,7 +11,7 @@
     <test name="AdminCreateNewWebsiteWithStoreAndStoreViewTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Add New Website with Store and Store View"/>
+            <stories value="Add Website with Store and Store View"/>
             <title value="Add a New Website with a Store and Store View"/>
             <description value="You should be able to add a New Website then assign a Store and Store View to it."/>
             <testCaseId value="796"/>

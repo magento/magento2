@@ -11,7 +11,7 @@
     <test name="AdminUpdateSimpleProductQuantityViaTheAdminTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Update Simple Product Quantity"/>
+            <stories value="Update Product"/>
             <title value="Update Simple Product Quantity via the Admin"/>
             <description value="You should be able to update the Quantity for a Simple Product via the Admin."/>
             <testCaseId value="816"/>

@@ -11,7 +11,7 @@
     <test name="AdminSourceForEachQuantityCanBeSetByAdminTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="For each Source Quantity"/>
+            <stories value="Update Source"/>
             <title value="Set the For Each Quantity for a Source"/>
             <description value="You should be able to set the For Each Quantity for a Source via the Admin."/>
             <testCaseId value="781"/>

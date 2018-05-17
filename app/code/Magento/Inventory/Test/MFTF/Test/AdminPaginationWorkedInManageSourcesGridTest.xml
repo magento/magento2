@@ -11,7 +11,7 @@
     <test name="AdminPaginationWorkedInManageSourcesGridTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Configuration-Sources"/>
+            <stories value="Grid Pagination"/>
             <title value="Pagination worked in Manage Sources grid - Admin user"/>
             <description value="You should be able to switch between pages on Manage Sources grid"/>
             <testCaseId value="933"/>

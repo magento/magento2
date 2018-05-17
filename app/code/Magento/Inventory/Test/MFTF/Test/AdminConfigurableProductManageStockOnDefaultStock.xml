@@ -11,7 +11,7 @@
     <test name="AdminConfigurableProductManageStockOnDefaultStock">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Manage configurable product variations stock"/>
+            <stories value="Update Configurable Product"/>
             <title value="Manage Configurable Product Variations Stock"/>
             <description value="Stock status of configurable product variation should affect configurable product appearance on storefront."/>
             <testCaseId value="969"/>

@@ -11,7 +11,7 @@
     <test name="SimpleProductAssignedToNonDefaultSourceCreatedByAdminUserTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Simple Product assigned to non-default Source"/>
+            <stories value="Assign Products to Sources"/>
             <title value="Simple Product assigned to non-default Source"/>
             <description value="Simple Product assigned to non-default Source created by Admin user visible on frontend."/>
             <testCaseId value="954"/>

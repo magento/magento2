@@ -11,7 +11,7 @@
     <test name="AdminCanDeleteSourcesAssignedToStockTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Delete Sources Assigned to Stock"/>
+            <stories value="Delete Sources from Stocks"/>
             <title value="Delete Sources Assigned to Stock"/>
             <description value="You should be able to Delete Sources that are assigned to a Stock."/>
             <testCaseId value="951"/>

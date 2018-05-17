@@ -11,7 +11,7 @@
     <test name="AdminUpdateSourceDataTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Update existing Source Data"/>
+            <stories value="Update Source"/>
             <title value="Source data updated by Admin user"/>
             <description value="You should be able to update a Sources data via the Admin."/>
             <testCaseId value="492"/>

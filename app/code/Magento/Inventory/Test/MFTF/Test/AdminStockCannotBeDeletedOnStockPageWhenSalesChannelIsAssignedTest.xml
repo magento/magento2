@@ -11,7 +11,7 @@
     <test name="AdminStockCannotBeDeletedOnStockPageWhenSalesChannelIsAssignedTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Cannot Delete Stock from Stock Edit Page when Sales Channel assigned"/>
+            <stories value="Delete Stock"/>
             <title value="Cannot Delete Stock from Stock Edit Page when Sales Channel assigned"/>
             <description value="You should not be able to delete a Stock fro Stock Edit Page when a Sales Channel is assigned."/>
             <testCaseId value="950"/>
@@ -33,11 +33,11 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
             <!-- todo temporary solution as it is impossible to parse website_id from the post request and as a consequence can not delete it via post -->
             <actionGroup ref="DeleteCustomWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="$$createCustomWebsite.website[name]$$"/>
             </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
         <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksListPage"/>

@@ -11,7 +11,7 @@
     <test name="AdminCreateNewStockWithNoSourceOrSalesChannelTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Create New Stock"/>
+            <stories value="Add Stock"/>
             <title value="New Stock created by Admin user"/>
             <description value="You should be able to create a New Stock, via the Admin, without adding a Source or Sales Channel."/>
             <testCaseId value="513"/>

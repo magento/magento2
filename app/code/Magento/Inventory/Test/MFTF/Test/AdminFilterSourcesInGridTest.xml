@@ -11,7 +11,7 @@
     <test name="AdminFilterSourcesInGridTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Filter Sources in Grid"/>
+            <stories value="Filtering in a Grid"/>
             <title value="Filter Sources on the Manage Sources grid"/>
             <description value="You should be able to Filter the Sources from the Manage Sources grid."/>
             <testCaseId value="493"/>

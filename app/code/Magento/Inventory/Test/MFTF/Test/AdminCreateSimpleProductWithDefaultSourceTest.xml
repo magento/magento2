@@ -11,7 +11,7 @@
     <test name="AdminCreateSimpleProductWithDefaultSourceTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Assign Default Source to New Product"/>
+            <stories value="Assign Sources to Products"/>
             <title value="Simple Product created with Default Source assigned by Admin user"/>
             <description value="You should be able to create a New Product, via the Admin, and assign the Default Source to it."/>
             <testCaseId value="483"/>

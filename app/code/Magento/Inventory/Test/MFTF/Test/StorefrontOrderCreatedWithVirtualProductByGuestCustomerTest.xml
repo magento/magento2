@@ -11,7 +11,7 @@
     <test name="StorefrontOrderCreatedWithVirtualProductByGuestCustomerTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Create an Order with a Virtual Product"/>
+            <stories value="Add Order"/>
             <title value="Create an Order with a Virtual Product via the Storefront"/>
             <description value="You should be able to create an Order with a Virtual Product from the Storefront."/>
             <testCaseId value="1043"/>

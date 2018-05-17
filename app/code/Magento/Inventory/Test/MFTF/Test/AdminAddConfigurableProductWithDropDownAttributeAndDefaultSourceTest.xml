@@ -11,7 +11,7 @@
     <test name="AdminAddConfigurableProductWithDropDownAttributeAndDefaultSourceTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Create Configurable Product with drop down attribute"/>
+            <stories value="Add Configurable Product"/>
             <title value="Create a Configurable Product with a drop down attribute"/>
             <description value="You should be able to create a Configurable Product that is assigned to the Default Source with a drop down attribute."/>
             <testCaseId value="745"/>

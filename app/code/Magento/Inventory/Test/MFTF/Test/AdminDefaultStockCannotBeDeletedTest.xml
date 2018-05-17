@@ -11,7 +11,7 @@
     <test name="AdminDefaultStockCannotBeDeletedTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Cannot Delete Default Stock"/>
+            <stories value="Delete Stock"/>
             <title value="Cannot Delete Default Stock from the Stock Grid"/>
             <description value="You should not be able to delete the Default Stock from the Stock Grid."/>
             <testCaseId value="797"/>

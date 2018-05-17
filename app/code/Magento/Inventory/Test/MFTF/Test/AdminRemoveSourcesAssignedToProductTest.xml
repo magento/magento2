@@ -11,7 +11,7 @@
     <test name="AdminRemoveSourcesAssignedToProductTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Delete Sources From Products"/>
+            <stories value="Delete Sources from Products"/>
             <title value="Delete Sources From Products"/>
             <description value="You should be able to delete a Source assigned to a Product from the Product page."/>
             <testCaseId value="937"/>

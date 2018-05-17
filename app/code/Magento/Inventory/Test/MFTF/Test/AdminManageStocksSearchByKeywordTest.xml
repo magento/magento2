@@ -11,7 +11,7 @@
     <test name="AdminManageStocksSearchByKeywordTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Search By Keyword in Grid"/>
+            <stories value="Search By Keyword in a Grid"/>
             <title value="Search by Keyword on the Manage Stock grid"/>
             <description value="You should be able to Search by Keyword from the Manage Stock grid."/>
             <testCaseId value="515"/>

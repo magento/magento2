@@ -11,7 +11,7 @@
     <test name="AdminAddMultipleSourcesToProductTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Add Multiple Sources to a Product"/>
+            <stories value="Add Sources to Products"/>
             <title value="Add Multiple Sources to a Product"/>
             <description value="You should be able to add Multiple Sources to a Product."/>
             <testCaseId value="630"/>

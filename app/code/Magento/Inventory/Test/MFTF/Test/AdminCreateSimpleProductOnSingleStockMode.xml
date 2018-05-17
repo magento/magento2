@@ -11,7 +11,7 @@
     <test name="AdminCreateSimpleProductOnSingleStockMode">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Create simple product visible on frontend on single stock mode"/>
+            <stories value="Add Simple Product"/>
             <title value="Simple Product created and visible on frontend"/>
             <description value="You should be able to create a New Product via the Admin, and see it on frontend as in stock."/>
             <testCaseId value="953"/>

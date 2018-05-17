@@ -11,7 +11,7 @@
     <test name="AdminVirtualProductAssignedToStockTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Assign Virtual Product to a Stock"/>
+            <stories value="Assign Products to Stocks"/>
             <title value="Assign Virtual Product to a Stock"/>
             <description value="You should be able to assigned a Virtual Product to a Stock via the Admin."/>
             <testCaseId value="1042"/>
