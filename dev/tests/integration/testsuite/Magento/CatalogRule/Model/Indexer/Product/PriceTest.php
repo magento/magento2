@@ -12,13 +12,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 
-/**
- * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/attribute.php
- * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/product_with_attribute.php
- * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/rule_by_attribute.php
- * @magentoDbIsolation enabled
- * @magentoAppIsolation enabled
- */
 class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -31,6 +24,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->resourceRule = Bootstrap::getObjectManager()->get(Rule::class);
     }
 
+    /**
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/configurable_product.php
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/rule_by_attribute.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
     public function testPriceApplying()
     {
         $customerGroupId = 1;
@@ -44,7 +43,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Model\Product $simpleProduct */
         $simpleProduct = $collection->getFirstItem();
         $simpleProduct->setPriceCalculation(false);
-
         $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, $customerGroupId, $simpleProductId);
         $this->assertEquals($rulePrice, $simpleProduct->getFinalPrice());
 
@@ -55,11 +53,14 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $collection->load();
         /** @var \Magento\Catalog\Model\Product $confProduct */
         $confProduct = $collection->getFirstItem();
-
-        $this->assertEquals($simpleProduct->getMinimalPrice(), $confProduct->getMinimalPrice());
+        $this->assertEquals($simpleProduct->getFinalPrice(), $confProduct->getMinimalPrice());
     }
 
     /**
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/simple_products.php
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/rule_by_attribute.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      */
     public function testSortByPrice()
@@ -72,11 +73,11 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $searchResults = $productRepository->getList($searchCriteria);
         /** @var \Magento\Catalog\Model\Product[] $products */
         $products = array_values($searchResults->getItems());
-        $this->assertTrue($products[0]->getMinimalPrice() <= $products[1]->getMinimalPrice());
-        $this->assertTrue($products[1]->getMinimalPrice() <= $products[2]->getMinimalPrice());
 
-        $products[0]->setPriceCalculation(false);
-        $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $products[0]->getId());
-        $this->assertEquals($rulePrice, $products[0]->getFinalPrice());
+        $product1 = $products[0];
+        $product1->setPriceCalculation(false);
+        $this->assertEquals('simple1', $product1->getSku());
+        $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product1->getId());
+        $this->assertEquals($rulePrice, $product1->getFinalPrice());
     }
 }
