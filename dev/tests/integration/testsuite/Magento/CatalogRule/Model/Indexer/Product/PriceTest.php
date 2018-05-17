@@ -9,6 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\CatalogRule\Model\ResourceModel\Rule;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 
@@ -49,6 +50,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($rulePrice, $simpleProduct->getFinalPrice());
 
         $confProductId = 666;
+        $stockRegistry = Bootstrap::getObjectManager()->get(StockRegistryInterface::class);
+        $stockItem = $stockRegistry->getStockItem($confProductId);
+        $stockItem->setIsInStock(true);
+        $stockRegistry->updateStockItemBySku('configurable', $stockItem);
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $collection->addIdFilter($confProductId);
         $collection->addPriceData($customerGroupId, $websiteId);

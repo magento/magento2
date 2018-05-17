@@ -53,7 +53,12 @@ $product->setTypeId(
     \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
 )->setStatus(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-);
+)->setStockData([
+    'use_config_manage_stock' => 1,
+    'qty' => 100,
+    'is_qty_decimal' => 0,
+    'is_in_stock' => 1,
+]);
 
 $extension = $product->getExtensionAttributes();
 $links = [];
