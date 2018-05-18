@@ -61,6 +61,8 @@
                 type="Magento\Customer\Block\Account\SortLink"/>
     <preference for="Magento\Customer\Model\Group\RetrieverInterface"
                 type="Magento\Customer\Model\Group\Retriever"/>
+    <preference for="Magento\Customer\Api\LinkTokenManagerInterface"
+                type="Magento\Customer\Model\Account\Password\LinkTokenManager"/>
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>

@@ -12,6 +12,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
+use Magento\Customer\Api\LinkTokenManagerInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
@@ -326,6 +327,11 @@ class AccountManagement implements AccountManagementInterface
     private $accountConfirmation;
 
     /**
+     * @var LinkTokenManagerInterface
+     */
+    private $linkTokenManager;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -355,7 +361,7 @@ class AccountManagement implements AccountManagementInterface
      * @param DateTimeFactory $dateTimeFactory
      * @param SessionManagerInterface|null $sessionManager
      * @param SaveHandlerInterface|null $saveHandler
-     * @param CollectionFactory|null $visitorCollectionFactory
+     * @param CollectionFactory|null $visitorColFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -387,7 +393,8 @@ class AccountManagement implements AccountManagementInterface
         AccountConfirmation $accountConfirmation = null,
         SessionManagerInterface $sessionManager = null,
         SaveHandlerInterface $saveHandler = null,
-        CollectionFactory $visitorCollectionFactory = null
+        CollectionFactory $visitorColFactory = null,
+        LinkTokenManagerInterface $linkTokenManager = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -421,8 +428,10 @@ class AccountManagement implements AccountManagementInterface
             ?: ObjectManager::getInstance()->get(SessionManagerInterface::class);
         $this->saveHandler = $saveHandler
             ?: ObjectManager::getInstance()->get(SaveHandlerInterface::class);
-        $this->visitorCollectionFactory = $visitorCollectionFactory
+        $this->visitorCollectionFactory = $visitorColFactory
             ?: ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->linkTokenManager = $linkTokenManager
+            ?: ObjectManager::getInstance()->get(LinkTokenManagerInterface::class);
     }
 
     /**
@@ -1267,22 +1276,8 @@ class AccountManagement implements AccountManagementInterface
      */
     public function changeResetPasswordLinkToken($customer, $passwordLinkToken)
     {
-        if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
-            throw new InputException(
-                __(
-                    'Invalid value of "%value" provided for the %fieldName field.',
-                    ['value' => $passwordLinkToken, 'fieldName' => 'password reset token']
-                )
-            );
-        }
-        if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
-            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-            $customerSecure->setRpToken($passwordLinkToken);
-            $customerSecure->setRpTokenCreatedAt(
-                $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
-            );
-            $this->customerRepository->save($customer);
-        }
+        $this->linkTokenManager->changeToken($customer, $passwordLinkToken);
+
         return true;
     }
 
