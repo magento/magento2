@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Model;
 
-class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
+class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Collection
@@ -53,9 +53,9 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture   Magento/Sales/_files/invoice_list_different_stores.php
      * @magentoConfigFixture default/sales_email/general/async_sending 1
      * @magentoConfigFixture current_store sales_email/invoice/enabled 1
-     * @magentoConfigFixture default_store sales_email/invoice/enabled 1
+     * @magentoConfigFixture default_store sales_email/invoice/enabled 0
      */
-    public function testOrderTotalItemCount()
+    public function testInvoiceEmailSenderExecute()
     {
         $expectedResult = 1;
 
