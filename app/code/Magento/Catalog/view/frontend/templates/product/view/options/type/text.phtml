@@ -20,7 +20,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
         <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
     </label>
 
-    <div class="control">
+    <div class="control" data-mage-init='{"Magento_Catalog/js/product/custom-option": {}}'>
         <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD): ?>
             <?php $_textValidate = null;
             if ($_option->getIsRequire()) {
@@ -61,8 +61,13 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
                       cols="25"><?= $block->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif; ?>
         <?php if ($_option->getMaxCharacters()): ?>
-            <p class="note"><?= /* @escapeNotVerified */ __('Maximum number of characters:') ?>
-                <strong><?= /* @escapeNotVerified */ $_option->getMaxCharacters() ?></strong></p>
+            <p class="note">
+                <?= __('Maximum %1 characters', $_option->getMaxCharacters()) ?>
+                <span class="character-counter hidden">
+                    (<span class="count"><?= /* @escapeNotVerified */ $_option->getMaxCharacters() ?></span>
+                    <?= /* @escapeNotVerified */ __(' remaining') ?>)
+                </span>
+            </p>
         <?php endif; ?>
     </div>
 </div>
