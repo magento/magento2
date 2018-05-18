@@ -216,7 +216,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      * @param string $packageName
      * @return bool
      */
-    private function isVendorMagento(string $packageName)
+    private function isVendorMagento(string $packageName): bool
     {
         return strpos($packageName, 'magento/') === 0;
     }
