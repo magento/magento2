@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Filesystem;
 
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Magento directories resolver.
