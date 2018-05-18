@@ -124,7 +124,7 @@ class Config
     }
 
     /**
-     * Unassign given theme from stores that were unchecked
+     * Unassigned given theme from stores that were unchecked
      *
      * @param string $themeId
      * @param array $stores
