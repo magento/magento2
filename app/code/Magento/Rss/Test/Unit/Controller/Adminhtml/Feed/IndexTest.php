@@ -104,14 +104,22 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $dataProvider = $this->createMock(\Magento\Framework\App\Rss\DataProviderInterface::class);
         $dataProvider->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
 
-        $rssModel = $this->createPartialMock(\Magento\Rss\Model\Rss::class, ['setDataProvider']);
+        $rssModel = $this->createPartialMock(\Magento\Rss\Model\Rss::class, ['setDataProvider', 'createRssXml']);
         $rssModel->expects($this->once())->method('setDataProvider')->will($this->returnSelf());
+
+        $exceptionMock = new \Magento\Framework\Exception\RuntimeException(
+            new \Magento\Framework\Phrase('Any message')
+        );
+
+        $rssModel->expects($this->once())->method('createRssXml')->will(
+            $this->throwException($exceptionMock)
+        );
 
         $this->response->expects($this->once())->method('setHeader')->will($this->returnSelf());
         $this->rssFactory->expects($this->once())->method('create')->will($this->returnValue($rssModel));
         $this->rssManager->expects($this->once())->method('getProvider')->will($this->returnValue($dataProvider));
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
         $this->controller->execute();
     }
 }
