@@ -52,7 +52,7 @@ class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
      * @param bool $expectedResult
      * @return void
      */
-    public function testValidatePath($path, $expectedResult)
+    public function testValidatePath(string $path, bool $expectedResult): void
     {
         $rootPath = '/path/root';
         $directoryConfig = 'directory_config';

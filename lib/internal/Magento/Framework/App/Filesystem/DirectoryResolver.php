@@ -27,10 +27,9 @@ class DirectoryResolver
 
     /**
      * @param DirectoryList $directoryList
-     * @param Filesystem|null $filesystem
-     * @throws \RuntimeException
+     * @param Filesystem $filesystem
      */
-    public function __construct(DirectoryList $directoryList, Filesystem $filesystem = null)
+    public function __construct(DirectoryList $directoryList, Filesystem $filesystem)
     {
         $this->directoryList = $directoryList;
         $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
