@@ -49,6 +49,11 @@ class EmailSenderHandler
     private $identityContainer;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Sales\Model\Order\Email\Sender $emailSender
      * @param \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource
      * @param \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection
@@ -61,23 +66,27 @@ class EmailSenderHandler
         \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource,
         \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        IdentityInterface $identityContainer = null
+        IdentityInterface $identityContainer = null,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->emailSender = $emailSender;
         $this->entityResource = $entityResource;
         $this->entityCollection = $entityCollection;
         $this->globalConfig = $globalConfig;
-        $this->identityContainer = $identityContainer;
 
         if (!$identityContainer instanceof IdentityInterface) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Instance of the %s is expected, got %s instead',
                     IdentityInterface::class,
-                    $identityContainer ?: get_class($identityContainer)
+                    null === $identityContainer ? null : get_class($identityContainer)
                 )
             );
         }
+
+        $this->identityContainer = $identityContainer;
+        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\StoreManagerInterface::class);
     }
 
     /**
@@ -91,18 +100,18 @@ class EmailSenderHandler
             $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
 
             /** @var \Magento\Store\Api\Data\StoreInterface[] $stores */
-            $stores = $this->getEntityStores($this->entityCollection);
+            $stores = $this->getStores(clone $this->entityCollection);
 
             foreach ($stores as $store) {
                 $this->identityContainer->setStore($store);
                 if (!$this->identityContainer->isEnabled()) {
                     continue;
                 }
-
-                $this->entityCollection->addFieldToFilter('store_id', $store->getId());
+                $entityCollection = clone $this->entityCollection;
+                $entityCollection->addFieldToFilter('store_id', $store->getId());
 
                 /** @var \Magento\Sales\Model\AbstractModel $item */
-                foreach ($this->entityCollection->getItems() as $item) {
+                foreach ($entityCollection->getItems() as $item) {
                     if ($this->emailSender->send($item, true)) {
                         $this->entityResource->save(
                             $item->setEmailSent(true)
@@ -119,15 +128,16 @@ class EmailSenderHandler
      * @param ResourceModel\Collection\AbstractCollection $entityCollection
      * @return \Magento\Store\Api\Data\StoreInterface[]
      */
-    private function getEntityStores(\Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection)
+    private function getStores(\Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection)
     {
         $stores = [];
 
         $entityCollection->addAttributeToSelect('store_id')->getSelect()->group('store_id');
-
         /** @var \Magento\Sales\Model\EntityInterface $item */
         foreach ($entityCollection->getItems() as $item) {
-            $stores[]= $item->getOrder()->getStore();
+            /** @var \Magento\Store\Model\StoreManagerInterface $store */
+            $store = $this->storeManager->getStore($item->getStoreId());
+            $stores[$item->getStoreId()] = $store;
         }
 
         return $stores;
