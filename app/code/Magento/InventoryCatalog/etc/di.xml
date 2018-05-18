@@ -73,13 +73,10 @@
     <type name="Magento\InventoryCatalog\Model\SourceItem\SourceItemsSave">
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save" disabled="true"/>
     </type>
-    <type name="Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface">
-        <plugin name="replace_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Spi\StockRegistryProvider\GetStockStatusPlugin"/>
-    </type>
     <type name="Magento\CatalogInventory\Api\StockRegistryInterface">
         <plugin name="adapt_get_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetStockStatusPlugin"/>
-        <plugin name="replace_stock_status_configuration_for_product_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\GetStockStatusBySkuPlugin"/>
-        <plugin name="replace_stock_status_for_product_id" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\GetProductStockStatusPlugin"/>
-        <plugin name="replace_stock_status_for_product_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\GetProductStockStatusBySkuPlugin"/>
+        <plugin name="adapt_get_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetStockStatusBySkuPlugin"/>
+        <plugin name="adapt_get_product_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusPlugin"/>
+        <plugin name="adapt_get_product_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusBySkuPlugin"/>
     </type>
 </config>

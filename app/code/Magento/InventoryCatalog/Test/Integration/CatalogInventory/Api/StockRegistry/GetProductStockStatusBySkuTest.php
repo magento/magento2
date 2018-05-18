@@ -8,19 +8,10 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration\CatalogInventory\Api\StockRegistry;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Inventory\Model\SourceItem\Command\SourceItemsSave;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Test StockRegistryInterface::getProductStockStatusBySku() for simple product type.
- */
 class GetProductStockStatusBySkuTest extends TestCase
 {
     /**
@@ -34,117 +25,105 @@ class GetProductStockStatusBySkuTest extends TestCase
     private $storeManager;
 
     /**
-     * @var StoreInterface
+     * @var string
      */
-    private $defaultStoreView;
-
-    /**
-     * @var StoreRepositoryInterface
-     */
-    private $storeRepository;
-
-    /**
-     * @var SourceItemRepositoryInterface
-     */
-    private $sourceItemRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var SourceItemsSave
-     */
-    private $sourceItemSave;
+    private $storeCodeBefore;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockRegistry = Bootstrap::getObjectManager()->get(StockRegistryInterface::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-        $this->storeRepository = Bootstrap::getObjectManager()->get(StoreRepositoryInterface::class);
-        $this->sourceItemRepository = Bootstrap::getObjectManager()->create(SourceItemRepositoryInterface::class);
-        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
-        $this->sourceItemSave = Bootstrap::getObjectManager()->create(SourceItemsSave::class);
-        $this->defaultStoreView = $this->storeManager->getDefaultStoreView();
+        $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
     }
 
     /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        //Revert custom store assignment.
-        $this->storeManager->setCurrentStore($this->defaultStoreView->getId());
-        parent::tearDown();
-    }
-
-    /**
-     * Check, simple product has correct stock status on default source.
-     *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoAppArea frontend
-     * @return void
-     */
-    public function testGetStatusOnDefaultSource()
-    {
-        $sku = 'simple';
-        //Check product with 'In Stock' status.
-        $this->assertEquals(1, $this->stockRegistry->getProductStockStatusBySku($sku));
-        $this->setProductOutOfStock($sku, 'default');
-        //Check product with 'Out of Stock' status.
-        $this->assertEquals(0, $this->stockRegistry->getProductStockStatusBySku($sku));
-    }
-
-    /**
-     * Check, simple product has correct stock status on custom source.
-     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
-     * @magentoAppArea frontend
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDbIsolation disabled
-     * @return void
+     *
+     * @param string $storeCode
+     * @param string $sku
+     * @param int $status
+     *
+     * @dataProvider getStatusDataProvider
      */
-    public function testGetStatusOnCustomSource()
-    {
-        $sku = 'SKU-2';
-        $store = $this->storeRepository->get('store_for_us_website');
-        $this->storeManager->setCurrentStore($store->getId());
+    public function testGetStatusIfScopeIdParameterIsNotPassed(
+        string $storeCode,
+        string $sku,
+        int $status
+    ): void {
+        $this->storeManager->setCurrentStore($storeCode);
 
-        //Check product with 'In Stock' status.
-        $this->assertEquals(1, $this->stockRegistry->getProductStockStatusBySku($sku));
+        $productStockStatus = $this->stockRegistry->getProductStockStatusBySku($sku);
 
-        $this->setProductOutOfStock($sku, 'us-1');
-
-        //Check product with 'Out of Stock' status.
-        $this->assertEquals(0, $this->stockRegistry->getProductStockStatusBySku($sku));
+        self::assertEquals($status, $productStockStatus);
     }
 
     /**
-     * Set simple product to 'Out of Stock'.
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @magentoDbIsolation disabled
      *
-     * @param string $productSku
-     * @param string $sourceCode
-     * @return void
+     * @param string $storeCode
+     * @param string $sku
+     * @param int $status
+     * @param int $stockId
+     *
+     * @dataProvider getStatusDataProvider
      */
-    private function setProductOutOfStock(string $productSku, string $sourceCode)
+    public function testGetStatusIfScopeIdParameterIsPassed(
+        string $storeCode,
+        string $sku,
+        int $status,
+        int $stockId
+    ): void {
+        $this->storeManager->setCurrentStore($storeCode);
+
+        $productStockStatus = $this->stockRegistry->getProductStockStatusBySku($sku, $stockId);
+
+        self::assertEquals($status, $productStockStatus);
+    }
+
+    /**
+     * @return array
+     */
+    public function getStatusDataProvider(): array
     {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SKU, $productSku)
-            ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)
-            ->create();
-        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
-        $sourceItem = reset($sourceItems);
-        $sourceItem->setStatus(0);
-        $this->sourceItemSave->execute([$sourceItem]);
+        return [
+            ['store_for_eu_website', 'SKU-1', 1, 10],
+            ['store_for_us_website', 'SKU-1', 0, 20],
+            ['store_for_global_website', 'SKU-1', 1, 30],
+            ['store_for_eu_website', 'SKU-2', 0, 10],
+            ['store_for_us_website', 'SKU-2', 1, 20],
+            ['store_for_global_website', 'SKU-2', 1, 30],
+            ['store_for_eu_website', 'SKU-3', 0, 10],
+            ['store_for_us_website', 'SKU-3', 0, 20],
+            ['store_for_global_website', 'SKU-3', 0, 30],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $this->storeManager->setCurrentStore($this->storeCodeBefore);
+
+        parent::tearDown();
     }
 }

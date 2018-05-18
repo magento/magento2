@@ -7,17 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry;
 
-use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
-use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
- * Adapt getStockStatus for multi stocks
+ * Adapt getProductStockStatus for multi stocks.
  */
-class AdaptGetStockStatusPlugin
+class AdaptGetProductStockStatusPlugin
 {
     /**
      * @var GetStockIdForCurrentWebsite
@@ -30,11 +28,6 @@ class AdaptGetStockStatusPlugin
     private $isProductSalable;
 
     /**
-     * @var GetProductSalableQtyInterface
-     */
-    private $getProductSalableQty;
-
-    /**
      * @var GetSkusByProductIdsInterface
      */
     private $getSkusByProductIds;
@@ -42,45 +35,37 @@ class AdaptGetStockStatusPlugin
     /**
      * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
      * @param IsProductSalableInterface $isProductSalable
-     * @param GetProductSalableQtyInterface $getProductSalableQty
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      */
     public function __construct(
         GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
         IsProductSalableInterface $isProductSalable,
-        GetProductSalableQtyInterface $getProductSalableQty,
         GetSkusByProductIdsInterface $getSkusByProductIds
     ) {
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->isProductSalable = $isProductSalable;
-        $this->getProductSalableQty = $getProductSalableQty;
         $this->getSkusByProductIds = $getSkusByProductIds;
     }
 
     /**
      * @param StockRegistryInterface $subject
-     * @param StockStatusInterface $stockStatus
+     * @param int $status
      * @param int $productId
      * @param int $scopeId
-     * @return StockStatusInterface
+     * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetStockStatus(
+    public function afterGetProductStockStatus(
         StockRegistryInterface $subject,
-        StockStatusInterface $stockStatus,
+        $status,
         $productId,
         $scopeId = null
-    ): StockStatusInterface {
+    ): int {
         if (null === $scopeId) {
             $scopeId = $this->getStockIdForCurrentWebsite->execute();
         }
 
         $sku = $this->getSkusByProductIds->execute([$productId])[$productId];
-        $status = (int)$this->isProductSalable->execute($sku, (int)$scopeId);
-        $qty = $this->getProductSalableQty->execute($sku, $scopeId);
-
-        $stockStatus->setStockStatus($status);
-        $stockStatus->setQty($qty);
-        return $stockStatus;
+        return (int)$this->isProductSalable->execute($sku, (int)$scopeId);
     }
 }
