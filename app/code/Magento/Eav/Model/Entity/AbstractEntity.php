@@ -1294,7 +1294,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $origData = $this->_getOrigObject($newObject)->getOrigData();
             }
 
-            if (is_null($origData)) {
+            if ($origData === null) {
                 $origData = [];
             }
 

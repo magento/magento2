@@ -31,6 +31,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @magentoDataFixture Magento/SalesRule/_files/rules_category.php
      * @dataProvider validateProductConditionDataProvider
+     * @magentoDbIsolation disabled
      */
     public function testValidateCategorySalesRuleIncludesChildren($categoryId, $expectedResult)
     {
@@ -53,6 +54,26 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         // Assert the validation result matches the expected result given the child product and category rule
         $this->assertEquals($expectedResult, $rule->validate($quote));
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Bundle/_files/order_item_with_bundle_and_options.php
+     * @magentoDataFixture Magento/SalesRule/_files/rules_sku_exclude.php
+     */
+    public function testValidateSalesRuleExcludesBundleChildren()
+    {
+        // Load the quote that contains a child of a bundle product
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
+            ->load('test_cart_with_bundle_and_options', 'reserved_order_id');
+
+        // Load the SalesRule looking for excluding products with selected sku
+        /** @var $rule \Magento\SalesRule\Model\Rule */
+        $rule = $this->objectManager->get(\Magento\Framework\Registry::class)
+            ->registry('_fixture/Magento_SalesRule_Sku_Exclude');
+
+        $this->assertEquals(false, $rule->validate($quote));
     }
 
     /**

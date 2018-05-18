@@ -718,7 +718,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {
-            $debugData = ['request' => $request];
+            $debugData = ['request' => parent::filterDebugData($request)];
             try {
                 $url = $this->getConfigData('gateway_url');
                 if (!$url) {
@@ -733,7 +733,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $responseBody = curl_exec($ch);
                 curl_close($ch);
 
-                $debugData['result'] = $responseBody;
+                $debugData['result'] = parent::filterDebugData($responseBody);
                 $this->_setCachedQuotes($request, $responseBody);
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
@@ -1073,7 +1073,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         ];
         $requestString = $this->serializer->serialize($trackRequest);
         $response = $this->_getCachedQuotes($requestString);
-        $debugData = ['request' => $trackRequest];
+        $debugData = ['request' => $this->filterDebugData($trackRequest)];
         if ($response === null) {
             try {
                 $client = $this->_createTrackSoapClient();
@@ -1399,6 +1399,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $result = new \Magento\Framework\DataObject();
         $client = $this->_createShipSoapClient();
         $requestClient = $this->_formShipmentRequest($request);
+        $debugData['request'] = $this->filterDebugData($requestClient);
         $response = $client->processShipment($requestClient);
 
         if ($response->HighestSeverity != 'FAILURE' && $response->HighestSeverity != 'ERROR') {
@@ -1408,13 +1409,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             );
             $result->setShippingLabelContent($shippingLabelContent);
             $result->setTrackingNumber($trackingNumber);
-            $debugData = ['request' => $client->__getLastRequest(), 'result' => $client->__getLastResponse()];
+            $debugData['result'] = $client->__getLastResponse();
             $this->_debug($debugData);
         } else {
-            $debugData = [
-                'request' => $client->__getLastRequest(),
-                'result' => ['error' => '', 'code' => '', 'xml' => $client->__getLastResponse()],
-            ];
+            $debugData['result'] = ['error' => '', 'code' => '', 'xml' => $client->__getLastResponse()];
             if (is_array($response->Notifications)) {
                 foreach ($response->Notifications as $notification) {
                     $debugData['result']['code'] .= $notification->Code . '; ';

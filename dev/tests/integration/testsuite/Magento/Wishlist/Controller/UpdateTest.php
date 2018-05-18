@@ -21,7 +21,6 @@ use Zend\Http\Request;
  * Tests updating wishlist item comment.
  *
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
  * @magentoAppArea frontend
  */
 class UpdateTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -56,6 +55,7 @@ class UpdateTest extends \Magento\TestFramework\TestCase\AbstractController
      * @param string|null $postDescription
      * @param string $expectedResult
      * @param boolean $presetComment
+     * @magentoDbIsolation disabled
      */
     public function testUpdateComment($postDescription, $expectedResult, $presetComment)
     {

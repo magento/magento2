@@ -32,7 +32,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
         $this->subject = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,
-            ['getAffectedProductIds', '__wakeUp']
+            ['getChangedProductIds', '__wakeUp']
         );
 
         $this->plugin = (new ObjectManager($this))->getObject(
@@ -46,7 +46,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function testAfterSaveWithoutAffectedProductIds()
     {
         $this->subject->expects($this->any())
-            ->method('getAffectedProductIds')
+            ->method('getChangedProductIds')
             ->will($this->returnValue([]));
 
         $this->productRuleProcessor->expects($this->never())
@@ -60,7 +60,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $productIds = [1, 2, 3];
 
         $this->subject->expects($this->any())
-            ->method('getAffectedProductIds')
+            ->method('getChangedProductIds')
             ->will($this->returnValue($productIds));
 
         $this->productRuleProcessor->expects($this->once())
