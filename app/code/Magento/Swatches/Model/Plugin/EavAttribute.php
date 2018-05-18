@@ -9,6 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Model\Swatch;
 
 /**
@@ -53,6 +54,11 @@ class EavAttribute
     protected $isSwatchExists;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * Serializer from arrays to string.
      *
      * @var Json
@@ -64,17 +70,20 @@ class EavAttribute
      * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
      * @param Json|null $serializer
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
         \Magento\Swatches\Helper\Data $swatchHelper,
-        Json $serializer = null
+        Json $serializer = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->swatchCollectionFactory = $collectionFactory;
         $this->swatchFactory = $swatchFactory;
         $this->swatchHelper = $swatchHelper;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->create(StoreManagerInterface::class);
     }
 
     /**
@@ -244,25 +253,44 @@ class EavAttribute
      * Save Visual Swatch data
      *
      * @param Attribute $attribute
+     *
      * @return void
      */
     protected function processVisualSwatch(Attribute $attribute)
     {
         $swatchArray = $attribute->getData('swatch/value');
+
         if (isset($swatchArray) && is_array($swatchArray)) {
-            foreach ($swatchArray as $optionId => $value) {
+            $visualSwatches = [];
+            foreach ($swatchArray as $key => $value) {
+                $visualSwatches[$key] =
+                    [
+                        self::DEFAULT_STORE_ID => $value,
+                        $this->storeManager->getStore()->getId() => '',
+                    ];
+            }
+
+            foreach ($visualSwatches as $optionId => $storeValues) {
                 $optionId = $this->getAttributeOptionId($optionId);
                 $isOptionForDelete = $this->isOptionForDelete($attribute, $optionId);
+
                 if ($optionId === null || $isOptionForDelete) {
                     //option was deleted by button with basket
                     continue;
                 }
-                $swatch = $this->loadSwatchIfExists($optionId, self::DEFAULT_STORE_ID);
 
-                $swatchType = $this->determineSwatchType($value);
+                $defaultSwatchValue = reset($storeValues);
+                foreach ($storeValues as $storeId => $value) {
+                    if (!$value) {
+                        $value = $defaultSwatchValue;
+                    }
 
-                $this->saveSwatchData($swatch, $optionId, self::DEFAULT_STORE_ID, $swatchType, $value);
-                $this->isSwatchExists = null;
+                    $swatch = $this->loadSwatchIfExists($optionId, $storeId);
+                    $swatchType = $this->determineSwatchType($value);
+
+                    $this->saveSwatchData($swatch, $optionId, $storeId, $swatchType, $value);
+                    $this->isSwatchExists = null;
+                }
             }
         }
     }

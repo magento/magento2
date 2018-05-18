@@ -9,6 +9,10 @@ namespace Magento\Swatches\Test\Unit\Model\Plugin;
 use Magento\Swatches\Model\Plugin\EavAttribute;
 use Magento\Swatches\Model\Swatch;
 
+/**
+ * Class EavAttributeTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class EavAttributeTest extends \PHPUnit\Framework\TestCase
 {
     const ATTRIBUTE_ID = 123;
@@ -45,6 +49,12 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection|\PHPUnit_Framework_MockObject_MockObject */
     private $collection;
 
+    /** @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
+    private $storeManager;
+
+    /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
+    private $store;
+
     /** @var array */
     private $optionIds = [];
 
@@ -61,6 +71,8 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
         $this->swatchHelper = $this->createMock(\Magento\Swatches\Helper\Data::class);
         $this->swatch = $this->createMock(\Magento\Swatches\Model\Swatch::class);
         $this->resource = $this->createMock(\Magento\Swatches\Model\ResourceModel\Swatch::class);
+        $this->storeManager = $this->createPartialMock(\Magento\Store\Model\StoreManager::class, ['getStore']);
+        $this->store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
         $this->collection =
             $this->createMock(\Magento\Swatches\Model\ResourceModel\Swatch\Collection::class);
         $this->collectionFactory = $this->createPartialMock(
@@ -92,6 +104,7 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
                 'swatchFactory' => $this->swatchFactory,
                 'swatchHelper' => $this->swatchHelper,
                 'serializer' => $serializer,
+                'storeManager' => $this->storeManager
             ]
         );
 
@@ -334,10 +347,10 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
 
         $this->swatch->expects($this->once())->method('getResource')
             ->willReturn($this->resource);
-        $this->swatch->expects($this->once())->method('getId')
+        $this->swatch->expects($this->exactly(2))->method('getId')
             ->willReturn(EavAttribute::DEFAULT_STORE_ID);
-        $this->swatch->expects($this->once())->method('save');
-        $this->swatch->expects($this->exactly(4))->method('setData')
+        $this->swatch->expects($this->exactly(2))->method('save');
+        $this->swatch->expects($this->exactly(8))->method('setData')
             ->withConsecutive(
                 ['option_id', self::OPTION_ID],
                 ['store_id', EavAttribute::DEFAULT_STORE_ID],
@@ -345,15 +358,15 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
                 ['value', $swatchValue]
             );
 
-        $this->collection->expects($this->exactly(2))->method('addFieldToFilter')
+        $this->collection->expects($this->exactly(4))->method('addFieldToFilter')
             ->withConsecutive(
                 ['option_id', self::OPTION_ID],
                 ['store_id', EavAttribute::DEFAULT_STORE_ID]
             )->willReturnSelf();
 
-        $this->collection->expects($this->once())->method('getFirstItem')
+        $this->collection->expects($this->exactly(2))->method('getFirstItem')
             ->willReturn($this->swatch);
-        $this->collectionFactory->expects($this->once())->method('create')
+        $this->collectionFactory->expects($this->exactly(2))->method('create')
             ->willReturn($this->collection);
 
         $this->attribute->expects($this->at(0))->method('getData')
@@ -381,6 +394,8 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
             ->with($this->attribute)
             ->willReturn(true);
         $this->swatchHelper->expects($this->never())->method('isTextSwatch');
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($this->store);
+        $this->store->expects($this->once())->method('getId')->willReturn(1);
 
         $this->eavAttribute->afterAfterSave($this->attribute);
     }
@@ -542,6 +557,8 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
         $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
             ->with($this->attribute)
             ->willReturn(true);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($this->store);
+        $this->store->expects($this->once())->method('getId')->willReturn(1);
         $this->swatchHelper->expects($this->never())->method('isTextSwatch');
 
         $this->eavAttribute->afterAfterSave($this->attribute);
