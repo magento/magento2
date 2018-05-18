@@ -12,6 +12,7 @@
         </item>
         <item name="label" xsi:type="string" translate="true">Release Notification</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
+        <item name="releaseContentVersion" xsi:type="string">2.2.4</item>
     </argument>
     <settings>
         <namespace>release_notification</namespace>
@@ -130,11 +131,11 @@
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
-                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>With <a href="http://docs.magento.com/m2/ce/user_guide/payment/amazon-pay.html" target="_blank">Amazon Pay</a>, we make it simple for the hundreds of millions of Amazon customers worldwide to easily login and purchase from your store using information already stored their Amazon account. With easy set up in Magento 2.2.4, Amazon Pay provides your customers with a trusted and familiar checkout experience. In just a few taps, they can complete a transaction without ever leaving your site.</p>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>With <a href="http://docs.magento.com/m2/ce/user_guide/payment/amazon-pay.html" target="_blank">Amazon Pay</a>, we make it simple for the hundreds of millions of Amazon customers worldwide to easily log in and purchase from your store using information already stored their Amazon account. With easy setup in Magento 2.2.4, Amazon Pay provides your customers with a trusted and familiar checkout experience. In just a few taps, they can complete a transaction without ever leaving your site.</p>
                         <ul>
                         <li><span>Your customers use one familiar login to identify themselves and transact anywhere Amazon Pay is offered.</span></li>
                         <li><span>Checkout experience is covered by the Amazon A-to-z Guarantee at no additional cost.</span></li>
-                        <li><span>Built on years of Amazon eCommerce innovation and trusted by merchants and buyers alike.</span></li>
+                        <li><span>Built on years of Amazon eCommerce innovation, and trusted by merchants and buyers alike.</span></li>
                         <li><span>Available across platforms and devices, in the home and on the go.</span></li>
                         </ul>]]>
                         </item>
@@ -214,12 +215,12 @@
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
-                        <p>With <a href="http://docs.magento.com/m2/ce/user_guide/payment/klarna.html" target="_blank">Klarna</a>, reduce purchase stress and improve your shopping experience with several retail finance and direct payment options that are easily integrated into your existing buying journey. Shoppers can choose to pay now via an online payment or direct debit, pay later via an invoice, or pay in installments.</p>
+                        <p>With <a href="http://docs.magento.com/m2/ce/user_guide/payment/klarna.html" target="_blank">Klarna</a>, reduce purchase stress and improve your shopping experience with several retail finance and direct-payment options that are easily integrated into your existing buying journey. Shoppers can choose to pay now by online payment or direct debit, pay later by invoice, or pay in installments.</p>
                         <ul>
-                        <li><span>Customers never leave your site resulting in a smoother shopping experience.</span></li>
+                        <li><span>Customers never leave your site, and enjoy a smoother shopping experience.</span></li>
                         <li><span>Easy application process with the ability to pay over time increases average order value and conversion rates.</span></li>
-                        <li><span>Assumes all credit and fraud risk and ensures you are paid for ordered goods.</span></li>
-                        <li><span>Ready for all devices.</span></li>
+                        <li><span>Assumes all credit and fraud risk, and ensures you are paid for ordered goods.</span></li>
+                        <li><span>Ready for all devices, and enables shoppers to use their Klarna account at any Klarna merchant with just a few clicks.</span></li>
                         <li><span>Fast and easy setup, right from the Magento Admin.</span></li>
                         </ul>]]>
                         </item>
@@ -299,14 +300,13 @@
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
-                        <p><a href="http://docs.magento.com/m2/ce/user_guide/tax/vertex.html" target="_blank">Vertex Cloud</a>  combines sophisticated software and an exceptional team of tax experts to help Magento merchants simplify their sales tax process, while complying and staying up-to-date with ever-changing tax laws. Included with Magento 2.2.4, merchants can easily access and configure Vertex Cloud directly within their Magento Admin to meet the complicated tax challenges faced when selling online.</p>
+                        <p><a href="http://docs.magento.com/m2/ce/user_guide/tax/vertex.html" target="_blank">Vertex Cloud</a> combines sophisticated software with an exceptional team of tax experts to help Magento merchants simplify the sales tax process, and comply with ever-changing tax laws. Merchants can easily access and configure Vertex Cloud from the Magento Admin to meet complex tax challenges.</p>
                         <ul>
-                        <li><span>Seamless integration with Magento with support for simple to the most complex tax needs.</span></li>
+                        <li><span>Seamless integration with award-winning support for simple-to-complex tax needs.</span></li>
                         <li><span>Automatically comply with the latest tax rules for each product and every jurisdiction.</span></li>
                         <li><span>Perform tax calculations and generate signature-ready PDF returns in one solution.</span></li>
                         <li><span>No penalty to merchants for tax estimates from abandoned carts.</span></li>
-                        <li><span>Flexible deployment options that fit your organization&#8217;s needs, whether in the cloud or on-premise.</span></li>
-                        <li><span>Award-winning customer support specialists are available to answer questions and assist customers.</span></li>
+                        <li><span>Flexible deployment options fit the needs of your organization in the cloud, or on premises.</span></li>
                         </ul>]]>
                         </item>
                     </item>
