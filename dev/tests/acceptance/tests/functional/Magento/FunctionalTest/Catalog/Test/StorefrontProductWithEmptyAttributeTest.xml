@@ -17,29 +17,18 @@
             <group value="product"/>
         </annotations>
         <before>
-            <!--<actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>-->
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
-            <!--<createData entity="productAttributeWithTwoOptions" stepKey="createProductAttribute"/>-->
+            <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createProductAttribute"/>
         </before>
         <after>
             <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
-            <!--<deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>-->
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToProductAttribute"/>
-        <waitForPageLoad stepKey="wait1"/>
-        <!--<click selector="#add" stepKey="addNewAttribute"/>-->
-        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="testattribute" stepKey="fillAttributeLabel"/>
-        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Dropdown" stepKey="selectCatalogAttributeInputType"/>
-        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
-        <selectOption selector="#is_visible_on_front" userInput="Yes" stepKey="isVisibleOnStoreFront"/>
-        <selectOption selector="#used_in_product_listing" userInput="Yes" stepKey="usedInProductListing"/>
-        <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
-        <waitForPageLoad stepKey="waitForSaveAttribute"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
         <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
@@ -54,8 +43,6 @@
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
         <amOnPage url="{{StorefrontProductPage.url(SimpleProduct.urlKey)}}" stepKey="goProductPageOnStorefront"/>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
-        <!--<see selector="#product-attribute-specs-table tr th:nth-of-type(1)" stepKey="seeAttribute"/>-->
-        <!--<scrollTo selector=".additional-attributes tbody td:nth-of-type(1)" stepKey="seeAttribute1"/>-->
         <dontSeeElement selector="//table[@id='product-attribute-specs-table']/tbody/tr/th[contains(text(),'testattribute')]" stepKey="seeAttribute2"/>
     </test>
     </tests>
