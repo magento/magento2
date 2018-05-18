@@ -419,7 +419,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             self::XML_PATH_CONFIRMATION_FLAG,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) == 1 ? true : false;
-        $isOwnSubscribes = false;
 
         $isSubscribeOwnEmail = $this->_customerSession->isLoggedIn()
             && $this->_customerSession->getCustomerDataObject()->getEmail() == $email;
