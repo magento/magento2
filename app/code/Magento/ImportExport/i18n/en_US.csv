@@ -1,20 +1,20 @@
-Export,Export
+"Export","Export"
 "Export Settings","Export Settings"
 "Entity Type","Entity Type"
 "Export File Format","Export File Format"
 "Fields Enclosure","Fields Enclosure"
-From,From
-To,To
+"From","From"
+"To","To"
 "We can't filter an attribute with no attribute options.","We can't filter an attribute with no attribute options."
 "Fixed Price: From","Fixed Price: From"
-Exclude,Exclude
+"Exclude","Exclude"
 "Attribute Label","Attribute Label"
 "Attribute Code","Attribute Code"
-Filter,Filter
+"Filter","Filter"
 "Unknown attribute filter type","Unknown attribute filter type"
-Download,Download
+"Download","Download"
 "Check Data","Check Data"
-Import,Import
+"Import","Import"
 "Import Settings","Import Settings"
 "Import Behavior","Import Behavior"
 " "," "
@@ -33,12 +33,12 @@ Import,Import
                                 e.g. var/export, var/import, var/export/some/dir"
 "Download Sample File","Download Sample File"
 "Please correct the data sent value.","Please correct the data sent value."
-Import/Export,Import/Export
-History,History
+"Import/Export","Import/Export"
+"History","History"
 "Import History","Import History"
 "Import history","Import history"
 "There is no sample file for this entity.","There is no sample file for this entity."
-Status,Status
+"Status","Status"
 "Maximum error count has been reached or system error is occurred!","Maximum error count has been reached or system error is occurred!"
 "Import successfully done","Import successfully done"
 "Sorry, but the data is invalid or the file is not uploaded.","Sorry, but the data is invalid or the file is not uploaded."
@@ -99,10 +99,10 @@ Status,Status
 "Cannot get autoincrement value","Cannot get autoincrement value"
 "Error in data structure: %1 values are mixed","Error in data structure: %1 values are mixed"
 "-- Please Select --","-- Please Select --"
-label,label
-Add/Update,Add/Update
-Replace,Replace
-Delete,Delete
+"label","label"
+"Add/Update","Add/Update"
+"Replace","Replace"
+"Delete","Delete"
 "Note: Product IDs will be regenerated.","Note: Product IDs will be regenerated."
 "Add/Update Complex Data","Add/Update Complex Data"
 "Delete Entities","Delete Entities"
@@ -110,12 +110,12 @@ Delete,Delete
 "Error message","Error message"
 "URL key for specified store already exists.","URL key for specified store already exists."
 "Entity Attributes","Entity Attributes"
-Continue,Continue
+"Continue","Continue"
 "Validation Results","Validation Results"
-ID,ID
+"ID","ID"
 "Start Date&Time","Start Date&Time"
-User,User
+"User","User"
 "Imported File","Imported File"
 "Error File","Error File"
 "Execution Time","Execution Time"
-Summary,Summary
+"Summary","Summary"
