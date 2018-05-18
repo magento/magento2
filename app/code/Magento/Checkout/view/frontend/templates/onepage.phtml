@@ -18,7 +18,7 @@
     <script type="text/x-magento-init">
         {
             "#checkout": {
-                "Magento_Ui/js/core/app": <?= $block->escapeJs($block->getJsLayout()) ?>
+                "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->escapeJs($block->getJsLayout()) ?>
             }
         }
     </script>
