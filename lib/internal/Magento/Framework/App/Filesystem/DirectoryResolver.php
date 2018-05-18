@@ -32,7 +32,7 @@ class DirectoryResolver
     public function __construct(DirectoryList $directoryList, Filesystem $filesystem)
     {
         $this->directoryList = $directoryList;
-        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
+        $this->filesystem = $filesystem;
     }
 
     /**
