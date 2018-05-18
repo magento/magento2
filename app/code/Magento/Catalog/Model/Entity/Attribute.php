@@ -113,7 +113,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory
+        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory = null   
     ) {
         $this->attrLockValidator = $lockValidator;
         parent::__construct(
