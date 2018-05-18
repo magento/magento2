@@ -66,6 +66,6 @@ class AdaptGetProductStockStatusPlugin
         }
 
         $sku = $this->getSkusByProductIds->execute([$productId])[$productId];
-        return (int)$this->isProductSalable->execute($sku, $scopeId);
+        return (int)$this->isProductSalable->execute($sku, (int)$scopeId);
     }
 }

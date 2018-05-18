@@ -56,6 +56,6 @@ class AdaptGetProductStockStatusBySkuPlugin
             $scopeId = $this->getStockIdForCurrentWebsite->execute();
         }
 
-        return (int)$this->isProductSalable->execute($productSku, $scopeId);
+        return (int)$this->isProductSalable->execute($productSku, (int)$scopeId);
     }
 }
