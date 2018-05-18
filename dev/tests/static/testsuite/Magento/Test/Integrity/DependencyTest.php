@@ -20,6 +20,7 @@ use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DependencyTest extends \PHPUnit\Framework\TestCase
 {
@@ -824,7 +825,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
         return $packageModuleMapping;
     }
-
 
     /**
      * Retrieve array of dependency items
