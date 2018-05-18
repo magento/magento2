@@ -7,7 +7,7 @@
 <button class="action-delete"
         attr="{'data-action': 'remove_row'}"
         data-bind="
-            click: function(){ $data.processingDeleteRecord($parents); },
+            click: function(){ $parent.processingDeleteRecord($record().index, $record.recordId); },
             attr: {
                 title: $parent.deleteButtonLabel
             }
