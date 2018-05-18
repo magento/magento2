@@ -14,6 +14,7 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Exception\AlreadyExistsException;
 
 class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -64,27 +65,27 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * Generate and set unique SKU to product
+     * Check unique SKU for product
      *
      * @param Product $object
      * @return void
      */
-    protected function _generateUniqueSku($object)
+    protected function _checkUniqueSku($object)
     {
         $attribute = $this->getAttribute();
         $entity = $attribute->getEntity();
-        $attributeValue = $object->getData($attribute->getAttributeCode());
-        $increment = null;
+        $attributeCode = $attribute->getAttributeCode();
+        $attributeValue = $object->getData($attributeCode);
         while (!$entity->checkAttributeUniqueValue($attribute, $object)) {
-            if ($increment === null) {
-                $increment = $this->_getLastSimilarAttributeValueIncrement($attribute, $object);
-            }
-            $sku = trim($attributeValue);
-            if (strlen($sku . '-' . ++$increment) > self::SKU_MAX_LENGTH) {
-                $sku = substr($sku, 0, -strlen($increment) - 1);
-            }
-            $sku = $sku . '-' . $increment;
-            $object->setData($attribute->getAttributeCode(), $sku);
+            throw new AlreadyExistsException(
+                __(
+                    'Duplicated %attribute found: %value',
+                    [
+                        'attribute' => $attributeCode,
+                        'value' => $attributeValue
+                    ]
+                )
+            );
         }
     }
 
@@ -96,7 +97,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function beforeSave($object)
     {
-        $this->_generateUniqueSku($object);
+        $this->_checkUniqueSku($object);
         return parent::beforeSave($object);
     }
 
