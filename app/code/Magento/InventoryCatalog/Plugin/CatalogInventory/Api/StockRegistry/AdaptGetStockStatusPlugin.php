@@ -77,7 +77,7 @@ class AdaptGetStockStatusPlugin
 
         $sku = $this->getSkusByProductIds->execute([$productId])[$productId];
         $status = (int)$this->isProductSalable->execute($sku, (int)$scopeId);
-        $qty = $this->getProductSalableQty->execute($sku, $scopeId);
+        $qty = $this->getProductSalableQty->execute($sku, (int)$scopeId);
 
         $stockStatus->setStockStatus($status);
         $stockStatus->setQty($qty);

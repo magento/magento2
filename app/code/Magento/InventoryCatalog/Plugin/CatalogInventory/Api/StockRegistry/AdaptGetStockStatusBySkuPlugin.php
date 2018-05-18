@@ -66,7 +66,7 @@ class AdaptGetStockStatusBySkuPlugin
             $scopeId = $this->getStockIdForCurrentWebsite->execute();
         }
 
-        $status = (int)$this->isProductSalable->execute($productSku, $scopeId);
+        $status = (int)$this->isProductSalable->execute($productSku, (int)$scopeId);
         $qty = $this->getProductSalableQty->execute($productSku, (int)$scopeId);
 
         $stockStatus->setStockStatus($status);
