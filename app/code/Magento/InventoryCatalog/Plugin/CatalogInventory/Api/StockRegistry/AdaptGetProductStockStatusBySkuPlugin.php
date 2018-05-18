@@ -40,15 +40,15 @@ class AdaptGetProductStockStatusBySkuPlugin
 
     /**
      * @param StockRegistryInterface $subject
-     * @param int $status
+     * @param callable $proceed
      * @param string $productSku
      * @param int $scopeId
      * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetProductStockStatusBySku(
+    public function aroundGetProductStockStatusBySku(
         StockRegistryInterface $subject,
-        $status,
+        callable $proceed,
         $productSku,
         $scopeId = null
     ): int {

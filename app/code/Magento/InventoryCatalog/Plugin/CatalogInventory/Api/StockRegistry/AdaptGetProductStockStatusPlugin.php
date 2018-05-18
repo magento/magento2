@@ -49,15 +49,15 @@ class AdaptGetProductStockStatusPlugin
 
     /**
      * @param StockRegistryInterface $subject
-     * @param int $status
+     * @param callable $proceed
      * @param int $productId
      * @param int $scopeId
      * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetProductStockStatus(
+    public function aroundGetProductStockStatus(
         StockRegistryInterface $subject,
-        $status,
+        callable $proceed,
         $productId,
         $scopeId = null
     ): int {
