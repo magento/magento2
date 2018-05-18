@@ -16,7 +16,7 @@
         <selectOption selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" userInput="Yes" stepKey="switchToYes" />
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
     </actionGroup>
-    <actionGroup name="dontDisplayOutOfStockProduct">
+    <actionGroup name="noDisplayOutOfStockProduct">
         <amOnPage url="{{InventoryConfigurationPage.url}}" stepKey="navigateToInventoryConfigurationPage"/>
         <waitForPageLoad stepKey="waitForConfigPageToLoad"/>
         <uncheckOption selector="{{InventoryConfigSection.DisplayOutOfStockSystemValue}}" stepKey="uncheckUseSystemValue"/>
