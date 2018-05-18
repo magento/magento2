@@ -7,7 +7,6 @@
         "magento/module-catalog": "*",
         "magento/module-backend": "*",
         "magento/module-reports": "*",
-        "magento/module-catalog-inventory": "*",
         "magento/module-inventory-api": "*",
         "magento/module-inventory-configuration-api": "*",
         "magento/module-inventory-low-quantity-notification-api": "*",
