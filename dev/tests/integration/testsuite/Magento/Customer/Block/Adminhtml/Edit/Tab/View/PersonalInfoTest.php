@@ -121,8 +121,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
     {
         $expectedCustomer = $this->createCustomerAndAddToBackendSession();
         $actualCustomer = $this->_block->getCustomer();
-        // Trigger extension attributes generation
-        $actualCustomer->getExtensionAttributes();
+        $this->assertEquals($expectedCustomer->getExtensionAttributes(), $actualCustomer->getExtensionAttributes());
         $this->assertEquals($expectedCustomer, $actualCustomer);
     }
 
