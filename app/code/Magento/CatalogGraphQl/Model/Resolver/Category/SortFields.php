@@ -32,21 +32,28 @@ class SortFields implements ResolverInterface
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
+    
+    /**
+     * @var \Magento\Catalog\Model\Category\Attribute\Source\Sortby
+     */
+    private $sortbyAttributeSource;
 
     /**
      * @param ValueFactory $valueFactory
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @oaram \Magento\Catalog\Model\Category\Attribute\Source\Sortby $sortbyAttributeSource
      */
     public function __construct(
         ValueFactory $valueFactory,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Category\Attribute\Source\Sortby $ss
+        \Magento\Catalog\Model\Category\Attribute\Source\Sortby $sortbyAttributeSource
     ) {
         $this->valueFactory = $valueFactory;
         $this->catalogConfig = $catalogConfig;
         $this->storeManager = $storeManager;
+        $this->sortbyAttributeSource = $sortbyAttributeSource;
     }
 
     /**
@@ -54,13 +61,13 @@ class SortFields implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
     {
-        $sortFieldsOptions = [
-            ['value' => 'position', 'label' => 'Position']
-        ];
-        foreach ($this->catalogConfig->getAttributesUsedForSortBy() as $attribute) {
-            $sortFieldsOptions[] = ['value' => $attribute->getAttributeCode(), 'label' => $attribute->getStoreLabel()];
-        }
-        
+        $sortFieldsOptions = $this->sortbyAttributeSource->getAllOptions();
+        array_walk(
+            $sortFieldsOptions,
+            function (&$option) {
+                $option['label'] = (string)$option['label'];
+            }
+        );
         $data = [
             'default' => $this->catalogConfig->getProductListDefaultSortBy($this->storeManager->getStore()->getId()),
             'options' => $sortFieldsOptions,

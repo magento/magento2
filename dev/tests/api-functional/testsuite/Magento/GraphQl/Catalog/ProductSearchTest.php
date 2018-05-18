@@ -511,14 +511,14 @@ QUERY;
         {
           page_size
           current_page
-          sort_fields 
+        }
+        sort_fields 
+        {
+          default
+          options 
           {
-            default
-            options 
-            {
-                value
-                label
-            }
+            value
+            label
           }
         }
     }
@@ -539,13 +539,13 @@ QUERY;
         $this->assertProductItems($filteredChildProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
         $this->assertEquals(1, $response['products']['page_info']['current_page']);
-        $this->assertArrayHasKey('sort_fields', $response['products']['page_info']);
-        $this->assertArrayHasKey('options', $response['products']['page_info']['sort_fields']);
-        $this->assertArrayHasKey('default', $response['products']['page_info']['sort_fields']);
-        $this->assertEquals('position', $response['products']['page_info']['sort_fields']['default']);
-        $this->assertArrayHasKey('value', $response['products']['page_info']['sort_fields']['options'][0]);
-        $this->assertArrayHasKey('label', $response['products']['page_info']['sort_fields']['options'][0]);
-        $this->assertEquals(['value'=>'position', 'label' => 'Position'], $response['products']['page_info']['sort_fields']['options'][0]);
+        $this->assertArrayHasKey('sort_fields', $response['products']);
+        $this->assertArrayHasKey('options', $response['products']['sort_fields']);
+        $this->assertArrayHasKey('default', $response['products']['sort_fields']);
+        $this->assertEquals('position', $response['products']['sort_fields']['default']);
+        $this->assertArrayHasKey('value', $response['products']['sort_fields']['options'][0]);
+        $this->assertArrayHasKey('label', $response['products']['sort_fields']['options'][0]);
+        $this->assertEquals('position', $response['products']['sort_fields']['options'][0]['value']);
     }
 
     /**
