@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Observer;
+namespace Magento\InventoryShipping\Model;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Sales\Model\Order\Shipment\Item;
