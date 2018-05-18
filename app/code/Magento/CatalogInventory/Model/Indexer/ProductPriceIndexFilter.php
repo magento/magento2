@@ -56,21 +56,21 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         $select = $connection->select();
         $select->from(
             ['price_index' => $priceTable->getTableName()],
-            ''
+            []
         );
         $select->joinLeft(
             ['website_stock' => $this->stockStatus->getMainTable()],
             'website_stock.product_id = price_index.' . $priceTable->getEntityField()
             . ' AND website_stock.website_id = price_index.' . $priceTable->getWebsiteField()
             . ' AND website_stock.stock_id = ' . Stock::DEFAULT_STOCK_ID,
-            ''
+            []
         );
         $select->joinLeft(
             ['default_stock' => $this->stockStatus->getMainTable()],
             'default_stock.product_id = price_index.' . $priceTable->getEntityField()
             . ' AND default_stock.website_id = 0'
             . ' AND default_stock.stock_id = ' . Stock::DEFAULT_STOCK_ID,
-            ''
+            []
         );
         $stockStatus = $connection->getIfNullSql('website_stock.stock_status', 'default_stock.stock_status');
         $select->where($stockStatus . ' = ?', Stock::STOCK_OUT_OF_STOCK);
