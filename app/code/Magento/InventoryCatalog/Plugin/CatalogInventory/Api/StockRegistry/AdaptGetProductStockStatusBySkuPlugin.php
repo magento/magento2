@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Adapt getProductStockStatusBySku for multi stocks.
@@ -17,25 +19,33 @@ use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 class AdaptGetProductStockStatusBySkuPlugin
 {
     /**
-     * @var GetStockIdForCurrentWebsite
-     */
-    private $getStockIdForCurrentWebsite;
-
-    /**
      * @var IsProductSalableInterface
      */
     private $isProductSalable;
 
     /**
-     * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var StockResolverInterface
+     */
+    private $stockResolver;
+
+    /**
      * @param IsProductSalableInterface $isProductSalable
+     * @param StoreManagerInterface $storeManager
+     * @param StockResolverInterface $stockResolver
      */
     public function __construct(
-        GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
-        IsProductSalableInterface $isProductSalable
+        IsProductSalableInterface $isProductSalable,
+        StoreManagerInterface $storeManager,
+        StockResolverInterface $stockResolver
     ) {
-        $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->isProductSalable = $isProductSalable;
+        $this->storeManager = $storeManager;
+        $this->stockResolver = $stockResolver;
     }
 
     /**
@@ -52,10 +62,15 @@ class AdaptGetProductStockStatusBySkuPlugin
         $productSku,
         $scopeId = null
     ): int {
-        if (null === $scopeId) {
-            $scopeId = $this->getStockIdForCurrentWebsite->execute();
+        try {
+            $websiteCode = null === $scopeId ? $this->storeManager->getWebsite()->getCode()
+                : $this->storeManager->getWebsite($scopeId)->getCode();
+            $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
+            $productStockStatus = (int)$this->isProductSalable->execute($productSku, $stockId);
+        } catch (\Exception $e) {
+            $productStockStatus = 0;
         }
 
-        return (int)$this->isProductSalable->execute($productSku, (int)$scopeId);
+        return $productStockStatus;
     }
 }

@@ -8,20 +8,17 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Adapt getProductStockStatus for multi stocks.
  */
 class AdaptGetProductStockStatusPlugin
 {
-    /**
-     * @var GetStockIdForCurrentWebsite
-     */
-    private $getStockIdForCurrentWebsite;
-
     /**
      * @var IsProductSalableInterface
      */
@@ -33,18 +30,31 @@ class AdaptGetProductStockStatusPlugin
     private $getSkusByProductIds;
 
     /**
-     * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var StockResolverInterface
+     */
+    private $stockResolver;
+
+    /**
      * @param IsProductSalableInterface $isProductSalable
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
+     * @param StoreManagerInterface $storeManager
+     * @param StockResolverInterface $stockResolver
      */
     public function __construct(
-        GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
         IsProductSalableInterface $isProductSalable,
-        GetSkusByProductIdsInterface $getSkusByProductIds
+        GetSkusByProductIdsInterface $getSkusByProductIds,
+        StoreManagerInterface $storeManager,
+        StockResolverInterface $stockResolver
     ) {
-        $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->isProductSalable = $isProductSalable;
         $this->getSkusByProductIds = $getSkusByProductIds;
+        $this->storeManager = $storeManager;
+        $this->stockResolver = $stockResolver;
     }
 
     /**
@@ -61,11 +71,16 @@ class AdaptGetProductStockStatusPlugin
         $productId,
         $scopeId = null
     ): int {
-        if (null === $scopeId) {
-            $scopeId = $this->getStockIdForCurrentWebsite->execute();
+        try {
+            $websiteCode = null === $scopeId ? $this->storeManager->getWebsite()->getCode()
+                : $this->storeManager->getWebsite($scopeId)->getCode();
+            $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
+            $sku = $this->getSkusByProductIds->execute([$productId])[$productId];
+            $productStockStatus = (int)$this->isProductSalable->execute($sku, $stockId);
+        } catch (\Exception $e) {
+            $productStockStatus = 0;
         }
 
-        $sku = $this->getSkusByProductIds->execute([$productId])[$productId];
-        return (int)$this->isProductSalable->execute($sku, (int)$scopeId);
+        return $productStockStatus;
     }
 }

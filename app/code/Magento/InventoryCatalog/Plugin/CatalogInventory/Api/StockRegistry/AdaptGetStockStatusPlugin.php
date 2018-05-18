@@ -9,21 +9,18 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry;
 
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Adapt getStockStatus for multi stocks
  */
 class AdaptGetStockStatusPlugin
 {
-    /**
-     * @var GetStockIdForCurrentWebsite
-     */
-    private $getStockIdForCurrentWebsite;
-
     /**
      * @var IsProductSalableInterface
      */
@@ -40,21 +37,34 @@ class AdaptGetStockStatusPlugin
     private $getSkusByProductIds;
 
     /**
-     * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var StockResolverInterface
+     */
+    private $stockResolver;
+
+    /**
      * @param IsProductSalableInterface $isProductSalable
      * @param GetProductSalableQtyInterface $getProductSalableQty
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
+     * @param StoreManagerInterface $storeManager
+     * @param StockResolverInterface $stockResolver
      */
     public function __construct(
-        GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
         IsProductSalableInterface $isProductSalable,
         GetProductSalableQtyInterface $getProductSalableQty,
-        GetSkusByProductIdsInterface $getSkusByProductIds
+        GetSkusByProductIdsInterface $getSkusByProductIds,
+        StoreManagerInterface $storeManager,
+        StockResolverInterface $stockResolver
     ) {
-        $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->isProductSalable = $isProductSalable;
         $this->getProductSalableQty = $getProductSalableQty;
         $this->getSkusByProductIds = $getSkusByProductIds;
+        $this->storeManager = $storeManager;
+        $this->stockResolver = $stockResolver;
     }
 
     /**
@@ -71,13 +81,17 @@ class AdaptGetStockStatusPlugin
         $productId,
         $scopeId = null
     ): StockStatusInterface {
-        if (null === $scopeId) {
-            $scopeId = $this->getStockIdForCurrentWebsite->execute();
+        try {
+            $websiteCode = null === $scopeId ? $this->storeManager->getWebsite()->getCode()
+                : $this->storeManager->getWebsite($scopeId)->getCode();
+            $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
+            $sku = $this->getSkusByProductIds->execute([$productId])[$productId];
+            $status = (int)$this->isProductSalable->execute($sku, $stockId);
+            $qty = $this->getProductSalableQty->execute($sku, $stockId);
+        } catch (\Exception $e) {
+            $status = 0;
+            $qty = 0;
         }
-
-        $sku = $this->getSkusByProductIds->execute([$productId])[$productId];
-        $status = (int)$this->isProductSalable->execute($sku, (int)$scopeId);
-        $qty = $this->getProductSalableQty->execute($sku, (int)$scopeId);
 
         $stockStatus->setStockStatus($status);
         $stockStatus->setQty($qty);

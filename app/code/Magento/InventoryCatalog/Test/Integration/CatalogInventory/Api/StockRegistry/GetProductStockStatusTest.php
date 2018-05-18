@@ -90,20 +90,18 @@ class GetProductStockStatusTest extends TestCase
      * @param string $storeCode
      * @param string $sku
      * @param int $status
-     * @param int $stockId
      *
      * @dataProvider getStatusDataProvider
      */
     public function testGetStatusIfScopeIdParameterIsPassed(
         string $storeCode,
         string $sku,
-        int $status,
-        int $stockId
+        int $status
     ): void {
         $this->storeManager->setCurrentStore($storeCode);
-
+        $websiteId = $this->storeManager->getWebsite()->getId();
         $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
-        $productStockStatus = $this->stockRegistry->getProductStockStatus($productId, $stockId);
+        $productStockStatus = $this->stockRegistry->getProductStockStatus($productId, $websiteId);
 
         self::assertEquals($status, $productStockStatus);
     }
@@ -114,15 +112,15 @@ class GetProductStockStatusTest extends TestCase
     public function getStatusDataProvider(): array
     {
         return [
-            ['store_for_eu_website', 'SKU-1', 1, 10],
-            ['store_for_us_website', 'SKU-1', 0, 20],
-            ['store_for_global_website', 'SKU-1', 1, 30],
-            ['store_for_eu_website', 'SKU-2', 0, 10],
-            ['store_for_us_website', 'SKU-2', 1, 20],
-            ['store_for_global_website', 'SKU-2', 1, 30],
-            ['store_for_eu_website', 'SKU-3', 0, 10],
-            ['store_for_us_website', 'SKU-3', 0, 20],
-            ['store_for_global_website', 'SKU-3', 0, 30],
+            ['store_for_eu_website', 'SKU-1', 1],
+            ['store_for_us_website', 'SKU-1', 0],
+            ['store_for_global_website', 'SKU-1', 1],
+            ['store_for_eu_website', 'SKU-2', 0],
+            ['store_for_us_website', 'SKU-2', 1],
+            ['store_for_global_website', 'SKU-2', 1],
+            ['store_for_eu_website', 'SKU-3', 0],
+            ['store_for_us_website', 'SKU-3', 0],
+            ['store_for_global_website', 'SKU-3', 0],
         ];
     }
 

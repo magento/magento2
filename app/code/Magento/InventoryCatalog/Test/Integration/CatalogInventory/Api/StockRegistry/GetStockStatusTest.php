@@ -94,7 +94,6 @@ class GetStockStatusTest extends TestCase
      * @param string $sku
      * @param int $status
      * @param float $qty
-     * @param int $stockId
      *
      * @dataProvider getStatusDataProvider
      */
@@ -102,13 +101,12 @@ class GetStockStatusTest extends TestCase
         string $storeCode,
         string $sku,
         int $status,
-        float $qty,
-        int $stockId
+        float $qty
     ): void {
         $this->storeManager->setCurrentStore($storeCode);
-
+        $websiteId = $this->storeManager->getWebsite()->getId();
         $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
-        $stockStatus = $this->stockRegistry->getStockStatus($productId, $stockId);
+        $stockStatus = $this->stockRegistry->getStockStatus($productId, $websiteId);
 
         self::assertEquals($status, $stockStatus->getStockStatus());
         self::assertEquals($qty, $stockStatus->getQty());
@@ -120,15 +118,15 @@ class GetStockStatusTest extends TestCase
     public function getStatusDataProvider(): array
     {
         return [
-            ['store_for_eu_website', 'SKU-1', 1, 8.5, 10],
-            ['store_for_us_website', 'SKU-1', 0, 0, 20],
-            ['store_for_global_website', 'SKU-1', 1, 8.5, 30],
-            ['store_for_eu_website', 'SKU-2', 0, 0, 10],
-            ['store_for_us_website', 'SKU-2', 1, 5, 20],
-            ['store_for_global_website', 'SKU-2', 1, 5, 30],
-            ['store_for_eu_website', 'SKU-3', 0, 0, 10],
-            ['store_for_us_website', 'SKU-3', 0, 0, 20],
-            ['store_for_global_website', 'SKU-3', 0, 0, 30],
+            ['store_for_eu_website', 'SKU-1', 1, 8.5],
+            ['store_for_us_website', 'SKU-1', 0, 0],
+            ['store_for_global_website', 'SKU-1', 1, 8.5],
+            ['store_for_eu_website', 'SKU-2', 0, 0],
+            ['store_for_us_website', 'SKU-2', 1, 5],
+            ['store_for_global_website', 'SKU-2', 1, 5],
+            ['store_for_eu_website', 'SKU-3', 0, 0],
+            ['store_for_us_website', 'SKU-3', 0, 0],
+            ['store_for_global_website', 'SKU-3', 0, 0],
         ];
     }
 
