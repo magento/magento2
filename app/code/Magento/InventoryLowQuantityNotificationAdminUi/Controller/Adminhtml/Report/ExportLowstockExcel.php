@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryLowQuantityNotification\Controller\Adminhtml\Report;
+namespace Magento\InventoryLowQuantityNotificationAdminUi\Controller\Adminhtml\Report;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
