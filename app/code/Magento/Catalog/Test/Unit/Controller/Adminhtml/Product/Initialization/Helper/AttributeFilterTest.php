@@ -8,6 +8,8 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use PHPUnit_Framework_MockObject_MockObject;
 
 class AttributeFilterTest extends \PHPUnit\Framework\TestCase
 {
@@ -17,12 +19,12 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|PHPUnit_Framework_MockObject_MockObject
      */
     protected $productMock;
 
@@ -45,7 +47,7 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
         $expectedProductData,
         $initialProductData
     ) {
-        /** @var \PHPUnit_Framework_MockObject_MockObject | Product $productMockMap */
+        /** @var PHPUnit_Framework_MockObject_MockObject | Product $productMockMap */
         $productMockMap = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData', 'getAttributes'])
@@ -223,8 +225,8 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
         $returnArray = [];
         foreach ($useDefaults as $attributecode => $isDefault) {
             if ($isDefault === '1') {
-                /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute | \PHPUnit_Framework_MockObject_MockObject $attribute */
-                $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+                /** @var Attribute | PHPUnit_Framework_MockObject_MockObject $attribute */
+                $attribute = $this->getMockBuilder(Attribute::class)
                     ->disableOriginalConstructor()
                     ->getMock();
                 $attribute->expects($this->any())
