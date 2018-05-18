@@ -4,12 +4,12 @@
  */
 
 define([
-    "jquery",
-    "mage/mage"
+    'jquery',
+    'mage/mage'
 ], function ($) {
     'use strict';
 
     return function (data) {
-        $($.mage.redirect(data.url, "assign", 5000));
+        $($.mage.redirect(data.url, 'assign', 5000));
     };
 });
