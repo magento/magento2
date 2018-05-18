@@ -392,6 +392,17 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @param Node|array $node
      * @return bool
+     * @deprecated 102.0.4
+     * @see _isCategoryMovable
+     */
+    protected function _isCategoryMoveable($node)
+    {
+        $this->_isCategoryMovable($node);
+    }
+
+    /**
+     * @param Node|array $node
+     * @return bool
      */
     protected function _isCategoryMovable($node)
     {
