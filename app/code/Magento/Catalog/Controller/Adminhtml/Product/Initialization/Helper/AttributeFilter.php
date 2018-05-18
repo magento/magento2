@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 
 use \Magento\Catalog\Model\Product;
@@ -30,10 +29,8 @@ class AttributeFilter
     {
         $attributeList = $product->getAttributes();
         foreach ($productData as $attributeCode => $attributeValue) {
-            if (!isset($useDefaults[$attributeCode]) || $useDefaults[$attributeCode] === '1') {
-                if ($attributeValue === '' && (bool)$product->getData($attributeCode) === (bool)$attributeValue) {
-                    unset($productData[$attributeCode]);
-                }
+            if ($this->isAttributeShouldNotBeUpdated($product, $useDefaults, $attributeCode, $attributeValue)) {
+                unset($productData[$attributeCode]);
             }
 
             if (isset($useDefaults[$attributeCode]) && $useDefaults[$attributeCode] === '1') {
@@ -81,6 +78,21 @@ class AttributeFilter
                 $productData[$attributeCode] = null;
             }
         }
+
         return $productData;
+    }
+
+    /**
+     * @param Product $product
+     * @param $useDefaults
+     * @param $attribute
+     * @param $value
+     * @return bool
+     */
+    private function isAttributeShouldNotBeUpdated(Product $product, $useDefaults, $attribute, $value): bool
+    {
+        $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === '1';
+
+        return ($value === '' && $considerUseDefaultsAttribute && !$product->getData($attribute));
     }
 }

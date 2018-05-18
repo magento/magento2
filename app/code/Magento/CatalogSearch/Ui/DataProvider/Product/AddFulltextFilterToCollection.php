@@ -11,7 +11,7 @@ use Magento\CatalogSearch\Model\ResourceModel\Search\Collection as SearchCollect
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
 /**
- * Class AddFulltextFilterToCollection
+ * Adds FullText search to Product Data Provider
  */
 class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
 {

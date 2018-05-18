@@ -594,7 +594,7 @@ abstract class AbstractAction
         if (empty($this->tempTreeIndexTableName)) {
             $this->tempTreeIndexTableName = $this->connection->getTableName('temp_catalog_category_tree_index')
                 . '_'
-                . substr(md5(time() . rand(0, 999999999)), 0, 8);
+                . substr(md5(time() . random_int(0, 999999999)), 0, 8);
         }
 
         return $this->tempTreeIndexTableName;
@@ -656,25 +656,43 @@ abstract class AbstractAction
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {
-        // This finds all children (cc2) that descend from a parent (cc) by path.
-        // For example, cc.path may be '1/2', and cc2.path may be '1/2/3/4/5'.
-        $temporarySelect = $this->connection->select()->from(
-            ['cc' => $this->getTable('catalog_category_entity')],
-            ['parent_id' => 'entity_id']
-        )->joinInner(
-            ['cc2' => $this->getTable('catalog_category_entity')],
-            'cc2.path LIKE ' . $this->connection->getConcatSql(
-                [$this->connection->quoteIdentifier('cc.path'), $this->connection->quote('/%')]
-            ),
-            ['child_id' => 'entity_id']
-        );
+        $offset = 0;
+        $limit = 500;
 
-        $this->connection->query(
-            $temporarySelect->insertFromSelect(
-                $temporaryName,
-                ['parent_id', 'child_id']
-            )
-        );
+        $categoryTable = $this->getTable('catalog_category_entity');
+
+        $categoriesSelect = $this->connection->select()
+            ->from(
+                ['c' => $categoryTable],
+                ['entity_id', 'path']
+            )->limit($limit, $offset);
+
+        $categories = $this->connection->fetchAll($categoriesSelect);
+
+        while ($categories) {
+            $values = [];
+
+            foreach ($categories as $category) {
+                foreach (explode('/', $category['path']) as $parentId) {
+                    if ($parentId !== $category['entity_id']) {
+                        $values[] = [$parentId, $category['entity_id']];
+                    }
+                }
+            }
+
+            if (count($values) > 0) {
+                $this->connection->insertArray($temporaryName, ['parent_id', 'child_id'], $values);
+            }
+
+            $offset += $limit;
+            $categoriesSelect = $this->connection->select()
+                ->from(
+                    ['c' => $categoryTable],
+                    ['entity_id', 'path']
+                )->limit($limit, $offset);
+
+            $categories = $this->connection->fetchAll($categoriesSelect);
+        }
     }
 
     /**
