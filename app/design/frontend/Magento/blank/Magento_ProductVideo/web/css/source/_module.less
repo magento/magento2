@@ -97,8 +97,8 @@
 
 //  @TODO UI: check possibility to use .media-width() mixin
 @media only screen
-and (min-device-width: 320px)
-and (max-device-width: 780px)
+and (min-device-width: @screen__xxs)
+and (max-device-width: @screen__m)
 and (orientation: landscape) {
     .product-video {
         height: 100%;
