@@ -70,7 +70,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param Product $object
      * @return void
      */
-    protected function _checkUniqueSku($object)
+    private function checkUniqueSku($object)
     {
         $attribute = $this->getAttribute();
         $entity = $attribute->getEntity();
@@ -90,6 +90,32 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Generate and set unique SKU to product
+     *
+     * @param Product $object
+     * @return void
+     * @deprecated
+     */
+    protected function _generateUniqueSku($object)
+    {
+        $attribute = $this->getAttribute();
+        $entity = $attribute->getEntity();
+        $attributeValue = $object->getData($attribute->getAttributeCode());
+        $increment = null;
+        while (!$entity->checkAttributeUniqueValue($attribute, $object)) {
+            if ($increment === null) {
+                $increment = $this->_getLastSimilarAttributeValueIncrement($attribute, $object);
+            }
+            $sku = trim($attributeValue);
+            if (strlen($sku . '-' . ++$increment) > self::SKU_MAX_LENGTH) {
+                $sku = substr($sku, 0, -strlen($increment) - 1);
+            }
+            $sku = $sku . '-' . $increment;
+            $object->setData($attribute->getAttributeCode(), $sku);
+        }
+    }
+
+    /**
      * Make SKU unique before save
      *
      * @param Product $object
@@ -97,7 +123,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function beforeSave($object)
     {
-        $this->_checkUniqueSku($object);
+        $this->checkUniqueSku($object);
         return parent::beforeSave($object);
     }
 
@@ -107,6 +133,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @param Product $object
      * @return int
+     * @deprecated
      */
     protected function _getLastSimilarAttributeValueIncrement($attribute, $object)
     {
