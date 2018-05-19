@@ -11,5 +11,5 @@ define([
 
     return function (data, element) {
         jQuery(element).mage('form').mage('validation');
-    }
+    };
 });
