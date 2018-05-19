@@ -142,7 +142,7 @@ class AfterAddressSaveObserver implements ObserverInterface
         $customerAddress = $observer->getCustomerAddress();
         $customer = $customerAddress->getCustomer();
         
-        if($customer->getId()) {
+        if ($customer->getId()) {
             $currentTimestamp = $this->_dateFactory->create()->gmtDate();
             $customerModel = $this->_customerFactory->create()->load($customer->getId());
             $customerModel->setUpdatedAt($currentTimestamp);
@@ -198,14 +198,6 @@ class AfterAddressSaveObserver implements ObserverInterface
                     }
                 }
             }
-            
-            /* $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $customerData=$objectManager->create('Magento\Customer\Model\Customer')->load($address->getParentId());
-            $date = $objectManager->create('Magento\Framework\Stdlib\DateTime\DateTimeFactory')->create()->gmtDate();
-            $customerData->setUpdatedAt($date);
-            $customerData->save(); */
-            
-            
         } catch (\Exception $e) {
             $this->_coreRegistry->register(self::VIV_PROCESSED_FLAG, false, true);
         }
