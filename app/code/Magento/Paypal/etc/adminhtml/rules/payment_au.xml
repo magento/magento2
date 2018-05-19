@@ -14,8 +14,7 @@
             <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
-                           event="deactivate-rule"
-                        >
+                           event="deactivate-rule">
                     <argument name="paypal_payflowpro_au">paypal_payflowpro_au</argument>
                     <argument name="payments_pro_hosted_solution_au">payments_pro_hosted_solution_au</argument>
                     <argument name="express_checkout_other">express_checkout_other</argument>
@@ -48,8 +47,7 @@
             <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
-                           event="deactivate-rule"
-                        >
+                           event="deactivate-rule">
                     <argument name="payments_pro_hosted_solution_au">payments_pro_hosted_solution_au</argument>
                     <argument name="wps_other">wps_other</argument>
                 </predicate>
@@ -77,8 +75,7 @@
             <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
-                           event="deactivate-rule"
-                        >
+                           event="deactivate-rule">
                     <argument name="paypal_payflowpro_au">paypal_payflowpro_au</argument>
                     <argument name="wps_other">wps_other</argument>
                 </predicate>
@@ -106,8 +103,7 @@
             <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
-                           event="deactivate-rule"
-                        >
+                           event="deactivate-rule">
                     <argument name="wps_other">wps_other</argument>
                 </predicate>
             </event>

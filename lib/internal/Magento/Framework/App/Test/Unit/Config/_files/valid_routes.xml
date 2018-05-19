@@ -10,7 +10,7 @@
         <route id="test">
             <module name="Some_ModuleName" before="Some_BeforeModuleName" />
         </route>
-        <route id="Some_ModuleName" frontName="test_test" >
+        <route id="Some_ModuleName" frontName="test_test">
             <module name="Some_ModuleName" after="Some_AfterModuleName"/>
         </route>
     </router>

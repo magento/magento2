@@ -22,7 +22,7 @@
             </option>
         </parameter>
         <parameter name="show_pager" type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno"
-                   translate="label" >
+                   translate="label">
             <label>Display Page Control</label>
         </parameter>
         <parameter name="products_per_page" type="text" required="true" visible="true" translate="label">
@@ -96,7 +96,7 @@
         <parameter name="title" type="text" visible="true" translate="label">
             <label>Anchor Custom Title</label>
         </parameter>
-        <parameter name="template" type="select" visible="true" translate="label" >
+        <parameter name="template" type="select" visible="true" translate="label">
             <label>Template</label>
             <option name="default" value="product/widget/link/link_block.phtml" selected="true" translate="label">
                 <label>Product Link Block Template</label>

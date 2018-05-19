@@ -13,7 +13,7 @@
                     <property name="name">
                         <constraint alias="some_validator" class="Magento\Framework\Validator_StringLenght">
                             <argument>
-                                <option name="min" >
+                                <option name="min">
                                     <!-- option can contain only text -->
                                     <option name="1">5</option>
                                 </option>

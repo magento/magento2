@@ -17,7 +17,7 @@
         </annotations>
         <before>
             <createData stepKey="category" entity="SimpleSubCategory"/>
-            <createData stepKey="product" entity="SimpleProduct" >
+            <createData stepKey="product" entity="SimpleProduct">
                 <requiredEntity createDataKey="category"/>
             </createData>
             <createData stepKey="customer" entity="Simple_US_Customer"/>

@@ -16,7 +16,7 @@
         </annotations>
         <before>
             <createData stepKey="categoryHandle" entity="SimpleSubCategory" />
-            <createData stepKey="baseConfigProductHandle" entity="BaseConfigurableProduct" >
+            <createData stepKey="baseConfigProductHandle" entity="BaseConfigurableProduct">
                 <requiredEntity createDataKey="categoryHandle"/>
             </createData>
             <createData stepKey="productAttributeHandle" entity="productAttributeWithTwoOptions"/>
