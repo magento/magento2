@@ -14,12 +14,15 @@ class ListAjax extends ProductController
     /**
      * Show list of product's reviews
      *
-     * @return \Magento\Framework\View\Result\Layout
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
         if (!$this->initProduct()) {
-            throw new LocalizedException(__('Cannot initialize product'));
+            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+            $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+            $resultForward->forward('noroute');
+            return $resultForward;
         } else {
             /** @var \Magento\Framework\View\Result\Layout $resultLayout */
             $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
