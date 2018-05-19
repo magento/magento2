@@ -7,6 +7,8 @@
 namespace Magento\Customer\Observer;
 
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
+use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Helper\Address as HelperAddress;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Address\AbstractAddress;
@@ -72,6 +74,16 @@ class AfterAddressSaveObserver implements ObserverInterface
      * @var Escaper
      */
     protected $escaper;
+    
+    /**
+     * @var CustomerFactory
+     */
+    protected $customerFactory;
+    
+    /**
+     * @var DateTimeFactory
+     */
+    protected $dateFactory;
 
     /**
      * @var CustomerSession
@@ -80,6 +92,8 @@ class AfterAddressSaveObserver implements ObserverInterface
 
     /**
      * @param Vat $customerVat
+     * @param DateTimeFactory $dateFactory
+     * @param CustomerFactory $customerFactory
      * @param HelperAddress $customerAddress
      * @param Registry $coreRegistry
      * @param GroupManagementInterface $groupManagement
@@ -91,6 +105,8 @@ class AfterAddressSaveObserver implements ObserverInterface
      */
     public function __construct(
         Vat $customerVat,
+        DateTimeFactory $dateFactory,
+        CustomerFactory $customerFactory,
         HelperAddress $customerAddress,
         Registry $coreRegistry,
         GroupManagementInterface $groupManagement,
@@ -101,6 +117,8 @@ class AfterAddressSaveObserver implements ObserverInterface
         CustomerSession $customerSession
     ) {
         $this->_customerVat = $customerVat;
+        $this->_dateFactory = $dateFactory;
+        $this->_customerFactory = $customerFactory;
         $this->_customerAddress = $customerAddress;
         $this->_coreRegistry = $coreRegistry;
         $this->_groupManagement = $groupManagement;
@@ -123,7 +141,14 @@ class AfterAddressSaveObserver implements ObserverInterface
         /** @var $customerAddress Address */
         $customerAddress = $observer->getCustomerAddress();
         $customer = $customerAddress->getCustomer();
-
+        
+        if($customer->getId()) {
+            $currentTimestamp = $this->_dateFactory->create()->gmtDate();
+            $customerModel = $this->_customerFactory->create()->load($customer->getId());
+            $customerModel->setUpdatedAt($currentTimestamp);
+            $customerModel->save();
+        }
+        
         if (!$this->_customerAddress->isVatValidationEnabled($customer->getStore())
             || $this->_coreRegistry->registry(self::VIV_PROCESSED_FLAG)
             || !$this->_canProcessAddress($customerAddress)
@@ -173,6 +198,14 @@ class AfterAddressSaveObserver implements ObserverInterface
                     }
                 }
             }
+            
+            /* $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $customerData=$objectManager->create('Magento\Customer\Model\Customer')->load($address->getParentId());
+            $date = $objectManager->create('Magento\Framework\Stdlib\DateTime\DateTimeFactory')->create()->gmtDate();
+            $customerData->setUpdatedAt($date);
+            $customerData->save(); */
+            
+            
         } catch (\Exception $e) {
             $this->_coreRegistry->register(self::VIV_PROCESSED_FLAG, false, true);
         }
