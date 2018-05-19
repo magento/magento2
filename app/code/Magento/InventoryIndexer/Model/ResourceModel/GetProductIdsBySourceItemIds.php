@@ -47,14 +47,14 @@ class GetProductIdsBySourceItemIds
      * @param MetadataPool $metadataPool
      * @param string $tableNameSourceItem
      * @param string $sourceItemIdFieldName
-     * @param $productInterfaceClassName
+     * @param string $productInterfaceClassName
      */
     public function __construct(
         ResourceConnection $resource,
         MetadataPool $metadataPool,
-        $tableNameSourceItem,
-        $sourceItemIdFieldName,
-        $productInterfaceClassName
+        string $tableNameSourceItem,
+        string $sourceItemIdFieldName,
+        string $productInterfaceClassName
     ) {
         $this->resource = $resource;
         $this->metadataPool = $metadataPool;

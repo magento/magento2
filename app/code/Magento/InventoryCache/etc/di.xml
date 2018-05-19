@@ -18,4 +18,9 @@
             <argument name="productInterfaceClassName" xsi:type="string">Magento\Catalog\Api\Data\ProductInterface</argument>
         </arguments>
     </type>
+    <type name="Magento\InventoryCache\Model\FlushCacheByProductIds">
+        <arguments>
+            <argument name="productCacheTag" xsi:type="const">Magento\Catalog\Model\Product::CACHE_TAG</argument>
+        </arguments>
+    </type>
 </config>

@@ -59,8 +59,8 @@ class GetProductIdsByStockIds
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param DefaultStockProviderInterface $defaultStockProvider
      * @param IndexStructure $indexStructure
-     * @param $productSkuColumn
-     * @param $productInterfaceClassName
+     * @param string $productSkuColumn
+     * @param string $productInterfaceClassName
      */
     public function __construct(
         ResourceConnection $resource,
@@ -68,8 +68,8 @@ class GetProductIdsByStockIds
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         DefaultStockProviderInterface $defaultStockProvider,
         IndexStructure $indexStructure,
-        $productSkuColumn,
-        $productInterfaceClassName
+        string $productSkuColumn,
+        string $productInterfaceClassName
     ) {
         $this->resource = $resource;
         $this->metadataPool = $metadataPool;
