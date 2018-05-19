@@ -32,9 +32,7 @@ define([
             data = {},
             parameters = {},
             root = {},
-            len = 0,
-            key = '',
-            i = 0;
+            key = '';
 
         /* eslint-disable */
         /**
