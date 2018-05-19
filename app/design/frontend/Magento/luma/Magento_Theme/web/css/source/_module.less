@@ -264,6 +264,7 @@
         display: block;
         padding: @indent__s;
         text-align: center;
+        box-sizing: border-box;
     }
 
     .page-header,
@@ -416,6 +417,12 @@
                 }
             }
         }
+    }
+    .page-footer,
+    .copyright {
+        bottom: 0;
+        position: absolute;
+        width: 100%;
     }
 }
 
