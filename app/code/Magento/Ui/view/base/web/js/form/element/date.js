@@ -95,7 +95,7 @@ define([
             timezoneFormat: 'YYYY-MM-DD HH:mm',
 
             listens: {
-                'value': 'onValueChange',
+                //'value': 'onValueChange',
                 'shiftedValue': 'onShiftedValueChange'
             },
 
