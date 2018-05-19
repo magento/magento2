@@ -336,11 +336,28 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      */
     public function getTracksCollection()
     {
-        if ($this->tracksCollection === null) {
-            $this->tracksCollection = $this->_trackCollectionFactory->create()->setShipmentFilter($this->getId());
+        /* if (!$this->hasData(ShipmentInterface::TRACKS)) {
+            if ($this->tracksCollection === null) {
+                $this->tracksCollection = $this->_trackCollectionFactory->create()->setShipmentFilter($this->getId());
+            }
+        }
+        else{
+            $this->tracksCollection = $this->getTracks();
         }
 
-        return $this->tracksCollection;
+        return $this->tracksCollection; */
+        
+        if (!$this->hasData(ShipmentInterface::TRACKS)) {
+            $this->setTracks($this->_trackCollectionFactory->create()->setShipmentFilter($this->getId()));
+            
+            if ($this->getId()) {
+                foreach ($this->getTracks() as $track) {
+                    $track->setShipment($this);
+                }
+            }
+        }
+        
+        return $this->getTracks();
     }
 
     /**
