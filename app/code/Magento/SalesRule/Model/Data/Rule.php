@@ -188,7 +188,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * Set whether the coupon is active
      *
      * @param bool $isActive
-     * @return bool
+     * @return $this
      */
     public function setIsActive($isActive)
     {

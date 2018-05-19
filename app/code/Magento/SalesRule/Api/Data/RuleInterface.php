@@ -173,7 +173,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set whether the coupon is active
      *
      * @param bool $isActive
-     * @return bool
+     * @return $this
      */
     public function setIsActive($isActive);
 
