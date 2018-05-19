@@ -85,6 +85,9 @@ class DeployStaticFile
     {
         $params['publish'] = true;
         $asset = $this->assetRepo->createAsset($this->resolveFile($fileName), $params);
+        if (isset($params['replace'])) {
+            $this->deleteFile($asset->getPath());
+        }
 
         $this->assetPublisher->publish($asset);
 

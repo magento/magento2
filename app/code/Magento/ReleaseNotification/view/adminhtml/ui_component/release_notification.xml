@@ -43,7 +43,7 @@
             <state>true</state>
             <options>
                 <option name="modalClass" xsi:type="string">release-notification-modal</option>
-                <option name="title" xsi:type="string" translate="true">What's new with Magento 2.2.2</option>
+                <option name="title" xsi:type="string" translate="true">What&#8217;s new with Magento 2.2.4</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
@@ -60,26 +60,21 @@
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
-                        <p>Magento 2.2.2 offers advanced new features, including:</p>
+                        <p>Magento 2.2.4 provides powerful new tools to help reduce cart abandonment and simplify store operations:</p>
                         <br />
-                        <div class="analytics-highlight">
-                        <h3>Advanced Reporting</h3>
-                        <p>Gain valuable insights through a dynamic suite of product, order, and customer reports,
-                        powered by Magento Business Intelligence.</p>
+                        <div class="trusted-payments-highlight">
+                        <h3>Trusted Payment Options</h3>
+                        <p>Online or on the go, your shoppers can easily purchase in a familiar, trusted way with Amazon Pay.</p>
                         </div>
-                        <div class="instant-purchase-highlight">
-                        <h3>Instant Purchase</h3>
-                        <p>Simplify ordering and boost conversion rates by allowing your customers to use stored
-                        payment and shipping information to skip tedious checkout steps.</p>
+                        <div class="flexible-payments-highlight">
+                        <h3>Flexible Payment Terms</h3>
+                        <p>Increase sales by providing shoppers with the flexibility to pay now, later, or in installments using Klarna&#8217;s integrated payment option.</p>
                         </div>
-                        <div class="email-marketing-highlight">
-                        <h3>Email Marketing Automation</h3>
-                        <p>Send smarter, faster email campaigns with marketing automation from dotmailer, powered by
-                        your Magento store's live data.</p>
+                        <div class="tax-automation-highlight">
+                        <h3>Sales and Use Tax Automation</h3>
+                        <p>Merchants can now automatically perform instant and accurate sales tax calculations on shopping cart items with Vertex Cloud.</p>
                         </div>
-                        <p>Release notes and additional details can be found at
-                        <a href="http://devdocs.magento.com/" target="_blank">Magento DevDocs</a>.
-                        </p>]]>
+                        <p>To learn more, see the <a href="http://devdocs.magento.com/guides/v2.2/release-notes/bk-release-notes.html" target="_blank">Release Notes</a> and the <a href="http://docs.magento.com/m2/ce/user_guide/getting-started.html" target="_blank">Magento User Guide</a>.</p>]]>
                         </item>
                     </item>
                 </argument>
@@ -100,7 +95,7 @@
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -114,12 +109,12 @@
             </container>
         </fieldset>
     </modal>
-    <modal name="analytics_modal" component="Magento_ReleaseNotification/js/modal/component">
+    <modal name="trusted_payments_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <options>
-                <option name="modalClass" xsi:type="string">analytics-subscription-modal</option>
-                <option name="title" xsi:type="string" translate="true">Advanced Reporting</option>
+                <option name="modalClass" xsi:type="string">trusted-payments-modal</option>
+                <option name="title" xsi:type="string" translate="true">Trusted Payment Options</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
@@ -135,14 +130,13 @@
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
-                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>Advanced Reporting
-                        provides you with a dynamic suite of reports with rich insights about the health of your
-                        business.</p><br /><p>As part of the Advanced Reporting service, we may also use your customer
-                        data for such purposes as benchmarking, improving our products and services, and providing you
-                        with new and improved analytics.</p><br /><p>By using Magento 2.2.2, you agree to the Advanced
-                        Reporting <a href="https://magento.com/legal/terms/privacy" target="_blank">Privacy Policy</a>
-                        and <a href="https://magento.com/legal/terms/cloud-terms" target="_blank">Terms
-                        of Service</a>. You may opt out at any time from the Stores Configuration page.</p>]]>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>With <a href="http://docs.magento.com/m2/ce/user_guide/payment/amazon-pay.html" target="_blank">Amazon Pay</a>, we make it simple for the hundreds of millions of Amazon customers worldwide to easily log in and purchase from your store using information already stored their Amazon account. With easy setup in Magento 2.2.4, Amazon Pay provides your customers with a trusted and familiar checkout experience. In just a few taps, they can complete a transaction without ever leaving your site.</p>
+                        <ul>
+                        <li><span>Your customers use one familiar login to identify themselves and transact anywhere Amazon Pay is offered.</span></li>
+                        <li><span>Checkout experience is covered by the Amazon A-to-z Guarantee at no additional cost.</span></li>
+                        <li><span>Built on years of Amazon eCommerce innovation, and trusted by merchants and buyers alike.</span></li>
+                        <li><span>Available across platforms and devices, in the home and on the go.</span></li>
+                        </ul>]]>
                         </item>
                     </item>
                 </argument>
@@ -159,7 +153,7 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
@@ -180,11 +174,11 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -198,12 +192,12 @@
             </container>
         </fieldset>
     </modal>
-    <modal name="instant_purchase_modal" component="Magento_ReleaseNotification/js/modal/component">
+    <modal name="flexible_payments_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <options>
-                <option name="modalClass" xsi:type="string">instant-purchase-modal</option>
-                <option name="title" xsi:type="string" translate="true">Instant Purchase</option>
+                <option name="modalClass" xsi:type="string">flexible-payments-modal</option>
+                <option name="title" xsi:type="string" translate="true">Flexible Payment Terms</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
@@ -220,19 +214,13 @@
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
-                        <p>Now you can deliver an Amazon-like experience with a new, streamlined checkout option.
-                        Logged-in customers can use previously-stored payment credentials and shipping information
-                        to skip steps, making the process faster and easier, especially for mobile shoppers. Key
-                        features include:
-                        </p>
+                        <p>With <a href="http://docs.magento.com/m2/ce/user_guide/payment/klarna.html" target="_blank">Klarna</a>, reduce purchase stress and improve your shopping experience with several retail finance and direct-payment options that are easily integrated into your existing buying journey. Shoppers can choose to pay now by online payment or direct debit, pay later by invoice, or pay in installments.</p>
                         <ul>
-                        <li><span>Configurable “Instant Purchase” button to place orders.</span></li>
-                        <li><span>Support for all payment solutions using Braintree Vault, including Braintree Credit
-                        Card, Braintree PayPal, and PayPal Payflow Pro.</span></li>
-                        <li><span>Shipping to the customer’s default address using the lowest cost, available shipping
-                        method.</span></li>
-                        <li><span>Ability for developers to customize the Instant Purchase business logic to meet
-                        merchant needs.</span></li>
+                        <li><span>Customers never leave your site, and enjoy a smoother shopping experience.</span></li>
+                        <li><span>Easy application process with the ability to pay over time increases average order value and conversion rates.</span></li>
+                        <li><span>Assumes all credit and fraud risk, and ensures you are paid for ordered goods.</span></li>
+                        <li><span>Ready for all devices, and enables shoppers to use their Klarna account at any Klarna merchant with just a few clicks.</span></li>
+                        <li><span>Fast and easy setup, right from the Magento Admin.</span></li>
                         </ul>]]>
                         </item>
                     </item>
@@ -250,11 +238,11 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -271,11 +259,11 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = tax_automation_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -289,12 +277,12 @@
             </container>
         </fieldset>
     </modal>
-    <modal name="email_marketing_modal" component="Magento_ReleaseNotification/js/modal/component">
+    <modal name="tax_automation_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <options>
-                <option name="modalClass" xsi:type="string">email-marketing-modal</option>
-                <option name="title" xsi:type="string" translate="true">Email Marketing Automation</option>
+                <option name="modalClass" xsi:type="string">tax-automation-modal</option>
+                <option name="title" xsi:type="string" translate="true">Sales and Use Tax Automation</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
@@ -311,17 +299,13 @@
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
-                        <p>Unlock an unparalleled level of insight and control of your eCommerce marketing with
-                        dotmailer Email Marketing Automation. Included with Magento 2.2.2 for easy set-up, dotmailer
-                        ensures every customer’s journey is captured, segmented, and personalized, enabling you to
-                        deliver customer-centric campaigns that beat your results over and over again. Benefits include:
-                        </p>
+                        <p><a href="http://docs.magento.com/m2/ce/user_guide/tax/vertex.html" target="_blank">Vertex Cloud</a> combines sophisticated software with an exceptional team of tax experts to help Magento merchants simplify the sales tax process, and comply with ever-changing tax laws. Merchants can easily access and configure Vertex Cloud from the Magento Admin to meet complex tax challenges.</p>
                         <ul>
-                        <li><span>No obligation 14-day trial.</span></li>
-                        <li><span>Automation campaigns using your live Magento store data that drive revenue,
-                        including abandoned cart, abandoned browse, product replenishment, and many more.</span></li>
-                        <li><span>Built-in solution for transactional emails.</span></li>
-                        <li><span>Telephone support and advice from marketing experts included.</span></li>
+                        <li><span>Seamless integration with award-winning support for simple-to-complex tax needs.</span></li>
+                        <li><span>Automatically comply with the latest tax rules for each product and every jurisdiction.</span></li>
+                        <li><span>Perform tax calculations and generate signature-ready PDF returns in one solution.</span></li>
+                        <li><span>No penalty to merchants for tax estimates from abandoned carts.</span></li>
+                        <li><span>Flexible deployment options fit the needs of your organization in the cloud, or on premises.</span></li>
                         </ul>]]>
                         </item>
                     </item>
@@ -339,11 +323,11 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = tax_automation_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -360,7 +344,7 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = tax_automation_modal</item>
                                     <item name="actionName" xsi:type="string">closeReleaseNotes</item>
                                 </item>
                             </item>
