@@ -106,7 +106,9 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
         if ($storeId > \Magento\Store\Model\Store::DEFAULT_STORE_ID && $title === null) {
             return true;
         }
-        if ($this->isEmpty($title)) {
+
+        // checking whether title is null and also changed is_empty to is_null
+        if ($this->isNull($title)) {
             return false;
         }
 
@@ -167,5 +169,16 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
     protected function isNegative($value)
     {
         return intval($value) < 0;
+    }
+
+    /**
+     * check whether title is null
+     *
+     * @param $title
+     * @return bool
+     */
+    protected function isNull($title)
+    {
+        return is_null($title);
     }
 }
