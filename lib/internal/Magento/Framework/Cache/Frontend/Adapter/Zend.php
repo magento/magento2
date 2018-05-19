@@ -16,11 +16,27 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     protected $_frontend;
 
     /**
-     * @param \Zend_Cache_Core $frontend
+     * Factory that creates the \Zend_Cache_Cores
+     *
+     * @var \Closure
      */
-    public function __construct(\Zend_Cache_Core $frontend)
+    private $frontendFactory;
+
+    /**
+     * The pid that owns the $_frontend object
+     *
+     * @var int
+     */
+    private $pid;
+
+    /**
+     * @param \Closure $frontendFactory
+     */
+    public function __construct(\Closure $frontendFactory)
     {
-        $this->_frontend = $frontend;
+        $this->frontendFactory = $frontendFactory;
+        $this->_frontend = $frontendFactory();
+        $this->pid = getmypid();
     }
 
     /**
@@ -28,7 +44,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
      */
     public function test($identifier)
     {
-        return $this->_frontend->test($this->_unifyId($identifier));
+        return $this->getFrontEnd()->test($this->_unifyId($identifier));
     }
 
     /**
@@ -36,7 +52,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
      */
     public function load($identifier)
     {
-        return $this->_frontend->load($this->_unifyId($identifier));
+        return $this->getFrontEnd()->load($this->_unifyId($identifier));
     }
 
     /**
@@ -44,7 +60,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
-        return $this->_frontend->save($data, $this->_unifyId($identifier), $this->_unifyIds($tags), $lifeTime);
+        return $this->getFrontEnd()->save($data, $this->_unifyId($identifier), $this->_unifyIds($tags), $lifeTime);
     }
 
     /**
@@ -52,13 +68,14 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
      */
     public function remove($identifier)
     {
-        return $this->_frontend->remove($this->_unifyId($identifier));
+        return $this->getFrontEnd()->remove($this->_unifyId($identifier));
     }
 
     /**
      * {@inheritdoc}
      *
      * @throws \InvalidArgumentException Exception is thrown when non-supported cleaning mode is specified
+     * @throws \Zend_Cache_Exception
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
@@ -76,7 +93,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
                 "Magento cache frontend does not support the cleaning mode '{$mode}'."
             );
         }
-        return $this->_frontend->clean($mode, $this->_unifyIds($tags));
+        return $this->getFrontEnd()->clean($mode, $this->_unifyIds($tags));
     }
 
     /**
@@ -84,7 +101,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
      */
     public function getBackend()
     {
-        return $this->_frontend->getBackend();
+        return $this->getFrontEnd()->getBackend();
     }
 
     /**
@@ -92,7 +109,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
      */
     public function getLowLevelFrontend()
     {
-        return $this->_frontend;
+        return $this->getFrontEnd();
     }
 
     /**
@@ -118,5 +135,21 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
             $ids[$key] = $this->_unifyId($value);
         }
         return $ids;
+    }
+
+    /**
+     * Get frontEnd cache adapter for current pid
+     *
+     * @return \Zend_Cache_Core
+     */
+    private function getFrontEnd()
+    {
+        if (getmypid() === $this->pid) {
+            return $this->_frontend;
+        }
+        $frontendFactory = $this->frontendFactory;
+        $this->_frontend = $frontendFactory();
+        $this->pid = getmypid();
+        return $this->_frontend;
     }
 }
