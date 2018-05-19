@@ -93,6 +93,15 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * @deprecated This method is not intended for usage
+     * @see updatedCheckQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null, $productType = null)
+     */
+    public function checkQuoteItemQty(StockItemInterface $stockItem, $qty, $summaryQty, $origQty = 0)
+    {
+        $this->updatedCheckQuoteItemQty($stockItem, $qty, $summaryQty, $origQty = 0);
+    }
+
+    /**
      * @param StockItemInterface $stockItem
      * @param int|float $qty
      * @param int|float $summaryQty
@@ -102,7 +111,7 @@ class StockStateProvider implements StockStateProviderInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function checkQuoteItemQty(StockItemInterface $stockItem, $qty, $summaryQty, $origQty = 0)
+    public function updatedCheckQuoteItemQty(StockItemInterface $stockItem, $qty, $summaryQty, $origQty = 0, $productType = null)
     {
         $result = $this->objectFactory->create();
         $result->setHasError(false);
@@ -125,7 +134,7 @@ class StockStateProvider implements StockStateProviderInterface
             $result->setOrigQty($origQty);
         }
 
-        if ($stockItem->getMinSaleQty() && $qty < $stockItem->getMinSaleQty()) {
+        if ($stockItem->getMinSaleQty() && $qty < $stockItem->getMinSaleQty() && $productType = null) {
             $result->setHasError(true)
                 ->setMessage(__('The fewest you may purchase is %1.', $stockItem->getMinSaleQty() * 1))
                 ->setErrorCode('qty_min')

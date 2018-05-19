@@ -141,19 +141,31 @@ class StockState implements StockStateInterface
     }
 
     /**
+     * @deprecated This method is not intended for usage
+     * @see updatedCheckQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null, $productType = null)
+     */
+    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null)
+    {
+        $this->updatedCheckQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null);
+    }
+
+    /**
      * @param int $productId
      * @param float $itemQty
      * @param float $qtyToCheck
      * @param float $origQty
      * @param int $scopeId
+     * @param string $productType
      * @return int
      */
-    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null)
+    public function updatedCheckQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null, $productType = null)
     {
         // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         // }
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
-        return $this->stockStateProvider->checkQuoteItemQty($stockItem, $itemQty, $qtyToCheck, $origQty);
+        return $this->stockStateProvider->checkQuoteItemQty($stockItem, $itemQty, $qtyToCheck, $origQty, $productType);
     }
+
+
 }
