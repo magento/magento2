@@ -26,7 +26,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @var string
      */
-    protected $_template = 'categories.phtml';
+    protected $_template = 'Magento_UrlRewrite::categories.phtml';
 
     /**
      * Adminhtml data

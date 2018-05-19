@@ -15,7 +15,7 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     /**
      * @var string
      */
-    protected $_template = 'billing/agreement/view/tab/info.phtml';
+    protected $_template = 'Magento_Paypal::billing/agreement/view/tab/info.phtml';
 
     /**
      * Core registry

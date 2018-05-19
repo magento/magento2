@@ -14,5 +14,5 @@ class Details extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'order/details.phtml';
+    protected $_template = 'Magento_Sales::order/details.phtml';
 }

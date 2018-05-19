@@ -15,7 +15,7 @@ class Stock extends \Magento\ProductAlert\Block\Email\AbstractEmail
     /**
      * @var string
      */
-    protected $_template = 'email/stock.phtml';
+    protected $_template = 'Magento_ProductAlert::email/stock.phtml';
 
     /**
      * Retrieve unsubscribe url for product

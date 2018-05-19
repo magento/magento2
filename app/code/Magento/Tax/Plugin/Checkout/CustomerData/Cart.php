@@ -66,7 +66,7 @@ class Cart
             foreach ($result['items'] as $key => $itemAsArray) {
                 if ($item = $this->findItemById($itemAsArray['item_id'], $items)) {
                     $this->itemPriceRenderer->setItem($item);
-                    $this->itemPriceRenderer->setTemplate('checkout/cart/item/price/sidebar.phtml');
+                    $this->itemPriceRenderer->setTemplate('Magento_Tax::checkout/cart/item/price/sidebar.phtml');
                     $result['items'][$key]['product_price']=$this->itemPriceRenderer->toHtml();
                 }
             }
