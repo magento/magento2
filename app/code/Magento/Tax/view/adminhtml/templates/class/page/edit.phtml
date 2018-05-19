@@ -18,3 +18,10 @@ require(['jquery', "mage/mage"], function(jQuery){
 
 });
 </script>
+<script type="text/x-magento-init">
+    {
+        "#<?= /* @escapeNotVerified */ $block->getRenameFormId() ?>": {
+            "Magento_Tax/js/page/validate": {}
+        }
+    }
+</script>
