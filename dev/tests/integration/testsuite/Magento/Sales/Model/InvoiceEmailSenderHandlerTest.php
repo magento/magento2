@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Model;
+
+use Magento\Config\Model\Config;
+use Magento\Store\Model\ScopeInterface;
 
 class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -53,25 +57,23 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation   enabled
      * @magentoDataFixture   Magento/Sales/_files/invoice_list_different_stores.php
      * @magentoConfigFixture default/sales_email/general/async_sending 1
-     * @magentoConfigFixture current_store sales_email/invoice/enabled 1
      */
     public function testInvoiceEmailSenderExecute()
     {
         $expectedResult = 1;
 
-        /** @var \Magento\Store\Model\Store $store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Store\Model\Store::class);
-        $secondStoreId = $store->load('fixture_second_store')->getId();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
-        )->setValue(
-            'sales_email/invoice/enabled',
-            0,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $secondStoreId
-        );
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $objectManager->create(\Magento\Store\Model\Store::class);
+        $secondStoreCode = $store->load('fixture_second_store')->getCode();
+
+        /** @var Config $storeConfig */
+        $storeConfig = $objectManager->create(Config::class);
+        $storeConfig->setScope(ScopeInterface::SCOPE_STORES);
+        $storeConfig->setStore($secondStoreCode);
+        $storeConfig->setDataByPath('sales_email/invoice/enabled', 0);
+        $storeConfig->save();
 
         $beforeSendCollection = clone $this->entityCollection;
         $beforeSendCollection->addFieldToFilter('send_email', ['eq' => 1]);
