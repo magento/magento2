@@ -26,7 +26,8 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
         );
         /** @var \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender */
         $invoiceSender = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Sales\Model\Order\Email\Sender\InvoiceSender::class,
+            ->create(
+                \Magento\Sales\Model\Order\Email\Sender\InvoiceSender::class,
                 [
                     'identityContainer' => $invoiceIdentity,
                 ]
@@ -53,7 +54,7 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture   Magento/Sales/_files/invoice_list_different_stores.php
      * @magentoConfigFixture default/sales_email/general/async_sending 1
      * @magentoConfigFixture current_store sales_email/invoice/enabled 1
-     * @magentoConfigFixture default_store sales_email/invoice/enabled 0
+     * @magentoConfigFixture fixture_second_store sales_email/invoice/enabled 0
      */
     public function testInvoiceEmailSenderExecute()
     {
@@ -69,5 +70,6 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
         $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
 
         $this->assertEquals($expectedResult, count($this->entityCollection->getItems()));
+        die;
     }
 }

@@ -4,13 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Sales\Model\Order;
-
 require 'default_rollback.php';
+require __DIR__ . '/../../../Magento/Store/_files/second_store.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 /** @var \Magento\Catalog\Model\Product $product */
 
 $addressData = include __DIR__ . '/address_data.php';
+
+$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Store\Model\Store::class);
+$secondStoreId = $store->load('fixture_second_store')->getId();
 
 $orders = [
     [
@@ -20,7 +23,7 @@ $orders = [
         'grand_total'      => 120.00,
         'subtotal'         => 120.00,
         'base_grand_total' => 120.00,
-        'store_id'         => 1,
+        'store_id'         => 0,
         'website_id'       => 1,
     ],
     [
@@ -30,7 +33,7 @@ $orders = [
         'grand_total'      => 140.00,
         'base_grand_total' => 140.00,
         'subtotal'         => 140.00,
-        'store_id'         => 0,
+        'store_id'         => 1,
         'website_id'       => 0,
     ],
     [
@@ -40,7 +43,7 @@ $orders = [
         'grand_total'      => 140.00,
         'base_grand_total' => 140.00,
         'subtotal'         => 140.00,
-        'store_id'         => 1,
+        'store_id'         => $secondStoreId,
         'website_id'       => 1,
     ],
 ];
