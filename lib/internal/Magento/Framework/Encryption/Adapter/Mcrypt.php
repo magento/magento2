@@ -45,29 +45,19 @@ class Mcrypt implements EncryptionAdapterInterface
     ) {
         $this->cipher = $cipher;
         $this->mode = $mode;
-        // @codingStandardsIgnoreStart
+        // @codingStandardIgnoreLine
         $this->handle = @mcrypt_module_open($cipher, '', $mode, '');
-        // @codingStandardsIgnoreEnd
         try {
-            // @codingStandardsIgnoreStart
+            // @codingStandardIgnoreLine
             $maxKeySize = @mcrypt_enc_get_key_size($this->handle);
-            // @codingStandardsIgnoreEnd
             if (strlen($key) > $maxKeySize) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase('Key must not exceed %1 bytes.', [$maxKeySize])
                 );
             }
-            // @codingStandardsIgnoreStart
+            // @codingStandardIgnoreLine
             $initVectorSize = @mcrypt_enc_get_iv_size($this->handle);
-            // @codingStandardsIgnoreEnd
-            if (true === $initVector) {
-                /* Generate a random vector from human-readable characters */
-                $abc = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                $initVector = '';
-                for ($i = 0; $i < $initVectorSize; $i++) {
-                    $initVector .= $abc[rand(0, strlen($abc) - 1)];
-                }
-            } elseif (false === $initVector) {
+            if (null === $initVector) {
                 /* Set vector to zero bytes to not use it */
                 $initVector = str_repeat("\0", $initVectorSize);
             } elseif (!is_string($initVector) || strlen($initVector) != $initVectorSize) {
@@ -80,14 +70,12 @@ class Mcrypt implements EncryptionAdapterInterface
             }
             $this->_initVector = $initVector;
         } catch (\Exception $e) {
-            // @codingStandardsIgnoreStart
+            // @codingStandardIgnoreLine
             @mcrypt_module_close($this->handle);
-            // @codingStandardsIgnoreEnd
-            throw $e;
+            throw new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase($e->getMessage()));
         }
-        // @codingStandardsIgnoreStart
+        // @codingStandardIgnoreLine
         @mcrypt_generic_init($this->handle, $key, $initVector);
-        // @codingStandardsIgnoreEnd
     }
 
     /**
@@ -97,8 +85,6 @@ class Mcrypt implements EncryptionAdapterInterface
     {
         // @codingStandardsIgnoreStart
         @mcrypt_generic_deinit($this->handle);
-        // @codingStandardsIgnoreEnd
-        // @codingStandardsIgnoreStart
         @mcrypt_module_close($this->handle);
         // @codingStandardsIgnoreEnd
     }
@@ -158,9 +144,8 @@ class Mcrypt implements EncryptionAdapterInterface
         if (strlen($data) == 0) {
             return $data;
         }
-        // @codingStandardsIgnoreStart
+        // @codingStandardIgnoreLine
         $data = @mdecrypt_generic($this->handle, $data);
-        // @codingStandardsIgnoreEnd
         /*
          * Returned string can in fact be longer than the unencrypted string due to the padding of the data
          * @link http://www.php.net/manual/en/function.mdecrypt-generic.php
