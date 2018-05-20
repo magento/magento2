@@ -101,7 +101,8 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * Get is active
      * @return mixed|null
      */
-    public function getIsActive(){
+    public function getIsActive()
+    {
         return $this->_get(self::IS_ACTIVE);
     }
 
