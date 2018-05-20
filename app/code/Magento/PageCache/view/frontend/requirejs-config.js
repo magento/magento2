@@ -6,7 +6,8 @@
 var config = {
     map: {
         '*': {
-            pageCache:  'Magento_PageCache/js/page-cache'
+            pageCache:  'Magento_PageCache/js/page-cache',
+            prolongCookie: 'Magento_PageCache/js/prolong-cookie'
         }
     }
 };
