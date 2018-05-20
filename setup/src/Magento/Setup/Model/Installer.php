@@ -1205,7 +1205,7 @@ class Installer
             }
         }
 
-        $this->dbValidator->checkDatabaseConnection(
+        $this->dbValidator->checkDatabaseConnectionWithDriverOptions(
             $this->deploymentConfig->get(
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
                 '/' . ConfigOptionsListConstants::KEY_NAME

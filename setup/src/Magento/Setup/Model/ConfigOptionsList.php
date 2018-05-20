@@ -377,7 +377,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                     }
                 }
 
-                $this->dbValidator->checkDatabaseConnection(
+                $this->dbValidator->checkDatabaseConnectionWithDriverOptions(
                     $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME],
                     $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST],
                     $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER],
