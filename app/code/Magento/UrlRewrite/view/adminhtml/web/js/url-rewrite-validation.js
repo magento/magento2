@@ -6,9 +6,14 @@ define([
     'jquery',
     'mage/backend/form',
     'mage/backend/validation'
-], function($){
+], function ($) {
+    
+    'use strict';
+    
     return function (data, element) {
         $(element).form()
-            .validation({validationUrl: data.url});
+            .validation({
+            validationUrl: data.url
+        });
     };
 });
