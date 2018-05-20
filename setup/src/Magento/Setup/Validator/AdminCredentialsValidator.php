@@ -8,6 +8,7 @@ namespace Magento\Setup\Validator;
 use Magento\Framework\Config\ConfigOptionsListConstants as ConfigOption;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\Installer;
+use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
 /**
  * Admin user credentials validator
@@ -30,6 +31,11 @@ class AdminCredentialsValidator
     private $setupFactory;
 
     /**
+     * @var DriverOptions
+     */
+    private $driverOptions;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Setup\Model\AdminAccountFactory $adminAccountFactory
@@ -39,11 +45,13 @@ class AdminCredentialsValidator
     public function __construct(
         \Magento\Setup\Model\AdminAccountFactory $adminAccountFactory,
         \Magento\Setup\Module\ConnectionFactory $connectionFactory,
-        \Magento\Setup\Module\SetupFactory $setupFactory
+        \Magento\Setup\Module\SetupFactory $setupFactory,
+        DriverOptions $driverOptions
     ) {
         $this->connectionFactory = $connectionFactory;
         $this->adminAccountFactory = $adminAccountFactory;
         $this->setupFactory = $setupFactory;
+        $this->driverOptions = $driverOptions;
     }
 
     /**
@@ -55,18 +63,7 @@ class AdminCredentialsValidator
      */
     public function validate(array $data)
     {
-        $driverOptionKeys = [
-            ConfigOption::KEY_MYSQL_SSL_KEY => ConfigOption::INPUT_KEY_DB_SSL_KEY,
-            ConfigOption::KEY_MYSQL_SSL_CERT => ConfigOption::INPUT_KEY_DB_SSL_CERT,
-            ConfigOption::KEY_MYSQL_SSL_CA => ConfigOption::INPUT_KEY_DB_SSL_CA,
-            ConfigOption::KEY_MYSQL_SSL_VERIFY => ConfigOption::INPUT_KEY_DB_SSL_VERIFY
-        ];
-        $driverOptions = [];
-        foreach ($driverOptionKeys as $configKey => $driverOptionKey) {
-            if ($data[$driverOptionKey] === false || !empty($data[$driverOptionKey])) {
-                $driverOptions[$configKey] = $data[$driverOptionKey];
-            }
-        }
+        $driverOptions = $this->driverOptions->getDriverOptions($data);
 
         $dbConnection = $this->connectionFactory->create([
             ConfigOption::KEY_NAME => $data[ConfigOption::INPUT_KEY_DB_NAME],

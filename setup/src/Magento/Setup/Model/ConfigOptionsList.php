@@ -12,6 +12,7 @@ use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 use Magento\Setup\Validator\DbValidator;
 
 /**
@@ -48,18 +49,28 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     ];
 
     /**
+     * @var DriverOptions
+     */
+    private $driverOptions;
+
+    /**
      * Constructor
      *
      * @param ConfigGenerator $configGenerator
      * @param DbValidator $dbValidator
      */
-    public function __construct(ConfigGenerator $configGenerator, DbValidator $dbValidator)
+    public function __construct(
+        ConfigGenerator $configGenerator,
+        DbValidator $dbValidator,
+        DriverOptions $driverOptions
+    )
     {
         $this->configGenerator = $configGenerator;
         $this->dbValidator = $dbValidator;
         foreach ($this->configOptionsListClasses as $className) {
             $this->configOptionsCollection[] = \Magento\Framework\App\ObjectManager::getInstance()->get($className);
         }
+        $this->driverOptions = $driverOptions;
     }
 
     /**
@@ -364,18 +375,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         ) {
             try {
                 $options = $this->getDbSettings($options, $deploymentConfig);
-                $driverOptionKeys = [
-                    ConfigOptionsListConstants::KEY_MYSQL_SSL_KEY => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_KEY,
-                    ConfigOptionsListConstants::KEY_MYSQL_SSL_CERT => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CERT,
-                    ConfigOptionsListConstants::KEY_MYSQL_SSL_CA => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CA,
-                    ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY => ConfigOptionsListConstants::INPUT_KEY_DB_SSL_VERIFY
-                ];
-                $driverOptions = [];
-                foreach ($driverOptionKeys as $configKey => $driverOptionKey) {
-                    if ($options[$driverOptionKey] === false || !empty($options[$driverOptionKey])) {
-                        $driverOptions[$configKey] = $options[$driverOptionKey];
-                    }
-                }
+                $driverOptions = $this->driverOptions->getDriverOptions($options);
 
                 $this->dbValidator->checkDatabaseConnectionWithDriverOptions(
                     $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME],
