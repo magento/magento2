@@ -9,8 +9,7 @@ define([
 ], function ($) {
     'use strict';
     return function (data, element) {
-        $(element).form()
-            .validation({
+        $(element).form().validation({
             validationUrl: data.url
         });
     };
