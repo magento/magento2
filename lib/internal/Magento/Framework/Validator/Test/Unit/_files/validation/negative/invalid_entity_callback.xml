@@ -12,7 +12,7 @@
                 <entity_constraints>
                     <constraint alias="eav_validator" class="Magento\Catalog\Model\Validator\Eav">
                         <!-- attribute class is required for callback element -->
-                        <callback method="someMethod" />
+                        <callback method="someMethod"/>
                     </constraint>
                 </entity_constraints>
             </rule>

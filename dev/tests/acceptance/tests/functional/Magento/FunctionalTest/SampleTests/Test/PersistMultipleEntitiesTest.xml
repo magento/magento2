@@ -26,7 +26,7 @@
             <deleteData createDataKey="simpleproduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
         </after>
-        <amOnPage stepKey="s11" url="/$$simplecategory.name$$.html" />
+        <amOnPage stepKey="s11" url="/$$simplecategory.name$$.html"/>
         <waitForPageLoad stepKey="s33"/>
         <see stepKey="s35" selector="{{StorefrontCategoryMainSection.productCount}}" userInput="2"/>
     </test>

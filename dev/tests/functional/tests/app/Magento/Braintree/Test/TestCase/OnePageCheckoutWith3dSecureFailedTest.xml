@@ -22,7 +22,7 @@
             <data name="expectedErrorMessage" xsi:type="string">Please try again with another form of payment.</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage"/>
         </variation>
     </testCase>
 </config>

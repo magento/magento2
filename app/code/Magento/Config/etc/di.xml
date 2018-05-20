@@ -6,10 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Config\Model\Config\Structure\SearchInterface" type="Magento\Config\Model\Config\Structure" />
-    <preference for="Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Config\Model\Config\Backend\File\RequestData" />
-    <preference for="Magento\Framework\App\Config\ConfigResource\ConfigInterface" type="Magento\Config\Model\ResourceModel\Config" />
-    <preference for="Magento\Framework\App\Config\CommentParserInterface" type="Magento\Config\Model\Config\Parser\Comment" />
+    <preference for="Magento\Config\Model\Config\Structure\SearchInterface" type="Magento\Config\Model\Config\Structure"/>
+    <preference for="Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Config\Model\Config\Backend\File\RequestData"/>
+    <preference for="Magento\Framework\App\Config\ConfigResource\ConfigInterface" type="Magento\Config\Model\ResourceModel\Config"/>
+    <preference for="Magento\Framework\App\Config\CommentParserInterface" type="Magento\Config\Model\Config\Parser\Comment"/>
     <virtualType name="Magento\Framework\View\TemplateEngine\Xhtml\ConfigCompiler" type="Magento\Framework\View\TemplateEngine\Xhtml\Compiler" shared="false">
         <arguments>
             <argument name="compilerText" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Text</argument>
@@ -31,8 +31,8 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
-    <type name="Magento\Config\Model\Config\Structure\Element\Iterator\Group" shared="false" />
-    <type name="Magento\Config\Model\Config\Structure\Element\Group\Proxy" shared="false" />
+    <type name="Magento\Config\Model\Config\Structure\Element\Iterator\Group" shared="false"/>
+    <type name="Magento\Config\Model\Config\Structure\Element\Group\Proxy" shared="false"/>
 
     <type name="Magento\Config\Model\Config\Structure\Element\Dependency\Mapper" shared="false">
         <arguments>

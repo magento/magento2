@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="currency_display_options_forming">
-        <observer name="magento_currencysymbol_currency_display_options" instance="Magento\CurrencySymbol\Observer\CurrencyDisplayOptions" />
+        <observer name="magento_currencysymbol_currency_display_options" instance="Magento\CurrencySymbol\Observer\CurrencyDisplayOptions"/>
     </event>
 </config>

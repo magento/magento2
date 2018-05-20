@@ -25,7 +25,7 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Eav\Attribute">
-        <plugin name="invalidate_caches_after_attribute_save" type="Magento\Swatches\Plugin\Catalog\CacheInvalidate" />
+        <plugin name="invalidate_caches_after_attribute_save" type="Magento\Swatches\Plugin\Catalog\CacheInvalidate"/>
     </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate">
         <arguments>

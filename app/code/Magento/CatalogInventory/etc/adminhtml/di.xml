@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\CatalogInventory\Model\Stock\Item" type="Magento\CatalogInventory\Model\Adminhtml\Stock\Item" />
+    <preference for="Magento\CatalogInventory\Model\Stock\Item" type="Magento\CatalogInventory\Model\Adminhtml\Stock\Item"/>
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
         <arguments>
             <argument name="constructors" xsi:type="array">

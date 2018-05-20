@@ -22,9 +22,9 @@
             <field name="tax_postcode" xsi:type="string">*</field>
             <field name="code" xsi:type="string">US-CA-*-Rate 1</field>
             <field name="rate" xsi:type="string">8.2500</field>
-            <field name="zip_is_range" xsi:type="string" />
-            <field name="zip_from" xsi:type="string" />
-            <field name="zip_to" xsi:type="string" />
+            <field name="zip_is_range" xsi:type="string"/>
+            <field name="zip_from" xsi:type="string"/>
+            <field name="zip_to" xsi:type="string"/>
             <field name="id" xsi:type="string">1</field>
             <field name="mtf_dataset_name" xsi:type="string">US-CA-*-Rate 1</field>
         </dataset>
@@ -44,9 +44,9 @@
             <field name="tax_postcode" xsi:type="string">*</field>
             <field name="code" xsi:type="string">US-NY-*-Rate 1</field>
             <field name="rate" xsi:type="string">8.3750</field>
-            <field name="zip_is_range" xsi:type="string" />
-            <field name="zip_from" xsi:type="string" />
-            <field name="zip_to" xsi:type="string" />
+            <field name="zip_is_range" xsi:type="string"/>
+            <field name="zip_from" xsi:type="string"/>
+            <field name="zip_to" xsi:type="string"/>
             <field name="id" xsi:type="string">2</field>
             <field name="mtf_dataset_name" xsi:type="string">US-NY-*-Rate 1</field>
         </dataset>

@@ -13,13 +13,13 @@
     </head>
     <update handle="editor"/>
     <body>
-        <referenceContainer name="left" htmlTag="div" />
+        <referenceContainer name="left" htmlTag="div"/>
         <referenceContainer name="left">
             <block class="Magento\Catalog\Block\Adminhtml\Category\Tree" name="category.tree" template="Magento_Catalog::catalog/category/tree.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
             <uiComponent name="category_form"/>
-            <block class="Magento\Catalog\Block\Adminhtml\Category\Edit" name="category.edit" template="Magento_Catalog::catalog/category/edit.phtml" />
+            <block class="Magento\Catalog\Block\Adminhtml\Category\Edit" name="category.edit" template="Magento_Catalog::catalog/category/edit.phtml"/>
         </referenceContainer>
         <referenceContainer name="js">
             <block class="Magento\Framework\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js"/>

@@ -9,9 +9,9 @@
     <testCase name="Magento\Tax\Test\TestCase\DeleteTaxRateEntityTest" summary="Delete Tax Rate" ticketId="MAGETWO-23295">
         <variation name="DeleteTaxRateEntityTestVariation1">
             <data name="taxRate/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessDeleteMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateNotInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateNotInTaxRule" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessDeleteMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateNotInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateNotInTaxRule"/>
         </variation>
     </testCase>
 </config>

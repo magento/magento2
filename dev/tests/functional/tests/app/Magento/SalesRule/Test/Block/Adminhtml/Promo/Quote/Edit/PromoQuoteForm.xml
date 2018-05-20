@@ -11,8 +11,8 @@
         <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::input[@name='name']]</selector>
         <strategy>xpath</strategy>
         <fields>
-            <name />
-            <description />
+            <name/>
+            <description/>
             <is_active>
                 <input>switcher</input>
             </is_active>
@@ -27,12 +27,12 @@
             <coupon_type>
                 <input>select</input>
             </coupon_type>
-            <coupon_code />
-            <uses_per_coupon />
-            <uses_per_customer />
-            <from_date />
-            <to_date />
-            <sort_order />
+            <coupon_code/>
+            <uses_per_coupon/>
+            <uses_per_customer/>
+            <from_date/>
+            <to_date/>
+            <sort_order/>
             <is_rss>
                 <input>switcher</input>
             </is_rss>
@@ -57,9 +57,9 @@
             <simple_action>
                 <input>select</input>
             </simple_action>
-            <discount_amount />
-            <discount_qty />
-            <discount_step />
+            <discount_amount/>
+            <discount_qty/>
+            <discount_step/>
             <apply_to_shipping>
                 <input>switcher</input>
             </apply_to_shipping>

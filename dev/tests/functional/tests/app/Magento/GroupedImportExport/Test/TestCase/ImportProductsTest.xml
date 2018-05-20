@@ -9,7 +9,7 @@
     <testCase name="Magento\CatalogImportExport\Test\TestCase\ImportProductsTest" summary="Import grouped products">
         <variation name="ImportProductVariation3" ticketId="MAGETWO-47720" summary="Import Grouped Product with Replace Behavior">
             <data name="import/data/import_file/entities/2" xsi:type="string">groupedProduct::withSimpleProduct</data>
-            <constraint name="Magento\GroupedImportExport\Test\Constraint\AssertImportedGroupedProducts" />
+            <constraint name="Magento\GroupedImportExport\Test\Constraint\AssertImportedGroupedProducts"/>
         </variation>
     </testCase>
 </config>

@@ -113,7 +113,7 @@
             <field name="weight" xsi:type="string">1</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">560</item>
-                <item name="dataset" xsi:type="string" />
+                <item name="dataset" xsi:type="string"/>
             </field>
             <field name="category_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_subcategory</item>
@@ -525,7 +525,7 @@
             </field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
-                <item name="dataset" xsi:type="string" />
+                <item name="dataset" xsi:type="string"/>
             </field>
             <field name="category_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_subcategory</item>
@@ -550,7 +550,7 @@
             </field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
-                <item name="dataset" xsi:type="string" />
+                <item name="dataset" xsi:type="string"/>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">100</item>
@@ -575,7 +575,7 @@
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
-                <item name="dataset" xsi:type="string" />
+                <item name="dataset" xsi:type="string"/>
             </field>
             <field name="product_has_weight" xsi:type="string">This item has weight</field>
             <field name="weight" xsi:type="string">100</field>
@@ -631,7 +631,7 @@
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">50</item>
-                <item name="dataset" xsi:type="string" />
+                <item name="dataset" xsi:type="string"/>
             </field>
             <field name="product_has_weight" xsi:type="string">This item has weight</field>
             <field name="weight" xsi:type="string">50</field>
@@ -660,7 +660,7 @@
             <field name="weight" xsi:type="string">1</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
-                <item name="dataset" xsi:type="string" />
+                <item name="dataset" xsi:type="string"/>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">86</item>
@@ -688,7 +688,7 @@
             <field name="weight" xsi:type="string">1</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
-                <item name="dataset" xsi:type="string" />
+                <item name="dataset" xsi:type="string"/>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">63</item>
@@ -1341,7 +1341,7 @@
             </field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
-                <item name="dataset" xsi:type="string" />
+                <item name="dataset" xsi:type="string"/>
             </field>
             <field name="category_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_anchor_subcategory</item>
@@ -1972,7 +1972,7 @@
             </field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
-                <item name="dataset" xsi:type="string" />
+                <item name="dataset" xsi:type="string"/>
             </field>
             <field name="category_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_subcategory</item>
@@ -2002,7 +2002,7 @@
             </field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
-                <item name="dataset" xsi:type="string" />
+                <item name="dataset" xsi:type="string"/>
             </field>
             <field name="category_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_subcategory</item>
@@ -2139,7 +2139,7 @@
             <field name="weight" xsi:type="string">1</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">150</item>
-                <item name="dataset" xsi:type="string" />
+                <item name="dataset" xsi:type="string"/>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">86</item>

@@ -14,9 +14,9 @@
             <data name="initialProducts/0" xsi:type="string">catalogProductSimple::out_of_stock</data>
             <data name="productsCount" xsi:type="number">2</data>
             <data name="product/data/stock_data" xsi:type="string">In Stock</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertMassProductUpdateSuccessMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsInStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertMassProductUpdateSuccessMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsInStock"/>
         </variation>
     </testCase>
 </config>

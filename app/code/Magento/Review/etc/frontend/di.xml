@@ -41,6 +41,6 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Block\Product\Compare\ListCompare">
-        <plugin name="reviewInitializer" type="Magento\Review\Block\Product\Compare\ListCompare\Plugin\Review" />
+        <plugin name="reviewInitializer" type="Magento\Review\Block\Product\Compare\ListCompare\Plugin\Review"/>
     </type>
 </config>

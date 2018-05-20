@@ -10,20 +10,20 @@
         <email>
             <selector>#customer-email</selector>
         </email>
-        <firstname />
-        <lastname />
-        <company />
+        <firstname/>
+        <lastname/>
+        <company/>
         <street>
             <selector>input[name="street[0]"]</selector>
         </street>
-        <city />
+        <city/>
         <region_id>
             <input>select</input>
         </region_id>
         <country_id>
             <input>select</input>
         </country_id>
-        <telephone />
-        <postcode />
+        <telephone/>
+        <postcode/>
     </fields>
 </mapping>

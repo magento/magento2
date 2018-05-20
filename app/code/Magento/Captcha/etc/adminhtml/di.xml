@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Captcha\Block\Captcha\DefaultCaptcha" type="Magento\Captcha\Block\Adminhtml\Captcha\DefaultCaptcha" />
+    <preference for="Magento\Captcha\Block\Captcha\DefaultCaptcha" type="Magento\Captcha\Block\Adminhtml\Captcha\DefaultCaptcha"/>
     <type name="Magento\Captcha\Model\DefaultModel">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Backend\Model\Auth\Session</argument>

@@ -11,6 +11,6 @@
              type="virtual"
              entity_type="moduleConfig"
              class="Magento\Setup\Test\Fixture\Module">
-        <field name="moduleName" />
+        <field name="moduleName"/>
     </fixture>
 </config>

@@ -9,7 +9,7 @@
     <testCase name="Magento\Analytics\Test\TestCase\AdvancedReportingButtonTest" summary="Navigate through Advanced Reporting button on dashboard to Sign Up page" ticketId="MAGETWO-63715">
         <variation name="AdvancedReportingButtonTest">
             <data name="advancedReportingLink" xsi:type="string">https://advancedreporting.rjmetrics.com/report</data>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPage" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPage"/>
         </variation>
     </testCase>
 </config>

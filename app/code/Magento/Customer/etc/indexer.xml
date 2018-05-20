@@ -23,7 +23,7 @@
             <field name="dob" xsi:type="filterable" dataType="date"/>
             <field name="gender" xsi:type="filterable" dataType="int"/>
             <field name="taxvat" xsi:type="searchable" dataType="varchar"/>
-            <field name="lock_expires" xsi:type="filterable" dataType="timestamp" />
+            <field name="lock_expires" xsi:type="filterable" dataType="timestamp"/>
         </fieldset>
 
         <fieldset name="shipping" source="Magento\Customer\Model\ResourceModel\Address\Collection">

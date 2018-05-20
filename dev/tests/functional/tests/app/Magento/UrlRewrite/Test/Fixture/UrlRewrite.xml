@@ -15,12 +15,12 @@
              repository_class="Magento\UrlRewrite\Test\Repository\UrlRewrite"
              handler_interface="Magento\UrlRewrite\Test\Handler\UrlRewrite\UrlRewriteInterface"
              class="Magento\UrlRewrite\Test\Fixture\UrlRewrite">
-        <field name="id" />
-        <field name="store_id" is_required="1" source="Magento\UrlRewrite\Test\Fixture\UrlRewrite\StoreId" />
-        <field name="redirect_type" is_required="0" />
-        <field name="request_path" is_required="1" />
-        <field name="entity_type" is_required="0" />
-        <field name="target_path" is_required="1" source="Magento\UrlRewrite\Test\Fixture\UrlRewrite\TargetPath" />
-        <field name="description" is_required="0" />
+        <field name="id"/>
+        <field name="store_id" is_required="1" source="Magento\UrlRewrite\Test\Fixture\UrlRewrite\StoreId"/>
+        <field name="redirect_type" is_required="0"/>
+        <field name="request_path" is_required="1"/>
+        <field name="entity_type" is_required="0"/>
+        <field name="target_path" is_required="1" source="Magento\UrlRewrite\Test\Fixture\UrlRewrite\TargetPath"/>
+        <field name="description" is_required="0"/>
     </fixture>
 </config>

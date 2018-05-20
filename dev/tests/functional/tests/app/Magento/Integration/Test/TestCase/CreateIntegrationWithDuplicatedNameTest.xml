@@ -9,7 +9,7 @@
     <testCase name="Magento\Integration\Test\TestCase\CreateIntegrationWithDuplicatedNameTest" summary="Create Integration with existing name" ticketId="MAGETWO-16756">
         <variation name="CreateIntegrationWithDuplicatedNameTestVariation1">
             <data name="integration/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationNameDuplicationErrorMessage" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationNameDuplicationErrorMessage"/>
         </variation>
     </testCase>
 </config>

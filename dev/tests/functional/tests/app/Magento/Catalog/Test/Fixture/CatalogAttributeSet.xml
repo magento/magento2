@@ -14,12 +14,12 @@
              repository_class="Magento\Catalog\Test\Repository\CatalogAttributeSet"
              handler_interface="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface"
              class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">
-        <field name="attribute_set_id" is_required="1" />
-        <field name="entity_type_id" is_required="" />
-        <field name="attribute_set_name" is_required="" />
-        <field name="sort_order" is_required="" />
-        <field name="skeleton_set" is_required="" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\SkeletonSet" />
-        <field name="assigned_attributes" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\AssignedAttributes" />
-        <field name="group" />
+        <field name="attribute_set_id" is_required="1"/>
+        <field name="entity_type_id" is_required=""/>
+        <field name="attribute_set_name" is_required=""/>
+        <field name="sort_order" is_required=""/>
+        <field name="skeleton_set" is_required="" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\SkeletonSet"/>
+        <field name="assigned_attributes" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\AssignedAttributes"/>
+        <field name="group"/>
     </fixture>
 </config>

@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/mtf/Magento/Mtf/TestRunner/etc/testRunner.xsd">
     <rule scope="testcase">
         <allow>
-            <tag group="mvp" value="yes" />
+            <tag group="mvp" value="yes"/>
         </allow>
     </rule>
 </config>

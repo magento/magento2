@@ -12,6 +12,6 @@
         <element name="statusDropdown" type="select" selector="#store_is_active"/>
         <element name="storeGrpDropdown" type="select" selector="#store_group_id"/>
         <element name="sortOrderTextField" type="input" selector="#store_sort_order"/>
-        <element name="acceptNewStoreViewCreation" type="button" selector=".action-primary.action-accept" />
+        <element name="acceptNewStoreViewCreation" type="button" selector=".action-primary.action-accept"/>
     </section>
 </sections>

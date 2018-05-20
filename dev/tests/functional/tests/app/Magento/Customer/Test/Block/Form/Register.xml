@@ -7,25 +7,25 @@
 -->
 <mapping strict="0">
     <fields>
-        <firstname />
-        <lastname />
-        <email />
-        <company />
-        <telephone />
+        <firstname/>
+        <lastname/>
+        <email/>
+        <company/>
+        <telephone/>
         <street>
             <selector>#street_1</selector>
         </street>
-        <city />
+        <city/>
         <region_id>
             <input>select</input>
         </region_id>
-        <postcode />
+        <postcode/>
         <country_id>
             <selector>#country</selector>
             <input>select</input>
         </country_id>
-        <password />
-        <confirmation />
+        <password/>
+        <confirmation/>
         <is_subscribed>
             <input>checkbox</input>
         </is_subscribed>

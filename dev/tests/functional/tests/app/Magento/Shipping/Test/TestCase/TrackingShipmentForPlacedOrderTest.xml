@@ -27,7 +27,7 @@
             </data>
             <data name="tag" xsi:type="string">severity:S1</data>
             <data name="tag" xsi:type="string">stable:no</data><!-- MAGETWO-89369 -->
-            <constraint name="Magento\Shipping\Test\Constraint\AssertTrackingDetailsIsPresent" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertTrackingDetailsIsPresent"/>
         </variation>
     </testCase>
 </config>

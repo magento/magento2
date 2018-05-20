@@ -12,7 +12,7 @@
             <data name="hh" xsi:type="string">11</data>
             <data name="mm" xsi:type="string">11</data>
             <data name="configData" xsi:type="string">change_default_timezone</data>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsSendingTimeAndZone" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsSendingTimeAndZone"/>
         </variation>
     </testCase>
 </config>

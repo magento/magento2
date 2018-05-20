@@ -14,6 +14,6 @@
         </arguments>
         <click stepKey="clickOnProductRow" selector="{{AdminProductGridSection.firstRow}}"/>
         <waitForPageLoad time="30" stepKey="waitForProductPageLoad"/>
-        <seeInField stepKey="seeProductSkuOnEditProductPage" selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" />
+        <seeInField stepKey="seeProductSkuOnEditProductPage" selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}"/>
     </actionGroup>
 </actionGroups>

@@ -11,7 +11,7 @@
         <email>
             <selector>[name='login[username]']</selector>
         </email>
-        <password />
+        <password/>
         <captcha>
             <selector>[name='captcha[user_login]']</selector>
         </captcha>

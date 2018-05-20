@@ -7,9 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_login">
-        <observer name="catalog" instance="Magento\Catalog\Observer\Compare\BindCustomerLoginObserver" shared="false" />
+        <observer name="catalog" instance="Magento\Catalog\Observer\Compare\BindCustomerLoginObserver" shared="false"/>
     </event>
     <event name="customer_logout">
-        <observer name="catalog" instance="Magento\Catalog\Observer\Compare\BindCustomerLogoutObserver" shared="false" />
+        <observer name="catalog" instance="Magento\Catalog\Observer\Compare\BindCustomerLogoutObserver" shared="false"/>
     </event>
 </config>

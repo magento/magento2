@@ -22,12 +22,12 @@
             <data name="previousOrderStatus" xsi:type="string">Pending</data>
             <data name="status" xsi:type="string">Pending</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Reorder, Cancel, Send Email, Hold, Invoice, Ship, Edit</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertReorderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertReorderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
         </variation>
     </testCase>
 </config>

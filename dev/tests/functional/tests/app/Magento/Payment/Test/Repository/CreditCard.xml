@@ -44,11 +44,11 @@
         </dataset>
 
         <dataset name="visa_empty">
-            <field name="cc_type" xsi:type="string" />
-            <field name="cc_number" xsi:type="string" />
-            <field name="cc_exp_month" xsi:type="string" />
-            <field name="cc_exp_year" xsi:type="string" />
-            <field name="cc_cid" xsi:type="string" />
+            <field name="cc_type" xsi:type="string"/>
+            <field name="cc_number" xsi:type="string"/>
+            <field name="cc_exp_month" xsi:type="string"/>
+            <field name="cc_exp_year" xsi:type="string"/>
+            <field name="cc_cid" xsi:type="string"/>
         </dataset>
 
         <dataset name="visa_cvv_mismatch">

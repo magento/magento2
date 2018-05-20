@@ -10,6 +10,6 @@
         <email>
             <selector>[name='username']</selector>
         </email>
-        <password />
+        <password/>
     </fields>
 </mapping>

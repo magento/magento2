@@ -7,6 +7,6 @@
 -->
 <mapping strict="0">
     <fields>
-        <qty />
+        <qty/>
     </fields>
 </mapping>

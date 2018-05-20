@@ -56,7 +56,7 @@
                     <upload_dir config="system/filesystem/media" scope_info="1">sales/store/logo</upload_dir>
                     <base_url type="media" scope_info="1">sales/store/logo</base_url>
                     <comment>
-                        <![CDATA[Your default logo will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If your pdf image is distorted, try to use larger file-size image.]]>
+                        <![CDATA[Your default logo will be used in PDF and HTML documents.<br/>(jpeg, tiff, png) If your pdf image is distorted, try to use larger file-size image.]]>
                     </comment>
                 </field>
                 <field id="logo_html" translate="label comment" type="image" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -65,7 +65,7 @@
                     <upload_dir config="system/filesystem/media" scope_info="1">sales/store/logo_html</upload_dir>
                     <base_url type="media" scope_info="1">sales/store/logo_html</base_url>
                     <comment>
-                        <![CDATA[Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)]]>
+                        <![CDATA[Logo for HTML documents only. If empty, default will be used.<br/>(jpeg, gif, png)]]>
                     </comment>
                 </field>
                 <field id="address" translate="label" type="textarea" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">

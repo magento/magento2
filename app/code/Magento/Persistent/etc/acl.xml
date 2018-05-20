@@ -12,7 +12,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Persistent::persistent" title="Persistent Shopping Cart" translate="title" sortOrder="60" />
+                            <resource id="Magento_Persistent::persistent" title="Persistent Shopping Cart" translate="title" sortOrder="60"/>
                         </resource>
                     </resource>
                 </resource>

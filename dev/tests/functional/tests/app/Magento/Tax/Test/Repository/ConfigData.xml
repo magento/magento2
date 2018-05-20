@@ -554,7 +554,7 @@
             <field name="tax/calculation/algorithm" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string" />
+                <item name="label" xsi:type="string"/>
                 <item name="value" xsi:type="string">UNIT_BASE_CALCULATION</item>
             </field>
             <field name="tax/calculation/price_includes_tax" xsi:type="array">
@@ -833,7 +833,7 @@
             <field name="tax/calculation/apply_after_discount" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string" />
+                <item name="label" xsi:type="string"/>
                 <item name="value" xsi:type="number">0</item>
             </field>
             <field name="tax/calculation/discount_tax" xsi:type="array">
@@ -872,7 +872,7 @@
             <field name="tax/calculation/apply_after_discount" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string" />
+                <item name="label" xsi:type="string"/>
                 <item name="value" xsi:type="number">0</item>
             </field>
             <field name="tax/calculation/discount_tax" xsi:type="array">

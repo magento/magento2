@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/resources.xsd">
-    <resource name="resourceName" extends="anotherResourceName" />
-    <resource name="otherResourceName" connection="connectionName" />
-    <resource name="defaultSetup" connection="customConnection" />
+    <resource name="resourceName" extends="anotherResourceName"/>
+    <resource name="otherResourceName" connection="connectionName"/>
+    <resource name="defaultSetup" connection="customConnection"/>
 </config>

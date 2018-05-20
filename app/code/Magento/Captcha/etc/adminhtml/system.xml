@@ -62,7 +62,7 @@
                 <field id="symbols" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Symbols Used in CAPTCHA</label>
                     <comment>
-                        <![CDATA[Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br />Similar looking characters (e.g. "i", "l", "1") decrease chance of correct recognition by customer.]]>
+                        <![CDATA[Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br/>Similar looking characters (e.g. "i", "l", "1") decrease chance of correct recognition by customer.]]>
                     </comment>
                     <depends>
                         <field id="enable">1</field>
@@ -134,7 +134,7 @@
                 <field id="symbols" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Symbols Used in CAPTCHA</label>
                     <comment>
-                        <![CDATA[Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br />Similar looking characters (e.g. "i", "l", "1") decrease chance of correct recognition by customer.]]>
+                        <![CDATA[Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br/>Similar looking characters (e.g. "i", "l", "1") decrease chance of correct recognition by customer.]]>
                     </comment>
                     <depends>
                         <field id="enable">1</field>

@@ -11,6 +11,6 @@
         <do_shipment>
             <input>checkbox</input>
         </do_shipment>
-        <comment_text />
+        <comment_text/>
     </fields>
 </mapping>

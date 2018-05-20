@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
-                        <resource id="Magento_CheckoutAgreements::checkoutagreement" title="Terms &amp; Conditions" translate="title" sortOrder="30" />
+                        <resource id="Magento_CheckoutAgreements::checkoutagreement" title="Terms &amp; Conditions" translate="title" sortOrder="30"/>
                     </resource>
                 </resource>
             </resource>

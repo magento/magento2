@@ -22,11 +22,11 @@
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">15.00</item>
             </data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
     </testCase>
 </config>

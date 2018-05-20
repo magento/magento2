@@ -11,8 +11,8 @@
         <website_id>
             <input>select</input>
         </website_id>
-        <name />
-        <code />
+        <name/>
+        <code/>
         <root_category_id>
             <input>select</input>
         </root_category_id>

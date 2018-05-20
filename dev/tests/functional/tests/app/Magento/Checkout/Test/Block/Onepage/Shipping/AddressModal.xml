@@ -7,21 +7,21 @@
 -->
 <mapping strict="0">
     <fields>
-        <firstname />
-        <lastname />
-        <company />
+        <firstname/>
+        <lastname/>
+        <company/>
         <street>
             <selector>input[name="street[0]"]</selector>
         </street>
-        <city />
+        <city/>
         <region_id>
             <input>select</input>
         </region_id>
         <country_id>
             <input>select</input>
         </country_id>
-        <telephone />
-        <postcode />
+        <telephone/>
+        <postcode/>
         <custom_attribute>
             <selector>[name="custom_attributes[%attribute_code%]"]</selector>
         </custom_attribute>

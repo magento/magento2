@@ -10,7 +10,7 @@
     <scope id="global">
         <fieldset id="sales_copy_order">
             <field name="customer_email">
-                <aspect name="to_edit_or_not_to_edit" />
+                <aspect name="to_edit_or_not_to_edit"/>
             </field>
         </fieldset>
         <fieldset id="customer_address">

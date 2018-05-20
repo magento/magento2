@@ -13,7 +13,7 @@
         </dimensions>
         <queries>
             <query xsi:type="boolQuery" name="quick_search_container" boost="1">
-                <queryReference clause="should" ref="search" />
+                <queryReference clause="should" ref="search"/>
                 <queryReference clause="must" ref="category"/>
                 <queryReference clause="must" ref="price"/>
                 <queryReference clause="must" ref="visibility"/>

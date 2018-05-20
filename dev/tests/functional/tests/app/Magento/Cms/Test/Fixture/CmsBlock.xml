@@ -14,13 +14,13 @@
              identifier="identifier"
              handler_interface="Magento\Cms\Test\Handler\CmsBlock\CmsBlockInterface"
              repository_class="Magento\Cms\Test\Repository\CmsBlock" class="Magento\Cms\Test\Fixture\CmsBlock">
-        <field name="block_id" is_required="1" />
-        <field name="title" is_required="" />
-        <field name="identifier" is_required="" />
-        <field name="content" is_required="" />
-        <field name="creation_time" is_required="" />
-        <field name="update_time" is_required="" />
-        <field name="is_active" is_required="" />
-        <field name="stores" is_required="1" source="Magento\Cms\Test\Fixture\CmsBlock\Stores" />
+        <field name="block_id" is_required="1"/>
+        <field name="title" is_required=""/>
+        <field name="identifier" is_required=""/>
+        <field name="content" is_required=""/>
+        <field name="creation_time" is_required=""/>
+        <field name="update_time" is_required=""/>
+        <field name="is_active" is_required=""/>
+        <field name="stores" is_required="1" source="Magento\Cms\Test\Fixture\CmsBlock\Stores"/>
     </fixture>
 </config>

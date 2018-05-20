@@ -9,9 +9,9 @@
     <testCase name="Magento\Review\Test\TestCase\DeleteProductRatingEntityTest" summary="Delete Product Rating" ticketId="MAGETWO-23276">
         <variation name="DeleteProductRatingEntityTestVariation1">
             <data name="productRating/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingSuccessDeleteMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInGrid" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingSuccessDeleteMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInGrid"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInProductPage"/>
         </variation>
     </testCase>
 </config>

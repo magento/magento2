@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="catalog_product_delete_after_done">
-        <observer name="review" instance="Magento\Review\Observer\ProcessProductAfterDeleteEventObserver" />
+        <observer name="review" instance="Magento\Review\Observer\ProcessProductAfterDeleteEventObserver"/>
     </event>
 </config>

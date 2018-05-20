@@ -20,7 +20,7 @@ Final classes and method are not compatible with plugins and proxies.
             ]]>
         </description>
         <priority>1</priority>
-        <properties />
+        <properties/>
         <example>
             <![CDATA[
 final class Foo

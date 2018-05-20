@@ -13,6 +13,6 @@
         <expiry_date>
             <selector>[name=expiryDate]</selector>
         </expiry_date>
-        <csc />
+        <csc/>
     </fields>
 </mapping>

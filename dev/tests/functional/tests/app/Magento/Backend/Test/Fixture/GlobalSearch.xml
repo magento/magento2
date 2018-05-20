@@ -9,6 +9,6 @@
     <fixture name="globalSearch"
              module="Magento_Backend"
              class="Magento\Backend\Test\Fixture\GlobalSearch">
-        <field name="query" source="Magento\Backend\Test\Fixture\GlobalSearch\Query" />
+        <field name="query" source="Magento\Backend\Test\Fixture\GlobalSearch\Query"/>
     </fixture>
 </config>

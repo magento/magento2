@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::marketing">
                     <resource id="Magento_Backend::marketing_seo">
-                        <resource id="Magento_Sitemap::sitemap" title="Site Map" translate="title" sortOrder="30" />
+                        <resource id="Magento_Sitemap::sitemap" title="Site Map" translate="title" sortOrder="30"/>
                     </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">

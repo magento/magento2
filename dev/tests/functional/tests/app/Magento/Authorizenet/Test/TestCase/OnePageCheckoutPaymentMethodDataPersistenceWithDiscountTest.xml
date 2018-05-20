@@ -27,7 +27,7 @@
             <data name="configData" xsi:type="string">authorizenet</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">severity:S1</data>
-            <constraint name="Magento\Authorizenet\Test\Constraint\AssertCreditCardNumberOnOnePageCheckout" />
+            <constraint name="Magento\Authorizenet\Test\Constraint\AssertCreditCardNumberOnOnePageCheckout"/>
         </variation>
     </testCase>
 </config>

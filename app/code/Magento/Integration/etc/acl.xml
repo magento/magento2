@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::system">
                     <resource id="Magento_Integration::extensions" title="System Extensions" translate="title" sortOrder="30">
-                        <resource id="Magento_Integration::integrations" title="System Integrations" translate="title" sortOrder="40" />
+                        <resource id="Magento_Integration::integrations" title="System Integrations" translate="title" sortOrder="40"/>
                     </resource>
                 </resource>
             </resource>

@@ -11,7 +11,7 @@
     <route url="/V1/TestModuleJoinDirectives" method="GET">
         <service class="Magento\TestModuleJoinDirectives\Api\TestRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="Magento_TestModuleJoinDirectives::getList" />
+            <resource ref="Magento_TestModuleJoinDirectives::getList"/>
         </resources>
     </route>
 </routes>

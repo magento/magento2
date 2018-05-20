@@ -10,7 +10,7 @@
     <update handle="adminhtml_history_grid_block"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\ImportExport\Block\Adminhtml\History" name="adminhtml.import.history.container" />
+            <block class="Magento\ImportExport\Block\Adminhtml\History" name="adminhtml.import.history.container"/>
         </referenceContainer>
     </body>
 </page>

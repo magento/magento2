@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="SitemapNew" area="Adminhtml" mca="sitemap/new/index" module="Magento_Sitemap">
-        <block name="sitemapForm" class="Magento\Mtf\Block\Form" locator="#add_sitemap_form" strategy="css selector" />
-        <block name="sitemapPageActions" class="Magento\Sitemap\Test\Block\Adminhtml\SitemapPageActions" locator=".page-main-actions" strategy="css selector" />
+        <block name="sitemapForm" class="Magento\Mtf\Block\Form" locator="#add_sitemap_form" strategy="css selector"/>
+        <block name="sitemapPageActions" class="Magento\Sitemap\Test\Block\Adminhtml\SitemapPageActions" locator=".page-main-actions" strategy="css selector"/>
     </page>
 </config>

@@ -6,10 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Store\Model\Config\InvalidatorInterface" type="Magento\Store\Model\Config\Invalidator\Proxy" />
-    <preference for="Magento\Framework\App\CacheInterface" type="Magento\Framework\App\Cache\Proxy" />
+    <preference for="Magento\Store\Model\Config\InvalidatorInterface" type="Magento\Store\Model\Config\Invalidator\Proxy"/>
+    <preference for="Magento\Framework\App\CacheInterface" type="Magento\Framework\App\Cache\Proxy"/>
     <virtualType name="custom_cache_instance" type="Magento\Framework\App\Cache">
-        <plugin name="tag" type="Magento\Framework\App\Cache\TagPlugin" />
+        <plugin name="tag" type="Magento\Framework\App\Cache\TagPlugin"/>
     </virtualType>
     <type name="Magento\SomeModule\Model\Test">
         <arguments>

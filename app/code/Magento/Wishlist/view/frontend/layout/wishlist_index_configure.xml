@@ -10,7 +10,7 @@
     <body>
         <referenceBlock name="product.info.addto">
             <block class="Magento\Wishlist\Block\Item\Configure" name="view.addto.wishlist"
-                template="Magento_Wishlist::item/configure/addto/wishlist.phtml" />
+                template="Magento_Wishlist::item/configure/addto/wishlist.phtml"/>
         </referenceBlock>
     </body>
 </page>

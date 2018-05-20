@@ -11,8 +11,8 @@
             <data name="initialCategory/dataset" xsi:type="string">default</data>
             <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default,catalogProductSimple::product_20_dollar</data>
             <data name="caches/full_page" xsi:type="string">Enabled</data>
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCategoryCaching" />
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheStatus" />
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCategoryCaching"/>
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheStatus"/>
         </variation>
     </testCase>
 </config>

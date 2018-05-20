@@ -16,8 +16,8 @@
             <data name="invoiceReport/to" xsi:type="string">m/d/Y 12:00 a+2 days</data>
             <data name="invoiceReport/show_order_statuses" xsi:type="string">Any</data>
             <data name="invoiceReport/show_empty_rows" xsi:type="string">Yes</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportIntervalResult" />
-            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportTotalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportIntervalResult"/>
+            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportTotalResult"/>
         </variation>
         <variation name="SalesInvoiceReportEntityTestVariation2">
             <data name="order/dataset" xsi:type="string">default</data>
@@ -28,8 +28,8 @@
             <data name="invoiceReport/to" xsi:type="string">m/d/Y</data>
             <data name="invoiceReport/show_order_statuses" xsi:type="string">Any</data>
             <data name="invoiceReport/show_empty_rows" xsi:type="string">No</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportIntervalResult" />
-            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportTotalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportIntervalResult"/>
+            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportTotalResult"/>
         </variation>
         <variation name="SalesInvoiceReportEntityTestVariation3">
             <data name="order/dataset" xsi:type="string">default</data>
@@ -41,8 +41,8 @@
             <data name="invoiceReport/show_order_statuses" xsi:type="string">Specified</data>
             <data name="invoiceReport/order_statuses" xsi:type="string">Processing</data>
             <data name="invoiceReport/show_empty_rows" xsi:type="string">No</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportIntervalResult" />
-            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportTotalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportIntervalResult"/>
+            <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportTotalResult"/>
         </variation>
     </testCase>
 </config>

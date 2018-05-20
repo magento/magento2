@@ -10,12 +10,12 @@
         <rules>
             <rule name="check_eav">
                 <entity_constraints>
-                    <constraint alias="eav_data_validator" class="Magento\Eav\Model\Validator\Attribute\Data" />
+                    <constraint alias="eav_data_validator" class="Magento\Eav\Model\Validator\Attribute\Data"/>
                 </entity_constraints>
             </rule>
             <rule name="metadata_form_data">
                 <entity_constraints>
-                    <constraint alias="metadata_data_validator" class="Magento\Customer\Model\Metadata\Validator" />
+                    <constraint alias="metadata_data_validator" class="Magento\Customer\Model\Metadata\Validator"/>
                 </entity_constraints>
             </rule>
         </rules>
@@ -37,7 +37,7 @@
         <rules>
             <rule name="check_eav">
                 <entity_constraints>
-                    <constraint alias="eav_data_validator" class="Magento\Eav\Model\Validator\Attribute\Data" />
+                    <constraint alias="eav_data_validator" class="Magento\Eav\Model\Validator\Attribute\Data"/>
                 </entity_constraints>
             </rule>
         </rules>

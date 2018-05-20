@@ -7,6 +7,6 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="ordersGrid" area="Adminhtml" mca="sales/order" module="Magento_Signifyd">
-        <block name="signifydOrdersGrid" class="Magento\Signifyd\Test\Block\Adminhtml\Order\Grid" locator="//div[contains(@data-bind, 'sales_order_grid')]" strategy="xpath" />
+        <block name="signifydOrdersGrid" class="Magento\Signifyd\Test\Block\Adminhtml\Order\Grid" locator="//div[contains(@data-bind, 'sales_order_grid')]" strategy="xpath"/>
     </page>
 </config>

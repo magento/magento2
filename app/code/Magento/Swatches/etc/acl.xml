@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_attributes">
-                        <resource id="Magento_Swatches::iframe" title="Swatches" translate="title" sortOrder="70" />
+                        <resource id="Magento_Swatches::iframe" title="Swatches" translate="title" sortOrder="70"/>
                     </resource>
                 </resource>
             </resource>

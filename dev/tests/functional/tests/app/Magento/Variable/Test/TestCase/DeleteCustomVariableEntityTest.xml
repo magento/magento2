@@ -9,9 +9,9 @@
     <testCase name="Magento\Variable\Test\TestCase\DeleteCustomVariableEntityTest" summary="Delete Custom Variable" ticketId="MAGETWO-25535">
         <variation name="DeleteCustomVariableEntityTestVariation1">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
-            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableSuccessDeleteMessage" />
-            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableNotInGrid" />
-            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableNotInCmsPageForm" />
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableSuccessDeleteMessage"/>
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableNotInGrid"/>
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableNotInCmsPageForm"/>
         </variation>
     </testCase>
 </config>

@@ -11,8 +11,8 @@
         <group_id>
             <input>optgroupselect</input>
         </group_id>
-        <name />
-        <code />
+        <name/>
+        <code/>
         <is_active>
             <input>select</input>
         </is_active>

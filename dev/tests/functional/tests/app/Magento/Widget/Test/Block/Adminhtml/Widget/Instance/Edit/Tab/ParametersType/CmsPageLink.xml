@@ -13,6 +13,6 @@
         <title>
             <selector>.control [name="parameters[title]"]</selector>
         </title>
-        <entities />
+        <entities/>
     </fields>
 </mapping>

@@ -9,7 +9,7 @@
     <page name="CheckoutOnepage" mca="checkout/index">
         <block name="authorizenetBlock" class="Magento\Authorizenet\Test\Block\Form\AuthorizenetCc" locator="#payment_form_authorizenet_directpost" strategy="css selector"/>
         <block name="paymentBlock">
-            <render name="authorizenet" class="Magento\Authorizenet\Test\Block\Form\AuthorizenetCc" />
+            <render name="authorizenet" class="Magento\Authorizenet\Test\Block\Form\AuthorizenetCc"/>
         </block>
     </page>
 </config>

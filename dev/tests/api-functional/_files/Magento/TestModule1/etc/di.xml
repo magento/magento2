@@ -6,8 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\TestModule1\Service\V1\AllSoapAndRestInterface" type="Magento\TestModule1\Service\V1\AllSoapAndRest" />
-    <preference for="Magento\TestModule1\Service\V2\AllSoapAndRestInterface" type="Magento\TestModule1\Service\V2\AllSoapAndRest" />
+    <preference for="Magento\TestModule1\Service\V1\AllSoapAndRestInterface" type="Magento\TestModule1\Service\V1\AllSoapAndRest"/>
+    <preference for="Magento\TestModule1\Service\V2\AllSoapAndRestInterface" type="Magento\TestModule1\Service\V2\AllSoapAndRest"/>
 
     <virtualType name="Magento\TestModule1\Service\Config\TestModule1MetadataConfig" type="Magento\Framework\Api\ExtensionAttribute\Config\MetadataConfig">
         <arguments>

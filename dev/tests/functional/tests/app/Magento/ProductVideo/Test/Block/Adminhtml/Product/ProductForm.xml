@@ -11,19 +11,19 @@
         <selector>[data-index="gallery"]</selector>
         <strategy>css selector</strategy>
         <fields>
-            <position />
-            <media_type />
-            <video_provider />
-            <file />
-            <value_id />
-            <label />
-            <disabled />
-            <removed />
-            <video_url />
-            <video_title />
-            <video_description />
-            <video_metadata />
-            <role />
+            <position/>
+            <media_type/>
+            <video_provider/>
+            <file/>
+            <value_id/>
+            <label/>
+            <disabled/>
+            <removed/>
+            <video_url/>
+            <video_title/>
+            <video_description/>
+            <video_metadata/>
+            <role/>
         </fields>
     </images-and-videos>
 </sections>

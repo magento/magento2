@@ -14,9 +14,9 @@
             <data name="cmsBlock/data/stores/dataset/option_0" xsi:type="string">all_store_views</data>
             <data name="cmsBlock/data/is_active" xsi:type="string">Yes</data>
             <data name="cmsBlock/data/content" xsi:type="string">description_updated_%isolation%</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockInGrid" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockOnCategoryPage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockSuccessSaveMessage"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockInGrid"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockOnCategoryPage"/>
         </variation>
         <variation name="UpdateCmsBlockEntityTestVariation2">
             <data name="tag" xsi:type="string">severity:S3</data>
@@ -25,8 +25,8 @@
             <data name="cmsBlock/data/stores/dataset/option_0" xsi:type="string">default</data>
             <data name="cmsBlock/data/is_active" xsi:type="string">No</data>
             <data name="cmsBlock/data/content" xsi:type="string">description_updated_%isolation%</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockNotOnCategoryPage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockSuccessSaveMessage"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockNotOnCategoryPage"/>
         </variation>
     </testCase>
 </config>

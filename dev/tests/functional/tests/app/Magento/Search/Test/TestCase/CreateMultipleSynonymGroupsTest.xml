@@ -54,7 +54,7 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupsSearch" />
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupsSearch"/>
         </variation>
     </testCase>
 </config>

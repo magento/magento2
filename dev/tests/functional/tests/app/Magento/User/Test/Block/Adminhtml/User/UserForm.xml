@@ -11,16 +11,16 @@
         <selector>#page_tabs_main_section</selector>
         <strategy>css selector</strategy>
         <fields>
-            <username />
-            <firstname />
-            <lastname />
-            <email />
-            <password />
-            <password_confirmation />
+            <username/>
+            <firstname/>
+            <lastname/>
+            <email/>
+            <password/>
+            <password_confirmation/>
             <interface_locale>
                 <input>select</input>
             </interface_locale>
-            <current_password />
+            <current_password/>
             <is_active>
                 <input>select</input>
             </is_active>

@@ -13,9 +13,9 @@
             <data name="template/data/sender_name" xsi:type="string">SenderName%isolation%</data>
             <data name="template/data/sender_email" xsi:type="string">SenderName%isolation%@example.com</data>
             <data name="template/data/text" xsi:type="string">Some content %isolation%</data>
-            <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterSuccessCreateMessage" />
-            <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterInGrid" />
-            <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterForm" />
+            <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterSuccessCreateMessage"/>
+            <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterInGrid"/>
+            <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterForm"/>
         </variation>
     </testCase>
 </config>

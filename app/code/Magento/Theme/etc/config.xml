@@ -9,9 +9,9 @@
     <default>
         <design>
             <invalid_caches>
-                <block_html />
-                <layout />
-                <translate />
+                <block_html/>
+                <layout/>
+                <translate/>
             </invalid_caches>
             <head translate="default_description">
                 <default_title>Magento Commerce</default_title>

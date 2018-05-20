@@ -10,7 +10,7 @@
         <variation name="CreateEmailTemplateEntityTestVariation1" summary="Create Change Email template">
             <data name="EmailTemplate/data/template_select" xsi:type="string">Change Email</data>
             <data name="EmailTemplate/data/template_code" xsi:type="string">Test code_%isolation%</data>
-            <constraint name="Magento\Email\Test\Constraint\AssertEmailTemplateSuccessSaveMessage" />
+            <constraint name="Magento\Email\Test\Constraint\AssertEmailTemplateSuccessSaveMessage"/>
         </variation>
     </testCase>
 </config>

@@ -12,7 +12,7 @@
             <data name="configData" xsi:type="string">minify_js_files</data>
             <data name="menuItem" xsi:type="string">Dashboard</data>
             <data name="pageTitle" xsi:type="string">Dashboard</data>
-            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable" />
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
     </testCase>
 </config>

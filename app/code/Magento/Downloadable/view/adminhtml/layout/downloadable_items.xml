@@ -18,8 +18,8 @@
                     <!--<item name="componentType" xsi:type="string">fieldset</item>-->
                 <!--</argument>-->
             <!--</arguments>-->
-            <!--<block name="catalog.product.edit.tab.downloadable.links" class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links" />-->
-            <!--<block class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples" />-->
+            <!--<block name="catalog.product.edit.tab.downloadable.links" class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links"/>-->
+            <!--<block class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples"/>-->
         <!--</block>-->
     <!--</referenceContainer>-->
 </layout>

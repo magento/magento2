@@ -25,8 +25,8 @@
             <data name="attribute/data/used_in_product_listing" xsi:type="string">Yes</data>
             <data name="attribute/data/used_for_sort_by" xsi:type="string">Yes</data>
             <data name="isRequired" xsi:type="string">Yes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
         </variation>
         <variation name="UpdateProductAttributeEntityTestVariation2">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -51,8 +51,8 @@
             <data name="attribute/data/used_in_product_listing" xsi:type="string">Yes</data>
             <data name="attribute/data/used_for_sort_by" xsi:type="string">Yes</data>
             <data name="isRequired" xsi:type="string">Yes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
         </variation>
         <variation name="UpdateProductAttributeEntityTestVariation3">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
@@ -63,8 +63,8 @@
                 <item name="0" xsi:type="string">FPC</item>
             </data>
             <data name="tag" xsi:type="string">to_maintain:yes</data>
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheIsRefreshableAndInvalidated" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheIsRefreshableAndInvalidated"/>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute"/>
         </variation>
         <variation name="UpdateProductAttributeEntityTestVariation4" summary="Create product attribute of type Dropdown and check its visibility on frontend in Advanced Search form" ticketId="MAGETWO-12941">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
@@ -73,7 +73,7 @@
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
             <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
             <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">No</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchAttributeIsAbsent" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchAttributeIsAbsent"/>
         </variation>
         <variation name="UpdateProductAttributeEntityTestVariation5" summary="Create product attribute of type Multiple Select and check its visibility on frontend in Advanced Search form" ticketId="MAGETWO-12941">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
@@ -81,7 +81,7 @@
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
             <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
             <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">No</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchAttributeIsAbsent" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchAttributeIsAbsent"/>
         </variation>
     </testCase>
 </config>

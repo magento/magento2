@@ -29,7 +29,7 @@
             </webservicex>
             <import>
                 <enabled>0</enabled>
-                <error_email />
+                <error_email/>
                 <error_email_identity>general</error_email_identity>
                 <error_email_template>currency_import_error_email_template</error_email_template>
             </import>

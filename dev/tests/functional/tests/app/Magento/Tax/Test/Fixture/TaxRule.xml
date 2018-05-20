@@ -15,12 +15,12 @@
              repository_class="Magento\Tax\Test\Repository\TaxRule"
              handler_interface="Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface"
              class="Magento\Tax\Test\Fixture\TaxRule">
-        <field name="tax_calculation_rule_id" is_required="1" />
-        <field name="code" is_required="" />
-        <field name="priority" is_required="" />
-        <field name="position" is_required="" />
-        <field name="tax_rate" source="Magento\Tax\Test\Fixture\TaxRule\TaxRate" />
-        <field name="tax_customer_class" source="Magento\Tax\Test\Fixture\TaxRule\TaxClass" />
-        <field name="tax_product_class" source="Magento\Tax\Test\Fixture\TaxRule\TaxClass" />
+        <field name="tax_calculation_rule_id" is_required="1"/>
+        <field name="code" is_required=""/>
+        <field name="priority" is_required=""/>
+        <field name="position" is_required=""/>
+        <field name="tax_rate" source="Magento\Tax\Test\Fixture\TaxRule\TaxRate"/>
+        <field name="tax_customer_class" source="Magento\Tax\Test\Fixture\TaxRule\TaxClass"/>
+        <field name="tax_product_class" source="Magento\Tax\Test\Fixture\TaxRule\TaxClass"/>
     </fixture>
 </config>

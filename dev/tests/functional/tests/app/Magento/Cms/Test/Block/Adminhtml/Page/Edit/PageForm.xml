@@ -11,7 +11,7 @@
         <selector>//div[div/strong/span[text()="Page Information"]]</selector>
         <strategy>xpath</strategy>
         <fields>
-            <title />
+            <title/>
             <is_active>
                 <input>switcher</input>
             </is_active>
@@ -22,8 +22,8 @@
         <selector>//div[div/strong/span[text()="Content"]]</selector>
         <strategy>xpath</strategy>
         <fields>
-            <content_heading />
-            <content />
+            <content_heading/>
+            <content/>
         </fields>
     </content>
     <page_in_websites>
@@ -56,8 +56,8 @@
         <selector>//div[div/strong/span[text()="Custom Design Update"]]</selector>
         <strategy>xpath</strategy>
         <fields>
-            <custom_theme_from />
-            <custom_theme_to />
+            <custom_theme_from/>
+            <custom_theme_to/>
             <custom_theme>
                 <input>select</input>
             </custom_theme>
@@ -71,7 +71,7 @@
         <selector>//div[div/strong/span[text()="Search Engine Optimization"]]</selector>
         <strategy>xpath</strategy>
         <fields>
-            <identifier />
+            <identifier/>
             <meta_keywords>
                 <selector>#page_meta_keywords</selector>
                 <input>textarea</input>

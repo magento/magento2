@@ -15,9 +15,9 @@
             <data name="taxRate/data/tax_country_id" xsi:type="string">United States</data>
             <data name="taxRate/data/tax_region_id" xsi:type="string">California</data>
             <data name="taxRate/data/rate" xsi:type="string">100</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm"/>
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation2">
             <data name="initialTaxRate/dataset" xsi:type="string">default</data>
@@ -28,9 +28,9 @@
             <data name="taxRate/data/tax_country_id" xsi:type="string">United States</data>
             <data name="taxRate/data/tax_region_id" xsi:type="string">California</data>
             <data name="taxRate/data/rate" xsi:type="string">15.05</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm"/>
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation3">
             <data name="initialTaxRate/dataset" xsi:type="string">default</data>
@@ -39,9 +39,9 @@
             <data name="taxRate/data/tax_postcode" xsi:type="string">*</data>
             <data name="taxRate/data/tax_country_id" xsi:type="string">United Kingdom</data>
             <data name="taxRate/data/rate" xsi:type="string">777</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm"/>
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation4">
             <data name="initialTaxRate/dataset" xsi:type="string">withZipRange</data>
@@ -51,9 +51,9 @@
             <data name="taxRate/data/tax_country_id" xsi:type="string">Canada</data>
             <data name="taxRate/data/tax_region_id" xsi:type="string">*</data>
             <data name="taxRate/data/rate" xsi:type="string">25</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm"/>
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation5">
             <data name="initialTaxRate/dataset" xsi:type="string">withZipRange</data>
@@ -63,8 +63,8 @@
             <data name="taxRate/data/zip_to" xsi:type="string">7800935</data>
             <data name="taxRate/data/tax_country_id" xsi:type="string">United Kingdom</data>
             <data name="taxRate/data/rate" xsi:type="string">12.99</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm"/>
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation6">
             <data name="initialTaxRate/dataset" xsi:type="string">withZipRange</data>
@@ -74,9 +74,9 @@
             <data name="taxRate/data/tax_country_id" xsi:type="string">France</data>
             <data name="taxRate/data/tax_region_id" xsi:type="string">Val-d'Oise</data>
             <data name="taxRate/data/rate" xsi:type="string">0.1</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm"/>
         </variation>
     </testCase>
 </config>

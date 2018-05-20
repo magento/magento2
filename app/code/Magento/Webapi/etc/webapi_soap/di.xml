@@ -25,18 +25,18 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\Webapi\Controller\Soap" />
-    <preference for="Magento\Framework\Model\ActionValidator\RemoveAction" type="Magento\Framework\Model\ActionValidator\RemoveAction\Allowed" />
-    <type name="Magento\Webapi\Controller\Rest\Router\Route" shared="false" />
+    <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\Webapi\Controller\Soap"/>
+    <preference for="Magento\Framework\Model\ActionValidator\RemoveAction" type="Magento\Framework\Model\ActionValidator\RemoveAction\Allowed"/>
+    <type name="Magento\Webapi\Controller\Rest\Router\Route" shared="false"/>
     <type name="Magento\Webapi\Controller\Soap">
         <arguments>
             <argument name="soapServer" xsi:type="object">Magento\Webapi\Model\Soap\Server\Proxy</argument>
             <argument name="errorProcessor" xsi:type="object">Magento\Framework\Webapi\ErrorProcessor\Proxy</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Webapi\Model\WebapiRoleLocator" />
+    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Webapi\Model\WebapiRoleLocator"/>
     <type name="Magento\Framework\Authorization">
-        <plugin name="guestAuthorization" type="Magento\Webapi\Model\Plugin\GuestAuthorization" />
+        <plugin name="guestAuthorization" type="Magento\Webapi\Model\Plugin\GuestAuthorization"/>
     </type>
 
     <!-- Configuration to check that the permissions are checked on fields -->

@@ -13,7 +13,7 @@
             <data name="product/data/name" xsi:type="string">bundle_3_options_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">bundle_3_options_%isolation%</data>
             <data name="product/data/bundle_selections/dataset" xsi:type="string">with_3_options_delete</data>
-            <constraint name="Magento\Bundle\Test\Constraint\AssertBundleOptionsDeleted" />
+            <constraint name="Magento\Bundle\Test\Constraint\AssertBundleOptionsDeleted"/>
         </variation>
     </testCase>
 </config>

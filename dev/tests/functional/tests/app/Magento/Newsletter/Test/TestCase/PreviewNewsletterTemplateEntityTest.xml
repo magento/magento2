@@ -10,7 +10,7 @@
         <variation name="PreviewNewsletterTemplateEntityTestVariation1">
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="newsletter/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterPreview" />
+            <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterPreview"/>
         </variation>
     </testCase>
 </config>

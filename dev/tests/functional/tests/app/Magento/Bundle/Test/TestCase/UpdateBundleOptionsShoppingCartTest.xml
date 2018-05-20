@@ -11,7 +11,7 @@
             <data name="originalProduct/dataset" xsi:type="string">bundleProduct::default</data>
             <data name="optionTitle" xsi:type="string">Option 1 new</data>
             <data name="optionNumber" xsi:type="string">0</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertCartBundleOptionTitle" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartBundleOptionTitle"/>
         </variation>
     </testCase>
 </config>

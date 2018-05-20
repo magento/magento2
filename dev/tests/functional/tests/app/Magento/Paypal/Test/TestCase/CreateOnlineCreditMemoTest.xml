@@ -44,11 +44,11 @@
                 <item name="transactionType" xsi:type="string">Capture</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus"/>
         </variation>
         <variation name="CreateOnlineCreditMemoPayflowProVariation1" summary="Create Refund for Order Paid with PayPal Payflow Pro" ticketId="MAGETWO-13063">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
@@ -84,11 +84,11 @@
                 <item name="transactionType" xsi:type="string">Capture</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus"/>
         </variation>
     </testCase>
 </config>

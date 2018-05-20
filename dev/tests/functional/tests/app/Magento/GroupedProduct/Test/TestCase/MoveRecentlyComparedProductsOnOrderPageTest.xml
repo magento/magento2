@@ -11,7 +11,7 @@
             <data name="products/0" xsi:type="string">groupedProduct::three_simple_products</data>
             <data name="products/1" xsi:type="string">groupedProduct::three_simple_products</data>
             <data name="productsIsConfigured" xsi:type="boolean">true</data>
-            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertProductInItemsOrderedGrid" />
+            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertProductInItemsOrderedGrid"/>
         </variation>
     </testCase>
 </config>

@@ -12,7 +12,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Multishipping::config_multishipping" title="Multishipping Settings Section" translate="title" sortOrder="6" />
+                            <resource id="Magento_Multishipping::config_multishipping" title="Multishipping Settings Section" translate="title" sortOrder="6"/>
                         </resource>
                     </resource>
                 </resource>

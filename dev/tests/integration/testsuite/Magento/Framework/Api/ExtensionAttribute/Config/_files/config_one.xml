@@ -9,10 +9,10 @@
     <extension_attributes for="Magento\Tax\Api\Data\TaxRateInterface">
     </extension_attributes>
     <extension_attributes for="Magento\Catalog\Api\Data\Product">
-        <attribute code="stock_item" type="Magento\CatalogInventory\Api\Data\StockItem" />
+        <attribute code="stock_item" type="Magento\CatalogInventory\Api\Data\StockItem"/>
     </extension_attributes>
     <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
-        <attribute code="custom_1" type="Magento\Customer\Api\Data\CustomerCustom" />
-        <attribute code="custom_2" type="Magento\CustomerExtra\Service\V1\Data\CustomerCustom21" />
+        <attribute code="custom_1" type="Magento\Customer\Api\Data\CustomerCustom"/>
+        <attribute code="custom_2" type="Magento\CustomerExtra\Service\V1\Data\CustomerCustom21"/>
     </extension_attributes>
 </config>

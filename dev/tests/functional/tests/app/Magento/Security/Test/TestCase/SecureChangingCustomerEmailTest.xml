@@ -12,15 +12,15 @@
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="customer/data/email" xsi:type="string">JaneDoe_%isolation%@example.com</data>
             <data name="customer/data/current_password" xsi:type="string">123123^q</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInfoSuccessSavedMessage" />
-            <constraint name="Magento\Security\Test\Constraint\AssertCustomerEmailChanged" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInfoSuccessSavedMessage"/>
+            <constraint name="Magento\Security\Test\Constraint\AssertCustomerEmailChanged"/>
         </variation>
         <variation name="SecureChangingEmailV2" summary="Change Email checkbox is checked, enter new email, wrong password">
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="customer/data/email" xsi:type="string">JaneDoe_%isolation%@example.com</data>
             <data name="customer/data/current_password" xsi:type="string">123123123</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertChangePasswordFailMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertChangePasswordFailMessage"/>
         </variation>
     </testCase>
 </config>

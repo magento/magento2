@@ -23,25 +23,25 @@
             <field name="customer/create_account/viv_domestic_group" xsi:type="array">
                 <item name="scope" xsi:type="string">customer</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string" />
+                <item name="label" xsi:type="string"/>
                 <item name="value" xsi:type="string">Valid VAT ID Domestic %isolation%</item>
             </field>
             <field name="customer/create_account/viv_intra_union_group" xsi:type="array">
                 <item name="scope" xsi:type="string">customer</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string" />
+                <item name="label" xsi:type="string"/>
                 <item name="value" xsi:type="string">Valid VAT ID Intra %isolation%</item>
             </field>
             <field name="customer/create_account/viv_invalid_group" xsi:type="array">
                 <item name="scope" xsi:type="string">customer</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string" />
+                <item name="label" xsi:type="string"/>
                 <item name="value" xsi:type="string">Invalid VAT ID %isolation%</item>
             </field>
             <field name="customer/create_account/viv_error_group" xsi:type="array">
                 <item name="scope" xsi:type="string">customer</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string" />
+                <item name="label" xsi:type="string"/>
                 <item name="value" xsi:type="string">Error VAT ID %isolation%</item>
             </field>
             <field name="customer/create_account/vat_frontend_visibility" xsi:type="array">

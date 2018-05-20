@@ -10,6 +10,6 @@
              module="Magento_Signifyd"
              class="Magento\Signifyd\Test\Fixture\SignifydAddress"
              extends="\Magento\Customer\Test\Fixture\Address">
-        <field name="firstname" source="Magento\Signifyd\Test\Fixture\SignifydAddress\Firstname"  is_required="1" />
+        <field name="firstname" source="Magento\Signifyd\Test\Fixture\SignifydAddress\Firstname"  is_required="1"/>
     </fixture>
 </config>

@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_quote_address_collect_totals_after">
-        <observer name="sales_customer_validate_vat_number" instance="Magento\Sales\Observer\Frontend\RestoreCustomerGroupId" />
+        <observer name="sales_customer_validate_vat_number" instance="Magento\Sales\Observer\Frontend\RestoreCustomerGroupId"/>
     </event>
 </config>

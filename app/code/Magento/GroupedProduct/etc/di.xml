@@ -35,10 +35,10 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Type">
-        <plugin name="grouped_output" type="Magento\GroupedProduct\Model\Product\Type\Plugin" />
+        <plugin name="grouped_output" type="Magento\GroupedProduct\Model\Product\Type\Plugin"/>
     </type>
     <type name="Magento\Catalog\Model\Product\CartConfiguration">
-        <plugin name="isProductConfigured" type="Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped" />
+        <plugin name="isProductConfigured" type="Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped"/>
     </type>
     <type name="Magento\Catalog\Helper\Product\Configuration">
         <plugin name="grouped_options" type="Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped"/>
@@ -76,10 +76,10 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks">
-        <plugin name="GroupedProduct" type="Magento\GroupedProduct\Model\Product\Initialization\Helper\ProductLinks\Plugin\Grouped" />
+        <plugin name="GroupedProduct" type="Magento\GroupedProduct\Model\Product\Initialization\Helper\ProductLinks\Plugin\Grouped"/>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Link">
-        <plugin name="groupedProductLinkProcessor" type="Magento\GroupedProduct\Model\ResourceModel\Product\Link\RelationPersister" />
+        <plugin name="groupedProductLinkProcessor" type="Magento\GroupedProduct\Model\ResourceModel\Product\Link\RelationPersister"/>
     </type>
     <type name="Magento\Catalog\Model\ProductLink\Converter\ConverterPool">
         <arguments>

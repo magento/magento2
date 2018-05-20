@@ -10,8 +10,8 @@
         <email>test-integration@magento.com</email>
         <endpoint_url>http://example.com/endpoint1</endpoint_url>
         <resources>
-            <resource name="Magento_Customer::customer" />
-            <resource name="Magento_Customer::manage" />
+            <resource name="Magento_Customer::customer"/>
+            <resource name="Magento_Customer::manage"/>
         </resources>
     </integration>
 </config>

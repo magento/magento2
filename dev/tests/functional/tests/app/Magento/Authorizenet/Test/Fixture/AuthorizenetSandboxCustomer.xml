@@ -11,7 +11,7 @@
              type="virtual"
              repository_class="Magento\Authorizenet\Test\Repository\AuthorizenetSandboxCustomer"
              class="Magento\Authorizenet\Test\Fixture\AuthorizenetSandboxCustomer">
-        <field name="login_id" />
-        <field name="password" />
+        <field name="login_id"/>
+        <field name="password"/>
     </fixture>
 </config>

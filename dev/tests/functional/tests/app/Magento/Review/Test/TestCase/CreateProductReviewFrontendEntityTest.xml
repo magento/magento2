@@ -16,10 +16,10 @@
             <data name="review/data/ratings/1/dataset" xsi:type="string">visibleOnDefaultWebsite</data>
             <data name="review/data/ratings/1/rating" xsi:type="string">4</data>
             <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertReviewCreationSuccessMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingOnReviewPage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertReviewCreationSuccessMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingOnReviewPage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage"/>
         </variation>
         <variation name="CreateProductReviewFrontendEntityTestVariation2" summary="Add Product Review from Customer's Prospective" ticketId="MAGETWO-12403">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
@@ -28,12 +28,12 @@
             <data name="review/data/title" xsi:type="string">title_%isolation%</data>
             <data name="review/data/detail" xsi:type="string">review_%isolation%</data>
             <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertReviewCreationSuccessMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewIsAbsentOnProductPage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewForm" />
-            <constraint name="Magento\Review\Test\Constraint\AssertSetApprovedProductReview" />
-            <constraint name="Magento\Review\Test\Constraint\AssertReviewLinksIsPresentOnProductPage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewOnProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertReviewCreationSuccessMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewIsAbsentOnProductPage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewForm"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertSetApprovedProductReview"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertReviewLinksIsPresentOnProductPage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewOnProductPage"/>
         </variation>
     </testCase>
 </config>

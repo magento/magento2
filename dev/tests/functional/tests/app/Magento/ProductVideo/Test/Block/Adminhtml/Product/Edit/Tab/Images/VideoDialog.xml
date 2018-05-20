@@ -7,8 +7,8 @@
 -->
 <mapping strict="0">
     <fields>
-        <video_url />
-        <video_title />
-        <video_description />
+        <video_url/>
+        <video_title/>
+        <video_description/>
     </fields>
 </mapping>

@@ -18,11 +18,11 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Xml\Generator" shared="false" />
-    <type name="Magento\Framework\Xml\Parser" shared="false" />
-    <type name="Magento\Framework\Code\Scanner\DirectoryScanner" shared="false" />
+    <type name="Magento\Framework\Xml\Generator" shared="false"/>
+    <type name="Magento\Framework\Xml\Parser" shared="false"/>
+    <type name="Magento\Framework\Code\Scanner\DirectoryScanner" shared="false"/>
     <type name="Magento\Integration\Model\ConfigBasedIntegrationManager">
-        <plugin name="webapiSetup" type="Magento\Webapi\Model\Plugin\Manager" />
+        <plugin name="webapiSetup" type="Magento\Webapi\Model\Plugin\Manager"/>
     </type>
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>

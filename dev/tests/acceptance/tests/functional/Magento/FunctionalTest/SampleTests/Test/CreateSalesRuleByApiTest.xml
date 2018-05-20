@@ -15,7 +15,7 @@
             <group value="skip"/>
         </annotations>
         <before>
-            <createData stepKey="saleRule" entity="SimpleSalesRule" />
+            <createData stepKey="saleRule" entity="SimpleSalesRule"/>
         </before>
         <!--see stepKey="test" userInput="$$saleRule.store_labels[0][store_id]$$" selector="test"/-->
     </test>

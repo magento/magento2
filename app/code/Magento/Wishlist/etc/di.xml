@@ -6,8 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Wishlist\Model\AuthenticationStateInterface" type="Magento\Wishlist\Model\AuthenticationState" />
-    <preference for="Magento\Wishlist\Controller\WishlistProviderInterface" type="Magento\Wishlist\Controller\WishlistProvider" />
+    <preference for="Magento\Wishlist\Model\AuthenticationStateInterface" type="Magento\Wishlist\Model\AuthenticationState"/>
+    <preference for="Magento\Wishlist\Controller\WishlistProviderInterface" type="Magento\Wishlist\Controller\WishlistProvider"/>
     <type name="Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid">
         <arguments>
             <argument name="resource" xsi:type="object">Magento\Wishlist\Model\ResourceModel\Item</argument>

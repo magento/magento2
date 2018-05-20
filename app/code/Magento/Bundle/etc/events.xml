@@ -7,15 +7,15 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="magento_bundle_api_data_optioninterface_save_before">
-        <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\BeforeEntitySave" />
+        <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\BeforeEntitySave"/>
     </event>
     <event name="magento_bundle_api_data_optioninterface_save_after">
-        <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\AfterEntitySave" />
+        <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\AfterEntitySave"/>
     </event>
     <event name="magento_bundle_api_data_optioninterface_delete_after">
-        <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\AfterEntityDelete" />
+        <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\AfterEntityDelete"/>
     </event>
     <event name="magento_bundle_model_selection_save_after">
-        <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\AfterEntitySave" />
+        <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\AfterEntitySave"/>
     </event>
 </config>

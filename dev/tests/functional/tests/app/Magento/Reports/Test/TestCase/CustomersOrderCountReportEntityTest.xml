@@ -15,7 +15,7 @@
             <data name="columns/orders" xsi:type="string">2</data>
             <data name="columns/average" xsi:type="string">285</data>
             <data name="columns/total" xsi:type="string">570</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertCustomerOrderCountReportResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertCustomerOrderCountReportResult"/>
         </variation>
         <variation name="CustomersOrderCountReportEntityTestVariation2">
             <data name="orders" xsi:type="string">default,virtual_product</data>
@@ -25,7 +25,7 @@
             <data name="columns/orders" xsi:type="string">2</data>
             <data name="columns/average" xsi:type="string">285</data>
             <data name="columns/total" xsi:type="string">570</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertCustomerOrderCountReportResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertCustomerOrderCountReportResult"/>
         </variation>
         <variation name="CustomersOrderCountReportEntityTestVariation3">
             <data name="orders" xsi:type="string">default</data>
@@ -35,7 +35,7 @@
             <data name="columns/orders" xsi:type="string">1</data>
             <data name="columns/average" xsi:type="string">560</data>
             <data name="columns/total" xsi:type="string">560</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertCustomerOrderCountReportResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertCustomerOrderCountReportResult"/>
         </variation>
     </testCase>
 </config>

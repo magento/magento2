@@ -27,8 +27,8 @@
                 <item name="mainWebsite" xsi:type="string">$</item>
                 <item name="customWebsite" xsi:type="string">€</item>
             </data>
-            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPageMainWebsite" />
-            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPageCustomWebsite" />
+            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPageMainWebsite"/>
+            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPageCustomWebsite"/>
         </variation>
     </testCase>
 </config>

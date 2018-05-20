@@ -7,6 +7,6 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
     <fixture name="category">
-        <field name="url_key_create_redirect" group="seo" />
+        <field name="url_key_create_redirect" group="seo"/>
     </fixture>
 </config>

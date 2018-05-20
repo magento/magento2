@@ -21,10 +21,10 @@
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, dhl_eu, shipping_origin_GB, config_base_currency_gb</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
         </variation>
     </testCase>
 </config>

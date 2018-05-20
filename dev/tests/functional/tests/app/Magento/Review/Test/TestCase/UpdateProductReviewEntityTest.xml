@@ -13,9 +13,9 @@
             <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
             <data name="review/data/title" xsi:type="string">title_upd_%isolation%</data>
             <data name="review/data/detail" xsi:type="string">review_upd_%isolation%</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertReviewSuccessSaveMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingOnReviewPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertReviewSuccessSaveMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingOnReviewPage"/>
         </variation>
     </testCase>
 </config>

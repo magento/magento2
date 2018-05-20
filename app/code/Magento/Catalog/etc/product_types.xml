@@ -18,7 +18,7 @@
         </customAttributes>
     </type>
     <composableTypes>
-        <type name="simple" />
-        <type name="virtual" />
+        <type name="simple"/>
+        <type name="virtual"/>
     </composableTypes>
 </config>

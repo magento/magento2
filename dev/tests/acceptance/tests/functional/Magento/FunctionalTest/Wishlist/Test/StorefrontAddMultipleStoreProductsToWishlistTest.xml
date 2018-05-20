@@ -15,8 +15,8 @@
         </annotations>
         <before>
             <createData stepKey="storeGroup" entity="customStoreGroup"/>
-            <createData stepKey="product" entity="SimpleOne" />
-            <createData stepKey="secondProduct" entity="SimpleOne" />
+            <createData stepKey="product" entity="SimpleOne"/>
+            <createData stepKey="secondProduct" entity="SimpleOne"/>
             <createData stepKey="customer" entity="Simple_US_Customer"/>
             <!-- Create new store view and assign it to non default store -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
@@ -66,9 +66,9 @@
         <fillField  stepKey="fillPassword" userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
         <waitForElementVisible stepKey="waitForButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
         <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
-        <see stepKey="seeFirstName" userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
-        <see stepKey="seeLastName" userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
-        <see stepKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeFirstName" userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+        <see stepKey="seeLastName" userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+        <see stepKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
         <!-- Add product visible on default store to wishlist -->
         <amOnPage url="$$product.name$$.html" stepKey="navigateToProductPageOnDefaultStore"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$product.name$$" stepKey="assertFirstProductNameTitle"/>

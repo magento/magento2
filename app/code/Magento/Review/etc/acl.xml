@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_attributes">
-                        <resource id="Magento_Review::ratings" title="Ratings" translate="title" sortOrder="60" />
+                        <resource id="Magento_Review::ratings" title="Ratings" translate="title" sortOrder="60"/>
                     </resource>
                 </resource>
                 <resource id="Magento_Backend::marketing">

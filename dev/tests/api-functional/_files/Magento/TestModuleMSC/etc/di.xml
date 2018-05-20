@@ -7,11 +7,11 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <preference for="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" type="Magento\TestModuleMSC\Model\AllSoapAndRest" />
+    <preference for="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" type="Magento\TestModuleMSC\Model\AllSoapAndRest"/>
 
-    <preference for="Magento\TestModuleMSC\Api\Data\ItemInterface" type="Magento\TestModuleMSC\Model\Data\Item" />
-    <preference for="Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface" type="Magento\TestModuleMSC\Model\Data\CustomAttributeDataObject" />
-    <preference for="Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface" type="Magento\TestModuleMSC\Model\Data\CustomAttributeNestedDataObject" />
+    <preference for="Magento\TestModuleMSC\Api\Data\ItemInterface" type="Magento\TestModuleMSC\Model\Data\Item"/>
+    <preference for="Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface" type="Magento\TestModuleMSC\Model\Data\CustomAttributeDataObject"/>
+    <preference for="Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface" type="Magento\TestModuleMSC\Model\Data\CustomAttributeNestedDataObject"/>
 
     <virtualType name="Magento\TestModuleMSC\Service\Config\TestModuleMSCMetadataConfig" type="Magento\Framework\Api\ExtensionAttribute\Config\MetadataConfig">
         <arguments>

@@ -17,9 +17,9 @@
             <data name="product/data/description" xsi:type="string">This is edited description for grouped product</data>
             <data name="product/data/short_description" xsi:type="string">This is edited short description for grouped product</data>
             <data name="product/data/url_key" xsi:type="string">updated-grouped-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
         </variation>
         <variation name="UpdateGroupedProductEntityTestVariation2">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -29,8 +29,8 @@
             <data name="product/data/associated/products" xsi:type="string">catalogProductVirtual::default,catalogProductVirtual::product_50_dollar</data>
             <data name="product/data/associated/dataset" xsi:type="string">defaultVirtualProduct</data>
             <data name="product/data/url_key" xsi:type="string">updated-grouped-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductForm"/>
         </variation>
         <variation name="UpdateGroupedProductEntityTestVariation3">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -40,9 +40,9 @@
             <data name="product/data/associated/products" xsi:type="string">catalogProductSimple::simple_for_composite_products,catalogProductSimple::default</data>
             <data name="product/data/associated/dataset" xsi:type="string">defaultSimpleProduct_without_qty</data>
             <data name="product/data/url_key" xsi:type="string">updated-grouped-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductsDefaultQty" />
-            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductsDefaultQty"/>
+            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductForm"/>
         </variation>
         <variation name="UpdateGroupedProductEntityTestVariation4">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -52,8 +52,8 @@
             <data name="product/data/associated/products" xsi:type="string">catalogProductSimple::withSpecialPrice,catalogProductSimple::withSpecialPrice</data>
             <data name="product/data/associated/dataset" xsi:type="string">defaultSimpleProduct_with_specialPrice</data>
             <data name="product/data/url_key" xsi:type="string">updated-grouped-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertSpecialPriceOnGroupedProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertSpecialPriceOnGroupedProductPage"/>
         </variation>
         <variation name="UpdateGroupedProductEntityTestVariation5">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -62,8 +62,8 @@
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <data name="product/data/url_key" xsi:type="string">updated-grouped-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
         </variation>
     </testCase>
 </config>

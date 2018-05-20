@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Translate\Inline\ConfigInterface" type="Magento\Backend\Model\Translate\Inline\Config" />
+    <preference for="Magento\Framework\Translate\Inline\ConfigInterface" type="Magento\Backend\Model\Translate\Inline\Config"/>
     <type name="Magento\Translation\Model\ResourceModel\Translate">
         <arguments>
             <argument name="scope" xsi:type="string">admin</argument>

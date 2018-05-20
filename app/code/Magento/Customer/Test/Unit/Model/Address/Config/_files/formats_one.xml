@@ -6,6 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/address_formats.xsd">
-    <format code="format_one" title="format_one_title" />
-    <format code="format_two" title="format_two_title_before merge" />
+    <format code="format_one" title="format_one_title"/>
+    <format code="format_two" title="format_two_title_before merge"/>
 </config>

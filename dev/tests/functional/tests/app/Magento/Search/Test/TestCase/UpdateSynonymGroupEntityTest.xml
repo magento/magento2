@@ -13,8 +13,8 @@
             <data name="description" xsi:type="string">Update Synonym Groups Successfully</data>
             <data name="synonymGroup/data/synonyms" xsi:type="string">new_synonym_%isolation%</data>
             <data name="synonymGroup/data/scope_id/dataset" xsi:type="string">all_store_views</data>
-            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupSuccessSaveMessage" />
-            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupInGrid" />
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupSuccessSaveMessage"/>
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupInGrid"/>
         </variation>
     </testCase>
 </config>

@@ -11,17 +11,17 @@
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/dataset" xsi:type="string">product_with_video_youtube</data>
             <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNoImageInGrid" />
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoCategoryView" />
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoProductView" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNoImageInGrid"/>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoCategoryView"/>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoProductView"/>
         </variation>
         <variation name="DeleteVideoEntityTestVariation2" summary="Delete video vimeo" ticketId="MAGETWO-43660">
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/dataset" xsi:type="string">product_with_video_vimeo</data>
             <data name="configData" xsi:type="string">play_if_base</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNoImageInGrid" />
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoCategoryView" />
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoProductView" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNoImageInGrid"/>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoCategoryView"/>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoProductView"/>
         </variation>
     </testCase>
 </config>

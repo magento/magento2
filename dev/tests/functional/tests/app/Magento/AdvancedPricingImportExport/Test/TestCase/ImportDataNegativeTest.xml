@@ -33,9 +33,9 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportCheckDataErrorMessage" />
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportCheckDataErrorMessagesList" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAdvancedPriceAbsentOnProductForm" />
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportCheckDataErrorMessage"/>
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportCheckDataErrorMessagesList"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAdvancedPriceAbsentOnProductForm"/>
         </variation>
     </testCase>
 </config>

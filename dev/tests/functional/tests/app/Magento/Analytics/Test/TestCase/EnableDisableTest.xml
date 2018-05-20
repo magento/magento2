@@ -10,12 +10,12 @@
         <variation name="disableAnalytics">
             <data name="vertical" xsi:type="string">Apps and Games</data>
             <data name="state" xsi:type="string">Disable</data>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled"/>
         </variation>
         <variation name="enableAnalytics">
             <data name="vertical" xsi:type="string">Apps and Games</data>
             <data name="state" xsi:type="string">Enable</data>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled"/>
         </variation>
     </testCase>
 </config>

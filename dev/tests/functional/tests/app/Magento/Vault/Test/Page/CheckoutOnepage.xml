@@ -7,9 +7,9 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="CheckoutOnepage" mca="checkout/index">
-        <block name="vaultPaymentBlock" class="Magento\Vault\Test\Block\Onepage\Payment\Method\Vault" locator="#checkout-step-payment" strategy="css selector" />
+        <block name="vaultPaymentBlock" class="Magento\Vault\Test\Block\Onepage\Payment\Method\Vault" locator="#checkout-step-payment" strategy="css selector"/>
         <block name="paymentBlock">
-            <render name="braintree" class="Magento\Braintree\Test\Block\Form\BraintreeCc" />
+            <render name="braintree" class="Magento\Braintree\Test\Block\Form\BraintreeCc"/>
         </block>
     </page>
 </config>

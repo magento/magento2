@@ -42,8 +42,8 @@
                 <TotalTransitDays>2</TotalTransitDays>
                 <PickupPostalLocAddDays>0</PickupPostalLocAddDays>
                 <DeliveryPostalLocAddDays>0</DeliveryPostalLocAddDays>
-                <PickupNonDHLCourierCode />
-                <DeliveryNonDHLCourierCode />
+                <PickupNonDHLCourierCode/>
+                <DeliveryNonDHLCourierCode/>
                 <DeliveryDate>2014-01-13</DeliveryDate>
                 <DeliveryTime>PT9H</DeliveryTime>
                 <DimensionalWeight>2.205</DimensionalWeight>
@@ -120,8 +120,8 @@
                 <TotalTransitDays>2</TotalTransitDays>
                 <PickupPostalLocAddDays>0</PickupPostalLocAddDays>
                 <DeliveryPostalLocAddDays>0</DeliveryPostalLocAddDays>
-                <PickupNonDHLCourierCode />
-                <DeliveryNonDHLCourierCode />
+                <PickupNonDHLCourierCode/>
+                <DeliveryNonDHLCourierCode/>
                 <DeliveryDate>2014-01-13</DeliveryDate>
                 <DeliveryTime>PT9H</DeliveryTime>
                 <DimensionalWeight>2.205</DimensionalWeight>
@@ -198,8 +198,8 @@
                 <TotalTransitDays>2</TotalTransitDays>
                 <PickupPostalLocAddDays>0</PickupPostalLocAddDays>
                 <DeliveryPostalLocAddDays>0</DeliveryPostalLocAddDays>
-                <PickupNonDHLCourierCode />
-                <DeliveryNonDHLCourierCode />
+                <PickupNonDHLCourierCode/>
+                <DeliveryNonDHLCourierCode/>
                 <DeliveryDate>2014-01-13</DeliveryDate>
                 <DeliveryTime>PT12H</DeliveryTime>
                 <DimensionalWeight>2.205</DimensionalWeight>
@@ -275,8 +275,8 @@
                 <TotalTransitDays>2</TotalTransitDays>
                 <PickupPostalLocAddDays>0</PickupPostalLocAddDays>
                 <DeliveryPostalLocAddDays>0</DeliveryPostalLocAddDays>
-                <PickupNonDHLCourierCode />
-                <DeliveryNonDHLCourierCode />
+                <PickupNonDHLCourierCode/>
+                <DeliveryNonDHLCourierCode/>
                 <DeliveryDate>2014-01-13</DeliveryDate>
                 <DeliveryTime>PT23H59M</DeliveryTime>
                 <DimensionalWeight>2.205</DimensionalWeight>
@@ -328,8 +328,8 @@
                 <TotalTransitDays>2</TotalTransitDays>
                 <PickupPostalLocAddDays>0</PickupPostalLocAddDays>
                 <DeliveryPostalLocAddDays>0</DeliveryPostalLocAddDays>
-                <PickupNonDHLCourierCode />
-                <DeliveryNonDHLCourierCode />
+                <PickupNonDHLCourierCode/>
+                <DeliveryNonDHLCourierCode/>
                 <DeliveryDate>2014-01-13</DeliveryDate>
                 <DeliveryTime>PT23H59M</DeliveryTime>
                 <DimensionalWeight>2.205</DimensionalWeight>

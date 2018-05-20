@@ -11,8 +11,8 @@
             <data name="tag" xsi:type="string">severity:S3</data>
             <data name="widgets/0" xsi:type="string">default</data>
             <data name="widgets/1" xsi:type="string">recently_viewed_products_on_blank_theme</data>
-            <constraint name="Magento\Widget\Test\Constraint\AssertThemeFilterValuesOnWidgetGrid" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetsInGrid" />
+            <constraint name="Magento\Widget\Test\Constraint\AssertThemeFilterValuesOnWidgetGrid"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetsInGrid"/>
         </variation>
     </testCase>
 </config>

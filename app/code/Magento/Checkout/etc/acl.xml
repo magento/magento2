@@ -12,7 +12,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Checkout::checkout" title="Checkout Section" translate="true" sortOrder="57" />
+                            <resource id="Magento_Checkout::checkout" title="Checkout Section" translate="true" sortOrder="57"/>
                         </resource>
                     </resource>
                 </resource>

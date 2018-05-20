@@ -29,8 +29,8 @@
             <data name="cmsPages/2/content/widget/dataset" xsi:type="string">new_products_grid</data>
             <data name="cmsPages/2/page_layout" xsi:type="string">1 column</data>
             <data name="cmsPages/2/identifier" xsi:type="string">identifier_%isolation%</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagesOnFrontendMultipleStoreViews" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagesOnFrontendMultipleStoreViews"/>
         </variation>
     </testCase>
 </config>

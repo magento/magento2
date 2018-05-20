@@ -11,14 +11,14 @@
              repository_class="Magento\CheckoutAgreements\Test\Repository\CheckoutAgreement"
              handler_interface="Magento\CheckoutAgreements\Test\Handler\CheckoutAgreement\CheckoutAgreementInterface"
              class="Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement">
-        <field name="agreement_id" is_required="1" />
-        <field name="name" is_required="" />
-        <field name="content" is_required="" />
-        <field name="content_height" is_required="" />
-        <field name="checkbox_text" is_required="" />
-        <field name="is_active" is_required="" />
-        <field name="is_html" is_required="" />
-        <field name="mode" is_required="" />
-        <field name="stores" source="Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement\Stores" />
+        <field name="agreement_id" is_required="1"/>
+        <field name="name" is_required=""/>
+        <field name="content" is_required=""/>
+        <field name="content_height" is_required=""/>
+        <field name="checkbox_text" is_required=""/>
+        <field name="is_active" is_required=""/>
+        <field name="is_html" is_required=""/>
+        <field name="mode" is_required=""/>
+        <field name="stores" source="Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement\Stores"/>
     </fixture>
 </config>

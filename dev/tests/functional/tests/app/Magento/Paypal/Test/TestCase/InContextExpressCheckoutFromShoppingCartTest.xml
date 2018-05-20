@@ -11,7 +11,7 @@
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="configData" xsi:type="string">paypal_express, paypal_express_in_context</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
-            <constraint name="Magento\Paypal\Test\Constraint\AssertExpressCancelledMessage" />
+            <constraint name="Magento\Paypal\Test\Constraint\AssertExpressCancelledMessage"/>
         </variation>
     </testCase>
 </config>

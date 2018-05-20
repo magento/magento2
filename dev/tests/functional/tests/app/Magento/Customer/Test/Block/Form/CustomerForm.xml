@@ -30,6 +30,6 @@
     <change_email>
         <input>checkbox</input>
     </change_email>
-    <confirmation />
+    <confirmation/>
 </fields>
 </mapping>

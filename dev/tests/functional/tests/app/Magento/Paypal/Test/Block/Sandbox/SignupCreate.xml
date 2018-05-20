@@ -16,11 +16,11 @@
         <street>
             <selector>[name=address1]</selector>
         </street>
-        <city />
+        <city/>
         <state>
             <input>select</input>
         </state>
-        <zip />
+        <zip/>
         <phone_number>
             <selector>[name=phoneNumber]</selector>
         </phone_number>

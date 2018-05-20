@@ -7,7 +7,7 @@
 -->
 <mapping strict="1">
     <fields>
-        <email />
-        <password />
+        <email/>
+        <password/>
     </fields>
 </mapping>

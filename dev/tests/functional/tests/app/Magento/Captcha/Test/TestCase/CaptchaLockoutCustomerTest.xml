@@ -13,7 +13,7 @@
             <data name="attempts" xsi:type="number">3</data>
             <data name="captcha" xsi:type="string">111</data>
             <data name="configData" xsi:type="string">captcha_storefront_login_failures_number, customer_max_login_failures_number</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerIsLockedOnBackend" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerIsLockedOnBackend"/>
         </variation>
     </testCase>
 </config>

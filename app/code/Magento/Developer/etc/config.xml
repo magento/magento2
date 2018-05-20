@@ -9,7 +9,7 @@
     <default>
         <dev>
             <restrict>
-                <allow_ips />
+                <allow_ips/>
             </restrict>
             <front_end_development_workflow>
                 <type>server_side_compilation</type>

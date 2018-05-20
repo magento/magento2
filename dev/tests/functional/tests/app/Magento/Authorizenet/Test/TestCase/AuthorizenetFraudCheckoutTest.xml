@@ -31,8 +31,8 @@
             <data name="invoiceStatus" xsi:type="string">Paid</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceStatusInOrdersGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceStatusInOrdersGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable"/>
         </variation>
     </testCase>
 </config>

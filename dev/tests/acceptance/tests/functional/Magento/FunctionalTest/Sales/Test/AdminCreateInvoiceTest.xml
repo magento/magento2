@@ -70,13 +70,13 @@
         <click selector="{{InvoiceNewSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
         <see selector="{{OrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
         <click selector="{{OrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5"/>
         <see selector="{{OrderDetailsInvoicesSection.content}}" userInput="{$grabOrderNumber}" stepKey="seeInvoice1"/>
         <see selector="{{OrderDetailsInvoicesSection.content}}" userInput="John Doe" stepKey="seeInvoice2"/>
         <click selector="{{OrderDetailsOrderViewSection.information}}" stepKey="clickInformation"/>
         <see selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
         <amOnPage url="{{InvoicesPage.url}}" stepKey="goToInvoices"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask6" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask6"/>
         <click selector="{{InvoicesGridSection.filter}}" stepKey="clickFilters"/>
         <fillField selector="{{InvoicesFiltersSection.orderNum}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum2"/>
         <click selector="{{InvoicesGridSection.firstRow}}" stepKey="clickInvoice2"/>

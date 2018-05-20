@@ -10,19 +10,19 @@
         <variation name="CreateCustomOrderStatusEntityTestVariation1">
             <data name="orderStatus/data/status" xsi:type="string">order_status%isolation%</data>
             <data name="orderStatus/data/label" xsi:type="string">orderLabel%isolation%</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusInGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusInGrid"/>
         </variation>
         <variation name="CreateCustomOrderStatusEntityTestVariation2">
             <data name="orderStatus/data/status" xsi:type="string">pending</data>
             <data name="orderStatus/data/label" xsi:type="string">orderLabel%isolation%</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusDuplicateStatus" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusDuplicateStatus"/>
         </variation>
         <variation name="CreateCustomOrderStatusEntityTestVariation3">
             <data name="orderStatus/data/status" xsi:type="string">order_status%isolation%</data>
             <data name="orderStatus/data/label" xsi:type="string">Suspected Fraud</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusInGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusInGrid"/>
         </variation>
     </testCase>
 </config>

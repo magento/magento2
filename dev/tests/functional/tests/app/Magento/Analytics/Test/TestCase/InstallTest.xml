@@ -11,7 +11,7 @@
             <data name="tag" xsi:type="string">severity:S1</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist"/>
             <constraint name="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled"/>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" prev="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" prev="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist"/>
         </variation>
     </testCase>
 </config>

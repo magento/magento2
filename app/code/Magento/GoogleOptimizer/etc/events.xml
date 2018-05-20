@@ -7,21 +7,21 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="catalog_product_save_after">
-        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\Product\SaveGoogleExperimentScriptObserver" />
+        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\Product\SaveGoogleExperimentScriptObserver"/>
     </event>
     <event name="catalog_product_delete_after">
-        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\Product\DeleteProductGoogleExperimentScriptObserver" />
+        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\Product\DeleteProductGoogleExperimentScriptObserver"/>
     </event>
     <event name="catalog_category_save_after">
-        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\Category\SaveGoogleExperimentScriptObserver" />
+        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\Category\SaveGoogleExperimentScriptObserver"/>
     </event>
     <event name="catalog_category_delete_after">
-        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\Category\DeleteCategoryGoogleExperimentScriptObserver" />
+        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\Category\DeleteCategoryGoogleExperimentScriptObserver"/>
     </event>
     <event name="cms_page_save_after">
-        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\CmsPage\SaveGoogleExperimentScriptObserver" />
+        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\CmsPage\SaveGoogleExperimentScriptObserver"/>
     </event>
     <event name="cms_page_delete_after">
-        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\CmsPage\DeleteCmsGoogleExperimentScriptObserver" />
+        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\CmsPage\DeleteCmsGoogleExperimentScriptObserver"/>
     </event>
 </config>

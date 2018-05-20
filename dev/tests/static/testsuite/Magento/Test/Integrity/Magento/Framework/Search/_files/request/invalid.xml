@@ -9,7 +9,7 @@
     <request query="suggested_search_container" index="product">
         <queries>
             <query xsi:type="boolQuery" name="suggested_search_container_dd" boost="2">
-                <queryReference clause="not" ref="fulltext_search_query4" />
+                <queryReference clause="not" ref="fulltext_search_query4"/>
             </query>
         </queries>
         <from>10</from>

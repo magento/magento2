@@ -23,9 +23,9 @@
             <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
             <data name="giftMessage/data/items/datasets" xsi:type="string">default</data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
-            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInBackendOrder" />
-            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrderItems" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage"/>
+            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInBackendOrder"/>
+            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrderItems"/>
         </variation>
         <variation name="CreateGiftMessageOnBackendTestVariation2">
             <data name="tag" xsi:type="string">severity:S2</data>
@@ -43,9 +43,9 @@
             <data name="giftMessage/data/recipient" xsi:type="string">Jane Doe</data>
             <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
-            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInBackendOrder" />
-            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrder" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage"/>
+            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInBackendOrder"/>
+            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrder"/>
         </variation>
         <variation name="CreateGiftMessageOnBackendTestVariation3">
             <data name="tag" xsi:type="string">severity:S2</data>
@@ -64,10 +64,10 @@
             <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
             <data name="giftMessage/data/items/datasets" xsi:type="string">default</data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
-            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInBackendOrder" />
-            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrder" />
-            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrderItems" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage"/>
+            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInBackendOrder"/>
+            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrder"/>
+            <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrderItems"/>
         </variation>
     </testCase>
 </config>

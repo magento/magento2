@@ -10,8 +10,8 @@
         <variation name="DeleteCmsPageEntityTestVariation1">
             <data name="tag" xsi:type="string">severity:S1, stable:no</data>
             <data name="cmsPage/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDeleteMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageNotInGrid" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDeleteMessage"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageNotInGrid"/>
         </variation>
     </testCase>
 </config>

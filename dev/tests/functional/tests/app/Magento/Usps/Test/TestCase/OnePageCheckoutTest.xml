@@ -22,7 +22,7 @@
             <data name="configData" xsi:type="string">checkmo, usps, shipping_origin_US_CA, usps_container_sm_flat_rate_box</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty"/>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
         </variation>
@@ -39,7 +39,7 @@
             <data name="configData" xsi:type="string">checkmo, usps, shipping_origin_US_CA</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty"/>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
         </variation>

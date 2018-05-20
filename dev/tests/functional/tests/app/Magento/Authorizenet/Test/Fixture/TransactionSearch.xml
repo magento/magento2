@@ -11,7 +11,7 @@
              type="virtual"
              repository_class="Magento\Authorizenet\Test\Repository\TransactionSearch"
              class="Magento\Authorizenet\Test\Fixture\TransactionSearch">
-        <field name="settlement_date_from" />
-        <field name="settlement_date_to" />
+        <field name="settlement_date_from"/>
+        <field name="settlement_date_to"/>
     </fixture>
 </config>

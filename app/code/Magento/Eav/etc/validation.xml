@@ -10,7 +10,7 @@
         <rules>
             <rule name="eav_attribute_data">
                 <entity_constraints>
-                    <constraint alias="eav_data_validator" class="Magento\Eav\Model\Validator\Attribute\Data" />
+                    <constraint alias="eav_data_validator" class="Magento\Eav\Model\Validator\Attribute\Data"/>
                 </entity_constraints>
             </rule>
         </rules>

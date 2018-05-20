@@ -12,32 +12,32 @@
             <data name="nestingLevel" xsi:type="number">2</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryIncludeInNavigationMenu" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertSubCategoryNotInNavigationMenu" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryIncludeInNavigationMenu"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertSubCategoryNotInNavigationMenu"/>
         </variation>
         <variation name="CategoryAndSubcategotyNotIncludeInNavigationMenu1" summary="Turn off include_in_menu category and check that category and subcategory are not visible on navigation menu">
             <data name="initialCategory/dataset" xsi:type="string">two_nested_categories</data>
             <data name="nestingLevel" xsi:type="number">2</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/include_in_menu" xsi:type="string">No</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryNotInNavigationMenu" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertSubCategoryNotInNavigationMenu" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryNotInNavigationMenu"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertSubCategoryNotInNavigationMenu"/>
         </variation>
         <variation name="InactiveCategoryAndSubcategotyNotIncludeInNavigationMenu" summary="Inactive category and check that category and subcategory are not visible on navigation menu">
             <data name="initialCategory/dataset" xsi:type="string">two_nested_categories</data>
             <data name="nestingLevel" xsi:type="number">2</data>
             <data name="category/data/is_active" xsi:type="string">No</data>
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryNotInNavigationMenu" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertSubCategoryNotInNavigationMenu" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryNotInNavigationMenu"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertSubCategoryNotInNavigationMenu"/>
         </variation>
         <variation name="CategoryAndSubcategotyNotIncludeInNavigationMenu2" summary="Turn off include_in_menu category, inactive category and check that category and subcategory are not visible on navigation menu">
             <data name="initialCategory/dataset" xsi:type="string">two_nested_categories</data>
             <data name="nestingLevel" xsi:type="number">2</data>
             <data name="category/data/is_active" xsi:type="string">No</data>
             <data name="category/data/include_in_menu" xsi:type="string">No</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryNotInNavigationMenu" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertSubCategoryNotInNavigationMenu" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryNotInNavigationMenu"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertSubCategoryNotInNavigationMenu"/>
         </variation>
     </testCase>
 </config>

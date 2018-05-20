@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Magento_Sales::sales" title="Sales" translate="title" module="Magento_Sales" sortOrder="15" dependsOnModule="Magento_Sales" resource="Magento_Sales::sales"/>
-        <add id="Magento_Sales::sales_operation" title="Operations" translate="title" module="Magento_Sales" sortOrder="10" parent="Magento_Sales::sales" resource="Magento_Sales::sales_operation" />
+        <add id="Magento_Sales::sales_operation" title="Operations" translate="title" module="Magento_Sales" sortOrder="10" parent="Magento_Sales::sales" resource="Magento_Sales::sales_operation"/>
         <add id="Magento_Sales::sales_order" title="Orders" translate="title" module="Magento_Sales" sortOrder="10" parent="Magento_Sales::sales_operation" action="sales/order" resource="Magento_Sales::sales_order"/>
         <add id="Magento_Sales::sales_invoice" title="Invoices" translate="title" module="Magento_Sales" sortOrder="20" parent="Magento_Sales::sales_operation" action="sales/invoice" resource="Magento_Sales::sales_invoice"/>
         <add id="Magento_Sales::sales_shipment" title="Shipments" translate="title" module="Magento_Sales" sortOrder="30" parent="Magento_Sales::sales_operation" action="sales/shipment" resource="Magento_Sales::shipment"/>

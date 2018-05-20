@@ -6,8 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\TestModuleDefaultHydrator\Api\CustomerPersistenceInterface" type="Magento\TestModuleDefaultHydrator\Model\CustomerPersistence" />
-    <preference for="Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterface" type="Magento\TestModuleDefaultHydrator\Model\Data\ExtensionAttribute" />
+    <preference for="Magento\TestModuleDefaultHydrator\Api\CustomerPersistenceInterface" type="Magento\TestModuleDefaultHydrator\Model\CustomerPersistence"/>
+    <preference for="Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterface" type="Magento\TestModuleDefaultHydrator\Model\Data\ExtensionAttribute"/>
     <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">

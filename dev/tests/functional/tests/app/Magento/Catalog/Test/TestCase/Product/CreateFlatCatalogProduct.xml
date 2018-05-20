@@ -10,7 +10,7 @@
         <variation name="CheckPaginationInStorefront"  ticketId="MAGETWO-67570">
             <data name="configData" xsi:type="string">category_flat,product_flat</data>
             <data name="productsCount" xsi:type="number">19</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertPaginationCorrectOnStoreFront" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertPaginationCorrectOnStoreFront"/>
         </variation>
     </testCase>
 </config>

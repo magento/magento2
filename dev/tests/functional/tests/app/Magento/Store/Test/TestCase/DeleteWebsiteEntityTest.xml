@@ -11,16 +11,16 @@
             <data name="tag" xsi:type="string">severity:S3</data>
             <data name="website/dataset" xsi:type="string">custom_website</data>
             <data name="createBackup" xsi:type="string">Yes</data>
-            <constraint name="Magento\Store\Test\Constraint\AssertWebsiteSuccessDeleteAndBackupMessages" />
-            <constraint name="Magento\Store\Test\Constraint\AssertWebsiteNotInGrid" />
-            <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid" />
+            <constraint name="Magento\Store\Test\Constraint\AssertWebsiteSuccessDeleteAndBackupMessages"/>
+            <constraint name="Magento\Store\Test\Constraint\AssertWebsiteNotInGrid"/>
+            <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid"/>
         </variation>
         <variation name="DeleteWebsiteEntityTestVariation2">
             <data name="tag" xsi:type="string">severity:S3</data>
             <data name="website/dataset" xsi:type="string">custom_website</data>
             <data name="createBackup" xsi:type="string">No</data>
-            <constraint name="Magento\Store\Test\Constraint\AssertWebsiteSuccessDeleteMessage" />
-            <constraint name="Magento\Store\Test\Constraint\AssertWebsiteNotInGrid" />
+            <constraint name="Magento\Store\Test\Constraint\AssertWebsiteSuccessDeleteMessage"/>
+            <constraint name="Magento\Store\Test\Constraint\AssertWebsiteNotInGrid"/>
         </variation>
     </testCase>
 </config>

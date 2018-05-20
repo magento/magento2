@@ -6,8 +6,8 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
-    <reference name="any_handle_name" />
+    <reference name="any_handle_name"/>
     <any_node>
-        <reference name="singlechunk" />
+        <reference name="singlechunk"/>
     </any_node>
 </layout>

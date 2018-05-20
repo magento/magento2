@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Signifyd\Model\QuoteSession\QuoteSessionInterface" type="Magento\Signifyd\Model\QuoteSession\FrontendSession" />
+    <preference for="Magento\Signifyd\Model\QuoteSession\QuoteSessionInterface" type="Magento\Signifyd\Model\QuoteSession\FrontendSession"/>
 </config>

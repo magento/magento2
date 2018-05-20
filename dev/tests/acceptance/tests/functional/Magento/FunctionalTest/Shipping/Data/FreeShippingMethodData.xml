@@ -40,7 +40,7 @@
         <data key="value">Free</data>
     </entity>
     <entity name="freeShippingSubtotalDefault" type="free_shipping_subtotal">
-        <data key="value" />
+        <data key="value"/>
     </entity>
     <entity name="freeSpecificerrmsgDefault" type="specificerrmsg">
         <data key="value">This shipping method is not available. To use this shipping method, please contact us.</data>
@@ -49,12 +49,12 @@
         <data key="value">0</data>
     </entity>
     <entity name="freeSpecificcountryDefault" type="specificcountry">
-        <data key="value" />
+        <data key="value"/>
     </entity>
     <entity name="freeShowmethodDefault" type="showmethod">
         <data key="value">0</data>
     </entity>
     <entity name="freeSortOrderDefault" type="sort_order">
-        <data key="value" />
+        <data key="value"/>
     </entity>
 </entities>

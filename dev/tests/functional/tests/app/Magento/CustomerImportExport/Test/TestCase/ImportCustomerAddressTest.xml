@@ -25,8 +25,8 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
-            <constraint name="Magento\CustomerImportExport\Test\Constraint\AssertImportCustomerAddresses" />
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage"/>
+            <constraint name="Magento\CustomerImportExport\Test\Constraint\AssertImportCustomerAddresses"/>
         </variation>
         <variation name="ImportCustomerAddressesVariation2" ticketId="MAGETWO-46176" summary="Add/Update Customer Addresses">
             <data name="import/data" xsi:type="array">
@@ -47,8 +47,8 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
-            <constraint name="Magento\CustomerImportExport\Test\Constraint\AssertImportCustomerAddresses" />
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage"/>
+            <constraint name="Magento\CustomerImportExport\Test\Constraint\AssertImportCustomerAddresses"/>
         </variation>
     </testCase>
 </config>

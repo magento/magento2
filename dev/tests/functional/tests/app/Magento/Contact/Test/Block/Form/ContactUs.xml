@@ -11,8 +11,8 @@
             <firstname>
                 <selector>input[name*=name]</selector>
             </firstname>
-            <email />
-            <telephone />
+            <email/>
+            <telephone/>
         </customer>
         <comment>
             <selector>#comment</selector>

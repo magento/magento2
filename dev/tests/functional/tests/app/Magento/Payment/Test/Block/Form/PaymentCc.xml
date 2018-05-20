@@ -11,13 +11,13 @@
         <cc_type>
             <input>select</input>
         </cc_type>
-        <cc_number />
+        <cc_number/>
         <cc_exp_month>
             <input>select</input>
         </cc_exp_month>
         <cc_exp_year>
             <input>select</input>
         </cc_exp_year>
-        <cc_cid />
+        <cc_cid/>
     </fields>
 </mapping>

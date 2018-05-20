@@ -11,6 +11,6 @@
         <email>
             <selector>[name='login[username]']</selector>
         </email>
-        <password />
+        <password/>
     </fields>
 </mapping>

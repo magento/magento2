@@ -43,10 +43,10 @@
                 <item name="transactionType" xsi:type="string">Refund</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus"/>
         </variation>
         <variation name="CreateOnlineCreditMemoBraintreeTestVariation2" summary="Partial Refund an order placed through Braintree with Partial capture" ticketId="MAGETWO-38325">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
@@ -100,9 +100,9 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
         </variation>
     </testCase>
 </config>

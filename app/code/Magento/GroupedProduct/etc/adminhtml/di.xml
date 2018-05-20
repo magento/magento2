@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\GroupedProduct\Model\Product\Type\Grouped" type="Magento\GroupedProduct\Model\Product\Type\Grouped\Backend" />
+    <preference for="Magento\GroupedProduct\Model\Product\Type\Grouped" type="Magento\GroupedProduct\Model\Product\Type\Grouped\Backend"/>
     <type name="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar">
         <plugin name="GroupedProduct" type="Magento\GroupedProduct\Block\Adminhtml\Order\Create\Sidebar" sortOrder="100"/>
     </type>

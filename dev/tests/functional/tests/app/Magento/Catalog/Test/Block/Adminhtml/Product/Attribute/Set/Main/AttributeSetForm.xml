@@ -7,7 +7,7 @@
 -->
 <mapping strict="0">
     <fields>
-        <attribute_set_name />
+        <attribute_set_name/>
         <skeleton_set>
             <input>select</input>
         </skeleton_set>

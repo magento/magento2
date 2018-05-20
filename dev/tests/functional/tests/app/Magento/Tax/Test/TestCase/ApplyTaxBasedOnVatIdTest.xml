@@ -24,9 +24,9 @@
                 <item name="grandTotal" xsi:type="string">17</item>
             </data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertEstimateShippingAndTax" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertEstimateShippingAndTax"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
         </variation>
     </testCase>
 </config>

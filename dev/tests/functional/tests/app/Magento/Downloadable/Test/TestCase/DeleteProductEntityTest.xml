@@ -10,9 +10,9 @@
         <variation name="DeleteProductEntityTestVariation7" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" method="test">
             <data name="products" xsi:type="string">downloadableProduct::default</data>
             <data name="isRequired" xsi:type="string">Yes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend"/>
         </variation>
     </testCase>
 </config>

@@ -28,12 +28,12 @@
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Hold, Invoice, Ship, Reorder, Edit</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
         <variation name="CreateOrderBackendTestBraintreeVariation2" summary="Checkout with Braintree Credit Card from Admin (Payment Action = Authorize and Capture)" ticketId="MAGETWO-38316">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test, test_type:3rd_party_test, severity:S0</data>
@@ -57,12 +57,12 @@
             <data name="configData" xsi:type="string">braintree, braintree_sale</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Hold, Ship, Reorder</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
         <variation name="CreateOrderBackendTestBraintreeVariation3" summary="Checkout with Braintree Credit Card from Admin (Basic Fraud Protection)" ticketId="MAGETWO-46470">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
@@ -83,9 +83,9 @@
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_fraud_rejected</data>
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Processing</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
     </testCase>
 </config>

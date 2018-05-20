@@ -26,8 +26,8 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage"/>
+            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing"/>
         </variation>
         <variation name="ImportProductsVariation2" ticketId="MAGETWO-46156" summary="Replace product tier prices">
             <data name="issue" xsi:type="string">MAGETWO-66134: [Export/Import] Advanced Pricing import works incorrect</data>
@@ -48,8 +48,8 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage"/>
+            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing"/>
         </variation>
         <variation name="ImportProductsVariation3" ticketId="MAGETWO-46157" summary="Delete product tier prices">
             <data name="issue" xsi:type="string">MAGETWO-66134: [Export/Import] Advanced Pricing import works incorrect</data>
@@ -70,8 +70,8 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage"/>
+            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing"/>
         </variation>
         <variation name="ImportProductsVariation4" ticketId="MAGETWO-46159" summary="Replace product tier prices in two websites">
             <data name="issue" xsi:type="string">MAGETWO-66134: [Export/Import] Advanced Pricing import works incorrect</data>
@@ -97,8 +97,8 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage"/>
+            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing"/>
         </variation>
     </testCase>
 </config>

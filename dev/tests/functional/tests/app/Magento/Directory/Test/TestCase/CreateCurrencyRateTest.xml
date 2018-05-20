@@ -17,8 +17,8 @@
             <data name="config/dataset" xsi:type="string">config_currency_symbols_usd_and_eur</data>
             <data name="basePrice" xsi:type="string">$10.00</data>
             <data name="convertedPrice" xsi:type="string">€8.00</data>
-            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
-            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateAppliedOnCatalogPage" />
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage"/>
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateAppliedOnCatalogPage"/>
         </variation>
         <variation name="CreateCurrencyRateTestVariation2">
             <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
@@ -30,8 +30,8 @@
             <data name="config/dataset" xsi:type="string">config_base_currency_us_display_currency_uah</data>
             <data name="basePrice" xsi:type="string">₴20.00</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
-            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
-            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateAppliedOnProductPage" />
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage"/>
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateAppliedOnProductPage"/>
         </variation>
         <variation name="CreateCurrencyRateTestVariation3" summary="Create currency rate if is not base currency" ticketId="MAGETWO-45310">
             <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
@@ -43,8 +43,8 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="config/dataset" xsi:type="string">config_allowed_currency_usd_and_uah</data>
-            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
-            <constraint name="Magento\Directory\Test\Constraint\AssertShippingPriceWithCustomCurrency" />
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage"/>
+            <constraint name="Magento\Directory\Test\Constraint\AssertShippingPriceWithCustomCurrency"/>
         </variation>
     </testCase>
 </config>

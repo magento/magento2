@@ -16,7 +16,7 @@
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Framework\View\Element\Template" name="affected-attribute-set-selector" template="Magento_ConfigurableProduct::product/configurable/affected-attribute-set-selector/form.phtml">
-                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\AttributeSet\Form" name="affected-attribute-set-form" />
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\AttributeSet\Form" name="affected-attribute-set-form"/>
             </block>
         </referenceContainer>
     </body>

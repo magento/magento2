@@ -11,7 +11,7 @@
     <route url="/V1/search" method="GET">
         <service class="Magento\Search\Api\SearchInterface" method="search"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
 

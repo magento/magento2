@@ -10,7 +10,7 @@
         <variation name="MoveRecentlyComparedProductsOnOrderPageTestVariationWithConfigurableProduct1">
             <data name="products/0" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
             <data name="products/1" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid"/>
         </variation>
     </testCase>
 </config>

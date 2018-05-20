@@ -14,10 +14,10 @@
                 <item name="1" xsi:type="string">CreateEmptyCartPost</item>
                 <item name="2" xsi:type="string">PlaceOrderPut</item>
             </data>
-            <constraint name="Magento\Swagger\Test\Constraint\AssertSwaggerSectionLoadOnPage" />
-            <constraint name="Magento\Swagger\Test\Constraint\AssertApiInfoTitleOnPage" />
-            <constraint name="Magento\Swagger\Test\Constraint\AssertServiceContentDisplay" />
-            <constraint name="Magento\Swagger\Test\Constraint\AssertEndpointContentDisplay" />
+            <constraint name="Magento\Swagger\Test\Constraint\AssertSwaggerSectionLoadOnPage"/>
+            <constraint name="Magento\Swagger\Test\Constraint\AssertApiInfoTitleOnPage"/>
+            <constraint name="Magento\Swagger\Test\Constraint\AssertServiceContentDisplay"/>
+            <constraint name="Magento\Swagger\Test\Constraint\AssertEndpointContentDisplay"/>
         </variation>
         <variation name="SwaggerTestVariation2" summary="Swagger ui for customerAccountManagementV1">
             <data name="serviceName" xsi:type="string">customerAccountManagementV1</data>
@@ -27,10 +27,10 @@
                 <item name="2" xsi:type="string">InitiatePasswordResetPut</item>
                 <item name="3" xsi:type="string">IsEmailAvailablePost</item>
             </data>
-            <constraint name="Magento\Swagger\Test\Constraint\AssertSwaggerSectionLoadOnPage" />
-            <constraint name="Magento\Swagger\Test\Constraint\AssertApiInfoTitleOnPage" />
-            <constraint name="Magento\Swagger\Test\Constraint\AssertServiceContentDisplay" />
-            <constraint name="Magento\Swagger\Test\Constraint\AssertEndpointContentDisplay" />
+            <constraint name="Magento\Swagger\Test\Constraint\AssertSwaggerSectionLoadOnPage"/>
+            <constraint name="Magento\Swagger\Test\Constraint\AssertApiInfoTitleOnPage"/>
+            <constraint name="Magento\Swagger\Test\Constraint\AssertServiceContentDisplay"/>
+            <constraint name="Magento\Swagger\Test\Constraint\AssertEndpointContentDisplay"/>
         </variation>
         <variation name="SwaggerTestVariation3" summary="Swagger ui for directoryCountryInformationAcquirerV1">
             <data name="serviceName" xsi:type="string">directoryCountryInformationAcquirerV1</data>
@@ -38,10 +38,10 @@
                 <item name="0" xsi:type="string">GetCountriesInfoGet</item>
                 <item name="1" xsi:type="string">GetCountryInfoGet</item>
             </data>
-            <constraint name="Magento\Swagger\Test\Constraint\AssertSwaggerSectionLoadOnPage" />
-            <constraint name="Magento\Swagger\Test\Constraint\AssertApiInfoTitleOnPage" />
-            <constraint name="Magento\Swagger\Test\Constraint\AssertServiceContentDisplay" />
-            <constraint name="Magento\Swagger\Test\Constraint\AssertEndpointContentDisplay" />
+            <constraint name="Magento\Swagger\Test\Constraint\AssertSwaggerSectionLoadOnPage"/>
+            <constraint name="Magento\Swagger\Test\Constraint\AssertApiInfoTitleOnPage"/>
+            <constraint name="Magento\Swagger\Test\Constraint\AssertServiceContentDisplay"/>
+            <constraint name="Magento\Swagger\Test\Constraint\AssertEndpointContentDisplay"/>
         </variation>
     </testCase>
 </config>

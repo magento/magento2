@@ -11,8 +11,8 @@
     <update handle="sales_order_guest_info_links"/>
     <body>
        <referenceContainer name="page.main.title">
-            <block class="Magento\Sales\Block\Order\Info" name="order.status" template="Magento_Sales::order/order_status.phtml" />
-            <block class="Magento\Sales\Block\Order\Info" name="order.date" template="Magento_Sales::order/order_date.phtml" />
+            <block class="Magento\Sales\Block\Order\Info" name="order.status" template="Magento_Sales::order/order_status.phtml"/>
+            <block class="Magento\Sales\Block\Order\Info" name="order.date" template="Magento_Sales::order/order_date.phtml"/>
             <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
                 <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false">
                     <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
@@ -22,7 +22,7 @@
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Order\View" name="sales.order.view" cacheable="false">
                 <block class="Magento\Sales\Block\Order\Items" name="order_items" template="Magento_Sales::order/items.phtml">
-                    <block class="Magento\Framework\View\Element\RendererList" name="sales.order.items.renderers" as="renderer.list" />
+                    <block class="Magento\Framework\View\Element\RendererList" name="sales.order.items.renderers" as="renderer.list"/>
                     <block class="Magento\Theme\Block\Html\Pager" name="sales_order_item_pager"/>
                     <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="Magento_Sales::order/totals.phtml">
                         <arguments>
@@ -33,7 +33,7 @@
                     </block>
                 </block>
             </block>
-            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info" />
+            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info"/>
         </referenceContainer>
     </body>
 </page>

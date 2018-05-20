@@ -6,11 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Mail\TemplateInterface" type="Magento\Email\Model\Template" />
-    <preference for="Magento\Framework\Mail\Template\FactoryInterface" type="Magento\Framework\Mail\Template\Factory" />
-    <preference for="Magento\Framework\Mail\TransportInterface" type="Magento\Email\Model\Transport" />
-    <preference for="Magento\Framework\Mail\MessageInterface" type="Magento\Framework\Mail\Message" />
-    <preference for="Magento\Framework\Mail\Template\SenderResolverInterface" type="Magento\Email\Model\Template\SenderResolver" />
+    <preference for="Magento\Framework\Mail\TemplateInterface" type="Magento\Email\Model\Template"/>
+    <preference for="Magento\Framework\Mail\Template\FactoryInterface" type="Magento\Framework\Mail\Template\Factory"/>
+    <preference for="Magento\Framework\Mail\TransportInterface" type="Magento\Email\Model\Transport"/>
+    <preference for="Magento\Framework\Mail\MessageInterface" type="Magento\Framework\Mail\Message"/>
+    <preference for="Magento\Framework\Mail\Template\SenderResolverInterface" type="Magento\Email\Model\Template\SenderResolver"/>
     <type name="Magento\Email\Model\BackendTemplate">
         <arguments>
             <argument name="urlModel" xsi:type="object" shared="false">Magento\Backend\Model\Url</argument>
@@ -58,8 +58,8 @@
         </arguments>
     </type>
     <type name="Magento\Framework\Mail\TransportInterface">
-        <plugin name="WindowsSmtpConfig" type="Magento\Email\Model\Plugin\WindowsSmtpConfig" />
-        <plugin name="EmailDisable" type="Magento\Email\Model\Mail\TransportInterfacePlugin" />
+        <plugin name="WindowsSmtpConfig" type="Magento\Email\Model\Plugin\WindowsSmtpConfig"/>
+        <plugin name="EmailDisable" type="Magento\Email\Model\Mail\TransportInterfacePlugin"/>
     </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>

@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::marketing">
                     <resource id="Magento_Backend::marketing_communications">
-                        <resource id="Magento_Newsletter::template" title="Newsletter Template" translate="title" sortOrder="20" />
+                        <resource id="Magento_Newsletter::template" title="Newsletter Template" translate="title" sortOrder="20"/>
                         <resource id="Magento_Newsletter::queue" title="Newsletter Queue" translate="title" sortOrder="30"/>
                         <resource id="Magento_Newsletter::subscriber" title="Newsletter Subscribers" translate="title" sortOrder="40"/>
                     </resource>
@@ -24,7 +24,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Newsletter::newsletter" title="Newsletter Section" translate="title" />
+                            <resource id="Magento_Newsletter::newsletter" title="Newsletter Section" translate="title"/>
                         </resource>
                     </resource>
                 </resource>

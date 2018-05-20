@@ -24,9 +24,9 @@
             <data name="cartPrice/sub_total" xsi:type="string">400.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">300.00</data>
             <data name="cartPrice/discount" xsi:type="string">100.00</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied"/>
         </variation>
     </testCase>
 </config>

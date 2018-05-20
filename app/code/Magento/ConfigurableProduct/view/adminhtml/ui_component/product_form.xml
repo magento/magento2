@@ -28,7 +28,7 @@
             <arguments>
                 <argument name="config" xsi:type="array">
                     <item name="collapsible" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true" />
+                    <item name="label" xsi:type="string" translate="true"/>
                     <item name="sortOrder" xsi:type="string">1000</item>
                     <item name="canShow" xsi:type="boolean">true</item>
                     <item name="componentType" xsi:type="string">fieldset</item>

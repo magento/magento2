@@ -30,9 +30,9 @@
             <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_sale, braintree_paypal_skip_order_review</data>
             <data name="paymentAction" xsi:type="string">sale</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory"/>
         </variation>
         <variation name="CreateOnlineCreditMemoBraintreePaypalTestVariation2" summary="Partial refund of order placed within Braintree PayPal" ticketId="MAGETWO-48698">
             <data name="products/0" xsi:type="string">catalogProductSimple::simple_for_sales</data>
@@ -75,9 +75,9 @@
                 </item>
             </data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory"/>
         </variation>
     </testCase>
 </config>

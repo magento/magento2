@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="CheckoutOnepage" mca="checkout" module="Magento_Checkout">
         <block name="paymentBlock">
-            <render name="default" class="Magento\Payment\Test\Block\Form\PaymentCc" />
+            <render name="default" class="Magento\Payment\Test\Block\Form\PaymentCc"/>
         </block>
     </page>
 </config>
