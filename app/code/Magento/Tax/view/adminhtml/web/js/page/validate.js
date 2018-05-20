@@ -6,7 +6,7 @@
 define([
     'jquery',
     'mage/mage'
-], function(jQuery){
+], function (jQuery) {
     'use strict';
 
     return function (data, element) {
