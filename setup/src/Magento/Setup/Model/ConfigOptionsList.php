@@ -149,6 +149,18 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'Database  initial set of commands',
                 'SET NAMES utf8;'
             ),
+            new FlagConfigOption(
+                ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION,
+                '',
+                'If specified, then db connection validation will be skipped',
+                '-s'
+            ),
+            new TextConfigOption(
+                ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS,
+                'http Cache hosts'
+            ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_SSL_KEY,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
@@ -178,18 +190,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY,
                 'Verify server sertification'
-            ),
-            new FlagConfigOption(
-                ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION,
-                '',
-                'If specified, then db connection validation will be skipped',
-                '-s'
-            ),
-            new TextConfigOption(
-                ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS,
-                TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS,
-                'http Cache hosts'
             ),
         ];
 
