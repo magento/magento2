@@ -54,7 +54,6 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture   Magento/Sales/_files/invoice_list_different_stores.php
      * @magentoConfigFixture default/sales_email/general/async_sending 1
      * @magentoConfigFixture current_store sales_email/invoice/enabled 1
-     * @magentoConfigFixture fixture_second_store sales_email/invoice/enabled 0
      */
     public function testInvoiceEmailSenderExecute()
     {
