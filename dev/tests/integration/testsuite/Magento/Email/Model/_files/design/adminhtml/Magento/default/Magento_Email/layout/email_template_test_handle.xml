@@ -5,6 +5,6 @@
  * See COPYING.txt for license details.
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <block class="Magento\Backend\Block\Template" name="sample_email_content" template="Magento_Email::sample_email_content.phtml"/>
 </layout>

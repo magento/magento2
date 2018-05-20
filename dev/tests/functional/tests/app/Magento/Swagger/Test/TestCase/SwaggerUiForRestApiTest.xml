@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Swagger\Test\TestCase\SwaggerUiForRestApiTest" summary="Swagger ui for REST API" ticketId="MAGETWO-41381">
-        <variation name="SwaggerTestVariation1" summary="Swagger ui for catalogProductRepositoryV1" >
+        <variation name="SwaggerTestVariation1" summary="Swagger ui for catalogProductRepositoryV1">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="serviceName" xsi:type="string">quoteGuestCartManagementV1</data>
             <data name="endpoints" xsi:type="array">

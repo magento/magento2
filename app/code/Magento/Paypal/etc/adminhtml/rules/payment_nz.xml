@@ -14,8 +14,7 @@
             <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
-                           event="deactivate-rule"
-                        >
+                           event="deactivate-rule">
                     <argument name="wps_other">wps_other</argument>
                 </predicate>
             </event>
@@ -38,8 +37,7 @@
             <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
-                           event="deactivate-rule"
-                        >
+                           event="deactivate-rule">
                     <argument name="paypal_payflowpro_nz">paypal_payflowpro_nz</argument>
                     <argument name="express_checkout_other">express_checkout_other</argument>
                 </predicate>
@@ -67,8 +65,7 @@
             <event value="1" name="activate-rule">
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
-                           event="deactivate-rule"
-                        >
+                           event="deactivate-rule">
                     <argument name="wps_other">wps_other</argument>
                 </predicate>
             </event>

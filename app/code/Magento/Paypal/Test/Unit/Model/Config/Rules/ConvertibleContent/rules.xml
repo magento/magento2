@@ -12,8 +12,7 @@
             <event value="1" name="event1">
                 <predicate name="predicate1"
                            message="Test message!"
-                           event="event1"
-                        >
+                           event="event1">
                     <argument name="argument1">argument1</argument>
                     <argument name="argument2">argument2</argument>
                 </predicate>
@@ -36,8 +35,7 @@
             <event value="1" name="event1">
                 <predicate name="predicate1"
                            message="Test message!"
-                           event="event1"
-                        >
+                           event="event1">
                     <argument name="argument1">argument1</argument>
                     <argument name="argument2">argument2</argument>
                 </predicate>

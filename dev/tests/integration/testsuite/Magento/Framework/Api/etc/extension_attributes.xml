@@ -14,8 +14,7 @@
             </resources>
             <join reference_table="cataloginventory_stock_item"
                   join_on_field="entity_id"
-                  reference_field="product_id"
-                    >
+                  reference_field="product_id">
                 <field>qty</field>
                 <field>item_id</field>
             </join>
@@ -26,8 +25,7 @@
             </resources>
             <join reference_table="cataloginventory_stock_item"
                   join_on_field="entity_id"
-                  reference_field="product_id"
-                    >
+                  reference_field="product_id">
                 <field>qty</field>
             </join>
         </attribute>
@@ -37,8 +35,7 @@
         <attribute code="test_group_code" type="string">
             <join reference_table="customer_group"
                   join_on_field="group_id"
-                  reference_field="customer_group_id"
-                    >
+                  reference_field="customer_group_id">
                 <field>customer_group_code</field>
             </join>
         </attribute>
@@ -48,16 +45,14 @@
         <attribute code="test_group_code" type="string">
             <join reference_table="customer_group"
                   join_on_field="group_id"
-                  reference_field="customer_group_id"
-                    >
+                  reference_field="customer_group_id">
                 <field>customer_group_code</field>
             </join>
         </attribute>
         <attribute code="test_group" type="Magento\Customer\Api\Data\GroupInterface">
             <join reference_table="customer_group"
                   join_on_field="group_id"
-                  reference_field="customer_group_id"
-                    >
+                  reference_field="customer_group_id">
                 <field>tax_class_id</field>
                 <field column="customer_group_code">code</field>
             </join>
@@ -68,16 +63,14 @@
         <attribute code="test_dummy_attribute" type="string">
             <join reference_table="eav_attribute"
                   reference_field="attribute_id"
-                  join_on_field="customer_group_id"
-                    >
+                  join_on_field="customer_group_id">
                 <field>attribute_code</field>
             </join>
         </attribute>
         <attribute code="test_complex_dummy_attribute" type="Magento\Catalog\Api\Data\ProductAttributeInterface">
             <join reference_table="admin_user"
                   reference_field="user_id"
-                  join_on_field="customer_group_id"
-                    >
+                  join_on_field="customer_group_id">
                 <field column="username">attribute_code</field>
                 <field column="firstname">frontend_label</field>
             </join>
@@ -88,8 +81,7 @@
         <attribute code="test_dummy_attribute" type="string">
             <join reference_table="eav_attribute"
                   reference_field="attribute_id"
-                  join_on_field="entity_id"
-                    >
+                  join_on_field="entity_id">
                 <field>attribute_code</field>
             </join>
         </attribute>

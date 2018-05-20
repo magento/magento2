@@ -10,8 +10,7 @@
         <attribute code="test_customer_group_id" type="int">
             <join reference_table="customer_entity"
                   reference_field="entity_id"
-                  join_on_field="parent_id"
-                    >
+                  join_on_field="parent_id">
                 <field>group_id</field>
             </join>
         </attribute>

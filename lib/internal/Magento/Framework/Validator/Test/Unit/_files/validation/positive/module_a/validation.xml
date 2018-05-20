@@ -9,7 +9,7 @@
     <entity name="test_entity_a">
         <rules>
             <rule name="check_alnum_and_int_not_empty_and_have_valid_value">
-                <property_constraints >
+                <property_constraints>
                     <property name="alnum">
                         <constraint class="Magento\Framework\Validator\Test\Unit\Test\NotEmpty"/>
                         <constraint class="Magento\Framework\Validator\Test\Unit\Test\Alnum"/>
