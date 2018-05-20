@@ -5,9 +5,10 @@
  */
 
 require 'default_rollback.php';
-require __DIR__ . '/../../../Magento/Store/_files/second_store.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 /** @var \Magento\Catalog\Model\Product $product */
+
+require __DIR__ . '/../../../Magento/Store/_files/second_store.php';
 
 $addressData = include __DIR__ . '/address_data.php';
 
