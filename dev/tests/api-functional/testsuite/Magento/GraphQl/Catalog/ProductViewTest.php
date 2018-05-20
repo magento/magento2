@@ -273,8 +273,9 @@ QUERY;
             'Filter category',
             $responseObject->getData('products/items/0/categories/2/name')
         );
+        $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
         self::assertEquals(
-            $product->getUrlModel()->getUrl($product, ['_ignore_category' => true, '_nosid' => true]),
+            $storeManager->getStore()->getBaseUrl() . 'simple-product.html',
             $responseObject->getData('products/items/0/canonical_url')
         );
     }
