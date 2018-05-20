@@ -49,8 +49,8 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoAppIsolation  disabled
-     * @magentoDbIsolation   disabled
+     * @magentoAppIsolation  enabled
+     * @magentoDbIsolation   enabled
      * @magentoDataFixture   Magento/Sales/_files/invoice_list_different_stores.php
      * @magentoConfigFixture default/sales_email/general/async_sending 1
      * @magentoConfigFixture current_store sales_email/invoice/enabled 1
@@ -58,7 +58,25 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvoiceEmailSenderExecute()
     {
-        $expectedResult = 1;
+        $expectedResult = 2;
+
+        /** @var \Magento\Store\Model\Store $store */
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Store\Model\Store::class);
+        $secondStoreId = $store->load('fixture_second_store')->getId();
+
+        /**
+         * @var $configWriter \Magento\Framework\App\Config\Storage\WriterInterface
+         */
+        $configWriter =  \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\App\Config\Storage\WriterInterface::class);
+
+        $configWriter->save(
+            'sales_email/invoice/enabled',
+            0,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+            $secondStoreId
+        );
 
         $beforeSendCollection = clone $this->entityCollection;
         $beforeSendCollection->addFieldToFilter('send_email', ['eq' => 1]);
@@ -70,6 +88,5 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
         $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
 
         $this->assertEquals($expectedResult, count($this->entityCollection->getItems()));
-        die;
     }
 }
