@@ -7,9 +7,7 @@ define([
     'mage/backend/form',
     'mage/backend/validation'
 ], function ($) {
-    
     'use strict';
-    
     return function (data, element) {
         $(element).form()
             .validation({
