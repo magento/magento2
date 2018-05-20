@@ -6,6 +6,8 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
+use Magento\Backend\App\Action\Context;
+
 class Delete extends \Magento\Backend\App\Action
 {
     /**
@@ -14,6 +16,23 @@ class Delete extends \Magento\Backend\App\Action
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_Cms::page_delete';
+    
+    /**
+     * @var \Magento\Cms\Api\PageRepositoryInterface
+     */
+    private $cmsPageRepository;
+    
+    /**
+     * @param Context $context
+     * @param \Magento\Cms\Api\PageRepositoryInterface $cmsPageRepository
+     */
+    public function __construct(
+        Context $context,
+        \Magento\Cms\Api\PageRepositoryInterface $cmsPageRepository = null
+    ) {
+        parent::__construct($context);
+        $this->cmsPageRepository = $cmsPageRepository ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Cms\Api\PageRepositoryInterface::class);
+    }
 
     /**
      * Delete action
@@ -30,10 +49,9 @@ class Delete extends \Magento\Backend\App\Action
             $title = "";
             try {
                 // init model and delete
-                $model = $this->_objectManager->create(\Magento\Cms\Model\Page::class);
-                $model->load($id);
+                $model = $this->cmsPageRepository->getById($id);
                 $title = $model->getTitle();
-                $model->delete();
+                $this->cmsPageRepository->delete($model);
                 // display success message
                 $this->messageManager->addSuccess(__('The page has been deleted.'));
                 // go to grid
