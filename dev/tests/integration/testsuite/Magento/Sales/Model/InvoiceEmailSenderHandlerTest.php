@@ -57,23 +57,19 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvoiceEmailSenderExecute()
     {
-        $expectedResult = 2;
+        $expectedResult = 1;
 
         /** @var \Magento\Store\Model\Store $store */
         $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Store\Model\Store::class);
         $secondStoreId = $store->load('fixture_second_store')->getId();
 
-        /**
-         * @var $configWriter \Magento\Framework\App\Config\Storage\WriterInterface
-         */
-        $configWriter =  \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\App\Config\Storage\WriterInterface::class);
-
-        $configWriter->save(
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
+        )->setValue(
             'sales_email/invoice/enabled',
             0,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $secondStoreId
         );
 
