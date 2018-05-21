@@ -5,9 +5,8 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCache\Model\ResourceModel;
+namespace Magento\InventoryIndexer\Model\ResourceModel;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
@@ -37,23 +36,31 @@ class GetProductIdsBySourceItemIds
     private $sourceItemIdFieldName;
 
     /**
+     * @var string
+     */
+    private $productInterfaceClassName;
+
+    /**
      * GetProductIdsByStockIds constructor.
      *
      * @param ResourceConnection $resource
      * @param MetadataPool $metadataPool
      * @param string $tableNameSourceItem
      * @param string $sourceItemIdFieldName
+     * @param string $productInterfaceClassName
      */
     public function __construct(
         ResourceConnection $resource,
         MetadataPool $metadataPool,
-        $tableNameSourceItem,
-        $sourceItemIdFieldName
+        string $tableNameSourceItem,
+        string $sourceItemIdFieldName,
+        string $productInterfaceClassName
     ) {
         $this->resource = $resource;
         $this->metadataPool = $metadataPool;
         $this->tableNameSourceItem = $tableNameSourceItem;
         $this->sourceItemIdFieldName = $sourceItemIdFieldName;
+        $this->productInterfaceClassName = $productInterfaceClassName;
     }
 
     /**
@@ -65,7 +72,7 @@ class GetProductIdsBySourceItemIds
      */
     public function execute(array $sourceItemIds): array
     {
-        $productLinkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $productLinkField = $this->metadataPool->getMetadata($this->productInterfaceClassName)->getLinkField();
         $connection = $this->resource->getConnection();
         $sourceItemTable = $this->resource->getTableName($this->tableNameSourceItem);
         $select = $connection->select()
