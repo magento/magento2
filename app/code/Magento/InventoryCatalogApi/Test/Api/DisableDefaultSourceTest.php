@@ -14,7 +14,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 
-class DisableDefaultSourceTest extends WebapiAbstract
+class PreventDefaultSourceDisablingTest extends WebapiAbstract
 {
     /**#@+
      * Service constants
@@ -24,31 +24,33 @@ class DisableDefaultSourceTest extends WebapiAbstract
     /**#@-*/
 
     /**
-     * @var array
+     * @var DefaultSourceProviderInterface
      */
-    private $validData = [
-        SourceInterface::SOURCE_CODE => 'source-code-1',
-        SourceInterface::NAME => 'source-name-1',
-        SourceInterface::POSTCODE => 'source-postcode',
-        SourceInterface::COUNTRY_ID => 'US',
-    ];
+    private $defaultSourceProvider;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
+    }
 
     /**
-     * @param string $field
-     * @param $value
-     * @param array $expectedErrorData
-     * @dataProvider failedValidationDataProvider
      * @throws \Exception
      */
-    public function testFailedValidationOnUpdate(string $field, $value, array $expectedErrorData)
+    public function testPreventDefaultSourceDisabling(): void
     {
-        $data = $this->validData;
-        $data[$field] = $value;
+        $defaultSourceCode = $this->defaultSourceProvider->getCode();
+        $data = [
+            SourceInterface::SOURCE_CODE => $defaultSourceCode, // needed for SOAP mode
+            SourceInterface::NAME => 'source-name-1',
+            SourceInterface::POSTCODE => 'source-postcode',
+            SourceInterface::COUNTRY_ID => 'US',
+            SourceInterface::ENABLED => false,
+        ];
 
-        $defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $defaultSourceProvider->getCode(),
+                'resourcePath' => self::RESOURCE_PATH . '/' . $defaultSourceCode,
                 'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -56,31 +58,17 @@ class DisableDefaultSourceTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $this->webApiCall($serviceInfo, $data, $expectedErrorData);
-    }
 
-    /**
-     * SuppressWarnings was added due to a tests on different fail types and big size of data provider
-     *
-     * @return array
-     */
-    public function failedValidationDataProvider(): array
-    {
-        return [
-            'disabled_default_' . SourceInterface::SOURCE_CODE => [
-                SourceInterface::SOURCE_CODE,
-                false,
+        $expectedErrorData = [
+            'message' => 'Validation Failed',
+            'errors' => [
                 [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => 'Default source can not be disabled.',
-                            'parameters' => [],
-                        ],
-                    ],
+                    'message' => 'Default source can not be disabled.',
+                    'parameters' => [],
                 ],
             ],
         ];
+        $this->webApiCall($serviceInfo, $data, $expectedErrorData);
     }
 
     /**
