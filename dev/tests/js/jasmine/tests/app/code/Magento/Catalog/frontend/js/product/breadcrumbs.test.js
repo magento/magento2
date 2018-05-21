@@ -19,7 +19,11 @@ define([
         },
         defaultContext = require.s.contexts._,
         menuSelector = '[data-action="navigation"] > ul',
-        menuItem = $('<li class="level0"><a href="http://localhost.com/cat1.html">Cat1</a></li>')[0],
+        menuItem = $(
+            '<li class="level0 category-item">' +
+            '<a href="http://localhost.com/cat1.html" id="ui-id-3">Cat1</a>' +
+            '</li>'
+        )[0],
 
         /**
          * Create context object.

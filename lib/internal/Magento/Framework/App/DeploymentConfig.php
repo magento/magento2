@@ -117,7 +117,7 @@ class DeploymentConfig
     }
 
     /**
-     * Check if data from deploy files is avaiable
+     * Check if data from deploy files is available
      *
      * @return bool
      * @since 100.1.3
