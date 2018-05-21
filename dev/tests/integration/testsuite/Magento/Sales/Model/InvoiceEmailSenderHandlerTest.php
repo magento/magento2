@@ -86,6 +86,6 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
         $this->entityCollection->addFieldToFilter('send_email', ['eq' => 1]);
         $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
 
-        $this->assertEquals($expectedResult, count($this->entityCollection->getItems()));
+        $this->assertCount($expectedResult, $this->entityCollection->getItems());
     }
 }

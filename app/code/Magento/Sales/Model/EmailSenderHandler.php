@@ -59,6 +59,7 @@ class EmailSenderHandler
      * @param \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param IdentityInterface|null $identityContainer
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @throws \InvalidArgumentException
      */
     public function __construct(
@@ -74,12 +75,11 @@ class EmailSenderHandler
         $this->entityCollection = $entityCollection;
         $this->globalConfig = $globalConfig;
 
-        if (!$identityContainer instanceof IdentityInterface) {
+        if (null === $identityContainer) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'Instance of the %s is expected, got %s instead',
-                    IdentityInterface::class,
-                    null === $identityContainer ? 'null' : get_class($identityContainer)
+                    'Instance of the %s is expected. Please set correct instance via di configuration',
+                    IdentityInterface::class
                 )
             );
         }
@@ -102,6 +102,7 @@ class EmailSenderHandler
             /** @var \Magento\Store\Api\Data\StoreInterface[] $stores */
             $stores = $this->getStores(clone $this->entityCollection);
 
+            /** @var \Magento\Store\Model\Store $store */
             foreach ($stores as $store) {
                 $this->identityContainer->setStore($store);
                 if (!$this->identityContainer->isEnabled()) {
@@ -127,9 +128,11 @@ class EmailSenderHandler
      *
      * @param ResourceModel\Collection\AbstractCollection $entityCollection
      * @return \Magento\Store\Api\Data\StoreInterface[]
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function getStores(\Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection)
-    {
+    private function getStores(
+        \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection
+    ): array {
         $stores = [];
 
         $entityCollection->addAttributeToSelect('store_id')->getSelect()->group('store_id');
