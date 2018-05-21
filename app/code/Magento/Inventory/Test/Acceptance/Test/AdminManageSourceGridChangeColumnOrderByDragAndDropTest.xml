@@ -29,17 +29,13 @@
             <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton"/>
             <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
             <click selector="{{AdminGridColumnsControls.cancel}}" stepKey="clickOnCancelToCloseDropdownMenu"/>
-
-            <dragAndDrop selector1="{{AdminGridHeaders.headerByName('Name')}}"
-                         selector2="{{AdminGridHeaders.headerByName('Code')}}"
-                         stepKey="dragAndDropNameColumnToDefaultPosition"/>
-            <waitForPageLoad time="30" stepKey="waitForMoveConfirmationAfterMoveNameColumnToDefaultPosition"/>
+        </before>
+        <after>
             <dragAndDrop selector1="{{AdminGridHeaders.headerByName('Is Enabled')}}"
                          selector2="{{AdminGridHeaders.headerByName('Name')}}"
                          stepKey="dragAndDropIsEnabledColumnToDefaultPosition"/>
             <waitForPageLoad time="30" stepKey="waitForMoveConfirmationAfterMoveIsEnabledColumnToDefaultPosition"/>
-        </before>
-        <after>
+
             <!-- Disable source as it can broke single source mode tests. -->
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSource"/>
             <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSources">
