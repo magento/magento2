@@ -106,7 +106,12 @@ define([
              *
              * @type {String}
              */
-            shiftedValue: ''
+            shiftedValue: '',
+
+            /**
+             * @type {bool}
+             */
+            ispageLoad: true
         },
 
         /**
@@ -146,6 +151,11 @@ define([
         onValueChange: function (value) {
             var dateFormat,
                 shiftedValue;
+
+            if (this.ispageLoad == true) {
+                this.ispageLoad = false;
+                return false;
+            }
 
             if (value) {
                 if (this.options.showsTime && !this.outputDateTimeToISO) {
