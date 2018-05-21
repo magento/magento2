@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f33217e3ed8f398e0b27fb509ee702f0",
+    "content-hash": "32f6995b41c8faaf30102ff688394775",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2883,16 +2883,16 @@
         },
         {
             "name": "zendframework/zend-form",
-            "version": "2.11.0",
+            "version": "2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-form.git",
-                "reference": "b68a9f07d93381613b68817091d0505ca94d3363"
+                "reference": "565fb4f4bb3e0dbeea0173c923c4a8be77de9441"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-form/zipball/b68a9f07d93381613b68817091d0505ca94d3363",
-                "reference": "b68a9f07d93381613b68817091d0505ca94d3363",
+                "url": "https://api.github.com/repos/zendframework/zend-form/zipball/565fb4f4bb3e0dbeea0173c923c4a8be77de9441",
+                "reference": "565fb4f4bb3e0dbeea0173c923c4a8be77de9441",
                 "shasum": ""
             },
             "require": {
@@ -2931,8 +2931,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.11.x-dev",
-                    "dev-develop": "2.12.x-dev"
+                    "dev-master": "2.12.x-dev",
+                    "dev-develop": "2.13.x-dev"
                 },
                 "zf": {
                     "component": "Zend\\Form",
@@ -2957,7 +2957,7 @@
                 "form",
                 "zf"
             ],
-            "time": "2017-12-06T21:09:08+00:00"
+            "time": "2018-05-16T18:49:44+00:00"
         },
         {
             "name": "zendframework/zend-http",
@@ -3074,16 +3074,16 @@
         },
         {
             "name": "zendframework/zend-i18n",
-            "version": "2.8.0",
+            "version": "2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-i18n.git",
-                "reference": "cfdb658121e0d7eb969a498c2f67f1eacaab9c63"
+                "reference": "6d69af5a04e1a4de7250043cb1322f077a0cdb7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-i18n/zipball/cfdb658121e0d7eb969a498c2f67f1eacaab9c63",
-                "reference": "cfdb658121e0d7eb969a498c2f67f1eacaab9c63",
+                "url": "https://api.github.com/repos/zendframework/zend-i18n/zipball/6d69af5a04e1a4de7250043cb1322f077a0cdb7f",
+                "reference": "6d69af5a04e1a4de7250043cb1322f077a0cdb7f",
                 "shasum": ""
             },
             "require": {
@@ -3115,8 +3115,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8.x-dev",
-                    "dev-develop": "2.9.x-dev"
+                    "dev-master": "2.9.x-dev",
+                    "dev-develop": "2.10.x-dev"
                 },
                 "zf": {
                     "component": "Zend\\I18n",
@@ -3138,7 +3138,7 @@
                 "i18n",
                 "zf"
             ],
-            "time": "2018-04-25T19:32:43+00:00"
+            "time": "2018-05-16T16:39:13+00:00"
         },
         {
             "name": "zendframework/zend-inputfilter",
