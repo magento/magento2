@@ -79,7 +79,7 @@ class EmailSenderHandler
                 sprintf(
                     'Instance of the %s is expected, got %s instead',
                     IdentityInterface::class,
-                    null === $identityContainer ? null : get_class($identityContainer)
+                    null === $identityContainer ? 'null' : get_class($identityContainer)
                 )
             );
         }
