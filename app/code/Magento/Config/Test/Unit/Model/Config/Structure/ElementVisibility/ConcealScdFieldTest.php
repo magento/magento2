@@ -64,9 +64,13 @@ class ConcealScdFieldTest extends \PHPUnit\Framework\TestCase
      * @param bool $isHidden
      * @dataProvider disabledDataProvider
      */
-    public function testCheckVisibility(string $path, string $mageMode,
-                                        int $scdOnDemand, bool $isHidden, bool $isDisabled): void
-    {
+    public function testCheckVisibility(
+        string $path,
+        string $mageMode,
+        int $scdOnDemand,
+        bool $isHidden,
+        bool $isDisabled
+    ): void {
         $this->stateMock->expects($this->any())
             ->method('getMode')
             ->willReturn($mageMode);

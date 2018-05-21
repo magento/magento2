@@ -83,9 +83,11 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      * @param string $mode
      * @param int $scdOnDemand
      * @param array $locales
+     * @return void
+     *
      * @dataProvider getFullLocalesDataProvider
      */
-    public function testGetOptionLocalesFull($mode, $scdOnDemand, $locales)
+    public function testGetOptionLocalesFull(string $mode, int $scdOnDemand, array $locales): void
     {
         $this->localeListsMock->expects($this->once())
             ->method('getOptionLocales')
@@ -100,9 +102,11 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      * @param string $mode
      * @param int $scdOnDemand
      * @param array $locales
+     * @return void
+     *
      * @dataProvider getFullLocalesDataProvider
      */
-    public function testGetTranslatedOptionLocalesFull($mode, $scdOnDemand, $locales)
+    public function testGetTranslatedOptionLocalesFull(string $mode, int $scdOnDemand, array $locales): void
     {
         $this->localeListsMock->expects($this->once())
             ->method('getTranslatedOptionLocales')
@@ -119,10 +123,17 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      * @param array $locales
      * @param array $expectedLocales
      * @param array $deployedCodes
+     * @return void
+     *
      * @dataProvider getLimitedLocalesDataProvider
      */
-    public function testGetOptionLocalesLimited($mode, $scdOnDemand, $locales, $expectedLocales, $deployedCodes)
-    {
+    public function testGetOptionLocalesLimited(
+        string $mode,
+        int $scdOnDemand,
+        array $locales,
+        array $expectedLocales,
+        array $deployedCodes
+    ): void {
         $this->localeListsMock->expects($this->once())
             ->method('getOptionLocales')
             ->willReturn($locales);
@@ -138,11 +149,17 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      * @param array $locales
      * @param array $expectedLocales
      * @param array $deployedCodes
+     * @return void
+     *
      * @dataProvider getLimitedLocalesDataProvider
      */
-    public function testGetTranslatedOptionLocalesLimited($mode, $scdOnDemand, $locales,
-                                                          $expectedLocales, $deployedCodes)
-    {
+    public function testGetTranslatedOptionLocalesLimited(
+        string $mode,
+        int $scdOnDemand,
+        array $locales,
+        array $expectedLocales,
+        array $deployedCodes
+    ): void {
         $this->localeListsMock->expects($this->once())
             ->method('getTranslatedOptionLocales')
             ->willReturn($locales);
@@ -153,12 +170,12 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $mode
+     * @param string $mode
      * @param int $scdOnDemand
-     * @param $deployedCodes
+     * @param array $deployedCodes
      * @return void
      */
-    private function prepareGetLocalesLimited($mode, $scdOnDemand, $deployedCodes)
+    private function prepareGetLocalesLimited(string $mode, int $scdOnDemand, $deployedCodes): void
     {
         $this->stateMock->expects($this->once())
             ->method('getMode')
@@ -188,11 +205,11 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $mode
+     * @param string $mode
      * @param int $scdOnDemand
      * @return void
      */
-    private function prepareGetLocalesFull($mode, $scdOnDemand)
+    private function prepareGetLocalesFull(string $mode, int $scdOnDemand): void
     {
         $this->stateMock->expects($this->once())
             ->method('getMode')
@@ -209,7 +226,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getFullLocalesDataProvider()
+    public function getFullLocalesDataProvider(): array
     {
         $deLocale = [
             'value' => 'de_DE',
@@ -252,7 +269,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getLimitedLocalesDataProvider()
+    public function getLimitedLocalesDataProvider(): array
     {
         $deLocale = [
             'value' => 'de_DE',
