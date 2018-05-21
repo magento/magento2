@@ -10,8 +10,6 @@ define([
     'use strict';
     
     return function (data, element) {
-        $(element).form().validation({
-            validationUrl: data.url
-        });
+        $(element).form().validation({validationUrl: data.url});
     };
 });
