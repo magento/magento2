@@ -90,7 +90,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     /**
      * @var string
      */
-    protected $_template = 'dashboard/graph.phtml';
+    protected $_template = 'Magento_Backend::dashboard/graph.phtml';
 
     /**
      * Adminhtml dashboard data
