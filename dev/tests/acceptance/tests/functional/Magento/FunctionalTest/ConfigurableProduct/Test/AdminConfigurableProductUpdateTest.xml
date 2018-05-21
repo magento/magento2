@@ -253,6 +253,7 @@
             <stories value="Edit a configurable product in admin"/>
             <title value="Admin should be able to edit configuration to add a value to an existing attribute"/>
             <description value="Admin should be able to edit configuration to add a value to an existing attribute"/>
+            <severity value="AVERAGE"/>
             <testCaseId value="MC-95"/>
             <group value="ConfigurableProduct"/>
         </annotations>
