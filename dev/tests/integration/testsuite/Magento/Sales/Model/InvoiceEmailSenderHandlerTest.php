@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Sales\Model;
 
 use Magento\Config\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
 class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
@@ -56,7 +57,6 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation  enabled
      * @magentoDbIsolation   enabled
      * @magentoDataFixture   Magento/Sales/_files/invoice_list_different_stores.php
-     * @magentoConfigFixture default/sales_email/general/async_sending 1
      */
     public function testInvoiceEmailSenderExecute()
     {
@@ -64,14 +64,16 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $objectManager->create(\Magento\Store\Model\Store::class);
-        $secondStoreCode = $store->load('fixture_second_store')->getCode();
+        /** @var Config $defConfig */
+        $defConfig = $objectManager->create(Config::class);
+        $defConfig->setScope(ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        $defConfig->setDataByPath('sales_email/general/async_sending', 1);
+        $defConfig->save();
 
         /** @var Config $storeConfig */
         $storeConfig = $objectManager->create(Config::class);
         $storeConfig->setScope(ScopeInterface::SCOPE_STORES);
-        $storeConfig->setStore($secondStoreCode);
+        $storeConfig->setStore('fixture_second_store');
         $storeConfig->setDataByPath('sales_email/invoice/enabled', 0);
         $storeConfig->save();
 
