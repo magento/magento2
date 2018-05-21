@@ -75,16 +75,8 @@ class EmailSenderHandler
         $this->entityCollection = $entityCollection;
         $this->globalConfig = $globalConfig;
 
-        if (null === $identityContainer) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Instance of the %s is expected. Please set correct instance via di configuration',
-                    IdentityInterface::class
-                )
-            );
-        }
-
-        $this->identityContainer = $identityContainer;
+        $this->identityContainer = $identityContainer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Sales\Model\Order\Email\Container\NullIdentity::class);
         $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Store\Model\StoreManagerInterface::class);
     }
