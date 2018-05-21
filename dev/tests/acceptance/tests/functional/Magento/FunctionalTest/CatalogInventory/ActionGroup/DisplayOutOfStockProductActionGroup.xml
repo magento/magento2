@@ -11,6 +11,8 @@
     <actionGroup name="displayOutOfStockProduct">
         <amOnPage url="{{InventoryConfigurationPage.url}}" stepKey="navigateToInventoryConfigurationPage"/>
         <waitForPageLoad stepKey="waitForConfigPageToLoad"/>
+        <conditionalClick stepKey="expandProductStockOptions" selector="{{InventoryConfigSection.ProductStockOptionsTab}}" dependentSelector="{{InventoryConfigSection.CheckIfProductStockOptionsTabExpanded}}" visible="true" />
+        <waitForElementVisible selector="{{InventoryConfigSection.DisplayOutOfStockSystemValue}}" stepKey="waitForDisplayOutOfStockOption" />
         <uncheckOption selector="{{InventoryConfigSection.DisplayOutOfStockSystemValue}}" stepKey="uncheckUseSystemValue"/>
         <waitForElementVisible selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" stepKey="waitForSwitcherDropdown" />
         <selectOption selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" userInput="Yes" stepKey="switchToYes" />

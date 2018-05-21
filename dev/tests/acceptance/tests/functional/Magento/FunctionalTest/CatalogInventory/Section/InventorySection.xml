@@ -7,7 +7,9 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="InventoryConfigSection">
-        <element name="DisplayOutOfStockSystemValue" type="button" selector="#cataloginventory_options_show_out_of_stock_inherit"/>
-        <element name="DisplayOutOfStockDropdown" type="button" selector="#cataloginventory_options_show_out_of_stock"/>
+        <element name="ProductStockOptionsTab" type="button" selector="#cataloginventory_options-head"/>
+        <element name="CheckIfProductStockOptionsTabExpanded" type="button" selector="#cataloginventory_options-head:not(.open)"/>
+        <element name="DisplayOutOfStockSystemValue" type="checkbox" selector="#cataloginventory_options_show_out_of_stock_inherit"/>
+        <element name="DisplayOutOfStockDropdown" type="select" selector="#cataloginventory_options_show_out_of_stock"/>
     </section>
 </sections>
