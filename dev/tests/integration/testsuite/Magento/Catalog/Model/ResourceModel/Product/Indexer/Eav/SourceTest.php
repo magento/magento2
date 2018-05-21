@@ -108,8 +108,9 @@ class SourceTest extends \PHPUnit\Framework\TestCase
         $product2->setStatus(Status::STATUS_ENABLED);
         $productRepository->save($product2);
 
-        $result = $connection->fetchAll($select);
-        $this->assertCount(1, $result);
+        $statusSelect = clone $select;
+        $statusSelect->reset(\Zend_Db_Select::COLUMNS)->columns(new \Zend_Db_Expr('COUNT(*)'));
+        $this->assertEquals(1, $connection->fetchOne($statusSelect));
     }
 
     /**

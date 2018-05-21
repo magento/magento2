@@ -117,14 +117,14 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
      * @param array $ids
      * @param array $parentIds
      * @param array $childIds
-     * @throws \Exception
+     * @return void
      * @dataProvider reindexEntitiesDataProvider
      */
     public function testReindexWithNotNullArgumentExecutesReindexEntities(
         array $ids,
         array $parentIds,
         array $childIds
-    ) {
+    ) : void {
         $reindexIds = array_unique(array_merge($ids, $parentIds, $childIds));
 
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
@@ -177,12 +177,15 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->_model->reindex($ids);
     }
 
+    /**
+     * @return array
+     */
     public function reindexEntitiesDataProvider()
     {
         return [
             [[4], [], [1, 2, 3]],
             [[3], [4], []],
-            [[5], [], []]
+            [[5], [], []],
         ];
     }
 }
