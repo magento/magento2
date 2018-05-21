@@ -11,9 +11,12 @@
     <actionGroup name="SwitchToVersion4ActionGroup">
         <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
         <waitForPageLoad stepKey="waitForConfigPageToLoad"/>
-        <uncheckOption selector="{{InventoryConfigSection.DisplayOutOfStockSystemValue}}" stepKey="uncheckUseSystemValue"/>
-        <waitForElementVisible selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" stepKey="waitForDropdown" />
-        <selectOption selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" userInput="Yes" stepKey="switchToYes" />
+        <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox" />
+        <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue"/>
+        <waitForElementVisible selector="{{ContentManagementSection.Switcher}}" stepKey="waitForSwitcherDropdown" />
+        <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 4" stepKey="switchToVersion4" />
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions" />
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
     </actionGroup>
 </actionGroups>
