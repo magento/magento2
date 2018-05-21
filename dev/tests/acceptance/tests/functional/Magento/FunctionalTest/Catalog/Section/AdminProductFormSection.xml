@@ -15,6 +15,7 @@
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
         <element name="contentTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[text()='Content']"/>
+        <element name="validationErrorLabel" type="text" selector="//label[@class='admin__field-error']"/>
         <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
     </section>
