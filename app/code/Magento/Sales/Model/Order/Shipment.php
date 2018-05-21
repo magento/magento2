@@ -94,11 +94,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     protected $orderRepository;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection|null
-     */
-    private $tracksCollection = null;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -336,17 +331,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      */
     public function getTracksCollection()
     {
-        /* if (!$this->hasData(ShipmentInterface::TRACKS)) {
-            if ($this->tracksCollection === null) {
-                $this->tracksCollection = $this->_trackCollectionFactory->create()->setShipmentFilter($this->getId());
-            }
-        }
-        else{
-            $this->tracksCollection = $this->getTracks();
-        }
-
-        return $this->tracksCollection; */
-        
         if (!$this->hasData(ShipmentInterface::TRACKS)) {
             $this->setTracks($this->_trackCollectionFactory->create()->setShipmentFilter($this->getId()));
             
