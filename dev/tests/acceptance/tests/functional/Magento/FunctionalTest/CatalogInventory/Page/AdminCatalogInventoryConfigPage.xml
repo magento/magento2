@@ -6,10 +6,7 @@
   */
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="AdminConfigPage" url="admin/system_config/" area="admin" module="Magento_Config">
-        <section name="AdminConfigSection"/>
-    </page>
-    <page name="AdminContentManagementPage" url="admin/system_config/edit/section/cms/" area="admin" module="Magento_Config">
-        <section name="ContentManagementSection"/>
+    <page name="AdminCatalogInventoryConfigPage" url="admin/system_config/edit/section/cataloginventory" area="admin" module="Magento_Config">
+        <section name="ProductStockOptions"/>
     </page>
 </pages>
