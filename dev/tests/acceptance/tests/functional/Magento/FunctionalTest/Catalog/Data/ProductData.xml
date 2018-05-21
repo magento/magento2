@@ -51,6 +51,7 @@
         <data key="visibility">4</data>
         <data key="status">1</data>
         <data key="quantity">1000</data>
+        <data key="urlKey" unique="suffix">simpleproduct</data>
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
