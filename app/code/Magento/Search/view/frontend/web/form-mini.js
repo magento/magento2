@@ -226,6 +226,7 @@ define([
 
                 case $.ui.keyCode.ENTER:
                     this.searchForm.trigger('submit');
+                    e.preventDefault();
                     break;
 
                 case $.ui.keyCode.DOWN:
