@@ -8,6 +8,7 @@ define([
     'mage/backend/validation'
 ], function ($) {
     'use strict';
+    
     return function (data, element) {
         $(element).form().validation({
             validationUrl: data.url
