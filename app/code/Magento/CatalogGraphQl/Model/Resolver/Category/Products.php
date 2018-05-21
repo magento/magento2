@@ -17,8 +17,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
-class Products
-    implements ResolverInterface
+class Products implements ResolverInterface
 {
     /** @var \Magento\Catalog\Api\ProductRepositoryInterface */
     private $productRepository;
@@ -102,5 +101,4 @@ class Products
 
         return $this->valueFactory->create($result);
     }
-
 }
