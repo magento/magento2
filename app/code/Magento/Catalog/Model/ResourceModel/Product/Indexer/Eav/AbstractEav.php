@@ -187,7 +187,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             []
         )->join(
             ['cpw' => $this->getTable('catalog_product_website')],
-            "i.entity_id = cpw.product_id AND sw.website_id = cpw.website_id AND cpw.product_id IS NOT NULL",
+            'i.entity_id = cpw.product_id AND sw.website_id = cpw.website_id',
             []
         )->group(
             ['parent_id', 'i.attribute_id', 'i.store_id', 'i.value', 'l.child_id']

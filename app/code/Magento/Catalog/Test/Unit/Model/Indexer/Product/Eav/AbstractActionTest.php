@@ -180,7 +180,7 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function reindexEntitiesDataProvider()
+    public function reindexEntitiesDataProvider() : array
     {
         return [
             [[4], [], [1, 2, 3]],

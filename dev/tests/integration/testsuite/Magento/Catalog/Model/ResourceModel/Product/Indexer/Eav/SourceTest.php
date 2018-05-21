@@ -109,7 +109,8 @@ class SourceTest extends \PHPUnit\Framework\TestCase
         $productRepository->save($product2);
 
         $statusSelect = clone $select;
-        $statusSelect->reset(\Zend_Db_Select::COLUMNS)->columns(new \Zend_Db_Expr('COUNT(*)'));
+        $statusSelect->reset(\Magento\Framework\DB\Select::COLUMNS)
+            ->columns(new \Magento\Framework\DB\Sql\Expression('COUNT(*)'));
         $this->assertEquals(1, $connection->fetchOne($statusSelect));
     }
 
