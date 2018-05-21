@@ -7,6 +7,8 @@
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -35,7 +37,7 @@ class RuleProductsSelectBuilderTest extends \PHPUnit\Framework\TestCase
     private $resourceMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|\PHPUnit_Framework_MockObject_MockObject
+     * @var ActiveTableSwitcher|\PHPUnit_Framework_MockObject_MockObject
      */
     private $activeTableSwitcherMock;
 
@@ -49,6 +51,11 @@ class RuleProductsSelectBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $metadataPoolMock;
 
+    /**
+     * @var IndexerTableSwapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $tableSwapperMock;
+
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
@@ -56,8 +63,7 @@ class RuleProductsSelectBuilderTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->activeTableSwitcherMock =
-            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class)
+        $this->activeTableSwitcherMock = $this->getMockBuilder(ActiveTableSwitcher::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
@@ -66,13 +72,17 @@ class RuleProductsSelectBuilderTest extends \PHPUnit\Framework\TestCase
         $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->tableSwapperMock = $this->getMockForAbstractClass(
+            IndexerTableSwapperInterface::class
+        );
 
         $this->model = new \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder(
             $this->resourceMock,
             $this->eavConfigMock,
             $this->storeManagerMock,
             $this->metadataPoolMock,
-            $this->activeTableSwitcherMock
+            $this->activeTableSwitcherMock,
+            $this->tableSwapperMock
         );
     }
 
@@ -92,8 +102,8 @@ class RuleProductsSelectBuilderTest extends \PHPUnit\Framework\TestCase
         $connectionMock = $this->getMockBuilder(AdapterInterface::class)->disableOriginalConstructor()->getMock();
         $this->resourceMock->expects($this->at(0))->method('getConnection')->willReturn($connectionMock);
 
-        $this->activeTableSwitcherMock->expects($this->once())
-            ->method('getAdditionalTableName')
+        $this->tableSwapperMock->expects($this->once())
+            ->method('getWorkingTableName')
             ->with($ruleTable)
             ->willReturn($rplTable);
 

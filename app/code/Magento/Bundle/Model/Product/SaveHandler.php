@@ -6,6 +6,7 @@
 namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Api\Data\OptionInterface;
+use Magento\Bundle\Model\Option\SaveAction;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
@@ -34,18 +35,25 @@ class SaveHandler implements ExtensionInterface
     private $metadataPool;
 
     /**
+     * @var SaveAction
+     */
+    private $optionSave;
+
+    /**
      * @param OptionRepository $optionRepository
      * @param ProductLinkManagementInterface $productLinkManagement
+     * @param SaveAction $optionSave
      * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         OptionRepository $optionRepository,
         ProductLinkManagementInterface $productLinkManagement,
+        SaveAction $optionSave,
         MetadataPool $metadataPool = null
     ) {
         $this->optionRepository = $optionRepository;
         $this->productLinkManagement = $productLinkManagement;
-
+        $this->optionSave = $optionSave;
         $this->metadataPool = $metadataPool
             ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
@@ -103,7 +111,7 @@ class SaveHandler implements ExtensionInterface
         }
         //Saving active options.
         foreach ($options as $option) {
-            $this->optionRepository->save($entity, $option);
+            $this->optionSave->save($entity, $option);
         }
 
         $entity->setCopyFromView(false);

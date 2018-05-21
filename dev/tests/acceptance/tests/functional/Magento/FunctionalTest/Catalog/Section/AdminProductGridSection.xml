@@ -23,6 +23,8 @@
         <element name="bulkActionDropdown" type="button" selector="div.admin__data-grid-header-row.row div.action-select-wrap button.action-select"/>
         <element name="bulkActionOption" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-select-wrap')]//ul/li/span[text() = '{{label}}']" parameterized="true"/>
         <element name="productGridXRowYColumnButton" type="input" selector="table.data-grid tr.data-row:nth-child({{row}}) td:nth-child({{column}})" parameterized="true" timeout="30"/>
+        <element name="table" type="text" selector="#container > div > div.admin__data-grid-wrap > table"/>
         <element name="firstRow" type="button" selector="tr.data-row:nth-of-type(1)"/>
+        <element name="productGridCheckboxOnRow" type="checkbox" selector="//*[@id='container']//tr[{{row}}]/td[1]//input" parameterized="true"/>
     </section>
 </sections>
