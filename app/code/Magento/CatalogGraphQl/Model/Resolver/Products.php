@@ -123,9 +123,10 @@ class Products implements ResolverInterface
             'items' => $searchResult->getProductsSearchResult(),
             'page_info' => [
                 'page_size' => $searchCriteria->getPageSize(),
-                'current_page' => $currentPage
+                'current_page' => $currentPage,
+                'sort_fields' => [],
             ],
-            'filters' => $this->filtersDataProvider->getData($layerType)
+            'filters' => $this->filtersDataProvider->getData($layerType),
         ];
 
         $result = function () use ($data) {
