@@ -3,17 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Config\Test\Unit\Model\Config\Structure;
+namespace Magento\Config\Test\Unit\Model\Config\Structure\ElementVisibility;
 
-use Magento\Config\Model\Config\Structure\ConcealInProductionConfigList;
+use Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction;
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 use Magento\Framework\App\State;
 
-/**
- * @deprecated Original class has changed the location
- * @see \Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction
- * @see \Magento\Config\Test\Unit\Model\Config\Structure\ElementVisibility\ConcealInProductionTest
- */
-class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
+class ConcealInProductionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var State|\PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +17,7 @@ class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
     private $stateMock;
 
     /**
-     * @var ConcealInProductionConfigList
+     * @var ConcealInProduction
      */
     private $model;
 
@@ -32,19 +28,19 @@ class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $configs = [
-            'first/path' => ConcealInProductionConfigList::DISABLED,
-            'second/path' => ConcealInProductionConfigList::HIDDEN,
-            'third' => ConcealInProductionConfigList::DISABLED,
+            'first/path' => ElementVisibilityInterface::DISABLED,
+            'second/path' => ElementVisibilityInterface::HIDDEN,
+            'third' => ElementVisibilityInterface::DISABLED,
             'third/path' => 'no',
-            'third/path/field' => ConcealInProductionConfigList::DISABLED,
+            'third/path/field' => ElementVisibilityInterface::DISABLED,
             'first/path/field' => 'no',
-            'fourth' => ConcealInProductionConfigList::HIDDEN,
+            'fourth' => ElementVisibilityInterface::HIDDEN,
         ];
         $exemptions = [
             'fourth/path/value' => '',
         ];
 
-        $this->model = new ConcealInProductionConfigList($this->stateMock, $configs, $exemptions);
+        $this->model = new ConcealInProduction($this->stateMock, $configs, $exemptions);
     }
 
     /**
@@ -52,8 +48,6 @@ class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
      * @param string $mageMode
      * @param bool $expectedResult
      * @dataProvider disabledDataProvider
-     *
-     * @deprecated
      */
     public function testIsDisabled($path, $mageMode, $expectedResult)
     {
@@ -65,8 +59,6 @@ class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return array
-     *
-     * @deprecated
      */
     public function disabledDataProvider()
     {
@@ -91,8 +83,6 @@ class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
      * @param string $mageMode
      * @param bool $expectedResult
      * @dataProvider hiddenDataProvider
-     *
-     * @deprecated
      */
     public function testIsHidden($path, $mageMode, $expectedResult)
     {
@@ -104,8 +94,6 @@ class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return array
-     *
-     * @deprecated
      */
     public function hiddenDataProvider()
     {

@@ -5,7 +5,10 @@
  */
 namespace Magento\Framework\Locale\Deployed;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
+use Magento\Framework\Config\ConfigOptionsListConstants as Constants;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\AvailableLocalesInterface;
 use Magento\Framework\Locale\ListsInterface;
@@ -46,21 +49,29 @@ class Options implements OptionInterface
     private $localeLists;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @param ListsInterface $localeLists locales list
      * @param State $state application state class
      * @param AvailableLocalesInterface $availableLocales operates with available locales
      * @param DesignInterface $design operates with magento design settings
+     * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
         ListsInterface $localeLists,
         State $state,
         AvailableLocalesInterface $availableLocales,
-        DesignInterface $design
+        DesignInterface $design,
+        DeploymentConfig $deploymentConfig = null
     ) {
         $this->localeLists = $localeLists;
         $this->state = $state;
         $this->availableLocales = $availableLocales;
         $this->design = $design;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -115,7 +126,8 @@ class Options implements OptionInterface
      */
     private function filterLocales(array $locales)
     {
-        if ($this->state->getMode() != State::MODE_PRODUCTION) {
+        if ($this->state->getMode() != State::MODE_PRODUCTION
+            || $this->deploymentConfig->getConfigData(Constants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)) {
             return $locales;
         }
 

@@ -3,18 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Config\Model\Config\Structure;
+namespace Magento\Config\Model\Config\Structure\ElementVisibility;
 
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 use Magento\Framework\App\State;
 
 /**
  * Defines status of visibility of form elements on Stores > Settings > Configuration page
  * in Admin Panel in Production mode.
  * @api
- * @deprecated class location was changed
- * @see \Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction
  */
-class ConcealInProductionConfigList implements ElementVisibilityInterface
+class ConcealInProduction implements ElementVisibilityInterface
 {
     /**
      * The list of form element paths with concrete visibility status.
@@ -77,7 +76,7 @@ class ConcealInProductionConfigList implements ElementVisibilityInterface
 
     /**
      * @inheritdoc
-     * @deprecated
+     * @since 100.2.0
      */
     public function isHidden($path)
     {
@@ -100,7 +99,7 @@ class ConcealInProductionConfigList implements ElementVisibilityInterface
 
     /**
      * @inheritdoc
-     * @deprecated
+     * @since 100.2.0
      */
     public function isDisabled($path)
     {
