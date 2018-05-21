@@ -71,16 +71,12 @@ class AdaptGetProductStockStatusPlugin
         $productId,
         $scopeId = null
     ): int {
-        try {
-            $websiteCode = null === $scopeId ? $this->storeManager->getWebsite()->getCode()
-                : $this->storeManager->getWebsite($scopeId)->getCode();
-            $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
-            $sku = $this->getSkusByProductIds->execute([$productId])[$productId];
-            $productStockStatus = (int)$this->isProductSalable->execute($sku, $stockId);
-        } catch (\Exception $e) {
-            $productStockStatus = 0;
-        }
+        $websiteCode = null === $scopeId
+            ? $this->storeManager->getWebsite()->getCode()
+            : $this->storeManager->getWebsite($scopeId)->getCode();
+        $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
+        $sku = $this->getSkusByProductIds->execute([$productId])[$productId];
 
-        return $productStockStatus;
+        return (int)$this->isProductSalable->execute($sku, $stockId);
     }
 }

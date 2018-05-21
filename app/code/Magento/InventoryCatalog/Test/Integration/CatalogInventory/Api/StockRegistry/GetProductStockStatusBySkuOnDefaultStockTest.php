@@ -69,22 +69,6 @@ class GetProductStockStatusBySkuOnDefaultStockTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
-     *
-     * @param string $sku
-     *
-     * @dataProvider getStatusDataProvider
-     */
-    public function testGetStatusIfNotExistedScopeIdParameterIsPassed(string $sku): void
-    {
-        $notExistedScopeId = 100;
-        $productStockStatus = $this->stockRegistry->getProductStockStatusBySku($sku, $notExistedScopeId);
-
-        self::assertEquals(0, $productStockStatus);
-    }
-
-    /**
      * @return array
      */
     public function getStatusDataProvider(): array
@@ -94,5 +78,16 @@ class GetProductStockStatusBySkuOnDefaultStockTest extends TestCase
             ['SKU-2', 1],
             ['SKU-3', 0],
         ];
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testGetStatusIfNotExistedScopeIdIsPassed(): void
+    {
+        $notExistedScopeId = 100;
+        $this->stockRegistry->getProductStockStatusBySku('SKU-1', $notExistedScopeId);
     }
 }
