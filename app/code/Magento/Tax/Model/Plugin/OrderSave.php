@@ -78,7 +78,7 @@ class OrderSave
         $ratesIdQuoteItemId = [];
         foreach ($taxesForItems as $taxesArray) {
             foreach ($taxesArray['applied_taxes'] as $rates) {
-                if (isset($rates['extension_attributes'])) {
+                if (isset($rates['extension_attributes']['rates'])) {
                     $taxRates = $rates['extension_attributes']['rates'];
                     if (is_array($taxRates)) {
                         if (count($taxRates) == 1) {
