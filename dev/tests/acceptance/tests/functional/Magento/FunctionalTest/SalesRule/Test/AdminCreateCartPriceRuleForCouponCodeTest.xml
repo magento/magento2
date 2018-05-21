@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateCartPriceRuleForCouponCodeTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Admin should be able to create a cart price rule for a specific coupon code"/>
+            <description value="Admin should be able to create a cart price rule for a specific coupon code"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-90"/>
+            <group value="SalesRule"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Create a cart price rule based on a coupon code  -->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{_defaultCoupon.code}}" stepKey="fillCouponCode"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="5" stepKey="fillDiscountAmount"/>
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+
+        <!-- Verify initial successful save -->
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{_defaultCoupon.code}}" stepKey="filterByName"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
+        <see selector="{{AdminCartPriceRulesSection.nameColumns}}" userInput="{{_defaultCoupon.code}}" stepKey="seeRuleInResults"/>
+
+        <!-- Verify further on the Rule's edit page -->
+        <click selector="{{AdminCartPriceRulesSection.rowContainingText(_defaultCoupon.code)}}" stepKey="goToEditRule"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="seeRuleName"/>
+        <seeOptionIsSelected selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="seeWebsites"/>
+        <seeOptionIsSelected selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="seeCustomerGroup"/>
+        <seeOptionIsSelected selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="seeCouponType"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{_defaultCoupon.code}}" stepKey="seeCouponCode"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions2"/>
+        <seeOptionIsSelected selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="seeActionType"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="5" stepKey="seeDiscountAmount"/>
+    </test>
+</tests>
