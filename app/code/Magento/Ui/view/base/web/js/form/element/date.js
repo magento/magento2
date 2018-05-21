@@ -95,7 +95,7 @@ define([
             timezoneFormat: 'YYYY-MM-DD HH:mm',
 
             listens: {
-                //'value': 'onValueChange',
+                'value': 'onValueChange',
                 'shiftedValue': 'onShiftedValueChange'
             },
 
@@ -106,12 +106,7 @@ define([
              *
              * @type {String}
              */
-            shiftedValue: '',
-
-            /**
-             * @type {bool}
-             */
-            ispageLoad: true
+            shiftedValue: ''
         },
 
         /**
@@ -152,11 +147,6 @@ define([
             var dateFormat,
                 shiftedValue;
 
-            if (this.ispageLoad == true) {
-                this.ispageLoad = false;
-                return false;
-            }
-
             if (value) {
                 if (this.options.showsTime && !this.outputDateTimeToISO) {
                     dateFormat = this.shiftedValue() ?
@@ -169,7 +159,7 @@ define([
                 if (this.options.showsTime) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
-                    dateFormat = this.shiftedValue() ?
+                    dateFormat = this.shiftedValue(value) ?
                         this.outputDateFormat :
                         this.inputDateFormat;
 
