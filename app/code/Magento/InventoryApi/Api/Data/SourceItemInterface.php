@@ -91,7 +91,7 @@ interface SourceItemInterface extends ExtensibleDataInterface
      * Set source item status (One of self::STATUS_*)
      *
      * @param int|null $status
-     * @return int
+     * @return void
      */
     public function setStatus($status);
 
