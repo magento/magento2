@@ -138,9 +138,9 @@ class Renderer implements RendererInterface
         $method = 'get' . $this->string->upperCaseWords($name, '_', '');
         if (method_exists($this->pageConfig, $method)) {
             $contentUpdated = $this->pageConfig->$method();
-            if(!is_object ($contentUpdated)) {
+            if (!is_object($contentUpdated)) {
                 $content = $contentUpdated;
-            }            
+            }
         }
         return $content;
     }
