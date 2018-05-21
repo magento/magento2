@@ -48,7 +48,7 @@ class ProductIdentitiesExtender
     {
         foreach ($this->configurableType->getParentIdsByChild($subject->getId()) as $parentId) {
             $parentProduct = $this->productRepository->getById($parentId);
-            $identities = array_merge((array) $identities, (array) $parentProduct->getIdentities());
+            $identities = array_merge($identities, $parentProduct->getIdentities());
         }
 
         return array_unique($identities);
