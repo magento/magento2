@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml;
+
+use Magento\Store\Model\Store;
 
 /**
  * Catalog category controller
@@ -35,6 +39,22 @@ abstract class Category extends \Magento\Backend\App\Action
     }
 
     /**
+     * Resolve store id
+     *
+     * Tries to take store id from store HTTP parameter, if can`t find it, try to dig into store_id
+     * If param is absent in store_id too, take default one
+     * @see Store
+     *
+     * @return int
+     */
+    private function resolveStoreId() : int
+    {
+        $storeId = $this->getRequest()->getParam('store', false);
+        $storeId = $storeId === false ? $this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID) : $storeId;
+        return (int) $storeId;
+    }
+
+    /**
      * Initialize requested category and put it into registry.
      * Root category can be returned, if inappropriate store/category is specified
      *
@@ -44,7 +64,7 @@ abstract class Category extends \Magento\Backend\App\Action
     protected function _initCategory($getRootInstead = false)
     {
         $categoryId = $this->resolveCategoryId();
-        $storeId = (int)$this->getRequest()->getParam('store');
+        $storeId = $this->resolveStoreId();
         $category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->setStoreId($storeId);
 
