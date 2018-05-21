@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Locale\Deployed;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -77,7 +79,7 @@ class Options implements OptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getOptionLocales()
+    public function getOptionLocales(): array
     {
         return $this->filterLocales($this->localeLists->getOptionLocales());
     }
@@ -85,7 +87,7 @@ class Options implements OptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getTranslatedOptionLocales()
+    public function getTranslatedOptionLocales(): array
     {
         return $this->filterLocales($this->localeLists->getTranslatedOptionLocales());
     }
@@ -93,7 +95,7 @@ class Options implements OptionInterface
     /**
      * Filter list of locales by available locales for current theme and depends on running application mode.
      *
-     * Applies filters only in production mode.
+     * Applies filters only in production mode when flag 'static_content_on_demand_in_production' is not enabled.
      * For example, if the current design theme has only one generated locale en_GB then for given array of locales:
      * ```php
      *     $locales = [
@@ -124,7 +126,7 @@ class Options implements OptionInterface
      * @param array $locales list of locales for filtering
      * @return array of filtered locales
      */
-    private function filterLocales(array $locales)
+    private function filterLocales(array $locales): array
     {
         if ($this->state->getMode() != State::MODE_PRODUCTION
             || $this->deploymentConfig->getConfigData(Constants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)) {

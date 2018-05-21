@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Model\Config\Structure\ElementVisibility;
 
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
@@ -80,21 +82,23 @@ class ConcealInProduction implements ElementVisibilityInterface
      */
     public function isHidden($path)
     {
-        $result = false;
         $path = $this->normalizePath($path);
         if ($this->state->getMode() === State::MODE_PRODUCTION
             && preg_match('/(?<group>(?<section>.*?)\/.*?)\/.*?/', $path, $match)) {
             $group = $match['group'];
             $section = $match['section'];
             $exemptions = array_keys($this->exemptions);
-            foreach ($this->configs as $configPath => $value) {
-                if ($value === static::HIDDEN && strpos($path, $configPath) !==false) {
-                    $result = empty(array_intersect([$section, $group, $path], $exemptions));
+            $checkedItems = [];
+            foreach ([$path, $group, $section] as $itemPath) {
+                $checkedItems[] = $itemPath;
+                if (!empty($this->configs[$itemPath])) {
+                    return $this->configs[$itemPath] === static::HIDDEN
+                        && empty(array_intersect($checkedItems, $exemptions));
                 }
             }
         }
 
-        return $result;
+        return false;
     }
 
     /**

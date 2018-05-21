@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Model\Config\Structure\ElementVisibility;
 
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
@@ -90,7 +92,7 @@ class ConcealScdField implements ElementVisibilityInterface
     /**
      * @inheritdoc
      */
-    public function isHidden($path)
+    public function isHidden($path): bool
     {
         $path = $this->normalizePath($path);
         if ($this->state->getMode() === State::MODE_PRODUCTION
@@ -115,7 +117,7 @@ class ConcealScdField implements ElementVisibilityInterface
     /**
      * @inheritdoc
      */
-    public function isDisabled($path)
+    public function isDisabled($path): bool
     {
         $path = $this->normalizePath($path);
         if ($this->state->getMode() === State::MODE_PRODUCTION

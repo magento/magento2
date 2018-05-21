@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\ElementVisibility;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -43,7 +45,6 @@ class ConcealScdFieldTest extends \PHPUnit\Framework\TestCase
             'section2/group2' => ElementVisibilityInterface::HIDDEN,
             'section3' => ElementVisibilityInterface::HIDDEN,
             'section3/group1/field1' => 'no',
-            'section5' => 'no',
         ];
         $exemptions = [
             'section1/group1/field3' => '',
@@ -63,7 +64,8 @@ class ConcealScdFieldTest extends \PHPUnit\Framework\TestCase
      * @param bool $isHidden
      * @dataProvider disabledDataProvider
      */
-    public function testCheckVisibility($path, $mageMode, $scdOnDemand, $isHidden, $isDisabled)
+    public function testCheckVisibility(string $path, string $mageMode,
+                                        int $scdOnDemand, bool $isHidden, bool $isDisabled): void
     {
         $this->stateMock->expects($this->any())
             ->method('getMode')
@@ -80,7 +82,7 @@ class ConcealScdFieldTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function disabledDataProvider()
+    public function disabledDataProvider(): array
     {
         return [
             //visibility of field 'section1/group1/field1' should be applied
@@ -104,60 +106,31 @@ class ConcealScdFieldTest extends \PHPUnit\Framework\TestCase
             ['section1/group2/field1', State::MODE_DEFAULT, 1, false, false],
             ['section1/group2/field1', State::MODE_DEVELOPER, 0, false, false],
             ['section1/group2/field1', State::MODE_DEVELOPER, 1, false, false],
-            //visibility of section 'section1' should be applied
-//            ['section1/group2/field2', State::MODE_PRODUCTION, 1, false, false],
-//            ['section1/group2/field2', State::MODE_PRODUCTION, 0, false, true],
-//            ['section1/group2/field2', State::MODE_DEFAULT, 0, false, false],
-//            ['section1/group2/field2', State::MODE_DEFAULT, 1, false, false],
-//            ['section1/group2/field2', State::MODE_DEVELOPER, 0, false, false],
-//            ['section1/group2/field2', State::MODE_DEVELOPER, 1, false, false],
-//            //exemption should be applied for section1/group1/field3
-//            ['section1/group1/field3', State::MODE_PRODUCTION, 1, false, false],
-//            ['section1/group1/field3', State::MODE_PRODUCTION, 0, false, false],
-//            ['section1/group1/field3', State::MODE_DEFAULT, 0, false, false],
-//            ['section1/group1/field3', State::MODE_DEFAULT, 1, false, false],
-//            ['section1/group1/field3', State::MODE_DEVELOPER, 0, false, false],
-//            ['section1/group1/field3', State::MODE_DEVELOPER, 1, false, false],
-//            //visibility of group 'section2/group1' should be applied
-//            ['section2/group1/field1', State::MODE_PRODUCTION, 1, false, false],
-//            ['section2/group1/field1', State::MODE_PRODUCTION, 0, false, true],
-//            //exemption should be applied for section2/group2/field1
-//            ['section2/group2/field1', State::MODE_PRODUCTION, 1, false, false],
-//            ['section2/group2/field1', State::MODE_PRODUCTION, 0, false, false],
-//            //any rule should not be applied
-//            ['section2/group3/field1', State::MODE_PRODUCTION, 1, false, false],
-//            ['section2/group3/field1', State::MODE_PRODUCTION, 0, false, false],
+            //as 'section1/group2' has neither Disable nor Hidden rule, this field should be visible
+            ['section1/group2/field2', State::MODE_PRODUCTION, 1, false, false],
+            ['section1/group2/field2', State::MODE_PRODUCTION, 0, false, false],
+            //exemption should be applied for section1/group1/field3
+            ['section1/group1/field3', State::MODE_PRODUCTION, 1, false, false],
+            ['section1/group1/field3', State::MODE_PRODUCTION, 0, false, false],
+            //visibility of group 'section2/group1' should be applied
+            ['section2/group1/field1', State::MODE_PRODUCTION, 1, false, false],
+            ['section2/group1/field1', State::MODE_PRODUCTION, 0, false, true],
+            //exemption should be applied for section2/group2/field1
+            ['section2/group2/field1', State::MODE_PRODUCTION, 1, false, false],
+            ['section2/group2/field1', State::MODE_PRODUCTION, 0, false, false],
+            //any rule should not be applied
+            ['section2/group3/field1', State::MODE_PRODUCTION, 1, false, false],
+            ['section2/group3/field1', State::MODE_PRODUCTION, 0, false, false],
+            //any rule should not be applied
+            ['section3/group1/field1', State::MODE_PRODUCTION, 1, false, false],
+            ['section3/group1/field1', State::MODE_PRODUCTION, 0, false, false],
+            //visibility of section 'section3' should be applied
+            ['section3/group1/field2', State::MODE_PRODUCTION, 1, false, false],
+            ['section3/group1/field2', State::MODE_PRODUCTION, 0, true, false],
+            //exception from 'section3/group2' should be applied
+            ['section3/group2/field1', State::MODE_PRODUCTION, 1, false, false],
+            ['section3/group2/field1', State::MODE_PRODUCTION, 0, false, false],
 
         ];
     }
-
-//    /**
-//     * @param string $path
-//     * @param string $mageMode
-//     * @param bool $expectedResult
-//     * @dataProvider hiddenDataProvider
-//     */
-//    public function testIsHidden($path, $mageMode, $expectedResult)
-//    {
-//        $this->stateMock->expects($this->once())
-//            ->method('getMode')
-//            ->willReturn($mageMode);
-//        $this->assertSame($expectedResult, $this->model->isHidden($path));
-//    }
-//
-//    /**
-//     * @return array
-//     */
-//    public function hiddenDataProvider()
-//    {
-//        return [
-//            ['first/path', State::MODE_PRODUCTION, false],
-//            ['first/path', State::MODE_DEFAULT, false],
-//            ['some/path', State::MODE_PRODUCTION, false],
-//            ['second/path/field', State::MODE_PRODUCTION, true],
-//            ['second/path', State::MODE_DEVELOPER, false],
-//            ['fourth/path/value', State::MODE_PRODUCTION, false],
-//            ['fourth/path/test', State::MODE_PRODUCTION, true],
-//        ];
-//    }
 }
