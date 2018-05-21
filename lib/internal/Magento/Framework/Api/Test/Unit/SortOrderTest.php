@@ -86,4 +86,14 @@ class SortOrderTest extends \PHPUnit\Framework\TestCase
             SortOrder::DIRECTION => 'not-asc-or-desc'
         ]);
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     */
+    public function testValidateField()
+    {
+        $this->sortOrder = new SortOrder([
+            SortOrder::FIELD => 'invalid field (value);'
+        ]);
+    }
 }
