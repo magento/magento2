@@ -253,6 +253,7 @@
             <stories value="Edit a configurable product in admin"/>
             <title value="Admin should be able to remove a configuration from a Configurable Product"/>
             <description value="Admin should be able to remove a configuration from a Configurable Product"/>
+            <severity value="AVERAGE"/>
             <testCaseId value="MC-86"/>
             <group value="ConfigurableProduct"/>
         </annotations>
