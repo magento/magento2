@@ -162,13 +162,14 @@ define([
              * @returns {void}
              */
             categoryLoader.buildCategoryTree = function (parent, config) {// eslint-disable-line no-shadow
+                var i = 0;
 
                 if (!config) {
                     return null;
                 }
 
                 if (parent && config && config.length) {
-                    for (var i = 0; i < config.length; i++) {
+                    for (i; i < config.length; i++) {
                         categoryLoader.processCategoryTree(parent, config, i);
                     }
                 }
