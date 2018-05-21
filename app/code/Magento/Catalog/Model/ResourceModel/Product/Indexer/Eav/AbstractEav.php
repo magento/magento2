@@ -160,7 +160,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param array $parentIds the parent entity ids limitation
      * @return \Magento\Framework\DB\Select
      */
-    protected function _prepareRelationIndexSelect( array $parentIds = null)
+    protected function _prepareRelationIndexSelect(array $parentIds = null)
     {
         $connection = $this->getConnection();
         $idxTable = $this->getIdxTable();
