@@ -11,6 +11,9 @@
         "magento/module-inventory-sales-api": "*",
         "magento/module-inventory-sales": "*"
     },
+    "suggest": {
+        "magento/module-catalog": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",

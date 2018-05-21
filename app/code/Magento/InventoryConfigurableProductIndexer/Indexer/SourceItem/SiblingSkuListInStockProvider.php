@@ -9,10 +9,8 @@ namespace Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem;
 
 use Exception;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
-use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryIndexer\Indexer\SourceItem\SkuListInStock;
 use Magento\InventoryIndexer\Indexer\SourceItem\SkuListInStockFactory;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -43,23 +41,39 @@ class SiblingSkuListInStockProvider
     private $metadataPool;
 
     /**
+     * @var string
+     */
+    private $tableNameSourceItem;
+
+    /**
+     * @var string
+     */
+    private $tableNameStockSourceLink;
+
+    /**
      * GetSkuListInStock constructor.
      *
      * @param ResourceConnection $resourceConnection
      * @param SkuListInStockFactory $skuListInStockFactory
      * @param MetadataPool $metadataPool
      * @param int $groupConcatMaxLen
+     * @param string $tableNameSourceItem
+     * @param string $tableNameStockSourceLink
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         SkuListInStockFactory $skuListInStockFactory,
         MetadataPool $metadataPool,
-        int $groupConcatMaxLen
+        int $groupConcatMaxLen,
+        $tableNameSourceItem,
+        $tableNameStockSourceLink
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->skuListInStockFactory = $skuListInStockFactory;
         $this->groupConcatMaxLen = $groupConcatMaxLen;
         $this->metadataPool = $metadataPool;
+        $this->tableNameSourceItem = $tableNameSourceItem;
+        $this->tableNameStockSourceLink = $tableNameStockSourceLink;
     }
 
     /**
@@ -72,12 +86,8 @@ class SiblingSkuListInStockProvider
     public function execute(array $sourceItemIds): array
     {
         $connection = $this->resourceConnection->getConnection();
-        $sourceStockLinkTable = $this->resourceConnection->getTableName(
-            StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
-        );
-        $sourceItemTable = $this->resourceConnection->getTableName(
-            SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM
-        );
+        $sourceStockLinkTable = $this->resourceConnection->getTableName($this->tableNameStockSourceLink);
+        $sourceItemTable = $this->resourceConnection->getTableName($this->tableNameSourceItem);
 
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $linkField = $metadata->getLinkField();
@@ -95,9 +105,9 @@ class SiblingSkuListInStockProvider
                 sprintf(
                     'source_item.%s = stock_source_link.%s',
                     SourceItemInterface::SOURCE_CODE,
-                    StockSourceLink::SOURCE_CODE
+                    StockSourceLinkInterface::SOURCE_CODE
                 ),
-                [StockSourceLink::STOCK_ID]
+                [StockSourceLinkInterface::STOCK_ID]
             )->joinInner(
                 ['child_product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
                 'child_product_entity.sku = source_item.sku',
@@ -115,7 +125,7 @@ class SiblingSkuListInStockProvider
                 'sibling_product_entity.' . $linkField . ' = sibling_link.product_id',
                 []
             )->where('source_item.source_item_id IN (?)', $sourceItemIds)
-            ->group(['stock_source_link.' . StockSourceLink::STOCK_ID]);
+            ->group(['stock_source_link.' . StockSourceLinkInterface::STOCK_ID]);
 
         $connection->query('SET group_concat_max_len = ' . $this->groupConcatMaxLen);
         $items = $connection->fetchAll($select);
@@ -134,7 +144,7 @@ class SiblingSkuListInStockProvider
         foreach ($items as $item) {
             /** @var SkuListInStock $skuListInStock */
             $skuListInStock = $this->skuListInStockFactory->create();
-            $skuListInStock->setStockId((int)$item[StockSourceLink::STOCK_ID]);
+            $skuListInStock->setStockId((int)$item[StockSourceLinkInterface::STOCK_ID]);
             $skuListInStock->setSkuList(explode(',', $item[SourceItemInterface::SKU]));
             $skuListInStockList[] = $skuListInStock;
         }

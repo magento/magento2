@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.report.grid.container">
+            <block class="Magento\InventoryLowQuantityNotificationAdminUi\Block\Adminhtml\Product\Lowstock\Grid" name="adminhtml.block.report.product.inventory.lowstock.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">gridLowstock</argument>
+                    <argument name="use_ajax" xsi:type="string">0</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\InventoryLowQuantityNotification\Model\ResourceModel\LowQuantityCollection</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.block.report.product.inventory.lowstock.export" as="grid.export">
+                    <arguments>
+                        <argument name="exportTypes" xsi:type="array">
+                            <item name="csv" xsi:type="array">
+                                <item name="urlPath" xsi:type="string">InventoryLowQuantityNotification/report/exportLowstockCsv</item>
+                                <item name="label" xsi:type="string" translate="true">CSV</item>
+                            </item>
+                            <item name="excel" xsi:type="array">
+                                <item name="urlPath" xsi:type="string">InventoryLowQuantityNotification/report/exportLowstockExcel</item>
+                                <item name="label" xsi:type="string" translate="true">Excel XML</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="adminhtml.block.report.product.inventory.lowstock.grid.columnSet">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.product.inventory.lowstock.grid.columnSet.name" as="name">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Product</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="index" xsi:type="string">product_name</argument>
+                            <argument name="filter_index" xsi:type="string">product_name</argument>
+                            <argument name="header_css_class" xsi:type="string">col-product</argument>
+                            <argument name="column_css_class" xsi:type="string">col-product</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.product.inventory.lowstock.grid.columnSet.sku" as="sku">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">SKU</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="index" xsi:type="string">sku</argument>
+                            <argument name="filter_index" xsi:type="string">sku</argument>
+                            <argument name="header_css_class" xsi:type="string">col-sku</argument>
+                            <argument name="column_css_class" xsi:type="string">col-sku</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.product.inventory.lowstock.grid.columnSet.qty" as="qty">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Quantity</argument>
+                            <argument name="filter" xsi:type="string">Magento\Backend\Block\Widget\Grid\Column\Filter\Range</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="index" xsi:type="string">quantity</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                            <argument name="header_css_class" xsi:type="string">col-qty</argument>
+                            <argument name="column_css_class" xsi:type="string">col-qty</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.product.inventory.lowstock.grid.columnSet.sourceCode" as="sourceCode">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Source Code</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="filter_index" xsi:type="string">source_code</argument>
+                            <argument name="index" xsi:type="string">source_code</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="options" model="Magento\InventoryLowQuantityNotificationAdminUi\Model\OptionSource\EnabledSourceCode"/>
+                            <argument name="header_css_class" xsi:type="string">col-source-code</argument>
+                            <argument name="column_css_class" xsi:type="string">col-source-code</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
