@@ -13,7 +13,7 @@ use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 /**
  * @inheritdoc
  */
-class SourceItemsSave implements SourceItemsSaveInterface
+class SourceItemsSaveWithoutLegacySynchronization implements SourceItemsSaveInterface
 {
     /**
      * @var SourceItemsSaveHandler

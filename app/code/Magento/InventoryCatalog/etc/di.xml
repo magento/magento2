@@ -67,10 +67,10 @@
     </type>
     <type name="Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem">
         <arguments>
-            <argument name="sourceItemsSave" xsi:type="object">Magento\InventoryCatalog\Model\SourceItem\SourceItemsSave</argument>
+            <argument name="sourceItemsSave" xsi:type="object">Magento\Inventory\Model\SourceItem\Command\SourceItemsSaveWithoutLegacySynchronization</argument>
         </arguments>
     </type>
-    <type name="Magento\InventoryCatalog\Model\SourceItem\SourceItemsSave">
+    <type name="Magento\Inventory\Model\SourceItem\Command\SourceItemsSaveWithoutLegacySynchronization">
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save" disabled="true"/>
     </type>
 </config>

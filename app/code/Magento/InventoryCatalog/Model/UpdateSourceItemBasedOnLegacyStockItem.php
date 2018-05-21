@@ -62,7 +62,6 @@ class UpdateSourceItemBasedOnLegacyStockItem
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param ResourceConnection $resourceConnection
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
-
      */
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
