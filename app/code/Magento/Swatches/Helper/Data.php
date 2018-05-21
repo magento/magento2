@@ -321,7 +321,7 @@ class Data
                 continue;
             }
 
-            if (in_array('image', $mediaEntry->getTypes(), true) || (!$baseImage)) {
+            if (in_array('image', $mediaEntry->getTypes(), true) || !$baseImage) {
                 $baseImage = $mediaEntry->getFile();
             }
 
