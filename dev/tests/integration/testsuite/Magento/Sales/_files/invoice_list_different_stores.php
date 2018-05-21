@@ -80,6 +80,9 @@ $orderService = \Magento\TestFramework\ObjectManager::getInstance()->create(
     \Magento\Sales\Api\InvoiceManagementInterface::class
 );
 
+/** @var \Magento\Sales\Api\OrderRepositoryInterface $orderRepository */
+$orderRepository = $objectManager->create(\Magento\Sales\Api\OrderRepositoryInterface::class);
+
 foreach ($orders as $orderFixture) {
     /** @var \Magento\Sales\Model\Order $order */
     $order = $objectManager->create(\Magento\Sales\Model\Order::class);
@@ -113,7 +116,9 @@ foreach ($orders as $orderFixture) {
     )->setPayment(
         clone $payment
     );
-    $order->save();
+
+    $orderRepository->save($order);
+
     /** @var \Magento\Sales\Model\Order\Invoice $invoice */
     $invoice = $orderService->prepareInvoice($order, $order->getItems());
     $invoice->register();
