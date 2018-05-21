@@ -27,12 +27,12 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
     <?php
     if ($block->getMode() == 'grid') {
         $viewMode = 'grid';
-        $image = 'category_page_grid';
+        $imageDisplayArea = 'category_page_grid';
         $showDescription = false;
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
     } else {
         $viewMode = 'list';
-        $image = 'category_page_list';
+        $imageDisplayArea = 'category_page_list';
         $showDescription = true;
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
     }
@@ -48,7 +48,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
             <li class="item product product-item">
                 <div class="product-item-info" data-container="product-grid">
                     <?php
-                    $productImage = $block->getImage($_product, $image);
+                    $productImage = $block->getImage($_product, $imageDisplayArea);
                     if ($pos != null) {
                         $position = ' style="left:' . $productImage->getWidth() . 'px;'
                             . 'top:' . $productImage->getHeight() . 'px;"';
