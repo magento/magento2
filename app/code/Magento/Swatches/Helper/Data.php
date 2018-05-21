@@ -321,9 +321,7 @@ class Data
                 continue;
             }
 
-            if (in_array('image', $mediaEntry->getTypes(), true)) {
-                $baseImage = $mediaEntry->getFile();
-            } elseif (!$baseImage) {
+            if (in_array('image', $mediaEntry->getTypes(), true) || (!$baseImage)) {
                 $baseImage = $mediaEntry->getFile();
             }
 
@@ -506,9 +504,7 @@ class Data
      */
     public function isProductHasSwatch(Product $product)
     {
-        $swatchAttributes = $this->getSwatchAttributes($product) ?: [];
-
-        return count($swatchAttributes) > 0;
+        return count($this->getSwatchAttributes($product) ?: []) > 0;
     }
 
     /**
