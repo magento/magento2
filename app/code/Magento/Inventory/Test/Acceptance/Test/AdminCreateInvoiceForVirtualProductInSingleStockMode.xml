@@ -118,7 +118,7 @@
         <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="{$grabOrderNumber}" stepKey="checkOrderId"/>
         <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="John Doe" stepKey="checkUserName"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.information}}" stepKey="clickInformation"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOredInformationSectionLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrderInformationSectionLoad"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="checkOrderStatus"/>
 
         <comment userInput="Check product sources quantity and salable quantity after invoice been created." stepKey="checkProductQtyAfterInvoiceCreatedComment"/>
