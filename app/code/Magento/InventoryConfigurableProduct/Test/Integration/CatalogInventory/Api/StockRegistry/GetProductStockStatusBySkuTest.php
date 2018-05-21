@@ -88,11 +88,11 @@ class GetProductStockStatusBySkuTest extends TestCase
      */
     public function testGetStatusIfScopeIdParameterIsPassed(
         string $storeCode,
-        int $status,
-        int $stockId
+        int $status
     ): void {
         $this->storeManager->setCurrentStore($storeCode);
-        $productStockStatus = $this->stockRegistry->getProductStockStatusBySku('configurable', $stockId);
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $productStockStatus = $this->stockRegistry->getProductStockStatusBySku('configurable', $websiteId);
 
         self::assertEquals($status, $productStockStatus);
     }
@@ -103,9 +103,9 @@ class GetProductStockStatusBySkuTest extends TestCase
     public function getStatusDataProvider(): array
     {
         return [
-            ['store_for_eu_website', 0, 10],
-            ['store_for_us_website', 1, 20],
-            ['store_for_global_website', 1, 30],
+            ['store_for_eu_website', 0],
+            ['store_for_us_website', 1],
+            ['store_for_global_website', 1],
         ];
     }
 

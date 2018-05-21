@@ -67,21 +67,6 @@ class GetProductStockStatusBySkuOnDefaultStockTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/default_stock_bundle_products.php
-     *
-     * @dataProvider getStockDataProvider
-     * @param string $sku
-     * @return void
-     */
-    public function testGetStatusIfNotExistedScopeIdParameterIsPassed(string $sku): void
-    {
-        $notExistedScopeId = 100;
-        $productStockStatus = $this->stockRegistry->getProductStockStatusBySku($sku, $notExistedScopeId);
-
-        self::assertEquals(0, $productStockStatus);
-    }
-
-    /**
      * @return array
      */
     public function getStockDataProvider(): array

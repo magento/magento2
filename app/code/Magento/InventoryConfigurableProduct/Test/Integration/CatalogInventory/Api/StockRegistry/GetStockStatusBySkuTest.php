@@ -88,18 +88,16 @@ class GetStockStatusBySkuTest extends TestCase
      * @param string $storeCode
      * @param int $status
      * @param float $qty
-     * @param int $stockId
      * @return void
      */
     public function testGetStatusIfScopeIdParameterIsPassed(
         string $storeCode,
         int $status,
-        float $qty,
-        int $stockId
+        float $qty
     ): void {
         $this->storeManager->setCurrentStore($storeCode);
-
-        $stockStatus = $this->stockRegistry->getStockStatusBySku('configurable', $stockId);
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $stockStatus = $this->stockRegistry->getStockStatusBySku('configurable', $websiteId);
 
         self::assertEquals($status, $stockStatus->getStockStatus());
         self::assertEquals($qty, $stockStatus->getQty());
@@ -111,9 +109,9 @@ class GetStockStatusBySkuTest extends TestCase
     public function getStatusDataProvider(): array
     {
         return [
-            ['store_for_eu_website', 0, 0, 10],
-            ['store_for_us_website', 1, 200, 20],
-            ['store_for_global_website', 1, 200, 30],
+            ['store_for_eu_website', 0, 0],
+            ['store_for_us_website', 1, 200],
+            ['store_for_global_website', 1, 200],
         ];
     }
 
