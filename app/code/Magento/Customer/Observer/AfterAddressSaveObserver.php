@@ -7,7 +7,7 @@
 namespace Magento\Customer\Observer;
 
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Helper\Address as HelperAddress;
 use Magento\Customer\Model\Address;
@@ -78,12 +78,12 @@ class AfterAddressSaveObserver implements ObserverInterface
     /**
      * @var CustomerFactory
      */
-    protected $customerFactory;
+    private $customerFactory;
     
     /**
-     * @var DateTimeFactory
+     * @var DateTime
      */
-    protected $dateFactory;
+    protected $date;
 
     /**
      * @var CustomerSession
@@ -92,7 +92,7 @@ class AfterAddressSaveObserver implements ObserverInterface
 
     /**
      * @param Vat $customerVat
-     * @param DateTimeFactory $dateFactory
+     * @param DateTime $date
      * @param CustomerFactory $customerFactory
      * @param HelperAddress $customerAddress
      * @param Registry $coreRegistry
@@ -105,7 +105,7 @@ class AfterAddressSaveObserver implements ObserverInterface
      */
     public function __construct(
         Vat $customerVat,
-        DateTimeFactory $dateFactory,
+        DateTime $date,
         CustomerFactory $customerFactory,
         HelperAddress $customerAddress,
         Registry $coreRegistry,
@@ -117,7 +117,7 @@ class AfterAddressSaveObserver implements ObserverInterface
         CustomerSession $customerSession
     ) {
         $this->_customerVat = $customerVat;
-        $this->_dateFactory = $dateFactory;
+        $this->date = $date;
         $this->_customerFactory = $customerFactory;
         $this->_customerAddress = $customerAddress;
         $this->_coreRegistry = $coreRegistry;
@@ -143,7 +143,7 @@ class AfterAddressSaveObserver implements ObserverInterface
         $customer = $customerAddress->getCustomer();
         
         if ($customer->getId()) {
-            $currentTimestamp = $this->_dateFactory->create()->gmtDate();
+            $currentTimestamp = $this->date->gmtDate();
             $customerModel = $this->_customerFactory->create()->load($customer->getId());
             $customerModel->setUpdatedAt($currentTimestamp);
             $customerModel->save();
