@@ -23,7 +23,7 @@ class AdaptAddStockStatusToSelectPlugin
     /**
      * @var StockResolverInterface
      */
-    private $getStockIdForCurrentWebsite;
+    private $stockResolver;
 
     /**
      * @var AddStockStatusToSelect
@@ -31,14 +31,14 @@ class AdaptAddStockStatusToSelectPlugin
     private $addStockStatusToSelect;
 
     /**
-     * @param StockResolverInterface $getStockIdForCurrentWebsite
+     * @param StockResolverInterface $stockResolver
      * @param AddStockStatusToSelect $addStockStatusToSelect
      */
     public function __construct(
-        StockResolverInterface $getStockIdForCurrentWebsite,
+        StockResolverInterface $stockResolver,
         AddStockStatusToSelect $addStockStatusToSelect
     ) {
-        $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
+        $this->stockResolver = $stockResolver;
         $this->addStockStatusToSelect = $addStockStatusToSelect;
     }
 
@@ -62,7 +62,7 @@ class AdaptAddStockStatusToSelectPlugin
             throw new LocalizedException(__('Website code is empty'));
         }
 
-        $stock = $this->getStockIdForCurrentWebsite->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $stockId = (int)$stock->getStockId();
 
         $this->addStockStatusToSelect->execute($select, $stockId);
