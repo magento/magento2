@@ -122,10 +122,10 @@ class Result
      * @param $id
      * @return \Magento\Quote\Model\Quote\Address\RateResult\Method|null
      */
-    public function getRateByMethodId($id)
+    public function getRateByMethodId($rateMethodId)
     {
-        return array_reduce($this->_rates, function($foundItem, $item) use ($id) {
-            if (!$foundItem && $item->getMethod() == $id) {
+        return array_reduce($this->_rates, function($foundItem, $item) use ($rateMethodId) {
+            if (!$foundItem && $item->getMethod() == $rateMethodId) {
                 return $item;
             } else {
                 return $foundItem;
