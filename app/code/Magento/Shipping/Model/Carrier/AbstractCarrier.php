@@ -456,7 +456,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
                 return $rate instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method &&
                     $rate->getMethod() == $freeMethod;
             });
-            return array_reduce($rates, function($acc, \Magento\Quote\Model\Quote\Address\RateResult\Method $rate) {
+            return array_reduce($rates, function(\Magento\Quote\Model\Quote\Address\RateResult\Method $rate) {
                 return $rate->getPrice();
             }, 0);
         }
