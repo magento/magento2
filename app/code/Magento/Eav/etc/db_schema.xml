@@ -377,7 +377,7 @@
             <column name="attribute_set_id"/>
             <column name="attribute_group_name"/>
         </constraint>
-        <constraint xsi:type="unique" name="CATALOG_CATEGORY_PRODUCT_ATTRIBUTE_SET_ID_ATTRIBUTE_GROUP_CODE">
+        <constraint xsi:type="unique" name="EAV_ATTRIBUTE_GROUP_ATTRIBUTE_SET_ID_ATTRIBUTE_GROUP_CODE">
             <column name="attribute_set_id"/>
             <column name="attribute_group_code"/>
         </constraint>
