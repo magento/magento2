@@ -9,7 +9,9 @@ namespace Magento\GraphQl\Catalog;
 
 use Magento\Framework\DataObject;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\ObjectManager;
 
 class CategoryTest extends GraphQlAbstract
 {
@@ -172,7 +174,6 @@ QUERY;
         new_from_date
         new_to_date
         options_container
-       
         price {
           minimalPrice {
             amount {
@@ -268,5 +269,149 @@ QUERY;
         $this->assertEquals(2, $response['category']['products']['total_count']);
         $this->assertEquals(1, $response['category']['products']['page_info']['current_page']);
         $this->assertEquals(20, $response['category']['products']['page_info']['page_size']);
+
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $firstProductSku = 'simple';
+        $firstProduct = $productRepository->get($firstProductSku, false, null, true);
+        $this->assertBaseFields($firstProduct, $response['category']['products']['items'][0]);
+        $this->assertAttributes($response['category']['products']['items'][0]);
+        $this->assertWebsites($firstProduct, $response['category']['products']['items'][0]['websites']);
+
+        $secondProductSku = '12345';
+        $secondProduct = $productRepository->get($secondProductSku, false, null, true);
+        $this->assertBaseFields($secondProduct, $response['category']['products']['items'][1]);
+        $this->assertAttributes($response['category']['products']['items'][1]);
+        $this->assertWebsites($secondProduct, $response['category']['products']['items'][1]['websites']);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $actualResponse
+     */
+    private function assertBaseFields($product, $actualResponse)
+    {
+
+        $assertionMap = [
+            ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
+            ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
+            ['response_field' => 'id', 'expected_value' => $product->getId()],
+            ['response_field' => 'name', 'expected_value' => $product->getName()],
+            ['response_field' => 'price', 'expected_value' =>
+                [
+                    'minimalPrice' => [
+                        'amount' => [
+                            'value' => $product->getPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'regularPrice' => [
+                        'amount' => [
+                            'value' => $product->getPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'maximalPrice' => [
+                        'amount' => [
+                            'value' => $product->getPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                ]
+            ],
+            ['response_field' => 'sku', 'expected_value' => $product->getSku()],
+            ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
+            ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
+//            ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
+        ];
+
+        $this->assertResponseFields($actualResponse, $assertionMap);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $actualResponse
+     */
+    private function assertWebsites($product, $actualResponse)
+    {
+        $assertionMap = [
+            [
+                'id' => current($product->getExtensionAttributes()->getWebsiteIds()),
+                'name' => 'Main Website',
+                'code' => 'base',
+                'sort_order' => 0,
+                'default_group_id' => '1',
+                'is_default' => true,
+            ]
+        ];
+
+        $this->assertEquals($actualResponse, $assertionMap);
+    }
+
+    /**
+     * @param array $actualResponse
+     */
+    private function assertAttributes($actualResponse)
+    {
+        $eavAttributes = [
+            'url_key',
+            'description',
+            'meta_description',
+            'meta_keyword',
+            'meta_title',
+            'short_description',
+            'tax_class_id',
+            'country_of_manufacture',
+            'gift_message_available',
+            'new_from_date',
+            'new_to_date',
+            'options_container',
+            'special_price',
+            'special_from_date',
+            'special_to_date',
+        ];
+
+        foreach($eavAttributes as $eavAttribute){
+            $this->assertArrayHasKey($eavAttribute, $actualResponse);
+        }
+    }
+
+    /**
+     * @param array $actualResponse
+     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
+     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
+     */
+    private function assertResponseFields($actualResponse, $assertionMap)
+    {
+        foreach ($assertionMap as $key => $assertionData) {
+            $expectedValue = isset($assertionData['expected_value'])
+                ? $assertionData['expected_value']
+                : $assertionData;
+            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
+            self::assertNotNull(
+                $expectedValue,
+                "Value of '{$responseField}' field must not be NULL"
+            );
+            self::assertEquals(
+                $expectedValue,
+                $actualResponse[$responseField],
+                "Value of '{$responseField}' field in response does not match expected value: "
+                . var_export($expectedValue, true)
+            );
+        }
+    }
+
+    private function eavAttributesToGraphQlSchemaFieldTranslator($attributeCode)
+    {
+        if(isset($this->eavAttributesToGraphQlSchemaFieldMap[$attributeCode])){
+            return $this->eavAttributesToGraphQlSchemaFieldMap[$attributeCode];
+        }
+
+        return $attributeCode;
     }
 }
