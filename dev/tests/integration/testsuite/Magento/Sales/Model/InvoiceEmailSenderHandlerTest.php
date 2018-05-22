@@ -77,15 +77,12 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
         $storeConfig->setDataByPath('sales_email/invoice/enabled', 0);
         $storeConfig->save();
 
-        $beforeSendCollection = clone $this->entityCollection;
-        $beforeSendCollection->addFieldToFilter('send_email', ['eq' => 1]);
-        $beforeSendCollection->addFieldToFilter('email_sent', ['null' => true]);
+        $sendCollection = clone $this->entityCollection;
+        $sendCollection->addFieldToFilter('send_email', ['eq' => 1]);
+        $sendCollection->addFieldToFilter('email_sent', ['null' => true]);
 
         $this->emailSender->sendEmails();
 
-        $this->entityCollection->addFieldToFilter('send_email', ['eq' => 1]);
-        $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
-
-        $this->assertCount($expectedResult, $this->entityCollection->getItems());
+        $this->assertCount($expectedResult, $sendCollection->getItems());
     }
 }
