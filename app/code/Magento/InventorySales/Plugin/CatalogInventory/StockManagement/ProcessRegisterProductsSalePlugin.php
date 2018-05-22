@@ -9,7 +9,9 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 
 use Magento\CatalogInventory\Api\RegisterProductSaleInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
@@ -41,21 +43,37 @@ class ProcessRegisterProductsSalePlugin
     private $checkItemsQuantity;
 
     /**
+     * @var GetProductTypesBySkusInterface
+     */
+    private $getProductTypesBySkus;
+
+    /**
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemManagementAllowedForProductType;
+
+    /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param StockResolverInterface $stockResolver
      * @param CheckItemsQuantity $checkItemsQuantity
+     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
         WebsiteRepositoryInterface $websiteRepository,
         StockResolverInterface $stockResolver,
-        CheckItemsQuantity $checkItemsQuantity
+        CheckItemsQuantity $checkItemsQuantity,
+        GetProductTypesBySkusInterface $getProductTypesBySkus,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->websiteRepository = $websiteRepository;
         $this->stockResolver = $stockResolver;
         $this->checkItemsQuantity = $checkItemsQuantity;
+        $this->getProductTypesBySkus = $getProductTypesBySkus;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
     }
 
     /**
@@ -80,11 +98,18 @@ class ProcessRegisterProductsSalePlugin
         if (null === $websiteId) {
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
+
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
+        $productTypes = $this->getProductTypesBySkus->execute($productSkus);
+
         $itemsBySku = [];
         foreach ($productSkus as $productId => $sku) {
+            if (false === $this->isSourceItemManagementAllowedForProductType->execute($productTypes[$sku])) {
+                continue;
+            }
             $itemsBySku[$sku] = $items[$productId];
         }
+
         $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
         $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
         $this->checkItemsQuantity->execute($itemsBySku, $stockId);
