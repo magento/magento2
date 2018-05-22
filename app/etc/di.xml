@@ -178,8 +178,6 @@
     <preference for="Magento\Framework\App\FeedFactoryInterface" type="Magento\Framework\App\FeedFactory" />
     <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
     <preference for="Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface" type="Magento\Eav\Model\TypeLocator\ComplexType"/>
-    <preference for="Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcherInterface" type="Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcher" />
-    <preference for="Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface" type="Magento\Framework\MultiDimensionalIndexer\IndexNameResolver" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaReader" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface" type="Magento\Framework\Setup\Declaration\Schema\SchemaConfig" />
@@ -1394,11 +1392,6 @@
             <argument name="ignoredUpdateColumns" xsi:type="array">
                 <item name="updated_at" xsi:type="string">updated_at</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\MultiDimensionalIndexer\IndexNameResolver">
-        <arguments>
-            <argument name="indexScopeResolver" xsi:type="object">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory">
