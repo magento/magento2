@@ -410,7 +410,7 @@ type Products @doc(description: "The Products object is the top-level object ret
 }
 
 type CategoryProducts @doc(description: "The category products object returned in the Category query") {
-    items: [ProductInterface] @doc(description: "An array of products that match the specified search criteria")
+    items: [ProductInterface] @doc(description: "An array of products that are assigned to the category")
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query")
     total_count: Int @doc(description: "The number of products returned")
 }
