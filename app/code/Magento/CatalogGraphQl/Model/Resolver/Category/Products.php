@@ -17,6 +17,9 @@ use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
+/**
+ * Category products resolver, used by GraphQL endpoints to retrieve products assigned to a category
+ */
 class Products implements ResolverInterface
 {
     /** @var \Magento\Catalog\Api\ProductRepositoryInterface */
