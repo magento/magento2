@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Model;
 
 class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
@@ -53,11 +55,9 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     private $serializer;
 
     /**
-     * Store Config
-     *
-     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
+     * @var \Magento\Framework\App\Request\PathInfoProcessorInterface
      */
-    protected $config;
+    private $pathInfoProcessor;
 
     /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
@@ -65,8 +65,8 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Store\Model\StoreResolver\ReaderList $readerList
-     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\App\Request\PathInfoProcessorInterface $pathInfoProcessor,
      * @param string $runMode
      * @param null $scopeCode
      */
@@ -76,8 +76,8 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Store\Model\StoreResolver\ReaderList $readerList,
-        \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Framework\Serialize\SerializerInterface $serializer,
+        \Magento\Framework\App\Request\PathInfoProcessorInterface $pathInfoProcessor,
         $runMode = ScopeInterface::SCOPE_STORE,
         $scopeCode = null
     ) {
@@ -86,8 +86,8 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         $this->request = $request;
         $this->cache = $cache;
         $this->readerList = $readerList;
-        $this->config = $config;
         $this->serializer = $serializer;
+        $this->pathInfoProcessor = $pathInfoProcessor;
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
         $this->scopeCode = $scopeCode;
     }
@@ -133,37 +133,23 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     private function getStoreCodeFromUrl() : ?string
     {
         $requestUri = $this->request->getRequestUri();
-        if ($this->isUseStoreCodeInUrlEnabled() && '/' !== $requestUri) {
+        if ('/' !== $this->request->getRequestUri()) {
             try {
-                //get path Info - without stripping store
                 $requestUri = $this->removeRepeatedSlashes($requestUri);
                 $parsedRequestUri = explode('?', $requestUri, 2);
                 $baseUrl = $this->request->getBaseUrl();
-                $pathInfo = (string)substr($parsedRequestUri[0], (int)strlen($baseUrl));
+                $pathInfo = ltrim((string)substr($parsedRequestUri[0], (int)strlen($baseUrl)), '/');
 
-                $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
-                /** @var \Magento\Store\Model\Store $store */
-                $store = $this->getRequestedStoreByCode($pathParts[0]);
-
-                if (!$this->request->isDirectAccessFrontendName($pathParts[0])
-                    && $store->getCode() != Store::ADMIN_CODE) {
-                    return $store->getCode();
+                $processedPathInfo = ltrim($this->pathInfoProcessor->process($this->request, $pathInfo), '/');
+                $urlStoreCode = trim(str_replace($processedPathInfo, '', $pathInfo), '/');
+                if (!empty($urlStoreCode)) {
+                    return $urlStoreCode;
                 }
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 return null;
             }
         }
         return null;
-    }
-
-    /**
-     * Get the use store code in the url setting enabled
-     *
-     * @return bool
-     */
-    private function isUseStoreCodeInUrlEnabled() : bool
-    {
-        return (bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL);
     }
 
     /**
@@ -195,7 +181,14 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
             $storesData = $this->serializer->unserialize($cacheData);
         } else {
             $storesData = $this->readStoresData();
-            $this->cache->save($this->serializer->serialize($storesData), $cacheKey, [self::CACHE_TAG]);
+            $this->cache->save(
+                $this->serializer->serialize($storesData),
+                $cacheKey,
+                [
+                    \Magento\Store\Model\Store::CACHE_TAG,
+                    self::CACHE_TAG
+                ]
+            );
         }
         return $storesData;
     }
