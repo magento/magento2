@@ -144,4 +144,34 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             $product->getName()
         );
     }
+
+    /**
+     * Check a case when product should be retrieved with different SKU variations.
+     *
+     * @param string $sku
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @dataProvider skuDataProvider
+     */
+    public function testGetProduct(string $sku)
+    {
+        $expectedSku = 'simple';
+        $product = $this->productRepository->get($sku);
+
+        self::assertNotEmpty($product);
+        self::assertEquals($expectedSku, $product->getSku());
+    }
+
+    /**
+     * Get list of SKU variations for the same product.
+     *
+     * @return array
+     */
+    public function skuDataProvider(): array
+    {
+        return [
+            ['sku' => 'simple'],
+            ['sku' => 'Simple'],
+            ['sku' => 'simple ']
+        ];
+    }
 }
