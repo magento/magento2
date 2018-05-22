@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminAddDefaultVideoDownloadableProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="You should be able to add default video for a Downloadable Product"/>
+            <description value="You should be able to add default video for a Downloadable Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-114"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Base AdminAddDefaultVideoDownloadableProductTest -->
+
+        <comment userInput="Create product in admin" stepKey="anchor0"/>
+
+        <comment userInput="Add product video" stepKey="anchor1"/>
+
+        <comment userInput="Add downloadable links" stepKey="anchor2"/>
+
+        <comment userInput="Save product" stepKey="anchor3"/>
+
+        <comment userInput="Assert product video in admin" stepKey="anchor4"/>
+
+        <comment userInput="Assert product in storefront" stepKey="anchor5"/>
+
+        <comment userInput="Assert product video in storefront" stepKey="anchor6"/>
+    </test>
+</tests>
