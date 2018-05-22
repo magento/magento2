@@ -14,7 +14,8 @@
     <type name="Magento\Config\Model\Config\Structure\ElementVisibilityComposite">
         <arguments>
             <argument name="visibility" xsi:type="array">
-                <item name="productionVisibility" xsi:type="object">Magento\Config\Model\Config\Structure\ConcealInProductionConfigList</item>
+                <item name="productionVisibility" xsi:type="object">Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction</item>
+                <item name="productionScdOnDemandVisibility" xsi:type="object">Magento\Config\Model\Config\Structure\ElementVisibility\ConcealScdField</item>
             </argument>
         </arguments>
     </type>
