@@ -11,13 +11,6 @@
     <?= $block->getSaveButtonHtml() ?>
 </div>
 <?= $block->getRenameFormHtml() ?>
-<script>
-require(['jquery', "mage/mage"], function(jQuery){
-
-    jQuery('#<?= /* @escapeNotVerified */ $block->getRenameFormId() ?>').mage('form').mage('validation');
-
-});
-</script>
 <script type="text/x-magento-init">
     {
         "#<?= /* @escapeNotVerified */ $block->getRenameFormId() ?>": {
