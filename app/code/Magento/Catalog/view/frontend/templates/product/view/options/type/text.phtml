@@ -63,9 +63,9 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
         <?php if ($_option->getMaxCharacters()): ?>
             <p class="note">
                 <?= __('Maximum %1 characters', $_option->getMaxCharacters()) ?>
-                <span class="character-counter hidden">
-                    (<span class="count"><?= /* @escapeNotVerified */ $_option->getMaxCharacters() ?></span>
-                    <?= /* @escapeNotVerified */ __(' remaining') ?>)
+                <span class="character-counter no-display">
+                    (<span class="count-remaining"><?= /* @escapeNotVerified */ $_option->getMaxCharacters() ?></span>
+                    <span class="count-message"></span>)
                 </span>
             </p>
         <?php endif; ?>
