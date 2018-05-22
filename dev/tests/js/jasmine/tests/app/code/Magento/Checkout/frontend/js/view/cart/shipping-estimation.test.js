@@ -53,6 +53,13 @@ define(['squire', 'ko'], function (Squire, ko) {
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Checkout/js/view/cart/shipping-estimation', function () {
         describe('"initElement" method', function () {
             it('Check for return value and element that initiated.', function () {
