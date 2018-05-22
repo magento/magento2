@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
@@ -44,17 +46,33 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
     private $productSalableResultFactory;
 
     /**
+     * @var GetProductTypesBySkusInterface
+     */
+    private $getProductTypesBySkus;
+
+    /**
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemManagementAllowedForProductType;
+
+    /**
      * @param ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory
      * @param ProductSalableResultInterfaceFactory $productSalableResultFactory
+     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param array $conditions
      */
     public function __construct(
         ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory,
         ProductSalableResultInterfaceFactory $productSalableResultFactory,
+        GetProductTypesBySkusInterface $getProductTypesBySkus,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         array $conditions
     ) {
         $this->productSalabilityErrorFactory = $productSalabilityErrorFactory;
         $this->productSalableResultFactory = $productSalableResultFactory;
+        $this->getProductTypesBySkus = $getProductTypesBySkus;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->conditions = $conditions;
     }
 
@@ -128,6 +146,8 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
      */
     public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface
     {
+        $this->validateProductType($sku);
+
         if (!empty($this->conditions) && empty($this->unrequiredConditions) && empty($this->requiredConditions)) {
             $this->setConditions();
         }
@@ -161,5 +181,19 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
 
         $unrequiredConditionsErrors = array_merge(...$unrequiredConditionsErrors);
         return $this->productSalableResultFactory->create(['errors' => $unrequiredConditionsErrors]);
+    }
+
+    /**
+     * @param string $sku
+     * @throws LocalizedException
+     */
+    private function validateProductType(string $sku): void
+    {
+        $productType = $this->getProductTypesBySkus->execute([$sku])[$sku];
+        if (false === $this->isSourceItemManagementAllowedForProductType->execute($productType)) {
+            throw new LocalizedException(
+                __('Can\'t check requested quantity for products without Source Items supporting.')
+            );
+        }
     }
 }

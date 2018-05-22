@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesApi\Api;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 
 /**
@@ -23,6 +24,7 @@ interface IsProductSalableForRequestedQtyInterface
      * @param int $stockId
      * @param float $requestedQty
      * @return ProductSalableResultInterface
+     * @throws LocalizedException
      */
     public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface;
 }
