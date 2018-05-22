@@ -32,9 +32,7 @@ define([
             data = {},
             parameters = {},
             root = {},
-            len = 0,
-            key = '',
-            i = 0;
+            key = '';
 
         /* eslint-disable */
         /**
@@ -182,11 +180,14 @@ define([
              * @returns {Object}
              */
             categoryLoader.buildHashChildren = function (hash, node) {// eslint-disable-line no-shadow
+                var i = 0,
+                    len;
+
                 // eslint-disable-next-line no-extra-parens
                 if ((node.childNodes.length > 0) || (node.loaded === false && node.loading === false)) {
                     hash.children = [];
 
-                    for (var i = 0, len = node.childNodes.length; i < len; i++) {
+                    for (i, len = node.childNodes.length; i < len; i++) {
                         /* eslint-disable */
                         if (!hash.children) {
                             hash.children = [];
