@@ -5,13 +5,17 @@
  */
 namespace Magento\Catalog\Console\Command;
 
-use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Indexer\Console\Command\AbstractIndexerCommand;
 use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
+use Magento\Framework\App\Cache\TypeListInterface;
 
 /**
  * Command to change price indexer dimensions mode
@@ -19,48 +23,53 @@ use Magento\Framework\App\ObjectManagerFactory;
 class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
 {
     const INPUT_KEY_MODE = 'mode';
-    const INPUT_KEY_NONE = 'none';
-    const INPUT_KEY_WEBSITE = 'website';
-    const INPUT_KEY_CUSTOMER_GROUP = 'customer_group';
-    const INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP = 'website_and_customer_group';
-    const XML_PATH_PRICE_DIMENSIONS_MODE = 'indexer/catalog_product_price/dimensions_mode';
 
     /**
      * ScopeConfigInterface
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $configReader;
 
     /**
      * ConfigInterface
      *
-     * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface
+     * @var ConfigInterface
      */
     private $configWriter;
 
     /**
      * TypeListInterface
      *
-     * @var \Magento\Framework\App\Cache\TypeListInterface
+     * @var TypeListInterface
      */
     private $cacheTypeList;
 
     /**
+     * ModeSwitcher
+     *
+     * @var ModeSwitcher
+     */
+    private $modeSwitcher;
+
+    /**
      * @param ObjectManagerFactory $objectManagerFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $configReader
-     * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $configWriter
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param ScopeConfigInterface $configReader
+     * @param ConfigInterface $configWriter
+     * @param TypeListInterface $cacheTypeList
+     * @param ModeSwitcher $modeSwitcher
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $configReader,
-        \Magento\Framework\App\Config\ConfigResource\ConfigInterface $configWriter,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+        ScopeConfigInterface $configReader,
+        ConfigInterface $configWriter,
+        TypeListInterface $cacheTypeList,
+        ModeSwitcher $modeSwitcher
     ) {
         $this->configReader = $configReader;
         $this->configWriter = $configWriter;
         $this->cacheTypeList = $cacheTypeList;
+        $this->modeSwitcher = $modeSwitcher;
         parent::__construct($objectManagerFactory);
     }
 
@@ -94,22 +103,26 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
 
         try {
             $currentMode = $input->getArgument(self::INPUT_KEY_MODE);
-            $previousMode = $this->configReader->getValue(self::XML_PATH_PRICE_DIMENSIONS_MODE) ?: self::INPUT_KEY_NONE;
+            $previousMode = $this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?:
+                ModeSwitcher::INPUT_KEY_NONE;
 
             if ($previousMode !== $currentMode) {
-                $this->configWriter->saveConfig(self::XML_PATH_PRICE_DIMENSIONS_MODE, $currentMode);
+                $this->configWriter->saveConfig(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE, $currentMode);
+
                 //Create new tables and move data
-                $this->cacheTypeList->cleanType('config');
-                //Delete old tables
-            }
+                $this->modeSwitcher->createTables($currentMode);
+                $this->modeSwitcher->moveData($currentMode, $previousMode);
 
-            if ($previousMode !== $currentMode) {
-                $this->configWriter->saveConfig(self::XML_PATH_PRICE_DIMENSIONS_MODE, $currentMode);
+                $this->cacheTypeList->cleanType('config');
+                $indexer->invalidate();
+
+                //Delete old tables
+                $this->modeSwitcher->dropTables($previousMode);
+
                 $output->writeln(
                     'Dimensions mode for indexer ' . $indexer->getTitle() . ' was changed from \''
                     . $previousMode . '\' to \'' . $currentMode . '\''
                 );
-                $indexer->invalidate();
             } else {
                 $output->writeln('Dimensions mode for indexer ' . $indexer->getTitle() . ' has not been changed');
             }
@@ -137,9 +150,9 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
         $modeOptions[] = new InputArgument(
             self::INPUT_KEY_MODE,
             InputArgument::REQUIRED,
-            'Indexer dimensions mode ['. self::INPUT_KEY_NONE . '|' . self::INPUT_KEY_WEBSITE
-            . '|' . self::INPUT_KEY_CUSTOMER_GROUP
-            . '|' . self::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP .']'
+            'Indexer dimensions mode ['. ModeSwitcher::INPUT_KEY_NONE . '|' . ModeSwitcher::INPUT_KEY_WEBSITE
+            . '|' . ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP
+            . '|' . ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP .']'
         );
         return $modeOptions;
     }
@@ -155,10 +168,10 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
         $errors = [];
 
         $acceptedModeValues = ' Accepted values for ' . self::INPUT_KEY_MODE . ' are \''
-            . self::INPUT_KEY_NONE . '\', \''
-            . self::INPUT_KEY_WEBSITE . '\', \''
-            . self::INPUT_KEY_CUSTOMER_GROUP . '\', \''
-            . self::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP . '\'';
+            . ModeSwitcher::INPUT_KEY_NONE . '\', \''
+            . ModeSwitcher::INPUT_KEY_WEBSITE . '\', \''
+            . ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP . '\', \''
+            . ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP . '\'';
 
         $inputMode = $input->getArgument(self::INPUT_KEY_MODE);
         if (!$inputMode) {
@@ -166,10 +179,10 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
         } elseif (!in_array(
             $inputMode,
             [
-                self::INPUT_KEY_NONE,
-                self::INPUT_KEY_WEBSITE,
-                self::INPUT_KEY_CUSTOMER_GROUP,
-                self::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP
+                ModeSwitcher::INPUT_KEY_NONE,
+                ModeSwitcher::INPUT_KEY_WEBSITE,
+                ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP,
+                ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP
             ]
         )) {
             $errors[] = $acceptedModeValues;

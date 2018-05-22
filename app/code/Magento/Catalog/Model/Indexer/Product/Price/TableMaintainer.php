@@ -1,0 +1,258 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
+namespace Magento\Catalog\Model\Indexer\Product\Price;
+
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
+
+class TableMaintainer
+{
+    /**
+     * Catalog product price index table name
+     */
+    const MAIN_INDEX_TABLE = 'catalog_product_index_price';
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * @var TableResolver
+     */
+    private $tableResolver;
+
+    /**
+     * @var AdapterInterface
+     */
+    private $connection;
+
+    /**
+     * Catalog tmp category index table name
+     */
+    private $tmpTableSuffix = '_tmp';
+
+    /**
+     * Catalog tmp category index table name
+     */
+    private $additionalTableSuffix = '_replica';
+
+    /**
+     * @var string[]
+     */
+    private $mainTmpTable;
+
+    /**
+     * @param ResourceConnection $resource
+     * @param TableResolver $tableResolver
+     */
+    public function __construct(
+        ResourceConnection $resource,
+        TableResolver $tableResolver
+    ) {
+        $this->resource = $resource;
+        $this->tableResolver = $tableResolver;
+    }
+
+    /**
+     * Get connection
+     *
+     * @return AdapterInterface
+     */
+    private function getConnection()
+    {
+        if (!isset($this->connection)) {
+            $this->connection = $this->resource->getConnection();
+        }
+        return $this->connection;
+    }
+
+    /**
+     * Return validated table name
+     *
+     * @param string|string[] $table
+     * @return string
+     */
+    private function getTable($table)
+    {
+        return $this->resource->getTableName($table);
+    }
+
+    /**
+     * Create table based on main table
+     *
+     * @param string $mainTableName
+     * @param string $newTableName
+     *
+     * @return void
+     */
+    private function createTable($mainTableName, $newTableName)
+    {
+        if (!$this->getConnection()->isTableExists($newTableName)) {
+            $this->getConnection()->createTable(
+                $this->getConnection()->createTableByDdl($mainTableName, $newTableName)
+            );
+        }
+    }
+
+    /**
+     * Drop table
+     *
+     * @param string $tableName
+     *
+     * @return void
+     */
+    private function dropTable($tableName)
+    {
+        if ($this->getConnection()->isTableExists($tableName)) {
+            $this->getConnection()->dropTable($tableName);
+        }
+    }
+
+    /**
+     * Truncate table
+     *
+     * @param string $tableName
+     *
+     * @return void
+     */
+    private function truncateTable($tableName)
+    {
+        if ($this->getConnection()->isTableExists($tableName)) {
+            $this->getConnection()->truncateTable($tableName);
+        }
+    }
+
+    /**
+     * Get array key for tmp table
+     *
+     * @param Dimension[] $dimensions
+     *
+     * @return string
+     */
+    private function getArrayKeyForTmpTable($dimensions)
+    {
+        $key = 'tmp';
+        foreach ($dimensions as $dimension) {
+            $key .= $dimension->getName() . '_' . $dimension->getValue();
+        }
+        return $key;
+    }
+
+    /**
+     * Return main index table name
+     *
+     * @param Dimension[] $dimensions
+     *
+     * @return string
+     */
+    public function getMainTable($dimensions)
+    {
+        return $this->tableResolver->resolve(self::MAIN_INDEX_TABLE, $dimensions);
+    }
+
+    /**
+     * Create main and replica index tables for dimensions
+     *
+     * @param Dimension[] $dimensions
+     *
+     * @return void
+     */
+    public function createTablesForDimensions($dimensions)
+    {
+        $mainTableName = $this->getMainTable($dimensions);
+        //Create index table for dimensions based on on main replica table
+        //Using main replica table is necessary for backward capability and TableResolver plugin work
+        $this->createTable(
+            $this->getTable(self::MAIN_INDEX_TABLE . $this->additionalTableSuffix),
+            $mainTableName
+        );
+
+        $mainReplicaTableName = $this->getMainTable($dimensions) . $this->additionalTableSuffix;
+        //Create replica table for dimensions based on main replica table
+        $this->createTable(
+            $this->getTable(self::MAIN_INDEX_TABLE . $this->additionalTableSuffix),
+            $mainReplicaTableName
+        );
+    }
+
+    /**
+     * Drop main and replica index tables for dimensions
+     *
+     * @param Dimension[] $dimensions
+     *
+     * @return void
+     */
+    public function dropTablesForDimensions($dimensions)
+    {
+        $mainTableName = $this->getMainTable($dimensions);
+        $this->dropTable($mainTableName);
+
+        $mainReplicaTableName = $this->getMainTable($dimensions) . $this->additionalTableSuffix;
+        $this->dropTable($mainReplicaTableName);
+    }
+
+    /**
+     * Truncate main and replica index tables for dimensions
+     *
+     * @param Dimension[] $dimensions
+     *
+     * @return void
+     */
+    public function truncateTablesForDimensions($dimensions)
+    {
+        $mainTableName = $this->getMainTable($dimensions);
+        $this->truncateTable($mainTableName);
+
+        $mainReplicaTableName = $this->getMainTable($dimensions) . $this->additionalTableSuffix;
+        $this->truncateTable($mainReplicaTableName);
+    }
+
+    /**
+     * Return replica index table name
+     *
+     * @param Dimension[] $dimensions
+     *
+     * @return string
+     */
+    public function getMainReplicaTable($dimensions)
+    {
+        return $this->getMainTable($dimensions) . $this->additionalTableSuffix;
+    }
+
+    /**
+     * Create temporary index table for dimensions
+     *
+     * @param Dimension[] $dimensions
+     *
+     * @return void
+     */
+    public function createMainTmpTable($dimensions)
+    {
+        if (!isset($this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)])) {
+            $originTableName = $this->getMainTable($dimensions);
+            $temporaryTableName = $this->getMainTable($dimensions) . $this->tmpTableSuffix;
+            $this->getConnection()->createTemporaryTableLike($temporaryTableName, $originTableName, true);
+            $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)] = $temporaryTableName;
+        }
+    }
+
+    /**
+     * Return temporary index table name
+     *
+     * @param Dimension[] $dimensions
+     *
+     * @return string
+     */
+    public function getMainTmpTable($dimensions)
+    {
+        return $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)];
+    }
+}
