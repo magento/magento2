@@ -672,13 +672,15 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     private function getActualWrappedErrors(\stdClass $errorNode)
     {
         $actualParameters = [];
-        $parameterNode = $errorNode->parameters->parameter;
-        if (is_array($parameterNode)) {
-            foreach ($parameterNode as $parameter) {
-                $actualParameters[$parameter->key] = $parameter->value;
+        if (isset($errorNode->parameters->parameter)) {
+            $parameterNode = $errorNode->parameters->parameter;
+            if (is_array($parameterNode)) {
+                foreach ($parameterNode as $parameter) {
+                    $actualParameters[$parameter->key] = $parameter->value;
+                }
+            } else {
+                $actualParameters[$parameterNode->key] = $parameterNode->value;
             }
-        } else {
-            $actualParameters[$parameterNode->key] = $parameterNode->value;
         }
         return [
             'message' => $errorNode->message,
