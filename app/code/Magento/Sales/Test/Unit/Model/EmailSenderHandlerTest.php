@@ -52,6 +52,11 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private $identityContainerMock;
 
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManagerMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -84,6 +89,10 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\Order\Email\Container\IdentityInterface::class
         );
 
+        $this->storeManagerMock = $this->createMock(
+            \Magento\Store\Model\StoreManagerInterface::class
+        );
+
         $this->object = $objectManager->getObject(
             \Magento\Sales\Model\EmailSenderHandler::class,
             [
@@ -92,6 +101,7 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
                 'entityCollection'  => $this->entityCollection,
                 'globalConfig'      => $this->globalConfig,
                 'identityContainer' => $this->identityContainerMock,
+                'storeManager'      => $this->storeManagerMock,
             ]
         );
     }
@@ -149,6 +159,7 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($collectionItems);
 
             if ($collectionItems) {
+
                 /** @var \Magento\Sales\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $collectionItem */
                 $collectionItem = $collectionItems[0];
 
@@ -158,18 +169,12 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
                     ->with($collectionItem, true)
                     ->willReturn($emailSendingResult);
 
-                $orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
                 $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
-                $orderMock
+                $this->storeManagerMock
                     ->expects($this->any())
                     ->method('getStore')
                     ->willReturn($storeMock);
-
-                $collectionItem
-                    ->expects($this->any())
-                    ->method('getOrder')
-                    ->willReturn($orderMock);
 
                 $this->identityContainerMock
                     ->expects($this->any())
