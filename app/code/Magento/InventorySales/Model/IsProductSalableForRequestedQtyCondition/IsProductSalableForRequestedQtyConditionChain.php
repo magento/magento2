@@ -146,12 +146,7 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
      */
     public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface
     {
-        $productType = $this->getProductTypesBySkus->execute([$sku])[$sku];
-        if (false === $this->isSourceItemManagementAllowedForProductType->execute($productType)) {
-            throw new LocalizedException(
-                __('Can\'t check requested quantity for products without Source Items supporting.')
-            );
-        }
+        $this->validateProductType($sku);
 
         if (!empty($this->conditions) && empty($this->unrequiredConditions) && empty($this->requiredConditions)) {
             $this->setConditions();
@@ -186,5 +181,19 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
 
         $unrequiredConditionsErrors = array_merge(...$unrequiredConditionsErrors);
         return $this->productSalableResultFactory->create(['errors' => $unrequiredConditionsErrors]);
+    }
+
+    /**
+     * @param string $sku
+     * @throws LocalizedException
+     */
+    private function validateProductType(string $sku): void
+    {
+        $productType = $this->getProductTypesBySkus->execute([$sku])[$sku];
+        if (false === $this->isSourceItemManagementAllowedForProductType->execute($productType)) {
+            throw new LocalizedException(
+                __('Can\'t check requested quantity for products without Source Items supporting.')
+            );
+        }
     }
 }
