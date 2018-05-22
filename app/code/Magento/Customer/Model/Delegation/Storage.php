@@ -120,7 +120,7 @@ class Storage
             $this->logger->error($exception);
             $serialized = null;
         }
-        if (!$serialized) {
+        if ($serialized === null) {
             return null;
         }
 
