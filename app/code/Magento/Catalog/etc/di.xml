@@ -549,6 +549,7 @@
             <argument name="commands" xsi:type="array">
                 <item name="imagesResizeCommand" xsi:type="object">Magento\Catalog\Console\Command\ImagesResizeCommand</item>
                 <item name="productAttributesCleanUp" xsi:type="object">Magento\Catalog\Console\Command\ProductAttributesCleanUp</item>
+                <item name="setPriceDimensionsMode" xsi:type="object">Magento\Catalog\Console\Command\PriceIndexerDimensionsModeSetCommand</item>
             </argument>
         </arguments>
     </type>
