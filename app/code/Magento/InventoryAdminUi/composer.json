@@ -6,7 +6,6 @@
         "magento/framework": "*",
         "magento/module-inventory-api": "*",
         "magento/module-backend": "*",
-        "magento/module-shipping": "*",
         "magento/module-directory": "*",
         "magento/module-ui": "*"
     },

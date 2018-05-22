@@ -17,4 +17,11 @@
         <plugin name="LoadSourceForShipment" type="Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment\LoadSourceForShipmentPlugin"/>
         <plugin name="DeleteSourceForShipment" type="Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment\DeleteSourceForShipmentPlugin"/>
     </type>
+    <type name="Magento\InventoryApi\Model\SourceValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="carrier_links" xsi:type="object">Magento\InventoryShipping\Model\Source\Validator\CarrierLinksValidator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

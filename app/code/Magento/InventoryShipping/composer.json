@@ -10,6 +10,7 @@
         "magento/module-inventory-sales-api": "*",
         "magento/module-inventory-source-selection-api": "*",
         "magento/module-sales": "*",
+        "magento/module-shipping": "*",
         "magento/module-store": "*"
     },
     "type": "magento2-module",
