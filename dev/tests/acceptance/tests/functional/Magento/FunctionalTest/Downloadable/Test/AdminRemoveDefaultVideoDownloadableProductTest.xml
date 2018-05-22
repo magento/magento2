@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminRemoveDefaultVideoDownloadableProductTest">
+        <annotations>
+            <group value="Downloadable"/>
+        </annotations>
+        <!-- Create downloadable product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd" after="anchor0"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad" after="adminProductIndexPageAdd"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage" after="adminProductIndexPageAdd">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm" after="goToCreateProductPage">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!-- Add downloadable links -->
+        <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection" after="anchor2"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable" after="openDownloadableSection"/>
+        <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillDownloadableLinkTitle" after="checkIsDownloadable"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkLinksPurchasedSeparately" after="fillDownloadableLinkTitle"/>
+        <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillDownloadableSampleTitle" after="checkLinksPurchasedSeparately"/>
+        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableLinkWithMaxDownloads" after="fillDownloadableSampleTitle">
+            <argument name="link" value="downloadableLinkWithMaxDownloads"/>
+        </actionGroup>
+        <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableLink" after="addDownloadableLinkWithMaxDownloads">
+            <argument name="link" value="downloadableLink"/>
+        </actionGroup>
+
+        <!--Save Product-->
+        <actionGroup ref="saveProductForm" stepKey="saveDownloadableProduct" after="anchor3"/>
+
+        <!--Save Product-->
+        <actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove" after="anchor9"/>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPageAfterRemove" after="anchor11">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+    </test>
+</tests>

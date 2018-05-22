@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminRemoveDefaultVideoDownloadableProductTest">
+        <before>
+            <!-- Set product video Youtube api key configuration -->
+            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setStoreConfig" after="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Set product video configuration to default -->
+            <createData entity="DefaultProductVideoConfig" stepKey="setStoreDefaultConfig" after="amOnLogoutPage"/>
+        </after>
+
+        <!-- Add product video -->
+        <actionGroup ref="addProductVideo" stepKey="addProductVideo" after="anchor1"/>
+
+        <!-- Remove product video from product -->
+        <actionGroup ref="removeProductVideo" stepKey="removeProductVideo" after="anchor8"/>
+
+        <!-- Assert product video not in admin product form -->
+        <actionGroup ref="assertProductVideoNotInAdminProductPage" stepKey="assertProductVideoNotInAdminProductPage" after="anchor10"/>
+
+        <!-- Assert product video not in storefront product page -->
+        <actionGroup ref="assertProductVideoNotInStorefrontProductPage" stepKey="assertProductVideoNotInStorefrontProductPage" after="anchor12"/>
+    </test>
+</tests>
