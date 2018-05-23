@@ -19,8 +19,8 @@ interface StockExtensionInterface extends \Magento\Framework\Api\ExtensionAttrib
     public function getSalesChannels(): ?array;
 
     /**
-     * @param \Magento\InventorySalesApi\Api\Data\SalesChannelInterface[] $salesChannels
+     * @param \Magento\InventorySalesApi\Api\Data\SalesChannelInterface[]|null $salesChannels
      * @return void
      */
-    public function setSalesChannels(array $salesChannels): void;
+    public function setSalesChannels($salesChannels): void;
 }
