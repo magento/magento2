@@ -169,17 +169,8 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * @param array $arguments
      * @return array
      */
-    public function updatePathParams(array $arguments)
+    public function updatePathParams(array $arguments): array
     {
-        if ($this->_sidResolver->getUseSessionInUrl()
-            && $this->_canUseSessionIdInParam
-        ) {
-            $arguments = array_merge_recursive($arguments, [
-                '_query' => [
-                    $this->_sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId(),
-                ]
-            ]);
-        }
         return $arguments;
     }
 
