@@ -14,6 +14,8 @@ use Magento\Theme\Ui\Component\Listing\Column\ViewAction;
 
 /**
  * Class ViewActionTest contains unit tests for \Magento\Theme\Ui\Component\Listing\Column\ViewAction class
+ *
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class ViewActionTest extends \PHPUnit\Framework\TestCase
 {
