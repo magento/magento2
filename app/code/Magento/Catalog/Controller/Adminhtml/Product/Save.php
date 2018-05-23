@@ -216,6 +216,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * Do copying data to stores
      *
+     * In case when 'copy_from' didnt specified we suppose, that data should be taken
+     * from default values (from admin store). For this we have fallback, and there is no need
+     * to copy data between 0 store and some speficic store
+     *
      * @param array $data
      * @param int $productId
      * @return void
@@ -227,15 +231,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 if (isset($data['product']['website_ids'][$websiteId])
                     && (bool)$data['product']['website_ids'][$websiteId]) {
                     foreach ($group as $store) {
-                        $copyFrom = (isset($store['copy_from'])) ? $store['copy_from'] : 0;
-                        $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
-                        if ($copyTo) {
-                            $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
-                                ->setStoreId($copyFrom)
-                                ->load($productId)
-                                ->setStoreId($copyTo)
-                                ->setCopyFromView(true)
-                                ->save();
+                        if (isset($store['copy_from'])) {
+                            $copyFrom = $store['copy_from'];
+                            $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
+                            if ($copyTo) {
+                                $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
+                                    ->setStoreId($copyFrom)
+                                    ->load($productId)
+                                    ->setStoreId($copyTo)
+                                    ->setCopyFromView(true)
+                                    ->save();
+                            }
                         }
                     }
                 }
