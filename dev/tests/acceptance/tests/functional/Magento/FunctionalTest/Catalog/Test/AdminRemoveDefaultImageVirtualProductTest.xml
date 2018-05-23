@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminRemoveDefaultImageVirtualProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to remove default images from a Virtual Product"/>
+            <description value="Admin should be able to remove default images from a Virtual Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-197"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create product-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductMain">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+
+        <!-- Add image to product -->
+        <actionGroup ref="addProductImage" stepKey="addImageForProduct">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <!-- Remove image from product -->
+        <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
+
+        <!-- Skip success message check when saving product because of bug MAGETWO-91177 -->
+        <!-- actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductFormAfterRemove"/>
+
+        <!-- Assert product image not in admin product form -->
+        <actionGroup ref="assertProductImageNotInAdminProductPage" stepKey="assertProductImageNotInAdminProductPage"/>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPageAfterRemove">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+        <!-- Assert product image not in storefront product page -->
+        <actionGroup ref="assertProductImageNotInStorefrontProductPage" stepKey="assertProductImageNotInStorefrontProductPage">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+    </test>
+</tests>
