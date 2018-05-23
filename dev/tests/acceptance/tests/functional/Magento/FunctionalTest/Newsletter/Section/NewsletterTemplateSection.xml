@@ -19,7 +19,6 @@
     <section name="NewsletterWYSIWYGSection">
         <element name="TextArea" type="text" selector="#text" />
         <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by" />
-        <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
         <element name="ShowHideBtn" type="button" selector="#toggletext"/>
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
         <element name="InsertWidgetIcon" type="button" selector="div[aria-label='Insert Widget']"/>
