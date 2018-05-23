@@ -376,7 +376,7 @@ QUERY;
             'special_to_date',
         ];
 
-        foreach($eavAttributes as $eavAttribute){
+        foreach ($eavAttributes as $eavAttribute) {
             $this->assertArrayHasKey($eavAttribute, $actualResponse);
         }
     }
@@ -408,7 +408,7 @@ QUERY;
 
     private function eavAttributesToGraphQlSchemaFieldTranslator($attributeCode)
     {
-        if(isset($this->eavAttributesToGraphQlSchemaFieldMap[$attributeCode])){
+        if (isset($this->eavAttributesToGraphQlSchemaFieldMap[$attributeCode])) {
             return $this->eavAttributesToGraphQlSchemaFieldMap[$attributeCode];
         }
 
