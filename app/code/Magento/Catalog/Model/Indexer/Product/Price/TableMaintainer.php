@@ -66,7 +66,7 @@ class TableMaintainer
      *
      * @return AdapterInterface
      */
-    private function getConnection()
+    public function getConnection()
     {
         if (!isset($this->connection)) {
             $this->connection = $this->resource->getConnection();

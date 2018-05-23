@@ -111,7 +111,24 @@ class ModeSwitcher
      */
     public function moveData($currentMode, $previousMode)
     {
-        //move data
+        $dimensionsArrayForCurrentMode = $this->getDimensionsArray($currentMode);
+        $dimensionsArrayForPreviousMode = $this->getDimensionsArray($previousMode);
+
+        foreach ($dimensionsArrayForCurrentMode as $dimensionsForCurrentMode) {
+            $newTable = $this->tableMaintainer->getMainTable($dimensionsForCurrentMode);
+            if (empty($dimensionsForCurrentMode)) {
+                // new mode none
+                foreach ($dimensionsArrayForPreviousMode as $dimensionsForPreviousMode) {
+                    $oldTable = $this->tableMaintainer->getMainTable($dimensionsForPreviousMode);
+                    $this->insertFromOldTablesToNew($newTable, $oldTable);
+                }
+            } else {
+                foreach ($dimensionsArrayForPreviousMode as $dimensionsForPreviousMode) {
+                    $oldTable = $this->tableMaintainer->getMainTable($dimensionsForPreviousMode);
+                    $this->insertFromOldTablesToNew($newTable, $oldTable, $dimensionsForCurrentMode);
+                }
+            }
+        }
     }
 
     /**
@@ -155,11 +172,14 @@ class ModeSwitcher
                     $websiteDimension = new Dimension('website', $website->getId());
                     $customerGroupDimension = new Dimension('group', $customerGroup->getId());
                     if ($mode === self::INPUT_KEY_WEBSITE) {
-                        $dimensionsArray[] = [$websiteDimension];
+                        $key = $websiteDimension->getValue();
+                        $dimensionsArray[$key] = [$websiteDimension];
                     } elseif ($mode === self::INPUT_KEY_CUSTOMER_GROUP) {
-                        $dimensionsArray[] = [$customerGroupDimension];
+                        $key = $customerGroupDimension->getValue();
+                        $dimensionsArray[$key] = [$customerGroupDimension];
                     } else {
-                        $dimensionsArray[] = [$websiteDimension, $customerGroupDimension];
+                        $key = $websiteDimension->getValue() . '-' . $customerGroupDimension->getValue();
+                        $dimensionsArray[$key] = [$websiteDimension, $customerGroupDimension];
                     }
                 }
             }
@@ -169,5 +189,31 @@ class ModeSwitcher
 
         $this->dimensionsArray[$mode] = $dimensionsArray;
         return $this->dimensionsArray[$mode];
+    }
+
+    /**
+     * Insert from old tables data to new
+     *
+     * @param string $newTable
+     * @param string $oldTable
+     * @param Dimension[] $dimensions
+     *
+     * @return void
+     */
+    private function insertFromOldTablesToNew($newTable, $oldTable, $dimensions = [])
+    {
+        $select = $this->tableMaintainer->getConnection()->select()->from($oldTable);
+
+        foreach ($dimensions as $dimension) {
+            if ($dimension->getName() === 'website') {
+                $select->where('website_id = ?', $dimension->getValue());
+            }
+            if ($dimension->getName() === 'group') {
+                $select->where('customer_group_id = ?', $dimension->getValue());
+            }
+        }
+        $this->tableMaintainer->getConnection()->query(
+            $this->tableMaintainer->getConnection()->insertFromSelect($select, $newTable)
+        );
     }
 }
