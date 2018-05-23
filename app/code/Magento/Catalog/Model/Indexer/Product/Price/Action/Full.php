@@ -54,6 +54,11 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private $modeDimensionCollection;
 
     /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer
+     */
+    private $dimensionTableMaintainer;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -66,6 +71,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator|null $batchSizeCalculator
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     * @param \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer|null $dimensionTableMaintainer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -82,7 +88,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator $batchSizeCalculator = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
-        \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory = null
+        \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory = null,
+        \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $dimensionTableMaintainer = null
     ) {
         parent::__construct(
             $config,
@@ -108,6 +115,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         );
         $dimensionCollectionFactory = $dimensionCollectionFactory ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory::class
+        );
+        $this->dimensionTableMaintainer = $dimensionTableMaintainer ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer::class
         );
 
         $this->allDimensionCollection = $dimensionCollectionFactory->createWithAllDimensions();
@@ -156,9 +166,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
         // Prepare tables for dimensions.
         foreach ($this->modeDimensionCollection as $dimension) {
-//             $this->dimensionTableMaintainer->createTableForDimension($dimension);
-//            $replicaTableName = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
-//            $this->_emptyTable($replicaTableName);
+            $this->dimensionTableMaintainer->createTablesForDimensions($dimension);
+            $replicaTableName = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
+            $this->_emptyTable($replicaTableName);
         }
     }
 

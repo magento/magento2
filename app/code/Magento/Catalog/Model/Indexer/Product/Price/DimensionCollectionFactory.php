@@ -60,6 +60,9 @@ class DimensionCollectionFactory
         );
     }
 
+    /**
+     * @return Dimension[]
+     */
     public function createWithAllDimensions()
     {
         return $this->generalDimensionCollectionFactory->create(
@@ -74,24 +77,22 @@ class DimensionCollectionFactory
 
     private function getDataProviders()
     {
-//        $dimensionsMode = $this->configReader->read('price_dimensions');
-        $dimensionsMode = 'none';
         $providers = [];
 
-        // TODO: change strings to const
-        switch ($dimensionsMode) {
-            case 'none':
+        switch ($this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE)) {
+            case null:
+            case ModeSwitcher::INPUT_KEY_NONE:
                 break;
 
-            case 'website':
+            case ModeSwitcher::INPUT_KEY_WEBSITE:
                 $providers[] = $this->websiteDataProviderFactory->create();
                 break;
 
-            case 'customer_group':
+            case ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP:
                 $providers[] = $this->customerGroupDataProviderFactory->create();
                 break;
 
-            case 'website_and_customer_group':
+            case ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP:
                 $providers[] = $this->websiteDataProviderFactory->create();
                 $providers[] = $this->customerGroupDataProviderFactory->create();
                 break;

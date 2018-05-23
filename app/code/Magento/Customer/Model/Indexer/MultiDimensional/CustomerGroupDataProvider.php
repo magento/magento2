@@ -31,7 +31,7 @@ class CustomerGroupDataProvider implements DimensionDataProviderInterface
     public function __construct(CustomerGroupCollectionFactory $collectionFactory, DimensionFactory $dimensionFactory) {
         $this->dimensionFactory = $dimensionFactory;
         $this->customerGroupsDataIterator = \SplFixedArray::fromArray(
-            $collectionFactory->create()->load()->getAllIds()
+            $collectionFactory->create()->getAllIds()
         );
     }
 

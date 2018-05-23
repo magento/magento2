@@ -35,7 +35,7 @@ class WebsiteDataProvider implements DimensionDataProviderInterface
     public function __construct(WebsiteCollectionFactory $collectionFactory, DimensionFactory $dimensionFactory){
         $this->dimensionFactory = $dimensionFactory;
         $this->websitesDataIterator = \SplFixedArray::fromArray(
-            $collectionFactory->create()->load()->getAllIds()
+            $collectionFactory->create()->getAllIds()
         );
     }
 
