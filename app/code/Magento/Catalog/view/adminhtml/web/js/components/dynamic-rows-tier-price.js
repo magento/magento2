@@ -36,7 +36,7 @@ define([
          * @param {Number} page - current page
          */
         changePage: function (page) {
-            this.clear(); /* Clear the children when directly edit the text field */
+            this.clear();
 
             if (page === 1 && !this.recordData().length) {
                 return false;
