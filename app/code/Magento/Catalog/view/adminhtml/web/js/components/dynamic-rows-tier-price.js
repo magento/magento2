@@ -30,11 +30,7 @@ define([
             this.labels(labels);
         },
 
-        /**
-         * Change page
-         *
-         * @param {Number} page - current page
-         */
+        /** @inheritdoc */
         changePage: function (page) {
             this.clear();
 
