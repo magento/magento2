@@ -27,6 +27,9 @@
         </before>
 
         <after>
+            <!--Logout from customer account-->
+            <amOnPage url="customer/account/logout/" stepKey="logoutCustomerOne"/>
+            <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
@@ -60,7 +63,10 @@
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
         <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order number is: " stepKey="seeOrderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessNotify"/>
+
         <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
+        <waitForElement selector="{{StorefrontCustomerOrderViewSection.orderTitle}}" stepKey="waitOrderViewPage"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerOrderPage.url}}" stepKey="seeMyOrderPage"/>
 
         <!--Go to product page-->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage2"/>
@@ -85,6 +91,7 @@
         <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
         <waitForElement selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="waitHomePage"/>
         <see userInput="Home Page" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeHomePageTitle"/>
+        <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
 
         <!--Go to product page-->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage3"/>
@@ -118,8 +125,10 @@
         <click selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="clickPrintLink"/>
         <waitForPageLoad stepKey="waitPrintPage"/>
         <switchToWindow stepKey="switchToWindow"/>
-        <waitForElement selector="#navbar-container #print-header" stepKey="waitPrintBlock"/>
-        <seeElement selector="#navbar-container #print-header" stepKey="seePrintPage"/>
+        <switchToNextTab stepKey="switchToTab"/>
+        <seeInCurrentUrl url="sales/order/print/order_id" stepKey="123"/>
+        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderTitle}}" stepKey="seeOrderTitleOnPrint"/>
+        <switchToWindow stepKey="switchToWindow2"/>
     </test>
     <test name="CheckCheckoutSuccessPageAsGuest">
         <annotations>
@@ -158,8 +167,6 @@
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
         </actionGroup>
 
-        <!--<waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoadedTest3"/>-->
-
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage"/>
@@ -178,6 +185,7 @@
         <dontSeeElement selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="seeInvisibleCreateAccountButton"/>
         <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
         <waitForElement selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="waitHomePage"/>
+        <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
         <see userInput="Home Page" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeHomePageTitle"/>
     </test>
 </tests>

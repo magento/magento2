@@ -16,6 +16,6 @@
         <element name="orderLink" type="text" selector="a[href*=order_id].order-number"/>
         <element name="orderNumberText" type="text" selector=".checkout-success > p:nth-child(1)"/>
         <element name="continueShoppingButton" type="button" selector=".action.primary.continue"/>
-        <element name="printLink" type="button" selector=".page-title-wrapper a"/>
+        <element name="printLink" type="button" selector=".print"/>
     </section>
 </sections>
