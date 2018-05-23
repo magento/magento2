@@ -20,7 +20,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
         <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
     </label>
 
-    <div class="control" data-mage-init='{"Magento_Catalog/js/product/custom-option": {}}'>
+    <div class="control">
         <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD): ?>
             <?php $_textValidate = null;
             if ($_option->getIsRequire()) {
@@ -61,13 +61,23 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
                       cols="25"><?= $block->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif; ?>
         <?php if ($_option->getMaxCharacters()): ?>
-            <p class="note">
+            <p class="note note_<?= /* @escapeNotVerified */ $_option->getId() ?>">
                 <?= __('Maximum %1 characters', $_option->getMaxCharacters()) ?>
-                <span class="character-counter no-display">
-                    (<span class="count-remaining"><?= /* @escapeNotVerified */ $_option->getMaxCharacters() ?></span>
-                    <span class="count-message"></span>)
-                </span>
+                <span class="character-counter no-display"></span>
             </p>
         <?php endif; ?>
     </div>
+    <?php if ($_option->getMaxCharacters()): ?>
+        <script type="text/x-magento-init">
+        {
+            "[data-selector='options[<?= /* @escapeNotVerified */ $_option->getId() ?>]']": {
+                "Magento_Catalog/js/product/remaining-characters": {
+                    "maxLength":  "<?= /* @escapeNotVerified */ $_option->getMaxCharacters() ?>",
+                    "noteSelector": ".note_<?= /* @escapeNotVerified */ $_option->getId() ?>",
+                    "counterSelector": ".note_<?= /* @escapeNotVerified */ $_option->getId() ?> .character-counter"
+                }
+            }
+        }
+    </script>
+    <?php endif; ?>
 </div>
