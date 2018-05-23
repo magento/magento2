@@ -14,10 +14,10 @@ use Magento\Framework\Config\ConfigOptionsListConstants as Constants;
 
 /**
  * Defines status of visibility of form elements on Stores > Settings > Configuration page
- * in Admin Panel in Production mode.
+ * when Constants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION is enabled.
  * @api
  */
-class ConcealScdField implements ElementVisibilityInterface
+class ConcealInProductionWithoutScdOnDemand implements ElementVisibilityInterface
 {
     /**
      * The list of form element paths with concrete visibility status.
@@ -40,13 +40,6 @@ class ConcealScdField implements ElementVisibilityInterface
     private $configs = [];
 
     /**
-     * The object that has information about the state of the system.
-     *
-     * @var State
-     */
-    private $state;
-
-    /**
      *
      * The list of form element paths which ignore visibility status.
      *
@@ -67,23 +60,30 @@ class ConcealScdField implements ElementVisibilityInterface
     private $exemptions = [];
 
     /**
+     * @var ConcealInProduction
+     */
+    private $concealInProduction;
+
+    /**
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
+     * @param ConcealInProductionFactory $concealInProductionFactory
      * @param State $state The object that has information about the state of the system
      * @param DeploymentConfig $deploymentConfig Deployment configuration reader
      * @param array $configs The list of form element paths with concrete visibility status.
      * @param array $exemptions The list of form element paths which ignore visibility status.
      */
     public function __construct(
-        State $state,
+        ConcealInProductionFactory $concealInProductionFactory,
         DeploymentConfig $deploymentConfig,
         array $configs = [],
         array $exemptions = []
     ) {
-        $this->state = $state;
+        $this->concealInProduction = $concealInProductionFactory
+            ->create(['configs' => $configs, 'exemptions' => $exemptions]);
         $this->deploymentConfig = $deploymentConfig;
         $this->configs = $configs;
         $this->exemptions = $exemptions;
@@ -94,23 +94,9 @@ class ConcealScdField implements ElementVisibilityInterface
      */
     public function isHidden($path): bool
     {
-        $path = $this->normalizePath($path);
-        if ($this->state->getMode() === State::MODE_PRODUCTION
-            && !$this->deploymentConfig->getConfigData(Constants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
-            && preg_match('/(?<group>(?<section>.*?)\/.*?)\/.*?/', $path, $match)) {
-            $group = $match['group'];
-            $section = $match['section'];
-            $exemptions = array_keys($this->exemptions);
-            $checkedItems = [];
-            foreach ([$path, $group, $section] as $itemPath) {
-                $checkedItems[] = $itemPath;
-                if (!empty($this->configs[$itemPath])) {
-                    return $this->configs[$itemPath] === static::HIDDEN
-                        && empty(array_intersect($checkedItems, $exemptions));
-                }
-            }
+        if (!$this->deploymentConfig->getConfigData(Constants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)) {
+            return $this->concealInProduction->isHidden($path);
         }
-
         return false;
     }
 
@@ -119,33 +105,9 @@ class ConcealScdField implements ElementVisibilityInterface
      */
     public function isDisabled($path): bool
     {
-        $path = $this->normalizePath($path);
-        if ($this->state->getMode() === State::MODE_PRODUCTION
-            && !$this->deploymentConfig->getConfigData(Constants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)) {
-            while ($path) {
-                if (!empty($this->configs[$path])) {
-                    return $this->configs[$path] === static::DISABLED;
-                }
-
-                $position = strripos($path, '/');
-                if ($position === false) {
-                    break;
-                }
-                $path = $position !== false ? substr($path, 0, $position) : null;
-            }
+        if (!$this->deploymentConfig->getConfigData(Constants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)) {
+            return $this->concealInProduction->isDisabled($path);
         }
-
         return false;
-    }
-
-    /**
-     * Returns normalized path.
-     *
-     * @param string $path The path to be normalized
-     * @return string The normalized path
-     */
-    private function normalizePath($path)
-    {
-        return trim($path, '/');
     }
 }
