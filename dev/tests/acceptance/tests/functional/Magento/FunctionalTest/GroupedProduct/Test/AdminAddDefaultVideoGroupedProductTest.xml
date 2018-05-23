@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminAddDefaultVideoGroupedProductTest" extends="AdminAddDefaultVideoDownloadableProductTest">
+        <annotations>
+            <group value="GroupedProduct"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+        </after>
+
+        <!-- Create a grouped product -->
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage" after="waitForProductIndexPageLoad">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillGroupedProductForm" stepKey="fillMainProductForm" after="goToCreateProductPage">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+
+        <!-- Add two simple products to grouped product -->
+        <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="step0" after="anchor2"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="step1" after="step0"/>
+        <click selector="body" stepKey="step2" after="step1"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="step3" after="step2"/>
+        <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="step4" after="step3"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="step5" after="step4">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="step6" after="step5"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="step7" after="step6">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="step8" after="step7"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="step9" after="step8"/>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage" after="anchor5">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+    </test>
+</tests>
