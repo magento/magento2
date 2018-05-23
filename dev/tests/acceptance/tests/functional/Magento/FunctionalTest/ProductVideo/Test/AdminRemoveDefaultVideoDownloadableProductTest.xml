@@ -9,6 +9,9 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminRemoveDefaultVideoDownloadableProductTest">
+        <annotations>
+            <group value="ProductVideo"/>
+        </annotations>
         <before>
             <!-- Set product video Youtube api key configuration -->
             <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setStoreConfig" after="loginAsAdmin"/>
