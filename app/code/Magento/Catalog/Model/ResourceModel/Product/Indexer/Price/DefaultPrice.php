@@ -6,6 +6,9 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Backup\BackupException;
 
 /**
  * Default Product Type Price Indexer Resource model
@@ -63,8 +66,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     private $priceModifiers = [];
 
     /**
-     * DefaultPrice constructor.
-     *
+     * @var BaseFinalPrice
+     */
+    private $baseFinalPrice;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -82,6 +88,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Framework\Module\Manager $moduleManager,
         $connectionName = null,
         IndexTableStructureFactory $indexTableStructureFactory = null,
+        BaseFinalPrice $baseFinalPrice = null,
         array $priceModifiers = []
     ) {
         $this->_eventManager = $eventManager;
@@ -89,7 +96,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
 
         $this->indexTableStructureFactory = $indexTableStructureFactory ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(IndexTableStructureFactory::class);
+            ObjectManager::getInstance()->get(IndexTableStructureFactory::class);
         foreach ($priceModifiers as $priceModifier) {
             if (!($priceModifier instanceof PriceModifierInterface)) {
                 throw new \InvalidArgumentException(
@@ -99,6 +106,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
 
             $this->priceModifiers[] = $priceModifier;
         }
+        $this->baseFinalPrice = $baseFinalPrice ?? ObjectManager::getInstance()->get(BackupException::class);
     }
 
     /**
@@ -303,7 +311,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     {
         $finalPriceTable = $this->prepareFinalPriceTable();
 
-        $select = $this->getSelect($entityIds, $type);
+        //TODO: use DimensionProvider foreach instead hard-coded values
+        $select = $this->getSelect($entityIds, $type, 1, 1);
         $query = $select->insertFromSelect($finalPriceTable->getTableName(), [], false);
         $this->getConnection()->query($query);
 
@@ -324,135 +333,9 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @since 101.0.8
      */
-    protected function getSelect($entityIds = null, $type = null)
+    protected function getSelect($entityIds = null, $type = null, int $websiteId = null, int $customerGroupId = null)
     {
-        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $connection = $this->getConnection();
-        $select = $connection->select()->from(
-            ['e' => $this->getTable('catalog_product_entity')],
-            ['entity_id']
-        )->join(
-            ['cg' => $this->getTable('customer_group')],
-            '',
-            ['customer_group_id']
-        )->join(
-            ['cw' => $this->getTable('store_website')],
-            '',
-            ['website_id']
-        )->join(
-            ['cwd' => $this->_getWebsiteDateTable()],
-            'cw.website_id = cwd.website_id',
-            []
-        )->join(
-            ['csg' => $this->getTable('store_group')],
-            'csg.website_id = cw.website_id AND cw.default_group_id = csg.group_id',
-            []
-        )->join(
-            ['cs' => $this->getTable('store')],
-            'csg.default_store_id = cs.store_id AND cs.store_id != 0',
-            []
-        )->join(
-            ['pw' => $this->getTable('catalog_product_website')],
-            'pw.product_id = e.entity_id AND pw.website_id = cw.website_id',
-            []
-        )->joinLeft(
-            ['tp' => $this->_getTierPriceIndexTable()],
-            'tp.entity_id = e.entity_id AND tp.website_id = cw.website_id' .
-            ' AND tp.customer_group_id = cg.customer_group_id',
-            []
-        );
-
-        if ($type !== null) {
-            $select->where('e.type_id = ?', $type);
-        }
-
-        // add enable products limitation
-        $statusCond = $connection->quoteInto(
-            '=?',
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-        );
-        $this->_addAttributeToSelect(
-            $select,
-            'status',
-            'e.' . $metadata->getLinkField(),
-            'cs.store_id',
-            $statusCond,
-            true
-        );
-        if ($this->moduleManager->isEnabled('Magento_Tax')) {
-            $taxClassId = $this->_addAttributeToSelect(
-                $select,
-                'tax_class_id',
-                'e.' . $metadata->getLinkField(),
-                'cs.store_id'
-            );
-        } else {
-            $taxClassId = new \Zend_Db_Expr('0');
-        }
-        $select->columns(['tax_class_id' => $taxClassId]);
-
-        $price = $this->_addAttributeToSelect(
-            $select,
-            'price',
-            'e.' . $metadata->getLinkField(),
-            'cs.store_id'
-        );
-        $specialPrice = $this->_addAttributeToSelect(
-            $select,
-            'special_price',
-            'e.' . $metadata->getLinkField(),
-            'cs.store_id'
-        );
-        $specialFrom = $this->_addAttributeToSelect(
-            $select,
-            'special_from_date',
-            'e.' . $metadata->getLinkField(),
-            'cs.store_id'
-        );
-        $specialTo = $this->_addAttributeToSelect(
-            $select,
-            'special_to_date',
-            'e.' . $metadata->getLinkField(),
-            'cs.store_id'
-        );
-        $currentDate = 'cwd.website_date';
-
-        $maxUnsignedBigint = '~0';
-        $specialFromDate = $connection->getDatePartSql($specialFrom);
-        $specialToDate = $connection->getDatePartSql($specialTo);
-        $specialFromExpr = "{$specialFrom} IS NULL OR {$specialFromDate} <= {$currentDate}";
-        $specialToExpr = "{$specialTo} IS NULL OR {$specialToDate} >= {$currentDate}";
-        $specialPriceExpr = $connection->getCheckSql(
-            "{$specialPrice} IS NOT NULL AND {$specialFromExpr} AND {$specialToExpr}",
-            $specialPrice,
-            $maxUnsignedBigint
-        );
-        $tierPrice = new \Zend_Db_Expr('tp.min_price');
-        $tierPriceExpr = $connection->getIfNullSql(
-            $tierPrice,
-            $maxUnsignedBigint
-        );
-        $finalPrice = $connection->getLeastSql([
-            $price,
-            $specialPriceExpr,
-            $tierPriceExpr,
-        ]);
-
-        $select->columns(
-            [
-                'orig_price' => $connection->getIfNullSql($price, 0),
-                'price' => $connection->getIfNullSql($finalPrice, 0),
-                'min_price' => $connection->getIfNullSql($finalPrice, 0),
-                'max_price' => $connection->getIfNullSql($finalPrice, 0),
-                'tier_price' => $tierPrice,
-                'base_tier' => $tierPrice,
-            ]
-        );
-
-        if ($entityIds !== null) {
-            $select->where('e.entity_id IN(?)', $entityIds);
-        }
-
+        $select = $this->baseFinalPrice->getQuery($websiteId, $customerGroupId, $type, $entityIds);
         /**
          * Add additional external limitation
          */
@@ -461,8 +344,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             [
                 'select' => $select,
                 'entity_field' => new \Zend_Db_Expr('e.entity_id'),
-                'website_field' => new \Zend_Db_Expr('cw.website_id'),
-                'store_field' => new \Zend_Db_Expr('cs.store_id'),
+                'website_field' => new \Zend_Db_Expr('pw.website_id'),
+                'store_field' => new \Zend_Db_Expr('cs.store_id'), //TODO: use catalog_product_index_website
+                'website_id' => $websiteId,
+                'customer_group_id' => $customerGroupId,
             ]
         );
 
