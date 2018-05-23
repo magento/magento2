@@ -327,7 +327,6 @@ QUERY;
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
             ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
-//            ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
         ];
 
         $this->assertResponseFields($actualResponse, $assertionMap);
@@ -404,14 +403,5 @@ QUERY;
                 . var_export($expectedValue, true)
             );
         }
-    }
-
-    private function eavAttributesToGraphQlSchemaFieldTranslator($attributeCode)
-    {
-        if (isset($this->eavAttributesToGraphQlSchemaFieldMap[$attributeCode])) {
-            return $this->eavAttributesToGraphQlSchemaFieldMap[$attributeCode];
-        }
-
-        return $attributeCode;
     }
 }
