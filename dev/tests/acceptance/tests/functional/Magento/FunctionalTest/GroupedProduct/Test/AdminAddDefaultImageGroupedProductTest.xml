@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminAddRemoveProductImageGroupedProductTest">
+    <test name="AdminAddDefaultImageGroupedProductTest">
         <annotations>
             <features value="GroupedProduct"/>
-            <stories value="Grouped Product Add/Remove Images"/>
-            <title value="Admin should be able to add/remove images for a Grouped Product"/>
-            <description value="Admin should be able to add/remove images for a Grouped Product"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add default images for a Grouped Product"/>
+            <description value="Admin should be able to add default images for a Grouped Product"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-106"/>
             <group value="GroupedProduct"/>
@@ -77,31 +77,6 @@
         <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertProductImageStorefrontProductPage">
             <argument name="product" value="GroupedProduct"/>
             <argument name="image" value="MagentoLogo"/>
-        </actionGroup>
-
-        <!-- Remove image from product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageRemove"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad2"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
-            <argument name="product" value="GroupedProduct"/>
-        </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid"/>
-        <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
-
-        <!-- Skip success message check when saving product because of bug MAGETWO-91177 -->
-        <!-- actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductFormAfterRemove"/>
-
-        <!-- Assert product image not in admin product form -->
-        <actionGroup ref="assertProductImageNotInAdminProductPage" stepKey="assertProductImageNotInAdminProductPage"/>
-
-        <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPageAfterRemove">
-            <argument name="product" value="GroupedProduct"/>
-        </actionGroup>
-        <!-- Assert product image not in storefront product page -->
-        <actionGroup ref="assertProductImageNotInStorefrontProductPage" stepKey="assertProductImageNotInStorefrontProductPage">
-            <argument name="product" value="GroupedProduct"/>
         </actionGroup>
     </test>
 </tests>
