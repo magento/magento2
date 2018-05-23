@@ -65,7 +65,7 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
         $productType = $this->getProductTypesBySkus->execute([$sku])[$sku];
 
         if (null === $stockItemData || (bool)$stockItemData[GetStockItemDataInterface::IS_SALABLE] === false ||
-            $this->isSourceItemManagementAllowedForProductType->execute($productType) === false)  {
+            $this->isSourceItemManagementAllowedForProductType->execute($productType) === false) {
             return 0;
         }
         $productQtyInStock = $stockItemData[GetStockItemDataInterface::QUANTITY] +
