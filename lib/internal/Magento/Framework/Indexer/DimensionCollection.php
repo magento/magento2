@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Indexer\MultiDimensional;
+namespace Magento\Framework\Indexer;
 
 class DimensionCollection implements \Iterator
 {

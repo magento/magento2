@@ -6,8 +6,6 @@
 namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Indexer\MultiDimensional\Dimension;
-use Magento\Framework\Indexer\MultiDimensional\DimensionalIndexerInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -18,7 +16,7 @@ use Magento\Catalog\Model\Indexer\Product\Price\MultiDimensionalIndexerInterface
  * Class Full reindex action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction implements DimensionalIndexerInterface
+class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
@@ -46,12 +44,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction i
     private $productMetaDataCached;
 
     /**
-     * @var \Magento\Framework\Indexer\MultiDimensional\DimensionCollection
+     * @var \Magento\Framework\Indexer\DimensionCollection
      */
     private $allDimensionCollection;
 
     /**
-     * @var \Magento\Framework\Indexer\MultiDimensional\DimensionCollection
+     * @var \Magento\Framework\Indexer\DimensionCollection
      */
     private $modeDimensionCollection;
 
@@ -286,12 +284,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction i
                 $priceIndexer->getTypeId()
             )
         );
-    }
-
-    // Maybe we don`t need this at all
-    public function executeWithinDimensions(array $ids = [], array $dimensions = [])
-    {
-        $a = 1;
     }
 
     /**

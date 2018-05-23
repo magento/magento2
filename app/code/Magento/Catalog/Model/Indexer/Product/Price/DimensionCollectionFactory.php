@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
-use Magento\Framework\Indexer\MultiDimensional\Dimension;
+use Magento\Framework\Indexer\Dimension;
 
 class DimensionCollectionFactory
 {
@@ -20,7 +20,7 @@ class DimensionCollectionFactory
     private $customerGroupDataProviderFactory;
 
     /**
-     * @var \Magento\Framework\Indexer\MultiDimensional\DimensionCollectionFactory
+     * @var \Magento\Framework\Indexer\DimensionCollectionFactory
      */
     private $generalDimensionCollectionFactory;
 
@@ -32,13 +32,13 @@ class DimensionCollectionFactory
     /**
      * @param \Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProviderFactory $websiteDataProviderFactory
      * @param \Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProviderFactory $customerGroupDataProviderFactory
-     * @param \Magento\Framework\Indexer\MultiDimensional\DimensionCollectionFactory $generalDimensionCollectionFactory
+     * @param \Magento\Framework\Indexer\DimensionCollectionFactory $generalDimensionCollectionFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configReader
      */
     public function __construct(
         \Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProviderFactory $websiteDataProviderFactory,
         \Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProviderFactory $customerGroupDataProviderFactory,
-        \Magento\Framework\Indexer\MultiDimensional\DimensionCollectionFactory $generalDimensionCollectionFactory,
+        \Magento\Framework\Indexer\DimensionCollectionFactory $generalDimensionCollectionFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $configReader
     )
     {

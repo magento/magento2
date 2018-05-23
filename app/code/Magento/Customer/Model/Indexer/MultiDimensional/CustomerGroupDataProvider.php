@@ -7,11 +7,17 @@
 namespace Magento\Customer\Model\Indexer\MultiDimensional;
 
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory as CustomerGroupCollectionFactory;
-use Magento\Framework\Indexer\MultiDimensional\DimensionFactory;
-use Magento\Framework\Indexer\MultiDimensional\DimensionDataProviderInterface;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Indexer\DimensionDataProviderInterface;
 
-class CustomerGroupDataProvider implements DimensionDataProviderInterface, CustomerGroupDimensionInterface
+class CustomerGroupDataProvider implements DimensionDataProviderInterface
 {
+    /**
+     * Name for customer group dimension for multidimensional indexer
+     * 'cg' - stands for 'customer_group'
+     */
+    const DIMENSION_NAME = 'cg';
+
     /**
      * @var \SplFixedArray
      */

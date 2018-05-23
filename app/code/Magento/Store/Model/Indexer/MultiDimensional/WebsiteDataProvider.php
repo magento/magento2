@@ -7,11 +7,17 @@
 namespace Magento\Store\Model\Indexer\MultiDimensional;
 
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteCollectionFactory;
-use Magento\Framework\Indexer\MultiDimensional\DimensionFactory;
-use Magento\Framework\Indexer\MultiDimensional\DimensionDataProviderInterface;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Indexer\DimensionDataProviderInterface;
 
-class WebsiteDataProvider implements DimensionDataProviderInterface, WebsiteDimensionInterface
+class WebsiteDataProvider implements DimensionDataProviderInterface
 {
+    /**
+     * Name for website dimension for multidimensional indexer
+     * 'ws' - stands for 'website_store'
+     */
+    const DIMENSION_NAME = 'ws';
+
     /**
      * @var \SplFixedArray
      */

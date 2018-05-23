@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Indexer\MultiDimensional;
+namespace Magento\Framework\Indexer;
 
 interface DimensionDataProviderInterface extends \Iterator
 {
