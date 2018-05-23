@@ -183,6 +183,7 @@
         <click selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
         <waitForElementNotVisible selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="waitInvisibleCreateAccountButton"/>
         <dontSeeElement selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="seeInvisibleCreateAccountButton"/>
+        <see selector="{{CheckoutSuccessRegisterSection.registerMessage}}" userInput="A letter with further instructions will be sent to your email." stepKey="seeNotifyCreateAccount"/>
         <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
         <waitForElement selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="waitHomePage"/>
         <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
