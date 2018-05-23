@@ -262,10 +262,10 @@
     .copyright {
         .lib-css(background-color, @copyright__background-color);
         .lib-css(color, @color-white);
+        box-sizing: border-box;
         display: block;
         padding: @indent__s;
         text-align: center;
-        box-sizing: border-box;
     }
 
     .page-header,
@@ -314,13 +314,14 @@
     //
     //  Widgets
     //  ---------------------------------------------
-
+    //  @codingStandardsIgnoreStart caused by bug in CodeSniffer implementation
     .sidebar {
         .widget.block:not(:last-child),
         .widget:not(:last-child) {
             margin-bottom: @indent__xl;
         }
     }
+    //  @codingStandardsIgnoreEnd
 
     .widget {
         clear: both;
@@ -334,7 +335,9 @@
         .widget.block {
             .lib-css(margin, @indent__base 0);
         }
-        .links .widget.block { margin: 0; }
+        .links .widget.block {
+            margin: 0;
+        }
     }
 
     .no-display:extend(.abs-no-display all) {
