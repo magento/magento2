@@ -16,6 +16,7 @@
             <description value="Admin should be able to remove default video from a Downloadable Product"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-207"/>
+            <group value="Catalog"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -30,7 +31,7 @@
 
         <comment userInput="Add product video" stepKey="anchor1"/>
 
-        <comment userInput="Add downloadable links" stepKey="anchor2"/>
+        <comment userInput="Add additional product data" stepKey="anchor2"/>
 
         <comment userInput="Save product" stepKey="anchor3"/>
 

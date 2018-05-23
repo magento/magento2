@@ -31,7 +31,7 @@
 
         <comment userInput="Add product video" stepKey="anchor1"/>
 
-        <comment userInput="Add downloadable links" stepKey="anchor2"/>
+        <comment userInput="Add additional product data" stepKey="anchor2"/>
 
         <comment userInput="Save product" stepKey="anchor3"/>
 

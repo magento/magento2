@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminAddDefaultVideoBundleProductTest" extends="AdminAddDefaultVideoDownloadableProductTest">
+    <test name="AdminRemoveDefaultVideoBundleProductTest" extends="AdminRemoveDefaultVideoDownloadableProductTest">
         <annotations>
             <group value="Bundle"/>
         </annotations>
@@ -51,7 +51,7 @@
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="step14" after="step13"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage" after="anchor5">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage" after="anchor11">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
     </test>
