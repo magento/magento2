@@ -54,16 +54,39 @@ class ExportButton extends AbstractComponent
      */
     public function prepare()
     {
+        $context = $this->getContext();
         $config = $this->getData('config');
         if (isset($config['options'])) {
             $options = [];
             foreach ($config['options'] as $option) {
-                $option['url'] = $this->urlBuilder->getUrl($option['url']);
+                $additionalParams = $this->getAdditionalParams($config, $context);
+                $option['url'] = $this->urlBuilder->getUrl($option['url'], $additionalParams);
                 $options[] = $option;
             }
             $config['options'] = $options;
             $this->setData('config', $config);
         }
         parent::prepare();
+    }
+
+    /**
+     * Get export button additional parameters
+     *
+     * @param array $config
+     * @param ContextInterface $context
+     * @return array
+     */
+    private function getAdditionalParams($config, $context)
+    {
+        $additionalParams = [];
+        if (isset($config['additionalParams'])) {
+            foreach ($config['additionalParams'] as $paramName => $paramValue) {
+                if ('*' == $paramValue) {
+                    $paramValue = $context->getRequestParam($paramName);
+                }
+                $additionalParams[$paramName] = $paramValue;
+            }
+        }
+        return $additionalParams;
     }
 }

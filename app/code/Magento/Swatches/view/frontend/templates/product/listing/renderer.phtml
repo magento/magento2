@@ -4,20 +4,23 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $block \Magento\Swatches\Block\Product\Renderer\Listing\Configurable */ ?>
-<div class="swatch-opt-<?php /* @escapeNotVerified */ echo $block->getProduct()->getId() ?>"></div>
-<script>
-    require(
-        ["jquery", "jquery/ui", "Magento_Swatches/js/swatch-renderer", "Magento_Swatches/js/catalog-add-to-cart"],
-        function ($) {
-            $('.swatch-opt-<?php /* @escapeNotVerified */ echo $block->getProduct()->getId() ?>').SwatchRenderer({
-                selectorProduct: '.product-item-details',
-                onlySwatches: true,
-                enableControlLabel: false,
-                numberToShow: <?php /* @escapeNotVerified */ echo $block->getNumberSwatchesPerProduct(); ?>,
-                jsonConfig: <?php /* @escapeNotVerified */ echo $block->getJsonConfig(); ?>,
-                jsonSwatchConfig: <?php /* @escapeNotVerified */ echo $block->getJsonSwatchConfig(); ?>,
-                mediaCallback: '<?php /* @escapeNotVerified */ echo $block->getMediaCallback() ?>'
-            });
-        });
+<div class="swatch-opt-<?php /* @escapeNotVerified */ echo $block->getProduct()->getId() ?>"
+     data-role="swatch-option-<?php /* @escapeNotVerified */ echo $block->getProduct()->getId() ?>"
+></div>
+
+<script type="text/x-magento-init">
+    {
+        "[data-role=swatch-option-<?php /* @escapeNotVerified */ echo $block->getProduct()->getId() ?>]": {
+            "Magento_Swatches/js/swatch-renderer": {
+                "selectorProduct": ".product-item-details",
+                "onlySwatches": true,
+                "enableControlLabel": false,
+                "numberToShow": <?php /* @escapeNotVerified */ echo $block->getNumberSwatchesPerProduct(); ?>,
+                "jsonConfig": <?php /* @escapeNotVerified */ echo $block->getJsonConfig(); ?>,
+                "jsonSwatchConfig": <?php /* @escapeNotVerified */ echo $block->getJsonSwatchConfig(); ?>,
+                "mediaCallback": "<?php /* @escapeNotVerified */ echo $block->getMediaCallback() ?>"
+            },
+            "Magento_Swatches/js/catalog-add-to-cart": {}
+        }
+    }
 </script>
