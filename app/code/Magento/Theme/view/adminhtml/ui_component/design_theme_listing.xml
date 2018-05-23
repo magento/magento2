@@ -36,6 +36,18 @@
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="design_theme_columns">
+        <settings>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">design_theme_listing.design_theme_listing.design_theme_columns.actions</item>
+                    <item name="target" xsi:type="string">applyAction</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">view</item>
+                        <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
+                    </item>
+                </param>
+            </childDefaults>
+        </settings>
         <column name="theme_id" sortOrder="10">
             <settings>
                 <filter>textRange</filter>
@@ -62,5 +74,16 @@
                 <label translate="true">Theme Path</label>
             </settings>
         </column>
+        <actionsColumn name="actions" class="Magento\Theme\Ui\Component\Listing\Column\ViewAction" sortOrder="50">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="viewUrlPath" xsi:type="string">admin/system_design_theme/edit</item>
+                    <item name="urlEntityParamName" xsi:type="string">id</item>
+                </item>
+            </argument>
+            <settings>
+                <indexField>theme_id</indexField>
+            </settings>
+        </actionsColumn>
     </columns>
 </listing>
