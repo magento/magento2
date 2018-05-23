@@ -28,29 +28,6 @@ define([
             });
 
             this.labels(labels);
-        },
-
-        /** @inheritdoc */
-        changePage: function (page) {
-            this.clear();
-
-            if (page === 1 && !this.recordData().length) {
-                return false;
-            }
-
-            if (~~page > this.pages()) {
-                this.currentPage(this.pages());
-
-                return false;
-            } else if (~~page < 1) {
-                this.currentPage(1);
-
-                return false;
-            }
-
-            this.initChildren();
-
-            return true;
         }
     });
 });
