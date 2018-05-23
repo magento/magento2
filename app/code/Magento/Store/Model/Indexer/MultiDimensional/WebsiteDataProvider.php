@@ -8,9 +8,9 @@ namespace Magento\Store\Model\Indexer\MultiDimensional;
 
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteCollectionFactory;
 use Magento\Framework\Indexer\DimensionFactory;
-use Magento\Framework\Indexer\DimensionDataProviderInterface;
+use Magento\Framework\Indexer\DimensionProviderInterface;
 
-class WebsiteDataProvider implements DimensionDataProviderInterface
+class WebsiteDataProvider implements DimensionProviderInterface
 {
     /**
      * Name for website dimension for multidimensional indexer
@@ -39,28 +39,10 @@ class WebsiteDataProvider implements DimensionDataProviderInterface
         );
     }
 
-    public function current()
+    public function getIterator(): \Traversable
     {
-        return $this->dimensionFactory->create(self::DIMENSION_NAME, $this->websitesDataIterator->current());
-    }
-
-    public function next()
-    {
-        $this->websitesDataIterator->next();
-    }
-
-    public function key()
-    {
-        return $this->websitesDataIterator->key();
-    }
-
-    public function valid()
-    {
-        return $this->websitesDataIterator->valid();
-    }
-
-    public function rewind()
-    {
-        $this->websitesDataIterator->rewind();
+        foreach ($this->websitesDataIterator as $website) {
+            yield $this->dimensionFactory->create(self::DIMENSION_NAME, $website);
+        }
     }
 }

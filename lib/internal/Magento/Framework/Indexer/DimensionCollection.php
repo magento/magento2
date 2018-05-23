@@ -14,6 +14,11 @@ class DimensionCollection implements \Iterator
     private $dimensionsIterators = [];
 
     /**
+     * @var array
+     */
+    private $dimensionsDataProviders = [];
+
+    /**
      * @var int
      */
     private $dimensionsCount;
@@ -48,7 +53,7 @@ class DimensionCollection implements \Iterator
 
         for ($i = ($this->dimensionsCount - 1); $i > 0; $i--) {
             if (!$this->dimensionsIterators[$i]->valid()) {
-                $this->dimensionsIterators[$i]->rewind();
+                $this->dimensionsIterators[$i] = $this->dimensionsDataProviders[$i]->getIterator();
                 $this->dimensionsIterators[$i-1]->next();
             }
         }
@@ -72,13 +77,15 @@ class DimensionCollection implements \Iterator
 
     public function rewind()
     {
-        foreach ($this->dimensionsIterators as $dimensionIterator) {
-            $dimensionIterator->rewind();
+        $this->dimensionsIterators = [];
+        foreach ($this->dimensionsDataProviders as $dimensionsDataProvider) {
+            $this->dimensionsIterators[] = $dimensionsDataProvider->getIterator();
         }
     }
 
-    private function addDimensionDataProvider(DimensionDataProviderInterface $dimensionDataProvider)
+    private function addDimensionDataProvider(DimensionProviderInterface $dimensionDataProvider)
     {
-        $this->dimensionsIterators[] = $dimensionDataProvider;
+        $this->dimensionsDataProviders[] = $dimensionDataProvider;
+        $this->dimensionsIterators[] = $dimensionDataProvider->getIterator();
     }
 }

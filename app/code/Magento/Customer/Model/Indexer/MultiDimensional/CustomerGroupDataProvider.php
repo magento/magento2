@@ -8,9 +8,9 @@ namespace Magento\Customer\Model\Indexer\MultiDimensional;
 
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory as CustomerGroupCollectionFactory;
 use Magento\Framework\Indexer\DimensionFactory;
-use Magento\Framework\Indexer\DimensionDataProviderInterface;
+use Magento\Framework\Indexer\DimensionProviderInterface;
 
-class CustomerGroupDataProvider implements DimensionDataProviderInterface
+class CustomerGroupDataProvider implements DimensionProviderInterface
 {
     /**
      * Name for customer group dimension for multidimensional indexer
@@ -35,28 +35,10 @@ class CustomerGroupDataProvider implements DimensionDataProviderInterface
         );
     }
 
-    public function current()
+    public function getIterator(): \Traversable
     {
-        return $this->dimensionFactory->create(self::DIMENSION_NAME, $this->customerGroupsDataIterator->current());
-    }
-
-    public function next()
-    {
-        $this->customerGroupsDataIterator->next();
-    }
-
-    public function key()
-    {
-        return $this->customerGroupsDataIterator->key();
-    }
-
-    public function valid()
-    {
-        return $this->customerGroupsDataIterator->valid();
-    }
-
-    public function rewind()
-    {
-        $this->customerGroupsDataIterator->rewind();
+        foreach ($this->customerGroupsDataIterator as $customerGroup) {
+            yield $this->dimensionFactory->create(self::DIMENSION_NAME, $customerGroup);
+        }
     }
 }
