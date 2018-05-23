@@ -18,8 +18,7 @@ $categoryLinkManagement = $objectManager->get(\Magento\Catalog\Api\CategoryLinkM
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setId(1)
-    ->setAttributeSetId(4)
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
     ->setName('Simple Product')
     ->setSku('simple-out-of-stock')
@@ -40,7 +39,8 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             'is_qty_decimal'            => 0,
             'is_in_stock'               => 0,
         ]
-    )->setCanSaveCustomOptions(true)
+    )
+    ->setCanSaveCustomOptions(true)
     ->setHasOptions(true);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */

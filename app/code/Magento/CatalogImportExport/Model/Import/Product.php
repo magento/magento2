@@ -2869,14 +2869,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         if ($this->stockConfiguration->isQty($this->skuProcessor->getNewSku($sku)['type_id'])) {
             $stockItemDo->setData($row);
-            $row['is_in_stock'] = $stockItemDo->getBackorders() && isset($row['is_in_stock'])
+            $row['is_in_stock'] = isset($row['is_in_stock']) && $stockItemDo->getBackorders()
                 ? $row['is_in_stock']
                 : $this->stockStateProvider->verifyStock($stockItemDo);
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
-                $row['low_stock_date'] = $this->dateTime->gmDate(
-                    'Y-m-d H:i:s',
-                    (new \DateTime())->getTimestamp()
-                );
+                $row['low_stock_date'] =
+                gmdate(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT, (new \DateTime())->getTimestamp());
             }
             $row['stock_status_changed_auto'] = (int)!$this->stockStateProvider->verifyStock($stockItemDo);
         } else {

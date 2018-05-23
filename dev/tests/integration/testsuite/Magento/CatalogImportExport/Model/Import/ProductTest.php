@@ -2185,7 +2185,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that imported product stock status with backorders functionality enabled can be set to 'out of stock'.
      *
-     * @magentoDataIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      *
      * @return void
@@ -2220,7 +2220,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'entity' => 'catalog_product',
                 \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE => 1,
             ]
-        )->setSource($source)->validateData();
+        )
+        ->setSource($source)
+        ->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 0);
 
