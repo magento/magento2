@@ -171,7 +171,9 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         switch ($packageType) {
             case 'magento2-module':
                 $xml = simplexml_load_file("$dir/etc/module.xml");
-                $this->assertConsistentModuleName($xml, $json->name);
+                if ($this->isVendorMagento($json->name)) {
+                    $this->assertConsistentModuleName($xml, $json->name);
+                }
                 $this->assertDependsOnPhp($json->require);
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
@@ -208,6 +210,17 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
             default:
                 throw new \InvalidArgumentException("Unknown package type {$packageType}");
         }
+    }
+
+    /**
+     * Returns true if package vendor is Magento.
+     *
+     * @param string $packageName
+     * @return bool
+     */
+    private function isVendorMagento($packageName)
+    {
+        return strpos($packageName, 'magento') === 0;
     }
 
     /**
