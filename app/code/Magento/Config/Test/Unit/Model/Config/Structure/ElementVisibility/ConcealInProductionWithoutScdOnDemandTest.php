@@ -100,7 +100,7 @@ class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestC
      *
      * @dataProvider visibilityDataProvider
      */
-    public function testIsHiddenScdOnDemandDisabled($isHidden): void
+    public function testIsHiddenScdOnDemandDisabled(bool $isHidden): void
     {
         $path = 'section1/group1/field1';
         $this->deploymentConfigMock->expects($this->once())
@@ -120,7 +120,7 @@ class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestC
      *
      * @dataProvider visibilityDataProvider
      */
-    public function testIsDisabledScdOnDemandDisabled($isDisabled): void
+    public function testIsDisabledScdOnDemandDisabled(bool $isDisabled): void
     {
         $path = 'section1/group1/field1';
         $this->deploymentConfigMock->expects($this->once())
