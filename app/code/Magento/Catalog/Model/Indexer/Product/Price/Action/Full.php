@@ -6,12 +6,19 @@
 namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Indexer\MultiDimensional\Dimension;
+use Magento\Framework\Indexer\MultiDimensional\DimensionalIndexerInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use \Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Model\Indexer\Product\Price\MultiDimensionalIndexerInterface;
 
 /**
  * Class Full reindex action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
+class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction implements DimensionalIndexerInterface
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
@@ -32,6 +39,21 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
      */
     private $activeTableSwitcher;
+
+    /**
+     * @var EntityMetadataInterface
+     */
+    private $productMetaDataCached;
+
+    /**
+     * @var \Magento\Framework\Indexer\MultiDimensional\DimensionCollection
+     */
+    private $allDimensionCollection;
+
+    /**
+     * @var \Magento\Framework\Indexer\MultiDimensional\DimensionCollection
+     */
+    private $modeDimensionCollection;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -61,7 +83,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator $batchSizeCalculator = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
+        \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory = null
     ) {
         parent::__construct(
             $config,
@@ -85,6 +108,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
         );
+        $dimensionCollectionFactory = $dimensionCollectionFactory ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory::class
+        );
+
+        $this->allDimensionCollection = $dimensionCollectionFactory->createWithAllDimensions();
+        $this->modeDimensionCollection = $dimensionCollectionFactory->create();
     }
 
     /**
@@ -98,66 +127,171 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     public function execute($ids = null)
     {
         try {
-            $this->_defaultIndexerResource->getTableStrategy()->setUseIdxTable(false);
-            $this->_prepareWebsiteDateTable();
-
-            $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-            $replicaTable = $this->activeTableSwitcher->getAdditionalTableName(
-                $this->_defaultIndexerResource->getMainTable()
-            );
-
-            // Prepare replica table for indexation.
-            $this->_defaultIndexerResource->getConnection()->truncateTable($replicaTable);
+            $this->prepareTables();
 
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $indexer */
-            foreach ($this->getTypeIndexers() as $indexer) {
-                $indexer->getTableStrategy()->setUseIdxTable(false);
-                $connection = $indexer->getConnection();
+            foreach ($this->getTypeIndexers() as $priceIndexer) {
+                $priceIndexer->getTableStrategy()->setUseIdxTable(false);
 
-                $batches = $this->batchProvider->getBatches(
-                    $connection,
-                    $entityMetadata->getEntityTable(),
-                    $entityMetadata->getIdentifierField(),
-                    $this->batchSizeCalculator->estimateBatchSize($connection, $indexer->getTypeId())
-                );
-
-                foreach ($batches as $batch) {
-                    // Get entity ids from batch
-                    $select = $connection->select();
-                    $select->distinct(true);
-                    $select->from(['e' => $entityMetadata->getEntityTable()], $entityMetadata->getIdentifierField());
-                    $select->where('type_id = ?', $indexer->getTypeId());
-
-                    $entityIds = $this->batchProvider->getBatchIds($connection, $select, $batch);
-
-                    if (!empty($entityIds)) {
-                        // Temporary table will created if not exists
-                        $idxTableName = $this->_defaultIndexerResource->getIdxTable();
-                        $this->_emptyTable($idxTableName);
-
-                        if ($indexer->getIsComposite()) {
-                            $this->_copyRelationIndexData($entityIds);
-                        }
-                        $this->_prepareTierPriceIndex($entityIds);
-
-                        // Reindex entities by id
-                        $indexer->reindexEntity($entityIds);
-
-                        // Sync data from temp table to index table
-                        $this->_insertFromTable($idxTableName, $replicaTable);
-
-                        // Drop temporary index table
-                        $connection->dropTable($idxTableName);
-                    }
+                if ($priceIndexer instanceof MultiDimensionalIndexerInterface) {
+                    $this->reindexProductTypeWithDimensions($priceIndexer);
+                    continue;
                 }
+
+                $this->reindexProductType($priceIndexer);
             }
-            $this->activeTableSwitcher->switchTable(
-                $this->_defaultIndexerResource->getConnection(),
-                [$this->_defaultIndexerResource->getMainTable()]
-            );
+
+            $this->switchTables();
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
+            throw new LocalizedException(__($e->getMessage()), $e);
         }
+    }
+
+    private function prepareTables()
+    {
+        $this->_defaultIndexerResource->getTableStrategy()->setUseIdxTable(false);
+
+        $this->_prepareWebsiteDateTable();
+
+        // Prepare replica table for indexation.
+        $this->_defaultIndexerResource->getConnection()->truncateTable($this->getReplicaTable());
+
+        // Prepare tables for dimensions.
+        foreach ($this->modeDimensionCollection as $dimension) {
+//             $this->dimensionTableMaintainer->createTableForDimension($dimension);
+//            $replicaTableName = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
+//            $this->_emptyTable($replicaTableName);
+        }
+    }
+
+    private function switchTables()
+    {
+        // Switch default table
+        $this->activeTableSwitcher->switchTable(
+            $this->_defaultIndexerResource->getConnection(),
+            [$this->_defaultIndexerResource->getMainTable()]
+        );
+
+        // Switch dimension tables
+        $dimensionTables = [];
+
+        foreach ($this->modeDimensionCollection as $dimension) {
+            $dimensionTables[] = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
+        }
+
+        if (count($dimensionTables) > 0) {
+            $this->activeTableSwitcher->switchTable($this->_defaultIndexerResource->getConnection(), $dimensionTables);
+        }
+    }
+
+    private function reindexProductType(PriceInterface $priceIndexer)
+    {
+        foreach ($this->getBatchesForIndexer($priceIndexer) as $batch) {
+            $this->reindexBatch($priceIndexer, $batch);
+        }
+    }
+
+    private function reindexProductTypeWithDimensions(PriceInterface $priceIndexer)
+    {
+        foreach ($this->allDimensionCollection as $dimension) {
+            $this->reindexDimensions($priceIndexer, $dimension);
+        }
+    }
+
+    private function reindexDimensions(PriceInterface $priceIndexer, array $dimension)
+    {
+        foreach ($this->getBatchesForIndexer($priceIndexer) as $batch) {
+            $this->reindexBatch($priceIndexer, $batch, $dimension);
+        }
+    }
+
+    private function reindexBatch(PriceInterface $priceIndexer, array $batch, array $dimensions = null)
+    {
+        $entityIds = $this->getEntityIdsFromBatch($priceIndexer, $batch);
+
+        if (!empty($entityIds)) {
+            // Temporary table will created if not exists
+            if ($dimensions === null) {
+                // Reindex entities by id
+                $idxTableName = $this->_defaultIndexerResource->getIdxTable();
+            }
+
+            if ($dimensions !== null) {
+                $idxTableName = $this->_defaultIndexerResource->getIdxTableWithinDimension();
+            }
+
+            $this->_emptyTable($idxTableName);
+
+            if ($priceIndexer->getIsComposite()) {
+                $this->_copyRelationIndexData($entityIds);
+            }
+            $this->_prepareTierPriceIndex($entityIds);
+
+            if ($dimensions === null) {
+                // Reindex entities by id
+                $priceIndexer->reindexEntity($entityIds);
+            }
+
+            if ($dimensions !== null) {
+                $priceIndexer->reindexEntityWithinDimension($entityIds, $dimensions);
+            }
+
+            // Sync data from temp table to index table
+            $this->_insertFromTable($idxTableName, $this->getReplicaTable());
+
+            // Drop temporary index table
+            $priceIndexer->getConnection()->dropTable($idxTableName);
+        }
+    }
+
+    private function getEntityIdsFromBatch(PriceInterface $priceIndexer, array $batch)
+    {
+        // Get entity ids from batch
+        $select = $priceIndexer->getConnection()
+            ->select()
+            ->distinct(true)
+            ->from(
+                ['e' => $this->getProductMetaData()->getEntityTable()],
+                $this->getProductMetaData()->getIdentifierField()
+            )
+            ->where('type_id = ?', $priceIndexer->getTypeId());
+
+        return $this->batchProvider->getBatchIds($priceIndexer->getConnection(), $select, $batch);
+    }
+
+    private function getProductMetaData()
+    {
+        if ($this->productMetaDataCached === null) {
+            $this->productMetaDataCached = $this->metadataPool->getMetadata(ProductInterface::class);
+        }
+
+        return $this->productMetaDataCached;
+    }
+
+    private function getReplicaTable()
+    {
+        return $this->activeTableSwitcher->getAdditionalTableName(
+            $this->_defaultIndexerResource->getMainTable()
+        );
+    }
+
+    private function getBatchesForIndexer(PriceInterface $priceIndexer)
+    {
+        return $this->batchProvider->getBatches(
+            $priceIndexer->getConnection(),
+            $this->getProductMetaData()->getEntityTable(),
+            $this->getProductMetaData()->getIdentifierField(),
+            $this->batchSizeCalculator->estimateBatchSize(
+                $priceIndexer->getConnection(),
+                $priceIndexer->getTypeId()
+            )
+        );
+    }
+
+    // Maybe we don`t need this at all
+    public function executeWithinDimensions(array $ids = [], array $dimensions = [])
+    {
+        $a = 1;
     }
 
     /**
