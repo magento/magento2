@@ -48,7 +48,7 @@ class Grid extends AbstractGrid
     /**
      * Order grid rows batch size
      */
-    const COPY_ROWS_BATCH_SIZE = 100;
+    const BATCH_SIZE = 100;
 
     /**
      * @param Context $context
@@ -114,10 +114,8 @@ class Grid extends AbstractGrid
     public function refreshBySchedule()
     {
         $notSyncedIds = $this->notSyncedDataProvider->getIds($this->mainTableName, $this->gridTableName);
-
-        while (!empty($notSyncedIds)) {
-            $notSyncedBunch = array_splice($notSyncedIds, 0, self::COPY_ROWS_BATCH_SIZE);
-            $select = $this->getGridOriginSelect()->where($this->mainTableName . '.entity_id IN (?)', $notSyncedBunch);
+        foreach (array_chunk($notSyncedIds, self::BATCH_SIZE) as $bunch) {
+            $select = $this->getGridOriginSelect()->where($this->mainTableName . '.entity_id IN (?)', $bunch);
             $fetchResult = $this->getConnection()->fetchAll($select);
             $this->getConnection()->insertOnDuplicate(
                 $this->getTable($this->gridTableName),
