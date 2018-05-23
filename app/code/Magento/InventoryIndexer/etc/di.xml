@@ -6,8 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventoryIndexer\Indexer\IndexHandlerInterface" type="Magento\InventoryIndexer\Indexer\IndexHandler"/>
-    <preference for="Magento\InventoryIndexer\Indexer\IndexStructureInterface" type="Magento\InventoryIndexer\Indexer\IndexStructure"/>
+    <preference for="Magento\InventoryMultiDimensionalIndexerApi\Model\IndexHandlerInterface" type="Magento\InventoryIndexer\Indexer\IndexHandler"/>
+    <preference for="Magento\InventoryMultiDimensionalIndexerApi\Model\IndexStructureInterface" type="Magento\InventoryIndexer\Indexer\IndexStructure"/>
     <type name="Magento\InventoryIndexer\Indexer\IndexHandler">
         <arguments>
             <argument name="batchSize" xsi:type="string">100</argument>
@@ -54,6 +54,13 @@
     <type name="Magento\InventoryIndexer\Model\StockIndexTableNameResolver">
         <arguments>
             <argument name="dimensionName" xsi:type="string">stock_</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryIndexer\Model\ResourceModel\GetProductIdsBySourceItemIds">
+        <arguments>
+            <argument name="tableNameSourceItem" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
+            <argument name="sourceItemIdFieldName" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::ID_FIELD_NAME</argument>
+            <argument name="productInterfaceClassName" xsi:type="string">Magento\Catalog\Api\Data\ProductInterface</argument>
         </arguments>
     </type>
 </config>

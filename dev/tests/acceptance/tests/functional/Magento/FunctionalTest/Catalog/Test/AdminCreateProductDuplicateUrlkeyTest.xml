@@ -15,8 +15,7 @@
             <title value="Error when try to save project with duplicate URL key."/>
             <description value="Error when try to save project with duplicate URL key."/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-87586"/>
-            <!--useCaseId value="USECASE-114"/-->
+            <testCaseId value="MC-112"/>
             <group value="product"/>
         </annotations>
         <before>

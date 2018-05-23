@@ -7,13 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model\SourceItem\Command;
 
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Validation\ValidationException;
-use Magento\Inventory\Model\ResourceModel\SourceItem\SaveMultiple;
-use Magento\Inventory\Model\SourceItem\Validator\SourceItemsValidator;
+use Magento\Inventory\Model\SourceItem\Command\Handler\SourceItemsSaveHandler;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
@@ -21,33 +16,16 @@ use Psr\Log\LoggerInterface;
 class SourceItemsSave implements SourceItemsSaveInterface
 {
     /**
-     * @var SourceItemsValidator
+     * @var SourceItemsSaveHandler
      */
-    private $sourceItemsValidator;
+    private $sourceItemsSaveHandler;
 
     /**
-     * @var SaveMultiple
+     * @param SourceItemsSaveHandler $sourceItemsSaveHandler
      */
-    private $saveMultiple;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @param SourceItemsValidator $sourceItemsValidator
-     * @param SaveMultiple $saveMultiple
-     * @param LoggerInterface $logger
-     */
-    public function __construct(
-        SourceItemsValidator $sourceItemsValidator,
-        SaveMultiple $saveMultiple,
-        LoggerInterface $logger
-    ) {
-        $this->sourceItemsValidator = $sourceItemsValidator;
-        $this->saveMultiple = $saveMultiple;
-        $this->logger = $logger;
+    public function __construct(SourceItemsSaveHandler $sourceItemsSaveHandler)
+    {
+        $this->sourceItemsSaveHandler = $sourceItemsSaveHandler;
     }
 
     /**
@@ -55,20 +33,6 @@ class SourceItemsSave implements SourceItemsSaveInterface
      */
     public function execute(array $sourceItems)
     {
-        if (empty($sourceItems)) {
-            throw new InputException(__('Input data is empty'));
-        }
-
-        $validationResult = $this->sourceItemsValidator->validate($sourceItems);
-        if (!$validationResult->isValid()) {
-            throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
-        }
-
-        try {
-            $this->saveMultiple->execute($sourceItems);
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save Source Item'), $e);
-        }
+        $this->sourceItemsSaveHandler->execute($sourceItems);
     }
 }

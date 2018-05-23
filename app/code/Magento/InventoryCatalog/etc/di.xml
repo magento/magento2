@@ -44,6 +44,13 @@
         <plugin name="adapt_add_stock_status_to_products" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddStockStatusToProductsPlugin"/>
         <plugin name="adapt_assign_status_to_product" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAssignStatusToProductPlugin"/>
     </type>
+    <type name="Magento\InventoryApi\Model\SourceValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="default_source_disable_validator" xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\DefaultSourceDisableValidator</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\InventoryApi\Model\StockSourceLinkValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -67,10 +74,16 @@
     </type>
     <type name="Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem">
         <arguments>
-            <argument name="sourceItemsSave" xsi:type="object">Magento\InventoryCatalog\Model\SourceItem\SourceItemsSave</argument>
+            <argument name="sourceItemsSave" xsi:type="object">Magento\Inventory\Model\SourceItem\Command\SourceItemsSaveWithoutLegacySynchronization</argument>
         </arguments>
     </type>
-    <type name="Magento\InventoryCatalog\Model\SourceItem\SourceItemsSave">
+    <type name="Magento\Inventory\Model\SourceItem\Command\SourceItemsSaveWithoutLegacySynchronization">
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save" disabled="true"/>
+    </type>
+    <type name="Magento\CatalogInventory\Api\StockRegistryInterface">
+        <plugin name="adapt_get_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetStockStatusPlugin"/>
+        <plugin name="adapt_get_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetStockStatusBySkuPlugin"/>
+        <plugin name="adapt_get_product_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusPlugin"/>
+        <plugin name="adapt_get_product_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusBySkuPlugin"/>
     </type>
 </config>

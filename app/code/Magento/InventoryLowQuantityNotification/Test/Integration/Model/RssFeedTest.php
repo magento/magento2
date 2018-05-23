@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Test\Integration\Model;
 
-use Magento\InventoryLowQuantityNotification\Block\Adminhtml\Rss\NotifyStock;
+use Magento\InventoryLowQuantityNotificationAdminUi\Block\Adminhtml\Rss\NotifyStock;
 use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\SourceItemConfigurationsSaveInterface;
 use Magento\Store\Model\Store;
@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * TEst getRssData with different configuration on multi source inventory.
+ * Test getRssData with different configuration on multi source inventory.
  */
 class RssFeedTest extends TestCase
 {

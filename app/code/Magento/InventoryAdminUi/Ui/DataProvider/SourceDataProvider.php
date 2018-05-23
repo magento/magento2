@@ -94,7 +94,6 @@ class SourceDataProvider extends DataProvider
             if ($data['totalRecords'] > 0) {
                 $sourceCode = $data['items'][0][SourceInterface::SOURCE_CODE];
                 $sourceGeneralData = $data['items'][0];
-                $sourceGeneralData['carrier_codes'] =  $this->getAssignedCarrierCodes($sourceCode);
                 $sourceGeneralData['disable_source_code'] = !empty($sourceGeneralData['source_code']);
                 $dataForSingle[$sourceCode] = [
                     'general' => $sourceGeneralData,
@@ -128,23 +127,5 @@ class SourceDataProvider extends DataProvider
             SourceInterface::SOURCE_CODE
         );
         return $searchResult;
-    }
-
-    /**
-     * @param string $sourceCode
-     * @return array
-     */
-    private function getAssignedCarrierCodes(string $sourceCode): array
-    {
-        $source = $this->sourceRepository->get($sourceCode);
-        $carrierCodes = [];
-
-        $carrierLinks = $source->getCarrierLinks();
-        if (count($carrierLinks)) {
-            foreach ($carrierLinks as $carrierLink) {
-                $carrierCodes[] = $carrierLink->getCarrierCode();
-            }
-        }
-        return $carrierCodes;
     }
 }
