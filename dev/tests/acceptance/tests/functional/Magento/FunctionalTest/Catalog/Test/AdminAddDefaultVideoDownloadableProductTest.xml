@@ -12,10 +12,11 @@
         <annotations>
             <features value="Catalog"/>
             <stories value="Add/remove images and videos for all product types and category"/>
-            <title value="You should be able to add default video for a Downloadable Product"/>
-            <description value="You should be able to add default video for a Downloadable Product"/>
+            <title value="Admin should be able to add default video for a Downloadable Product"/>
+            <description value="Admin should be able to add default video for a Downloadable Product"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-114"/>
+            <group value="Catalog"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

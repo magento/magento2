@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminAddDefaultVideoBundleProductTest" extends="AdminAddDefaultVideoDownloadableProductTest">
+        <before>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+        </after>
+
+        <!-- Create a bundle product -->
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage" after="waitForProductIndexPageLoad">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillMainProductForm" after="goToCreateProductPage">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!-- Add two bundle items -->
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="step0" after="anchor2"/>
+        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="step1" after="step0"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="step2" after="step1"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="step3" after="step2"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="step4" after="step3"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="step5" after="step4"/>
+        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="step6" after="step5"/>
+        <waitForPageLoad stepKey="step7" after="step6"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="step8" after="step7">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="step9" after="step8"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="step10" after="step9">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="step11" after="step10"/>
+        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="step12" after="step11"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="step13" after="step12"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="step14" after="step13"/>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage" after="anchor5">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+    </test>
+</tests>

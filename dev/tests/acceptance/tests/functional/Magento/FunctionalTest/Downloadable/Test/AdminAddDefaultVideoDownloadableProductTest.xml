@@ -13,9 +13,9 @@
             <group value="Downloadable"/>
         </annotations>
         <!-- Create downloadable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd" after="anchor0"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad" after="adminProductIndexPageAdd"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage" after="adminProductIndexPageAdd">
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToAdminProductIndexPage" after="anchor0"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad" after="goToAdminProductIndexPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage" after="waitForProductIndexPageLoad">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
         <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm" after="goToCreateProductPage">
@@ -23,20 +23,21 @@
         </actionGroup>
 
         <!-- Add downloadable links -->
-        <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection" after="anchor2"/>
-        <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable" after="openDownloadableSection"/>
-        <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillDownloadableLinkTitle" after="checkIsDownloadable"/>
-        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkLinksPurchasedSeparately" after="fillDownloadableLinkTitle"/>
-        <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillDownloadableSampleTitle" after="checkLinksPurchasedSeparately"/>
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableLinkWithMaxDownloads" after="fillDownloadableSampleTitle">
+        <!-- Start specific product steps, generic stepKey so that it can be used for test extensions -->
+        <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="step0" after="anchor2"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="step1" after="step0"/>
+        <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="step2" after="step1"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="step3" after="step2"/>
+        <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="step4" after="step3"/>
+        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="step5" after="step4">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
-        <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableLink" after="addDownloadableLinkWithMaxDownloads">
+        <actionGroup ref="addDownloadableProductLink" stepKey="step6" after="step5">
             <argument name="link" value="downloadableLink"/>
         </actionGroup>
 
         <!--Save Product-->
-        <actionGroup ref="saveProductForm" stepKey="saveDownloadableProduct" after="anchor3"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct" after="anchor3"/>
 
         <!-- Assert product in storefront product page -->
         <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage" after="anchor5">
