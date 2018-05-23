@@ -167,8 +167,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         // Prepare tables for dimensions.
         foreach ($this->modeDimensionCollection as $dimension) {
             $this->dimensionTableMaintainer->createTablesForDimensions($dimension);
-            $replicaTableName = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
-            $this->_emptyTable($replicaTableName);
+            $this->_emptyTable($this->dimensionTableMaintainer->getMainReplicaTable($dimension));
         }
     }
 

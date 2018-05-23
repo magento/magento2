@@ -100,7 +100,7 @@ class DimensionCollectionFactory
 
             default:
                 throw new \InvalidArgumentException(
-                    sprintf('Undefined dimension name "%s".', $dimensionsMode)
+                    sprintf('Undefined dimension mode "%s".', $dimensionsMode)
                 );
         }
 
