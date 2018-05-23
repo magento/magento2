@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminConfigurableProductManageStockOnDefaultStock">
+    <test name="AdminConfigurableProductDisabledManageStockOnDefaultStock">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Manage configurable product variations stock"/>
-            <title value="Manage Configurable Product Variations Stock"/>
-            <description value="Stock status of configurable product variation should affect configurable product appearance on storefront."/>
+            <stories value="Check 'Manage Stock' system configuration value affection on configurable product on default source."/>
+            <title value="Check 'Manage Stock' system configuration value affection on configurable product on default source."/>
+            <description value="Verify, that configurable product with children on default source and 'Out of Stock' status is visible on storefront in case 'Manage Stock' system configuration value is set to 'No'."/>
             <testCaseId value="969"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
@@ -25,8 +25,15 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
+
+            <comment userInput="Enable 'Manage Stock' configuration." stepKey="revertManageStockConfigurationComment"/>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableMangeStock"/>
+
+            <comment userInput="Perform reindex and cache flush after save stock related config." stepKey="reindexCacheFlushComment"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
         </after>
 
         <comment userInput="Create Configurable product with two options 'In Stock' on 'Default' stock" stepKey="CreateConfigurableProductComment"/>
@@ -130,5 +137,26 @@
         <waitForPageLoad stepKey="waitForPageLoad8"/>
         <seeInTitle userInput="{{ConfigurableMsiProduct.name}}" stepKey="checkProductIsCorrectByName"/>
         <see userInput="Out of Stock" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="checkConfigurableProductHasOutOfStockStatus"/>
+
+        <comment userInput="Disable 'Manage Stock' configuration" stepKey="disableMangeStockConfigurationComment"/>
+        <magentoCLI command="config:set cataloginventory/item_options/manage_stock 0" stepKey="disableMangeStock"/>
+
+        <comment userInput="Perform reindex and cache flush after disable 'Mange Stock' configuration config." stepKey="reindexCacheFlushAfterDisableManageStockComment"/>
+        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock"/>
+
+        <comment userInput="Check, configurable product back to category page and has 'In Stock' status on product view page." stepKey="checkConfigurableProductBackOnStorefront"/>
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="checkConfigurableIsBackToCategoryPage">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="checkConfigurableBackToStockOnProductViewPage">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+
+        <selectOption selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute1.name}}" stepKey="checkCanSelectWhiteVariation"/>
+        <seeOptionIsSelected selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute1.name}}" stepKey="checkWhiteVariationCanBeSelected"/>
+        <selectOption selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkCanSelectRedVariation"/>
+        <seeOptionIsSelected selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkRedVariationCanBeSelected"/>
     </test>
 </tests>
