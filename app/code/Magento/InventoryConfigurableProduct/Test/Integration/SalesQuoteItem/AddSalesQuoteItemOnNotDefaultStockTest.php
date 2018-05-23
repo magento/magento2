@@ -148,7 +148,8 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
         $this->storeManager->setCurrentStore($storeCode);
 
         return Bootstrap::getObjectManager()->create(
-            Quote::class, [
+            Quote::class,
+            [
                 'data' => [
                     'store_id' => $store->getId(),
                     'is_active' => 0,
