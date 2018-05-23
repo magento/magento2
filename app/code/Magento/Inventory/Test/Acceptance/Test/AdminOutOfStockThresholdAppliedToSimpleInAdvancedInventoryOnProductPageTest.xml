@@ -87,7 +87,7 @@
         <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesToAssignDefaultSource"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToAssignDefaultSource">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <argument name="value" value="_defaultSource.source_code"/>
+            <argument name="value" value="{{_defaultSource.source_code}}"/>
         </actionGroup>
         <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode(_defaultSource.source_code)}}" stepKey="clickOnCheckboxToAssignDefaultSource"/>
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDoneToAssignDefaultSource"/>
@@ -113,7 +113,7 @@
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSimpleProduct">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="SimpleMsiProduct.sku"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
         </actionGroup>
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
         <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
@@ -133,7 +133,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGridToSetOutOfStockThreshold"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToSetOutOfStockThreshold">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="SimpleMsiProduct.sku"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
         </actionGroup>
         <click selector="{{AdminGridRow.editByValue(SimpleMsiProduct.sku)}}" stepKey="clickOnEditToSetOutOfStockThreshold"/>
         <waitForPageLoad stepKey="waitForAdminProductPageLoadToSetOutOfStockThreshold"/>
@@ -142,7 +142,7 @@
         <click selector="{{AdminProductSourcesSection.advancedInventory}}" stepKey="clickOnAdvancedInventoryToSetOutOfStockThreshold"/>
         <click selector="{{AdminAdvancedInventorySection.outOfStockThresholdUseDefault}}" stepKey="clickOnUseDefaultMinQty"/>
         <fillField selector="{{AdminAdvancedInventorySection.outOfStockThreshold}}" userInput="101" stepKey="fillMinQtyForProduct"/>
-        <click selector="{{AdminAdvancedInventoryControls.done}}" stepKey="clickOnDoneToSetOutOfStockThreshold"/>
+        <click selector="{{AdminAdvancedInventoryControlsSection.done}}" stepKey="clickOnDoneToSetOutOfStockThreshold"/>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseToSetOutOfStockThreshold"/>
 
         <!-- Go to storefront category page, assert product isn't visible. -->
