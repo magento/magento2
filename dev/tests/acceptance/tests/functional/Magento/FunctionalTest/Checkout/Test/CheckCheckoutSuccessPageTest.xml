@@ -126,7 +126,7 @@
         <waitForPageLoad stepKey="waitPrintPage"/>
         <switchToWindow stepKey="switchToWindow"/>
         <switchToNextTab stepKey="switchToTab"/>
-        <seeInCurrentUrl url="sales/order/print/order_id" stepKey="123"/>
+        <seeInCurrentUrl url="sales/order/print/order_id" stepKey="seePrintPage"/>
         <seeElement selector="{{StorefrontCustomerOrderViewSection.orderTitle}}" stepKey="seeOrderTitleOnPrint"/>
         <switchToWindow stepKey="switchToWindow2"/>
     </test>
