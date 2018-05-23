@@ -78,8 +78,9 @@ class DimensionCollectionFactory
     private function getDataProviders()
     {
         $providers = [];
+        $dimensionsMode = $this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE);
 
-        switch ($this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE)) {
+        switch ($dimensionsMode) {
             case null:
             case ModeSwitcher::INPUT_KEY_NONE:
                 break;
