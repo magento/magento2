@@ -208,25 +208,17 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private function reindexDimensions(PriceInterface $priceIndexer, array $dimension)
     {
         foreach ($this->getBatchesForIndexer($priceIndexer) as $batch) {
-            $this->reindexBatch($priceIndexer, $batch, $dimension);
+            $this->reindexBatchWithinDimension($priceIndexer, $batch, $dimension);
         }
     }
 
-    private function reindexBatch(PriceInterface $priceIndexer, array $batch, array $dimensions = null)
+    private function reindexBatch(PriceInterface $priceIndexer, array $batch)
     {
         $entityIds = $this->getEntityIdsFromBatch($priceIndexer, $batch);
 
         if (!empty($entityIds)) {
             // Temporary table will created if not exists
-            if ($dimensions === null) {
-                // Reindex entities by id
-                $idxTableName = $this->_defaultIndexerResource->getIdxTable();
-            }
-
-            if ($dimensions !== null) {
-                $idxTableName = $this->_defaultIndexerResource->getIdxTableWithinDimension();
-            }
-
+            $idxTableName = $this->_defaultIndexerResource->getIdxTable();
             $this->_emptyTable($idxTableName);
 
             if ($priceIndexer->getIsComposite()) {
@@ -234,17 +226,35 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             }
             $this->_prepareTierPriceIndex($entityIds);
 
-            if ($dimensions === null) {
-                // Reindex entities by id
-                $priceIndexer->reindexEntity($entityIds);
-            }
-
-            if ($dimensions !== null) {
-                $priceIndexer->reindexEntityWithinDimension($entityIds, $dimensions);
-            }
+            // Reindex entities by id
+            $priceIndexer->reindexEntity($entityIds);
 
             // Sync data from temp table to index table
             $this->_insertFromTable($idxTableName, $this->getReplicaTable());
+
+            // Drop temporary index table
+            $priceIndexer->getConnection()->dropTable($idxTableName);
+        }
+    }
+
+    private function reindexBatchWithinDimension(PriceInterface $priceIndexer, array $batch, array $dimensions)
+    {
+        $entityIds = $this->getEntityIdsFromBatch($priceIndexer, $batch);
+
+        if (!empty($entityIds)) {
+            // Temporary table will created if not exists
+            $idxTableName = $this->_defaultIndexerResource->getIdxTableWithinDimension();
+            $this->_emptyTable($idxTableName);
+
+            if ($priceIndexer->getIsComposite()) {
+                $this->_copyRelationIndexData($entityIds);
+            }
+            $this->_prepareTierPriceIndex($entityIds);
+
+            $priceIndexer->reindexEntityWithinDimension($entityIds, $dimensions);
+
+            // Sync data from temp table to index table
+            $this->_insertFromTable($idxTableName, $this->dimensionTableMaintainer->getMainReplicaTable($dimensions));
 
             // Drop temporary index table
             $priceIndexer->getConnection()->dropTable($idxTableName);
