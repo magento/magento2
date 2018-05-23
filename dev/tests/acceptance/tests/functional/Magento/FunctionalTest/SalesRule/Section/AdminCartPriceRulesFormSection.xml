@@ -9,6 +9,8 @@
           xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCartPriceRulesFormSection">
         <element name="save" type="button" selector="#save" timeout="30"/>
+        <element name="delete" type="button" selector="#delete" timeout="30"/>
+        <element name="modalAcceptButton" type="button" selector="button.action-accept" timeout="30"/>
 
         <!-- Rule Information (the main form on the page) -->
         <element name="ruleInformationHeader" type="button" selector="div[data-index='rule_information']" timeout="30"/>

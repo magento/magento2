@@ -25,12 +25,17 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <!-- Delete the cart price rule we made during the test -->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
+                <argument name="ruleName" value="{{_defaultCoupon.code}}"/>
+            </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create a cart price rule for $10 Fixed amount discount -->
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForRulesPage"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
@@ -49,6 +54,7 @@
 
         <!-- Spot check the storefront -->
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
         <waitForPageLoad stepKey="waitForCartPage"/>
