@@ -10,46 +10,24 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAddDefaultVideoSimpleProductTest">
         <annotations>
-            <features value="ProductVideo"/>
-            <stories value="Add/remove images and videos for all product types and category"/>
-            <title value="Admin should be able to add default product video for a Simple Product"/>
-            <description value="Admin should be able to add default product video for a Simple Product"/>
-            <severity value="MAJOR"/>
-            <testCaseId value="MC-111"/>
             <group value="ProductVideo"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!-- Set product video Youtube api key configuration -->
-            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setStoreConfig"/>
+            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setStoreConfig" after="loginAsAdmin"/>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
-            <!-- Set product video default configuration -->
-            <createData entity="DefaultProductVideoConfig" stepKey="setStoreDefaultConfig"/>
+            <!-- Set product video configuration to default -->
+            <createData entity="DefaultProductVideoConfig" stepKey="setStoreDefaultConfig" before="amOnLogoutPage"/>
         </after>
 
-        <!-- Create product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
-            <argument name="product" value="ApiSimpleProduct"/>
-        </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm">
-            <argument name="product" value="ApiSimpleProduct"/>
-        </actionGroup>
         <!-- Add product video -->
-        <actionGroup ref="addProductVideo" stepKey="addProductVideo"/>
-        <!-- Save product -->
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <actionGroup ref="addProductVideo" stepKey="addProductVideo" after="fillMainProductForm"/>
 
         <!-- Assert product video in admin product form -->
-        <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertProductVideoAdminProductPage"/>
-        <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
-            <argument name="product" value="ApiSimpleProduct"/>
-        </actionGroup>
+        <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertProductVideoAdminProductPage" after="saveProductForm"/>
+
         <!-- Assert product video in storefront product page -->
-        <actionGroup ref="assertProductVideoStorefrontProductPage" stepKey="assertProductVideoStorefrontProductPage"/>
+        <actionGroup ref="assertProductVideoStorefrontProductPage" stepKey="assertProductVideoStorefrontProductPage" after="AssertProductInStorefrontProductPage"/>
     </test>
 </tests>
