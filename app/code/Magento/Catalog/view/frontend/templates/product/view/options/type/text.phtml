@@ -62,7 +62,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
         <?php endif; ?>
         <?php if ($_option->getMaxCharacters()): ?>
             <p class="note note_<?= /* @escapeNotVerified */ $_option->getId() ?>">
-                <?= __('Maximum %1 characters', $_option->getMaxCharacters()) ?>
+                <?= /* @escapeNotVerified */ __('Maximum %1 characters', $_option->getMaxCharacters()) ?>
                 <span class="character-counter no-display"></span>
             </p>
         <?php endif; ?>

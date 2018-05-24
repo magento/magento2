@@ -14,7 +14,8 @@ define([
         options: {
             remainingText: $t('remaining'),
             tooManyText: $t('too many'),
-            errorClass: 'mage-error'
+            errorClass: 'mage-error',
+            noDisplayClass: 'no-display'
         },
 
         /**
@@ -26,9 +27,8 @@ define([
             this.note = $(this.options.noteSelector);
             this.counter = $(this.options.counterSelector);
 
-            this.element.on('change keyup paste', function () {
-                this.updateCharacterCount();
-            }.bind(this));
+            this.updateCharacterCount();
+            this.element.on('change keyup paste', this.updateCharacterCount.bind(this));
         },
 
         /**
@@ -38,12 +38,9 @@ define([
             var length = this.element.val().length,
                 diff = this.options.maxLength - length;
 
-            if (!isNaN(diff)) {
-                this.counter.text(this._formatMessage(diff));
-                this.counter.toggleClass('no-display', length === 0);
-                this.note.toggleClass(this.options.errorClass, diff < 0);
-            }
-
+            this.counter.text(this._formatMessage(diff));
+            this.counter.toggleClass(this.options.noDisplayClass, length === 0);
+            this.note.toggleClass(this.options.errorClass, diff < 0);
         },
 
         /**
