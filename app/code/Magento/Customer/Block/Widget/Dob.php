@@ -128,7 +128,7 @@ class Dob extends AbstractWidget
     {
         $filter = $this->getFormFilter();
         if ($filter) {
-            $value = date('Y-m-d',strtotime($value));
+            $value = date('Y-m-d', $this->getTime());
             $value = $filter->outputFilter($value);
         }
         return $value;
