@@ -9,8 +9,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
-use \Magento\Framework\Exception\LocalizedException;
-use Magento\Catalog\Model\Indexer\Product\Price\MultiDimensionalIndexerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\Dimension\DimensionalIndexerInterface;
 
 /**
  * Class Full reindex action
@@ -141,7 +141,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             foreach ($this->getTypeIndexers() as $priceIndexer) {
                 $priceIndexer->getTableStrategy()->setUseIdxTable(false);
 
-                if ($priceIndexer instanceof MultiDimensionalIndexerInterface) {
+                if ($priceIndexer instanceof DimensionalIndexerInterface) {
                     $this->reindexProductTypeWithDimensions($priceIndexer);
                     continue;
                 }
