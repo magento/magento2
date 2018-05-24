@@ -18,4 +18,8 @@
     <entity name="BasicMsiStock2" type="stock">
         <data key="name" unique="suffix">Basic MSI Stock 2 </data>
     </entity>
+    <!-- Please don't use this entity in your tests otherwise AdminPaginationWorkedInManageStocksGridTest will fail -->
+    <entity name="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" type="stock">
+        <data key="name" unique="suffix">Special Stock </data>
+    </entity>
 </entities>
