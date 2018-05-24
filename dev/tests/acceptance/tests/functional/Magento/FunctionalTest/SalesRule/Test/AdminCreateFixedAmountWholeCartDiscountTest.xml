@@ -33,7 +33,7 @@
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
-        <!-- Create a cart price rule for $10 Fixed amount discount for whole cart -->
+        <!-- Create a cart price rule for Fixed amount discount for whole cart -->
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
         <waitForPageLoad stepKey="waitForRulesPage"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
