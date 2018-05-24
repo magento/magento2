@@ -10,13 +10,13 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminRemoveDefaultVideoVirtualProductTest" extends="AdminRemoveDefaultVideoSimpleProductTest">
         <annotations>
-            <features value="ProductVideo"/>
+            <features value="Catalog"/>
             <stories value="Add/remove images and videos for all product types and category"/>
             <title value="Admin should be able to remove default product video from a Virtual Product"/>
             <description value="Admin should be able to remove default product video from a Virtual Product"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-204"/>
-            <group value="ProductVideo"/>
+            <group value="Catalog"/>
         </annotations>
 
         <!-- Replacing steps in base AdminRemoveDefaultVideoSimpleProductTest -->
@@ -27,7 +27,7 @@
         <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
-        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPageAfterRemove">
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
     </test>
