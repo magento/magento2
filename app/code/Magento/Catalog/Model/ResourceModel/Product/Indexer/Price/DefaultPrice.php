@@ -5,10 +5,12 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
+use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Backup\BackupException;
+use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
 /**
  * Default Product Type Price Indexer Resource model
@@ -71,6 +73,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     private $baseFinalPrice;
 
     /**
+     * @var DimensionCollectionFactory
+     */
+    private $dimensionCollectionFactory;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -89,6 +96,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $connectionName = null,
         IndexTableStructureFactory $indexTableStructureFactory = null,
         BaseFinalPrice $baseFinalPrice = null,
+        DimensionCollectionFactory $dimensionCollectionFactory = null,
         array $priceModifiers = []
     ) {
         $this->_eventManager = $eventManager;
@@ -106,7 +114,9 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
 
             $this->priceModifiers[] = $priceModifier;
         }
-        $this->baseFinalPrice = $baseFinalPrice ?? ObjectManager::getInstance()->get(BackupException::class);
+        $this->baseFinalPrice = $baseFinalPrice ?? ObjectManager::getInstance()->get(BaseFinalPrice::class);
+        $this->dimensionCollectionFactory = $dimensionCollectionFactory
+            ?? ObjectManager::getInstance()->get(DimensionCollectionFactory::class);
     }
 
     /**
@@ -311,11 +321,17 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     {
         $finalPriceTable = $this->prepareFinalPriceTable();
 
-        //TODO: use DimensionProvider foreach instead hard-coded values
-        $select = $this->getSelect($entityIds, $type, 1, 1);
-        $query = $select->insertFromSelect($finalPriceTable->getTableName(), [], false);
-        $this->getConnection()->query($query);
-
+        $dimensions = $this->dimensionCollectionFactory->createWithAllDimensions();
+        foreach ($dimensions as $dimension) {
+            $select = $this->getSelect(
+                $entityIds,
+                $type,
+                $dimension[WebsiteDataProvider::DIMENSION_NAME]->getValue(),
+                $dimension[CustomerGroupDataProvider::DIMENSION_NAME]->getValue()
+            );
+            $query = $select->insertFromSelect($finalPriceTable->getTableName(), [], false);
+            $this->getConnection()->query($query);
+        }
         $this->applyDiscountPrices($finalPriceTable);
 
         return $this;

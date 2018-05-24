@@ -181,7 +181,4 @@
     <type name="Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider">
         <plugin name="taxSettingsProvider" type="Magento\Tax\Plugin\Ui\DataProvider\TaxSettings"/>
     </type>
-    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice">
-        <plugin name="add_tax_id_to_price_index_select" type="Magento\Tax\Plugin\Product\Indexer\Price\Query\AddTaxId"/>
-    </type>
 </config>

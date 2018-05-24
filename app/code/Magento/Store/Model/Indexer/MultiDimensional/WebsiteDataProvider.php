@@ -19,30 +19,28 @@ class WebsiteDataProvider implements DimensionProviderInterface
     const DIMENSION_NAME = 'ws';
 
     /**
-     * @var \SplFixedArray
-     */
-    private $websitesDataIterator;
-
-    /**
      * @var DimensionFactory
      */
     private $dimensionFactory;
 
     /**
-     * @param WebsiteCollectionFactory $collectionFactory
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param DimensionFactory $dimensionFactory
      */
-    public function __construct(WebsiteCollectionFactory $collectionFactory, DimensionFactory $dimensionFactory){
+    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager, DimensionFactory $dimensionFactory){
         $this->dimensionFactory = $dimensionFactory;
-        $this->websitesDataIterator = \SplFixedArray::fromArray(
-            $collectionFactory->create()->getAllIds()
-        );
+        $this->storeManager = $storeManager;
     }
 
     public function getIterator(): \Traversable
     {
-        foreach ($this->websitesDataIterator as $website) {
-            yield $this->dimensionFactory->create(self::DIMENSION_NAME, $website);
+        foreach ($this->storeManager->getWebsites(false) as $website) {
+            yield $this->dimensionFactory->create(self::DIMENSION_NAME, $website->getId());
         }
     }
 

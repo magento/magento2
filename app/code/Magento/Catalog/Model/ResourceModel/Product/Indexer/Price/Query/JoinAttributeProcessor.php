@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DB\Select;
 
 /**
@@ -32,6 +33,16 @@ class JoinAttributeProcessor
     private $storeManager;
 
     /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * @var string
+     */
+    private $connectionName;
+
+    /**
      * JoinProcessor constructor.
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -44,11 +55,15 @@ class JoinAttributeProcessor
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\ResourceConnection $resource,
+        $connectionName = 'indexer'
     ) {
         $this->eavConfig = $eavConfig;
         $this->metadataPool = $metadataPool;
         $this->storeManager = $storeManager;
+        $this->resource = $resource;
+        $this->connectionName = $connectionName;
     }
 
     /**
@@ -65,7 +80,7 @@ class JoinAttributeProcessor
         $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
         $attributeId = $attribute->getAttributeId();
         $attributeTable = $attribute->getBackend()->getTable();
-        $connection = $this->getConnection();
+        $connection = $this->resource->getConnection($this->connectionName);
         $joinType = $attributeValue !== null ? 'join' : 'joinLeft';
         $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 

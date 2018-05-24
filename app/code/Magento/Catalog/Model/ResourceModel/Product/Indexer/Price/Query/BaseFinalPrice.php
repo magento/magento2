@@ -31,19 +31,27 @@ class BaseFinalPrice
     private $joinAttributeProcessor;
 
     /**
+     * @var \Magento\Framework\Module\Manager
+     */
+    private $moduleManager;
+
+    /**
      * BaseFinalPrice constructor.
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param JoinAttributeProcessor $joinAttributeProcessor
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         JoinAttributeProcessor $joinAttributeProcessor,
+        \Magento\Framework\Module\Manager $moduleManager,
         $connectionName = 'indexer'
     ) {
         $this->resource = $resource;
         $this->connectionName = $connectionName;
         $this->joinAttributeProcessor = $joinAttributeProcessor;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -63,15 +71,15 @@ class BaseFinalPrice
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
         )->joinInner(
-            ['pw' => $this->getTable('catalog_product_website')],
-            sprintf('pw.product_id = e.entity_id AND pw.website_id = %s', $websiteId),
-            []
-        )->joinInner(
             ['cg' => $this->getTable('customer_group')],
             sprintf('cg.customer_group_id = %s', $customerGroupId),
             ['customer_group_id']
         )->joinInner(
-            ['cwd' => $this->getTable('catalog_product_index_website')], //website currency rates
+            ['pw' => $this->getTable('catalog_product_website')],
+            sprintf('pw.product_id = e.entity_id AND pw.website_id = %s', $websiteId),
+            ['pw.website_id']
+        )->joinInner(
+            ['cwd' => $this->getTable('catalog_product_index_website')], // website currency rates
             'pw.website_id = cwd.website_id',
             []
         )->joinLeft(
@@ -81,7 +89,14 @@ class BaseFinalPrice
             []
         );
 
-        $this->joinAttributeProcessor->process($select, 'status', Status::STATUS_ENABLED);
+        if ($this->moduleManager->isEnabled('Magento_Tax')) {
+            $taxClassId = $this->joinAttributeProcessor->process($select, $websiteId,'tax_class_id');
+        } else {
+            $taxClassId = new \Zend_Db_Expr(0);
+        }
+        $select->columns(['tax_class_id' => $taxClassId]);
+
+        $this->joinAttributeProcessor->process($select, $websiteId, 'status', Status::STATUS_ENABLED);
 
         $price = $this->joinAttributeProcessor->process($select, $websiteId, 'price');
         $specialPrice = $this->joinAttributeProcessor->process($select, $websiteId, 'special_price');
