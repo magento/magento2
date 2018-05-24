@@ -2879,7 +2879,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 : $this->stockStateProvider->verifyStock($stockItemDo);
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                 $date = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
-                $row['low_stock_date'] = $date->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                $row['low_stock_date'] = $date->format(DateTime::DATETIME_PHP_FORMAT);
             }
             $row['stock_status_changed_auto'] = (int)!$this->stockStateProvider->verifyStock($stockItemDo);
         } else {
