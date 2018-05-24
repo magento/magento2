@@ -20,7 +20,6 @@ class CustomOptionTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Api\ExtensionAttributesFactory | \PHPUnit_Framework_MockObject_MockObject */
     private $extensionAttributesFactoryMock;
 
-
     /** @var \Magento\Catalog\Api\Data\CustomOptionExtensionInterface | \PHPUnit_Framework_MockObject_MockObject */
     private $extensionMock;
 
