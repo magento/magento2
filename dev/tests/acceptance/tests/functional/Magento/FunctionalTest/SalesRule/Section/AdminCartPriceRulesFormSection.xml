@@ -24,5 +24,6 @@
         <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
         <element name="apply" type="select" selector="select[name='simple_action']"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
+        <element name="discountStep" type="input" selector="input[name='discount_step']"/>
     </section>
 </sections>
