@@ -181,9 +181,31 @@
         <see selector="{{CheckoutSuccessRegisterSection.customerEmail}}" userInput="Email Address: {{CustomerEntityOne.email}}" stepKey="seeCustomerEmail"/>
         <seeElement selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="seeVisibleCreateAccountButton"/>
         <click selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
-        <waitForElementNotVisible selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="waitInvisibleCreateAccountButton"/>
-        <dontSeeElement selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="seeInvisibleCreateAccountButton"/>
-        <see selector="{{CheckoutSuccessRegisterSection.registerMessage}}" userInput="A letter with further instructions will be sent to your email." stepKey="seeNotifyCreateAccount"/>
+        <waitForElement selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="waitAccountPage"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerCreatePage.url}}" stepKey="seeCreateAccountPage"/>
+        <see userInput="Create New Customer Account" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeCreateAccountPageTitle"/>
+
+        <!--Go to product page-->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage2"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
+
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage2">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection2">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
+        <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage2"/>
+
+        <!--Continue shopping-->
         <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
         <waitForElement selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="waitHomePage"/>
         <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
