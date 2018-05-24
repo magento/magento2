@@ -326,7 +326,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     {
         if ($this->getUseConfigMaxSaleQty()) {
             $customerGroupId = $this->getCustomerGroupId();
-            $maxSaleQty = $this->stockConfiguration->getMaxSaleQty($this->getStoreId(), $customerGroupId);
+            $maxSaleQty = $this->stockConfiguration->getMaxSaleQty($this->getStoreId());
         } else {
             $maxSaleQty = (float) $this->getData(static::MAX_SALE_QTY);
         }

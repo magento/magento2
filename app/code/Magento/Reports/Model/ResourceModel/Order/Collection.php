@@ -160,7 +160,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         if ($this->_isLive) {
             $this->_prepareSummaryLive($range, $customStart, $customEnd, $isFilter);
         } else {
-            $this->_prepareSummaryAggregated($range, $customStart, $customEnd, $isFilter);
+            $this->_prepareSummaryAggregated($range, $customStart, $customEnd);
         }
 
         return $this;

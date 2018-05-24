@@ -44,7 +44,7 @@ class Logger extends Bare
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
-        $result = parent::clean($mode, $tags, $mode);
+        $result = parent::clean($mode, $tags);
         $this->log(compact('tags', 'mode'));
         return $result;
     }

@@ -87,8 +87,7 @@ class UiComponent implements ReaderInterface
         $referenceName = $this->layoutHelper->scheduleStructure(
             $scheduledStructure,
             $currentElement,
-            $currentElement->getParent(),
-            ['attributes' => $attributes]
+            $currentElement->getParent()
         );
         $attributes = array_merge(
             $attributes,

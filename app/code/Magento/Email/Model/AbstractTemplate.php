@@ -223,7 +223,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
 
         // Ensure child templates have the same area/store context as parent
         $template->setDesignConfig($this->getDesignConfig()->toArray())
-            ->loadByConfigPath($configPath, $variables)
+            ->loadByConfigPath($configPath)
             ->setTemplateType($this->getType())
             ->setIsChildTemplate(true);
 

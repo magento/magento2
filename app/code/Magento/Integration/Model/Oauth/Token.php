@@ -200,7 +200,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     public function createCustomerToken($userId)
     {
         $this->setCustomerId($userId);
-        return $this->saveAccessToken(UserContextInterface::USER_TYPE_CUSTOMER, $userId);
+        return $this->saveAccessToken(UserContextInterface::USER_TYPE_CUSTOMER);
     }
 
     /**

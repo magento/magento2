@@ -290,7 +290,7 @@ class Tree extends Dbp
         foreach ($allIds as $id) {
             $parents = $this->getNodeById($id)->getPath();
             foreach ($parents as $parent) {
-                if (!$this->_getItemIsActive($parent->getId(), $storeId)) {
+                if (!$this->_getItemIsActive($parent->getId())) {
                     $disabledIds[] = $id;
                     continue;
                 }

@@ -117,7 +117,7 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
         foreach ($parsedExpression as $operand) {
             if ($this->_parser->isOperation($operand)) {
                 $this->_checkOperandsSet($firstOperand, $secondOperand, $tmpResult, $result);
-                $result = $this->_operate($firstOperand, $secondOperand, $operand, $tmpResult, $result);
+                $result = $this->_operate($firstOperand, $secondOperand, $operand);
                 $firstOperand = $secondOperand = null;
             } else {
                 if (null === $firstOperand) {

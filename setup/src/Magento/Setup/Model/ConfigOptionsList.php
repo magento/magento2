@@ -165,7 +165,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
     {
         $configData = [];
-        $configData[] = $this->configGenerator->createCryptConfig($data, $deploymentConfig);
+        $configData[] = $this->configGenerator->createCryptConfig($data);
         $definitionConfig = $this->configGenerator->createDefinitionsConfig($data);
         if (isset($definitionConfig)) {
             $configData[] = $definitionConfig;
