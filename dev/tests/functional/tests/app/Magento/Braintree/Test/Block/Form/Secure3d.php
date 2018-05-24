@@ -32,7 +32,7 @@ class Secure3d extends Form
 
     /**
      * 3D Secure Authorization iFrame locator.
-     * 
+     *
      * @var string
      */
     private $braintree3dSecureAuthForm = '#authWindow';
