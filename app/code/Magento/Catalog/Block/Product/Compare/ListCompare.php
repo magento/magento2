@@ -221,12 +221,9 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function hasAttributeValueForProducts($attribute)
     {
-        $index = 0;
         foreach ($this->getItems() as $item) {
-            if ($index++ != 0) {
-                if ($item->hasData($attribute->getAttributeCode())) {
-                    return true;
-                }
+            if ($item->hasData($attribute->getAttributeCode())) {
+                return true;
             }
         }
         return false;
