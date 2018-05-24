@@ -40,8 +40,7 @@ class DimensionCollectionFactory
         \Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProviderFactory $customerGroupDataProviderFactory,
         \Magento\Framework\Indexer\DimensionCollectionFactory $generalDimensionCollectionFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $configReader
-    )
-    {
+    ) {
         $this->websiteDataProviderFactory = $websiteDataProviderFactory;
         $this->customerGroupDataProviderFactory = $customerGroupDataProviderFactory;
         $this->generalDimensionCollectionFactory = $generalDimensionCollectionFactory;
@@ -51,11 +50,22 @@ class DimensionCollectionFactory
     /**
      * @return Dimension[]
      */
-    public function create()
+    public function createByCurrentMode()
+    {
+        $dbMode = $this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE);
+
+        return $this->generalDimensionCollectionFactory->create(
+            [
+                'dimensionDataProviders' => $this->getDataProviders($dbMode)
+            ]
+        );
+    }
+
+    public function createByMode(string $mode)
     {
         return $this->generalDimensionCollectionFactory->create(
             [
-                'dimensionDataProviders' => $this->getDataProviders()
+                'dimensionDataProviders' => $this->getDataProviders($mode)
             ]
         );
     }
@@ -63,22 +73,20 @@ class DimensionCollectionFactory
     /**
      * @return Dimension[]
      */
-    public function createWithAllDimensions()
+    public function createByAllDimensions()
     {
         return $this->generalDimensionCollectionFactory->create(
             [
-                'dimensionDataProviders' => [
-                    $this->websiteDataProviderFactory->create(),
-                    $this->customerGroupDataProviderFactory->create()
-                ]
+                'dimensionDataProviders' => $this->getDataProviders(
+                    ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP
+                )
             ]
         );
     }
 
-    private function getDataProviders()
+    private function getDataProviders($dimensionsMode)
     {
         $providers = [];
-        $dimensionsMode = $this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE);
 
         switch ($dimensionsMode) {
             case null:

@@ -120,8 +120,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer::class
         );
 
-        $this->allDimensionCollection = $dimensionCollectionFactory->createWithAllDimensions();
-        $this->modeDimensionCollection = $dimensionCollectionFactory->create();
+        $this->allDimensionCollection = $dimensionCollectionFactory->createByAllDimensions();
+        $this->modeDimensionCollection = $dimensionCollectionFactory->createByCurrentMode();
     }
 
     /**
