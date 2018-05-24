@@ -501,8 +501,9 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
     {
         $classPathParts = explode('\\', $class);
         $classPartialPath = '';
-        for ($i = count($classPathParts) - 1; $i >= 0; $i--) {
-            if ($i === (count($classPathParts) - 1)) {
+        $classPathPartsCount = count($classPathParts);
+        for ($i = $classPathPartsCount - 1; $i >= 0; $i--) {
+            if ($i === ($classPathPartsCount - 1)) {
                 $classPartialPath = $classPathParts[$i] . $classPartialPath;
             } else {
                 $classPartialPath = $classPathParts[$i] . '\\' . $classPartialPath;
