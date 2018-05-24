@@ -8,15 +8,16 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminAddRemoveProductImageSimpleProductTest">
+    <test name="AdminRemoveDefaultImageSimpleProductTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Simple Product Add/Remove Images"/>
-            <title value="Admin should be able to add/remove images for a Simple Product"/>
-            <description value="Admin should be able to add/remove images for a Simple Product"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to remove default images from a Simple Product"/>
+            <description value="Admin should be able to remove default images from a Simple Product"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-113"/>
+            <testCaseId value="MC-195"/>
             <group value="Catalog"/>
+            <group value="ji"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -40,29 +41,10 @@
         <actionGroup ref="addProductImage" stepKey="addImageForProductSimple">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
+
         <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
 
-        <!-- Assert product image in admin product form -->
-        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertProductImageAdminProductPage"/>
-
-        <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
-            <argument name="product" value="SimpleProduct3"/>
-        </actionGroup>
-
-        <!-- Assert product image in storefront product page -->
-        <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertProductImageStorefrontProductPage">
-            <argument name="product" value="SimpleProduct3"/>
-            <argument name="image" value="MagentoLogo"/>
-        </actionGroup>
-
         <!-- Remove image from product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageRemove"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad2"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
-            <argument name="product" value="SimpleProduct3"/>
-        </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid"/>
         <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
 
         <!-- Skip success message check when saving product because of bug MAGETWO-91177 -->
