@@ -764,7 +764,6 @@ define([
          * Change page to next
          */
         nextPage: function () {
-            this.clear();
             this.currentPage(this.currentPage() + 1);
         },
 
@@ -772,7 +771,6 @@ define([
          * Change page to previous
          */
         previousPage: function () {
-            this.clear();
             this.currentPage(this.currentPage() - 1);
         },
 
