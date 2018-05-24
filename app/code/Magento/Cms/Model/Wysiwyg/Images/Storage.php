@@ -739,7 +739,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     protected function _sanitizePath($path)
     {
-        return rtrim(preg_replace('~[/\\\]+~', '/', $this->_directory->getDriver()->getRealPath($path)), '/');
+        return rtrim(preg_replace('~[/\\\]+~', '/', $this->_directory->getDriver()->getRealPathSafety($path)), '/');
     }
 
     /**
