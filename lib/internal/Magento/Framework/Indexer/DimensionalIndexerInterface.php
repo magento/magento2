@@ -9,7 +9,7 @@ namespace Magento\Framework\Indexer\Dimension;
 
 /**
  * @api
- * Run indexer by specific dimension
+ * Run indexer by dimensions
  */
 interface DimensionalIndexerInterface
 {
@@ -17,9 +17,9 @@ interface DimensionalIndexerInterface
      * Execute indexer by specified dimension.
      * Accept array of dimensions DTO that represent indexer dimension
      *
-     * @param \Magento\Framework\Indexer\Dimension[] $dimension
+     * @param \Magento\Framework\Indexer\Dimension[] $dimensions
      * @param array|null $entityIds
      * @return void
      */
-    public function executeByDimension(array $dimension, array $entityIds = null);
+    public function reindexByDimensions(array $dimensions, array $entityIds = null);
 }
