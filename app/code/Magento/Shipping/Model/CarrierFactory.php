@@ -83,16 +83,13 @@ class CarrierFactory implements CarrierFactoryInterface
      * Get carrier by its code if it is active
      *
      * @param string $carrierCode
+     * @param int $storeId
+     * @param bool $isReturn
      * @return bool|Carrier\AbstractCarrier
      */
-    public function getIfActive($carrierCode)
+    public function getIfActive(string $carrierCode, int $storeId, bool $isReturn)
     {
-        return $this->_scopeConfig->isSetFlag(
-            'carriers/' . $carrierCode . '/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) ? $this->get(
-            $carrierCode
-        ) : false;
+        return $this->isFlagSet($carrierCode, $storeId, $isReturn) ? $this->get($carrierCode) : false;
     }
 
     /**
@@ -100,17 +97,29 @@ class CarrierFactory implements CarrierFactoryInterface
      *
      * @param string $carrierCode
      * @param null|int $storeId
+     * @param bool $isReturn
      * @return bool|Carrier\AbstractCarrier
      */
-    public function createIfActive($carrierCode, $storeId = null)
+    public function createIfActive(string $carrierCode, int $storeId, bool $isReturn)
+    {
+        return $this->isFlagSet($carrierCode, $storeId, $isReturn) ? $this->create($carrierCode, $storeId) : false;
+    }
+
+    private function isFlagSet(string $carrierCode, int $storeId, bool $isReturn): bool
     {
         return $this->_scopeConfig->isSetFlag(
-            'carriers/' . $carrierCode . '/active',
+            $this->getActiveFlagPath($carrierCode, $isReturn),
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
-        ) ? $this->create(
-            $carrierCode,
-            $storeId
-        ) : false;
+        );
+    }
+
+    private function getActiveFlagPath(string $carrierCode, bool $isReturn): string
+    {
+        if ($isReturn) {
+            return 'carriers/' . $carrierCode . '/active_rma';
+        }
+
+        return 'carriers/' . $carrierCode . '/active';
     }
 }

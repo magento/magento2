@@ -38,15 +38,15 @@ interface CarrierFactoryInterface
      * @return bool|AbstractCarrierInterface
      * @api
      */
-    public function getIfActive($carrierCode);
+    public function getIfActive(string $carrierCode, int $storeId, bool $isReturn);
 
     /**
      * Create carrier by its code if it is active
      *
      * @param string $carrierCode
-     * @param null|int $storeId
+     * @param int $storeId
      * @return bool|AbstractCarrierInterface
      * @api
      */
-    public function createIfActive($carrierCode, $storeId = null);
+    public function createIfActive(string $carrierCode, int $storeId, bool $isReturn);
 }
