@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Indexer;
 
-class DimensionCollection implements \Iterator
+class DimensionCollection implements \Iterator, \Countable
 {
     /**
      * @var array
@@ -81,6 +81,17 @@ class DimensionCollection implements \Iterator
         foreach ($this->dimensionsDataProviders as $dimensionsDataProvider) {
             $this->dimensionsIterators[] = $dimensionsDataProvider->getIterator();
         }
+    }
+
+    public function count()
+    {
+        $counts = [];
+
+        foreach ($this->dimensionsDataProviders as $dimensionsDataProvider) {
+            $counts[] = count($dimensionsDataProvider);
+        }
+
+        return array_product($counts);
     }
 
     private function addDimensionDataProvider(DimensionProviderInterface $dimensionDataProvider)

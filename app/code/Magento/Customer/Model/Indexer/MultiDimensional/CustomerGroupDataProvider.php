@@ -41,4 +41,9 @@ class CustomerGroupDataProvider implements DimensionProviderInterface
             yield $this->dimensionFactory->create(self::DIMENSION_NAME, $customerGroup);
         }
     }
+
+    public function count(): int
+    {
+        return $this->customerGroupsDataIterator->count();
+    }
 }

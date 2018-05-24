@@ -45,4 +45,9 @@ class WebsiteDataProvider implements DimensionProviderInterface
             yield $this->dimensionFactory->create(self::DIMENSION_NAME, $website);
         }
     }
+
+    public function count(): int
+    {
+        return $this->websitesDataIterator->count();
+    }
 }
