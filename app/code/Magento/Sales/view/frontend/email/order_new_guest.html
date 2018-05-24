@@ -22,7 +22,7 @@
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%name," name=$order.getBillingAddress().getName()}}</p>
+            <p class="greeting">{{trans "%customer_name," customer_name=$order.getBillingAddress().getName()}}</p>
             <p>
                 {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
                 {{trans "Once your package ships we will send an email with a link to track your order."}}
