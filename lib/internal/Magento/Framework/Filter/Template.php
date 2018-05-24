@@ -313,7 +313,8 @@ class Template implements \Zend_Filter_Interface
         $stackVars = $tokenizer->tokenize();
         $result = $default;
         $last = 0;
-        for ($i = 0; $i < count($stackVars); $i++) {
+        $stackVarsCount = count($stackVars);
+        for ($i = 0; $i < $stackVarsCount; $i++) {
             if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
                 // Getting of template value
                 $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
