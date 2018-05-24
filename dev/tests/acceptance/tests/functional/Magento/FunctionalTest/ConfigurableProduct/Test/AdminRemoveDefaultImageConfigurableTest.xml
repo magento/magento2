@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminAddRemoveProductImageConfigurableTest">
+    <test name="AdminRemoveDefaultImageConfigurableTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="Configurable Product Add/Remove Images"/>
-            <title value="Admin should be able to add/remove images for a Configurable Product"/>
-            <description value="Admin should be able to add/remove images for a Configurable Product"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to remove default images from a Configurable Product"/>
+            <description value="Admin should be able to remove default images from a Configurable Product"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-101"/>
+            <testCaseId value="MC-196"/>
             <group value="ConfigurableProduct"/>
         </annotations>
 
@@ -103,29 +103,10 @@
         <actionGroup ref="addProductImage" stepKey="addImageForProduct">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
+
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
 
-        <!-- Assert product image in admin product form -->
-        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertProductImageAdminProductPage"/>
-
-        <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="AssertProductInStorefrontProductPage">
-            <argument name="product" value="$$baseConfigProductHandle$$"/>
-        </actionGroup>
-
-        <!-- Assert product image in storefront product page -->
-        <actionGroup ref="assertProductImageStorefrontProductPage2" stepKey="assertProductImageStorefrontProductPage">
-            <argument name="product" value="$$baseConfigProductHandle$$"/>
-            <argument name="image" value="MagentoLogo"/>
-        </actionGroup>
-
         <!-- Remove image from product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageRemove"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad2"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
-            <argument name="product" value="$$baseConfigProductHandle$$"/>
-        </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid2"/>
         <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
 
         <!-- Skip success message check when saving product because of bug MAGETWO-91177 -->

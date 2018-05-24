@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminAddRemoveProductImageBundleProductTest">
+    <test name="AdminAddDefaultImageBundleProductTest">
         <annotations>
             <features value="Bundle"/>
-            <stories value="Bundle Product Add/Remove Images"/>
-            <title value="Admin should be able to add/remove images for a Bundle Product"/>
-            <description value="Admin should be able to add/remove images for a Bundle Product"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add default images for a Bundle Product"/>
+            <description value="Admin should be able to add default images for a Bundle Product"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-115"/>
             <group value="Bundle"/>
@@ -81,31 +81,6 @@
         <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertProductImageStorefrontProductPage">
             <argument name="product" value="BundleProduct"/>
             <argument name="image" value="MagentoLogo"/>
-        </actionGroup>
-
-        <!-- Remove image from product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageRemove"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad2"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
-            <argument name="product" value="BundleProduct"/>
-        </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid"/>
-        <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
-
-        <!-- Skip success message check when saving product because of bug MAGETWO-91177 -->
-        <!-- actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductFormAfterRemove"/>
-
-        <!-- Assert product image not in admin product form -->
-        <actionGroup ref="assertProductImageNotInAdminProductPage" stepKey="assertProductImageNotInAdminProductPage"/>
-
-        <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPageAfterRemove">
-            <argument name="product" value="BundleProduct"/>
-        </actionGroup>
-        <!-- Assert product image not in storefront product page -->
-        <actionGroup ref="assertProductImageNotInStorefrontProductPage" stepKey="assertProductImageNotInStorefrontProductPage">
-            <argument name="product" value="BundleProduct"/>
         </actionGroup>
     </test>
 </tests>
