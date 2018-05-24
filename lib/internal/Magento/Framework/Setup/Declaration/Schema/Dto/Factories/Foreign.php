@@ -7,6 +7,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Dto\Factories;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\Declaration\Schema\TableNameResolver;
 
 /**
  * Foreign key constraint factory.
@@ -34,20 +35,28 @@ class Foreign implements FactoryInterface
     private $resourceConnection;
 
     /**
+     * @var TableNameResolver
+     */
+    private $tableNameResolver;
+
+    /**
      * Constructor.
      *
      * @param ObjectManagerInterface $objectManager
      * @param ResourceConnection $resourceConnection
+     * @param TableNameResolver $tableNameResolver
      * @param string $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ResourceConnection $resourceConnection,
+        TableNameResolver $tableNameResolver,
         $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference::class
     ) {
         $this->objectManager = $objectManager;
         $this->resourceConnection = $resourceConnection;
         $this->className = $className;
+        $this->tableNameResolver = $tableNameResolver;
     }
 
     /**
@@ -65,7 +74,9 @@ class Foreign implements FactoryInterface
             $nameWithoutPrefix = $this->resourceConnection
                 ->getConnection($data['table']->getResource())
                 ->getForeignKeyName(
-                    $data['table']->getNameWithoutPrefix(),
+                    $this->tableNameResolver->getNameOfOriginTable(
+                        $data['table']->getNameWithoutPrefix()
+                    ),
                     $data['column']->getName(),
                     $data['referenceTable']->getNameWithoutPrefix(),
                     $data['referenceColumn']->getName()

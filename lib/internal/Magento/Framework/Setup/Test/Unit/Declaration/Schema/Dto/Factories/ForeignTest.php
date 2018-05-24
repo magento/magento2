@@ -14,6 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Foreign;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
+use Magento\Framework\Setup\Declaration\Schema\TableNameResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -42,6 +43,11 @@ class ForeignTest extends \PHPUnit\Framework\TestCase
     private $adapterMock;
 
     /**
+     * @var TableNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $tableNameResolver;
+
+    /**
      * @var Foreign
      */
     private $foreignFactory;
@@ -58,12 +64,16 @@ class ForeignTest extends \PHPUnit\Framework\TestCase
         $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->tableNameResolver = $this->getMockBuilder(TableNameResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->foreignFactory = $this->objectManagerHelper->getObject(
             Foreign::class,
             [
                 'objectManager' => $this->objectManagerMock,
                 'resourceConnection' => $this->resourceConnectionMock,
+                'tableNameResolver' => $this->tableNameResolver,
             ]
         );
     }
@@ -141,6 +151,11 @@ class ForeignTest extends \PHPUnit\Framework\TestCase
             ->method('getConnection')
             ->with($resource)
             ->willReturn($this->adapterMock);
+
+        $this->tableNameResolver
+            ->method('getNameOfOriginTable')
+            ->with($tableNameWithoutPrefix)
+            ->willReturn($tableNameWithoutPrefix);
 
         $this->adapterMock
             ->method('getForeignKeyName')

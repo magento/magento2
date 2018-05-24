@@ -7,6 +7,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Declaration;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Setup\Declaration\Schema\TableNameResolver;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Setup\Exception;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
@@ -68,6 +69,11 @@ class SchemaBuilder
     private $resourceConnection;
 
     /**
+     * @var TableNameResolver
+     */
+    private $tableNameResolver;
+
+    /**
      * SchemaBuilder constructor.
      *
      * @param    ElementFactory $elementFactory
@@ -75,6 +81,7 @@ class SchemaBuilder
      * @param    Sharding $sharding
      * @param    ValidationComposite $validationComposite
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     * @param TableNameResolver $tableNameResolver
      * @internal param array $tablesData
      */
     public function __construct(
@@ -82,13 +89,15 @@ class SchemaBuilder
         BooleanUtils $booleanUtils,
         Sharding $sharding,
         ValidationComposite $validationComposite,
-        \Magento\Framework\App\ResourceConnection $resourceConnection
+        \Magento\Framework\App\ResourceConnection $resourceConnection,
+        TableNameResolver $tableNameResolver
     ) {
         $this->sharding = $sharding;
         $this->elementFactory = $elementFactory;
         $this->booleanUtils = $booleanUtils;
         $this->validationComposite = $validationComposite;
         $this->resourceConnection = $resourceConnection;
+        $this->tableNameResolver = $tableNameResolver;
     }
 
     /**
@@ -295,16 +304,7 @@ class SchemaBuilder
             return $name;
         }
 
-        /**
-         * Replica tables should be identical to the original -
-         * indexes and constraints must use the original table name to calculate their own names.
-         */
-        $tableName = $table->getName();
-        $tableIsReplica = preg_match('#(?<table_name>\S+)_replica$#i', $table->getName(), $matches);
-
-        if ($tableIsReplica) {
-            $tableName = $matches['table_name'];
-        }
+        $tableName = $this->tableNameResolver->getNameOfOriginTable($table->getName());
 
         return $this->resourceConnection
             ->getIdxName(
@@ -340,7 +340,7 @@ class SchemaBuilder
              * @see MAGETWO-91365
              */
             $indexType = AdapterInterface::INDEX_TYPE_INDEX;
-            if (isset($indexData['index_type']) && $indexData['indexType'] === AdapterInterface::INDEX_TYPE_FULLTEXT) {
+            if (isset($indexData['indexType']) && $indexData['indexType'] === AdapterInterface::INDEX_TYPE_FULLTEXT) {
                 $indexType = $indexData['indexType'];
             }
 
@@ -413,7 +413,7 @@ class SchemaBuilder
                  */
                 $constraintData['name'] = $this->resourceConnection
                     ->getFkName(
-                        $table->getName(),
+                        $this->tableNameResolver->getNameOfOriginTable($table->getName()),
                         $constraintData['column']->getName(),
                         $constraintData['referenceTable']->getName(),
                         $constraintData['referenceColumn']->getName()
