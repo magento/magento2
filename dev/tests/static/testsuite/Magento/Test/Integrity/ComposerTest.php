@@ -171,7 +171,9 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         switch ($packageType) {
             case 'magento2-module':
                 $xml = simplexml_load_file("$dir/etc/module.xml");
-                $this->assertConsistentModuleName($xml, $json->name);
+                if ($this->isVendorMagento($json->name)) {
+                    $this->assertConsistentModuleName($xml, $json->name);
+                }
                 $this->assertDependsOnPhp($json->require);
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
