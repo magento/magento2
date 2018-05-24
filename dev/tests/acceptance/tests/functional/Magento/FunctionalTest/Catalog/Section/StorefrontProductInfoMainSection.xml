@@ -12,6 +12,7 @@
         <element name="stock" type="input" selector=".stock.available"/>
         <element name="productName" type="text" selector=".base"/>
         <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
+        <element name="productPriceLabel" type="text" selector=".price-label"/>
         <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
         <element name="specialPrice" type="text" selector=".special-price"/>
         <element name="oldPrice" type="text" selector=".old-price"/>
