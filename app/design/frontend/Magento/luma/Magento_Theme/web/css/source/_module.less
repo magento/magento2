@@ -62,17 +62,16 @@
 //  Common
 //  _____________________________________________
 
+.page-wrapper {
+    .ie9 & {
+        .lib-css(background-color, @page__background-color);
+        min-height: 0;
+    }
+}
+
 & when (@media-common = true) {
     body {
         .lib-css(background-color, @page__background-color);
-    }
-
-    //  ToDo UI: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
-    .page-wrapper {
-        .ie9 & {
-            .lib-css(background-color, @page__background-color);
-            min-height: 0;
-        }
     }
 
     //
