@@ -343,10 +343,6 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
             ->method('validateRow')
             ->will($this->returnValue($validationReturn));
 
-        $customerEntity->expects($this->any())
-            ->method('getErrorMessages')
-            ->will($this->returnValue([]));
-
         $addressEntity
             ->expects($this->exactly($calls['addressValidationCalls']))
             ->method('validateRow')
@@ -361,8 +357,6 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         $customerEntity->expects($this->any())
             ->method('getCustomerStorage')
             ->will($this->returnValue($customerStorage));
-
-        $addressEntity->expects($this->any())->method('getErrorMessages')->will($this->returnValue([]));
 
         $data = $this->_getModelDependencies();
         $data['customer_entity'] = $customerEntity;
