@@ -40,7 +40,11 @@
             </parameter>
             <parameter name="cache_lifetime" xsi:type="text" visible="true">
                 <label translate="true">Cache Lifetime (Seconds)</label>
-                <description translate="true">86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache.</description>
+                <description translate="true">
+                    <![CDATA[Time in seconds between the widget updates.
+                    <br/>If not set, equals to 86400 seconds (24 hours). To update widget instantly, go to Cache Management and clear Blocks HTML Output cache.
+                    <br/>Widget will not show products that begin to match the specified conditions until cache is refreshed.]]>
+                </description>
             </parameter>
             <parameter name="condition" xsi:type="conditions" visible="true" required="true" sort_order="10"
                        class="Magento\CatalogWidget\Block\Product\Widget\Conditions">
