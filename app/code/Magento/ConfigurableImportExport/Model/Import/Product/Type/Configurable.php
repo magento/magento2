@@ -258,9 +258,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         if (isset($this->_productSuperAttrs["{$productId}_{$attributeId}"])) {
             return $this->_productSuperAttrs["{$productId}_{$attributeId}"];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
