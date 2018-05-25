@@ -2535,13 +2535,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getExtensionAttributes()
     {
-        $extensionAttributes = $this->_getExtensionAttributes();
-        if (null === $extensionAttributes) {
-            /** @var \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes */
-            $extensionAttributes = $this->extensionAttributesFactory->create(ProductInterface::class);
-            $this->setExtensionAttributes($extensionAttributes);
-        }
-        return $extensionAttributes;
+        return $this->_getExtensionAttributes();
     }
 
     /**

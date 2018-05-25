@@ -1337,7 +1337,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedResult = [
             [
                 'value_id' => 5,
-                'value_id' => 5,
                 "label" => "new_label_text",
                 'file' => 'filename1',
                 'position' => 10,
