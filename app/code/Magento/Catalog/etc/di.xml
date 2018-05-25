@@ -1087,7 +1087,7 @@
                 <item name="mode-4" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP</item>
             </argument>
             <argument name="modesConfiguration" xsi:type="array">
-                <item name="mode-1" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\DimensionProvider::EMPTY_CONFIGURATION</item>
+                <item name="mode-1" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory::EMPTY_CONFIGURATION</item>
                 <item name="mode-2" xsi:type="array">
                     <item name="websites" xsi:type="string">websites</item>
                 </item>
