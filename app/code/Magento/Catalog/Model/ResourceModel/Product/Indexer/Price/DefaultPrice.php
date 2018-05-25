@@ -5,12 +5,13 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
-use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
 use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
 
 /**
  * Default Product Type Price Indexer Resource model
@@ -96,7 +97,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $connectionName = null,
         IndexTableStructureFactory $indexTableStructureFactory = null,
         BaseFinalPrice $baseFinalPrice = null,
-        DimensionCollectionFactory $dimensionCollectionFactory = null,
+        DimensionProviderFactory $dimensionCollectionFactory = null,
         array $priceModifiers = []
     ) {
         $this->_eventManager = $eventManager;
@@ -116,7 +117,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         }
         $this->baseFinalPrice = $baseFinalPrice ?? ObjectManager::getInstance()->get(BaseFinalPrice::class);
         $this->dimensionCollectionFactory = $dimensionCollectionFactory
-            ?? ObjectManager::getInstance()->get(DimensionCollectionFactory::class);
+            ?? ObjectManager::getInstance()->get(DimensionProviderFactory::class);
     }
 
     /**
@@ -321,8 +322,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     {
         $finalPriceTable = $this->prepareFinalPriceTable();
 
-        $dimensions = $this->dimensionCollectionFactory->createByAllDimensions();
-        foreach ($dimensions as $dimension) {
+        $dimensions = $this->dimensionCollectionFactory->createByMode(
+            ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP
+        )
+        ;
+        foreach ($dimensions->getIterator() as $dimension) {
             $select = $this->getSelect(
                 $entityIds,
                 $type,

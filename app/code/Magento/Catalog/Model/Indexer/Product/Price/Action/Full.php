@@ -162,12 +162,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
         // Prepare replica table for indexation.
         $this->_defaultIndexerResource->getConnection()->truncateTable($this->getReplicaTable());
-
-        // Prepare tables for dimensions.
-        foreach ($this->modeDimensionCollection as $dimension) {
-            $this->dimensionTableMaintainer->createTablesForDimensions($dimension);
-            $this->_emptyTable($this->dimensionTableMaintainer->getMainReplicaTable($dimension));
-        }
     }
 
     private function switchTables()
@@ -179,15 +173,15 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         );
 
         // Switch dimension tables
-        $dimensionTables = [];
+//        $dimensionTables = [];
 
-        foreach ($this->modeDimensionCollection as $dimension) {
-            $dimensionTables[] = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
-        }
+//        foreach ($this->modeDimensionCollection as $dimension) {
+//            $dimensionTables[] = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
+//        }
 
-        if (count($dimensionTables) > 0) {
-            $this->activeTableSwitcher->switchTable($this->_defaultIndexerResource->getConnection(), $dimensionTables);
-        }
+//        if (count($dimensionTables) > 0) {
+//            $this->activeTableSwitcher->switchTable($this->_defaultIndexerResource->getConnection(), $dimensionTables);
+//        }
     }
 
     private function reindexProductType(PriceInterface $priceIndexer)

@@ -92,7 +92,7 @@ class ModeSwitcher
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
         \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory
+        \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionCollectionFactory
     ) {
         $this->configReader = $configReader;
         $this->configWriter = $configWriter;
@@ -181,7 +181,7 @@ class ModeSwitcher
             return $this->dimensionsArray[$mode];
         }
 
-        $this->dimensionsArray[$mode] = $this->dimensionCollectionFactory->createByMode($mode);
+        $this->dimensionsArray[$mode] = $this->dimensionCollectionFactory->createByMode($mode)->getIterator();
 
         //Array structure for 'none' mode
         if (count($this->dimensionsArray[$mode]) === 0) {
