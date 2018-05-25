@@ -31,7 +31,7 @@
             <?php foreach ($block->getGroups() as $_group): ?>
             <?php if (!($_group->getId() == $block->getCurrentGroupId())): ?>
                 <li class="switcher-option">
-                    <a href="<?= $block->getStoreUrl($_group) ?>">
+                    <a href="<?= $block->escapeUrl($block->getStoreUrl($_group)) ?>">
                         <?= $block->escapeHtml($_group->getName()) ?>
                     </a>
                 </li>
