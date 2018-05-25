@@ -4,10 +4,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Wonderland\Model\Data;
+declare(strict_types=1);
+
+namespace Magento\TestModuleExtensionAttributes\Model\Data;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
-use Magento\Wonderland\Api\Data\FakeExtensibleTwoInterface;
+use Magento\TestModuleExtensionAttributes\Api\Data\FakeExtensibleTwoInterface;
 
 class FakeExtensibleTwo extends AbstractExtensibleObject implements FakeExtensibleTwoInterface
 {
