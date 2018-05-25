@@ -169,7 +169,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * @param array $arguments
      * @return array
      */
-    public function updatePathParams(array $arguments): array
+    public function updatePathParams(array $arguments)
     {
         return $arguments;
     }
