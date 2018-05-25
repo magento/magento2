@@ -49,6 +49,9 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      */
     private $serializer;
 
+
+    protected $_listConfigurable;
+
     /**
      * NewWidget constructor.
      *
@@ -64,6 +67,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Framework\App\Http\Context $httpContext,
+        \Magento\Swatches\Block\Product\Renderer\Listing\Configurable $listconfigurable,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
@@ -74,6 +78,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             $httpContext,
             $data
         );
+        $this->_listConfigurable = $listconfigurable;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
@@ -280,5 +285,23 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             );
         }
         return $price;
+    }
+
+    public function getProductDetailHtml(\Magento\Catalog\Model\Product $product)
+    {
+        $renderer =  $this->_listConfigurable;
+
+       if ($renderer) {
+          $renderer->setProduct($product);
+            return $renderer->setTemplate('product/listing/renderer.phtml')->toHtml();
+        }
+        return '';
+    }
+    public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
+    {
+        $url = $this->getAddToCartUrl($product);
+        return [
+            'action' => $url
+        ];
     }
 }
