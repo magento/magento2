@@ -991,4 +991,7 @@
             </argument>
         </arguments>
     </type>
+    <preference
+            for="Magento\Sales\Api\OrderCustomerDelegateInterface"
+            type="Magento\Sales\Model\Order\OrderCustomerDelegate" />
 </config>
