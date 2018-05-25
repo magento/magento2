@@ -12,7 +12,6 @@
         <element name="checkIfContentTabOpen" type="button" selector="//span[text()='Content']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
         <element name="CheckIfTabExpand" type="button" selector="//div[@data-state-collapsible='closed']//span[text()='Content']"/>
         <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by" />
-        <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
         <element name="InsertWidgetIcon" type="button" selector="div[aria-label='Insert Widget']"/>
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
