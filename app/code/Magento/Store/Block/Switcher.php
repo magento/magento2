@@ -234,4 +234,15 @@ class Switcher extends \Magento\Framework\View\Element\Template
             $data
         );
     }
+
+    /**
+     * Returns target store url
+     *
+     * @param Store $store
+     * @return string
+     */
+    public function getStoreUrl(Store $store)
+    {
+        return $store->getCurrentUrl(true);
+    }
 }
