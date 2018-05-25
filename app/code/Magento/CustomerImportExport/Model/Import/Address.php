@@ -170,7 +170,7 @@ class Address extends AbstractCustomer
 
     /**
      * @deprecated
-    */
+     */
     protected $_addressCollection;
 
     /**
