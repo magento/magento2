@@ -206,6 +206,8 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
                             'message' => $message,
                             'store' => $this->storeManager->getStore(),
                         ]
+                    )->setScopeId(
+                        $this->storeManager->getStore()->getStoreId()
                     )->setFrom(
                         $this->scopeConfig->getValue(
                             'wishlist/email/email_identity',
