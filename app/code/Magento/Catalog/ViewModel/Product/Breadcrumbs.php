@@ -8,6 +8,7 @@ namespace Magento\Catalog\ViewModel\Product;
 use Magento\Catalog\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
@@ -28,17 +29,25 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     private $scopeConfig;
 
     /**
+     * @var Json
+     */
+    private $json;
+
+    /**
      * @param Data $catalogData
      * @param ScopeConfigInterface $scopeConfig
+     * @param Json $json
      */
     public function __construct(
         Data $catalogData,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        Json $json
     ) {
         parent::__construct();
 
         $this->catalogData = $catalogData;
         $this->scopeConfig = $scopeConfig;
+        $this->json = $json;
     }
 
     /**
@@ -77,5 +86,21 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
         return $this->catalogData->getProduct() !== null
             ? $this->catalogData->getProduct()->getName()
             : '';
+    }
+
+    /**
+     * Returns breadcrumb json.
+     *
+     * @return string
+     */
+    public function getJsonConfiguration()
+    {
+        return $this->json->serialize([
+            'breadcrumbs' => [
+                'categoryUrlSuffix' => $this->getCategoryUrlSuffix(),
+                'userCategoryPathInUrl' => (int)$this->isCategoryUsedInProductUrl(),
+                'product' => $this->getProductName()
+            ]
+        ]);
     }
 }
