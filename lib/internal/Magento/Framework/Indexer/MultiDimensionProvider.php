@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Indexer;
 
-class DimensionProvider implements DimensionProviderInterface
+class MultiDimensionProvider implements MultiDimensionProviderInterface
 {
     /**
      * @var array
@@ -29,10 +29,10 @@ class DimensionProvider implements DimensionProviderInterface
     private $dimensionsCount;
 
     /**
-     * @param array $dimensionDataProviders
+     * @param DimensionProviderInterface[] $dimensionProviders
      */
-    public function __construct(array $dimensionDataProviders = []) {
-        foreach ($dimensionDataProviders as $dimensionDataProvider) {
+    public function __construct(array $dimensionProviders = []) {
+        foreach ($dimensionProviders as $dimensionDataProvider) {
             $this->addDimensionDataProvider($dimensionDataProvider);
         }
     }
@@ -46,7 +46,9 @@ class DimensionProvider implements DimensionProviderInterface
             yield $this->getCurrentDimension();
             $this->setNextDimension();
         }
-
+        if (!$dimensionsCount) {
+            yield [[]];
+        }
     }
 
     public function count(): int
@@ -71,10 +73,6 @@ class DimensionProvider implements DimensionProviderInterface
         foreach ($this->dimensionsIterators as $dimensionIterator) {
             /** @var Dimension $dimension */
             $dimension = $dimensionIterator->current();
-
-            if (is_array($dimension)) {
-                $dimension = reset($dimension);
-            }
 
             $dimensions[$dimension->getName()] = $dimension;
         }
@@ -103,6 +101,7 @@ class DimensionProvider implements DimensionProviderInterface
 
     private function initDataIterators()
     {
+        $this->dimensionsIterators = [];
         foreach ($this->dimensionsDataProviders as $dimensionDataProvider) {
             $this->dimensionsIterators[] = $dimensionDataProvider->getIterator();
         }

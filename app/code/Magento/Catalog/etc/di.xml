@@ -1076,9 +1076,9 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory">
         <arguments>
-            <argument name="dataProviders" xsi:type="array">
-                <item name="websites" xsi:type="object">Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProviderFactory</item>
-                <item name="customer_groups" xsi:type="object">Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProviderFactory</item>
+            <argument name="dimensionProviders" xsi:type="array">
+                <item name="websites" xsi:type="object">Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider</item>
+                <item name="customer_groups" xsi:type="object">Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider</item>
             </argument>
             <argument name="modes" xsi:type="array">
                 <item name="mode-1" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_NONE</item>

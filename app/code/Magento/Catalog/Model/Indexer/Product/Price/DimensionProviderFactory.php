@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
-use Magento\Framework\Indexer\DimensionProviderInterface;
+use Magento\Framework\Indexer\MultiDimensionProviderInterface;
 
 class DimensionProviderFactory
 {
@@ -15,14 +15,14 @@ class DimensionProviderFactory
     const EMPTY_CONFIGURATION = '-';
 
     /**
-     * @var \Magento\Framework\Indexer\DimensionCollectionFactory
+     * @var \Magento\Framework\Indexer\MultiDimensionProviderFactory
      */
-    private $dimensionProviderFactory;
+    private $multiDimensionProviderFactory;
 
     /**
      * @var array
      */
-    private $dataProviders;
+    private $dimensionProviders;
 
     /**
      * @var array
@@ -35,18 +35,24 @@ class DimensionProviderFactory
     private $modesConfiguration;
 
     public function __construct(
-        \Magento\Framework\Indexer\DimensionProviderFactory $dimensionProviderFactory,
-        array $dataProviders,
+        \Magento\Framework\Indexer\MultiDimensionProviderInterfaceFactory $multiDimensionProviderFactory,
+        array $dimensionProviders,
         array $modes,
         array $modesConfiguration
     ) {
-        $this->dimensionProviderFactory = $dimensionProviderFactory;
-        $this->dataProviders = $dataProviders;
+        $this->multiDimensionProviderFactory = $multiDimensionProviderFactory;
+        $this->dimensionProviders = $dimensionProviders;
         $this->modes = $modes;
         $this->modesConfiguration = $modesConfiguration;
     }
 
-    public function createByMode($dimensionsMode): DimensionProviderInterface
+    /**
+     * Create MultiDimensionProviderInterface for specified "dimension mode" - which dimensions indexer use for sharding
+     *
+     * @param string $dimensionsMode
+     * @return MultiDimensionProviderInterface
+     */
+    public function createByMode(string $dimensionsMode): MultiDimensionProviderInterface
     {
         if (!in_array($dimensionsMode, $this->modes)) {
             throw new \InvalidArgumentException(
@@ -61,9 +67,9 @@ class DimensionProviderFactory
             );
         }
 
-        return $this->dimensionProviderFactory->create(
+        return $this->multiDimensionProviderFactory->create(
             [
-                'dimensionDataProviders' => $this->getDataProviders($modeConfigurationKey)
+                'dimensionProviders' => $this->getDataProviders($modeConfigurationKey)
             ]
         );
     }
@@ -78,13 +84,13 @@ class DimensionProviderFactory
         }
 
         foreach ($modeConfiguration as $modeDataProviderName) {
-            if (!array_key_exists($modeDataProviderName, $this->dataProviders)) {
+            if (!array_key_exists($modeDataProviderName, $this->dimensionProviders)) {
                 throw new \InvalidArgumentException(
                     sprintf('Missing data provider "%s".', $modeDataProviderName)
                 );
             }
 
-            $providers[] = $this->dataProviders[$modeDataProviderName]->create();
+            $providers[] = $this->dimensionProviders[$modeDataProviderName];
         }
 
         return $providers;

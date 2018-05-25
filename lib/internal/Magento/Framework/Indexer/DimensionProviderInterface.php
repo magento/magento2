@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Indexer;
 
+/**
+ * Provide a list of dimensions
+ */
 interface DimensionProviderInterface extends \IteratorAggregate, \Countable
 {
     /**

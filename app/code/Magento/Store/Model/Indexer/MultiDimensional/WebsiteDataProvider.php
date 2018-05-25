@@ -46,7 +46,7 @@ class WebsiteDataProvider implements DimensionProviderInterface
     public function getIterator(): \Traversable
     {
         foreach ($this->getWebsites() as $website) {
-            yield [self::DIMENSION_NAME => $this->dimensionFactory->create(self::DIMENSION_NAME, $website)];
+            yield $this->dimensionFactory->create(self::DIMENSION_NAME, $website);
         }
     }
 
