@@ -253,4 +253,32 @@
         <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
         <requiredEntity type="product_option">ProductOptionTime</requiredEntity>
     </entity>
+    <entity name="ApiVirtualProductWithDescription" type="product">
+        <data key="sku" unique="suffix">api-virtual-product</data>
+        <data key="type_id">virtual</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Virtual Product</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-virtual-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithNewFromDate" type="product">
+        <data key="sku" unique="suffix">SimpleProduct</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">125.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">1000</data>
+        <data key="urlKey" unique="suffix">simpleproduct</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductNewsFromDate</requiredEntity>
+    </entity>
 </entities>
