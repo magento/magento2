@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 
 /**
  * Class to prepare new tables for new indexer mode
@@ -42,19 +44,32 @@ class ModeSwitcher
     private $tableMaintainer;
 
     /**
+     * WebsiteRepositoryInterface
+     *
      * @var \Magento\Store\Api\WebsiteRepositoryInterface
      */
     private $websiteRepository;
 
     /**
+     * GroupRepositoryInterface
+     *
      * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
     private $customerGroupRepository;
 
     /**
+     * SearchCriteriaBuilder
+     *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
+
+    /**
+     * DimensionCollectionFactory
+     *
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory
+     */
+    private $dimensionCollectionFactory;
 
     /**
      * @var array|null
@@ -68,6 +83,7 @@ class ModeSwitcher
      * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
      * @param \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $configReader,
@@ -75,7 +91,8 @@ class ModeSwitcher
         \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer,
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
         \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory
     ) {
         $this->configReader = $configReader;
         $this->configWriter = $configWriter;
@@ -83,6 +100,7 @@ class ModeSwitcher
         $this->websiteRepository = $websiteRepository;
         $this->customerGroupRepository = $customerGroupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->dimensionCollectionFactory = $dimensionCollectionFactory;
     }
 
     /**
@@ -117,12 +135,13 @@ class ModeSwitcher
         foreach ($dimensionsArrayForCurrentMode as $dimensionsForCurrentMode) {
             $newTable = $this->tableMaintainer->getMainTable($dimensionsForCurrentMode);
             if (empty($dimensionsForCurrentMode)) {
-                // new mode none
+                // new mode is 'none'
                 foreach ($dimensionsArrayForPreviousMode as $dimensionsForPreviousMode) {
                     $oldTable = $this->tableMaintainer->getMainTable($dimensionsForPreviousMode);
                     $this->insertFromOldTablesToNew($newTable, $oldTable);
                 }
             } else {
+                // new mode is not 'none'
                 foreach ($dimensionsArrayForPreviousMode as $dimensionsForPreviousMode) {
                     $oldTable = $this->tableMaintainer->getMainTable($dimensionsForPreviousMode);
                     $this->insertFromOldTablesToNew($newTable, $oldTable, $dimensionsForCurrentMode);
@@ -152,7 +171,7 @@ class ModeSwitcher
     /**
      * Get dimensions array
      *
-     * @param string $previousMode
+     * @param string $mode
      *
      * @return array
      */
@@ -162,32 +181,13 @@ class ModeSwitcher
             return $this->dimensionsArray[$mode];
         }
 
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $customerGroups = $this->customerGroupRepository->getList($searchCriteria)->getItems();
+        $this->dimensionsArray[$mode] = $this->dimensionCollectionFactory->createByMode($mode);
 
-        $dimensionsArray = [];
-        if ($mode !== self::INPUT_KEY_NONE) {
-            foreach ($this->websiteRepository->getList() as $website) {
-                foreach ($customerGroups as $customerGroup) {
-                    $websiteDimension = new Dimension('website', $website->getId());
-                    $customerGroupDimension = new Dimension('group', $customerGroup->getId());
-                    if ($mode === self::INPUT_KEY_WEBSITE) {
-                        $key = $websiteDimension->getValue();
-                        $dimensionsArray[$key] = [$websiteDimension];
-                    } elseif ($mode === self::INPUT_KEY_CUSTOMER_GROUP) {
-                        $key = $customerGroupDimension->getValue();
-                        $dimensionsArray[$key] = [$customerGroupDimension];
-                    } else {
-                        $key = $websiteDimension->getValue() . '-' . $customerGroupDimension->getValue();
-                        $dimensionsArray[$key] = [$websiteDimension, $customerGroupDimension];
-                    }
-                }
-            }
-        } else {
-            $dimensionsArray[] = [];
+        //Array structure for 'none' mode
+        if (count($this->dimensionsArray[$mode]) === 0) {
+            $this->dimensionsArray[$mode] = [[]];
         }
 
-        $this->dimensionsArray[$mode] = $dimensionsArray;
         return $this->dimensionsArray[$mode];
     }
 
@@ -205,10 +205,10 @@ class ModeSwitcher
         $select = $this->tableMaintainer->getConnection()->select()->from($oldTable);
 
         foreach ($dimensions as $dimension) {
-            if ($dimension->getName() === 'website') {
+            if ($dimension->getName() === WebsiteDataProvider::DIMENSION_NAME) {
                 $select->where('website_id = ?', $dimension->getValue());
             }
-            if ($dimension->getName() === 'group') {
+            if ($dimension->getName() === CustomerGroupDataProvider::DIMENSION_NAME) {
                 $select->where('customer_group_id = ?', $dimension->getValue());
             }
         }
