@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Indexer\Dimension;
+namespace Magento\Framework\Indexer;
 
 /**
  * @api
