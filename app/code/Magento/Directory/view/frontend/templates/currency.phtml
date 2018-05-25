@@ -24,7 +24,7 @@
              data-mage-init='{"dropdown":{}}'
              data-toggle="dropdown"
              data-trigger-keypress-button="true">
-            <strong class="language-<?= $block->escapeHtml($block->getCurrentCurrencyCode()) ?>">
+            <strong class="language-<?= $block->escapeHtml($currentCurrencyCode) ?>">
                 <span><?= $block->escapeHtml($currentCurrencyCode) ?> - <?= @$block->escapeHtml($currencies[$currentCurrencyCode]) ?></span>
             </strong>
         </div>
