@@ -97,7 +97,7 @@ class DimensionCollection implements \Iterator, \Countable
                 $counts[] = count($dimensionsDataProvider);
             }
 
-            $this->dimensionsCount = array_product($counts);
+            $this->dimensionsCount = count($counts) === 0 ? 0 : array_product($counts);
         }
 
         return $this->dimensionsCount;
