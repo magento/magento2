@@ -18,14 +18,6 @@ $objectManager = Bootstrap::getObjectManager();
 $registry = $objectManager->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
-// Delete product
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-try {
-    $product = $productRepository->get('simple333', false, null, true);
-    $product->delete();
-} catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
-    //Product already removed
-}
 // Delete first category
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
 $searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
