@@ -177,6 +177,7 @@
     <preference for="Magento\Framework\App\FeedInterface" type="Magento\Framework\App\Feed" />
     <preference for="Magento\Framework\App\FeedFactoryInterface" type="Magento\Framework\App\FeedFactory" />
     <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
+    <preference for="Magento\Framework\Config\DesignResolverInterface" type="\Magento\Framework\Config\View\DesignResolver" />
     <preference for="Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface" type="Magento\Eav\Model\TypeLocator\ComplexType"/>
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaReader" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
@@ -1192,7 +1193,7 @@
             <argument name="fileName" xsi:type="string">view.xml</argument>
             <argument name="converter" xsi:type="object">Magento\Framework\Config\Converter</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Framework\Config\SchemaLocator</argument>
-            <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolver</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\View\DesignResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\DB\SelectFactory">

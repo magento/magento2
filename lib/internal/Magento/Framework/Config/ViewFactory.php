@@ -45,9 +45,9 @@ class ViewFactory
             /** @var \Magento\Theme\Model\View\Design $design */
             $design = $this->objectManager->create(\Magento\Theme\Model\View\Design::class);
             $design->setDesignTheme($arguments['themeModel'], $arguments['area']);
-            /** @var \Magento\Framework\Config\FileResolver $fileResolver */
+            /** @var \Magento\Framework\Config\View\DesignResolver $fileResolver */
             $fileResolver = $this->objectManager->create(
-                \Magento\Framework\Config\FileResolver::class,
+                \Magento\Framework\Config\View\DesignResolver::class,
                 [
                     'designInterface' => $design,
                 ]

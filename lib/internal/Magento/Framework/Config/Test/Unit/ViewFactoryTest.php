@@ -54,12 +54,12 @@ class ViewFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('setDesignTheme')
             ->with($this->theme, self::AREA);
 
-        /** @var \Magento\Framework\Config\FileResolver|\PHPUnit_Framework_MockObject_MockObject $fileResolver */
-        $fileResolver = $this->createMock(\Magento\Framework\Config\FileResolver::class);
+        /** @var \Magento\Framework\Config\View\DesignResolver|\PHPUnit_Framework_MockObject_MockObject $fileResolver */
+        $fileResolver = $this->createMock(\Magento\Framework\Config\View\DesignResolver::class);
 
         $valueMap = [
             [\Magento\Theme\Model\View\Design::class, [], $design],
-            [\Magento\Framework\Config\FileResolver::class, ['designInterface' => $design], $fileResolver],
+            [\Magento\Framework\Config\View\DesignResolver::class, ['designInterface' => $design], $fileResolver],
             [\Magento\Framework\Config\View::class, ['fileResolver' => $fileResolver], $this->view],
         ];
         $this->objectManager->expects($this->exactly(3))
