@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Declaration;
 
+use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
@@ -86,7 +87,14 @@ class WhitelistDeclarationTest extends \PHPUnit\Framework\TestCase
      */
     private function filterUndeclaredElements(array $undeclaredElements): array
     {
-        $ignoredElements = json_decode(file_get_contents(__DIR__ . '/_files/ignore_whitelisting.json'), true);
+        $files = Files::getFiles([__DIR__ . '/_files/ignore_whitelisting'], '*.json');
+        $ignoredElements = [];
+        foreach ($files as $filePath) {
+            $ignoredElements = array_merge_recursive(
+                $ignoredElements,
+                json_decode(file_get_contents($filePath), true)
+            );
+        }
 
         return $this->arrayRecursiveDiff($undeclaredElements, $ignoredElements);
     }
