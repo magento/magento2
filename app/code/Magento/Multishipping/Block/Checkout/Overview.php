@@ -319,9 +319,18 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @return mixed
+     * @deprecated
+     * typo in method name, see getBillingAddressTotals()
      */
     public function getBillinAddressTotals()
+    {
+        return $this->getBillingAddressTotals();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBillingAddressTotals()
     {
         $address = $this->getQuote()->getBillingAddress();
         return $this->getShippingAddressTotals($address);
