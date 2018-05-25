@@ -21,6 +21,11 @@ class DimensionCollection implements \Iterator, \Countable
     /**
      * @var int
      */
+    private $dimensionsProvidersCount;
+
+    /**
+     * @var int
+     */
     private $dimensionsCount;
 
     /**
@@ -31,7 +36,7 @@ class DimensionCollection implements \Iterator, \Countable
             $this->addDimensionDataProvider($dimensionDataProvider);
         }
 
-        $this->dimensionsCount = count($this->dimensionsIterators);
+        $this->dimensionsProvidersCount = count($this->dimensionsIterators);
     }
 
     public function current()
@@ -49,9 +54,9 @@ class DimensionCollection implements \Iterator, \Countable
 
     public function next()
     {
-        $this->dimensionsIterators[$this->dimensionsCount - 1]->next();
+        $this->dimensionsIterators[$this->dimensionsProvidersCount - 1]->next();
 
-        for ($i = ($this->dimensionsCount - 1); $i > 0; $i--) {
+        for ($i = ($this->dimensionsProvidersCount - 1); $i > 0; $i--) {
             if (!$this->dimensionsIterators[$i]->valid()) {
                 $this->dimensionsIterators[$i] = $this->dimensionsDataProviders[$i]->getIterator();
                 $this->dimensionsIterators[$i-1]->next();
@@ -72,7 +77,7 @@ class DimensionCollection implements \Iterator, \Countable
 
     public function valid()
     {
-        return $this->dimensionsCount > 0 && $this->dimensionsIterators[0]->valid();
+        return $this->dimensionsProvidersCount > 0 && $this->dimensionsIterators[0]->valid();
     }
 
     public function rewind()
@@ -85,13 +90,17 @@ class DimensionCollection implements \Iterator, \Countable
 
     public function count()
     {
-        $counts = [];
+        if ($this->dimensionsCount === null) {
+            $counts = [];
 
-        foreach ($this->dimensionsDataProviders as $dimensionsDataProvider) {
-            $counts[] = count($dimensionsDataProvider);
+            foreach ($this->dimensionsDataProviders as $dimensionsDataProvider) {
+                $counts[] = count($dimensionsDataProvider);
+            }
+
+            $this->dimensionsCount = array_product($counts);
         }
 
-        return array_product($counts);
+        return $this->dimensionsCount;
     }
 
     private function addDimensionDataProvider(DimensionProviderInterface $dimensionDataProvider)

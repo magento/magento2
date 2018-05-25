@@ -9,6 +9,7 @@ namespace Magento\Store\Model\Indexer\MultiDimensional;
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteCollectionFactory;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Indexer\DimensionProviderInterface;
+use Magento\Store\Model\Store;
 
 class WebsiteDataProvider implements DimensionProviderInterface
 {
@@ -19,33 +20,54 @@ class WebsiteDataProvider implements DimensionProviderInterface
     const DIMENSION_NAME = 'ws';
 
     /**
+     * @var WebsiteCollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
+     * @var \SplFixedArray
+     */
+    private $websitesDataIterator;
+
+    /**
      * @var DimensionFactory
      */
     private $dimensionFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param WebsiteCollectionFactory $collectionFactory
      * @param DimensionFactory $dimensionFactory
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager, DimensionFactory $dimensionFactory){
+    public function __construct(WebsiteCollectionFactory $collectionFactory, DimensionFactory $dimensionFactory){
         $this->dimensionFactory = $dimensionFactory;
-        $this->storeManager = $storeManager;
+        $this->collectionFactory = $collectionFactory;
     }
 
     public function getIterator(): \Traversable
     {
-        foreach ($this->storeManager->getWebsites(false) as $website) {
-            yield $this->dimensionFactory->create(self::DIMENSION_NAME, $website->getId());
+        foreach ($this->getWebsites() as $website) {
+            yield $this->dimensionFactory->create(self::DIMENSION_NAME, $website);
         }
     }
 
     public function count(): int
     {
-        return $this->websitesDataIterator->count();
+        return $this->getWebsites()->count();
+    }
+
+    /**
+     * @return \SplFixedArray
+     */
+    private function getWebsites()
+    {
+        if ($this->websitesDataIterator === null) {
+            $this->websitesDataIterator = \SplFixedArray::fromArray(
+                $this->collectionFactory->create()
+                    ->addFieldToFilter('code', ['neq' => Store::ADMIN_CODE])
+                    ->getAllIds()
+            );
+        }
+
+        return $this->websitesDataIterator;
     }
 }

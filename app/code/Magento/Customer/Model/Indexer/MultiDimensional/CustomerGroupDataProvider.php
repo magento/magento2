@@ -19,6 +19,11 @@ class CustomerGroupDataProvider implements DimensionProviderInterface
     const DIMENSION_NAME = 'cg';
 
     /**
+     * @var CustomerGroupCollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * @var \SplFixedArray
      */
     private $customerGroupsDataIterator;
@@ -30,20 +35,32 @@ class CustomerGroupDataProvider implements DimensionProviderInterface
 
     public function __construct(CustomerGroupCollectionFactory $collectionFactory, DimensionFactory $dimensionFactory) {
         $this->dimensionFactory = $dimensionFactory;
-        $this->customerGroupsDataIterator = \SplFixedArray::fromArray(
-            $collectionFactory->create()->getAllIds()
-        );
+        $this->collectionFactory = $collectionFactory;
     }
 
     public function getIterator(): \Traversable
     {
-        foreach ($this->customerGroupsDataIterator as $customerGroup) {
+        foreach ($this->getCustomerGroups() as $customerGroup) {
             yield $this->dimensionFactory->create(self::DIMENSION_NAME, $customerGroup);
         }
     }
 
     public function count(): int
     {
-        return $this->customerGroupsDataIterator->count();
+        return $this->getCustomerGroups()->count();
+    }
+
+    /**
+     * @return \SplFixedArray
+     */
+    private function getCustomerGroups()
+    {
+        if ($this->customerGroupsDataIterator === null) {
+            $this->customerGroupsDataIterator = \SplFixedArray::fromArray(
+                $this->collectionFactory->create()->getAllIds()
+            );
+        }
+
+        return $this->customerGroupsDataIterator;
     }
 }
