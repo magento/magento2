@@ -199,6 +199,7 @@ abstract class AbstractAction
                     'website_id' => $website->getId(),
                     'website_date' => $this->_dateTime->formatDate($timestamp, false),
                     'rate' => $rate,
+                    'default_store_id' => $store->getId()
                 ];
             }
         }

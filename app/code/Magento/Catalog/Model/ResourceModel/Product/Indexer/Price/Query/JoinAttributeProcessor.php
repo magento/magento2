@@ -11,12 +11,10 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DB\Select;
 
 /**
- * Allows to join product attribute to Select. Used for build price index for specified dimension, w
+ * Allows to join product attribute to Select. Used for build price index for specified dimension
  */
 class JoinAttributeProcessor
 {
-    private $defaultStoreId;
-
     /**
      * @var \Magento\Eav\Model\Config
      */
@@ -75,7 +73,7 @@ class JoinAttributeProcessor
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_Db_Select_Exception
      */
-    public function process(Select $select, $websiteId, $attributeCode, $attributeValue = null)
+    public function process(Select $select, $attributeCode, $attributeValue = null)
     {
         $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
         $attributeId = $attribute->getAttributeId();
@@ -95,7 +93,6 @@ class JoinAttributeProcessor
             );
             $whereExpression = new \Zend_Db_Expr("{$alias}.value");
         } else {
-            $storeId = $this->getDefaultStoreForWebsite($websiteId);
             $dAlias = 'tad_' . $attributeCode;
             $sAlias = 'tas_' . $attributeCode;
 
@@ -108,7 +105,7 @@ class JoinAttributeProcessor
             $select->joinLeft(
                 [$sAlias => $attributeTable],
                 "{$sAlias}.{$productIdField} = e.{$productIdField} AND {$sAlias}.attribute_id = {$attributeId}" .
-                " AND {$sAlias}.store_id = {$storeId}",
+                " AND {$sAlias}.store_id = cwd.default_store_id",
                 []
             );
             $whereExpression = $connection->getCheckSql(
@@ -123,21 +120,5 @@ class JoinAttributeProcessor
         }
 
         return $whereExpression;
-    }
-
-    /**
-     * @param $websiteId
-     * @return int
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function getDefaultStoreForWebsite($websiteId): int
-    {
-        if (!isset($this->defaultStoreId[$websiteId])) {
-            $website = $this->storeManager->getWebsite($websiteId);
-            $defaultGroup = $website->getDefaultGroup();
-            $this->defaultStoreId[$websiteId] = (int) $defaultGroup->getDefaultStoreId();
-        }
-
-        return $this->defaultStoreId[$websiteId];
     }
 }

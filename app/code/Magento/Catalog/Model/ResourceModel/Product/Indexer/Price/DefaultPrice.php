@@ -321,7 +321,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     {
         $finalPriceTable = $this->prepareFinalPriceTable();
 
-        $dimensions = $this->dimensionCollectionFactory->createWithAllDimensions();
+        $dimensions = $this->dimensionCollectionFactory->createByAllDimensions();
         foreach ($dimensions as $dimension) {
             $select = $this->getSelect(
                 $entityIds,
@@ -361,7 +361,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 'select' => $select,
                 'entity_field' => new \Zend_Db_Expr('e.entity_id'),
                 'website_field' => new \Zend_Db_Expr('pw.website_id'),
-                'store_field' => new \Zend_Db_Expr('cs.store_id'), //TODO: use catalog_product_index_website
+                'store_field' => new \Zend_Db_Expr('cwd.default_store_id'),
                 'website_id' => $websiteId,
                 'customer_group_id' => $customerGroupId,
             ]

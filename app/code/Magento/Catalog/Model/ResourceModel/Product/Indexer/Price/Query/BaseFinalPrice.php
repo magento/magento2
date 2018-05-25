@@ -79,7 +79,7 @@ class BaseFinalPrice
             sprintf('pw.product_id = e.entity_id AND pw.website_id = %s', $websiteId),
             ['pw.website_id']
         )->joinInner(
-            ['cwd' => $this->getTable('catalog_product_index_website')], // website currency rates
+            ['cwd' => $this->getTable('catalog_product_index_website')],
             'pw.website_id = cwd.website_id',
             []
         )->joinLeft(
@@ -90,18 +90,18 @@ class BaseFinalPrice
         );
 
         if ($this->moduleManager->isEnabled('Magento_Tax')) {
-            $taxClassId = $this->joinAttributeProcessor->process($select, $websiteId,'tax_class_id');
+            $taxClassId = $this->joinAttributeProcessor->process($select,'tax_class_id');
         } else {
             $taxClassId = new \Zend_Db_Expr(0);
         }
         $select->columns(['tax_class_id' => $taxClassId]);
 
-        $this->joinAttributeProcessor->process($select, $websiteId, 'status', Status::STATUS_ENABLED);
+        $this->joinAttributeProcessor->process($select, 'status', Status::STATUS_ENABLED);
 
-        $price = $this->joinAttributeProcessor->process($select, $websiteId, 'price');
-        $specialPrice = $this->joinAttributeProcessor->process($select, $websiteId, 'special_price');
-        $specialFrom = $this->joinAttributeProcessor->process($select, $websiteId, 'special_from_date');
-        $specialTo = $this->joinAttributeProcessor->process($select, $websiteId, 'special_to_date');
+        $price = $this->joinAttributeProcessor->process($select, 'price');
+        $specialPrice = $this->joinAttributeProcessor->process($select, 'special_price');
+        $specialFrom = $this->joinAttributeProcessor->process($select, 'special_from_date');
+        $specialTo = $this->joinAttributeProcessor->process($select, 'special_to_date');
         $currentDate = 'cwd.website_date';
 
         $maxUnsignedBigint = '~0';
