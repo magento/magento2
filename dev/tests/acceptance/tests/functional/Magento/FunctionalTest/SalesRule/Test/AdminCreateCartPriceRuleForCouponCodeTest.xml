@@ -20,6 +20,7 @@
         </annotations>
 
         <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
 
@@ -28,7 +29,7 @@
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
                 <argument name="ruleName" value="{{_defaultCoupon.code}}"/>
             </actionGroup>
-
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
@@ -62,5 +63,24 @@
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions2"/>
         <seeOptionIsSelected selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="seeActionType"/>
         <seeInField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="5" stepKey="seeDiscountAmount"/>
+
+        <!-- Create a product to check the storefront -->
+        <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+            <argument name="category" value="$$createPreReqCategory$$"/>
+            <argument name="simpleProduct" value="_defaultProduct"/>
+        </actionGroup>
+
+        <!-- Spot check the storefront -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
+        <waitForPageLoad stepKey="waitForCartPage"/>
+        <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyCoupon">
+            <argument name="coupon" value="_defaultCoupon"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$5.00" stepKey="seeDiscountTotal"/>
     </test>
 </tests>

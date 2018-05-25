@@ -53,14 +53,10 @@
         </actionGroup>
 
         <!-- Spot check the storefront -->
-        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <!-- Use quantity 2 to verify that this discount is only applied once for the entire cart and not once per item -->
-        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="fillQuantity"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
-        <waitForPageLoad stepKey="waitForCartPage"/>
-        <waitForElementVisible selector="td[data-th='Discount']" stepKey="waitForDiscountElement"/>
-        <see selector="td[data-th='Discount']" userInput="-$19.99" stepKey="seeDiscountTotal"/>
+        <actionGroup ref="VerifyDiscountAmount" stepKey="verifyStorefront">
+            <argument name="productUrl" value="{{_defaultProduct.urlKey}}.html"/>
+            <argument name="quantity" value="2"/>
+            <argument name="expectedDiscount" value="-$19.99"/>
+        </actionGroup>
     </test>
 </tests>
