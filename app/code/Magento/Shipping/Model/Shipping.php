@@ -255,7 +255,7 @@ class Shipping implements RateCollectorInterface
         $carrier = $this->_carrierFactory->createIfActive(
             $carrierCode,
             $request->getStoreId(),
-            $request->getData('is_return')
+            (bool) $request->getData('is_return')
         );
 
         if (!$carrier) {
