@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
-use Magento\Framework\Indexer\Dimension;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 
 class DimensionProviderFactory

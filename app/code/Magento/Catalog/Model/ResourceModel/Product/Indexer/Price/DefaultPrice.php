@@ -324,9 +324,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
 
         $dimensions = $this->dimensionCollectionFactory->createByMode(
             ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP
-        )
-        ;
-        foreach ($dimensions->getIterator() as $dimension) {
+        );
+        foreach ($dimensions as $dimension) {
             $select = $this->getSelect(
                 $entityIds,
                 $type,

@@ -181,7 +181,7 @@ class ModeSwitcher
             return $this->dimensionsArray[$mode];
         }
 
-        $this->dimensionsArray[$mode] = $this->dimensionCollectionFactory->createByMode($mode)->getIterator();
+        $this->dimensionsArray[$mode] = $this->dimensionCollectionFactory->createByMode($mode);
 
         //Array structure for 'none' mode
         if (count($this->dimensionsArray[$mode]) === 0) {

@@ -73,7 +73,7 @@ class DimensionProvider implements DimensionProviderInterface
             $dimension = $dimensionIterator->current();
 
             if (is_array($dimension)) {
-                $dimension = $dimension[0];
+                $dimension = reset($dimension);
             }
 
             $dimensions[$dimension->getName()] = $dimension;
