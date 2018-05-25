@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Wonderland\Api\Model;
+namespace Magento\TestModuleExtensionAttributes\Api\Model;
 
 /**
  * Customer attribute metadata class.
  */
 class FakeAttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject implements
-    \Magento\Wonderland\Api\Data\FakeAttributeMetadataInterface
+    \Magento\TestModuleExtensionAttributes\Api\Data\FakeAttributeMetadataInterface
 {
     /**
      * {@inheritdoc}

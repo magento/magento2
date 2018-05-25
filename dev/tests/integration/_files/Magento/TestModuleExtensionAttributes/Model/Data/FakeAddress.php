@@ -4,10 +4,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Wonderland\Model\Data;
+declare(strict_types=1);
+
+namespace Magento\TestModuleExtensionAttributes\Model\Data;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
-use Magento\Wonderland\Api\Data\FakeAddressInterface;
+use Magento\TestModuleExtensionAttributes\Api\Data\FakeAddressInterface;
 
 class FakeAddress extends AbstractExtensibleObject implements FakeAddressInterface
 {
@@ -34,7 +36,7 @@ class FakeAddress extends AbstractExtensibleObject implements FakeAddressInterfa
     /**
      * Get region
      *
-     * @return \Magento\Wonderland\Model\Data\FakeRegion|null
+     * @return \Magento\TestModuleExtensionAttributes\Model\Data\FakeRegion|null
      */
     public function getRegion()
     {
@@ -44,7 +46,7 @@ class FakeAddress extends AbstractExtensibleObject implements FakeAddressInterfa
     /**
      * Get region
      *
-     * @return \Magento\Wonderland\Model\Data\FakeRegion[]|null
+     * @return \Magento\TestModuleExtensionAttributes\Model\Data\FakeRegion[]|null
      */
     public function getRegions()
     {
@@ -194,7 +196,7 @@ class FakeAddress extends AbstractExtensibleObject implements FakeAddressInterfa
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface|null
+     * @return \Magento\TestModuleExtensionAttributes\Api\Data\FakeAddressExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -214,11 +216,11 @@ class FakeAddress extends AbstractExtensibleObject implements FakeAddressInterfa
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface $extensionAttributes
+     * @param \Magento\TestModuleExtensionAttributes\Api\Data\FakeAddressExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface $extensionAttributes
+        \Magento\TestModuleExtensionAttributes\Api\Data\FakeAddressExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

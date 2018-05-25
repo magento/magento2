@@ -3,7 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Wonderland\Api\Data;
+declare(strict_types=1);
+
+namespace Magento\TestModuleExtensionAttributes\Api\Data;
 
 /**
  * Customer interface.
@@ -98,17 +100,17 @@ interface FakeCustomerInterface extends \Magento\Framework\Api\CustomAttributesD
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\Wonderland\Api\Data\FakeCustomerExtensionInterface|null
+     * @return \Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Wonderland\Api\Data\FakeCustomerExtensionInterface $extensionAttributes
+     * @param \Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Wonderland\Api\Data\FakeCustomerExtensionInterface $extensionAttributes
+        \Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerExtensionInterface $extensionAttributes
     );
 }
