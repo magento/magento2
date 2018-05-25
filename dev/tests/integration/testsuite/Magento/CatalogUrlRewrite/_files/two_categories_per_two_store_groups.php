@@ -6,13 +6,13 @@
 declare(strict_types=1);
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
+$defaultCategory = $objectManager->create(\Magento\Catalog\Helper\DefaultCategory::class);
 /** @var \Magento\Catalog\Model\Category $category */
 $category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setCreatedAt('2014-06-23 09:50:07')
     ->setName('Category 1')
-    ->setParentId(2)
+    ->setParentId($defaultCategory->getId())
     ->setPath('1/2/3')
     ->setLevel(2)
     ->setAvailableSortBy('name')
@@ -34,7 +34,7 @@ $rootCategoryForTestStoreGroup = $objectManager->create(\Magento\Catalog\Model\C
 $rootCategoryForTestStoreGroup->isObjectNew(true);
 $rootCategoryForTestStoreGroup->setCreatedAt('2014-06-23 09:50:07')
     ->setName('Category 2')
-    ->setParentId(1)
+    ->setParentId(\Magento\Catalog\Model\Category::TREE_ROOT_ID)
     ->setPath('1/2/334')
     ->setLevel(2)
     ->setAvailableSortBy('name')
@@ -50,10 +50,6 @@ $rootCategoryForTestStoreGroup->setStoreId($store->load('test')->getId())
     ->save();
 
 $storeCode = 'test';
-/** @var \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository */
-$categoryRepository = $objectManager->create(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
-/** @var \Magento\Catalog\Api\Data\CategoryInterface $category */
-$category = $categoryRepository->get(2);
 /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
 $storeRepository = $objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
 /** @var \Magento\Store\Api\Data\StoreInterface $store */
@@ -64,7 +60,7 @@ $storeGroup = $objectManager->create(\Magento\Store\Model\Group::class)
     ->setWebsiteId('1')
     ->setCode('test_store_group')
     ->setName('Test Store Group')
-    ->setRootCategoryId($category->getId())
+    ->setRootCategoryId($rootCategoryForTestStoreGroup->getId())
     ->setDefaultStoreId($store->getId())
     ->save();
 
