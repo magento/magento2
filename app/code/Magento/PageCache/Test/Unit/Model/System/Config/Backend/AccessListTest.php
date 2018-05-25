@@ -67,7 +67,7 @@ class AccessListTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getInvalidValues(): array
+    public function getInvalidValues()
     {
         return [
             ['\\bull val\\'],
