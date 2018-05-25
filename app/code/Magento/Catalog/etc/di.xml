@@ -1074,4 +1074,31 @@
             <argument name="nativeAttributeConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\NativeAttributeCondition</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="websites" xsi:type="object">Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProviderFactory</item>
+                <item name="customer_groups" xsi:type="object">Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProviderFactory</item>
+            </argument>
+            <argument name="modes" xsi:type="array">
+                <item name="mode-1" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_NONE</item>
+                <item name="mode-2" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_WEBSITE</item>
+                <item name="mode-3" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP</item>
+                <item name="mode-4" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP</item>
+            </argument>
+            <argument name="modesConfiguration" xsi:type="array">
+                <item name="mode-1" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\DimensionProvider::EMPTY_CONFIGURATION</item>
+                <item name="mode-2" xsi:type="array">
+                    <item name="websites" xsi:type="string">websites</item>
+                </item>
+                <item name="mode-3" xsi:type="array">
+                    <item name="customer_groups" xsi:type="string">customer_groups</item>
+                </item>
+                <item name="mode-4" xsi:type="array">
+                    <item name="websites" xsi:type="string">websites</item>
+                    <item name="customer_groups" xsi:type="string">customer_groups</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -11,6 +11,8 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
+use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
+use Magento\Framework\Indexer\DimensionProviderInterface;
 
 /**
  * Class Full reindex action
@@ -88,7 +90,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator $batchSizeCalculator = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
-        \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory = null,
+        \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionCollectionFactory = null,
         \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $dimensionTableMaintainer = null
     ) {
         parent::__construct(
@@ -114,14 +116,11 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
         );
         $dimensionCollectionFactory = $dimensionCollectionFactory ?: ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory::class
+            \Magento\Catalog\Model\Indexer\Product\Price\DimensionProvider::class
         );
         $this->dimensionTableMaintainer = $dimensionTableMaintainer ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer::class
         );
-
-        $this->allDimensionCollection = $dimensionCollectionFactory->createByAllDimensions();
-        $this->modeDimensionCollection = $dimensionCollectionFactory->createByCurrentMode();
     }
 
     /**
@@ -200,7 +199,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
     private function reindexProductTypeWithDimensions(PriceInterface $priceIndexer)
     {
-        foreach ($this->allDimensionCollection as $dimension) {
+        /** @var DimensionProviderInterface $dimensionsProviders */
+        $dimensionsProviders = $this->dimensionTableMaintainer->createByMode(
+            ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP
+        );
+
+        foreach ($dimensionsProviders->getIterator() as $dimension) {
             $this->reindexDimensions($priceIndexer, $dimension);
         }
     }
