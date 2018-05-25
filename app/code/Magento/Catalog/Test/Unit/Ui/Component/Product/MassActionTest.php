@@ -89,6 +89,10 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->massAction->getConfiguration());
     }
 
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function getPrepareDataProvider()
     {
         return [
