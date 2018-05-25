@@ -10,7 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Indexer\Dimension\DimensionalIndexerInterface;
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
 
 /**
  * Class Full reindex action
@@ -237,13 +237,14 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         }
     }
 
-    private function reindexBatchWithinDimension(PriceInterface $priceIndexer, array $batch, array $dimensions)
+    private function reindexBatchWithinDimension(DimensionalIndexerInterface $priceIndexer, array $batch, array $dimensions)
     {
         $entityIds = $this->getEntityIdsFromBatch($priceIndexer, $batch);
 
         if (!empty($entityIds)) {
             // Temporary table will created if not exists
-            $idxTableName = $this->_defaultIndexerResource->getIdxTableWithinDimension();
+//            $idxTableName = $this->_defaultIndexerResource->getIdxTableWithinDimension($dimensions);
+            $idxTableName = $this->_defaultIndexerResource->getIdxTable(); # TODO: replace with appropriate method according to dimension
             $this->_emptyTable($idxTableName);
 
             if ($priceIndexer->getIsComposite()) {
@@ -251,7 +252,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             }
             $this->_prepareTierPriceIndex($entityIds);
 
-            $priceIndexer->reindexEntityWithinDimension($entityIds, $dimensions);
+            $priceIndexer->reindexByDimensions($entityIds, $dimensions);
 
             // Sync data from temp table to index table
             $this->_insertFromTable($idxTableName, $this->dimensionTableMaintainer->getMainReplicaTable($dimensions));
