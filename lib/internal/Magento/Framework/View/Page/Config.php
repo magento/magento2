@@ -340,6 +340,14 @@ class Config
     }
 
     /**
+     * @param string $title
+     */
+    public function setMetaTitle($title)
+    {
+        $this->setMetadata('title', $title);
+    }
+
+    /**
      * @param string $keywords
      * @return void
      */
