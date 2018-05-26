@@ -142,7 +142,8 @@ class Renderer implements RendererInterface
             }
             return $content;
         }
-        if (method_exists($this->pageConfig, $method)) {
+        // We skip title, because PageConfig::getTitle() refers to the tag <title> and not to meta title.
+        if (!in_array($name, ['title']) && method_exists($this->pageConfig, $method)) {
             $content = $this->pageConfig->$method();
         }
         return $content;
