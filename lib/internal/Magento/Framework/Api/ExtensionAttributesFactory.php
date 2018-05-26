@@ -42,7 +42,7 @@ class ExtensionAttributesFactory
      *
      * @param string $extensibleClassName
      * @param array $data
-     * @return object
+     * @return \Magento\Framework\Api\ExtensionAttributesInterface
      */
     public function create($extensibleClassName, $data = [])
     {
