@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Declaration;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
-use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
 use Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 
 /**
  * Class WhitelistDeclarationTest
@@ -25,22 +27,27 @@ class WhitelistDeclarationTest extends \PHPUnit\Framework\TestCase
      * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
+
     /**
-     * @var Schema
+     * @var SchemaConfigInterface
      */
-    private $declarativeSchema;
+    private $schemaConfig;
 
     public function setUp()
     {
+        /** @var ObjectManagerInterface|ObjectManager $objectManager */
         $objectManager = Bootstrap::getObjectManager();
-        $schemaConfig = $objectManager->get(SchemaConfigInterface::class);
-        $this->declarativeSchema = $schemaConfig->getDeclarationConfig();
+        $resourceConnection = $objectManager->create(ResourceConnection::class);
+        $objectManager->removeSharedInstance(ResourceConnection::class);
+        $objectManager->addSharedInstance($resourceConnection, ResourceConnection::class);
         $this->componentRegistrar = $objectManager->get(ComponentRegistrarInterface::class);
+        $this->schemaConfig = $objectManager->create(SchemaConfigInterface::class);
     }
 
     /**
      * Checks that all declared table elements also declared into whitelist declaration.
      *
+     * @appIsolation
      * @throws \Exception
      */
     public function testConstraintsAndIndexesAreWhitelisted()
@@ -48,8 +55,9 @@ class WhitelistDeclarationTest extends \PHPUnit\Framework\TestCase
         $undeclaredElements = [];
         $resultMessage = "New table elements that do not exist in the whitelist declaration:\n";
         $whitelistTables = $this->getWhiteListTables();
+        $declarativeSchema = $this->schemaConfig->getDeclarationConfig();
 
-        foreach ($this->declarativeSchema->getTables() as $schemaTable) {
+        foreach ($declarativeSchema->getTables() as $schemaTable) {
             $tableNameWithoutPrefix = $schemaTable->getNameWithoutPrefix();
             foreach ($schemaTable->getConstraints() as $constraint) {
                 $constraintNameWithoutPrefix = $constraint->getNameWithoutPrefix();
