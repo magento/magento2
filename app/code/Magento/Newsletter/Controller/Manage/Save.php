@@ -96,9 +96,6 @@ class Save extends \Magento\Newsletter\Controller\Manage
                             ->unsubscribeCustomerById($customerId);
                         $this->messageManager->addSuccess(__('We removed the subscription.'));
                     }
-                } else {
-                    $this->_redirect('newsletter/manage/');
-                    return;
                 }
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
