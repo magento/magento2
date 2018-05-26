@@ -331,22 +331,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     public function testRequestShippingRates($storeCode, $expectedRate)
     {
-        $store = $this->storeRepository->get($storeCode);
-        $this->_quote->setStoreId($store->getId());
+        $this->_quote->setStoreId($this->storeRepository->get($storeCode)->getId());
         $this->_address->setItemQty(1);
         $this->_address->requestShippingRates();
-        /**
-         * @var \Magento\Quote\Model\ResourceModel\Quote\Address\Rate\Collection $shippingRatesCollection
-         */
-        $shippingRatesCollection = $this->_address->getShippingRatesCollection();
-        /**
-         * @var \Magento\Quote\Model\Quote\Address\Rate[] $shippingRates
-         */
-        $shippingRates = $shippingRatesCollection->getItems();
-        self::assertEquals(
-            $expectedRate,
-            $shippingRates[0]->getPrice()
-        );
+
+        self::assertContains($expectedRate, $this->_address->getShippingRatesCollection()->getItems());
     }
 
     /**
