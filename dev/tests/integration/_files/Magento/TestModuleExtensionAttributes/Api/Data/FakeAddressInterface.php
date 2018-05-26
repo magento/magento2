@@ -4,8 +4,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Wonderland\Api\Data;
+namespace Magento\TestModuleExtensionAttributes\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
@@ -55,14 +56,14 @@ interface FakeAddressInterface extends ExtensibleDataInterface
     /**
      * Get region
      *
-     * @return \Magento\Wonderland\Api\Data\FakeRegionInterface|null
+     * @return \Magento\TestModuleExtensionAttributes\Api\Data\FakeRegionInterface|null
      */
     public function getRegion();
 
     /**
      * Get region
      *
-     * @return \Magento\Wonderland\Api\Data\FakeRegionInterface[]|null
+     * @return \Magento\TestModuleExtensionAttributes\Api\Data\FakeRegionInterface[]|null
      */
     public function getRegions();
 
@@ -174,17 +175,17 @@ interface FakeAddressInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface|null
+     * @return \Magento\TestModuleExtensionAttributes\Api\Data\FakeAddressExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface $extensionAttributes
+     * @param \Magento\TestModuleExtensionAttributes\Api\Data\FakeAddressExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface $extensionAttributes
+        \Magento\TestModuleExtensionAttributes\Api\Data\FakeAddressExtensionInterface $extensionAttributes
     );
 }

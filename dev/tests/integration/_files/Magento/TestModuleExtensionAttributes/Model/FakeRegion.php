@@ -4,10 +4,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Wonderland\Model;
+declare(strict_types=1);
+
+namespace Magento\TestModuleExtensionAttributes\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Wonderland\Api\Data\FakeRegionInterface;
+use Magento\TestModuleExtensionAttributes\Api\Data\FakeRegionInterface;
 
 class FakeRegion extends AbstractExtensibleModel implements FakeRegionInterface
 {
@@ -44,7 +46,7 @@ class FakeRegion extends AbstractExtensibleModel implements FakeRegionInterface
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface|null
+     * @return \Magento\TestModuleExtensionAttributes\Api\Data\FakeRegionExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -54,11 +56,11 @@ class FakeRegion extends AbstractExtensibleModel implements FakeRegionInterface
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface $extensionAttributes
+     * @param \Magento\TestModuleExtensionAttributes\Api\Data\FakeRegionExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface $extensionAttributes
+        \Magento\TestModuleExtensionAttributes\Api\Data\FakeRegionExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
