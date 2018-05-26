@@ -6,6 +6,12 @@
 namespace Magento\Catalog\Block\Product\Widget;
 
 /**
+ * Add to cart postparams
+ */
+use Magento\Catalog\Model\Product;
+use Magento\Swatches\Block\Product\Renderer\Listing\Configurable;
+
+/**
  * New products widget
  */
 class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Magento\Widget\Block\BlockInterface
@@ -49,7 +55,9 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      */
     private $serializer;
 
-
+    /**
+     * @var \Magento\Swatches\Block\Product\Renderer\Listing\Configurable
+     */
     protected $_listConfigurable;
 
     /**
@@ -67,7 +75,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Swatches\Block\Product\Renderer\Listing\Configurable $listconfigurable,
+        Configurable $listconfigurable,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
@@ -291,10 +299,10 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     {
         $renderer =  $this->_listConfigurable;
 
-       if ($renderer) {
-          $renderer->setProduct($product);
+        if ($renderer) {
+            $renderer->setProduct($product);
             return $renderer->setTemplate('product/listing/renderer.phtml')->toHtml();
-        }
+    }
         return '';
     }
     public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
