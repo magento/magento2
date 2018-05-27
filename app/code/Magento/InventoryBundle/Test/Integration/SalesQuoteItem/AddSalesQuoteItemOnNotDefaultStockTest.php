@@ -85,6 +85,8 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      */
     public function testAddInStockProductToQuote()
     {
+        $this->markTestSkipped('Waiting for bundle product on not default stock support');
+
         $productSku = 'bundle';
         $productQty = 4;
         $expectedQtyInCart = 4;
@@ -113,6 +115,8 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      */
     public function testAddOutOffStockProductToQuote()
     {
+        $this->markTestSkipped('Waiting for bundle product on not default stock support');
+
         $productSku = 'bundle';
         $productQty = 6;
         $expectedItemsInCart = 0;

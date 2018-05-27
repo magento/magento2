@@ -147,7 +147,8 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
     private function getQuote(): Quote
     {
         return Bootstrap::getObjectManager()->create(
-            Quote::class, [
+            Quote::class,
+            [
                 'data' => [
                     'store_id' => 1,
                     'is_active' => 0,

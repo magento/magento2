@@ -92,48 +92,48 @@ $bundleProductId = 3;
 /** @var Product $bundleProduct */
 $bundleProduct = Bootstrap::getObjectManager()->create(Product::class);
 $bundleProduct->setTypeId(Type::TYPE_BUNDLE)
-              ->setId($bundleProductId)
-              ->setWebsiteIds($websiteIds)
-              ->setAttributeSetId(4)
-              ->setName('Bundle Product')
-              ->setSku('bundle')
-              ->setVisibility(Visibility::VISIBILITY_BOTH)
-              ->setStatus(Status::STATUS_ENABLED)
-              ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
-              ->setPriceView(1)
-              ->setPriceType(1)
-              ->setShipmentType(1)
-              ->setPrice(10.0)
-              ->setBundleOptionsData(
-         [
-             [
-                 'title' => 'Bundle Product Items',
-                 'default_title' => 'Bundle Product Items',
-                 'type' => 'select',
-                 'required' => 1,
-                 'delete' => '',
-             ],
-         ]
-     )
-              ->setBundleSelectionsData(
-         [
-             [
-                 [
-                     'product_id' => $product->getId(),
-                     'selection_qty' => 1,
-                     'selection_can_change_qty' => 1,
-                     'delete' => '',
-                 ],
-             ],
-         ]
-     );
+    ->setId($bundleProductId)
+    ->setWebsiteIds($websiteIds)
+    ->setAttributeSetId(4)
+    ->setName('Bundle Product')
+    ->setSku('bundle')
+    ->setVisibility(Visibility::VISIBILITY_BOTH)
+    ->setStatus(Status::STATUS_ENABLED)
+    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
+    ->setPriceView(1)
+    ->setPriceType(1)
+    ->setShipmentType(1)
+    ->setPrice(10.0)
+    ->setBundleOptionsData(
+        [
+            [
+                'title' => 'Bundle Product Items',
+                'default_title' => 'Bundle Product Items',
+                'type' => 'select',
+                'required' => 1,
+                'delete' => '',
+            ],
+        ]
+    )
+    ->setBundleSelectionsData(
+        [
+            [
+                [
+                    'product_id' => $product->getId(),
+                    'selection_qty' => 1,
+                    'selection_can_change_qty' => 1,
+                    'delete' => '',
+                ],
+            ],
+        ]
+    );
 if ($bundleProduct->getBundleOptionsData()) {
     $options = [];
     foreach ($bundleProduct->getBundleOptionsData() as $key => $optionData) {
         if (!(bool)$optionData['delete']) {
             /** @var OptionInterface $option */
             $option = Bootstrap::getObjectManager()->create(OptionInterfaceFactory::class)
-                                    ->create(['data' => $optionData]);
+                ->create(['data' => $optionData]);
             $option->setSku($bundleProduct->getSku());
             $option->setOptionId(null);
             $links = [];
@@ -143,7 +143,7 @@ if ($bundleProduct->getBundleOptionsData()) {
                     if (!(bool)$linkData['delete']) {
                         /** @var LinkInterface $link */
                         $link = Bootstrap::getObjectManager()->create(LinkInterfaceFactory::class)
-                                              ->create(['data' => $linkData]);
+                            ->create(['data' => $linkData]);
                         $linkProduct = $productRepository->getById($linkData['product_id']);
                         $link->setSku($linkProduct->getSku());
                         $link->setQty($linkData['selection_qty']);
@@ -179,7 +179,7 @@ $stockItem->save();
 
 /** @var CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = Bootstrap::getObjectManager()
-                                   ->create(CategoryLinkManagementInterface::class);
+                                    ->create(CategoryLinkManagementInterface::class);
 
 $categoryLinkManagement->assignProductToCategories(
     $bundleProduct->getSku(),
