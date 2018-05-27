@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurableProduct\Test\Integration\Order;
 
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObjectFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -17,7 +20,6 @@ use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryReservationsApi\Model\CleanupReservationsInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
@@ -26,11 +28,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  */
 class PlaceOrderOnDefaultStockTest extends TestCase
 {
-    /**
-     * @var DefaultStockProviderInterface
-     */
-    private $defaultStockProvider;
-
     /**
      * @var CleanupReservationsInterface
      */
@@ -72,14 +69,9 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     private $orderManagement;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var DataObjectFactory
      */
-    private $eavConfig;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $optionCollectionFactory;
+    private $dataObjectFactory;
 
     protected function setUp()
     {
@@ -88,51 +80,93 @@ class PlaceOrderOnDefaultStockTest extends TestCase
         $this->cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
-        $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
         $this->orderManagement = Bootstrap::getObjectManager()->get(OrderManagementInterface::class);
-        $this->eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
-        $this->optionCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
+        $this->dataObjectFactory = Bootstrap::getObjectManager()->get(DataObjectFactory::class);
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/product_configurable.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/source_items_configurable_on_default_source.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
     public function testPlaceOrderWithInStockProduct()
     {
-        $sku = 'configurable';
-        $qty = 90;
+        $sku = 'configurable_in_stock';
+        $qty = 4;
 
-        $cart = $this->getCart();
         $product = $this->productRepository->get($sku);
+        $quote = $this->getQuote();
 
-        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-        $attribute = $this->eavConfig->getAttribute('catalog_product', 'test_configurable');
+        $quote->addProduct($product, $this->getByRequest($product, $qty));
+        $orderId = $this->cartManagement->placeOrder($quote->getId());
 
-        /** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
-        $options = $this->optionCollectionFactory->create();
-        $option = $options->setAttributeFilter($attribute->getId())
-            ->getFirstItem();
+        self::assertNotNull($orderId);
 
-        $requestInfo = new \Magento\Framework\DataObject(
-            [
-                'product' => (int)$product->getId(),
-                'selected_configurable_option' => 1,
-                'qty' => $qty,
-                'super_attribute' => [
-                    $attribute->getId() => $option->getId()
-                ]
-            ]
-        );
-        $cart->addProduct($product, $requestInfo);
+        //cleanup
+        $this->deleteOrderById((int)$orderId);
+    }
 
-        $orderId = $this->cartManagement->placeOrder($cart->getId());
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     */
+    public function testPlaceOrderWithOutOffStockProduct()
+    {
+        $sku = 'configurable_out_of_stock';
+        $qty = 8;
+
+        $quote = $this->getQuote();
+        $product = $this->productRepository->get($sku);
+        $quote->addProduct($product, $this->getByRequest($product, $qty));
+
+        self::expectException(LocalizedException::class);
+        $orderId = $this->cartManagement->placeOrder($quote->getId());
+
+        self::assertNull($orderId);
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @magentoConfigFixture current_store cataloginventory/item_options/backorders 1
+     */
+    public function testPlaceOrderWithOutOffStockProductAndBackOrdersTurnedOn()
+    {
+        $sku = 'configurable_out_of_stock';
+        $qty = 8;
+
+        $product = $this->productRepository->get($sku);
+        $quote = $this->getQuote();
+        $quote->addProduct($product, $this->getByRequest($product, $qty));
+
+        $orderId = $this->cartManagement->placeOrder($quote->getId());
+
+        self::assertNotNull($orderId);
+
+        //cleanup
+        $this->deleteOrderById((int)$orderId);
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @magentoConfigFixture current_store cataloginventory/item_options/manage_stock 0
+     */
+    public function testPlaceOrderWithOutOffStockProductAndManageStockTurnedOff()
+    {
+        $sku = 'configurable_out_of_stock';
+        $qty = 8;
+
+        $product = $this->productRepository->get($sku);
+        $quote = $this->getQuote();
+        $quote->addProduct($product, $this->getByRequest($product, $qty));
+
+        $orderId = $this->cartManagement->placeOrder($quote->getId());
 
         self::assertNotNull($orderId);
 
@@ -143,7 +177,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     /**
      * @return CartInterface
      */
-    private function getCart(): CartInterface
+    private function getQuote(): CartInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('reserved_order_id', 'test_order_1')
@@ -153,6 +187,26 @@ class PlaceOrderOnDefaultStockTest extends TestCase
         $cart->setStoreId(1);
 
         return $cart;
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param float $productQty
+     *
+     * @return DataObject
+     */
+    private function getByRequest(ProductInterface $product, float $productQty): DataObject
+    {
+        $configurableOptions = $product->getTypeInstance()->getConfigurableOptions($product);
+        $option = current(current($configurableOptions));
+
+        return $this->dataObjectFactory->create(
+            [
+                'product' => $option['product_id'],
+                'super_attribute' => [key($configurableOptions) => $option['value_index']],
+                'qty' => $productQty
+            ]
+        );
     }
 
     /**
