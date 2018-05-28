@@ -97,6 +97,16 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected $_relatedCacheTypes;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Type
+     */
+    protected $_productType;
+
+    /**
+     * @var \Magento\Widget\Model\Config\Reader
+     */
+    protected $_reader;
+
+    /**
      * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
