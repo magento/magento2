@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Order configuration model
@@ -85,7 +86,7 @@ class Config
 
     /**
      * @param string $state
-     * @return Status|null
+     * @return Status
      */
     protected function _getState($state)
     {
@@ -101,7 +102,7 @@ class Config
      * Retrieve default status for state
      *
      * @param   string $state
-     * @return  string
+     * @return  string|null
      */
     public function getStateDefaultStatus($state)
     {
@@ -117,10 +118,10 @@ class Config
     /**
      * Retrieve status label
      *
-     * @param   string $code
-     * @param null $forceArea
-     * @return  string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param string $code
+     * @param string|null $forceArea
+     * @return string
+     * @throws LocalizedException
      */
     public function getStatusLabel($code, $forceArea = null)
     {

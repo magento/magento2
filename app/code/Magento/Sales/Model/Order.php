@@ -8,6 +8,7 @@ namespace Magento\Sales\Model;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -986,7 +987,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve frontend label of order status
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getFrontendStatusLabel()
     {
@@ -997,7 +998,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve label of order status
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getStatusLabel()
     {
@@ -1083,12 +1084,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function hold()
     {
         if (!$this->canHold()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('A hold action is not available.'));
+            throw new LocalizedException(__('A hold action is not available.'));
         }
         $this->setHoldBeforeState($this->getState());
         $this->setHoldBeforeStatus($this->getStatus());
@@ -1101,12 +1102,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Attempt to unhold the order
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function unhold()
     {
         if (!$this->canUnhold()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('You cannot remove the hold.'));
+            throw new LocalizedException(__('You cannot remove the hold.'));
         }
 
         $this->setState($this->getHoldBeforeState())
@@ -1150,7 +1151,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param string $comment
      * @param bool $graceful
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function registerCancellation($comment = '', $graceful = true)
@@ -1189,7 +1190,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
                 $this->addStatusHistoryComment($comment, false);
             }
         } elseif (!$graceful) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot cancel this order.'));
+            throw new LocalizedException(__('We cannot cancel this order.'));
         }
         return $this;
     }
