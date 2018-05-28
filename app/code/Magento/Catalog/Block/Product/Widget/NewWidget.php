@@ -5,10 +5,6 @@
  */
 namespace Magento\Catalog\Block\Product\Widget;
 
-/**
- * Add to cart postparams
- */
-use Magento\Catalog\Model\Product;
 use Magento\Swatches\Block\Product\Renderer\Listing\Configurable;
 
 /**

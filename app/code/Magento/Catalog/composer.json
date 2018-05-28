@@ -4,6 +4,7 @@
     "require": {
         "php": "~7.0.13|~7.1.0",
         "magento/module-store": "100.2.*",
+        "magento/module-swatches": "100.2.*",
         "magento/module-eav": "101.0.*",
         "magento/module-cms": "102.0.*",
         "magento/module-indexer": "100.2.*",
