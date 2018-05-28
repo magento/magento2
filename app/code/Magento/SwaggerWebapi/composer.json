@@ -1,16 +1,12 @@
 {
     "name": "magento/module-swagger-webapi",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "version": "100.2.2",
     "require": {
         "php": "~7.0.13|~7.1.0",
-        "magento/framework": "*",
-        "magento/module-swagger": "*"
+        "magento/framework": "101.0.*"
     },
     "type": "magento2-module",
+    "version": "100.2.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
