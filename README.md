@@ -24,7 +24,7 @@ php bin/magento setup:upgrade
 php bin/magento setup:di:compile
 php bin/magento setup:static-content:deploy
 ```
-## Changelog:
+## Changelog
 https://magefan.com/login-as-customer-magento-2-extension
 
 ## Support
