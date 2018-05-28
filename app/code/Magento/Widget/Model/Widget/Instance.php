@@ -22,6 +22,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method int getThemeId()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
