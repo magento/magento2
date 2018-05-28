@@ -78,7 +78,7 @@ class AfterAddressSaveObserver implements ObserverInterface
     /**
      * @var CustomerFactory
      */
-    private $customerFactory;
+    protected $customerFactory;
     
     /**
      * @var DateTime
