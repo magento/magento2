@@ -281,7 +281,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             ? $arguments['display_minimal_price']
             : true;
 
-            /** @var \Magento\Framework\Pricing\Render $priceRender */
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
 
         $price = '';
@@ -295,6 +295,10 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         return $price;
     }
 
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return string
+     */
     public function getProductDetailHtml(\Magento\Catalog\Model\Product $product)
     {
         $renderer =  $this->_listConfigurable;
@@ -302,9 +306,14 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         if ($renderer) {
             $renderer->setProduct($product);
             return $renderer->setTemplate('product/listing/renderer.phtml')->toHtml();
-    }
+        }
         return '';
     }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return array
+     */
     public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
     {
         $url = $this->getAddToCartUrl($product);
