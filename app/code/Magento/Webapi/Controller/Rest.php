@@ -255,4 +255,76 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             throw new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
         }
     }
+
+    /**
+     * Execute schema request
+     *
+     * @return void
+     * @deprecated 100.1.0
+     */
+    protected function processSchemaRequest()
+    {
+        $requestedServices = $this->_request->getRequestedServices('all');
+        $requestedServices = $requestedServices == Request::ALL_SERVICES
+            ? $this->swaggerGenerator->getListOfServices()
+            : $requestedServices;
+        $responseBody = $this->swaggerGenerator->generate(
+            $requestedServices,
+            $this->_request->getScheme(),
+            $this->_request->getHttpHost(false),
+            $this->_request->getRequestUri()
+        );
+        $this->_response->setBody($responseBody)->setHeader('Content-Type', 'application/json');
+    }
+
+    /**
+     * Execute API request
+     *
+     * @return void
+     * @deprecated 100.1.0
+     * @throws AuthorizationException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Webapi\Exception
+     */
+    protected function processApiRequest()
+    {
+        $inputParams = $this->getInputParamsResolver()->resolve();
+
+        $route = $this->getInputParamsResolver()->getRoute();
+        $serviceMethodName = $route->getServiceMethod();
+        $serviceClassName = $route->getServiceClass();
+
+        $service = $this->_objectManager->get($serviceClassName);
+        /** @var \Magento\Framework\Api\AbstractExtensibleObject $outputData */
+        $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
+        $outputData = $this->serviceOutputProcessor->process(
+            $outputData,
+            $serviceClassName,
+            $serviceMethodName
+        );
+        if ($this->_request->getParam(FieldsFilter::FILTER_PARAMETER) && is_array($outputData)) {
+            $outputData = $this->fieldsFilter->filter($outputData);
+        }
+        $header = $this->getDeploymentConfig()->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT);
+        if ($header) {
+            $this->_response->setHeader('X-Frame-Options', $header);
+        }
+        $this->_response->prepareResponse($outputData);
+    }
+
+    /**
+     * Get deployment config
+     *
+     * @return DeploymentConfig
+     * @deprecated 100.1.0
+     */
+    private function getDeploymentConfig()
+    {
+        if (!$this->deploymentConfig instanceof \Magento\Framework\App\DeploymentConfig) {
+            $this->deploymentConfig = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
+    }
+
 }

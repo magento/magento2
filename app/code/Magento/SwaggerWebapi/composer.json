@@ -4,6 +4,7 @@
     "config": {
         "sort-packages": true
     },
+    "version": "100.2.2",
     "require": {
         "php": "~7.0.13|~7.1.0",
         "magento/framework": "*",
