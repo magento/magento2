@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundle\Test\Integration\SalesQuoteItem;
+namespace Magento\InventoryBundleProduct\Test\Integration\SalesQuoteItem;
 
 use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -58,7 +58,7 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/default_stock_bundle_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/default_stock_bundle_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
     public function testAddOutOfStockProductToQuote()
@@ -77,7 +77,7 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/default_stock_bundle_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/default_stock_bundle_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
     public function testAddInStockProductToQuote()

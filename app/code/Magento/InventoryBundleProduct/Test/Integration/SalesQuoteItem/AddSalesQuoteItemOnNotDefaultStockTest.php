@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundle\Test\Integration\SalesQuoteItem;
+namespace Magento\InventoryBundleProduct\Test\Integration\SalesQuoteItem;
 
 use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -74,11 +74,11 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/product_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/product_bundle.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/source_items_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/source_items_bundle.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDbIsolation disabled
@@ -103,12 +103,12 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/product_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/product_bundle.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/source_items_bundle.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/set_product_bundle_out_of_stock.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/source_items_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/set_product_bundle_out_of_stock.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDbIsolation disabled
