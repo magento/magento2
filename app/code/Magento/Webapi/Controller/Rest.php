@@ -13,12 +13,15 @@ use Magento\Framework\Webapi\ErrorProcessor;
 use Magento\Framework\Webapi\Request;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
+use Magento\Framework\Webapi\Rest\Response\FieldsFilter;
 use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
+use Magento\Webapi\Model\Rest\Swagger\Generator;
 use Magento\Webapi\Controller\Rest\RequestProcessorPool;
 
 /**
@@ -92,6 +95,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $areaList;
 
     /**
+     * @var \Magento\Framework\Webapi\Rest\Response\FieldsFilter
+     */
+    protected $fieldsFilter;
+
+    /**
      * @var \Magento\Framework\Session\Generic
      */
     protected $session;
@@ -103,6 +111,16 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $paramsOverrider;
 
     /**
+     * @var \Magento\Framework\Webapi\ServiceOutputProcessor
+     */
+    protected $serviceOutputProcessor;
+
+    /**
+     * @var \Magento\Webapi\Model\Rest\Swagger\Generator
+     */
+    protected $swaggerGenerator;
+
+    /**
      * @var RequestProcessorPool
      */
     protected $requestProcessorPool;
@@ -112,6 +130,16 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @deprecated 100.1.0
      */
     private $storeManager;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var Rest\InputParamsResolver
+     */
+    private $inputParamsResolver;
 
     /**
      * Initialize dependencies
@@ -126,9 +154,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param ErrorProcessor $errorProcessor
      * @param PathProcessor $pathProcessor
      * @param \Magento\Framework\App\AreaList $areaList
+     * @param FieldsFilter $fieldsFilter
      * @param ParamsOverrider $paramsOverrider
      * @param StoreManagerInterface $storeManager
-     * @param RequestProcessorPool $requestProcessorPool
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -144,9 +172,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         ErrorProcessor $errorProcessor,
         PathProcessor $pathProcessor,
         \Magento\Framework\App\AreaList $areaList,
+        FieldsFilter $fieldsFilter,
         ParamsOverrider $paramsOverrider,
-        StoreManagerInterface $storeManager,
-        RequestProcessorPool $requestProcessorPool
+        ServiceOutputProcessor $serviceOutputProcessor,
+        Generator $swaggerGenerator,
+        StoreManagerInterface $storeManager
     ) {
         $this->_router = $router;
         $this->_request = $request;
@@ -158,9 +188,12 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->_errorProcessor = $errorProcessor;
         $this->_pathProcessor = $pathProcessor;
         $this->areaList = $areaList;
+        $this->fieldsFilter = $fieldsFilter;
         $this->paramsOverrider = $paramsOverrider;
+        $this->serviceOutputProcessor = $serviceOutputProcessor;
+        $this->swaggerGenerator = $swaggerGenerator;
         $this->storeManager = $storeManager;
-        $this->requestProcessorPool = $requestProcessorPool;
+        $this->requestProcessorPool = $this->_objectManager->get(RequestProcessorPool::class);
     }
 
     /**
