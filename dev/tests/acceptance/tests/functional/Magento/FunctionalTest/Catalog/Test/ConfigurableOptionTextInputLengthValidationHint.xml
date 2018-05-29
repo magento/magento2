@@ -16,7 +16,7 @@
             <description value="You should have a dynamic length validation hint when using text option has max char limit"/>
             <severity value="MINOR"/>
             <testCaseId value="MAGETWO-92229"/>
-            <group value="product123"/>
+            <group value="product"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
