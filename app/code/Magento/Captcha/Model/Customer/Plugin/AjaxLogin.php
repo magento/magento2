@@ -81,9 +81,9 @@ class AjaxLogin
         if ($content) {
             $loginParams = $this->serializer->unserialize($content);
         }
-        $username = isset($loginParams['username']) ? $loginParams['username'] : null;
-        $captchaString = isset($loginParams[$captchaInputName]) ? $loginParams[$captchaInputName] : null;
-        $loginFormId = isset($loginParams[$captchaFormIdField]) ? $loginParams[$captchaFormIdField] : null;
+        $username = $loginParams['username'] ?? null;
+        $captchaString = $loginParams[$captchaInputName] ?? null;
+        $loginFormId = $loginParams[$captchaFormIdField] ?? null;
 
         foreach ($this->formIds as $formId) {
             $captchaModel = $this->helper->getCaptcha($formId);
