@@ -22,8 +22,12 @@ $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productSearchCriteriaBuilder = $objectManager->create(SearchCriteriaBuilder::class);
 $searchCriteria = $productSearchCriteriaBuilder->addFilter('sku', ['simple1', 'simple2', 'simple3'], 'in')
     ->create();
-$productList = $productRepository->getList($searchCriteria)
-    ->getItems();
+$productList = $productRepository->getList($searchCriteria)->getItems();
+
+$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', true);
+
 if (!empty($productList)) {
     foreach ($productList as $product) {
         $productRepository->delete($product);
