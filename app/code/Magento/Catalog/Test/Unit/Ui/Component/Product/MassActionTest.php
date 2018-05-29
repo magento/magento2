@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\Component\Product;
 
 use Magento\Catalog\Ui\Component\Product\MassAction;
@@ -93,7 +95,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getPrepareDataProvider()
+    public function getPrepareDataProvider() : array
     {
         return [
             [

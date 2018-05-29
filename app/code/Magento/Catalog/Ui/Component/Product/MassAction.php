@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Ui\Component\Product;
 
 use Magento\Framework\AuthorizationInterface;
@@ -43,7 +45,7 @@ class MassAction extends AbstractComponent
     /**
      * {@inheritdoc}
      */
-    public function prepare()
+    public function prepare() : void
     {
         $config = $this->getConfiguration();
 
@@ -67,7 +69,7 @@ class MassAction extends AbstractComponent
     /**
      * {@inheritdoc}
      */
-    public function getComponentName()
+    public function getComponentName() : string
     {
         return static::NAME;
     }
@@ -78,7 +80,7 @@ class MassAction extends AbstractComponent
      * @param string $actionType
      * @return bool
      */
-    private function isActionAllowed($actionType)
+    private function isActionAllowed($actionType) : bool
     {
         $isAllowed = true;
         switch ($actionType) {
