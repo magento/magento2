@@ -138,7 +138,7 @@
                     <formElements>
                         <select>
                             <settings>
-                                <options class="Magento\Inventory\Model\OptionSource\SourceItemStatus"/>
+                                <options class="Magento\InventoryCatalogAdminUi\Model\OptionSource\SourceItemStatus"/>
                             </settings>
                         </select>
                     </formElements>

@@ -5,22 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryImportExport\Model\Export\Source;
+namespace Magento\InventoryCatalogAdminUi\Model\OptionSource;
 
-use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Framework\Data\OptionSourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * @inheritdoc
+ * Provide option values for UI
  */
-class StockStatus extends AbstractSource
+class SourceItemStatus implements OptionSourceInterface
 {
     /**
-     * Retrieve All options
-     *
-     * @return array
+     * @inheritdoc
      */
-    public function getAllOptions()
+    public function toOptionArray()
     {
         return [
             [

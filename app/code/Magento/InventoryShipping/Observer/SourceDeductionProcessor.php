@@ -107,7 +107,7 @@ class SourceDeductionProcessor implements ObserverInterface
         ]);
 
         /** @var \Magento\Sales\Model\Order\Shipment\Item $shipmentItem */
-        foreach ($shipment->getItems() as $shipmentItem) {
+        foreach ($shipment->getAllItems() as $shipmentItem) {
             foreach ($this->getItemsToDeduct->execute($shipmentItem) as $item) {
                 $shipmentItems[] = $item;
             }
