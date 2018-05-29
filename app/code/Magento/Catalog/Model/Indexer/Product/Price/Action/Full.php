@@ -170,12 +170,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
     private function switchTables()
     {
-        // Switch default table
-        $this->activeTableSwitcher->switchTable(
-            $this->_defaultIndexerResource->getConnection(),
-            [$this->_defaultIndexerResource->getMainTable()]
-        );
-
         $currentMode = $this->configReader
             ->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?: ModeSwitcher::INPUT_KEY_NONE;
 
@@ -186,7 +180,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         $dimensionTables = [];
 
         foreach ($dimensionsProviders as $dimension) {
-            $dimensionTables[] = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
+            $dimensionTables[] = $this->dimensionTableMaintainer->getMainTable($dimension);
         }
 
         if (count($dimensionTables) > 0) {
