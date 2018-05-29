@@ -31,7 +31,8 @@ class MultiDimensionProvider implements MultiDimensionProviderInterface
     /**
      * @param DimensionProviderInterface[] $dimensionProviders
      */
-    public function __construct(array $dimensionProviders = []) {
+    public function __construct(array $dimensionProviders = [])
+    {
         foreach ($dimensionProviders as $dimensionDataProvider) {
             $this->addDimensionDataProvider($dimensionDataProvider);
         }
@@ -47,7 +48,7 @@ class MultiDimensionProvider implements MultiDimensionProviderInterface
             $this->setNextDimension();
         }
         if (!$dimensionsCount) {
-            yield [[]];
+            yield [];
         }
     }
 
@@ -96,7 +97,6 @@ class MultiDimensionProvider implements MultiDimensionProviderInterface
     {
         $this->dimensionsDataProviders[] = $dimensionDataProvider;
         $this->dimensionsProvidersCount++;
-
     }
 
     private function initDataIterators()
