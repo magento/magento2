@@ -41,17 +41,14 @@ abstract class Category extends \Magento\Backend\App\Action
     /**
      * Resolve store id
      *
-     * Tries to take store id from store HTTP parameter, if can`t find it, try to dig into store_id
-     * If param is absent in store_id too, take default one
+     * Tries to take store id from store HTTP parameter
      * @see Store
      *
      * @return int
      */
     private function resolveStoreId() : int
     {
-        $storeId = $this->getRequest()->getParam('store', false);
-        $storeId = $storeId === false ? $this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID) : $storeId;
-        return (int) $storeId;
+        return (int) $this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID);
     }
 
     /**
