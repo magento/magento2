@@ -12,8 +12,6 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
  * Provide option values for UI
- *
- * @api
  */
 class SourceItemStatus implements OptionSourceInterface
 {

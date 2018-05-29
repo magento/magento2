@@ -9,7 +9,6 @@ namespace Magento\Inventory\Model\SourceItem\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\OptionSource\SourceItemStatus;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Model\SourceItemValidatorInterface;
 
@@ -24,20 +23,12 @@ class StatusValidator implements SourceItemValidatorInterface
     private $validationResultFactory;
 
     /**
-     * @var SourceItemStatus
-     */
-    private $sourceItemStatus;
-
-    /**
      * @param ValidationResultFactory $validationResultFactory
-     * @param SourceItemStatus $sourceItemStatus
      */
     public function __construct(
-        ValidationResultFactory $validationResultFactory,
-        SourceItemStatus $sourceItemStatus
+        ValidationResultFactory $validationResultFactory
     ) {
         $this->validationResultFactory = $validationResultFactory;
-        $this->sourceItemStatus = $sourceItemStatus;
     }
 
     /**
@@ -55,7 +46,7 @@ class StatusValidator implements SourceItemValidatorInterface
             return $this->validationResultFactory->create(['errors' => $errors]);
         }
 
-        $allowedStatuses = array_column($this->sourceItemStatus->toOptionArray(), 'value');
+        $allowedStatuses = [SourceItemInterface::STATUS_IN_STOCK, SourceItemInterface::STATUS_OUT_OF_STOCK];
 
         $errors = [];
         if (!in_array((int)$value, $allowedStatuses, true)) {
