@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
+
 use Magento\Framework\Exception\LocalizedException;
 
 /**
