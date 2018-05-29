@@ -232,6 +232,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         if ($isDeleteBehavior || !$customerImport) {
             $addressEntity->expects($this->never())->method('importData');
         } else {
+            $addressEntity->expects($this->once())->method('setCustomerAttributes')->will($this->returnSelf());
             $addressEntity->expects($this->once())->method('importData')->will($this->returnValue($addressImport));
         }
 
@@ -654,7 +655,6 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      */
     public function testImportData($behavior, $customerImport, $addressImport, $result)
     {
-        return;
         $isDeleteBehavior = $behavior == Import::BEHAVIOR_DELETE;
         $entityMock = $this->_getModelMockForImportData($isDeleteBehavior, $customerImport, $addressImport);
         $entityMock->setParameters(['behavior' => $behavior]);
