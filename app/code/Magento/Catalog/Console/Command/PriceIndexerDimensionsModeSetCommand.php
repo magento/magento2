@@ -107,12 +107,12 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
                 ModeSwitcher::INPUT_KEY_NONE;
 
             if ($previousMode !== $currentMode) {
-                $this->configWriter->saveConfig(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE, $currentMode);
-
                 //Create new tables and move data
                 $this->modeSwitcher->createTables($currentMode);
                 $this->modeSwitcher->moveData($currentMode, $previousMode);
 
+                //Change config options
+                $this->configWriter->saveConfig(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE, $currentMode);
                 $this->cacheTypeList->cleanType('config');
                 $indexer->invalidate();
 
@@ -145,7 +145,7 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
      *
      * @return InputOption[]
      */
-    public function getInputList()
+    public function getInputList(): array
     {
         $modeOptions[] = new InputArgument(
             self::INPUT_KEY_MODE,
@@ -163,7 +163,7 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
      * @param InputInterface $input
      * @return string[]
      */
-    public function validate(InputInterface $input)
+    public function validate(InputInterface $input): array
     {
         $errors = [];
 

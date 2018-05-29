@@ -77,10 +77,10 @@ class TableMaintainer
     /**
      * Return validated table name
      *
-     * @param string|string[] $table
+     * @param string $table
      * @return string
      */
-    private function getTable($table)
+    private function getTable(string $table): string
     {
         return $this->resource->getTableName($table);
     }
@@ -93,7 +93,7 @@ class TableMaintainer
      *
      * @return void
      */
-    private function createTable($mainTableName, $newTableName)
+    private function createTable(string $mainTableName, string $newTableName)
     {
         if (!$this->getConnection()->isTableExists($newTableName)) {
             $this->getConnection()->createTable(
@@ -109,7 +109,7 @@ class TableMaintainer
      *
      * @return void
      */
-    private function dropTable($tableName)
+    private function dropTable(string $tableName)
     {
         if ($this->getConnection()->isTableExists($tableName)) {
             $this->getConnection()->dropTable($tableName);
@@ -123,7 +123,7 @@ class TableMaintainer
      *
      * @return void
      */
-    private function truncateTable($tableName)
+    private function truncateTable(string $tableName)
     {
         if ($this->getConnection()->isTableExists($tableName)) {
             $this->getConnection()->truncateTable($tableName);
@@ -137,7 +137,7 @@ class TableMaintainer
      *
      * @return string
      */
-    private function getArrayKeyForTmpTable($dimensions)
+    private function getArrayKeyForTmpTable(array $dimensions): string
     {
         $key = 'tmp';
         foreach ($dimensions as $dimension) {
@@ -153,7 +153,7 @@ class TableMaintainer
      *
      * @return string
      */
-    public function getMainTable($dimensions)
+    public function getMainTable(array $dimensions): string
     {
         return $this->tableResolver->resolve(self::MAIN_INDEX_TABLE, $dimensions);
     }
@@ -165,7 +165,7 @@ class TableMaintainer
      *
      * @return void
      */
-    public function createTablesForDimensions($dimensions)
+    public function createTablesForDimensions(array $dimensions)
     {
         $mainTableName = $this->getMainTable($dimensions);
         //Create index table for dimensions based on on main replica table
@@ -190,7 +190,7 @@ class TableMaintainer
      *
      * @return void
      */
-    public function dropTablesForDimensions($dimensions)
+    public function dropTablesForDimensions(array $dimensions)
     {
         $mainTableName = $this->getMainTable($dimensions);
         $this->dropTable($mainTableName);
@@ -206,7 +206,7 @@ class TableMaintainer
      *
      * @return void
      */
-    public function truncateTablesForDimensions($dimensions)
+    public function truncateTablesForDimensions(array $dimensions)
     {
         $mainTableName = $this->getMainTable($dimensions);
         $this->truncateTable($mainTableName);
@@ -222,7 +222,7 @@ class TableMaintainer
      *
      * @return string
      */
-    public function getMainReplicaTable($dimensions)
+    public function getMainReplicaTable(array $dimensions)
     {
         return $this->getMainTable($dimensions) . $this->additionalTableSuffix;
     }
@@ -234,7 +234,7 @@ class TableMaintainer
      *
      * @return void
      */
-    public function createMainTmpTable($dimensions)
+    public function createMainTmpTable(array $dimensions)
     {
         if (!isset($this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)])) {
             $originTableName = $this->getMainTable($dimensions);
@@ -251,7 +251,7 @@ class TableMaintainer
      *
      * @return string
      */
-    public function getMainTmpTable($dimensions)
+    public function getMainTmpTable(array $dimensions)
     {
         return $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)];
     }

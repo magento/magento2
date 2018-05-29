@@ -67,9 +67,9 @@ class ModeSwitcher
     /**
      * DimensionCollectionFactory
      *
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory
      */
-    private $dimensionCollectionFactory;
+    private $dimensionProviderFactory;
 
     /**
      * @var array|null
@@ -83,7 +83,7 @@ class ModeSwitcher
      * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
      * @param \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory
+     * @param \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionProviderFactory
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $configReader,
@@ -92,7 +92,7 @@ class ModeSwitcher
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
         \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionCollectionFactory
+        \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionProviderFactory
     ) {
         $this->configReader = $configReader;
         $this->configWriter = $configWriter;
@@ -100,7 +100,7 @@ class ModeSwitcher
         $this->websiteRepository = $websiteRepository;
         $this->customerGroupRepository = $customerGroupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->dimensionCollectionFactory = $dimensionCollectionFactory;
+        $this->dimensionProviderFactory = $dimensionProviderFactory;
     }
 
     /**
@@ -110,7 +110,7 @@ class ModeSwitcher
      *
      * @return void
      */
-    public function createTables($currentMode)
+    public function createTables(string $currentMode)
     {
         foreach ($this->getDimensionsArray($currentMode) as $dimensions) {
             if (!empty($dimensions)) {
@@ -127,7 +127,7 @@ class ModeSwitcher
      *
      * @return void
      */
-    public function moveData($currentMode, $previousMode)
+    public function moveData(string $currentMode, string $previousMode)
     {
         $dimensionsArrayForCurrentMode = $this->getDimensionsArray($currentMode);
         $dimensionsArrayForPreviousMode = $this->getDimensionsArray($previousMode);
@@ -157,7 +157,7 @@ class ModeSwitcher
      *
      * @return void
      */
-    public function dropTables($previousMode)
+    public function dropTables(string $previousMode)
     {
         foreach ($this->getDimensionsArray($previousMode) as $dimensions) {
             if (empty($dimensions)) {
@@ -175,13 +175,13 @@ class ModeSwitcher
      *
      * @return array
      */
-    private function getDimensionsArray($mode)
+    private function getDimensionsArray(string $mode): \Magento\Framework\Indexer\MultiDimensionProviderInterface
     {
         if (isset($this->dimensionsArray[$mode])) {
             return $this->dimensionsArray[$mode];
         }
 
-        $this->dimensionsArray[$mode] = $this->dimensionCollectionFactory->createByMode($mode);
+        $this->dimensionsArray[$mode] = $this->dimensionProviderFactory->createByMode($mode);
 
         return $this->dimensionsArray[$mode];
     }
@@ -195,7 +195,7 @@ class ModeSwitcher
      *
      * @return void
      */
-    private function insertFromOldTablesToNew($newTable, $oldTable, $dimensions = [])
+    private function insertFromOldTablesToNew(string $newTable, string $oldTable, array $dimensions = [])
     {
         $select = $this->tableMaintainer->getConnection()->select()->from($oldTable);
 
