@@ -13,5 +13,10 @@
         <element name="productItemName" type="text" selector=".product-item-name"/>
         <element name="productItemQty" type="text" selector=".value"/>
         <element name="productItemPrice" type="text" selector=".price"/>
+        <element name="giftWrappingName" type="text" selector=".gift-wrapping-name"/>
+        <element name="giftWrappingReqularPrice" type="text" selector=".gift-wrapping-title .regular-price span"/>
+        <element name="giftRemoveButton" type="button" selector=".gift-wrapping-title .action-remove"/>
+        <element name="clickImage" type="text" selector=".gift-wrapping-preview"/>
+        <element name="clickButtonGiftUpdate" type="button" selector=".gift-options .actions-toolbar button[type='submit']"/>
     </section>
 </sections>

@@ -23,5 +23,16 @@
         <element name="viewAndEditCart" type="button" selector=".action.viewcart" timeout="30"/>
         <element name="miniCartItemsText" type="text" selector=".minicart-items"/>
         <element name="deleteMiniCartItem" type="button" selector=".action.delete" timeout="30"/>
+        <element name="giftWrapping" type="text" selector="//*[@id='cart-totals']//tr[@class='totals giftwrapping']//td[@class='amount']"/>
+        <element name="giftReceipt" type="text" selector=".gift-receipt label span"/>
+        <element name="giftReceiptCheckbox" type="checkbox" selector=".gift-receipt input"/>
+        <element name="giftPrintedCardCheckbox" type="checkbox" selector=".gift-printed-card input"/>
+        <element name="giftMessageTo" type="input" selector=".cart-gift-item .gift-message .gift-options-content .field-to input"/>
+        <element name="giftMessageFrom" type="input" selector=".cart-gift-item .gift-message .gift-options-content .field-from input"/>
+        <element name="giftMessage" type="textarea" selector=".cart-gift-item .gift-message .gift-options-content .text textarea"/>
+        <element name="giftWrappingNameResult" type="text" selector=".gift-summary .gift-wrapping-summary .gift-wrapping-name"/>
+        <element name="giftWrappingPriceResult" type="text" selector="//*[contains(., '{{var1}}')]/../span[@class='regular-price']//span[contains(., '{{var2}}')]" parameterized="true"/>
+        <element name="giftReceiptResult" type="text" selector=".gift-wrapping-summary span.label"/>
+        <element name="giftMessageResult" type="text" selector=".gift-message-summary span"/>
     </section>
 </sections>

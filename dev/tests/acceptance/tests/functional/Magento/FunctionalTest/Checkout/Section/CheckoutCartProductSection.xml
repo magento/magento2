@@ -26,5 +26,13 @@
                  parameterized="true"/>
         <element name="RemoveItem" type="button"
                  selector="//table[@id='shopping-cart-table']//tbody//tr[contains(@class,'item-actions')]//a[contains(@class,'action-delete')]"/>
+        <element name="giftOption" type="text" selector="//tr[contains(., '{{var1}}')]/following-sibling::*[contains(., '{{var2}}')]" parameterized="true"/>
+        <element name="giftOptionAll" type="text" selector="//div[contains(@class,'cart-gift-item')][contains(., '{{var1}}')]" parameterized="true"/>
+        <element name="clickGiftOptionsItem" type="button" selector=".gift-options-cart-item .action-gift"/>
+        <element name="clickGiftOptionsAll" type="button" selector=".gift-item-block .title span"/>
+        <element name="visibleSmallImageAll" type="text" selector=".gift-item-block .gift-options-content img"/>
+        <element name="visibleSmallImageItems" type="text" selector="#shopping-cart-table .gift-options-content img"/>
+        <element name="giftMessageAll" type="block" selector=".cart-gift-item .gift-message"/>
+        <element name="giftMessageItem" type="block" selector="#shopping-cart-table .gift-options .gift-message"/>
     </section>
 </sections>

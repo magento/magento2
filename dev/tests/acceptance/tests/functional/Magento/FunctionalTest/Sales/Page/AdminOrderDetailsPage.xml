@@ -22,5 +22,6 @@
         <section name="AdminOrderShipmentsTabSection"/>
         <section name="AdminOrderCommentsTabSection"/>
         <section name="AdminOrderTotalSection"/>
+        <section name="AdminOrderGiftOptionSection"/>
     </page>
 </pages>
