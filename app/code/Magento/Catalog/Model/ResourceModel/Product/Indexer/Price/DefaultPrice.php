@@ -444,6 +444,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      */
     protected function _applyCustomOption()
     {
+        // no need to run all queries if current products have no custom options
+        if (!$this->checkIfCustomOptionsExist()) {
+            return $this;
+        }
+
         $connection = $this->getConnection();
         $finalPriceTable = $this->_getDefaultFinalPriceTable();
 
@@ -453,18 +458,22 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $copTable = $this->_getCustomOptionPriceTable();
         $this->_prepareCustomOptionPriceTable();
 
+        // prepare prices for products with custom options that has multiple values
         $select = $this->customOptionsPrice->getSelectForOptionsWithMultipleValues($finalPriceTable);
         $query = $select->insertFromSelect($coaTable);
         $connection->query($query);
 
+        // prepare prices for products with custom options that has single value
         $select = $this->customOptionsPrice->getSelectForOptionsWithOneValue($finalPriceTable);
         $query = $select->insertFromSelect($coaTable);
         $connection->query($query);
 
+        // aggregate prices from previous two cases into one table
         $select = $this->customOptionsPrice->getSelectAggregated($coaTable);
         $query = $select->insertFromSelect($copTable);
         $connection->query($query);
 
+        // update tmp price index with prices from custom options (from previous aggregated table)
         $select = $this->customOptionsPrice->getSelectForUpdate($copTable);
         $query = $select->crossUpdateFromSelect(['i' => $finalPriceTable]);
         $connection->query($query);
@@ -473,6 +482,22 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $connection->delete($copTable);
 
         return $this;
+    }
+
+    private function checkIfCustomOptionsExist()
+    {
+        $select = $this->getConnection()
+            ->select()
+            ->from(
+                ['i' => $this->_getDefaultFinalPriceTable()],
+                ['entity_id']
+            )->join(
+                ['o' => $this->getTable('catalog_product_option')],
+                'o.product_id = i.entity_id',
+                []
+            );
+
+        return !empty($this->getConnection()->fetchRow($select));
     }
 
     /**
