@@ -1235,7 +1235,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $multiRowData = $this->_getMultiRowFormat($rowData);
                 if (!empty($rowData[self::COLUMN_SKU]) && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
                     $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
-                    if (array_key_exists('custom_options', $rowData) && trim($rowData['custom_options']) === "") {
+                    if (array_key_exists('custom_options', $rowData) && trim($rowData['custom_options']) === '') {
                         $optionsToRemove[] = $this->_rowProductId;
                     }
                 }
@@ -1273,15 +1273,18 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             $this->removeExistingOptions($products, $optionsToRemove);
 
+            $types = [
+                'values' => $typeValues,
+                'prices' => $typePrices,
+                'titles' => $typeTitles,
+            ];
             //Save prepared custom options data.
             $this->savePreparedCustomOptions(
                 $products,
                 $options,
                 $titles,
                 $prices,
-                $typeValues,
-                $typePrices,
-                $typeTitles
+                $types
             );
         }
 
@@ -1546,7 +1549,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _parseRequiredData(array $rowData)
     {
-        if (!isset($this->_rowProductId)) {
+        if ($this->_rowProductId === null) {
             return false;
         }
 
@@ -2006,9 +2009,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $options
      * @param array $titles
      * @param array $prices
-     * @param array $typeValues
-     * @param array $typePrices
-     * @param array $typeTitles
+     * @param array $types
      *
      * @return void
      */
@@ -2017,16 +2018,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         array $options,
         array $titles,
         array $prices,
-        array $typeValues,
-        array $typePrices,
-        array $typeTitles
+        array $types
     ): void {
-        if ($this->_isReadyForSaving($options, $titles, $typeValues)) {
-            $types = [
-                'values' => $typeValues,
-                'prices' => $typePrices,
-                'titles' => $typeTitles,
-            ];
+        if ($this->_isReadyForSaving($options, $titles, $types['values'])) {
             if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
                 $this->_compareOptionsWithExisting($options, $titles, $prices, $types['values']);
                 $this->restoreOriginalOptionTypeIds($types['values'], $types['prices'], $types['titles']);
