@@ -120,6 +120,18 @@ QUERY;
      */
     public function testCategoryProducts()
     {
+        /** @var \Magento\Catalog\Model\Indexer\Category\Product\Processor $categoryProductIndexer */
+        $categoryProductIndexer = $this->objectManager->get(
+            \Magento\Catalog\Model\Indexer\Category\Product\Processor::class
+        );
+        $categoryProductIndexer->reindexAll();
+
+        /** @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor $inventoryIndexer */
+        $inventoryIndexer = $this->objectManager->get(
+            \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class
+        );
+        $inventoryIndexer->reindexAll();
+
         $categoryId = 4;
         $query = <<<QUERY
 {
