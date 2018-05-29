@@ -32,12 +32,6 @@ class ExtensibleEntityProcessor implements CollectionProcessorInterface
         $this->joinProcessor = $joinProcessor;
     }
 
-    /**
-     * @param Collection $collection
-     * @param SearchCriteriaInterface $searchCriteria
-     * @param array $attributeNames
-     * @return Collection
-     */
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
