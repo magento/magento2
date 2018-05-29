@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\UrlRewrite\Plugin\Store\Model;
+namespace Magento\UrlRewrite\Plugin\Store;
 
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreSwitcher;
@@ -14,7 +14,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * Plugin handles url rewrites for redirect url
  */
-class SwitchAction
+class RewriteUrlAfterStoreSwitching
 {
     /**
      * @var UrlFinderInterface

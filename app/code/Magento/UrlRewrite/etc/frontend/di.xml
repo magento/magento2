@@ -18,6 +18,6 @@
         </arguments>
     </type>
     <type name="Magento\Store\Model\StoreSwitcher">
-        <plugin name="store_switcher_plugin" type="Magento\UrlRewrite\Plugin\Store\Model\SwitchAction"/>
+        <plugin name="urlrewrite_store_switcher_plugin" type="Magento\UrlRewrite\Plugin\Store\RewriteUrlAfterStoreSwitching"/>
     </type>
 </config>

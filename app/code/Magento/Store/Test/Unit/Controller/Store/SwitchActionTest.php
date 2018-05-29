@@ -10,6 +10,8 @@ use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreResolver;
+use Magento\Store\Model\StoreSwitcher;
 
 /**
  * Test class for \Magento\Store\Controller\Store\SwitchAction
@@ -56,8 +58,8 @@ class SwitchActionTest extends \PHPUnit\Framework\TestCase
      */
     private $redirectMock;
 
-    /** @var \Magento\Framework\Url\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    private $urlHelper;
+    /** @var StoreSwitcher|\PHPUnit_Framework_MockObject_MockObject */
+    private $storeSwitcher;
 
     protected function setUp()
     {
@@ -74,8 +76,9 @@ class SwitchActionTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->redirectMock =
             $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)->getMock();
-        $this->urlHelper = $this->getMockBuilder(\Magento\Framework\Url\Helper\Data::class)
+        $this->storeSwitcher = $this->getMockBuilder(StoreSwitcher::class)
             ->disableOriginalConstructor()
+            ->setMethods(['switch'])
             ->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
@@ -88,7 +91,7 @@ class SwitchActionTest extends \PHPUnit\Framework\TestCase
                 '_request' => $this->requestMock,
                 '_response' => $this->responseMock,
                 '_redirect' => $this->redirectMock,
-                'urlHelper' => $this->urlHelper
+                'storeSwitcher' => $this->storeSwitcher
             ]
         );
     }
@@ -104,21 +107,27 @@ class SwitchActionTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['isUseStoreInUrl'])
             ->getMockForAbstractClass();
 
-        $this->urlHelper->expects($this->any())
-            ->method('removeRequestParam')
-            ->willReturn($expectedRedirectUrl);
-
-        $this->requestMock->expects($this->once())->method('getParam')->willReturn($storeToSwitchToCode);
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                [StoreResolver::PARAM_NAME, null, $storeToSwitchToCode],
+                ['___from_store', null, $defaultStoreViewCode]
+            ]
+        );
+        $this->storeRepositoryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($defaultStoreViewCode)
+            ->willReturn($defaultStoreViewMock);
         $this->storeRepositoryMock
             ->expects($this->once())
             ->method('getActiveStoreByCode')
+            ->with($storeToSwitchToCode)
             ->willReturn($storeToSwitchToMock);
-        $this->storeManagerMock
-            ->expects($this->once())
-            ->method('getDefaultStoreView')
-            ->willReturn($defaultStoreViewMock);
-        $defaultStoreViewMock->expects($this->once())->method('getId')->willReturn($defaultStoreViewCode);
-        $storeToSwitchToMock->expects($this->once())->method('getId')->willReturn($storeToSwitchToCode);
+        $this->storeSwitcher->expects($this->once())
+            ->method('switch')
+            ->with($defaultStoreViewMock, $storeToSwitchToMock, $expectedRedirectUrl)
+            ->willReturn($expectedRedirectUrl);
+
         $this->redirectMock->expects($this->once())->method('getRedirectUrl')->willReturn($expectedRedirectUrl);
         $this->responseMock->expects($this->once())->method('setRedirect')->with($expectedRedirectUrl);
 

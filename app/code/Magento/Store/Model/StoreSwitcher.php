@@ -77,8 +77,8 @@ class StoreSwitcher
      */
     public function switch(StoreInterface $fromStore, StoreInterface $targetStore, string $redirectUrl): string
     {
-        // Remove SID, ___from_store, ___store from url
         $targetUrl = $redirectUrl;
+        // Remove SID, ___from_store, ___store from url
         $sidName = $this->sidResolver->getSessionIdQueryParam($this->session);
         $targetUrl = $this->urlHelper->removeRequestParam($targetUrl, $sidName);
         $targetUrl = $this->urlHelper->removeRequestParam($targetUrl, '___from_store');
