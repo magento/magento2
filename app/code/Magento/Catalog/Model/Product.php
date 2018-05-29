@@ -2108,6 +2108,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get cache tags associated with object id
      *
+     * @deprecated
+     * @see \Magento\Catalog\Model\Product::getIdentities
      * @return string[]
      */
     public function getCacheIdTags()
@@ -2533,13 +2535,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getExtensionAttributes()
     {
-        $extensionAttributes = $this->_getExtensionAttributes();
-        if (null === $extensionAttributes) {
-            /** @var \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes */
-            $extensionAttributes = $this->extensionAttributesFactory->create(ProductInterface::class);
-            $this->setExtensionAttributes($extensionAttributes);
-        }
-        return $extensionAttributes;
+        return $this->_getExtensionAttributes();
     }
 
     /**
