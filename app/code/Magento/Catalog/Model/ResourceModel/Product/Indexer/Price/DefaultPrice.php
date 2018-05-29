@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\CustomOptionsPrice;
 use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
@@ -74,6 +75,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     private $baseFinalPrice;
 
     /**
+     * @var CustomOptionsPrice
+     */
+    private $customOptionsPrice;
+
+    /**
      * @var DimensionCollectionFactory
      */
     private $dimensionCollectionFactory;
@@ -97,6 +103,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $connectionName = null,
         IndexTableStructureFactory $indexTableStructureFactory = null,
         BaseFinalPrice $baseFinalPrice = null,
+        CustomOptionsPrice $customOptionsPrice = null,
         DimensionProviderFactory $dimensionCollectionFactory = null,
         array $priceModifiers = []
     ) {
@@ -116,6 +123,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             $this->priceModifiers[] = $priceModifier;
         }
         $this->baseFinalPrice = $baseFinalPrice ?? ObjectManager::getInstance()->get(BaseFinalPrice::class);
+        $this->customOptionsPrice = $baseFinalPrice ?? ObjectManager::getInstance()->get(CustomOptionsPrice::class);
         $this->dimensionCollectionFactory = $dimensionCollectionFactory
             ?? ObjectManager::getInstance()->get(DimensionProviderFactory::class);
     }
@@ -438,177 +446,27 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     {
         $connection = $this->getConnection();
         $finalPriceTable = $this->_getDefaultFinalPriceTable();
-        $coaTable = $this->_getCustomOptionAggregateTable();
-        $copTable = $this->_getCustomOptionPriceTable();
-        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
+        $coaTable = $this->_getCustomOptionAggregateTable();
         $this->_prepareCustomOptionAggregateTable();
+
+        $copTable = $this->_getCustomOptionPriceTable();
         $this->_prepareCustomOptionPriceTable();
 
-        $select = $connection->select()->from(
-            ['i' => $finalPriceTable],
-            ['entity_id', 'customer_group_id', 'website_id']
-        )->join(
-            ['e' => $this->getTable('catalog_product_entity')],
-            'e.entity_id = i.entity_id',
-            []
-        )->join(
-            ['cw' => $this->getTable('store_website')],
-            'cw.website_id = i.website_id',
-            []
-        )->join(
-            ['csg' => $this->getTable('store_group')],
-            'csg.group_id = cw.default_group_id',
-            []
-        )->join(
-            ['cs' => $this->getTable('store')],
-            'cs.store_id = csg.default_store_id',
-            []
-        )->join(
-            ['o' => $this->getTable('catalog_product_option')],
-            'o.product_id = e.' . $metadata->getLinkField(),
-            ['option_id']
-        )->join(
-            ['ot' => $this->getTable('catalog_product_option_type_value')],
-            'ot.option_id = o.option_id',
-            []
-        )->join(
-            ['otpd' => $this->getTable('catalog_product_option_type_price')],
-            'otpd.option_type_id = ot.option_type_id AND otpd.store_id = 0',
-            []
-        )->joinLeft(
-            ['otps' => $this->getTable('catalog_product_option_type_price')],
-            'otps.option_type_id = otpd.option_type_id AND otpd.store_id = cs.store_id',
-            []
-        )->group(
-            ['i.entity_id', 'i.customer_group_id', 'i.website_id', 'o.option_id']
-        );
-
-        $optPriceType = $connection->getCheckSql('otps.option_type_price_id > 0', 'otps.price_type', 'otpd.price_type');
-        $optPriceValue = $connection->getCheckSql('otps.option_type_price_id > 0', 'otps.price', 'otpd.price');
-        $minPriceRound = new \Zend_Db_Expr("ROUND(i.price * ({$optPriceValue} / 100), 4)");
-        $minPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $minPriceRound);
-        $minPriceMin = new \Zend_Db_Expr("MIN({$minPriceExpr})");
-        $minPrice = $connection->getCheckSql("MIN(o.is_require) = 1", $minPriceMin, '0');
-
-        $tierPriceRound = new \Zend_Db_Expr("ROUND(i.base_tier * ({$optPriceValue} / 100), 4)");
-        $tierPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
-        $tierPriceMin = new \Zend_Db_Expr("MIN({$tierPriceExpr})");
-        $tierPriceValue = $connection->getCheckSql("MIN(o.is_require) > 0", $tierPriceMin, 0);
-        $tierPrice = $connection->getCheckSql("MIN(i.base_tier) IS NOT NULL", $tierPriceValue, "NULL");
-
-        $maxPriceRound = new \Zend_Db_Expr("ROUND(i.price * ({$optPriceValue} / 100), 4)");
-        $maxPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $maxPriceRound);
-        $maxPrice = $connection->getCheckSql(
-            "(MIN(o.type)='radio' OR MIN(o.type)='drop_down')",
-            "MAX({$maxPriceExpr})",
-            "SUM({$maxPriceExpr})"
-        );
-
-        $select->columns(
-            [
-                'min_price' => $minPrice,
-                'max_price' => $maxPrice,
-                'tier_price' => $tierPrice,
-            ]
-        );
-
+        $select = $this->customOptionsPrice->getSelectForOptionsWithMultipleValues($finalPriceTable);
         $query = $select->insertFromSelect($coaTable);
         $connection->query($query);
 
-        $select = $connection->select()->from(
-            ['i' => $finalPriceTable],
-            ['entity_id', 'customer_group_id', 'website_id']
-        )->join(
-            ['e' => $this->getTable('catalog_product_entity')],
-            'e.entity_id = i.entity_id',
-            []
-        )->join(
-            ['cw' => $this->getTable('store_website')],
-            'cw.website_id = i.website_id',
-            []
-        )->join(
-            ['csg' => $this->getTable('store_group')],
-            'csg.group_id = cw.default_group_id',
-            []
-        )->join(
-            ['cs' => $this->getTable('store')],
-            'cs.store_id = csg.default_store_id',
-            []
-        )->join(
-            ['o' => $this->getTable('catalog_product_option')],
-            'o.product_id = e.' . $metadata->getLinkField(),
-            ['option_id']
-        )->join(
-            ['opd' => $this->getTable('catalog_product_option_price')],
-            'opd.option_id = o.option_id AND opd.store_id = 0',
-            []
-        )->joinLeft(
-            ['ops' => $this->getTable('catalog_product_option_price')],
-            'ops.option_id = opd.option_id AND ops.store_id = cs.store_id',
-            []
-        );
-
-        $optPriceType = $connection->getCheckSql('ops.option_price_id > 0', 'ops.price_type', 'opd.price_type');
-        $optPriceValue = $connection->getCheckSql('ops.option_price_id > 0', 'ops.price', 'opd.price');
-
-        $minPriceRound = new \Zend_Db_Expr("ROUND(i.price * ({$optPriceValue} / 100), 4)");
-        $priceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $minPriceRound);
-        $minPrice = $connection->getCheckSql("{$priceExpr} > 0 AND o.is_require = 1", $priceExpr, 0);
-
-        $maxPrice = $priceExpr;
-
-        $tierPriceRound = new \Zend_Db_Expr("ROUND(i.base_tier * ({$optPriceValue} / 100), 4)");
-        $tierPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
-        $tierPriceValue = $connection->getCheckSql("{$tierPriceExpr} > 0 AND o.is_require = 1", $tierPriceExpr, 0);
-        $tierPrice = $connection->getCheckSql("i.base_tier IS NOT NULL", $tierPriceValue, "NULL");
-
-        $select->columns(
-            [
-                'min_price' => $minPrice,
-                'max_price' => $maxPrice,
-                'tier_price' => $tierPrice,
-            ]
-        );
-
+        $select = $this->customOptionsPrice->getSelectForOptionsWithOneValue($finalPriceTable);
         $query = $select->insertFromSelect($coaTable);
         $connection->query($query);
 
-        $select = $connection->select()->from(
-            [$coaTable],
-            [
-                'entity_id',
-                'customer_group_id',
-                'website_id',
-                'min_price' => 'SUM(min_price)',
-                'max_price' => 'SUM(max_price)',
-                'tier_price' => 'SUM(tier_price)',
-            ]
-        )->group(
-            ['entity_id', 'customer_group_id', 'website_id']
-        );
+        $select = $this->customOptionsPrice->getSelectAggregated($coaTable);
         $query = $select->insertFromSelect($copTable);
         $connection->query($query);
 
-        $table = ['i' => $finalPriceTable];
-        $select = $connection->select()->join(
-            ['io' => $copTable],
-            'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
-            ' AND i.website_id = io.website_id',
-            []
-        );
-        $select->columns(
-            [
-                'min_price' => new \Zend_Db_Expr('i.min_price + io.min_price'),
-                'max_price' => new \Zend_Db_Expr('i.max_price + io.max_price'),
-                'tier_price' => $connection->getCheckSql(
-                    'i.tier_price IS NOT NULL',
-                    'i.tier_price + io.tier_price',
-                    'NULL'
-                ),
-            ]
-        );
-        $query = $select->crossUpdateFromSelect($table);
+        $select = $this->customOptionsPrice->getSelectForUpdate($copTable);
+        $query = $select->crossUpdateFromSelect(['i' => $finalPriceTable]);
         $connection->query($query);
 
         $connection->delete($coaTable);
