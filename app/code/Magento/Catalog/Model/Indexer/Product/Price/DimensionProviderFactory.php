@@ -90,7 +90,7 @@ class DimensionProviderFactory
                 );
             }
 
-            $providers[] = $this->dimensionProviders[$modeDataProviderName];
+            $providers[] = clone $this->dimensionProviders[$modeDataProviderName];
         }
 
         return $providers;
