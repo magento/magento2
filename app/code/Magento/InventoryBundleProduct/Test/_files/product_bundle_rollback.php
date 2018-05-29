@@ -6,7 +6,6 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogInventory\Model\Stock\Status;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -26,11 +25,6 @@ $productRepository = Bootstrap::getObjectManager()
 foreach (['simple_10', 'bundle'] as $sku) {
     try {
         $product = $productRepository->get($sku, false, null, true);
-
-        $stockStatus = $objectManager->create(Status::class);
-        $stockStatus->load($product->getEntityId(), 'product_id');
-        $stockStatus->delete();
-
         $productRepository->delete($product);
     } catch (NoSuchEntityException $e) {
         //Product already removed

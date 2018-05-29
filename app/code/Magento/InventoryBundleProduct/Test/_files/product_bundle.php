@@ -16,13 +16,10 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Setup\CategorySetup;
-use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\Registry;
 use Magento\Quote\Model\ResourceModel\Quote\Item as QuoteItem;
 use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
-
-Bootstrap::getInstance()->reinitialize();
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
@@ -52,19 +49,6 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
 
 $product = $productRepository->save($product);
-
-/** @var Item $stockItem */
-$stockItem = Bootstrap::getObjectManager()->create(Item::class);
-$stockItem->load($productId, 'product_id');
-
-if (!$stockItem->getProductId()) {
-    $stockItem->setProductId($productId);
-}
-$stockItem->setUseConfigManageStock(1);
-$stockItem->setQty(1000);
-$stockItem->setIsQtyDecimal(0);
-$stockItem->setIsInStock(1);
-$stockItem->save();
 
 // Remove any previously created product with the same id.
 /** @var Registry $registry */
@@ -163,19 +147,6 @@ if ($bundleProduct->getBundleOptionsData()) {
     $bundleProduct->setExtensionAttributes($extension);
 }
 $bundleProduct->save();
-
-/** @var Item $stockItem */
-$stockItem = Bootstrap::getObjectManager()->create(Item::class);
-$stockItem->load($bundleProductId, 'product_id');
-
-if (!$stockItem->getProductId()) {
-    $stockItem->setProductId($bundleProductId);
-}
-$stockItem->setUseConfigManageStock(1);
-$stockItem->setQty(100);
-$stockItem->setIsQtyDecimal(0);
-$stockItem->setIsInStock(1);
-$stockItem->save();
 
 /** @var CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = Bootstrap::getObjectManager()
