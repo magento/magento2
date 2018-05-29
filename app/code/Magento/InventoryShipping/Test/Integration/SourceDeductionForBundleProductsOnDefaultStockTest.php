@@ -74,9 +74,15 @@ class SourceDeductionForBundleProductsOnDefaultStockTest extends TestCase
             ->get(ShipmentItemCreationInterfaceFactory::class);
     }
 
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_bundle_children.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/products_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_bundle_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     */
     public function testSourceDeductionWhileShippingBundleWithShipmentSeparately()
     {
-        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/1154');
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('increment_id', 'test_order_bundle_1')
             ->create();
@@ -116,9 +122,15 @@ class SourceDeductionForBundleProductsOnDefaultStockTest extends TestCase
         self::assertEquals(4, $salableQty);
     }
 
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_bundle_children.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/products_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_bundle_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     */
     public function testSourceDeductionWhileShippingBundleWithShipmentTogether()
     {
-        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/1154');
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('increment_id', 'test_order_bundle_1')
             ->create();
