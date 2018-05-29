@@ -12,6 +12,8 @@ use Magento\Framework\Message\MessageInterface;
 /**
  * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
  *
+ * @magentoDbIsolation disabled
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CompareTest extends \Magento\TestFramework\TestCase\AbstractController

@@ -64,6 +64,10 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->adapter = $this->createAdapter();
+
+        $indexer = $this->objectManager->create(\Magento\Indexer\Model\Indexer::class);
+        $indexer->load('catalogsearch_fulltext');
+        $indexer->reindexAll();
     }
 
     /**
@@ -208,7 +212,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     public function testRangeFilterWithAllFields()
     {
         $this->requestBuilder->bind('range_filter_from', 11);
-        $this->requestBuilder->bind('range_filter_to', 16);
+        $this->requestBuilder->bind('range_filter_to', 17);
         $this->requestBuilder->setRequestName('range_filter');
 
         $queryResponse = $this->executeQuery();
@@ -265,7 +269,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      */
     public function testTermFilterArray()
     {
-        $this->requestBuilder->bind('request.price', [16, 18]);
+        $this->requestBuilder->bind('request.price', [17, 18]);
         $this->requestBuilder->setRequestName('term_filter');
 
         $queryResponse = $this->executeQuery();
@@ -312,13 +316,13 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     public function testBoolFilter()
     {
         $expectedIds = [2, 3];
-        $this->requestBuilder->bind('must_range_filter1_from', 12);
+        $this->requestBuilder->bind('must_range_filter1_from', 13);
         $this->requestBuilder->bind('must_range_filter1_to', 22);
-        $this->requestBuilder->bind('should_term_filter1', 12);
-        $this->requestBuilder->bind('should_term_filter2', 14);
-        $this->requestBuilder->bind('should_term_filter3', 16);
+        $this->requestBuilder->bind('should_term_filter1', 13);
+        $this->requestBuilder->bind('should_term_filter2', 15);
+        $this->requestBuilder->bind('should_term_filter3', 17);
         $this->requestBuilder->bind('should_term_filter4', 18);
-        $this->requestBuilder->bind('not_term_filter1', 12);
+        $this->requestBuilder->bind('not_term_filter1', 13);
         $this->requestBuilder->bind('not_term_filter2', 18);
         $this->requestBuilder->setRequestName('bool_filter');
 
@@ -337,7 +341,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $expectedIds = [1];
         $this->requestBuilder->bind('not_range_filter_from', 14);
         $this->requestBuilder->bind('not_range_filter_to', 20);
-        $this->requestBuilder->bind('nested_not_term_filter', 12);
+        $this->requestBuilder->bind('nested_not_term_filter', 13);
         $this->requestBuilder->setRequestName('bool_filter_with_nested_bool_filter');
 
         $queryResponse = $this->executeQuery();
@@ -533,9 +537,15 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->create(Collection::class)
             ->setAttributeFilter($attribute->getId());
 
+        $visibility = [
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
+        ];
+
         $firstOption = $selectOptions->getFirstItem();
         $firstOptionId = $firstOption->getId();
         $this->requestBuilder->bind('test_configurable', $firstOptionId);
+        $this->requestBuilder->bind('visibility', $visibility);
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();
@@ -544,6 +554,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $secondOption = $selectOptions->getLastItem();
         $secondOptionId = $secondOption->getId();
         $this->requestBuilder->bind('test_configurable', $secondOptionId);
+        $this->requestBuilder->bind('visibility', $visibility);
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();

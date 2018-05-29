@@ -16,6 +16,7 @@ use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Class AbstractAction
@@ -44,6 +45,7 @@ abstract class AbstractAction
 
     /**
      * Suffix for table to show it is temporary
+     * @deprecated
      */
     const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
@@ -109,6 +111,11 @@ abstract class AbstractAction
     protected $metadataPool;
 
     /**
+     * @var TableMaintainer
+     */
+    protected $tableMaintainer;
+
+    /**
      * @var string
      * @since 101.0.0
      */
@@ -125,13 +132,15 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\Config $config
      * @param QueryGenerator $queryGenerator
      * @param MetadataPool|null $metadataPool
+     * @param TableMaintainer|null $tableMaintainer
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $config,
         QueryGenerator $queryGenerator = null,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        TableMaintainer $tableMaintainer = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -139,6 +148,7 @@ abstract class AbstractAction
         $this->config = $config;
         $this->queryGenerator = $queryGenerator ?: ObjectManager::getInstance()->get(QueryGenerator::class);
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
     }
 
     /**
@@ -182,6 +192,7 @@ abstract class AbstractAction
      * The name is switched between 'catalog_category_product_index' and 'catalog_category_product_index_replica'
      *
      * @return string
+     * @deprecated
      */
     protected function getMainTable()
     {
@@ -192,12 +203,26 @@ abstract class AbstractAction
      * Return temporary index table name
      *
      * @return string
+     * @deprecated
      */
     protected function getMainTmpTable()
     {
         return $this->useTempTable
             ? $this->getTable(self::MAIN_INDEX_TABLE . self::TEMPORARY_TABLE_SUFFIX)
             : $this->getMainTable();
+    }
+
+    /**
+     * Return index table name
+     *
+     * @param int $storeId
+     * @return string
+     */
+    protected function getIndexTable($storeId)
+    {
+        return $this->useTempTable
+            ? $this->tableMaintainer->getMainReplicaTable($storeId)
+            : $this->tableMaintainer->getMainTable($storeId);
     }
 
     /**
@@ -421,7 +446,7 @@ abstract class AbstractAction
             $this->connection->query(
                 $this->connection->insertFromSelect(
                     $select,
-                    $this->getMainTmpTable(),
+                    $this->getIndexTable($store->getId()),
                     ['category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
@@ -569,7 +594,7 @@ abstract class AbstractAction
         if (empty($this->tempTreeIndexTableName)) {
             $this->tempTreeIndexTableName = $this->connection->getTableName('temp_catalog_category_tree_index')
                 . '_'
-                . substr(md5(time() . rand(0, 999999999)), 0, 8);
+                . substr(md5(time() . random_int(0, 999999999)), 0, 8);
         }
 
         return $this->tempTreeIndexTableName;
@@ -631,25 +656,43 @@ abstract class AbstractAction
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {
-        // This finds all children (cc2) that descend from a parent (cc) by path.
-        // For example, cc.path may be '1/2', and cc2.path may be '1/2/3/4/5'.
-        $temporarySelect = $this->connection->select()->from(
-            ['cc' => $this->getTable('catalog_category_entity')],
-            ['parent_id' => 'entity_id']
-        )->joinInner(
-            ['cc2' => $this->getTable('catalog_category_entity')],
-            'cc2.path LIKE ' . $this->connection->getConcatSql(
-                [$this->connection->quoteIdentifier('cc.path'), $this->connection->quote('/%')]
-            ),
-            ['child_id' => 'entity_id']
-        );
+        $offset = 0;
+        $limit = 500;
 
-        $this->connection->query(
-            $temporarySelect->insertFromSelect(
-                $temporaryName,
-                ['parent_id', 'child_id']
-            )
-        );
+        $categoryTable = $this->getTable('catalog_category_entity');
+
+        $categoriesSelect = $this->connection->select()
+            ->from(
+                ['c' => $categoryTable],
+                ['entity_id', 'path']
+            )->limit($limit, $offset);
+
+        $categories = $this->connection->fetchAll($categoriesSelect);
+
+        while ($categories) {
+            $values = [];
+
+            foreach ($categories as $category) {
+                foreach (explode('/', $category['path']) as $parentId) {
+                    if ($parentId !== $category['entity_id']) {
+                        $values[] = [$parentId, $category['entity_id']];
+                    }
+                }
+            }
+
+            if (count($values) > 0) {
+                $this->connection->insertArray($temporaryName, ['parent_id', 'child_id'], $values);
+            }
+
+            $offset += $limit;
+            $categoriesSelect = $this->connection->select()
+                ->from(
+                    ['c' => $categoryTable],
+                    ['entity_id', 'path']
+                )->limit($limit, $offset);
+
+            $categories = $this->connection->fetchAll($categoriesSelect);
+        }
     }
 
     /**
@@ -680,7 +723,7 @@ abstract class AbstractAction
             $this->connection->query(
                 $this->connection->insertFromSelect(
                     $select,
-                    $this->getMainTmpTable(),
+                    $this->getIndexTable($store->getId()),
                     ['category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
@@ -812,7 +855,7 @@ abstract class AbstractAction
                 $this->connection->query(
                     $this->connection->insertFromSelect(
                         $select,
-                        $this->getMainTmpTable(),
+                        $this->getIndexTable($store->getId()),
                         ['category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'],
                         \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                     )

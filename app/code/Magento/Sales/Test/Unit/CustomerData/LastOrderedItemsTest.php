@@ -58,6 +58,11 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
      */
     private $section;
 
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
+
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -81,13 +86,16 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->productRepository = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
             ->getMockForAbstractClass();
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->getMockForAbstractClass();
         $this->section = new \Magento\Sales\CustomerData\LastOrderedItems(
             $this->orderCollectionFactoryMock,
             $this->orderConfigMock,
             $this->customerSessionMock,
             $this->stockRegistryMock,
             $this->storeManagerMock,
-            $this->productRepository
+            $this->productRepository,
+            $this->loggerMock
         );
     }
 
@@ -195,5 +203,35 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
             ->method('setPage')
             ->willReturnSelf();
         return $this->orderMock;
+    }
+
+    public function testGetSectionDataWithNotExistingProduct()
+    {
+        $storeId = 1;
+        $websiteId = 4;
+        $productId = 1;
+        $exception = new \Magento\Framework\Exception\NoSuchEntityException(__("Product doesn't exist"));
+        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProductId'])
+            ->getMock();
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMockForAbstractClass();
+
+        $this->getLastOrderMock();
+        $this->storeManagerMock->expects($this->exactly(2))->method('getStore')->willReturn($storeMock);
+        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
+        $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
+        $this->orderMock->expects($this->once())
+            ->method('getParentItemsRandomCollection')
+            ->with(\Magento\Sales\CustomerData\LastOrderedItems::SIDEBAR_ORDER_LIMIT)
+            ->willReturn([$orderItemMock]);
+        $orderItemMock->expects($this->once())->method('getProductId')->willReturn($productId);
+        $this->productRepository->expects($this->once())
+            ->method('getById')
+            ->with($productId, false, $storeId)
+            ->willThrowException($exception);
+        $this->loggerMock->expects($this->once())->method('critical')->with($exception);
+
+        $this->assertEquals(['items' => []], $this->section->getSectionData());
     }
 }

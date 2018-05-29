@@ -106,7 +106,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
+                    (float) $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
             }
         }
 
