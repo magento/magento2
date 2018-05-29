@@ -89,6 +89,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -111,7 +112,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         LockValidatorInterface $lockValidator,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory = null   
     ) {
         $this->attrLockValidator = $lockValidator;
         parent::__construct(
@@ -133,7 +135,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
             $dateTimeFormatter,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $frontendLabelFactory
         );
     }
 

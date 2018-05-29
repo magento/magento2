@@ -70,6 +70,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array|null $data
      * @param \Magento\Customer\Model\Metadata\AttributeMetadataCache|null $attributeMetadataCache
+     * @param \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -93,7 +94,8 @@ class Attribute extends \Magento\Eav\Model\Attribute
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Customer\Model\Metadata\AttributeMetadataCache $attributeMetadataCache = null
+        \Magento\Customer\Model\Metadata\AttributeMetadataCache $attributeMetadataCache = null,
+        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory = null
     ) {
         $this->indexerRegistry = $indexerRegistry;
         $this->attributeMetadataCache = $attributeMetadataCache ?: \Magento\Framework\App\ObjectManager::getInstance()
@@ -117,7 +119,8 @@ class Attribute extends \Magento\Eav\Model\Attribute
             $dateTimeFormatter,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $frontendLabelFactory
         );
     }
 

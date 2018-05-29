@@ -109,6 +109,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param \Magento\Eav\Api\Data\AttributeExtensionFactory|null $eavAttributeFactory
+     * @param \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -135,7 +136,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null
+        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null,
+        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory = null
     ) {
         $this->_indexerEavProcessor = $indexerEavProcessor;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
@@ -162,7 +164,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
             $dateTimeFormatter,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $frontendLabelFactory
         );
     }
 

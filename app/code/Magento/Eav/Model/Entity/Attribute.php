@@ -100,6 +100,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
      */
@@ -122,7 +123,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         DateTimeFormatterInterface $dateTimeFormatter,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory = null
     ) {
         parent::__construct(
             $context,
@@ -139,7 +141,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             $dataObjectHelper,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $frontendLabelFactory
         );
         $this->_localeDate = $localeDate;
         $this->_localeResolver = $localeResolver;
