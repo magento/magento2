@@ -23,12 +23,20 @@ class StatusValidator implements SourceItemValidatorInterface
     private $validationResultFactory;
 
     /**
+     * @var array
+     */
+    private $allowedSourceItemStatuses;
+
+    /**
      * @param ValidationResultFactory $validationResultFactory
+     * @param array $allowedSourceItemStatuses
      */
     public function __construct(
-        ValidationResultFactory $validationResultFactory
+        ValidationResultFactory $validationResultFactory,
+        array $allowedSourceItemStatuses = []
     ) {
         $this->validationResultFactory = $validationResultFactory;
+        $this->allowedSourceItemStatuses = $allowedSourceItemStatuses;
     }
 
     /**
@@ -46,10 +54,8 @@ class StatusValidator implements SourceItemValidatorInterface
             return $this->validationResultFactory->create(['errors' => $errors]);
         }
 
-        $allowedStatuses = [SourceItemInterface::STATUS_IN_STOCK, SourceItemInterface::STATUS_OUT_OF_STOCK];
-
         $errors = [];
-        if (!in_array((int)$value, $allowedStatuses, true)) {
+        if (!in_array((int)$value, array_values($this->allowedSourceItemStatuses), true)) {
             $errors[] = __(
                 '"%field" should a known status.',
                 ['field' => SourceItemInterface::STATUS]
