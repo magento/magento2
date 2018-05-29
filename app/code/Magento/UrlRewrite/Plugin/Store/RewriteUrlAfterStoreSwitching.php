@@ -71,7 +71,7 @@ class RewriteUrlAfterStoreSwitching
             UrlRewrite::STORE_ID => $oldStoreId,
         ]);
         if ($oldRewrite) {
-            // we're in catalog and can check whether we have target URL or a user should be redirected to base url
+            // look for url rewrite match on the target store
             $currentRewrite = $this->urlFinder->findOneByData([
                 UrlRewrite::REQUEST_PATH => $urlPath,
                 UrlRewrite::STORE_ID => $targetStore->getId(),

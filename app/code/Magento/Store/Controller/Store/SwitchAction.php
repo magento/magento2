@@ -77,7 +77,7 @@ class SwitchAction extends Action
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
+     * @return void
      */
     public function execute()
     {
