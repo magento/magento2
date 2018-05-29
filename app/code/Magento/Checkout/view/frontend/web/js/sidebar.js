@@ -220,6 +220,11 @@ define([
          * @param {HTMLElement} elem
          */
         _updateItemQtyAfter: function (elem) {
+            var productData = this._getProductById(Number(elem.data('cart-item')));
+
+            if (!_.isUndefined(productData)) {
+                $(document).trigger('ajax:updateCartItemQty', productData['product_sku']);
+            }
             this._hideItemButton(elem);
         },
 
@@ -242,13 +247,24 @@ define([
          * @private
          */
         _removeItemAfter: function (elem) {
-            var productData = _.find(customerData.get('cart')().items, function (item) {
-                return Number(elem.data('cart-item')) === Number(item['item_id']);
-            });
+            var productData = this._getProductById(Number(elem.data('cart-item')));
 
             if (!_.isUndefined(productData)) {
                 $(document).trigger('ajax:removeFromCart', productData['product_sku']);
             }
+        },
+
+        /**
+         * Retrieves product data by Id.
+         *
+         * @param {Number} productId - product Id
+         * @returns {Object|undefined}
+         * @private
+         */
+        _getProductById: function (productId) {
+            return _.find(customerData.get('cart')().items, function (item) {
+                return productId === Number(item['item_id']);
+            });
         },
 
         /**
