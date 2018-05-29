@@ -9,6 +9,7 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="productAttributeWithTwoOptions" type="ProductAttribute">
+        <data key="name" unique="suffix">ProductAttributeWithTwoOptions</data>
         <data key="attribute_code" unique="suffix">attribute</data>
         <data key="frontend_input">textarea</data>
         <data key="scope">global</data>

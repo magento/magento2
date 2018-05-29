@@ -206,13 +206,17 @@ define([
 
             switch (keyCode) {
                 case $.ui.keyCode.HOME:
-                    this._getFirstVisibleElement().addClass(this.options.selectClass);
-                    this.responseList.selected = this._getFirstVisibleElement();
+                    if (this._getFirstVisibleElement()) {
+                        this._getFirstVisibleElement().addClass(this.options.selectClass);
+                        this.responseList.selected = this._getFirstVisibleElement();
+                    }
                     break;
 
                 case $.ui.keyCode.END:
-                    this._getLastElement().addClass(this.options.selectClass);
-                    this.responseList.selected = this._getLastElement();
+                    if (this._getLastElement()) {
+                        this._getLastElement().addClass(this.options.selectClass);
+                        this.responseList.selected = this._getLastElement();
+                    }
                     break;
 
                 case $.ui.keyCode.ESCAPE:
@@ -222,6 +226,7 @@ define([
 
                 case $.ui.keyCode.ENTER:
                     this.searchForm.trigger('submit');
+                    e.preventDefault();
                     break;
 
                 case $.ui.keyCode.DOWN:

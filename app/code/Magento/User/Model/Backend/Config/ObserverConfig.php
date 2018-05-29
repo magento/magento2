@@ -72,7 +72,7 @@ class ObserverConfig
     }
 
     /**
-     * Get admin maxiumum security failures from config
+     * Get admin maximum security failures from config
      *
      * @return int
      */

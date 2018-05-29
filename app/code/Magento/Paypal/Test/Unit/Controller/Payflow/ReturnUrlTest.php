@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Controller\Payflow;
 
+use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Checkout\Block\Onepage\Success;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
@@ -91,6 +92,11 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+     * @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $paymentFailures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -138,6 +144,17 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getLastRealOrderId', 'getLastRealOrder', 'restoreQuote'])
             ->getMock();
 
+        $this->quote = $this->getMockBuilder(CartInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->context->expects($this->any())->method('getView')->willReturn($this->view);
+        $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
+
+        $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->context->method('getView')
             ->willReturn($this->view);
         $this->context->method('getRequest')
@@ -148,6 +165,7 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             'checkoutSession' => $this->checkoutSession,
             'orderFactory' => $this->orderFactory,
             'checkoutHelper' => $this->checkoutHelper,
+            'paymentFailures' => $this->paymentFailures,
         ]);
     }
 
@@ -321,6 +339,7 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             'checkoutSession' => $this->checkoutSession,
             'orderFactory' => $this->orderFactory,
             'checkoutHelper' => $this->checkoutHelper,
+            'paymentFailures' => $this->paymentFailures,
         ]);
 
         $returnUrl->execute();
