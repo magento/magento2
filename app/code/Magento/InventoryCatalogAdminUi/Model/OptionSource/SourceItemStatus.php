@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\OptionSource;
+namespace Magento\InventoryCatalogAdminUi\Model\OptionSource;
 
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
