@@ -12,6 +12,9 @@ use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
 
+/**
+ * Class encapsulate logic of work with tables per store in Product Price indexer
+ */
 class TableMaintainer
 {
     /**
@@ -249,14 +252,15 @@ class TableMaintainer
      *
      * @param Dimension[] $dimensions
      *
-     * @return string|null
+     * @return string
+     *
+     * @throws \Exception
      */
     public function getMainTmpTable(array $dimensions)
     {
-        if (isset($this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)])) {
-            return $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)];
-        } else {
-            return null;
+        if (!isset($this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)])) {
+            throw new \Exception('Temporary table does not exist');
         }
+        return $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)];
     }
 }
