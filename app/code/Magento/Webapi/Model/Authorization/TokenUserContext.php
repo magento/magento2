@@ -134,7 +134,7 @@ class TokenUserContext implements UserContextInterface
         }
 
         if (empty($tokenTtl)) {
-        	return false;
+            return false;
         }
 
         if ($this->dateTime->strToTime($token->getCreatedAt()) < ($this->date->gmtTimestamp() - $tokenTtl * 3600)) {
