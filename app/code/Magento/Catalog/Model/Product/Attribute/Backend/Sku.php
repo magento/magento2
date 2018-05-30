@@ -11,6 +11,7 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
+
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
@@ -44,6 +45,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Validate SKU
      *
      * @param Product $object
+     *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -53,7 +55,9 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attrCode = $this->getAttribute()->getAttributeCode();
         $value = $object->getData($attrCode);
         if ($this->getAttribute()->getIsRequired() && strlen($value) === 0) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The value of attribute "%1" must be set', $attrCode));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The value of attribute "%1" must be set', $attrCode)
+            );
         }
 
         if ($this->string->strlen($object->getSku()) > self::SKU_MAX_LENGTH) {
@@ -61,6 +65,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 __('SKU length should be %1 characters maximum.', self::SKU_MAX_LENGTH)
             );
         }
+
         return true;
     }
 
@@ -68,7 +73,10 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Check unique SKU for product
      *
      * @param Product $object
+     *
      * @return void
+     *
+     * @throws AlreadyExistsException
      */
     private function checkUniqueSku($object)
     {
@@ -82,7 +90,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                     'Duplicated %attribute found: %value',
                     [
                         'attribute' => $attributeCode,
-                        'value' => $attributeValue
+                        'value' => $attributeValue,
                     ]
                 )
             );
@@ -93,8 +101,8 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Generate and set unique SKU to product
      *
      * @param Product $object
+     *
      * @return void
-     * @deprecated
      */
     protected function _generateUniqueSku($object)
     {
@@ -119,11 +127,17 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Make SKU unique before save
      *
      * @param Product $object
+     *
      * @return $this
      */
     public function beforeSave($object)
     {
-        $this->checkUniqueSku($object);
+        if (true === $object->getIsDuplicate()) {
+            $this->_generateUniqueSku($object);
+        } else {
+            $this->checkUniqueSku($object);
+        }
+
         return parent::beforeSave($object);
     }
 
@@ -132,6 +146,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @param Product $object
+     *
      * @return int
      * @deprecated
      */
@@ -153,6 +168,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             1
         );
         $data = $connection->fetchOne($select, $bind);
-        return abs((int)str_replace($value, '', $data));
+
+        return abs((int) str_replace($value, '', $data));
     }
 }
