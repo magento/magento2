@@ -107,10 +107,10 @@ class InventoryRequestFromInvoiceFactory
     }
 
     /**
-     * @param $invoiceItem
+     * @param InvoiceItemInterface $invoiceItem
      * @return bool
      */
-    private function canProcessInvoiceItem($invoiceItem): bool
+    private function canProcessInvoiceItem(InvoiceItemInterface $invoiceItem): bool
     {
         $orderItem = $invoiceItem->getOrderItem();
         if ($orderItem->isDeleted() || $orderItem->getParentItemId() || !$orderItem->getIsVirtual()) {
