@@ -60,6 +60,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $categories);
         /** @var $category \Magento\Catalog\Model\Category */
         $category = $categories->getFirstItem();
-        $this->assertStringEndsWith('category-3-on-2.html', $category->getUrl());
+        $this->assertContains('category-3-on-2', $category->getUrl());
     }
 }
