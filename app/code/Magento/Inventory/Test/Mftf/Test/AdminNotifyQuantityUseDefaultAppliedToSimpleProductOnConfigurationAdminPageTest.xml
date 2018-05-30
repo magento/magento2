@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="NotifyQuantityUseDefaultAppliedToSimpleProductOnConfigurationAdminPage">
+    <test name="AdminNotifyQuantityUseDefaultAppliedToSimpleProductOnConfigurationAdminPageTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Use 'Notify for Quantity Below' system value with custom source on simple product"/>
@@ -17,6 +17,7 @@
             <testCaseId value="955"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="multi_mode"/>
         </annotations>
 
         <before>
@@ -53,7 +54,7 @@
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourceFilters"/>
             <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSourcesByCustomSourceName">
                 <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-                <argument name="value" value="_minimalSource.source_code"/>
+                <argument name="value" value="{{_minimalSource.source_code}}"/>
             </actionGroup>
             <click selector="{{AdminGridRow.editByValue($$customSource.source[source_code]$$)}}" stepKey="editCustomSource"/>
             <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad"/>
@@ -113,7 +114,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateBackToProductGrid"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterProductsByCreatedSimpleProductSku">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="SimpleMsiProduct.sku"/>
+            <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
         </actionGroup>
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectGridColumns"/>
         <click selector="{{AdminGridColumnsControls.reset}}" stepKey="resetColumnsVisibility"/>
