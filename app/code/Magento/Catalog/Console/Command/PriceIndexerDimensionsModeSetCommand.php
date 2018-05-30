@@ -19,6 +19,8 @@ use Magento\Framework\App\Cache\TypeListInterface;
 
 /**
  * Command to change price indexer dimensions mode
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
 {
