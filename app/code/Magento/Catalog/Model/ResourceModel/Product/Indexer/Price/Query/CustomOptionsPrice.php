@@ -26,25 +26,39 @@ class CustomOptionsPrice
     private $columnValueExpressionFactory;
 
     /**
+     * @var \Magento\Catalog\Helper\Data
+     */
+    private $dataHelper;
+
+    /**
      * @var string
      */
     private $connectionName;
 
     /**
+     * @var bool
+     */
+    private $isPriceGlobalFlag;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param \Magento\Framework\DB\Sql\ColumnValueExpressionFactory $columnValueExpressionFactory
+     * @param \Magento\Catalog\Helper\Data $dataHelper
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Framework\DB\Sql\ColumnValueExpressionFactory $columnValueExpressionFactory,
+        \Magento\Catalog\Helper\Data $dataHelper,
         $connectionName = 'indexer'
     ) {
         $this->resource = $resource;
         $this->metadataPool = $metadataPool;
         $this->connectionName = $connectionName;
         $this->columnValueExpressionFactory = $columnValueExpressionFactory;
+        $this->dataHelper = $dataHelper;
     }
 
     public function getSelectForOptionsWithMultipleValues($sourceTable)
@@ -84,16 +98,26 @@ class CustomOptionsPrice
                 ['otpd' => $this->getTable('catalog_product_option_type_price')],
                 'otpd.option_type_id = ot.option_type_id AND otpd.store_id = 0',
                 []
-            )->joinLeft(
-                ['otps' => $this->getTable('catalog_product_option_type_price')],
-                'otps.option_type_id = otpd.option_type_id AND otpd.store_id = cs.store_id',
-                []
             )->group(
                 ['i.entity_id', 'i.customer_group_id', 'i.website_id', 'o.option_id']
             );
 
-        $optPriceType = $connection->getCheckSql('otps.option_type_price_id > 0', 'otps.price_type', 'otpd.price_type');
-        $optPriceValue = $connection->getCheckSql('otps.option_type_price_id > 0', 'otps.price', 'otpd.price');
+        if ($this->isPriceGlobal()) {
+            $optPriceType = 'otpd.price_type';
+            $optPriceValue = 'otpd.price';
+        }
+
+        if (!$this->isPriceGlobal()) {
+            $select->joinLeft(
+                ['otps' => $this->getTable('catalog_product_option_type_price')],
+                'otps.option_type_id = otpd.option_type_id AND otpd.store_id = cs.store_id',
+                []
+            );
+
+            $optPriceType = $connection->getCheckSql('otps.option_type_price_id > 0', 'otps.price_type', 'otpd.price_type');
+            $optPriceValue = $connection->getCheckSql('otps.option_type_price_id > 0', 'otps.price', 'otpd.price');
+        }
+
         $minPriceRound = $this->columnValueExpressionFactory
             ->create([
                 'expression' => "ROUND(i.price * ({$optPriceValue} / 100), 4)"
@@ -172,14 +196,23 @@ class CustomOptionsPrice
                 ['opd' => $this->getTable('catalog_product_option_price')],
                 'opd.option_id = o.option_id AND opd.store_id = 0',
                 []
-            )->joinLeft(
+            );
+
+        if ($this->isPriceGlobal()) {
+            $optPriceType = 'opd.price_type';
+            $optPriceValue = 'opd.price';
+        }
+
+        if (!$this->isPriceGlobal()) {
+            $select->joinLeft(
                 ['ops' => $this->getTable('catalog_product_option_price')],
                 'ops.option_id = opd.option_id AND ops.store_id = cs.store_id',
                 []
             );
 
-        $optPriceType = $connection->getCheckSql('ops.option_price_id > 0', 'ops.price_type', 'opd.price_type');
-        $optPriceValue = $connection->getCheckSql('ops.option_price_id > 0', 'ops.price', 'opd.price');
+            $optPriceType = $connection->getCheckSql('ops.option_price_id > 0', 'ops.price_type', 'opd.price_type');
+            $optPriceValue = $connection->getCheckSql('ops.option_price_id > 0', 'ops.price', 'opd.price');
+        }
 
         $minPriceRound = $this->columnValueExpressionFactory
             ->create([
@@ -263,5 +296,14 @@ class CustomOptionsPrice
     private function getTable($tableName)
     {
         return $this->resource->getTableName($tableName, $this->connectionName);
+    }
+
+    private function isPriceGlobal()
+    {
+        if ($this->isPriceGlobalFlag === null) {
+            $this->isPriceGlobalFlag = $this->dataHelper->isPriceGlobal();
+        }
+
+        return $this->isPriceGlobalFlag;
     }
 }
