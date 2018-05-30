@@ -16,6 +16,7 @@ define([
                 categoryUrlSuffix: '',
                 useCategoryPathInUrl: false,
                 product: '',
+                categoryItemSelector: '.category-item',
                 menuContainer: '[data-action="navigation"] > ul'
             },
 
@@ -163,7 +164,10 @@ define([
                     categoryMenuItem = null;
 
                 if (categoryUrl && menu.length) {
-                    categoryMenuItem = menu.find('a[href="' + categoryUrl + '"]');
+                    categoryMenuItem = menu.find(
+                        this.options.categoryItemSelector +
+                        ' > a[href="' + categoryUrl + '"]'
+                    );
                 }
 
                 return categoryMenuItem;
