@@ -45,3 +45,6 @@ if (!empty($items)) {
     $quote = array_pop($items);
     $quoteRepository->delete($quote);
 }
+
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', false);

@@ -70,7 +70,7 @@ class SecureTokenTest extends TestCase
         $this->service = $this->objectManager->create(
             SecureToken::class,
             [
-                'mathRandom' => $this->mathRandom
+                'mathRandom' => $this->mathRandom,
             ]
         );
     }
@@ -89,8 +89,9 @@ class SecureTokenTest extends TestCase
      * @magentoDataFixture Magento/Paypal/_files/quote_payflowpro.php
      * @magentoDataFixture Magento/Paypal/Fixtures/default_payment_configuration.php
      * @magentoAppArea adminhtml
+     * @return void
      */
-    public function testRequestToken()
+    public function testRequestToken(): void
     {
         $quote = $this->getQuote('100000015');
         $quote->setStoreId(null);
@@ -103,8 +104,9 @@ class SecureTokenTest extends TestCase
      * @magentoDataFixture Magento/Paypal/_files/quote_payflowpro.php
      * @magentoDataFixture Magento/Paypal/Fixtures/store_payment_configuration.php
      * @magentoAppArea adminhtml
+     * @return void
      */
-    public function testRequestTokenWithStoreConfiguration()
+    public function testRequestTokenWithStoreConfiguration(): void
     {
         $quote = $this->getQuote('100000015');
         $store = $this->getStore('test');
@@ -118,8 +120,9 @@ class SecureTokenTest extends TestCase
      * @magentoDataFixture Magento/Paypal/_files/quote_payflowpro.php
      * @magentoDataFixture Magento/Paypal/Fixtures/website_payment_configuration.php
      * @magentoAppArea adminhtml
+     * @return void
      */
-    public function testRequestTokenWithWebsiteConfiguration()
+    public function testRequestTokenWithWebsiteConfiguration(): void
     {
         $quote = $this->getQuote('100000015');
         $store = $this->getStore('fixture_second_store');
@@ -135,9 +138,15 @@ class SecureTokenTest extends TestCase
      * @param string $expVendor
      * @param string $expUser
      * @param string $expPwd
+     * @return void
      */
-    private function execute(Quote $quote, string $expPartner, string $expVendor, string $expUser, string $expPwd)
-    {
+    private function execute(
+        Quote $quote,
+        string $expPartner,
+        string $expVendor,
+        string $expUser,
+        string $expPwd
+    ): void {
         $secureTokenId = '31f2a7c8d257c70b1c9eb9051b90e0';
         $token = '80IgSbabyj0CtBDWHZZeQN3';
 
@@ -174,8 +183,9 @@ class SecureTokenTest extends TestCase
      * @param string $expected
      * @param string $actual
      * @param string $property
+     * @return void
      */
-    private function performAssertion(string $expected, string $actual, string $property)
+    private function performAssertion(string $expected, string $actual, string $property): void
     {
         self::assertEquals($expected, $actual, "$property should match.");
     }
