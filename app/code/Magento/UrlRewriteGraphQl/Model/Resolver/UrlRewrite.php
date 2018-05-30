@@ -14,8 +14,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Cms\Helper\Page;
+use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlResolverInterface;
 
 /**
  * UrlRewrite field resolver, used for GraphQL request processing.
@@ -38,26 +37,26 @@ class UrlRewrite implements ResolverInterface
     private $valueFactory;
     
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var UrlRewrite\CustomUrlResolverInterface
      */
-    private $scopeConfig;
-    
+    private $customUrlResolver;
+
     /**
      * @param UrlFinderInterface $urlFinder
      * @param StoreManagerInterface $storeManager
      * @param ValueFactory $valueFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param CustomUrlResolverInterface $customUrlResolver
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
         StoreManagerInterface $storeManager,
         ValueFactory $valueFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        CustomUrlResolverInterface $customUrlResolver
     ) {
         $this->urlFinder = $urlFinder;
         $this->storeManager = $storeManager;
         $this->valueFactory = $valueFactory;
-        $this->scopeConfig = $scopeConfig;
+        $this->customUrlResolver = $customUrlResolver;
     }
 
     /**
@@ -78,13 +77,9 @@ class UrlRewrite implements ResolverInterface
             $url = $args['url'];
             if (substr($url, 0, 1) === '/' && $url !== '/') {
                 $url = ltrim($url, '/');
-            } else if ($url === '/') {
-                $homePageIdentifier = $this->scopeConfig->getValue(
-                    Page::XML_PATH_HOME_PAGE,
-                    ScopeInterface::SCOPE_STORE
-                );
-                $url = $homePageIdentifier;
             }
+            $customUrl = $this->customUrlResolver->resolveUrl($url);
+            $url = $customUrl ?: $url;
             $urlRewrite = $this->findCanonicalUrl($url);
             if ($urlRewrite) {
                 $urlRewriteReturnArray = [
