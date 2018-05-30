@@ -647,7 +647,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param DataObject $response
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Payment\Gateway\Command\CommandException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      */

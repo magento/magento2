@@ -189,10 +189,12 @@ class PaymentFailuresService implements PaymentFailuresInterface
      * @param Quote $quote
      * @return string
      */
-    private function getShippingMethod(Quote $quote)
+    private function getShippingMethod(Quote $quote): string
     {
         $shippingMethod = '';
-        if ($shippingInfo = $quote->getShippingAddress()->getShippingMethod()) {
+        $shippingInfo = $quote->getShippingAddress()->getShippingMethod();
+
+        if ($shippingInfo) {
             $data = explode('_', $shippingInfo);
             $shippingMethod = $data[0];
         }
@@ -206,12 +208,9 @@ class PaymentFailuresService implements PaymentFailuresInterface
      * @param Quote $quote
      * @return string
      */
-    private function getPaymentMethod(Quote $quote)
+    private function getPaymentMethod(Quote $quote): string
     {
-        $paymentMethod = '';
-        if ($paymentInfo = $quote->getPayment()) {
-            $paymentMethod = $paymentInfo->getMethod();
-        }
+        $paymentMethod = $quote->getPayment()->getMethod() ?? '';
 
         return $paymentMethod;
     }

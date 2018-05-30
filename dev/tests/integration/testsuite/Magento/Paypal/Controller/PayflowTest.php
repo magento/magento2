@@ -63,7 +63,7 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->order->getPayment()->setMethod(Config::METHOD_PAYFLOWLINK);
 
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->_objectManager->create(Quote::class)->setStoreid($this->order->getStoreid());
+        $quote = $this->_objectManager->create(Quote::class)->setStoreid($this->order->getStoreId());
 
         $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
         $this->quoteRepository->save($quote);
@@ -111,7 +111,7 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
      * @magentoConfigFixture current_store paypal/general/business_account merchant_2012050718_biz@example.com
      * @return void
      */
-    public function testCancelAction()
+    public function testCancelAction(): void
     {
         $orderId = $this->order->getEntityId();
         /** @var \Magento\Sales\Model\Order $order */

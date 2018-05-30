@@ -59,7 +59,7 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @return void
      */
-    public function testHandlerWithCustomer()
+    public function testHandlerWithCustomer(): void
     {
         $errorMessage = __('Transaction declined.');
         $checkoutType = 'custom_checkout';

@@ -60,11 +60,11 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
 
         /** @var OrderInterface $order */
         $this->order = array_pop($orders);
-        $this->order->getPayment()->setMethod(Config::METHOD_PAYFLOWLINK);
+        $this->order->getPayment()->setMethod(Config::METHOD_PAYFLOWADVANCED);
 
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $this->_objectManager->create(Quote::class)
-            ->setStoreid($this->order->getStoreid());
+            ->setStoreid($this->order->getStoreId());
 
         $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
         $this->quoteRepository->save($quote);
@@ -104,7 +104,7 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
      * @magentoConfigFixture current_store paypal/general/business_account merchant_2012050718_biz@example.com
      * @return void
      */
-    public function testCancelAction()
+    public function testCancelAction(): void
     {
         $orderId = $this->order->getEntityId();
         /** @var \Magento\Sales\Model\Order $order */
@@ -115,7 +115,7 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
         $session = $this->_objectManager->get(Session::class);
         $session->setQuoteId($quote->getId());
         $session->setPaypalStandardQuoteId($quote->getId())->setLastRealOrderId('100000001');
-        $this->dispatch('paypal/payflow/cancelpayment');
+        $this->dispatch('paypal/payflowadvanced/cancelpayment');
 
         $order = $this->_objectManager->create(OrderRepositoryInterface::class)->get($orderId);
         $this->assertEquals('canceled', $order->getState());
