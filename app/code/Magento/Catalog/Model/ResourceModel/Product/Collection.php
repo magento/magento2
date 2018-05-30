@@ -14,11 +14,17 @@ use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory;
+use Magento\Framework\Indexer\DimensionFactory;
 
 /**
  * Product collection
@@ -279,8 +285,26 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $tableMaintainer;
 
     /**
+     * @var PriceTableResolver
+     */
+    private $priceTableResolver;
+    /**
+     * @var DimensionProviderFactory
+     */
+    private $dimensionProviderFactory;
+
+    /**
+     * @var DimensionFactory
+     */
+    private $dimensionFactory;
+
+    /**
+     * @var IndexScopeResolverInterface
+     */
+    private $indexScopeResolver;
+
+    /**
      * Collection constructor
-     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -304,7 +328,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
      * @param TableMaintainer|null $tableMaintainer
-     *
+     * @param PriceTableResolver|null $priceTableResolver
+     * @param DimensionProviderFactory|null $dimensionProviderFactory
+     * @param DimensionFactory|null $dimensionFactory
+     * @param IndexScopeResolverInterface|null $indexScopeResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -330,7 +357,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         ProductLimitationFactory $productLimitationFactory = null,
         MetadataPool $metadataPool = null,
-        TableMaintainer $tableMaintainer = null
+        TableMaintainer $tableMaintainer = null,
+        PriceTableResolver $priceTableResolver = null,
+        DimensionProviderFactory $dimensionProviderFactory = null,
+        DimensionFactory $dimensionFactory = null,
+        IndexScopeResolverInterface $indexScopeResolver = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -361,6 +392,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $connection
         );
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
+        $this->dimensionProviderFactory = $dimensionProviderFactory
+            ?: ObjectManager::getInstance()->get(DimensionProviderFactory::class);
+        $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
+        $this->dimensionFactory = $dimensionFactory
+            ?: ObjectManager::getInstance()->get(DimensionFactory::class);
+        $this->indexScopeResolver = $indexScopeResolver
+            ?: ObjectManager::getInstance()->get(IndexScopeResolverInterface::class);
     }
 
     /**
@@ -1897,12 +1935,33 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'max_price',
                 'tier_price',
             ];
-            $tableName = ['price_index' => $this->getTable('catalog_product_index_price')];
-            if ($joinLeft) {
-                $select->joinLeft($tableName, $joinCond, $colls);
+
+            $joinFunction = $joinLeft
+                ? function ($tableName) use ($select, $joinLeft, $joinCond, $colls) {
+                    $select->joinLeft($tableName, $joinCond, $colls);
+                }
+                : function ($tableName) use ($select, $joinLeft, $joinCond, $colls) {
+                    $select->join($tableName, $joinCond, $colls);
+                };
+
+            if (isset($this->_productLimitationFilters['customer_group_id'])
+                || isset($this->_productLimitationFilters['website_id'])
+            ) {
+                $dimensions = $this->makeCurrentDimensions();
+
+                $tableName = [
+                    'price_index' => $this->priceTableResolver->resolve(
+                        'catalog_product_index_price',
+                        $dimensions
+                    )
+                ];
+                $joinFunction($tableName);
             } else {
-                $select->join($tableName, $joinCond, $colls);
+                //handle rare case when price index is used on backend area where website/customer group is not passed.
+                $tableName = ['price_index' => $this->indexScopeResolver->resolve('catalog_product_index_price', [])];
+                $joinFunction($tableName);
             }
+
             // Set additional field filters
             foreach ($this->_priceDataFieldFilters as $filterData) {
                 $select->where(call_user_func_array('sprintf', $filterData));
@@ -2406,5 +2465,39 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         return $this->_pricesCount;
+    }
+
+    /**
+     * @return array
+     */
+    private function makeCurrentDimensions(): array
+    {
+        $dimensions = [];
+
+        if (isset($this->_productLimitationFilters['customer_group_id'])) {
+            $dimensions[] = $this->dimensionFactory->create(
+                CustomerGroupDataProvider::DIMENSION_NAME,
+                $this->_productLimitationFilters['customer_group_id']
+            );
+        } else {
+            $dimensions[] = $this->dimensionFactory->create(
+                CustomerGroupDataProvider::DIMENSION_NAME,
+                $this->_customerSession->getCustomerGroupId()
+            );
+        }
+
+        if (isset($this->_productLimitationFilters['website_id'])) {
+            $dimensions[] = $this->dimensionFactory->create(
+                WebsiteDataProvider::DIMENSION_NAME,
+                $this->_productLimitationFilters['website_id']
+            );
+        } else {
+            $dimensions[] = $this->dimensionFactory->create(
+                WebsiteDataProvider::DIMENSION_NAME,
+                $this->_storeManager->getStore($this->getStoreId())->getWebsiteId()
+            );
+        }
+
+        return $dimensions;
     }
 }
