@@ -12,7 +12,7 @@ namespace Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite;
  *
  * It can be used, for example, to resolve '\' URL path to a 'Home' page.
  */
-interface CustomUrlResolverInterface
+interface CustomUrlLocatorInterface
 {
     /**
      * Resolve URL based on custom rules.
@@ -20,5 +20,5 @@ interface CustomUrlResolverInterface
      * @param string $urlKey
      * @return string|null Return null if URL cannot be resolved
      */
-    public function resolveUrl($urlKey): ?string;
+    public function locateUrl($urlKey): ?string;
 }

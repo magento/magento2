@@ -6,10 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlResolver">
+    <type name="Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocator">
         <arguments>
-            <argument name="urlResolvers" xsi:type="array">
-                <item name="homePageResolver" xsi:type="object">Magento\CmsUrlRewriteGraphQl\Model\Resolver\UrlRewrite\HomePageUrlResolver</item>
+            <argument name="urlLocators" xsi:type="array">
+                <item name="homePageUrlLocator" xsi:type="object">Magento\CmsUrlRewriteGraphQl\Model\Resolver\UrlRewrite\HomePageUrlLocator</item>
             </argument>
         </arguments>
     </type>

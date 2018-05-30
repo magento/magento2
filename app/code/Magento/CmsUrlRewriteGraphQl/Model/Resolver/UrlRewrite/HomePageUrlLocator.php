@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\CmsUrlRewriteGraphQl\Model\Resolver\UrlRewrite;
 
-use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlResolverInterface;
+use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocatorInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Cms\Helper\Page;
 
 /**
- * Home page URL resolver.
+ * Home page URL locator.
  */
-class HomePageUrlResolver implements CustomUrlResolverInterface
+class HomePageUrlLocator implements CustomUrlLocatorInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -33,7 +33,7 @@ class HomePageUrlResolver implements CustomUrlResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolveUrl($urlKey): ?string
+    public function locateUrl($urlKey): ?string
     {
         if ($urlKey === '/') {
             $homePageUrl = $this->scopeConfig->getValue(

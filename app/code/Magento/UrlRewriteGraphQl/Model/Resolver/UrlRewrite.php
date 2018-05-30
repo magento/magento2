@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlResolverInterface;
+use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocatorInterface;
 
 /**
  * UrlRewrite field resolver, used for GraphQL request processing.
@@ -37,26 +37,26 @@ class UrlRewrite implements ResolverInterface
     private $valueFactory;
     
     /**
-     * @var UrlRewrite\CustomUrlResolverInterface
+     * @var CustomUrlLocatorInterface
      */
-    private $customUrlResolver;
+    private $customUrlLocator;
 
     /**
      * @param UrlFinderInterface $urlFinder
      * @param StoreManagerInterface $storeManager
      * @param ValueFactory $valueFactory
-     * @param CustomUrlResolverInterface $customUrlResolver
+     * @param CustomUrlLocatorInterface $customUrlLocator
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
         StoreManagerInterface $storeManager,
         ValueFactory $valueFactory,
-        CustomUrlResolverInterface $customUrlResolver
+        CustomUrlLocatorInterface $customUrlLocator
     ) {
         $this->urlFinder = $urlFinder;
         $this->storeManager = $storeManager;
         $this->valueFactory = $valueFactory;
-        $this->customUrlResolver = $customUrlResolver;
+        $this->customUrlLocator = $customUrlLocator;
     }
 
     /**
@@ -78,7 +78,7 @@ class UrlRewrite implements ResolverInterface
             if (substr($url, 0, 1) === '/' && $url !== '/') {
                 $url = ltrim($url, '/');
             }
-            $customUrl = $this->customUrlResolver->resolveUrl($url);
+            $customUrl = $this->customUrlLocator->locateUrl($url);
             $url = $customUrl ?: $url;
             $urlRewrite = $this->findCanonicalUrl($url);
             if ($urlRewrite) {
