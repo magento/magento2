@@ -234,7 +234,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 
     /**
      * Retrieve template file path.
-     * 
+     *
      * @param string $file
      * @param array $designParams
      * @param string $module
