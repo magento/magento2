@@ -19,7 +19,7 @@ class AssertProductUrlDuplicateErrorMessage extends AbstractConstraint
     /**
      * Text title of the error message to be checked.
      */
-    const ERROR_MESSAGE_TITLE = 'The value specified in the URL Key field would generate a URL that already exists.';
+    const ERROR_MESSAGE_TITLE = 'SKU is already in use.';
 
     /**
      * Assert that success message is displayed after product save.
