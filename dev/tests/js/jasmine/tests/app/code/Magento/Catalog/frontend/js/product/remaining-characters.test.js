@@ -26,8 +26,12 @@ define([
             });
         });
 
-        describe('Note text is updated on input change', function () {
+        afterEach(function () {
+            widget.remove();
+            note.remove();
+        });
 
+        describe('Note text is updated on input change', function () {
             it('check empty input', function () {
                 var testData = {
                     input: '',
@@ -75,7 +79,6 @@ define([
                 widget.trigger(testData.action);
                 expect(note.find('.character-counter').text()).toBe(testData.expectedText);
             });
-
         });
     });
 });
