@@ -59,13 +59,11 @@
 
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
         <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order number is: " stepKey="seeOrderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessNotify"/>
 
         <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
-        <waitForElement selector="{{StorefrontCustomerOrderViewSection.orderTitle}}" stepKey="waitOrderViewPage"/>
         <seeInCurrentUrl url="{{StorefrontCustomerOrderPage.url}}" stepKey="seeMyOrderPage"/>
 
         <!--Go to product page-->
@@ -87,9 +85,8 @@
 
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
-        <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage2"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage2"/>
         <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
-        <waitForElement selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="waitHomePage"/>
         <see userInput="Home Page" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeHomePageTitle"/>
         <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
 
@@ -112,7 +109,7 @@
 
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder3"/>
-        <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage3"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage3"/>
 
         <!--Check "Print Receipt" button is presented (desktop only)-->
         <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint"/>
@@ -123,7 +120,6 @@
 
         <!--See print page-->
         <click selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="clickPrintLink"/>
-        <waitForPageLoad stepKey="waitPrintPage"/>
         <switchToWindow stepKey="switchToWindow"/>
         <switchToNextTab stepKey="switchToTab"/>
         <seeInCurrentUrl url="sales/order/print/order_id" stepKey="seePrintPage"/>
@@ -169,7 +165,7 @@
 
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
 
         <!--See success messages-->
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
@@ -181,7 +177,6 @@
         <see selector="{{CheckoutSuccessRegisterSection.customerEmail}}" userInput="Email Address: {{CustomerEntityOne.email}}" stepKey="seeCustomerEmail"/>
         <seeElement selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="seeVisibleCreateAccountButton"/>
         <click selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
-        <waitForElement selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="waitAccountPage"/>
         <seeInCurrentUrl url="{{StorefrontCustomerCreatePage.url}}" stepKey="seeCreateAccountPage"/>
         <see userInput="Create New Customer Account" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeCreateAccountPageTitle"/>
 
@@ -203,11 +198,10 @@
 
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
-        <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage2"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage2"/>
 
         <!--Continue shopping-->
         <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
-        <waitForElement selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="waitHomePage"/>
         <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
         <see userInput="Home Page" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeHomePageTitle"/>
     </test>
