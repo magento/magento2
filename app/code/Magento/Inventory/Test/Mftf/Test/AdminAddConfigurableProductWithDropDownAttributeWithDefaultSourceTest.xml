@@ -8,28 +8,20 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminAddConfigurableProductWithDropDownAttributeAndDefaultSourceTest">
+    <test name="AdminAddConfigurableProductWithDropDownAttributeWithDefaultSourceTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Add Configurable Product"/>
             <title value="Create a Configurable Product with a drop down attribute"/>
-            <description value="You should be able to create a Configurable Product that is assigned to the Default Source with a drop down attribute."/>
+            <description value="You should be able to create a Configurable Product that is assigned to a New Source with a drop down attribute."/>
             <testCaseId value="745"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
-            <group value="multi_mode"/>
+            <group value="single_mode"/>
         </annotations>
 
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory1"/>
-            <createData entity="FullSource1" stepKey="createSource1"/>
-            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
-
-            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
-                <requiredEntity createDataKey="createStock1"/>
-                <requiredEntity createDataKey="createSource1"/>
-            </createData>
-
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
@@ -74,17 +66,8 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
 
         <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku1"/>
-        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="clickOnAssignSources2"/>
 
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
-            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <argument name="value" value="$$createSource1.source[source_code]$$"/>
-        </actionGroup>
-        <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource1"/>
-        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="clickOnDone2"/>
-
-        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSource}}" userInput="100" stepKey="fillTheQuantityField1"/>
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForSingleMode}}" userInput="100" stepKey="fillTheQuantityField1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton5"/>
 

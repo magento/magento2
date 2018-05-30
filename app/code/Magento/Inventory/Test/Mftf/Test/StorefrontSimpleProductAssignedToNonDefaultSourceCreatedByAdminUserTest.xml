@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="SimpleProductAssignedToNonDefaultSourceCreatedByAdminUserTest">
+    <test name="StorefrontSimpleProductAssignedToNonDefaultSourceCreatedByAdminUserTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Assign Products to Sources"/>
@@ -23,26 +23,14 @@
         <before>
             <createData entity="SimpleSubCategory" stepKey="createSimpleSubCategory"/>
             <createData entity="_minimalSource" stepKey="createCustomSource"/>
-            <createData entity="BasicMsiStock1" stepKey="createCustomStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createCustomStock"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <waitForPageLoad stepKey="waitForPageLoadAfterLogin"/>
 
-             <!--assign source and sales channel to stock-->
-            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPage"/>
-            <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
-            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomStockByKeyword">
-                <argument name="keyword" value="$$createCustomStock.stock[name]$$"/>
-            </actionGroup>
-            <click selector="{{AdminGridRow.editByValue($$createCustomStock.stock[name]$$)}}" stepKey="clickOnEditForCustomStock"/>
-            <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
-            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannel"/>
-            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSources"/>
-            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByKeyword">
-                <argument name="keyword" value="$$createCustomSource.source[name]$$"/>
-            </actionGroup>
-            <click selector="{{AdminGridRow.checkboxByValue($$createCustomSource.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource"/>
-            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDone"/>
-            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createCustomStock"/>
+                <requiredEntity createDataKey="createCustomSource"/>
+            </createData>
 
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGrid"/>
         </before>
