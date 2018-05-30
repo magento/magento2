@@ -89,7 +89,14 @@ class InventoryRequestFromInvoiceFactory
     {
         $selectionRequestItems = [];
         foreach ($invoiceItems as $invoiceItem) {
-            if (!$invoiceItem->getOrderItem()->getIsVirtual()) {
+            $orderItem = $invoiceItem->getOrderItem();
+            $qtyToInvoice = $orderItem->getQtyToInvoice() + $invoiceItem->getQty();
+
+            if ($orderItem->isDeleted()
+                || $orderItem->getParentItemId()
+                || $this->isZero((float)$qtyToInvoice)
+                || !$orderItem->getIsVirtual()
+            ) {
                 continue;
             }
 
@@ -120,5 +127,17 @@ class InventoryRequestFromInvoiceFactory
         }
 
         return $qty > 0 ? $qty : 0;
+    }
+
+    /**
+     * Compare float number with some epsilon
+     *
+     * @param float $floatNumber
+     *
+     * @return bool
+     */
+    private function isZero(float $floatNumber): bool
+    {
+        return $floatNumber < 0.0000001;
     }
 }
