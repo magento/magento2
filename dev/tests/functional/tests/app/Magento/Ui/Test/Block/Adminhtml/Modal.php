@@ -131,7 +131,7 @@ class Modal extends Block
     }
 
     /**
-     * Wait until modal window will disapper.
+     * Wait until modal window will disappear.
      *
      * @return void
      */
