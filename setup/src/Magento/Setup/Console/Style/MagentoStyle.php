@@ -519,7 +519,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     }
 
     /**
-     * @param $messages
+     * @param array $messages
      * @return array
      */
     private function reduceBuffer($messages)
