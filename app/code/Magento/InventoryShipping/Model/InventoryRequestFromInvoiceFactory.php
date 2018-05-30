@@ -89,14 +89,7 @@ class InventoryRequestFromInvoiceFactory
     {
         $selectionRequestItems = [];
         foreach ($invoiceItems as $invoiceItem) {
-            $orderItem = $invoiceItem->getOrderItem();
-            $qtyToInvoice = $orderItem->getQtyToInvoice() + $invoiceItem->getQty();
-
-            if ($orderItem->isDeleted()
-                || $orderItem->getParentItemId()
-                || $this->isZero((float)$qtyToInvoice)
-                || !$orderItem->getIsVirtual()
-            ) {
+            if (!$this->canProcessInvoiceItem($invoiceItem)) {
                 continue;
             }
 
@@ -114,6 +107,20 @@ class InventoryRequestFromInvoiceFactory
     }
 
     /**
+     * @param $invoiceItem
+     * @return bool
+     */
+    private function canProcessInvoiceItem($invoiceItem): bool
+    {
+        $orderItem = $invoiceItem->getOrderItem();
+        if ($orderItem->isDeleted() || $orderItem->getParentItemId() || !$orderItem->getIsVirtual()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param OrderItemInterface $item
      * @param string|int|float $qty
      * @return float|int
@@ -127,17 +134,5 @@ class InventoryRequestFromInvoiceFactory
         }
 
         return $qty > 0 ? $qty : 0;
-    }
-
-    /**
-     * Compare float number with some epsilon
-     *
-     * @param float $floatNumber
-     *
-     * @return bool
-     */
-    private function isZero(float $floatNumber): bool
-    {
-        return $floatNumber < 0.0000001;
     }
 }
