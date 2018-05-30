@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchConfigurableByNameTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search configurable product with product name"/>
+            <description value="Guest customer should be able to advance search configurable product with product name"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-138"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+    </test>
+    <test name="AdvanceCatalogSearchConfigurableBySkuTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search configurable product with product sku"/>
+            <description value="Guest customer should be able to advance search configurable product with product sku"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-144"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductSkuActionGroup" stepKey="search">
+            <argument name="sku" value="$$createProductOne.sku$$"/>
+        </actionGroup>
+    </test>
+    <test name="AdvanceCatalogSearchConfigurableByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search configurable product with product description"/>
+            <description value="Guest customer should be able to advance search configurable product with product description"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-237"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByDescriptionActionGroup" stepKey="search">
+            <argument name="description" value="$$createProductOne.custom_attributes[description]$$"/>
+        </actionGroup>
+    </test>
+    <test name="AdvanceCatalogSearchConfigurableByShortDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search configurable product with product short description"/>
+            <description value="Guest customer should be able to advance search configurable product with product short description"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-240"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByShortDescriptionActionGroup" stepKey="search">
+            <argument name="shortDescription" value="$$createProductOne.custom_attributes[short_description]$$"/>
+        </actionGroup>
+    </test>
+</tests>

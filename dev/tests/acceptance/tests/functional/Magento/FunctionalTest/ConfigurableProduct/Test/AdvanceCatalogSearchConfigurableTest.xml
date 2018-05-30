@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchConfigurableByNameTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>
+
+            <createData entity="SimpleProduct" stepKey="simple1Handle" before="simple2Handle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <createData entity="SimpleProduct" stepKey="simple2Handle" before="createProductOne">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <!-- TODO: Move configurable product creation to an actionGroup when MQE-697 is fixed -->
+            <createData entity="ApiConfigurableProductWithDescription" stepKey="createProductOne"/>
+
+            <createData entity="productDropDownAttribute" stepKey="productAttributeHandle"/>
+
+            <createData entity="productAttributeOption1" stepKey="productAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="productAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="addToAttributeSetHandle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <createData entity="SimpleOne" stepKey="childProductHandle1">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+            </createData>
+            <createData entity="SimpleOne" stepKey="childProductHandle2">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configProductOptionHandle">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle1">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="childProductHandle1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle2">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="childProductHandle2"/>
+            </createData>
+        </before>
+    </test>
+    <test name="AdvanceCatalogSearchConfigurableBySkuTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>
+
+            <createData entity="SimpleProduct" stepKey="simple1Handle" before="simple2Handle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <createData entity="SimpleProduct" stepKey="simple2Handle" before="createProductOne">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <!-- TODO: Move configurable product creation to an actionGroup when MQE-697 is fixed -->
+            <createData entity="ApiConfigurableProductWithDescription" stepKey="createProductOne"/>
+
+            <createData entity="productDropDownAttribute" stepKey="productAttributeHandle"/>
+
+            <createData entity="productAttributeOption1" stepKey="productAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="productAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="addToAttributeSetHandle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <createData entity="SimpleOne" stepKey="childProductHandle1">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+            </createData>
+            <createData entity="SimpleOne" stepKey="childProductHandle2">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configProductOptionHandle">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle1">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="childProductHandle1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle2">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="childProductHandle2"/>
+            </createData>
+        </before>
+    </test>
+    <test name="AdvanceCatalogSearchConfigurableByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>
+
+            <createData entity="SimpleProduct" stepKey="simple1Handle" before="simple2Handle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <createData entity="SimpleProduct" stepKey="simple2Handle" before="createProductOne">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <!-- TODO: Move configurable product creation to an actionGroup when MQE-697 is fixed -->
+            <createData entity="ApiConfigurableProductWithDescription" stepKey="createProductOne"/>
+
+            <createData entity="productDropDownAttribute" stepKey="productAttributeHandle"/>
+
+            <createData entity="productAttributeOption1" stepKey="productAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="productAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="addToAttributeSetHandle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <createData entity="SimpleOne" stepKey="childProductHandle1">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+            </createData>
+            <createData entity="SimpleOne" stepKey="childProductHandle2">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configProductOptionHandle">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle1">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="childProductHandle1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle2">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="childProductHandle2"/>
+            </createData>
+        </before>
+    </test>
+    <test name="AdvanceCatalogSearchConfigurableByShortDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>
+
+            <createData entity="SimpleProduct" stepKey="simple1Handle" before="simple2Handle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <createData entity="SimpleProduct" stepKey="simple2Handle" before="createProductOne">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <!-- TODO: Move configurable product creation to an actionGroup when MQE-697 is fixed -->
+            <createData entity="ApiConfigurableProductWithDescription" stepKey="createProductOne"/>
+
+            <createData entity="productDropDownAttribute" stepKey="productAttributeHandle"/>
+
+            <createData entity="productAttributeOption1" stepKey="productAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="productAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="addToAttributeSetHandle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <createData entity="SimpleOne" stepKey="childProductHandle1">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+            </createData>
+            <createData entity="SimpleOne" stepKey="childProductHandle2">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configProductOptionHandle">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle1">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="childProductHandle1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle2">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="childProductHandle2"/>
+            </createData>
+        </before>
+    </test>
+</tests>
