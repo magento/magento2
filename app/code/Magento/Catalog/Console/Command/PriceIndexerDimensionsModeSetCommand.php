@@ -93,7 +93,7 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
         $errors = $this->validate($input);
 
         if ($errors) {
-            throw new \InvalidArgumentException(implode("\n", $errors));
+            throw new \InvalidArgumentException(implode(PHP_EOL, $errors));
         }
 
         $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
