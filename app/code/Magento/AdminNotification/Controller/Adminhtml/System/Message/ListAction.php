@@ -62,8 +62,10 @@ class ListAction extends \Magento\Backend\App\AbstractAction
         if (empty($result)) {
             $result[] = [
                 'severity' => (string)\Magento\Framework\Notification\MessageInterface::SEVERITY_NOTICE,
-                'text' => 'You have viewed and resolved all recent system notices. '
-                    . 'Please refresh the web page to clear the notice alert.',
+                'text' => __(
+                    'You have viewed and resolved all recent system notices. '
+                    . 'Please refresh the web page to clear the notice alert.'
+                )
             ];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
