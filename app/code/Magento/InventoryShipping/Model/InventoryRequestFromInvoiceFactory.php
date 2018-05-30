@@ -15,6 +15,7 @@ use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactor
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItemModel;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Traversable;
 
@@ -107,10 +108,10 @@ class InventoryRequestFromInvoiceFactory
     }
 
     /**
-     * @param InvoiceItemInterface $invoiceItem
+     * @param InvoiceItemModel $invoiceItem
      * @return bool
      */
-    private function canProcessInvoiceItem(InvoiceItemInterface $invoiceItem): bool
+    private function canProcessInvoiceItem(InvoiceItemModel $invoiceItem): bool
     {
         $orderItem = $invoiceItem->getOrderItem();
         if ($orderItem->isDeleted() || $orderItem->getParentItemId() || !$orderItem->getIsVirtual()) {
