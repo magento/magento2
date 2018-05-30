@@ -168,7 +168,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $adapterMockForCheckout->expects($this->once())->method('rollback');
 
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
-        $exception = new \Exception(__('DB exception'));
+        $exception = new \Magento\Framework\Exception\CouldNotSaveException(__('DB exception'));
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
