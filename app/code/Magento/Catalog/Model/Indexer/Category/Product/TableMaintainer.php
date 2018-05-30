@@ -205,6 +205,10 @@ class TableMaintainer
      */
     public function getMainTmpTable(int $storeId)
     {
-        return $this->mainTmpTable[$storeId];
+        if (isset($this->mainTmpTable[$storeId])) {
+            return $this->mainTmpTable[$storeId];
+        } else {
+            return null;
+        }
     }
 }

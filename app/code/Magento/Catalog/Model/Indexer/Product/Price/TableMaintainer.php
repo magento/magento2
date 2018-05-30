@@ -222,7 +222,7 @@ class TableMaintainer
      *
      * @return string
      */
-    public function getMainReplicaTable(array $dimensions)
+    public function getMainReplicaTable(array $dimensions): string
     {
         return $this->getMainTable($dimensions) . $this->additionalTableSuffix;
     }
@@ -249,10 +249,14 @@ class TableMaintainer
      *
      * @param Dimension[] $dimensions
      *
-     * @return string
+     * @return string|null
      */
     public function getMainTmpTable(array $dimensions)
     {
-        return $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)];
+        if (isset($this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)])) {
+            return $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)];
+        } else {
+            return null;
+        }
     }
 }
