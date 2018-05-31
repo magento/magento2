@@ -69,6 +69,3 @@ foreach ($websiteCodes as $key => $websiteCode) {
  * with indexes form 0 to 9, but last created Store id is greater than 9.
  */
 $sequence->generateSequences($store->getId());
-
-/* Refresh stores memory cache */
-$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
