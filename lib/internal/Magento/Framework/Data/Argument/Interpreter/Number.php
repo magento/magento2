@@ -14,7 +14,7 @@ class Number implements InterpreterInterface
 {
     /**
      * {@inheritdoc}
-     * @return float
+     * @return int|float
      * @throws \InvalidArgumentException
      */
     public function evaluate(array $data)
@@ -23,7 +23,7 @@ class Number implements InterpreterInterface
             throw new \InvalidArgumentException('Numeric value is expected.');
         }
 
-        $result = (float) $data['value'];
+        $result = $data['value'] + 0;
 
         return $result;
     }
