@@ -122,8 +122,8 @@ class AjaxLogin
     private function isFormCaptchaExist($loginFormId, $username): bool
     {
         return (
-            $this->helper->getCaptcha($loginFormId)->isRequired($username)
-            && !in_array($loginFormId, $this->formIds)
+            in_array($loginFormId, $this->formIds)
+            && $this->helper->getCaptcha($loginFormId)->isRequired($username)
         );
     }
 }
