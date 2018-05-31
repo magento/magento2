@@ -283,7 +283,7 @@ class PaymentFailuresService implements PaymentFailuresInterface
      */
     private function getCustomerName(Quote $quote): string
     {
-        $customer = __('Guest');
+        $customer = __('Guest')->render();
         if (!$quote->getCustomerIsGuest()) {
             $customer = $quote->getCustomer()->getFirstname() . ' ' .
                         $quote->getCustomer()->getLastname();
