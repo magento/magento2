@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Captcha\Model\Customer\Plugin;
 
 use Magento\Captcha\Helper\Data as CaptchaHelper;
@@ -85,23 +86,44 @@ class AjaxLogin
         $captchaString = $loginParams[$captchaInputName] ?? null;
         $loginFormId = $loginParams[$captchaFormIdField] ?? null;
 
-        foreach ($this->formIds as $formId) {
-            $captchaModel = $this->helper->getCaptcha($formId);
-            if ($captchaModel->isRequired($username) && !in_array($loginFormId, $this->formIds)) {
-                $resultJson = $this->resultJsonFactory->create();
-                return $resultJson->setData(['errors' => true, 'message' => __('Provided form does not exist')]);
-            }
+        if (!$this->isFormCaptchaExist($loginFormId, $username)) {
+            return $this->returnJsonError(__('Provided form does not exist'));
+        }
 
-            if ($formId == $loginFormId) {
+        foreach ($this->formIds as $formId) {
+            if ($formId === $loginFormId) {
+                $captchaModel = $this->helper->getCaptcha($formId);
                 $captchaModel->logAttempt($username);
                 if (!$captchaModel->isCorrect($captchaString)) {
                     $this->sessionManager->setUsername($username);
-                    /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-                    $resultJson = $this->resultJsonFactory->create();
-                    return $resultJson->setData(['errors' => true, 'message' => __('Incorrect CAPTCHA')]);
+                    return $this->returnJsonError(__('Incorrect CAPTCHA'));
                 }
             }
         }
         return $proceed();
+    }
+
+    /**
+     *
+     * @param \Magento\Framework\Phrase $phrase
+     * @return \Magento\Framework\Controller\Result\Json
+     */
+    private function returnJsonError(\Magento\Framework\Phrase $phrase): \Magento\Framework\Controller\Result\Json
+    {
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData(['errors' => true, 'message' => $phrase]);
+    }
+
+    /**
+     * @param string $loginFormId
+     * @param string $username
+     * @return bool
+     */
+    private function isFormCaptchaExist($loginFormId, $username): bool
+    {
+        return (
+            $this->helper->getCaptcha($loginFormId)->isRequired($username)
+            && !in_array($loginFormId, $this->formIds)
+        );
     }
 }
