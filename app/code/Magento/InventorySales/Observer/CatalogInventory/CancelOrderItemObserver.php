@@ -17,8 +17,9 @@ use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\InputException;
 
 class CancelOrderItemObserver implements ObserverInterface
 {
@@ -87,18 +88,20 @@ class CancelOrderItemObserver implements ObserverInterface
     /**
      * @param EventObserver $observer
      * @return void
-     * @throws LocalizedException
      */
     public function execute(EventObserver $observer)
     {
-        /** @var \Magento\Sales\Model\Order\Item $item */
+        /** @var OrderItem $item */
         $item = $observer->getEvent()->getItem();
-        $children = $item->getChildrenItems();
-        $qty = $item->getQtyOrdered() - max($item->getQtyShipped(), $item->getQtyInvoiced()) - $item->getQtyCanceled();
-        if ($item->getId() && $item->getProductId() && empty($children) && $qty) {
-            $productSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
-                [$item->getProductId()]
-            )[$item->getProductId()];
+        $qty = $item->getQtyToCancel();
+        if ($this->canCancelOrderItem($item) && $qty) {
+            try {
+                $productSku = $this->getSkusByProductIds->execute(
+                    [$item->getProductId()]
+                )[$item->getProductId()];
+            } catch (InputException $e) {
+                return;
+            }
 
             $itemToSell = $this->itemsToSellFactory->create([
                 'sku' => $productSku,
@@ -125,5 +128,17 @@ class CancelOrderItemObserver implements ObserverInterface
         }
 
         $this->priceIndexer->reindexRow($item->getProductId());
+    }
+
+    /**
+     * @param OrderItem $orderItem
+     * @return bool
+     */
+    private function canCancelOrderItem(OrderItem $orderItem): bool
+    {
+        if ($orderItem->getId() && $orderItem->getProductId() && !$orderItem->isDummy()) {
+            return true;
+        }
+        return false;
     }
 }

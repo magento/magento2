@@ -15,6 +15,7 @@ use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProd
 use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Class provides around Plugin on \Magento\CatalogInventory\Model\StockManagement::backItemQty
@@ -86,13 +87,22 @@ class ProcessBackItemQtyPlugin
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundBackItemQty(StockManagement $subject, callable $proceed, $productId, $qty, $scopeId = null)
-    {
+    public function aroundBackItemQty(
+        StockManagement $subject,
+        callable $proceed,
+        $productId,
+        $qty,
+        $scopeId = null
+    ): bool {
         if (null === $scopeId) {
             throw new LocalizedException(__('$scopeId is required'));
         }
 
-        $productSku = $this->getSkusByProductIds->execute([$productId])[$productId];
+        try {
+            $productSku = $this->getSkusByProductIds->execute([$productId])[$productId];
+        } catch (InputException $e) {
+            return true;
+        }
         $productType = $this->getProductTypesBySkus->execute([$productSku])[$productSku];
 
         if (true === $this->isSourceItemManagementAllowedForProductType->execute($productType)) {
