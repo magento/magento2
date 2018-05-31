@@ -95,13 +95,18 @@ class CancelOrderItemObserver implements ObserverInterface
         $item = $observer->getEvent()->getItem();
         $qty = $item->getQtyToCancel();
         if ($this->canCancelOrderItem($item) && $qty) {
-            // As it was decided that the inventory doesn’t depend on the catalog (these two system are independent)
-            // it is necessary for us to have an ability to process orders even with deleted or non-existing products
             try {
                 $productSku = $this->getSkusByProductIds->execute(
                     [$item->getProductId()]
                 )[$item->getProductId()];
             } catch (InputException $e) {
+                /*
+                 * As it was decided the Inventory should not use data constraints depending on Catalog
+                 * (these two systems are not highly coupled, i.e. Magento does not sync data between them, so that
+                 * it's possible that SKU exists in Catalog, but does not exist in Inventory and vice versa)
+                 * it is necessary for Magento to have an ability to process placed orders even with
+                 * deleted or non-existing products
+                 */
                 return;
             }
 
