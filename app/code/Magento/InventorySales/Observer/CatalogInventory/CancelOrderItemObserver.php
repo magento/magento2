@@ -100,7 +100,7 @@ class CancelOrderItemObserver implements ObserverInterface
                     [$item->getProductId()]
                 )[$item->getProductId()];
             } catch (InputException $e) {
-                /*
+                /**
                  * As it was decided the Inventory should not use data constraints depending on Catalog
                  * (these two systems are not highly coupled, i.e. Magento does not sync data between them, so that
                  * it's possible that SKU exists in Catalog, but does not exist in Inventory and vice versa)
