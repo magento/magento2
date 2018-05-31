@@ -11,8 +11,7 @@
         <arguments>
             <argument name="storeGroupName" defaultValue="customStoreGroup.name"/>
         </arguments>
-        <amOnPage  url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="clickCreateStoreViewButton"/>
+        <amOnPage  url="{{AdminSystemStoreViewPage.url}}" stepKey="amOnAdminSystemStoreViewPage"/>
         <waitForPageLoad time="30" stepKey="waitForProductPageLoad"/>
         <selectOption userInput="{{storeGroupName}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
         <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
