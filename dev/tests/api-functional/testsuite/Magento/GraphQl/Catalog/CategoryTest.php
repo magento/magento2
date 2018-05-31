@@ -114,13 +114,12 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/categories_indexed.php
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCategoryProducts()
     {
-        $categoryId = 4;
+        $categoryId = 2;
         $query = <<<QUERY
 {
   category(id: {$categoryId}) {
@@ -266,25 +265,21 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('products', $response['category']);
         $this->assertArrayHasKey('total_count', $response['category']['products']);
-        $this->assertEquals(2, $response['category']['products']['total_count']);
+        $this->assertGreaterThanOrEqual(1, $response['category']['products']['total_count']);
         $this->assertEquals(1, $response['category']['products']['page_info']['current_page']);
         $this->assertEquals(20, $response['category']['products']['page_info']['page_size']);
+
+        $this->assertArrayHasKey('sku', $response['category']['products']['items'][0]);
+        $firstProductSku = $response['category']['products']['items'][0]['sku'];
 
         /**
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $firstProductSku = 'simple';
         $firstProduct = $productRepository->get($firstProductSku, false, null, true);
         $this->assertBaseFields($firstProduct, $response['category']['products']['items'][0]);
         $this->assertAttributes($response['category']['products']['items'][0]);
         $this->assertWebsites($firstProduct, $response['category']['products']['items'][0]['websites']);
-
-        $secondProductSku = '12345';
-        $secondProduct = $productRepository->get($secondProductSku, false, null, true);
-        $this->assertBaseFields($secondProduct, $response['category']['products']['items'][1]);
-        $this->assertAttributes($response['category']['products']['items'][1]);
-        $this->assertWebsites($secondProduct, $response['category']['products']['items'][1]['websites']);
     }
 
     /**
@@ -297,7 +292,6 @@ QUERY;
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
-            ['response_field' => 'id', 'expected_value' => $product->getId()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'price', 'expected_value' =>
                 [
