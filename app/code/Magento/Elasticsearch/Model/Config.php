@@ -61,7 +61,7 @@ class Config implements ClientOptionsInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param ClientResolver|null $clientResolver
      * @param EngineResolver|null $engineResolver
-     * @param string|null $prefix
+     * @param string $prefix
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
