@@ -77,7 +77,7 @@
         <actionsColumn name="actions" class="Magento\Theme\Ui\Component\Listing\Column\ViewAction" sortOrder="50">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="viewUrlPath" xsi:type="string">admin/system_design_theme/edit</item>
+                    <item name="viewUrlPath" xsi:type="string">adminhtml/system_design_theme/edit</item>
                     <item name="urlEntityParamName" xsi:type="string">id</item>
                 </item>
             </argument>
