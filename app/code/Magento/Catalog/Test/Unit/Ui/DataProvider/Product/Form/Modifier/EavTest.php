@@ -462,16 +462,17 @@ class EavTest extends AbstractModifierTest
      * @param bool $productRequired
      * @param string|null $attrValue
      * @param array $expected
+     * @return void
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      * @dataProvider setupAttributeMetaDataProvider
      */
     public function testSetupAttributeMetaDefaultAttribute(
         $productId,
-        $productRequired,
+        bool $productRequired,
         $attrValue,
-        $expected
-    ) {
+        array $expected
+    ) : void {
         $configPath = 'arguments/data/config';
         $groupCode = 'product-details';
         $sortOrder = '0';
@@ -480,14 +481,14 @@ class EavTest extends AbstractModifierTest
             ['value' => 1.5, 'label' => 'Float label'],
             ['value' => true, 'label' => 'Boolean label'],
             ['value' => 'string', 'label' => 'String label'],
-            ['value' => ['test1', 'test2'], 'label' => 'Array label']
+            ['value' => ['test1', 'test2'], 'label' => 'Array label'],
         ];
         $attributeOptionsExpected = [
             ['value' => '1', 'label' => 'Int label'],
             ['value' => '1.5', 'label' => 'Float label'],
             ['value' => '1', 'label' => 'Boolean label'],
             ['value' => 'string', 'label' => 'String label'],
-            ['value' => ['test1', 'test2'], 'label' => 'Array label']
+            ['value' => ['test1', 'test2'], 'label' => 'Array label'],
         ];
 
         $this->productMock->method('getId')->willReturn($productId);
@@ -563,7 +564,7 @@ class EavTest extends AbstractModifierTest
                     'source' => 'product-details',
                     'scopeLabel' => '',
                     'globalScope' => false,
-                    'sortOrder' => 0
+                    'sortOrder' => 0,
                 ],
             ],
             'default_null_prod_not_new_and_not_required' => [
@@ -582,7 +583,7 @@ class EavTest extends AbstractModifierTest
                     'source' => 'product-details',
                     'scopeLabel' => '',
                     'globalScope' => false,
-                    'sortOrder' => 0
+                    'sortOrder' => 0,
                 ],
             ],
             'default_null_prod_new_and_not_required' => [
@@ -601,7 +602,7 @@ class EavTest extends AbstractModifierTest
                     'source' => 'product-details',
                     'scopeLabel' => '',
                     'globalScope' => false,
-                    'sortOrder' => 0
+                    'sortOrder' => 0,
                 ],
             ],
             'default_null_prod_new_and_required' => [
@@ -620,7 +621,7 @@ class EavTest extends AbstractModifierTest
                     'source' => 'product-details',
                     'scopeLabel' => '',
                     'globalScope' => false,
-                    'sortOrder' => 0
+                    'sortOrder' => 0,
                 ],
             ]
         ];
