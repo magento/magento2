@@ -48,6 +48,6 @@
         <data key="shareable">No</data>
         <data key="number_of_downloads">1000</data>
         <data key="sort_order">0</data>
-        <data key="link_file">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
+        <data key="link_url">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
     </entity>
 </entities>

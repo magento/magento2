@@ -14,13 +14,12 @@
         </annotations>
         <before>
             <createData entity="ApiDownloadableProduct" stepKey="createProductOne"/>
-            <!-- Uncomment after bug MQE-1023 is fixed -->
-            <!--createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createProductOne"/>
             </createData>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
                 <requiredEntity createDataKey="createProductOne"/>
-            </createData-->
+            </createData>
         </before>
     </test>
     <test name="AdvanceCatalogSearchDownloadableBySkuTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
@@ -29,13 +28,12 @@
         </annotations>
         <before>
             <createData entity="ApiDownloadableProduct" stepKey="createProductOne"/>
-            <!-- Uncomment after bug MQE-1023 is fixed -->
-            <!--createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createProductOne"/>
             </createData>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
                 <requiredEntity createDataKey="createProductOne"/>
-            </createData-->
+            </createData>
         </before>
     </test>
     <test name="AdvanceCatalogSearchDownloadableByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
@@ -44,13 +42,12 @@
         </annotations>
         <before>
             <createData entity="ApiDownloadableProduct" stepKey="createProductOne"/>
-            <!-- Uncomment after bug MQE-1023 is fixed -->
-            <!--createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createProductOne"/>
             </createData>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
                 <requiredEntity createDataKey="createProductOne"/>
-            </createData-->
+            </createData>
         </before>
     </test>
     <test name="AdvanceCatalogSearchDownloadableByShortDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
@@ -59,13 +56,12 @@
         </annotations>
         <before>
             <createData entity="ApiDownloadableProduct" stepKey="createProductOne"/>
-            <!-- Uncomment after bug MQE-1023 is fixed -->
-            <!--createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createProductOne"/>
             </createData>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
                 <requiredEntity createDataKey="createProductOne"/>
-            </createData-->
+            </createData>
         </before>
     </test>
     <test name="AdvanceCatalogSearchDownloadableByPriceTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
@@ -74,13 +70,12 @@
         </annotations>
         <before>
             <createData entity="ApiDownloadableProduct" stepKey="createProductOne"/>
-            <!-- Uncomment after bug MQE-1023 is fixed -->
-            <!--createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createProductOne"/>
             </createData>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
                 <requiredEntity createDataKey="createProductOne"/>
-            </createData-->
+            </createData>
         </before>
     </test>
 </tests>
