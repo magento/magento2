@@ -51,7 +51,7 @@ class AttributeFilter
      * @param array $productData
      * @return array
      */
-    private function prepareConfigData(Product $product, $attributeCode, array $productData): array
+    private function prepareConfigData(Product $product, string $attributeCode, array $productData): array
     {
         // UI component sends value even if field is disabled, so 'Use Config Settings' must be reset to false
         if ($product->hasData('use_config_' . $attributeCode)) {
@@ -67,7 +67,7 @@ class AttributeFilter
      * @param array $productData
      * @return array
      */
-    private function prepareDefaultData(array $attributeList, $attributeCode, array $productData): array
+    private function prepareDefaultData(array $attributeList, string $attributeCode, array $productData): array
     {
         if (isset($attributeList[$attributeCode])) {
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
@@ -87,12 +87,12 @@ class AttributeFilter
 
     /**
      * @param Product $product
-     * @param $useDefaults
-     * @param $attribute
-     * @param $value
+     * @param array $useDefaults
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
-    private function isAttributeShouldNotBeUpdated(Product $product, $useDefaults, $attribute, $value): bool
+    private function isAttributeShouldNotBeUpdated(Product $product, array $useDefaults, $attribute, $value): bool
     {
         $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === '1';
 
