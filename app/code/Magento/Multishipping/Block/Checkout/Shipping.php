@@ -9,7 +9,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address;
 
 /**
- * Mustishipping checkout shipping
+ * Multishipping checkout shipping
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */

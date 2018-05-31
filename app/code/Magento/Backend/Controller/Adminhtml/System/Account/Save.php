@@ -29,9 +29,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
     {
         if (!($this->securityCookie instanceof SecurityCookie)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
-        } else {
-            return $this->securityCookie;
         }
+        return $this->securityCookie;
     }
 
     /**

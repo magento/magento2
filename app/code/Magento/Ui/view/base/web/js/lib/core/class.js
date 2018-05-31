@@ -27,12 +27,12 @@ define([
      * Creates constructor function which allows
      * initialization without usage of a 'new' operator.
      *
-     * @param {Object} protoProps - Prototypal propeties of a new consturctor.
-     * @param {Function} consturctor
-     * @returns {Function} Created consturctor.
+     * @param {Object} protoProps - Prototypal properties of a new constructor.
+     * @param {Function} constructor
+     * @returns {Function} Created constructor.
      */
-    function createConstructor(protoProps, consturctor) {
-        var UiClass = consturctor;
+    function createConstructor(protoProps, constructor) {
+        var UiClass = constructor;
 
         if (!UiClass) {
 
@@ -61,7 +61,7 @@ define([
     Class = createConstructor({
 
         /**
-         * Entry point to the initialization of consturctors' instance.
+         * Entry point to the initialization of constructors' instance.
          *
          * @param {Object} [options={}]
          * @returns {Class} Chainable.
