@@ -9,9 +9,7 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Magento_Backend::system">
-                    <resource id="Magento_Marketplace::partners" title="Find Partners &amp; Extensions" translate="title" sortOrder="80" />
-                </resource>
+                <resource id="Magento_Marketplace::partners" title="Find Partners &amp; Extensions" translate="title" sortOrder="80" />
             </resource>
         </resources>
     </acl>
