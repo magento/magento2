@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogInventory\Model\Indexer;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceModifierInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
@@ -24,18 +24,18 @@ class ProductPriceIndexFilter implements PriceModifierInterface
     private $stockConfiguration;
 
     /**
-     * @var Status
+     * @var Item
      */
-    private $stockStatus;
+    private $stockItem;
 
     /**
      * @param StockConfigurationInterface $stockConfiguration
-     * @param Status $stockStatus
+     * @param Item $stockItem
      */
-    public function __construct(StockConfigurationInterface $stockConfiguration, Status $stockStatus)
+    public function __construct(StockConfigurationInterface $stockConfiguration, Item $stockItem)
     {
         $this->stockConfiguration = $stockConfiguration;
-        $this->stockStatus = $stockStatus;
+        $this->stockItem = $stockItem;
     }
 
     /**
@@ -52,27 +52,31 @@ class ProductPriceIndexFilter implements PriceModifierInterface
             return;
         }
 
-        $connection = $this->stockStatus->getConnection();
+        $connection = $this->stockItem->getConnection();
         $select = $connection->select();
         $select->from(
             ['price_index' => $priceTable->getTableName()],
             []
         );
-        $select->joinLeft(
-            ['website_stock' => $this->stockStatus->getMainTable()],
-            'website_stock.product_id = price_index.' . $priceTable->getEntityField()
-            . ' AND website_stock.website_id = price_index.' . $priceTable->getWebsiteField()
-            . ' AND website_stock.stock_id = ' . Stock::DEFAULT_STOCK_ID,
+        $select->joinInner(
+            ['stock_item' => $this->stockItem->getMainTable()],
+            'stock_item.product_id = price_index.' . $priceTable->getEntityField()
+            . ' AND stock_item.stock_id = ' . Stock::DEFAULT_STOCK_ID,
             []
         );
-        $select->joinLeft(
-            ['default_stock' => $this->stockStatus->getMainTable()],
-            'default_stock.product_id = price_index.' . $priceTable->getEntityField()
-            . ' AND default_stock.website_id = 0'
-            . ' AND default_stock.stock_id = ' . Stock::DEFAULT_STOCK_ID,
-            []
-        );
-        $stockStatus = $connection->getIfNullSql('website_stock.stock_status', 'default_stock.stock_status');
+        if ($this->stockConfiguration->getManageStock()) {
+            $stockStatus = $connection->getCheckSql(
+                'use_config_manage_stock = 0 AND manage_stock = 0',
+                1,
+                'is_in_stock'
+            );
+        } else {
+            $stockStatus = $connection->getCheckSql(
+                'use_config_manage_stock = 0 AND manage_stock = 1',
+                'is_in_stock',
+                1
+            );
+        }
         $select->where($stockStatus . ' = ?', Stock::STOCK_OUT_OF_STOCK);
 
         $query = $select->deleteFromSelect('price_index');
