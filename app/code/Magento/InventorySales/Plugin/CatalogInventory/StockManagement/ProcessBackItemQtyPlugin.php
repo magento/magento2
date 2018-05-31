@@ -98,6 +98,8 @@ class ProcessBackItemQtyPlugin
             throw new LocalizedException(__('$scopeId is required'));
         }
 
+        // As it was decided that the inventory doesn’t depend on the catalog (these two system are independent)
+        // it is necessary for us to have an ability to process orders even with deleted or non-existing products
         try {
             $productSku = $this->getSkusByProductIds->execute([$productId])[$productId];
         } catch (InputException $e) {
