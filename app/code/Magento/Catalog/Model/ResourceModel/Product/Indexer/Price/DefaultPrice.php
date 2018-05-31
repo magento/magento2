@@ -63,6 +63,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     private $priceModifiers = [];
 
     /**
+    * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+    */
+    protected $activeTableSwitcher;
+
+    /**
      * DefaultPrice constructor.
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -82,7 +87,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Framework\Module\Manager $moduleManager,
         $connectionName = null,
         IndexTableStructureFactory $indexTableStructureFactory = null,
-        array $priceModifiers = []
+        array $priceModifiers = [],
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
@@ -99,6 +105,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
 
             $this->priceModifiers[] = $priceModifier;
         }
+
+        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
+        );
     }
 
     /**

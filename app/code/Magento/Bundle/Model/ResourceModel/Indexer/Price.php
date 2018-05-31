@@ -274,6 +274,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
     protected function _calculateBundleSelectionPrice($priceType)
     {
         $connection = $this->getConnection();
+        $indexReplicaTable = $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable());
 
         if ($priceType == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
             $selectionPriceValue = $connection->getCheckSql(
@@ -355,7 +356,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             'bs.selection_id = bsp.selection_id AND bsp.website_id = i.website_id',
             ['']
         )->join(
-            ['idx' => $this->getIdxTable()],
+            ['idx' => $indexReplicaTable],
             'bs.product_id = idx.entity_id AND i.customer_group_id = idx.customer_group_id' .
             ' AND i.website_id = idx.website_id',
             []

@@ -76,6 +76,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      *
      * @param null|int|array $entityIds
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _applyConfigurableOption($entityIds = null)
     {
@@ -84,11 +85,12 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         $copTable = $this->_getConfigurableOptionPriceTable();
         $finalPriceTable = $this->_getDefaultFinalPriceTable();
         $linkField = $metadata->getLinkField();
+        $indexReplicaTable = $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable());
 
         $this->_prepareConfigurableOptionPriceTable();
 
         $select = $connection->select()->from(
-            ['i' => $this->getIdxTable()],
+            ['i' => $indexReplicaTable],
             []
         )->join(
             ['l' => $this->getTable('catalog_product_super_link')],
