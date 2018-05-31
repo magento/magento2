@@ -3,18 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Config\Model\Config\Structure;
+declare(strict_types=1);
 
+namespace Magento\Config\Model\Config\Structure\ElementVisibility;
+
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 use Magento\Framework\App\State;
 
 /**
  * Defines status of visibility of form elements on Stores > Settings > Configuration page
  * in Admin Panel in Production mode.
  * @api
- * @deprecated class location was changed
- * @see \Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction
  */
-class ConcealInProductionConfigList implements ElementVisibilityInterface
+class ConcealInProduction implements ElementVisibilityInterface
 {
     /**
      * The list of form element paths with concrete visibility status.
@@ -44,30 +45,65 @@ class ConcealInProductionConfigList implements ElementVisibilityInterface
     private $state;
 
     /**
+     *
+     * The list of form element paths which ignore visibility status.
+     *
+     * E.g.
+     *
+     * ```php
+     * [
+     *      'general/country/default' => '',
+     * ];
+     * ```
+     *
+     * It means that:
+     *  - field 'default' in group Country Options (in section General) will be showed, even if all group(section)
+     *    will be hidden.
+     *
+     * @var array
+     */
+    private $exemptions = [];
+
+    /**
      * @param State $state The object that has information about the state of the system
      * @param array $configs The list of form element paths with concrete visibility status.
+     * @param array $exemptions The list of form element paths which ignore visibility status.
      */
-    public function __construct(State $state, array $configs = [])
+    public function __construct(State $state, array $configs = [], array $exemptions = [])
     {
         $this->state = $state;
         $this->configs = $configs;
+        $this->exemptions = $exemptions;
     }
 
     /**
      * @inheritdoc
-     * @deprecated
+     * @since 100.2.0
      */
     public function isHidden($path)
     {
         $path = $this->normalizePath($path);
-        return $this->state->getMode() === State::MODE_PRODUCTION
-            && !empty($this->configs[$path])
-            && $this->configs[$path] === static::HIDDEN;
+        if ($this->state->getMode() === State::MODE_PRODUCTION
+            && preg_match('/(?<group>(?<section>.*?)\/.*?)\/.*?/', $path, $match)) {
+            $group = $match['group'];
+            $section = $match['section'];
+            $exemptions = array_keys($this->exemptions);
+            $checkedItems = [];
+            foreach ([$path, $group, $section] as $itemPath) {
+                $checkedItems[] = $itemPath;
+                if (!empty($this->configs[$itemPath])) {
+                    return $this->configs[$itemPath] === static::HIDDEN
+                        && empty(array_intersect($checkedItems, $exemptions));
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
      * @inheritdoc
-     * @deprecated
+     * @since 100.2.0
      */
     public function isDisabled($path)
     {
