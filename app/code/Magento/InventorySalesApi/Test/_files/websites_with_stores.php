@@ -63,9 +63,3 @@ foreach ($websiteCodes as $key => $websiteCode) {
     $store->save();
     $eventManager->dispatch('store_add', ['store' => $store]);
 }
-
-/**
- * \Magento\TestFramework\Application by default generates 10 Sequence tables of each kind
- * with indexes form 0 to 9, but last created Store id is greater than 9.
- */
-$sequence->generateSequences($store->getId());
