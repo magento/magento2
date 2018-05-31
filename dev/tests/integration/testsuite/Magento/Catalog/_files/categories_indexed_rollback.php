@@ -3,19 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 include __DIR__ . '/categories_rollback.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-/** @var \Magento\Catalog\Model\Indexer\Category\Product\Processor $categoryProductIndexer */
-$categoryProductIndexer = $objectManager->get(
-    \Magento\Catalog\Model\Indexer\Category\Product\Processor::class
-);
-$categoryProductIndexer->reindexAll();
-
-/** @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor $inventoryIndexer */
-$inventoryIndexer = $objectManager->get(
-    \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class
-);
-$inventoryIndexer->reindexAll();
+/** @var \Magento\Indexer\Model\Indexer\CollectionFactory $indexerCollectionFactory */
+$indexerCollectionFactory = $objectManager->get(\Magento\Indexer\Model\Indexer\CollectionFactory::class);
+$indexerCollection = $indexerCollectionFactory->create();
+$indexers = $indexerCollection->getItems();
+foreach ($indexers as $indexer) {
+    $indexer->reindexAll();
+}
