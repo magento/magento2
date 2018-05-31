@@ -1014,7 +1014,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param bool|string $status
      * @return OrderStatusHistoryInterface
      */
-    public function addStatusHistoryComment($comment, $status = false)
+    public function addStatusHistoryComment($comment, $status = false, $isVisibleOnFront = false)
     {
         if (false === $status) {
             $status = $this->getStatus();
@@ -1029,6 +1029,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $comment
         )->setEntityName(
             $this->entityType
+        )->setIsVisibleOnFront(
+            $isVisibleOnFront
         );
         $this->addStatusHistory($history);
         return $history;
