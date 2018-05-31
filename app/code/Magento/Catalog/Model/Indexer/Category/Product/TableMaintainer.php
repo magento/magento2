@@ -13,6 +13,9 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
 
+/**
+ * Class encapsulate logic of work with tables per store in Category Product indexer
+ */
 class TableMaintainer
 {
     /**
@@ -202,9 +205,14 @@ class TableMaintainer
      * @param $storeId
      *
      * @return string
+     *
+     * @throws \Exception
      */
     public function getMainTmpTable(int $storeId)
     {
+        if (!isset($this->mainTmpTable[$storeId])) {
+            throw new \Exception('Temporary table does not exist');
+        }
         return $this->mainTmpTable[$storeId];
     }
 }
