@@ -87,6 +87,23 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ]
             );
         }
+        if (version_compare($context->getVersion(), '2.0.5', '<')) {
+            $this->expandRemoteIpField($setup);
+        }
         $setup->endSetup();
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function expandRemoteIpField(SchemaSetupInterface $setup)
+    {
+        $connection = $setup->getConnection(self::$connectionName);
+        $connection->modifyColumn(
+            $setup->getTable('quote', self::$connectionName),
+            'remote_ip',
+            ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 'length' => 45]
+        );
     }
 }
