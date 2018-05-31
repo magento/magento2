@@ -15,9 +15,6 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\Customer\Model\Context as CustomerContext;
-
-;
-
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
@@ -133,7 +130,7 @@ class ExclusionStrategy implements FilterStrategyInterface
                 $this->dimensionFactory->create(WebsiteDataProvider::DIMENSION_NAME, $websiteId),
                 $this->dimensionFactory->create(
                     CustomerGroupDataProvider::DIMENSION_NAME,
-                    $this->httpContext->getValue(CustomerContext::CONTEXT_GROUP)
+                    (string)$this->httpContext->getValue(CustomerContext::CONTEXT_GROUP)
                 )
             ]
         );
