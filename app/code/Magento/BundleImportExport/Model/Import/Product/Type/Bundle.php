@@ -411,6 +411,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->populateExistingOptions();
                     $this->insertOptions();
                     $this->insertSelections();
+                    $this->insertParentChildRelations();
                     $this->clear();
                 }
             }
@@ -655,6 +656,32 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         }
 
         $this->relationsDataSaver->saveSelections($selections);
+
+        return $this;
+    }
+
+    /**
+     * Insert parent/child product relations
+     *
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     */
+    private function insertParentChildRelations()
+    {
+        foreach ($this->_cachedOptions as $productId => $options) {
+            $childIds = [];
+            foreach ($options as $option) {
+                foreach ($option['selections'] as $selection) {
+                    if (!isset($selection['parent_product_id'])) {
+                        if (!isset($this->_cachedSkuToProducts[$selection['sku']])) {
+                            continue;
+                        }
+                        $childIds[] = $this->_cachedSkuToProducts[$selection['sku']];
+                    }
+                }
+
+                $this->relationsDataSaver->saveProductRelations($productId, $childIds);
+            }
+        }
 
         return $this;
     }

@@ -895,18 +895,4 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         $this->setData(self::IS_FILTERABLE_IN_GRID, $isFilterableInGrid);
         return $this;
     }
-
-    /**
-     * @return \Magento\Eav\Api\Data\AttributeExtensionInterface
-     */
-    public function getExtensionAttributes()
-    {
-        $extensionAttributes = $this->_getExtensionAttributes();
-        if (null === $extensionAttributes) {
-            /** @var \Magento\Eav\Api\Data\AttributeExtensionInterface $extensionAttributes */
-            $extensionAttributes = $this->eavAttributeFactory->create();
-            $this->setExtensionAttributes($extensionAttributes);
-        }
-        return $extensionAttributes;
-    }
 }
