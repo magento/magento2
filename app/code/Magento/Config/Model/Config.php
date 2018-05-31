@@ -131,6 +131,7 @@ class Config extends \Magento\Framework\DataObject
         $saveTransaction = $this->_transactionFactory->create();
         /* @var $saveTransaction \Magento\Framework\DB\Transaction */
 
+        $changedPaths = [];
         // Extends for old config data
         $extraOldGroups = [];
 
@@ -143,7 +144,8 @@ class Config extends \Magento\Framework\DataObject
                 $extraOldGroups,
                 $oldConfig,
                 $saveTransaction,
-                $deleteTransaction
+                $deleteTransaction,
+                $changedPaths
             );
         }
 
@@ -157,7 +159,11 @@ class Config extends \Magento\Framework\DataObject
             // website and store codes can be used in event implementation, so set them as well
             $this->_eventManager->dispatch(
                 "admin_system_config_changed_section_{$this->getSection()}",
-                ['website' => $this->getWebsite(), 'store' => $this->getStore()]
+                [
+                    'website' => $this->getWebsite(),
+                    'store' => $this->getStore(),
+                    'changed_paths' => $changedPaths,
+                ]
             );
         } catch (\Exception $e) {
             // re-init configuration
@@ -179,6 +185,7 @@ class Config extends \Magento\Framework\DataObject
      * @param array &$oldConfig
      * @param \Magento\Framework\DB\Transaction $saveTransaction
      * @param \Magento\Framework\DB\Transaction $deleteTransaction
+     * @param array &$changedPaths
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -192,7 +199,8 @@ class Config extends \Magento\Framework\DataObject
         array &$extraOldGroups,
         array &$oldConfig,
         \Magento\Framework\DB\Transaction $saveTransaction,
-        \Magento\Framework\DB\Transaction $deleteTransaction
+        \Magento\Framework\DB\Transaction $deleteTransaction,
+        array &$changedPaths = []
     ) {
         $groupPath = $sectionPath . '/' . $groupId;
         $scope = $this->getScope();
@@ -292,9 +300,13 @@ class Config extends \Magento\Framework\DataObject
                     } else {
                         $deleteTransaction->addObject($backendModel);
                     }
+                    if ($oldConfig[$path]['value'] !== $fieldData['value']) {
+                        $changedPaths[] = $path;
+                    }
                 } elseif (!$inherit) {
                     $backendModel->unsConfigId();
                     $saveTransaction->addObject($backendModel);
+                    $changedPaths[] = $path;
                 }
             }
         }
@@ -309,7 +321,8 @@ class Config extends \Magento\Framework\DataObject
                     $extraOldGroups,
                     $oldConfig,
                     $saveTransaction,
-                    $deleteTransaction
+                    $deleteTransaction,
+                    $changedPaths
                 );
             }
         }

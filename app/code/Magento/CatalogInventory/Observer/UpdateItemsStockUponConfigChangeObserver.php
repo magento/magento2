@@ -7,6 +7,7 @@ namespace Magento\CatalogInventory\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 
 /**
@@ -36,8 +37,17 @@ class UpdateItemsStockUponConfigChangeObserver implements ObserverInterface
     public function execute(EventObserver $observer)
     {
         $website = (int) $observer->getEvent()->getWebsite();
-        $this->resourceStockItem->updateSetOutOfStock($website);
-        $this->resourceStockItem->updateSetInStock($website);
-        $this->resourceStockItem->updateLowStockDate($website);
+        $changedPaths = (array) $observer->getEvent()->getChangedPaths();
+
+        if (\array_intersect([
+            Configuration::XML_PATH_MANAGE_STOCK,
+            Configuration::XML_PATH_MIN_QTY,
+            Configuration::XML_PATH_BACKORDERS,
+            Configuration::XML_PATH_NOTIFY_STOCK_QTY,
+        ], $changedPaths)) {
+            $this->resourceStockItem->updateSetOutOfStock($website);
+            $this->resourceStockItem->updateSetInStock($website);
+            $this->resourceStockItem->updateLowStockDate($website);
+        }
     }
 }

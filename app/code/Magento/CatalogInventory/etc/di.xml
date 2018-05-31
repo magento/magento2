@@ -125,4 +125,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
+        <plugin name="priceIndexUpdater" type="Magento\CatalogInventory\Model\Plugin\PriceIndexUpdater" />
+    </type>
 </config>

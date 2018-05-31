@@ -9,6 +9,7 @@ namespace Magento\CatalogInventory\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
+use Magento\CatalogInventory\Model\Configuration;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 
 /**
@@ -38,7 +39,11 @@ class InvalidatePriceIndexUponConfigChangeObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $priceIndexer = $this->priceIndexProcessor->getIndexer();
-        $priceIndexer->invalidate();
+        $changedPaths = (array) $observer->getEvent()->getChangedPaths();
+
+        if (\in_array(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, $changedPaths, true)) {
+            $priceIndexer = $this->priceIndexProcessor->getIndexer();
+            $priceIndexer->invalidate();
+        }
     }
 }

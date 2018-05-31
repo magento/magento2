@@ -67,14 +67,14 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         if ($this->stockConfiguration->getManageStock()) {
             $stockStatus = $connection->getCheckSql(
                 'use_config_manage_stock = 0 AND manage_stock = 0',
-                1,
+                Stock::STOCK_IN_STOCK,
                 'is_in_stock'
             );
         } else {
             $stockStatus = $connection->getCheckSql(
                 'use_config_manage_stock = 0 AND manage_stock = 1',
                 'is_in_stock',
-                1
+                Stock::STOCK_IN_STOCK
             );
         }
         $select->where($stockStatus . ' = ?', Stock::STOCK_OUT_OF_STOCK);
