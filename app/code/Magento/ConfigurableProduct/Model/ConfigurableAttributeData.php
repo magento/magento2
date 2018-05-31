@@ -8,6 +8,8 @@ namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
+use Magento\ConfigurableProduct\Model\Config\Source\ProductAttributesSort;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class ConfigurableAttributeData
@@ -16,6 +18,22 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
  */
 class ConfigurableAttributeData
 {
+    const XML_PATH_CONF_PRODUCT_ATTRIBUTES_SORT = 'catalog/frontend/product_attributes_sort_by';
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(
+        ScopeConfigInterface $scopeConfig
+    ) {
+        $this->scopeConfig = $scopeConfig;
+    }
+
     /**
      * Get product attributes
      *
@@ -37,7 +55,7 @@ class ConfigurableAttributeData
                     'code' => $productAttribute->getAttributeCode(),
                     'label' => $productAttribute->getStoreLabel($product->getStoreId()),
                     'options' => $attributeOptionsData,
-                    'position' => $productAttribute->getPosition(),
+                    'position' => $this->getPosition($attribute),
                 ];
                 $defaultValues[$attributeId] = $this->getAttributeConfigValue($attributeId, $product);
             }
@@ -46,6 +64,36 @@ class ConfigurableAttributeData
             'attributes' => $attributes,
             'defaultValues' => $defaultValues,
         ];
+    }
+
+    /**
+     * Get configurable product attribute position
+     *
+     * @param $attribute
+     *
+     * @return mixed
+     */
+    protected function getPosition($attribute)
+    {
+        if ($this->getConfigurableProductAttributesSortConfig() === ProductAttributesSort::GLOBAL_ATTRIBUTE_SETTING) {
+            $position = $attribute->getProductAttribute()->getPosition();
+        } else {
+            $position = $attribute->getPosition();
+        }
+        return $position;
+    }
+
+    /**
+     * Get configuration value for configurable products attributes sorting settings
+     *
+     * @return bool
+     */
+    protected function getConfigurableProductAttributesSortConfig()
+    {
+        return (int)$this->scopeConfig->getValue(
+            self::XML_PATH_CONF_PRODUCT_ATTRIBUTES_SORT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
