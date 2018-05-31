@@ -19,4 +19,15 @@
         <data key="is_active">true</data>
         <data key="current_password">123123q</data>
     </entity>
+    <entity name="restrictedCatalogProductUser" type="user">
+        <data key="username" unique="suffix">restrictedUser</data>
+        <data key="firstname">RestrictedCatalogUser</data>
+        <data key="lastname">Product</data>
+        <data key="email" unique="prefix">restrictedCatalogUser@example.com</data>
+        <data key="password">123123q</data>
+        <data key="password_confirmation">123123q</data>
+        <data key="interface_local">en_US</data>
+        <data key="is_active">true</data>
+        <data key="current_password">123123q</data>
+    </entity>
 </entities>
