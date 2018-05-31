@@ -53,26 +53,34 @@ class TableMaintainer
     private $mainTmpTable;
 
     /**
+     * @var null|string
+     */
+    private $connectionName;
+
+    /**
      * @param ResourceConnection $resource
      * @param TableResolver $tableResolver
+     * @param null $connectionName
      */
     public function __construct(
         ResourceConnection $resource,
-        TableResolver $tableResolver
+        TableResolver $tableResolver,
+        $connectionName = null
     ) {
         $this->resource = $resource;
         $this->tableResolver = $tableResolver;
+        $this->connectionName = $connectionName;
     }
 
     /**
-     * Get connection
+     * Get connection for work with price indexer
      *
      * @return AdapterInterface
      */
-    public function getConnection()
+    public function getConnection(): AdapterInterface
     {
-        if (!isset($this->connection)) {
-            $this->connection = $this->resource->getConnection();
+        if (null === $this->connection) {
+            $this->connection = $this->resource->getConnection($this->connectionName);
         }
         return $this->connection;
     }

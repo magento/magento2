@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Framework\Indexer;
 
 /**
- * @api
  * Run indexer by dimensions
  */
 interface DimensionalIndexerInterface
@@ -21,5 +20,5 @@ interface DimensionalIndexerInterface
      * @param array|null $entityIds
      * @return void
      */
-    public function reindexByDimensions(array $dimensions, array $entityIds = null);
+    public function executeByDimension(array $dimensions, \Traversable $entityIds = null);
 }

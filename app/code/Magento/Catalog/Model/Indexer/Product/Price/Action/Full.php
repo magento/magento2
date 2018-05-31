@@ -61,6 +61,16 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private $configReader;
 
     /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * @var string
+     */
+    private $connectionName;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -92,7 +102,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
         \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionCollectionFactory = null,
         \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $dimensionTableMaintainer = null,
-        \Magento\Framework\App\Config\ScopeConfigInterface $configReader = null
+        \Magento\Framework\App\Config\ScopeConfigInterface $configReader = null,
+        \Magento\Framework\App\ResourceConnection $resource = null,
+        $connectionName = 'indexer'
     ) {
         parent::__construct(
             $config,
@@ -125,6 +137,10 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         $this->configReader = $configReader ?: ObjectManager::getInstance()->get(
             \Magento\Framework\App\Config\ScopeConfigInterface::class
         );
+        $this->resource = $resource ?? ObjectManager::getInstance()->get(
+                \Magento\Framework\App\ResourceConnection::class
+            );
+        $this->connectionName = $connectionName;
     }
 
     /**
@@ -141,15 +157,15 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $this->prepareTables();
 
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $indexer */
-            foreach ($this->getTypeIndexers() as $priceIndexer) {
-                $priceIndexer->getTableStrategy()->setUseIdxTable(false);
+            foreach ($this->getTypeIndexers() as $typeId => $priceIndexer) {
 
                 if ($priceIndexer instanceof DimensionalIndexerInterface) {
-                    $this->reindexProductTypeWithDimensions($priceIndexer);
+                    $this->reindexProductTypeWithDimensions($priceIndexer, $typeId);
                     continue;
                 }
 
-                $this->reindexProductType($priceIndexer);
+                $priceIndexer->getTableStrategy()->setUseIdxTable(false);
+                $this->reindexProductType($priceIndexer, $typeId);
             }
 
             $this->switchTables();
@@ -191,35 +207,35 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         }
     }
 
-    private function reindexProductType(PriceInterface $priceIndexer)
+    private function reindexProductType(PriceInterface $priceIndexer, string $typeId)
     {
-        foreach ($this->getBatchesForIndexer($priceIndexer) as $batch) {
-            $this->reindexBatch($priceIndexer, $batch);
+        foreach ($this->getBatchesForIndexer($typeId) as $batch) {
+            $this->reindexBatch($priceIndexer, $batch, $typeId);
         }
     }
 
-    private function reindexProductTypeWithDimensions(PriceInterface $priceIndexer)
+    private function reindexProductTypeWithDimensions(DimensionalIndexerInterface $priceIndexer, string $typeId)
     {
         /** @var DimensionProviderInterface $dimensionsProviders */
         $dimensionsProviders = $this->dimensionCollectionFactory->createByMode(
             ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP
         );
 
-        foreach ($dimensionsProviders as $dimension) {
-            $this->reindexDimensions($priceIndexer, $dimension);
+        foreach ($dimensionsProviders as $dimensions) {
+            $this->reindexDimensions($priceIndexer, $dimensions, $typeId);
         }
     }
 
-    private function reindexDimensions(PriceInterface $priceIndexer, array $dimension)
+    private function reindexDimensions(DimensionalIndexerInterface $priceIndexer, array $dimensions, string $typeId)
     {
-        foreach ($this->getBatchesForIndexer($priceIndexer) as $batch) {
-            $this->reindexBatchWithinDimension($priceIndexer, $batch, $dimension);
+        foreach ($this->getBatchesForIndexer($typeId) as $batch) {
+            $this->reindexBatchWithinDimension($priceIndexer, $batch, $dimensions, $typeId);
         }
     }
 
-    private function reindexBatch(PriceInterface $priceIndexer, array $batch)
+    private function reindexBatch(PriceInterface $priceIndexer, array $batch, string $typeId)
     {
-        $entityIds = $this->getEntityIdsFromBatch($priceIndexer, $batch);
+        $entityIds = $this->getEntityIdsFromBatch($typeId, $batch);
 
         if (!empty($entityIds)) {
             // Temporary table will created if not exists
@@ -242,44 +258,47 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         }
     }
 
-    private function reindexBatchWithinDimension(DimensionalIndexerInterface $priceIndexer, array $batch, array $dimensions)
+    private function reindexBatchWithinDimension(DimensionalIndexerInterface $priceIndexer, array $batch, array $dimensions, string $typeId)
     {
-        $entityIds = $this->getEntityIdsFromBatch($priceIndexer, $batch);
+        $entityIds = $this->getEntityIdsFromBatch($typeId, $batch);
 
         if (!empty($entityIds)) {
-            // Temporary table will created if not exists
-//            $idxTableName = $this->_defaultIndexerResource->getIdxTableWithinDimension($dimensions);
-            $idxTableName = $this->_defaultIndexerResource->getIdxTable(); # TODO: replace with appropriate method according to dimension
-            $this->_emptyTable($idxTableName);
+            $this->dimensionTableMaintainer->createMainTmpTable($dimensions);
+            $temporaryTable = $this->dimensionTableMaintainer->getMainTmpTable($dimensions);
+            $this->_emptyTable($temporaryTable);
 
-            if ($priceIndexer->getIsComposite()) {
-                $this->_copyRelationIndexData($entityIds);
-            }
+            // TODO: will be handled in separate task
+            // if ($priceIndexer->getIsComposite()) {
+            //    $this->_copyRelationIndexData($entityIds);
+            // }
+
+            // TODO: handle inside index model and move index fulfilment into index model
             $this->_prepareTierPriceIndex($entityIds);
 
-            $priceIndexer->reindexByDimensions($entityIds, $dimensions);
+            $priceIndexer->executeByDimension($dimensions, \SplFixedArray::fromArray($entityIds));
 
             // Sync data from temp table to index table
-            $this->_insertFromTable($idxTableName, $this->dimensionTableMaintainer->getMainReplicaTable($dimensions));
-
-            // Drop temporary index table
-            $priceIndexer->getConnection()->dropTable($idxTableName);
+            $this->_insertFromTable(
+                $temporaryTable,
+                $this->dimensionTableMaintainer->getMainReplicaTable($dimensions)
+            );
         }
     }
 
-    private function getEntityIdsFromBatch(PriceInterface $priceIndexer, array $batch)
+    private function getEntityIdsFromBatch(string $typeId, array $batch)
     {
+        $connection = $this->resource->getConnection($this->connectionName);
         // Get entity ids from batch
-        $select = $priceIndexer->getConnection()
+        $select = $connection
             ->select()
             ->distinct(true)
             ->from(
                 ['e' => $this->getProductMetaData()->getEntityTable()],
                 $this->getProductMetaData()->getIdentifierField()
             )
-            ->where('type_id = ?', $priceIndexer->getTypeId());
+            ->where('type_id = ?', $typeId);
 
-        return $this->batchProvider->getBatchIds($priceIndexer->getConnection(), $select, $batch);
+        return $this->batchProvider->getBatchIds($connection, $select, $batch);
     }
 
     private function getProductMetaData()
@@ -298,15 +317,16 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         );
     }
 
-    private function getBatchesForIndexer(PriceInterface $priceIndexer)
+    private function getBatchesForIndexer(string $typeId)
     {
+        $connection = $this->resource->getConnection($this->connectionName);
         return $this->batchProvider->getBatches(
-            $priceIndexer->getConnection(),
+            $connection,
             $this->getProductMetaData()->getEntityTable(),
             $this->getProductMetaData()->getIdentifierField(),
             $this->batchSizeCalculator->estimateBatchSize(
-                $priceIndexer->getConnection(),
-                $priceIndexer->getTypeId()
+                $connection,
+                $typeId
             )
         );
     }

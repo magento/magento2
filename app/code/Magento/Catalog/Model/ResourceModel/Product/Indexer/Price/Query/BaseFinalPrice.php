@@ -8,7 +8,11 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\ColumnValueExpression;
+use Magento\Framework\Exception\InputException;
+use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
 /**
  * Prepare base select for Product Price index limited by specified dimensions: website and customer group
@@ -36,6 +40,11 @@ class BaseFinalPrice
     private $moduleManager;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * BaseFinalPrice constructor.
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param JoinAttributeProcessor $joinAttributeProcessor
@@ -46,25 +55,34 @@ class BaseFinalPrice
         \Magento\Framework\App\ResourceConnection $resource,
         JoinAttributeProcessor $joinAttributeProcessor,
         \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         $connectionName = 'indexer'
     ) {
         $this->resource = $resource;
         $this->connectionName = $connectionName;
         $this->joinAttributeProcessor = $joinAttributeProcessor;
         $this->moduleManager = $moduleManager;
+        $this->eventManager = $eventManager;
     }
 
     /**
-     * @param int $websiteId
-     * @param int $customerGroupId
+     * @param array $dimensions
      * @param string $productType
      * @param array $entityIds
      * @return Select
+     * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_Db_Select_Exception
      */
-    public function getQuery(int $websiteId, int $customerGroupId, string $productType, array $entityIds = []): Select
+    public function getQuery(array $dimensions, string $productType, array $entityIds = []): Select
     {
+        if (!isset($dimensions[WebsiteDataProvider::DIMENSION_NAME],
+            $dimensions[CustomerGroupDataProvider::DIMENSION_NAME])
+        ) {
+            throw new InputException(__('All dimensions for product index price must be provided'));
+        }
+        $websiteId = $dimensions[WebsiteDataProvider::DIMENSION_NAME]->getValue();
+        $customerGroupId = $dimensions[CustomerGroupDataProvider::DIMENSION_NAME]->getValue();
         $connection = $this->resource->getConnection($this->connectionName);
 
         $select = $connection->select()->from(
@@ -114,7 +132,7 @@ class BaseFinalPrice
             $specialPrice,
             $maxUnsignedBigint
         );
-        $tierPrice = new \Zend_Db_Expr('tp.min_price');
+        $tierPrice = new ColumnValueExpression('tp.min_price');
         $tierPriceExpr = $connection->getIfNullSql(
             $tierPrice,
             $maxUnsignedBigint
@@ -127,12 +145,11 @@ class BaseFinalPrice
 
         $select->columns(
             [
-                'orig_price' => $connection->getIfNullSql($price, 0),
-                'price' => $connection->getIfNullSql($finalPrice, 0),
+                'price' => $connection->getIfNullSql($price, 0), //orig_price in catalog_product_index_price_final_tmp
+                'final_price' => $connection->getIfNullSql($finalPrice, 0), //price in catalog_product_index_price_final_tmp
                 'min_price' => $connection->getIfNullSql($finalPrice, 0),
                 'max_price' => $connection->getIfNullSql($finalPrice, 0),
                 'tier_price' => $tierPrice,
-                'base_tier' => $tierPrice,
             ]
         );
 
@@ -141,6 +158,21 @@ class BaseFinalPrice
         if ($entityIds !== null) {
             $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
         }
+
+        /**
+         * throw event for backward compatibility
+         */
+        $this->eventManager->dispatch(
+            'prepare_catalog_product_index_select',
+            [
+                'select' => $select,
+                'entity_field' => new ColumnValueExpression('e.entity_id'),
+                'website_field' => new ColumnValueExpression('pw.website_id'),
+                'store_field' => new ColumnValueExpression('cwd.default_store_id'),
+                'website_id' => new ColumnValueExpression($websiteId),
+                'customer_group_id' => new ColumnValueExpression($customerGroupId),
+            ]
+        );
 
         return $select;
     }

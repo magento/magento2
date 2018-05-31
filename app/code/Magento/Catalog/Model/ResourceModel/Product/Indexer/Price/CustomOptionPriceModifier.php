@@ -3,12 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query;
+namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
-use \Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\ColumnValueExpression;
 
-class CustomOptionsPrice
+
+/**
+ * Class for adding catalog rule prices to price index table.
+ */
+class CustomOptionPriceModifier implements PriceModifierInterface
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
@@ -41,10 +48,21 @@ class CustomOptionsPrice
     private $isPriceGlobalFlag;
 
     /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private $connection;
+
+    /**
+     * @var \Magento\Framework\Indexer\Table\StrategyInterface
+     */
+    private $tableStrategy;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Sql\ColumnValueExpressionFactory $columnValueExpressionFactory
      * @param \Magento\Catalog\Helper\Data $dataHelper
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param string $connectionName
      */
     public function __construct(
@@ -52,6 +70,7 @@ class CustomOptionsPrice
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Framework\DB\Sql\ColumnValueExpressionFactory $columnValueExpressionFactory,
         \Magento\Catalog\Helper\Data $dataHelper,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         $connectionName = 'indexer'
     ) {
         $this->resource = $resource;
@@ -59,9 +78,101 @@ class CustomOptionsPrice
         $this->connectionName = $connectionName;
         $this->columnValueExpressionFactory = $columnValueExpressionFactory;
         $this->dataHelper = $dataHelper;
+        $this->tableStrategy = $tableStrategy;
     }
 
-    public function getSelectForOptionsWithMultipleValues($sourceTable)
+    /**
+     * Apply custom option price to temporary index price table
+     *
+     * @param IndexTableStructure $priceTable
+     * @param array $entityIds
+     * @return void
+     * @throws \Exception
+     */
+    public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = [])
+    {
+        // no need to run all queries if current products have no custom options
+        if (!$this->checkIfCustomOptionsExist($priceTable)) {
+            return ;
+        }
+
+        $connection = $this->getConnection();
+        $finalPriceTable = $priceTable->getTableName();
+
+        $coaTable = $this->getCustomOptionAggregateTable();
+        $this->prepareCustomOptionAggregateTable();
+
+        $copTable = $this->getCustomOptionPriceTable();
+        $this->prepareCustomOptionPriceTable();
+
+        $select = $this->getSelectForOptionsWithMultipleValues($finalPriceTable);
+        $query = $select->insertFromSelect($coaTable);
+        $connection->query($query);
+
+        $select = $this->getSelectForOptionsWithOneValue($finalPriceTable);
+        $query = $select->insertFromSelect($coaTable);
+        $connection->query($query);
+
+        $select = $this->getSelectAggregated($coaTable);
+        $query = $select->insertFromSelect($copTable);
+        $connection->query($query);
+
+        // update tmp price index with prices from custom options (from previous aggregated table)
+        $select = $this->getSelectForUpdate($copTable);
+        $query = $select->crossUpdateFromSelect(['i' => $finalPriceTable]);
+        $connection->query($query);
+
+        $connection->delete($coaTable);
+        $connection->delete($copTable);
+    }
+
+    /**
+     * @param IndexTableStructure $priceTable
+     * @return bool
+     * @throws \Exception
+     */
+    private function checkIfCustomOptionsExist(IndexTableStructure $priceTable): bool
+    {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+
+        $select = $this->getConnection()
+            ->select()
+            ->from(
+                ['i' => $priceTable->getTableName()],
+                ['entity_id']
+            )->join(
+                ['e' => $this->getTable('catalog_product_entity')],
+                'e.entity_id = i.entity_id',
+                []
+            )->join(
+                ['o' => $this->getTable('catalog_product_option')],
+                'o.product_id = e.' . $metadata->getLinkField(),
+                ['option_id']
+            );
+
+        return !empty($this->getConnection()->fetchRow($select));
+    }
+
+    /**
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private function getConnection()
+    {
+        if (null === $this->connection) {
+            $this->connection = $this->resource->getConnection($this->connectionName);
+        }
+
+        return $this->connection;
+    }
+
+    /**
+     * Prepare prices for products with custom options that has multiple values
+     *
+     * @param string $sourceTable
+     * @return \Magento\Framework\DB\Select
+     * @throws \Exception
+     */
+    private function getSelectForOptionsWithMultipleValues(string $sourceTable): Select
     {
         $connection = $this->resource->getConnection($this->connectionName);
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
@@ -163,7 +274,14 @@ class CustomOptionsPrice
         return $select;
     }
 
-    public function getSelectForOptionsWithOneValue($sourceTable)
+    /**
+     * Prepare prices for products with custom options that has single value
+     *
+     * @param string $sourceTable
+     * @return \Magento\Framework\DB\Select
+     * @throws \Exception
+     */
+    private function getSelectForOptionsWithOneValue(string $sourceTable): Select
     {
         $connection = $this->resource->getConnection($this->connectionName);
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
@@ -242,7 +360,13 @@ class CustomOptionsPrice
         return $select;
     }
 
-    public function getSelectAggregated($sourceTable)
+    /**
+     * Aggregate prices with one and multiply options into one table
+     *
+     * @param string $sourceTable
+     * @return \Magento\Framework\DB\Select
+     */
+    private function getSelectAggregated(string $sourceTable): Select
     {
         $connection = $this->resource->getConnection($this->connectionName);
 
@@ -264,7 +388,11 @@ class CustomOptionsPrice
         return $select;
     }
 
-    public function getSelectForUpdate($sourceTable)
+    /**
+     * @param string $sourceTable
+     * @return \Magento\Framework\DB\Select
+     */
+    private function getSelectForUpdate(string $sourceTable): Select
     {
         $connection = $this->resource->getConnection($this->connectionName);
 
@@ -276,8 +404,8 @@ class CustomOptionsPrice
         );
         $select->columns(
             [
-                'min_price' => new \Zend_Db_Expr('i.min_price + io.min_price'),
-                'max_price' => new \Zend_Db_Expr('i.max_price + io.max_price'),
+                'min_price' => new ColumnValueExpression('i.min_price + io.min_price'),
+                'max_price' => new ColumnValueExpression('i.max_price + io.max_price'),
                 'tier_price' => $connection->getCheckSql(
                     'i.tier_price IS NOT NULL',
                     'i.tier_price + io.tier_price',
@@ -293,17 +421,60 @@ class CustomOptionsPrice
      * @param string $tableName
      * @return string
      */
-    private function getTable($tableName)
+    private function getTable(string $tableName): string
     {
         return $this->resource->getTableName($tableName, $this->connectionName);
     }
 
-    private function isPriceGlobal()
+    /**
+     * @return bool
+     */
+    private function isPriceGlobal(): bool
     {
         if ($this->isPriceGlobalFlag === null) {
             $this->isPriceGlobalFlag = $this->dataHelper->isPriceGlobal();
         }
 
         return $this->isPriceGlobalFlag;
+    }
+
+    /**
+     * Retrieve table name for custom option temporary aggregation data
+     *
+     * @return string
+     */
+    private function getCustomOptionAggregateTable(): string
+    {
+        return $this->tableStrategy->getTableName('catalog_product_index_price_opt_agr');
+    }
+
+    /**
+     * Retrieve table name for custom option prices data
+     *
+     * @return string
+     */
+    private function getCustomOptionPriceTable(): string
+    {
+        return $this->tableStrategy->getTableName('catalog_product_index_price_opt');
+    }
+
+    /**
+     * Prepare table structure for custom option temporary aggregation data
+     *
+     * @return void
+     */
+    private function prepareCustomOptionAggregateTable()
+    {
+        $this->getConnection()->delete($this->getCustomOptionAggregateTable());
+    }
+
+    /**
+     * Prepare table structure for custom option prices data
+     *
+     * @return void
+     */
+    private function prepareCustomOptionPriceTable()
+    {
+        $this->getConnection()->delete($this->getCustomOptionPriceTable());
     }
 }

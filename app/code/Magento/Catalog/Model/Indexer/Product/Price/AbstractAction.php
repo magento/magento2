@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -243,14 +244,17 @@ abstract class AbstractAction
                     $typeInfo['price_indexer']
                 ) ? $typeInfo['price_indexer'] : get_class($this->_defaultIndexerResource);
 
-                $isComposite = !empty($typeInfo['composite']);
                 $indexer = $this->_indexerPriceFactory->create(
                     $modelName
-                )->setTypeId(
-                    $typeId
-                )->setIsComposite(
-                    $isComposite
                 );
+                // left setters for backward compatibility
+                if ($indexer instanceof PriceInterface) {
+                    $indexer->setTypeId(
+                        $typeId
+                    )->setIsComposite(
+                        !empty($typeInfo['composite'])
+                    );
+                }
                 $this->_indexers[$typeId] = $indexer;
             }
         }
