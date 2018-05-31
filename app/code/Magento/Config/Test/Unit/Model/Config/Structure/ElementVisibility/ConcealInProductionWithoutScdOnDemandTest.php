@@ -69,7 +69,10 @@ class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestC
         );
     }
 
-    public function testIsHiddenScdOnDemandEnabled(): void
+    /**
+     * @return void
+     */
+    public function testIsHiddenScdOnDemandEnabled()
     {
         $path = 'section1/group1/field1';
         $this->deploymentConfigMock->expects($this->once())
@@ -82,7 +85,10 @@ class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestC
         $this->assertFalse($this->model->isHidden($path));
     }
 
-    public function testIsDisabledScdOnDemandEnabled(): void
+    /**
+     * @return void
+     */
+    public function testIsDisabledScdOnDemandEnabled()
     {
         $path = 'section1/group1/field1';
         $this->deploymentConfigMock->expects($this->once())
@@ -99,8 +105,9 @@ class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestC
      * @param bool $isHidden
      *
      * @dataProvider visibilityDataProvider
+     * @return void
      */
-    public function testIsHiddenScdOnDemandDisabled(bool $isHidden): void
+    public function testIsHiddenScdOnDemandDisabled(bool $isHidden)
     {
         $path = 'section1/group1/field1';
         $this->deploymentConfigMock->expects($this->once())
@@ -119,8 +126,9 @@ class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestC
      * @param bool $isDisabled
      *
      * @dataProvider visibilityDataProvider
+     * @return void
      */
-    public function testIsDisabledScdOnDemandDisabled(bool $isDisabled): void
+    public function testIsDisabledScdOnDemandDisabled(bool $isDisabled)
     {
         $path = 'section1/group1/field1';
         $this->deploymentConfigMock->expects($this->once())

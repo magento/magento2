@@ -87,7 +87,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider getFullLocalesDataProvider
      */
-    public function testGetOptionLocalesFull(string $mode, int $scdOnDemand, array $locales): void
+    public function testGetOptionLocalesFull(string $mode, int $scdOnDemand, array $locales)
     {
         $this->localeListsMock->expects($this->once())
             ->method('getOptionLocales')
@@ -106,7 +106,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider getFullLocalesDataProvider
      */
-    public function testGetTranslatedOptionLocalesFull(string $mode, int $scdOnDemand, array $locales): void
+    public function testGetTranslatedOptionLocalesFull(string $mode, int $scdOnDemand, array $locales)
     {
         $this->localeListsMock->expects($this->once())
             ->method('getTranslatedOptionLocales')
@@ -133,7 +133,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         array $locales,
         array $expectedLocales,
         array $deployedCodes
-    ): void {
+    ) {
         $this->localeListsMock->expects($this->once())
             ->method('getOptionLocales')
             ->willReturn($locales);
@@ -159,7 +159,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         array $locales,
         array $expectedLocales,
         array $deployedCodes
-    ): void {
+    ) {
         $this->localeListsMock->expects($this->once())
             ->method('getTranslatedOptionLocales')
             ->willReturn($locales);
@@ -175,7 +175,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      * @param array $deployedCodes
      * @return void
      */
-    private function prepareGetLocalesLimited(string $mode, int $scdOnDemand, $deployedCodes): void
+    private function prepareGetLocalesLimited(string $mode, int $scdOnDemand, $deployedCodes)
     {
         $this->stateMock->expects($this->once())
             ->method('getMode')
@@ -209,7 +209,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      * @param int $scdOnDemand
      * @return void
      */
-    private function prepareGetLocalesFull(string $mode, int $scdOnDemand): void
+    private function prepareGetLocalesFull(string $mode, int $scdOnDemand)
     {
         $this->stateMock->expects($this->once())
             ->method('getMode')
