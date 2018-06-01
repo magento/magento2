@@ -138,16 +138,24 @@
                     <formElements>
                         <select>
                             <settings>
-                                <options class="Magento\Inventory\Model\OptionSource\SourceItemStatus"/>
+                                <options class="Magento\InventoryCatalogAdminUi\Model\OptionSource\SourceItemStatus"/>
                             </settings>
                         </select>
                     </formElements>
                 </field>
                 <field name="quantity" formElement="input" sortOrder="50">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="number">0.0</item>
+                        </item>
+                    </argument>
                     <settings>
                         <dataType>text</dataType>
                         <dataScope>quantity</dataScope>
                         <label translate="true">Qty</label>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
                     </settings>
                 </field>
                 <field name="actionDelete" formElement="actionDelete" sortOrder="90">

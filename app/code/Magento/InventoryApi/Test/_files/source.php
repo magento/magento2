@@ -41,16 +41,7 @@ $dataObjectHelper->populateWithArray(
         SourceInterface::FAX => 'source-fax',
         SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
         SourceInterface::USE_DEFAULT_CARRIER_CONFIG => false,
-        SourceInterface::CARRIER_LINKS => [
-            [
-                SourceCarrierLinkInterface::CARRIER_CODE => 'ups',
-                SourceCarrierLinkInterface::POSITION => 100,
-            ],
-            [
-                SourceCarrierLinkInterface::CARRIER_CODE => 'usps',
-                SourceCarrierLinkInterface::POSITION => 200,
-            ],
-        ],
+        SourceInterface::CARRIER_LINKS => [],
     ],
     SourceInterface::class
 );

@@ -288,8 +288,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
      */
     public function isUseDefaultCarrierConfig()
     {
-        //TODO: https://github.com/magento-engcom/msi/issues/1192
-        //return $this->getData(self::USE_DEFAULT_CARRIER_CONFIG);
         return true;
     }
 
