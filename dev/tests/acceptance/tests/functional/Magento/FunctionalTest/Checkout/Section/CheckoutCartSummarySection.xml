@@ -15,5 +15,7 @@
         <element name="total" type="text" selector="//*[@id='cart-totals']//tr[@class='grand totals']//td//span[@class='price']"/>
         <element name="proceedToCheckout" type="button" selector=".action.primary.checkout span" timeout="30"/>
         <element name="discountAmount" type="text" selector="td[data-th='Discount']"/>
+        <element name="shippingHeading" type="button" selector="#block-shipping-heading"/>
+        <element name="postcode" type="input" selector="input[name='postcode']"/>
     </section>
 </sections>
