@@ -17,5 +17,6 @@
         <element name="discountAmount" type="text" selector="td[data-th='Discount']"/>
         <element name="shippingHeading" type="button" selector="#block-shipping-heading"/>
         <element name="postcode" type="input" selector="input[name='postcode']"/>
+        <element name="stateProvince" type="select" selector="select[name='region_id']"/>
     </section>
 </sections>
