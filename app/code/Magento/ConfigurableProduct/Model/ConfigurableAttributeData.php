@@ -76,7 +76,7 @@ class ConfigurableAttributeData
     protected function getPosition($attribute)
     {
         if ($this->getConfigurableProductAttributesSortConfig() === ProductAttributesSort::GLOBAL_ATTRIBUTE_SETTING) {
-            return $position = $attribute->getProductAttribute()->getPosition();
+            return $attribute->getProductAttribute()->getPosition();
         }
 
         return $attribute->getPosition();
