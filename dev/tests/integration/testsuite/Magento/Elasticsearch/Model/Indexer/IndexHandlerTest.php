@@ -190,6 +190,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDbIsolation enabled
      * @magentoAppArea adminhtml
      * @magentoConfigFixture default/catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest

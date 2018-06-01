@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Search\Model\EngineResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
@@ -56,22 +57,27 @@ class Config implements ClientOptionsInterface
     private $clientResolver;
 
     /**
+     * @var EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
      * Constructor
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param ClientResolver|null $clientResolver
-     * @param EngineResolver|null $engineResolver
+     * @param EngineResolverInterface|null $engineResolver
      * @param string $prefix
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         ClientResolver $clientResolver = null,
-        EngineResolver $engineResolver = null,
+        EngineResolverInterface $engineResolver = null,
         $prefix = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->clientResolver = $clientResolver ?: ObjectManager::getInstance()->get(ClientResolver::class);
-        $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()->get(EngineResolver::class);
+        $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()->get(EngineResolverInterface::class);
         $this->prefix = $prefix ?: $this->clientResolver->getCurrentEngine();
     }
 
