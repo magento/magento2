@@ -29,12 +29,12 @@
 
         <!-- Create new category in the product page with the category of AdminCreateCategoryFromProductPage -->
         <actionGroup ref="FillNewProductCategory" stepKey="FillNewProductCategory">
-            <argument name="categoryName" value="AdminCreateCategoryFromProductPage" />
+            <argument name="categoryName" value="admincreatecategoryfromproductpage" />
         </actionGroup>
 
         <!-- Check that category was created -->
         <actionGroup ref="CategoryPresent" stepKey="checkIfCategoryPresent">
-            <argument name="categoryName" value="AdminCreateCategoryFromProductPage" />
+            <argument name="categoryName" value="admincreatecategoryfromproductpage" />
         </actionGroup>
 
         <!-- Delete the created category -->

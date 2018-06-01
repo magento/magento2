@@ -18,7 +18,6 @@
         <element name="parentCategoryDropdownDefaultOption" type="block" selector=".product_form_product_form_create_category_modal .action-menu-item._expended .admin__action-multiselect-label" />
         <element name="createCategory" type="button" selector="#save" />
 
-        <element name="categoryStructure" type="button" selector="#ext-gen5" />
         <element name="lastCreatedCategory" type="block" selector=".x-tree-root-ct li li:last-child" />
         <element name="categoryDeleteButton" type="button" selector="//button/span[text()='Delete']" />
         <element name="acceptDeletion" type="button" selector="//button/span[text()='OK']" />

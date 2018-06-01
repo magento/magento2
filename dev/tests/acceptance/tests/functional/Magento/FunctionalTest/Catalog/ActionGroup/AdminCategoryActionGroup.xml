@@ -148,6 +148,11 @@
 
     <!-- Actions to delete the category last made -->
     <actionGroup name="DeleteMostRecentCategory">
+
+        <amOnPage url="/{{AdminCategoryPage.url}}" stepKey="goToCategoryFrontPage"/>
+
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+
         <click stepKey="goToCreateCategory" selector="{{AdminProductCategoryCreationSection.lastCreatedCategory}}" />
         <waitForPageLoad stepKey="waitForCreatedCategoryPageLoad"/>
 
@@ -166,10 +171,13 @@
             <argument name="categoryName" defaultValue="Test Category" type="string"/>
         </arguments>
 
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryFrontPage"/>
+        <amOnPage url="/{{AdminCategoryPage.url}}" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
 
-        <see selector="{{AdminProductCategoryCreationSection.categoryStructure}}" userInput="{{categoryName}}" stepKey="assertCategoryOnStorefront"/>
+        <see userInput="{{categoryName}}" stepKey="assertCategoryOnStorefront"/>
+
+        <amOnPage url="/{{categoryName}}.html" stepKey="goToCustomerFrontPage"/>
+        <waitForPageLoad stepKey="waitForCustomerCategoryPageLoad"/>
     </actionGroup>
 
     <!--Check that name field is required-->
