@@ -89,9 +89,7 @@ class CurrencyConverterApi extends AbstractImport
             } finally {
                 ini_restore('max_execution_time');
             }
-
         }
-
 
         return $data;
     }
