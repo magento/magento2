@@ -63,6 +63,11 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
     private $placeReservationsForSalesEvent;
 
     /**
+     * @var GetInvoicedItemsPerSourceByPriority
+     */
+    private $getInvoicedItemsPerSourceByPriority;
+
+    /**
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param SalesChannelInterfaceFactory $salesChannelFactory
      * @param GetShippedItemsPerSourceByPriority $getShippedItemsPerSourceByPriority
@@ -71,6 +76,7 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
      * @param SalesEventInterfaceFactory $salesEventFactory
      * @param ItemToSellInterfaceFactory $itemsToSellFactory
      * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
+     * @param GetInvoicedItemsPerSourceByPriority $getInvoicedItemsPerSourceByPriority
      */
     public function __construct(
         WebsiteRepositoryInterface $websiteRepository,
@@ -80,7 +86,8 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
         ProcessBackItemQtyToSource $processBackItemQtyToSource,
         SalesEventInterfaceFactory $salesEventFactory,
         ItemToSellInterfaceFactory $itemsToSellFactory,
-        PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
+        PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent,
+        GetInvoicedItemsPerSourceByPriority $getInvoicedItemsPerSourceByPriority
     ) {
         $this->websiteRepository = $websiteRepository;
         $this->salesChannelFactory = $salesChannelFactory;
@@ -90,6 +97,7 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
         $this->salesEventFactory = $salesEventFactory;
         $this->itemsToSellFactory = $itemsToSellFactory;
         $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
+        $this->getInvoicedItemsPerSourceByPriority = $getInvoicedItemsPerSourceByPriority;
     }
 
     /**
@@ -102,6 +110,7 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
     ) {
         $salesChannel = $this->getSalesChannelForOrder($order);
         $shippedItems = $this->getShippedItemsPerSourceByPriority->execute($order, $returnToStockItems);
+        $invoiceItems = $this->getInvoicedItemsPerSourceByPriority->execute($order, $returnToStockItems);
         $itemToSell = [];
 
         /** @var ItemsToRefundInterface $item */
@@ -111,6 +120,28 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
             $originalProcessedQty = $item->getProcessedQuantity() + $item->getQuantity();
 
             foreach ($shippedItems as $sourceCode => $data) {
+                if (empty($data[$sku])) {
+                    continue;
+                }
+
+                $availableQtyToBack = $data[$sku] + $originalProcessedQty;
+                $backQty = min($availableQtyToBack, $qtyBackToSource);
+                $originalProcessedQty += $data[$sku];
+
+                if ($this->isZero((float)$availableQtyToBack)) {
+                    continue;
+                }
+
+                $backItemQtyRequest = $this->backItemQtyRequestFactory->create([
+                    'sourceCode' => $sourceCode,
+                    'sku' => $sku,
+                    'qty' => $backQty
+                ]);
+                $this->processBackItemQtyToSource->execute($backItemQtyRequest, $salesChannel);
+                $qtyBackToSource -= $backQty;
+            }
+
+            foreach ($invoiceItems as $sourceCode => $data) {
                 if (empty($data[$sku])) {
                     continue;
                 }
