@@ -147,11 +147,6 @@
 
         <waitForPageLoad stepKey="waitForCategoryCreated"/>
 
-        <click stepKey="saveProduct" selector="{{AdminProductFormSection.saveButton}}" />
-
-        <waitForPageLoad stepKey="waitForChangesSaved"/>
-
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
     </actionGroup>
 
     <!-- Actions to delete the category last made -->
@@ -161,13 +156,13 @@
 
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
 
-        <click stepKey="goToCreateCategory" selector="{{AdminCategoryMainActionsSection.lastCreatedCategory}}" />
+        <click stepKey="goToCreateCategory" selector="{{AdminCategorySidebarTreeSection.lastCreatedCategory}}" />
         <waitForPageLoad stepKey="waitForCreatedCategoryPageLoad"/>
 
-        <click stepKey="clickDeleteCategory" selector="{{AdminCategoryMainActionsSection.categoryDeleteButton}}" />
+        <click stepKey="clickDeleteCategory" selector="{{AdminCategoryMainActionsSection.DeleteButton}}" />
         <waitForPageLoad stepKey="waitForModalVisible"/>
 
-        <click stepKey="clickOkToDelete" selector="{{AdminCategoryMainActionsSection.acceptDeletion}}" />
+        <click stepKey="clickOkToDelete" selector="{{AdminCategoryModalSection.ok}}" />
 
         <waitForPageLoad stepKey="waitForModalNotVisible"/>
 
