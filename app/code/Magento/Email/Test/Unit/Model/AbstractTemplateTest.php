@@ -437,7 +437,7 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testSetForcedAreaWhenAreIsSet(): void
+    public function testSetForcedAreaWhenAreaIsSet(): void
     {
         $templateId = 'test_template';
         $model = $this->getModelMock([], ['area' => 'frontend']);
