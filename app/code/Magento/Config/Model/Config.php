@@ -126,10 +126,10 @@ class Config extends \Magento\Framework\DataObject
 
         $oldConfig = $this->_getConfig(true);
 
-        $deleteTransaction = $this->_transactionFactory->create();
         /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
-        $saveTransaction = $this->_transactionFactory->create();
+        $deleteTransaction = $this->_transactionFactory->create();
         /* @var $saveTransaction \Magento\Framework\DB\Transaction */
+        $saveTransaction = $this->_transactionFactory->create();
 
         $changedPaths = [];
         // Extends for old config data
@@ -144,9 +144,20 @@ class Config extends \Magento\Framework\DataObject
                 $extraOldGroups,
                 $oldConfig,
                 $saveTransaction,
-                $deleteTransaction,
-                $changedPaths
+                $deleteTransaction
             );
+
+            if (isset($groupData['fields'])) {
+                $groupPath = $sectionId . '/' . $groupId;
+                foreach ($groupData['fields'] as $fieldId => $fieldData) {
+                    /** @var $field \Magento\Config\Model\Config\Structure\Element\Field */
+                    $field = $this->_configStructure->getElement($groupPath . '/' . $fieldId);
+                    $path = $field->getGroupPath() . '/' . $fieldId;
+                    if ($this->isValueChanged($oldConfig, $path, $fieldData)) {
+                        $changedPaths[] = $path;
+                    }
+                }
+            }
         }
 
         try {
@@ -175,6 +186,25 @@ class Config extends \Magento\Framework\DataObject
     }
 
     /**
+     * Check is config value changed
+     *
+     * @param array $oldConfig
+     * @param string $path
+     * @param array $fieldData
+     * @return bool
+     */
+    private function isValueChanged(array $oldConfig, string $path, array $fieldData)
+    {
+        if (isset($oldConfig[$path]['value'])) {
+            $result = !isset($fieldData['value']) || $oldConfig[$path]['value'] !== $fieldData['value'];
+        } else {
+            $result = empty($fieldData['inherit']);
+        }
+
+        return $result;
+    }
+
+    /**
      * Process group data
      *
      * @param string $groupId
@@ -185,7 +215,6 @@ class Config extends \Magento\Framework\DataObject
      * @param array &$oldConfig
      * @param \Magento\Framework\DB\Transaction $saveTransaction
      * @param \Magento\Framework\DB\Transaction $deleteTransaction
-     * @param array &$changedPaths
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -199,8 +228,7 @@ class Config extends \Magento\Framework\DataObject
         array &$extraOldGroups,
         array &$oldConfig,
         \Magento\Framework\DB\Transaction $saveTransaction,
-        \Magento\Framework\DB\Transaction $deleteTransaction,
-        array &$changedPaths = []
+        \Magento\Framework\DB\Transaction $deleteTransaction
     ) {
         $groupPath = $sectionPath . '/' . $groupId;
         $scope = $this->getScope();
@@ -300,13 +328,9 @@ class Config extends \Magento\Framework\DataObject
                     } else {
                         $deleteTransaction->addObject($backendModel);
                     }
-                    if ($oldConfig[$path]['value'] !== $fieldData['value']) {
-                        $changedPaths[] = $path;
-                    }
                 } elseif (!$inherit) {
                     $backendModel->unsConfigId();
                     $saveTransaction->addObject($backendModel);
-                    $changedPaths[] = $path;
                 }
             }
         }
@@ -321,8 +345,7 @@ class Config extends \Magento\Framework\DataObject
                     $extraOldGroups,
                     $oldConfig,
                     $saveTransaction,
-                    $deleteTransaction,
-                    $changedPaths
+                    $deleteTransaction
                 );
             }
         }
