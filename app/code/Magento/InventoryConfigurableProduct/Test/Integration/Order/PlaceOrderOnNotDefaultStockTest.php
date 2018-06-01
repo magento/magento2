@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfigurable\Test\Integration\Order;
+namespace Magento\InventoryConfigurableProduct\Test\Integration\Order;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -13,7 +13,6 @@ use Magento\Framework\Registry;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
-use Magento\Quote\Api\Data\CartItemInterfaceFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
