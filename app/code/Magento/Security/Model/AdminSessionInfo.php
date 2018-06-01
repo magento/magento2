@@ -154,7 +154,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Setter for isOtherSessionsTerminated
      *
      * @param bool $isOtherSessionsTerminated
-     * @return this
+     * @return $this
      */
     public function setIsOtherSessionsTerminated($isOtherSessionsTerminated)
     {
