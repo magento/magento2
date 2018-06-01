@@ -12,6 +12,7 @@ use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProd
 use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
+use Magento\Framework\Exception\InputException;
 
 /**
  * @inheritdoc
@@ -62,14 +63,27 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
     public function execute(string $sku, int $stockId): float
     {
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-        $productType = $this->getProductTypesBySkus->execute([$sku])[$sku];
+        $this->validateProductType($sku);
 
-        if (null === $stockItemData || (bool)$stockItemData[GetStockItemDataInterface::IS_SALABLE] === false ||
-            $this->isSourceItemManagementAllowedForProductType->execute($productType) === false) {
+        if (null === $stockItemData || (bool)$stockItemData[GetStockItemDataInterface::IS_SALABLE] === false) {
             return 0;
         }
         $productQtyInStock = $stockItemData[GetStockItemDataInterface::QUANTITY] +
             $this->getReservationsQuantity->execute($sku, $stockId);
         return $productQtyInStock;
+    }
+
+    /**
+     * @param string $sku
+     * @throws InputException
+     */
+    private function validateProductType(string $sku): void
+    {
+        $productType = $this->getProductTypesBySkus->execute([$sku])[$sku];
+        if (false === $this->isSourceItemManagementAllowedForProductType->execute($productType)) {
+            throw new InputException(
+                __('Can\'t check requested quantity for products without Source Items support.')
+            );
+        }
     }
 }
