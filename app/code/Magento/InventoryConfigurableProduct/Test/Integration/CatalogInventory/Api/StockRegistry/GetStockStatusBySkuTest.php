@@ -109,9 +109,9 @@ class GetStockStatusBySkuTest extends TestCase
     public function getStatusDataProvider(): array
     {
         return [
-            ['store_for_eu_website', 0, 0],
-            ['store_for_us_website', 1, 200],
-            ['store_for_global_website', 1, 200],
+            ['store_for_eu_website', 0, 0],     // Qty not supported for complex products
+            ['store_for_us_website', 1, 0],     // Qty not supported for complex products
+            ['store_for_global_website', 1, 0], // Qty not supported for complex products
         ];
     }
 
