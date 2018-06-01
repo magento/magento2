@@ -123,6 +123,8 @@
             <data name="billingCheckboxState" xsi:type="string">Yes</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo</data>
+            <data name="issue" xsi:type="string">MAGETWO-91293</data>
+            <data name="tag" xsi:type="string">stable:no</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
@@ -198,6 +200,7 @@
             <data name="tag" xsi:type="string">severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="customerPassword" xsi:type="string">12312Qa.</data>
             <data name="checkoutMethod" xsi:type="string">register</data>
             <data name="shippingAddress/dataset" xsi:type="string">UK_address_2</data>
             <data name="billingAddress/dataset" xsi:type="string">UK_address_without_email</data>
@@ -207,7 +210,7 @@
                 <item name="grandTotal" xsi:type="string">565.00</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerRedirectToDashboard" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation9" summary="One Page Checkout Products with different shipping/billing address and Tier Prices" ticketId="MAGETWO-42604">

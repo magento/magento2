@@ -14,7 +14,7 @@
             <stories value="Create an Invoice via the Admin"/>
             <title value="Create Invoice"/>
             <description value="Should be able to create an invoice via the admin."/>
-            <severity value="NORMAL"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-72096"/>
             <group value="sales"/>
         </annotations>
@@ -59,7 +59,7 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
-        <amOnPage url="{{OrdersPage.url}}" stepKey="onOrdersPage"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onAdminOrdersPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
         <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
         <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
