@@ -86,17 +86,19 @@ class AjaxLogin
         $captchaString = $loginParams[$captchaInputName] ?? null;
         $loginFormId = $loginParams[$captchaFormIdField] ?? null;
 
-        if (!$this->isFormCaptchaExist($loginFormId, $username)) {
+        if (!in_array($loginFormId, $this->formIds) && $this->helper->getCaptcha($loginFormId)->isRequired($username)) {
             return $this->returnJsonError(__('Provided form does not exist'));
         }
 
         foreach ($this->formIds as $formId) {
             if ($formId === $loginFormId) {
                 $captchaModel = $this->helper->getCaptcha($formId);
-                $captchaModel->logAttempt($username);
-                if (!$captchaModel->isCorrect($captchaString)) {
-                    $this->sessionManager->setUsername($username);
-                    return $this->returnJsonError(__('Incorrect CAPTCHA'));
+                if ($captchaModel->isRequired($username)) {
+                    $captchaModel->logAttempt($username);
+                    if (!$captchaModel->isCorrect($captchaString)) {
+                        $this->sessionManager->setUsername($username);
+                        return $this->returnJsonError(__('Incorrect CAPTCHA'));
+                    }
                 }
             }
         }
@@ -112,18 +114,5 @@ class AjaxLogin
     {
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData(['errors' => true, 'message' => $phrase]);
-    }
-
-    /**
-     * @param string $loginFormId
-     * @param string $username
-     * @return bool
-     */
-    private function isFormCaptchaExist($loginFormId, $username): bool
-    {
-        return (
-            in_array($loginFormId, $this->formIds)
-            && $this->helper->getCaptcha($loginFormId)->isRequired($username)
-        );
     }
 }
