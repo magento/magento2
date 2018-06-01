@@ -1909,9 +1909,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         $origCountry = (string)$this->getCountryParams($origCountryCode)->getData('name');
         $destCountry = (string)$this->getCountryParams($destCountryCode)->getData('name');
-        $isDomestic = (string)$this->getCountryParams($destCountryCode)->getData('domestic');
 
-        if (($origCountry == $destCountry && $isDomestic)
+        if (($origCountry == $destCountry)
             || ($this->_carrierHelper->isCountryInEU($origCountryCode)
                 && $this->_carrierHelper->isCountryInEU($destCountryCode)
             )
