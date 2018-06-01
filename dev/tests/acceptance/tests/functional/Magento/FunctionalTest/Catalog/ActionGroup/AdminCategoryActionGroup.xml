@@ -147,11 +147,11 @@
 
         <waitForPageLoad stepKey="waitForCategoryCreated"/>
 
-        <click stepKey="saveProduct" selector="{{AdminProductCategoryCreationSection.saveButton}}" />
+        <click stepKey="saveProduct" selector="{{AdminProductFormSection.saveButton}}" />
 
         <waitForPageLoad stepKey="waitForChangesSaved"/>
 
-        <seeElement selector="{{AdminProductCategoryCreationSection.successMessage}}" stepKey="assertSuccess"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
     </actionGroup>
 
     <!-- Actions to delete the category last made -->
@@ -161,13 +161,13 @@
 
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
 
-        <click stepKey="goToCreateCategory" selector="{{AdminProductCategoryCreationSection.lastCreatedCategory}}" />
+        <click stepKey="goToCreateCategory" selector="{{AdminCategoryMainActionsSection.lastCreatedCategory}}" />
         <waitForPageLoad stepKey="waitForCreatedCategoryPageLoad"/>
 
-        <click stepKey="clickDeleteCategory" selector="{{AdminProductCategoryCreationSection.categoryDeleteButton}}" />
+        <click stepKey="clickDeleteCategory" selector="{{AdminCategoryMainActionsSection.categoryDeleteButton}}" />
         <waitForPageLoad stepKey="waitForModalVisible"/>
 
-        <click stepKey="clickOkToDelete" selector="{{AdminProductCategoryCreationSection.acceptDeletion}}" />
+        <click stepKey="clickOkToDelete" selector="{{AdminCategoryMainActionsSection.acceptDeletion}}" />
 
         <waitForPageLoad stepKey="waitForModalNotVisible"/>
 
