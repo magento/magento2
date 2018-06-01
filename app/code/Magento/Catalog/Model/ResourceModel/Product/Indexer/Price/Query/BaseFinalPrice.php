@@ -12,6 +12,7 @@ use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\ColumnValueExpression;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Indexer\Dimension;
 use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
 /**
@@ -45,6 +46,16 @@ class BaseFinalPrice
     private $eventManager;
 
     /**
+     * Mapping between dimensions and field in database
+     *
+     * @var array
+     */
+    private $dimensionToFieldMapper = [
+        WebsiteDataProvider::DIMENSION_NAME => 'pw.website_id',
+        CustomerGroupDataProvider::DIMENSION_NAME => 'cg.customer_group_id',
+    ];
+
+    /**
      * BaseFinalPrice constructor.
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param JoinAttributeProcessor $joinAttributeProcessor
@@ -66,7 +77,7 @@ class BaseFinalPrice
     }
 
     /**
-     * @param array $dimensions
+     * @param Dimension[] $dimensions
      * @param string $productType
      * @param array $entityIds
      * @return Select
@@ -76,13 +87,6 @@ class BaseFinalPrice
      */
     public function getQuery(array $dimensions, string $productType, array $entityIds = []): Select
     {
-        if (!isset($dimensions[WebsiteDataProvider::DIMENSION_NAME],
-            $dimensions[CustomerGroupDataProvider::DIMENSION_NAME])
-        ) {
-            throw new InputException(__('All dimensions for product index price must be provided'));
-        }
-        $websiteId = $dimensions[WebsiteDataProvider::DIMENSION_NAME]->getValue();
-        $customerGroupId = $dimensions[CustomerGroupDataProvider::DIMENSION_NAME]->getValue();
         $connection = $this->resource->getConnection($this->connectionName);
 
         $select = $connection->select()->from(
@@ -90,11 +94,11 @@ class BaseFinalPrice
             ['entity_id']
         )->joinInner(
             ['cg' => $this->getTable('customer_group')],
-            sprintf('cg.customer_group_id = %s', $customerGroupId),
+            [],
             ['customer_group_id']
         )->joinInner(
             ['pw' => $this->getTable('catalog_product_website')],
-            sprintf('pw.product_id = e.entity_id AND pw.website_id = %s', $websiteId),
+            'pw.product_id = e.entity_id',
             ['pw.website_id']
         )->joinInner(
             ['cwd' => $this->getTable('catalog_product_index_website')],
@@ -106,6 +110,15 @@ class BaseFinalPrice
             ' AND tp.customer_group_id = cg.customer_group_id',
             []
         );
+
+        foreach ($dimensions as $dimension) {
+            if (!isset($this->dimensionToFieldMapper[$dimension->getName()])) {
+                throw new InputException(
+                    __('Provided dimension %1 is not valid for Price indexer', $dimension->getName())
+                );
+            }
+            $select->where($this->dimensionToFieldMapper[$dimension->getName()] . ' = ?', $dimension->getValue());
+        }
 
         if ($this->moduleManager->isEnabled('Magento_Tax')) {
             $taxClassId = $this->joinAttributeProcessor->process($select,'tax_class_id');
@@ -169,8 +182,6 @@ class BaseFinalPrice
                 'entity_field' => new ColumnValueExpression('e.entity_id'),
                 'website_field' => new ColumnValueExpression('pw.website_id'),
                 'store_field' => new ColumnValueExpression('cwd.default_store_id'),
-                'website_id' => new ColumnValueExpression($websiteId),
-                'customer_group_id' => new ColumnValueExpression($customerGroupId),
             ]
         );
 

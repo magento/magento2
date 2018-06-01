@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
 
 /**
  * Default Product Type Price Indexer Resource model
@@ -16,6 +18,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * @deprecated Not used anymore for price indexation. Class left for backward compatibility
+ * @see DimensionalIndexerInterface
  */
 class DefaultPrice extends AbstractIndexer implements PriceInterface
 {

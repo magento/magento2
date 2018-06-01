@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 
 /**

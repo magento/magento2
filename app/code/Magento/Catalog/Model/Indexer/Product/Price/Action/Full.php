@@ -216,12 +216,16 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
     private function reindexProductTypeWithDimensions(DimensionalIndexerInterface $priceIndexer, string $typeId)
     {
+        $currentMode = $this->configReader
+            ->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?: ModeSwitcher::INPUT_KEY_NONE;
+
         /** @var DimensionProviderInterface $dimensionsProviders */
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode(
-            ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP
-        );
+        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($currentMode);
 
         foreach ($dimensionsProviders as $dimensions) {
+            $this->dimensionTableMaintainer->getConnection()->truncateTable(
+                $this->dimensionTableMaintainer->getMainReplicaTable($dimensions)
+            );
             $this->reindexDimensions($priceIndexer, $dimensions, $typeId);
         }
     }
