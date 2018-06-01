@@ -5,8 +5,9 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
 
 /**
  * Abstract action reindex class
@@ -18,7 +19,7 @@ abstract class AbstractAction
     /**
      * Default Product Type Price indexer resource model
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
+     * @var DefaultPrice
      */
     protected $_defaultIndexerResource;
 
@@ -86,7 +87,7 @@ abstract class AbstractAction
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
+     * @param DefaultPrice $defaultIndexerResource
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice $tierPriceIndexResource
      */
     public function __construct(
@@ -97,7 +98,7 @@ abstract class AbstractAction
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource,
+        DefaultPrice $defaultIndexerResource,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice $tierPriceIndexResource = null
     ) {
         $this->_config = $config;
@@ -248,7 +249,7 @@ abstract class AbstractAction
                     $modelName
                 );
                 // left setters for backward compatibility
-                if ($indexer instanceof PriceInterface) {
+                if ($indexer instanceof DefaultPrice) {
                     $indexer->setTypeId(
                         $typeId
                     )->setIsComposite(
@@ -326,39 +327,41 @@ abstract class AbstractAction
         $this->_prepareWebsiteDateTable();
 
         $productsTypes = $this->getProductsTypes($changedIds);
-        $compositeIds = [];
-        $notCompositeIds = [];
+
+        //TODO: tests with composite products
+//        foreach ($productsTypes as $productType => $entityIds) {
+//            $indexer = $this->_getIndexer($productType);
+//            if ($indexer->getIsComposite()) {
+//                $compositeIds += $entityIds;
+//            } else {
+//                $notCompositeIds += $entityIds;
+//            }
+//        }
+
+        $parentProductsTypes = $this->getParentProductsTypes($changedIds);
+        $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
+        foreach ($parentProductsTypes as $parentProductsIds) {
+            $changedIds = array_merge($changedIds, $parentProductsIds);
+        }
+        $changedIds = array_unique($changedIds);
+
+        //TODO: check that it handled for composite products
+//        if (!empty($compositeIds)) {
+//            $this->_copyRelationIndexData($compositeIds, $notCompositeIds);
+//        }
+        $this->_prepareTierPriceIndex($changedIds);
 
         foreach ($productsTypes as $productType => $entityIds) {
             $indexer = $this->_getIndexer($productType);
-            if ($indexer->getIsComposite()) {
-                $compositeIds += $entityIds;
+            if ($indexer instanceof DimensionalIndexerInterface) {
+                $indexer->executeByDimension([], \SplFixedArray::fromArray($entityIds));
             } else {
-                $notCompositeIds += $entityIds;
+                $indexer->reindexEntity($entityIds);
             }
-        }
-
-        if (!empty($notCompositeIds)) {
-            $parentProductsTypes = $this->getParentProductsTypes($notCompositeIds);
-            $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
-            foreach ($parentProductsTypes as $parentProductsIds) {
-                $compositeIds = $compositeIds + $parentProductsIds;
-                $changedIds = array_merge($changedIds, $parentProductsIds);
-            }
-        }
-
-        if (!empty($compositeIds)) {
-            $this->_copyRelationIndexData($compositeIds, $notCompositeIds);
-        }
-        $this->_prepareTierPriceIndex($compositeIds + $notCompositeIds);
-
-        foreach ($productsTypes as $productType => $entityIds) {
-            $indexer = $this->_getIndexer($productType);
-            $indexer->reindexEntity($entityIds);
         }
         $this->_syncData($changedIds);
 
-        return $compositeIds + $notCompositeIds;
+        return $changedIds;
     }
 
     /**
@@ -450,7 +453,8 @@ abstract class AbstractAction
     }
 
     /**
-     * Get parent products types.
+     * Get parent products types
+     * Used for add composite products to reindex if we have only simple products in changed ids set
      *
      * @param array $productsIds
      * @return array
