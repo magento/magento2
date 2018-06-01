@@ -32,7 +32,7 @@ class PriceIndexUpdater
      * @param Item $result
      * @param AbstractModel $model
      * @return Item
-     * SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(Item $subject, Item $result, AbstractModel $model)
     {
