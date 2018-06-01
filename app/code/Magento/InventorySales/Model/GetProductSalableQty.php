@@ -62,8 +62,8 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
      */
     public function execute(string $sku, int $stockId): float
     {
-        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
         $this->validateProductType($sku);
+        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
 
         if (null === $stockItemData || (bool)$stockItemData[GetStockItemDataInterface::IS_SALABLE] === false) {
             return 0;
