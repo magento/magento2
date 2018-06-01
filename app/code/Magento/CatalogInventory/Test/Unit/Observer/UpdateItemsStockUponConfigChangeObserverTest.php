@@ -35,7 +35,7 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\Te
 
         $this->event = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsite'])
+            ->setMethods(['getWebsite', 'getChangedPaths'])
             ->getMock();
 
         $this->eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
@@ -65,6 +65,9 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\Te
         $this->event->expects($this->once())
             ->method('getWebsite')
             ->will($this->returnValue($websiteId));
+        $this->event->expects($this->once())
+            ->method('getChangedPaths')
+            ->will($this->returnValue([\Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK]));
 
         $this->observer->execute($this->eventObserver);
     }
