@@ -21,27 +21,28 @@
 
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="_defaultProduct" stepKey="createPreReqProduct">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
-            <!-- Delete the cart price rule we made during the test -->
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
                 <argument name="ruleName" value="{{SimpleSalesRule.name}}"/>
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct"/>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create the rule... -->
-        <!-- Fill basic Rule Information fields -->
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
         <waitForPageLoad stepKey="waitForRulesPage"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
-        <!-- Fill Conditions section -->
         <click selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="expandConditions"/>
         <!-- Scroll down to fix some flaky behavior... -->
         <scrollTo selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="scrollToConditionsTab"/>
@@ -53,25 +54,18 @@
         <selectOption selector="{{PriceRuleConditionsSection.operatorByIndex('1', '1')}}" userInput="greater than" stepKey="fillOperator"/>
         <click selector="{{PriceRuleConditionsSection.ruleParamLink('1', '1', '2')}}" stepKey="startEditValue"/>
         <fillField selector="{{PriceRuleConditionsSection.valueByIndex('1', '1')}}" userInput="1" stepKey="fillValue"/>
-        <!-- Fill Actions section  -->
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="1.00" stepKey="fillDiscountAmount"/>
-        <!-- Save the rule -->
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
 
-        <!-- Create a product to use in the storefront -->
-        <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
-            <argument name="category" value="$$createPreReqCategory$$"/>
-            <argument name="simpleProduct" value="_defaultProduct"/>
-        </actionGroup>
-
-        <!-- Add the product we created to our cart -->
-        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToProductPage"/>
+        <!-- Add 1 product to the cart -->
+        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <waitForPageLoad stepKey="waitForAddToCart"/>
 
         <!-- Should not see the discount yet because we have only 1 item in our cart -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
@@ -79,11 +73,12 @@
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$123.00" stepKey="seeSubtotal"/>
         <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount"/>
 
-        <!-- Add another of the product to our cart -->
-        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToProductPage2"/>
+        <!-- Add the same product to the cart again (2 total) -->
+        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage2"/>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity2"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart2"/>
+        <waitForPageLoad stepKey="waitForAddToCart2"/>
 
         <!-- Now we should see the discount because we have more than 1 item -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage2"/>
