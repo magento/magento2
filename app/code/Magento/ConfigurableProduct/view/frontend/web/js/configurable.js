@@ -275,18 +275,33 @@ define([
         },
 
         /**
-         * Change displayed product image according to chosen options of configurable product
+         * When approrpriate, trigger change to displayed product image according to chosen
+         * options of configurable product
          *
          * @private
          */
         _changeProductImage: function () {
-            var images,
-                initialImages = this.options.mediaGalleryInitial,
-                galleryObject = $(this.options.mediaGallerySelector).data('gallery');
+            var gallery = $(this.options.mediaGallerySelector),
+                galleryObject = gallery.data('gallery');
 
             if (!galleryObject) {
+                gallery.on('gallery:loaded', this._changeGalleryImage.bind(this, gallery));
+
                 return;
             }
+
+            this._changeGalleryImage.call(this, gallery);
+        },
+
+        /**
+         * Change displayed product image according to chosen options of configurable product
+         *
+         * @private
+         */
+        _changeGalleryImage: function (element) {
+            var images,
+                initialImages = this.options.mediaGalleryInitial,
+                galleryObject = element.data('gallery');
 
             images = this.options.spConfig.images[this.simpleProduct];
 
