@@ -5,9 +5,9 @@
  */
 namespace Magento\CatalogInventory\Model\Plugin;
 
-use Magento\CatalogInventory\Model\Stock\Item as ItemModel;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Update product price index after product stock status changed.
@@ -28,13 +28,13 @@ class PriceIndexUpdater
     }
 
     /**
-     * @param ItemResourceModel $subject
-     * @param ItemResourceModel $result
-     * @param ItemModel $model
-     * @return ItemResourceModel
+     * @param Item $subject
+     * @param Item $result
+     * @param AbstractModel $model
+     * @return Item
      * SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(ItemResourceModel $subject, ItemResourceModel $result, ItemModel $model)
+    public function afterSave(Item $subject, Item $result, AbstractModel $model)
     {
         $fields = [
             'is_in_stock',
@@ -52,25 +52,25 @@ class PriceIndexUpdater
     }
 
     /**
-     * @param ItemResourceModel $subject
+     * @param Item $subject
      * @param $result
      * @param int $websiteId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterUpdateSetOutOfStock(ItemResourceModel $subject, $result, int $websiteId)
+    public function afterUpdateSetOutOfStock(Item $subject, $result, int $websiteId)
     {
         $this->priceIndexProcessor->markIndexerAsInvalid();
     }
 
     /**
-     * @param ItemResourceModel $subject
+     * @param Item $subject
      * @param $result
      * @param int $websiteId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterUpdateSetInStock(ItemResourceModel $subject, $result, int $websiteId)
+    public function afterUpdateSetInStock(Item $subject, $result, int $websiteId)
     {
         $this->priceIndexProcessor->markIndexerAsInvalid();
     }
