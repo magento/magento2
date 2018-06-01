@@ -14,7 +14,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Robots\Model\Config\Value as RobotsValue;
-use Magento\Store\Model\StoreResolver;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Backend model for sitemap/search_engines/submission_robots configuration value.
@@ -30,16 +30,16 @@ class Robots extends Value implements IdentityInterface
     protected $_cacheTag = true;
 
     /**
-     * @var StoreResolver
+     * @var StoreManagerInterface
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @param Context $context
      * @param Registry $registry
      * @param ScopeConfigInterface $config
      * @param TypeListInterface $cacheTypeList
-     * @param StoreResolver $storeResolver
+     * @param StoreManagerInterface $storeManager
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
@@ -49,12 +49,12 @@ class Robots extends Value implements IdentityInterface
         Registry $registry,
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
-        StoreResolver $storeResolver,
+        StoreManagerInterface $storeManager,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->storeResolver = $storeResolver;
+        $this->storeManager = $storeManager;
 
         parent::__construct(
             $context,
@@ -75,7 +75,7 @@ class Robots extends Value implements IdentityInterface
     public function getIdentities()
     {
         return [
-            RobotsValue::CACHE_TAG . '_' . $this->storeResolver->getCurrentStoreId(),
+            RobotsValue::CACHE_TAG . '_' . $this->storeManager->getStore()->getId(),
         ];
     }
 }

@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Context;
 use Magento\Robots\Model\Config\Value;
 use Magento\Robots\Model\Robots;
-use Magento\Store\Model\StoreResolver;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Robots Block Class.
@@ -27,24 +27,24 @@ class Data extends AbstractBlock implements IdentityInterface
     private $robots;
 
     /**
-     * @var StoreResolver
+     * @var StoreManagerInterface
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @param Context $context
      * @param Robots $robots
-     * @param StoreResolver $storeResolver
+     * @param StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
         Context $context,
         Robots $robots,
-        StoreResolver $storeResolver,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->robots = $robots;
-        $this->storeResolver = $storeResolver;
+        $this->storeManager = $storeManager;
 
         parent::__construct($context, $data);
     }
@@ -69,7 +69,7 @@ class Data extends AbstractBlock implements IdentityInterface
     public function getIdentities()
     {
         return [
-            Value::CACHE_TAG . '_' . $this->storeResolver->getCurrentStoreId(),
+            Value::CACHE_TAG . '_' . $this->storeManager->getStore()->getId(),
         ];
     }
 }

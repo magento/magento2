@@ -11,8 +11,8 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Eav\Model\Config;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class StatusBaseSelectProcessor
@@ -30,23 +30,23 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
     private $metadataPool;
 
     /**
-     * @var StoreResolverInterface
+     * @var StoreManagerInterface
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @param Config $eavConfig
      * @param MetadataPool $metadataPool
-     * @param StoreResolverInterface $storeResolver
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Config $eavConfig,
         MetadataPool $metadataPool,
-        StoreResolverInterface $storeResolver
+        StoreManagerInterface $storeManager
     ) {
         $this->eavConfig = $eavConfig;
         $this->metadataPool = $metadataPool;
-        $this->storeResolver = $storeResolver;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -70,7 +70,7 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
             ['status_attr' => $statusAttribute->getBackendTable()],
             "status_attr.{$linkField} = " . self::PRODUCT_TABLE_ALIAS . ".{$linkField}"
             . ' AND status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
-            . ' AND status_attr.store_id = ' . $this->storeResolver->getCurrentStoreId(),
+            . ' AND status_attr.store_id = ' . $this->storeManager->getStore()->getId(),
             []
         );
 

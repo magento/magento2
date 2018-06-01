@@ -12,7 +12,6 @@ use Magento\Robots\Model\Config\Value;
 use Magento\Sitemap\Helper\Data as SitemapHelper;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\StoreResolver;
 
 /**
  * Prepares sitemap links to add to the robots.txt file
@@ -22,11 +21,6 @@ use Magento\Store\Model\StoreResolver;
  */
 class Robots extends AbstractBlock implements IdentityInterface
 {
-    /**
-     * @var StoreResolver
-     */
-    private $storeResolver;
-
     /**
      * @var CollectionFactory
      */
@@ -44,7 +38,6 @@ class Robots extends AbstractBlock implements IdentityInterface
 
     /**
      * @param Context $context
-     * @param StoreResolver $storeResolver
      * @param CollectionFactory $sitemapCollectionFactory
      * @param SitemapHelper $sitemapHelper
      * @param StoreManagerInterface $storeManager
@@ -52,13 +45,11 @@ class Robots extends AbstractBlock implements IdentityInterface
      */
     public function __construct(
         Context $context,
-        StoreResolver $storeResolver,
         CollectionFactory $sitemapCollectionFactory,
         SitemapHelper $sitemapHelper,
         StoreManagerInterface $storeManager,
         array $data = []
     ) {
-        $this->storeResolver = $storeResolver;
         $this->sitemapCollectionFactory = $sitemapCollectionFactory;
         $this->sitemapHelper = $sitemapHelper;
         $this->storeManager = $storeManager;
@@ -78,8 +69,7 @@ class Robots extends AbstractBlock implements IdentityInterface
      */
     protected function _toHtml()
     {
-        $defaultStoreId = $this->storeResolver->getCurrentStoreId();
-        $defaultStore = $this->storeManager->getStore($defaultStoreId);
+        $defaultStore = $this->storeManager->getDefaultStoreView();
 
         /** @var \Magento\Store\Model\Website $website */
         $website = $this->storeManager->getWebsite($defaultStore->getWebsiteId());
@@ -138,7 +128,7 @@ class Robots extends AbstractBlock implements IdentityInterface
     public function getIdentities()
     {
         return [
-            Value::CACHE_TAG . '_' . $this->storeResolver->getCurrentStoreId(),
+            Value::CACHE_TAG . '_' . $this->storeManager->getDefaultStoreView()->getId(),
         ];
     }
 }

@@ -7,7 +7,7 @@ namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Checkout\Helper\Data;
 use Magento\Framework\App\ObjectManager;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class LayoutProcessor
@@ -40,9 +40,9 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     private $checkoutDataHelper;
 
     /**
-     * @var StoreResolverInterface
+     * @var StoreManagerInterface
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @var \Magento\Shipping\Model\Config
@@ -53,15 +53,18 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider
      * @param \Magento\Ui\Component\Form\AttributeMapper $attributeMapper
      * @param AttributeMerger $merger
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider,
         \Magento\Ui\Component\Form\AttributeMapper $attributeMapper,
-        AttributeMerger $merger
+        AttributeMerger $merger,
+        StoreManagerInterface $storeManager
     ) {
         $this->attributeMetadataDataProvider = $attributeMetadataDataProvider;
         $this->attributeMapper = $attributeMapper;
         $this->merger = $merger;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -193,7 +196,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     private function processShippingChildrenComponents($shippingRatesLayout)
     {
         $activeCarriers = $this->getShippingConfig()->getActiveCarriers(
-            $this->getStoreResolver()->getCurrentStoreId()
+            $this->storeManager->getStore()->getId()
         );
         foreach (array_keys($shippingRatesLayout) as $carrierName) {
             $carrierKey = str_replace('-rates-validation', '', $carrierName);
@@ -369,20 +372,5 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         }
 
         return $this->shippingConfig;
-    }
-
-    /**
-     * Get store resolver.
-     *
-     * @return StoreResolverInterface
-     * @deprecated 100.2.0
-     */
-    private function getStoreResolver()
-    {
-        if (!$this->storeResolver) {
-            $this->storeResolver = ObjectManager::getInstance()->get(StoreResolverInterface::class);
-        }
-
-        return $this->storeResolver;
     }
 }
