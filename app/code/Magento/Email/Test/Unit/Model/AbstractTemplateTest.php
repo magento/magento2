@@ -440,9 +440,25 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
     public function testSetForcedAreaWhenAreaIsSet(): void
     {
         $templateId = 'test_template';
+        $model = $this->getModelMock([], ['area' => null]);
+
+        $this->emailConfig->expects($this->once())
+            ->method('getTemplateArea')
+            ->with($templateId);
+
+        $model->setForcedArea($templateId);
+    }
+
+    /**
+     * @return void
+     */
+    public function testNotSetForcedAreaWhenAreaIsSet(): void
+    {
+        $templateId = 'test_template';
         $model = $this->getModelMock([], ['area' => 'frontend']);
 
-        $this->emailConfig->expects($this->never())->method('getTemplateArea');
+        $this->emailConfig->expects($this->never())
+            ->method('getTemplateArea');
 
         $model->setForcedArea($templateId);
     }
