@@ -629,7 +629,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     * Get new supper attribute id.
+     * Get new super attribute id.
      *
      * @return int
      */
