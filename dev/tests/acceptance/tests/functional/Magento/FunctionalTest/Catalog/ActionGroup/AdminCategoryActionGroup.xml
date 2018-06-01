@@ -118,6 +118,60 @@
         <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="dontSeeCategoryInTree"/>
     </actionGroup>
 
+    <!-- Actions to fill out a new category from the product page-->
+    <actionGroup name="FillNewProductCategory" >
+        <arguments>
+            <argument name="categoryName" defaultValue="Test Category" type="string"/>
+        </arguments>
+
+        <!--Navigate to product page -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+
+        <!-- Click first example product -->
+        <click stepKey="clickFirstExampleProduct" selector="{{AdminProductCategoryCreationSection.firstExampleProduct}}" />
+        <waitForPageLoad stepKey="waitForSpecificProductPage"/>
+
+        <!-- Click on new Category -->
+        <click stepKey="clickNewCategory" selector="{{AdminProductCategoryCreationSection.newCategory}}" />
+        <waitForPageLoad stepKey="waitForFieldSet"/>
+
+        <fillField stepKey="fillCategoryName" selector="{{AdminProductCategoryCreationSection.nameInput}}" userInput="{{categoryName}}" />
+
+        <click stepKey="clickParentCategory" selector="{{AdminProductCategoryCreationSection.parentCategory}}" />
+        <waitForPageLoad stepKey="waitForDropDownVisible"/>
+
+        <click stepKey="clickDefaultParentCategory" selector="{{AdminProductCategoryCreationSection.parentCategoryDropdownDefaultOption}}" />
+
+        <click stepKey="createCategory" selector="{{AdminProductCategoryCreationSection.createCategory}}" />
+    </actionGroup>
+
+    <!-- Actions to delete the category last made -->
+    <actionGroup name="DeleteMostRecentCategory">
+        <click stepKey="goToCreateCategory" selector="{{AdminProductCategoryCreationSection.lastCreatedCategory}}" />
+        <waitForPageLoad stepKey="waitForCreatedCategoryPageLoad"/>
+
+        <click stepKey="clickDeleteCategory" selector="{{AdminProductCategoryCreationSection.categoryDeleteButton}}" />
+        <waitForPageLoad stepKey="waitForModalVisible"/>
+
+        <click stepKey="clickOkToDelete" selector="{{AdminProductCategoryCreationSection.acceptDeletion}}" />
+
+        <waitForPageLoad stepKey="waitForModalNotVisible"/>
+
+    </actionGroup>
+
+    <!-- Actions to check if a certain category is present on the page -->
+    <actionGroup name="CategoryPresent" >
+        <arguments>
+            <argument name="categoryName" defaultValue="Test Category" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryFrontPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+
+        <see selector="{{AdminProductCategoryCreationSection.categoryStructure}}" userInput="{{categoryName}}" stepKey="assertCategoryOnStorefront"/>
+    </actionGroup>
+
     <!--Check that name field is required-->
     <actionGroup name="CheckCategoryNameIsRequiredField">
         <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>

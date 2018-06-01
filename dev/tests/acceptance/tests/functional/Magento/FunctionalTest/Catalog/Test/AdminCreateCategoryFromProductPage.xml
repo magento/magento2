@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryFromProductPage">
+        <annotations>
+            <features value="Category"/>
+            <stories value="Admin should be able to create category from the product page"/>
+            <description value="Admin should be able to create category from the product page" />
+            <severity value="AVERAGE" />
+            <testCaseId value="MC-234" />
+            <group value="Catalog" />
+        </annotations>
+        <before>
+            <createData entity="SimpleTwo" stepKey="simpleProduct">
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!-- Create new category in the product page with the category of AdminCreateCategoryFromProductPage -->
+        <actionGroup ref="FillNewProductCategory" stepKey="FillNewProductCategory">
+            <argument name="categoryName" value="AdminCreateCategoryFromProductPage" />
+        </actionGroup>
+
+        <!-- Check that category was created -->
+        <actionGroup ref="CategoryPresent" stepKey="checkIfCategoryPresent">
+            <argument name="categoryName" value="AdminCreateCategoryFromProductPage" />
+        </actionGroup>
+
+        <!-- Delete the created category -->
+        <actionGroup ref="DeleteMostRecentCategory" stepKey="getRidOfCreatedCategory" />
+
+    </test>
+</tests>
