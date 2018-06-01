@@ -144,6 +144,14 @@
         <click stepKey="clickDefaultParentCategory" selector="{{AdminProductCategoryCreationSection.parentCategoryDropdownDefaultOption}}" />
 
         <click stepKey="createCategory" selector="{{AdminProductCategoryCreationSection.createCategory}}" />
+
+        <waitForPageLoad stepKey="waitForCategoryCreated"/>
+
+        <click stepKey="saveProduct" selector="{{AdminProductCategoryCreationSection.saveButton}}" />
+
+        <waitForPageLoad stepKey="waitForChangesSaved"/>
+
+        <seeElement selector="{{AdminProductCategoryCreationSection.successMessage}}" stepKey="assertSuccess"/>
     </actionGroup>
 
     <!-- Actions to delete the category last made -->
@@ -171,12 +179,16 @@
             <argument name="categoryName" defaultValue="Test Category" type="string"/>
         </arguments>
 
-        <amOnPage url="/{{AdminCategoryPage.url}}" stepKey="goToCategoryFrontPage"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
 
         <see userInput="{{categoryName}}" stepKey="assertCategoryOnStorefront"/>
 
         <amOnPage url="/{{categoryName}}.html" stepKey="goToCustomerFrontPage"/>
+
+        <see userInput="{{categoryName}}" stepKey="assertCategoryNameOnStorefront"/>
+        <see userInput="Compare Products" stepKey="assertCategoryPageShowsUp"/>
+
         <waitForPageLoad stepKey="waitForCustomerCategoryPageLoad"/>
     </actionGroup>
 

@@ -18,8 +18,7 @@
             <group value="Catalog" />
         </annotations>
         <before>
-            <createData entity="SimpleTwo" stepKey="simpleProduct">
-            </createData>
+            <createData entity="SimpleTwo" stepKey="simpleProduct" />
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -29,12 +28,12 @@
 
         <!-- Create new category in the product page with the category of AdminCreateCategoryFromProductPage -->
         <actionGroup ref="FillNewProductCategory" stepKey="FillNewProductCategory">
-            <argument name="categoryName" value="admincreatecategoryfromproductpage" />
+            <argument name="categoryName" value="{{_defaultCategory.name}}" />
         </actionGroup>
 
         <!-- Check that category was created -->
         <actionGroup ref="CategoryPresent" stepKey="checkIfCategoryPresent">
-            <argument name="categoryName" value="admincreatecategoryfromproductpage" />
+            <argument name="categoryName" value="{{_defaultCategory.name}}" />
         </actionGroup>
 
         <!-- Delete the created category -->

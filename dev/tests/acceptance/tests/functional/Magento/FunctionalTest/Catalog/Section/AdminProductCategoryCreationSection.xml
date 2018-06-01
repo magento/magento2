@@ -17,6 +17,8 @@
         <element name="parentCategory" type="block" selector=".product_form_product_form_create_category_modal div[data-role='selected-option']" />
         <element name="parentCategoryDropdownDefaultOption" type="block" selector=".product_form_product_form_create_category_modal .action-menu-item._expended .admin__action-multiselect-label" />
         <element name="createCategory" type="button" selector="#save" />
+        <element name="saveButton" type="button" selector="#save-button" />
+        <element name="successMessage" type="block" selector=".success" />
 
         <element name="lastCreatedCategory" type="block" selector=".x-tree-root-ct li li:last-child" />
         <element name="categoryDeleteButton" type="button" selector="//button/span[text()='Delete']" />
