@@ -732,7 +732,7 @@ class Installer
             )->addColumn(
                 'flag_data',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                '64k',
+                '128k',
                 [],
                 'Flag Data'
             )->addColumn(
