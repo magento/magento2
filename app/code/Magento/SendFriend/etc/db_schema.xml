@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="sendfriend_log" resource="default" engine="innodb" comment="Send to friend function log storage table">
         <column xsi:type="int" name="log_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Log ID"/>

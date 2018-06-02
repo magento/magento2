@@ -7,6 +7,7 @@
 
 namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 
 /**
@@ -118,13 +119,25 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             return;
         } catch (ApiProcessableException $e) {
             $this->_processPaypalApiError($e);
+        } catch (LocalizedException $e) {
+            $this->processException($e, $e->getRawMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage(
-                $e,
-                __('We can\'t place the order.')
-            );
-            $this->_redirect('*/*/review');
+            $this->processException($e, 'We can\'t place the order.');
         }
+    }
+
+    /**
+     * Process exception.
+     *
+     * @param \Exception $exception
+     * @param string $message
+     *
+     * @return void
+     */
+    private function processException(\Exception $exception, string $message): void
+    {
+        $this->messageManager->addExceptionMessage($exception, __($message));
+        $this->_redirect('*/*/review');
     }
 
     /**

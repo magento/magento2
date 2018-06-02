@@ -31,7 +31,7 @@ class AssertSwatchesAreNotVisibleOnCategoryPage extends AbstractConstraint
         $isSwatchesBlockVisible = $catalogCategoryView->getListSwatchesProductBlock()
             ->getProductItem($product)->isSwatchesBlockVisible();
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $isSwatchesBlockVisible,
             'Swatches are still present on category page.'
         );

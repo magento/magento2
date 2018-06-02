@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="OpenProductFromCategoryPageActionGroup">
+        <arguments>
+            <argument name="category"/>
+            <argument name="product"/>
+        </arguments>
+        <!-- Go to storefront category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url(category.custom_attributes[url_path])}}" stepKey="navigateToCategoryPage"/>
+        <!-- Go to storefront product page -->
+        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(product.name)}}" stepKey="openProductPage"/>
+        <waitForAjaxLoad stepKey="waitForImageLoader"/>
+    </actionGroup>
+</actionGroups>

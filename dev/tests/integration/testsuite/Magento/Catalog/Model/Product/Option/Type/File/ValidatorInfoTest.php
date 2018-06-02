@@ -54,8 +54,8 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testExceptionWithErrors()
     {
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage(
             "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The maximum allowed image size for 'MediaOption' is 2000x2000 px.\n"
@@ -88,8 +88,8 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testExceptionWithoutErrors()
     {
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage(
             "The product's required option(s) weren't entered. Make sure the options are entered and try again."
         );
 

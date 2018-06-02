@@ -3,18 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GraphQl\UrlRewrite;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
-use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Test the GraphQL endpoint's URLResolver query to verify canonical URL's are correctly returned.
@@ -42,13 +39,13 @@ class UrlResolverTest extends GraphQlAbstract
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        $storeId  = $product->getStoreId();
+        $storeId = $product->getStoreId();
 
         /** @var  UrlFinderInterface $urlFinder */
         $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
         $actualUrls = $urlFinder->findOneByData(
             [
-                'request_path' =>$urlPath,
+                'request_path' => $urlPath,
                 'store_id' => $storeId
             ]
         );
@@ -84,14 +81,14 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        $storeId  = $product->getStoreId();
+        $storeId = $product->getStoreId();
         $product->getUrlKey();
 
         /** @var  UrlFinderInterface $urlFinder */
         $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
         $actualUrls = $urlFinder->findOneByData(
             [
-                'request_path' =>$urlPath,
+                'request_path' => $urlPath,
                 'store_id' => $storeId
             ]
         );
@@ -128,13 +125,13 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        $storeId  = $product->getStoreId();
+        $storeId = $product->getStoreId();
 
         /** @var  UrlFinderInterface $urlFinder */
         $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
         $actualUrls = $urlFinder->findOneByData(
             [
-                'request_path' =>$urlPath2,
+                'request_path' => $urlPath2,
                 'store_id' => $storeId
             ]
         );
@@ -149,7 +146,7 @@ QUERY;
    id
    canonical_url
    type
-  } 
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -181,7 +178,7 @@ QUERY;
             = <<<QUERY
 {
   urlResolver(url:"{$requestPath}")
-  { 
+  {
    id
    canonical_url
    type
@@ -205,16 +202,16 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        $storeId  = $product->getStoreId();
+        $storeId = $product->getStoreId();
         $product->setUrlKey('p002-new')->save();
-        $urlPath = $product->getUrlKey() .'.html';
+        $urlPath = $product->getUrlKey() . '.html';
         $this->assertEquals($urlPath, 'p002-new.html');
 
         /** @var  UrlFinderInterface $urlFinder */
         $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
         $actualUrls = $urlFinder->findOneByData(
             [
-                'request_path' =>$urlPath,
+                'request_path' => $urlPath,
                 'store_id' => $storeId
             ]
         );
@@ -228,7 +225,7 @@ QUERY;
    id
    canonical_url
    type
-  } 
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -250,13 +247,13 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        $storeId  = $product->getStoreId();
+        $storeId = $product->getStoreId();
 
         /** @var  UrlFinderInterface $urlFinder */
         $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
         $urlFinder->findOneByData(
             [
-                'request_path' =>$urlPath,
+                'request_path' => $urlPath,
                 'store_id' => $storeId
             ]
         );
@@ -274,5 +271,72 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertNull($response['urlResolver']);
+    }
+
+    /**
+     * Test for category entity with leading slash
+     *
+     * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     */
+    public function testCategoryUrlWithLeadingSlash()
+    {
+        $productSku = 'p002';
+        $urlPath = 'cat-1.html';
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku, false, null, true);
+        $storeId = $product->getStoreId();
+
+        /** @var  UrlFinderInterface $urlFinder */
+        $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
+        $actualUrls = $urlFinder->findOneByData(
+            [
+                'request_path' => $urlPath,
+                'store_id' => $storeId
+            ]
+        );
+        $categoryId = $actualUrls->getEntityId();
+        $targetPath = $actualUrls->getTargetPath();
+        $expectedType = $actualUrls->getEntityType();
+
+        $query = <<<QUERY
+{
+  urlResolver(url:"/{$urlPath}")
+  {
+   id
+   canonical_url
+   type
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayHasKey('urlResolver', $response);
+        $this->assertEquals($categoryId, $response['urlResolver']['id']);
+        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+    }
+
+    /**
+     * Test resolution of '/' path to home page
+     */
+    public function testResolveSlash()
+    {
+        $query
+            = <<<QUERY
+{
+  urlResolver(url:"/")
+  {
+   id
+   canonical_url
+   type
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey('urlResolver', $response);
+        $this->assertEquals(2, $response['urlResolver']['id']);
+        $this->assertEquals('cms/page/view/page_id/2', $response['urlResolver']['canonical_url']);
+        $this->assertEquals('CMS_PAGE', $response['urlResolver']['type']);
     }
 }

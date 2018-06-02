@@ -5,10 +5,12 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
+use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\ImportExport\Model\Import;
 use \Magento\Store\Model\Store;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Catalog\Model\Product as ProductEntity;
 
 /**
  * Export entity product model
@@ -202,7 +204,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_itemFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
+     * @var Collection
      */
     protected $_optionColFactory;
 
@@ -918,6 +920,29 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Load products' data from the collection
+     * and filter it (if needed).
+     *
+     * @return array Keys are product IDs, values arrays with keys as store IDs
+     *               and values as store-specific versions of Product entity.
+     */
+    protected function loadCollection(): array
+    {
+        $data = [];
+
+        $collection = $this->_getEntityCollection();
+        foreach (array_keys($this->_storeIdToCode) as $storeId) {
+            $collection->setStoreId($storeId);
+            foreach ($collection as $itemId => $item) {
+                $data[$itemId][$storeId] = $item;
+            }
+        }
+        $collection->clear();
+
+        return $data;
+    }
+
+    /**
      * Collect export data for all products
      *
      * @return array
@@ -927,14 +952,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function collectRawData()
     {
         $data = [];
-        $collection = $this->_getEntityCollection();
-        foreach ($this->_storeIdToCode as $storeId => $storeCode) {
-            $collection->setStoreId($storeId);
-            /**
-             * @var int $itemId
-             * @var \Magento\Catalog\Model\Product $item
-             */
-            foreach ($collection as $itemId => $item) {
+        $items = $this->loadCollection();
+
+        /**
+         * @var int $itemId
+         * @var ProductEntity[] $itemByStore
+         */
+        foreach ($items as $itemId => $itemByStore) {
+            foreach ($this->_storeIdToCode as $storeId => $storeCode) {
+                $item = $itemByStore[$storeId];
                 $additionalAttributes = [];
                 $productLinkId = $item->getData($this->getProductEntityLinkField());
                 foreach ($this->_getExportAttrCodes() as $code) {
@@ -1012,7 +1038,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $data[$itemId][$storeId]['product_id'] = $itemId;
                 $data[$itemId][$storeId]['product_link_id'] = $productLinkId;
             }
-            $collection->clear();
         }
 
         return $data;
@@ -1325,6 +1350,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Collect custom options data for products that will be exported.
+     *
+     * Option name and type will be collected for all store views, all other data (which can't be changed on store view
+     * level will be collected for DEFAULT_STORE_ID only.
+     * Store view specified data will be saved to the additional store view row.
+     *
      * @param int[] $productIds
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -1335,49 +1366,48 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $customOptionsData = [];
 
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
-            if (Store::DEFAULT_STORE_ID != $storeId) {
-                continue;
-            }
             $options = $this->_optionColFactory->create();
-            /* @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options*/
-            $options->reset();
-            $options->addOrder('sort_order', 'ASC');
-            $options->addTitleToResult($storeId);
-            $options->addPriceToResult($storeId);
-            $options->addProductToFilter($productIds);
-            $options->addValuesToResult($storeId);
+            /* @var Collection $options*/
+            $options->reset()
+                ->addOrder('sort_order', Collection::SORT_ORDER_ASC)
+                ->addTitleToResult($storeId)
+                ->addPriceToResult($storeId)
+                ->addProductToFilter($productIds)
+                ->addValuesToResult($storeId);
 
             foreach ($options as $option) {
                 $row = [];
                 $productId = $option['product_id'];
-
                 $row['name'] = $option['title'];
                 $row['type'] = $option['type'];
-                $row['required'] = $option['is_require'];
-                $row['price'] = $option['price'];
-                $row['price_type'] = ($option['price_type'] == 'percent') ? $option['price_type'] : 'fixed';
-                $row['sku'] = $option['sku'];
-                if ($option['max_characters']) {
-                    $row['max_characters'] = $option['max_characters'];
-                }
-
-                foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
-                    if (!isset($option[$fileOptionKey])) {
-                        continue;
+                if (Store::DEFAULT_STORE_ID === $storeId) {
+                    $row['required'] = $option['is_require'];
+                    $row['price'] = $option['price'];
+                    $row['price_type'] = ($option['price_type'] === 'percent') ? 'percent' : 'fixed';
+                    $row['sku'] = $option['sku'];
+                    if ($option['max_characters']) {
+                        $row['max_characters'] = $option['max_characters'];
                     }
 
-                    $row[$fileOptionKey] = $option[$fileOptionKey];
-                }
+                    foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
+                        if (!isset($option[$fileOptionKey])) {
+                            continue;
+                        }
 
+                        $row[$fileOptionKey] = $option[$fileOptionKey];
+                    }
+                }
                 $values = $option->getValues();
 
                 if ($values) {
                     foreach ($values as $value) {
-                        $valuePriceType = ($value['price_type'] == 'percent') ? $value['price_type'] : 'fixed';
                         $row['option_title'] = $value['title'];
-                        $row['price'] = $value['price'];
-                        $row['price_type'] = $valuePriceType;
-                        $row['sku'] = $value['sku'];
+                        if (Store::DEFAULT_STORE_ID === $storeId) {
+                            $row['option_title'] = $value['title'];
+                            $row['price'] = $value['price'];
+                            $row['price_type'] = ($value['price_type'] === 'percent') ? 'percent' : 'fixed';
+                            $row['sku'] = $value['sku'];
+                        }
                         $customOptionsData[$productId][$storeId][] = $this->optionRowToCellString($row);
                     }
                 } else {

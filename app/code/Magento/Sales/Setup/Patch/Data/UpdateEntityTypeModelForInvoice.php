@@ -9,8 +9,8 @@ namespace Magento\Sales\Setup\Patch\Data;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Setup\SalesSetupFactory;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 class UpdateEntityTypeModelForInvoice implements DataPatchInterface, PatchVersionInterface
 {

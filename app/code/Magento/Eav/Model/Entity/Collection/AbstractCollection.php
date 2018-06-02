@@ -1124,7 +1124,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
         } catch (\Exception $e) {
-            $this->printLogQuery(true, true, $query);
+            $this->printLogQuery(false, true, $query);
             throw $e;
         }
 
@@ -1498,6 +1498,10 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 $condition
             );
         } else {
+            if (isset($condition['null'])) {
+                $joinType = 'left';
+            }
+
             $this->_addAttributeJoin($attribute, $joinType);
             if (isset($this->_joinAttributes[$attribute]['condition_alias'])) {
                 $field = $this->_joinAttributes[$attribute]['condition_alias'];
@@ -1589,6 +1593,17 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $this->_joinFields = [];
 
         return $this;
+    }
+
+    /**
+     * Check whether attribute with code is already added to collection
+     *
+     * @param string $attributeCode
+     * @return bool
+     */
+    public function isAttributeAdded($attributeCode) : bool
+    {
+        return isset($this->_selectAttributes[$attributeCode]);
     }
 
     /**
