@@ -6,8 +6,29 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
+use Magento\Backend\App\Action;
+use Magento\Store\Model\App\Emulation;
+
 class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
+    /** @var \Magento\Store\Model\App\Emulation $appEmulation */
+    private $appEmulation;
+
+    /**
+     * Generate constructor.
+     * @param Action\Context $context
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
+     */
+    public function __construct(
+        Action\Context $context,
+        Emulation $appEmulation
+    ) {
+        $this->appEmulation = $appEmulation;
+        parent::__construct(
+            $context
+        );
+    }
+    
     /**
      * Generate sitemap
      *
@@ -23,7 +44,13 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         // if sitemap record exists
         if ($sitemap->getId()) {
             try {
+                //We need to emulate to get the correct frontend URL for the product images
+                $this->appEmulation->startEnvironmentEmulation($sitemap->getStoreId(),
+                    \Magento\Framework\App\Area::AREA_FRONTEND,
+                    true
+                );
                 $sitemap->generateXml();
+                $this->appEmulation->stopEnvironmentEmulation();
 
                 $this->messageManager->addSuccess(
                     __('The sitemap "%1" has been generated.', $sitemap->getSitemapFilename())
