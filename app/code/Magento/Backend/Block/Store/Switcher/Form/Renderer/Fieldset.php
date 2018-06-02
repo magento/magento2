@@ -23,7 +23,7 @@ class Fieldset extends \Magento\Backend\Block\Template implements \Magento\Frame
     /**
      * @var string
      */
-    protected $_template = 'store/switcher/form/renderer/fieldset.phtml';
+    protected $_template = 'Magento_Backend::store/switcher/form/renderer/fieldset.phtml';
 
     /**
      * Retrieve an element
