@@ -18,7 +18,7 @@ class SourceItemsDeleteTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source-item';
+    const RESOURCE_PATH = '/V1/inventory/source-items-delete';
     const SERVICE_NAME = 'inventoryApiSourceItemsDeleteV1';
     /**#@-*/
 

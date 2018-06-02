@@ -107,7 +107,7 @@
             <resource ref="Magento_InventoryApi::source"/>
         </resources>
     </route>
-    <route url="/V1/inventory/source-item" method="DELETE">
+    <route url="/V1/inventory/source-items-delete" method="POST">
         <service class="Magento\InventoryApi\Api\SourceItemsDeleteInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::source"/>
