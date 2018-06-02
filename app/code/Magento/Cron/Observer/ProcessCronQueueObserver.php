@@ -9,7 +9,7 @@
  */
 namespace Magento\Cron\Observer;
 
-use Magento\Framework\Console\CLI;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ObserverInterface;
 use \Magento\Cron\Model\Schedule;
 
@@ -454,7 +454,6 @@ class ProcessCronQueueObserver implements ObserverInterface
             if ($schedule->trySchedule()) {
                 // time matches cron expression
                 $schedule->save();
-                return;
             }
         }
     }

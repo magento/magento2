@@ -19,7 +19,7 @@
                 <div class="control">
                     <input type="number" name="qty" id="qty" maxlength="12" value=""
                            title="<?php echo $block->escapeHtml(__('Qty')); ?>"
-                           class="input-text qty" data-validate="{'required-number':true,digits:true}"/>
+                           class="input-text qty" data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"/>
                 </div>
             </div>
             <?php endif; ?>

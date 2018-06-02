@@ -8,9 +8,10 @@ define(
         'jquery',
         'mage/storage',
         'Magento_Ui/js/model/messageList',
-        'Magento_Customer/js/customer-data'
+        'Magento_Customer/js/customer-data',
+        'mage/translate'
     ],
-    function($, storage, globalMessageList, customerData) {
+    function($, storage, globalMessageList, customerData, $t) {
         'use strict';
         var callbacks = [],
             action = function(loginData, redirectUrl, isGlobal, messageContainer) {
@@ -39,7 +40,9 @@ define(
                         }
                     }
                 }).fail(function () {
-                    messageContainer.addErrorMessage({'message': 'Could not authenticate. Please try again later'});
+                    messageContainer.addErrorMessage({
+                        'message': $t('Could not authenticate. Please try again later')
+                    });
                     callbacks.forEach(function(callback) {
                         callback(loginData);
                     });

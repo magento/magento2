@@ -1673,7 +1673,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-checkout-tooltip-content-position-top-mobile {
         @abs-checkout-tooltip-content-position-top();
     }

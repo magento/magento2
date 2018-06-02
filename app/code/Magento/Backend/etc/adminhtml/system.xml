@@ -116,7 +116,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="template_hints_blocks" translate="label" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Add Block Names to Hints</label>
+                    <label>Add Block Class Type to Hints</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
@@ -405,7 +405,7 @@
             <label>Web</label>
             <tab>general</tab>
             <resource>Magento_Backend::web</resource>
-            <group id="url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Url Options</label>
                 <field id="use_store" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Add Store Code to Urls</label>
@@ -415,7 +415,7 @@
                         <![CDATA[<strong style="color:red">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).]]>
                     </comment>
                 </field>
-                <field id="redirect_to_base" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="redirect_to_base" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Auto-redirect to Base URL</label>
                     <source_model>Magento\Config\Model\Config\Source\Web\Redirect</source_model>
                     <comment>I.e. redirect from http://example.com/store/ to http://www.example.com/store/</comment>

@@ -43,7 +43,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public function testCodeStyle()
     {
-        $reportFile = self::$reportDir . '/less_report.txt';
+        $reportFile = self::$reportDir . '/csless_report.txt';
         $wrapper = new LessWrapper();
         $codeSniffer = new CodeSniffer(realpath(__DIR__ . '/_files/lesscs'), $reportFile, $wrapper);
 
@@ -57,10 +57,11 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
 
         $result = $codeSniffer->run($this->filterFiles($fileList));
 
+        $report = file_exists($reportFile) ? file_get_contents($reportFile) : "";
         $this->assertEquals(
             0,
             $result,
-            "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
+            "PHP Code Sniffer has found {$result} error(s): " . PHP_EOL . $report
         );
     }
 

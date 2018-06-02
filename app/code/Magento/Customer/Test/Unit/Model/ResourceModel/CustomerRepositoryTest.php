@@ -160,7 +160,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
-            ->setMethods(['__toArray'])
+            ->setMethods(['__toArray', 'setGroupId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->model = new \Magento\Customer\Model\ResourceModel\CustomerRepository(
@@ -187,6 +187,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 1;
         $storeId = 2;
+        $groupId = 1;
 
         $region = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\RegionInterface::class, [], '', false);
         $address = $this->getMockForAbstractClass(
@@ -222,6 +223,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             [
                 'getId',
                 'setId',
+                'setGroupId',
                 'setStoreId',
                 'getStoreId',
                 'getAttributeSetId',
@@ -254,7 +256,8 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getEmail',
                 'getWebsiteId',
                 'getAddresses',
-                'setAddresses'
+                'setAddresses',
+                'getGroupId'
             ]
         );
         $customerSecureData = $this->getMock(
@@ -289,6 +292,17 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomerId')
             ->with($customerId)
             ->willReturnSelf();
+
+        $this->customer->expects($this->exactly(2))
+            ->method('getGroupId')
+            ->willReturn($groupId);
+        $customerAttributesMetaData->expects($this->once())
+            ->method('getGroupId')
+            ->willReturn(null);
+        $customerModel->expects($this->once())
+            ->method('setGroupId')
+            ->with($groupId);
+
         $address->expects($this->once())
             ->method('getRegion')
             ->willReturn($region);

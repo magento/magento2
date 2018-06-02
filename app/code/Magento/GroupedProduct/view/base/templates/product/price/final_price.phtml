@@ -17,13 +17,19 @@ $minProduct = $block->getSaleableItem()
     ->getMinProduct();
 
 if ($minProduct) {
+    $finalPrice = $minProduct->getPriceInfo()->getPrice('final_price');
+    $finalPriceValue = $finalPrice->getAmount();
     $amountRender = $block->getRendererPool()
         ->createAmountRender(
-            $minProduct->getPriceInfo()->getPrice('final_price')->getAmount(),
+            $finalPriceValue,
             $minProduct,
-            $minProduct->getPriceInfo()->getPrice('final_price'),
+            $finalPrice,
             ['include_container' => true]
         );
+    $currencyCode = $amountRender->getDisplayCurrencyCode();
+} else {
+    $finalPriceValue = 0;
+    $currencyCode = '';
 }
 ?>
 <div class="price-box" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -32,4 +38,6 @@ if ($minProduct) {
         <span class="price-label"><?php /* @escapeNotVerified */ echo __('Starting at')?></span><?php echo $amountRender->toHtml();?>
     </p>
     <?php endif ?>
+    <meta itemprop="price" content="<?php /* @noEscape */ echo $finalPriceValue; ?>" />
+    <meta itemprop="priceCurrency" content="<?php /* @noEscape */ echo $currencyCode; ?>" />
 </div>

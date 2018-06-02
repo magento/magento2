@@ -47,7 +47,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\App\Arguments\FileResolver\Primary'
             )->disableOriginalConstructor()->getMock();
 
-            /* Enable Validation regardles of MAGE_MODE */
+            /* Enable Validation regardless of MAGE_MODE */
             $validateStateMock = $this->getMockBuilder(
                 'Magento\Framework\Config\ValidationStateInterface'
             )->disableOriginalConstructor()->getMock();

@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Session;
 
+use Magento\Framework\App\State;
 use Zend\Stdlib\Parameters;
 
 class SidResolverTest extends \PHPUnit_Framework_TestCase
@@ -49,34 +50,45 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected $request;
 
+    /**
+     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $appState;
+
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Session\Generic _model */
-        $this->session = $objectManager->get('Magento\Framework\Session\Generic');
+        $this->session = $objectManager->get(\Magento\Framework\Session\Generic::class);
 
         $this->scopeConfig = $this->getMockBuilder(
-            'Magento\Framework\App\Config\ScopeConfigInterface'
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
         )->setMethods(
             ['getValue']
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
         $this->urlBuilder = $this->getMockBuilder(
-            'Magento\Framework\Url'
+            \Magento\Framework\Url::class
         )->setMethods(
             ['isOwnOriginUrl']
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $this->request = $objectManager->get('Magento\Framework\App\RequestInterface');
+        $this->request = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
+
+        $this->appState = $this->getMockBuilder(State::class)
+            ->setMethods(['getAreaCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $objectManager->create(
-            'Magento\Framework\Session\SidResolver',
+            \Magento\Framework\Session\SidResolver::class,
             [
                 'scopeConfig' => $this->scopeConfig,
                 'urlBuilder' => $this->urlBuilder,
                 'sidNameMap' => [$this->customSessionName => $this->customSessionQueryParam],
                 'request' => $this->request,
+                'appState' => $this->appState,
             ]
         );
     }
@@ -95,6 +107,10 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSid($sid, $useFrontedSid, $isOwnOriginUrl, $testSid)
     {
+        $this->appState->expects($this->atLeastOnce())
+            ->method('getAreaCode')
+            ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
+
         $this->scopeConfig->expects(
             $this->any()
         )->method(
