@@ -627,7 +627,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Overridden to use _idFieldName by default.
      *
-     * @param null $valueField
+     * @param string|null $valueField
      * @param string $labelField
      * @param array $additional
      * @return array
