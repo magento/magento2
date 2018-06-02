@@ -11,12 +11,9 @@ use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
 use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
-use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -40,24 +37,14 @@ class SourceDeductionService implements SourceDeductionServiceInterface
     private $getStockItemConfiguration;
 
     /**
-     * @var StockByWebsiteIdResolverInterface
+     * @var StockResolverInterface
      */
-    private $stockByWebsiteIdResolver;
-
-    /**
-     * @var SalesChannelInterfaceFactory
-     */
-    private $salesChannelFactory;
+    private $stockResolver;
 
     /**
      * @var ItemToSellInterfaceFactory
      */
     private $itemsToSellFactory;
-
-    /**
-     * @var WebsiteRepositoryInterface
-     */
-    private $websiteRepository;
 
     /**
      * @var PlaceReservationsForSalesEventInterface
@@ -68,29 +55,24 @@ class SourceDeductionService implements SourceDeductionServiceInterface
      * @param SourceItemsSaveInterface $sourceItemsSave
      * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
-     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
-     * @param SalesChannelInterfaceFactory $salesChannelFactory
+     * @param StockResolverInterface $stockResolver
      * @param ItemToSellInterfaceFactory $itemsToSellFactory
-     * @param WebsiteRepositoryInterface $websiteRepository
      * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
+     * @internal param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      */
     public function __construct(
         SourceItemsSaveInterface $sourceItemsSave,
         GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku,
         GetStockItemConfigurationInterface $getStockItemConfiguration,
-        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
-        SalesChannelInterfaceFactory $salesChannelFactory,
+        StockResolverInterface $stockResolver,
         ItemToSellInterfaceFactory $itemsToSellFactory,
-        WebsiteRepositoryInterface $websiteRepository,
         PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
     ) {
         $this->sourceItemsSave = $sourceItemsSave;
         $this->getSourceItemBySourceCodeAndSku = $getSourceItemBySourceCodeAndSku;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
-        $this->salesChannelFactory = $salesChannelFactory;
+        $this->stockResolver = $stockResolver;
         $this->itemsToSellFactory = $itemsToSellFactory;
-        $this->websiteRepository = $websiteRepository;
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
     }
 
@@ -101,9 +83,12 @@ class SourceDeductionService implements SourceDeductionServiceInterface
     {
         $sourceItemToSave = [];
         $sourceCode = $sourceDeductionRequest->getSourceCode();
-        $websiteId = $sourceDeductionRequest->getWebsiteId();
+        $salesChannel = $sourceDeductionRequest->getSalesChannel();
 
-        $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
+        $stockId = (int)$this->stockResolver->get(
+            $salesChannel->getType(),
+            $salesChannel->getCode()
+        )->getStockId();
         $itemsToSell = [];
         foreach ($sourceDeductionRequest->getItems() as $item) {
             $itemSku = $item->getSku();
@@ -135,13 +120,6 @@ class SourceDeductionService implements SourceDeductionServiceInterface
 
         $salesEvent = $sourceDeductionRequest->getSalesEvent();
 
-        $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
-        $salesChannel = $this->salesChannelFactory->create([
-            'data' => [
-                'type' => SalesChannelInterface::TYPE_WEBSITE,
-                'code' => $websiteCode
-            ]
-        ]);
         $this->placeReservationsForSalesEvent->execute($itemsToSell, $salesChannel, $salesEvent);
     }
 }

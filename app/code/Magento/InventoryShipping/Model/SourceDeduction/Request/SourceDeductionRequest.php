@@ -8,17 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Model\SourceDeduction\Request;
 
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
  * @inheritdoc
  */
 class SourceDeductionRequest implements SourceDeductionRequestInterface
 {
-    /**
-     * @var int
-     */
-    private $websiteId;
-
     /**
      * @var string
      */
@@ -30,30 +26,31 @@ class SourceDeductionRequest implements SourceDeductionRequestInterface
     private $items;
 
     /**
+     * @var SalesChannelInterface
+     */
+    private $salesChannel;
+
+    /**
      * @var SalesEventInterface
      */
     private $salesEvent;
 
     /**
-     * @param int $websiteId
      * @param string $sourceCode
      * @param array $items
+     * @param SalesChannelInterface $salesChannel
      * @param SalesEventInterface $salesEvent
      */
-    public function __construct(int $websiteId, string $sourceCode, array $items, SalesEventInterface $salesEvent)
-    {
-        $this->websiteId = $websiteId;
+    public function __construct(
+        string $sourceCode,
+        array $items,
+        SalesChannelInterface $salesChannel,
+        SalesEventInterface $salesEvent
+    ) {
         $this->sourceCode = $sourceCode;
         $this->items = $items;
+        $this->salesChannel = $salesChannel;
         $this->salesEvent = $salesEvent;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getWebsiteId(): int
-    {
-        return $this->websiteId;
     }
 
     /**
@@ -70,6 +67,14 @@ class SourceDeductionRequest implements SourceDeductionRequestInterface
     public function getItems(): array
     {
         return $this->items;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSalesChannel(): SalesChannelInterface
+    {
+        return $this->salesChannel;
     }
 
     /**
