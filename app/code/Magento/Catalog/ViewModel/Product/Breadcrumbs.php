@@ -9,6 +9,7 @@ namespace Magento\Catalog\ViewModel\Product;
 
 use Magento\Catalog\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -43,13 +44,13 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     public function __construct(
         Data $catalogData,
         ScopeConfigInterface $scopeConfig,
-        Json $json
+        Json $json = null
     ) {
         parent::__construct();
 
         $this->catalogData = $catalogData;
         $this->scopeConfig = $scopeConfig;
-        $this->json = $json;
+        $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
