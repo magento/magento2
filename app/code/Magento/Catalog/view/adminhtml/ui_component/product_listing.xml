@@ -21,21 +21,18 @@
         <settings>
             <storageConfig>
                 <param name="dataScope" xsi:type="string">filters.store_id</param>
+                <param name="default_store" xsi:type="string">1</param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
         <aclResource>Magento_Catalog::products</aclResource>
         <dataProvider class="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider" name="product_listing_data_source">
+            <storeId>1000</storeId>
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>entity_id</primaryFieldName>
             </settings>
         </dataProvider>
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="data" xsi:type="array">
-                <item name="store_id" xsi:type="number">0</item>
-            </argument>
-        </argument>
     </dataSource>
     <listingToolbar name="listing_top">
         <settings>

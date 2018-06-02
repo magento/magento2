@@ -59,8 +59,11 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->addFieldStrategies = $addFieldStrategies;
         $this->addFilterStrategies = $addFilterStrategies;
 
-        if (isset($data['store_id'])) {
-            $this->collection->setStoreId($data['store_id']);
+        if (isset($data['config']['storageConfig']['default_store'])
+            && (bool) $data['config']['storageConfig']['default_store']
+        ) {
+            print_r("Oh damn");exit;
+            $this->collection->setStoreId($this->collection->getDefaultStoreId());
         }
     }
 
