@@ -69,16 +69,17 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
      */
     public function execute()
     {
-        $taxClass = (int)$this->getRequest()->getParam('tax_class');
+        $taxClass = (int)$this->getRequest()->getParam('tax_class_id');
 
         /** @var \Magento\Customer\Api\Data\GroupInterface $customerGroup */
         $customerGroup = null;
         if ($taxClass) {
-            $id = $this->getRequest()->getParam('id');
+            $id = $this->getRequest()->getParam('customer_group_id');
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
-                $customerGroupCode = (string)$this->getRequest()->getParam('code');
-                if ($id !== null) {
+                $customerGroupCode = (string)$this->getRequest()->getParam('customer_group_code');
+                if ($id !== null && $id !== '') {
                     $customerGroup = $this->groupRepository->getById((int)$id);
                     $customerGroupCode = $customerGroupCode ?: $customerGroup->getCode();
                 } else {
@@ -87,10 +88,14 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
                 $customerGroup->setCode(!empty($customerGroupCode) ? $customerGroupCode : null);
                 $customerGroup->setTaxClassId($taxClass);
 
-                $this->groupRepository->save($customerGroup);
+                $customerGroup = $this->groupRepository->save($customerGroup);
 
                 $this->messageManager->addSuccess(__('You saved the customer group.'));
-                $resultRedirect->setPath('customer/group');
+                if ($this->getRequest()->getParam('back')) {
+                    $resultRedirect->setPath('customer/group/edit', ['id' => $customerGroup->getId()]);
+                } else {
+                    $resultRedirect->setPath('customer/group');
+                }
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 if ($customerGroup != null) {

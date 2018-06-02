@@ -139,12 +139,13 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $groupId = 0;
         $code = 'NOT LOGGED IN';
 
-        $this->request->expects($this->exactly(3))
+        $this->request->expects($this->exactly(4))
             ->method('getParam')
             ->withConsecutive(
-                ['tax_class'],
-                ['id'],
-                ['code']
+                ['tax_class_id'],
+                ['customer_group_id'],
+                ['customer_group_code'],
+                ['back']
             )
             ->willReturnOnConsecutiveCalls($taxClass, $groupId, null);
         $this->resultRedirectFactory->expects($this->once())
@@ -165,7 +166,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with($taxClass);
         $this->groupRepositoryMock->expects($this->once())
             ->method('save')
-            ->with($this->group);
+            ->with($this->group)
+            ->willReturn($this->group);
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->with(__('You saved the customer group.'));
@@ -194,7 +196,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     {
         $this->request->expects($this->once())
             ->method('getParam')
-            ->with('tax_class')
+            ->with('tax_class_id')
             ->willReturn(null);
         $this->forwardFactoryMock->expects($this->once())
             ->method('create')

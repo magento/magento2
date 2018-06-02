@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">customer_group_form.customer_group_form_data_source</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="save_and_continue" class="Magento\Customer\Block\Adminhtml\Group\Edit\SaveAndContinueButton"/>
+            <button name="save" class="Magento\Customer\Block\Adminhtml\Group\Edit\SaveButton"/>
+            <button name="reset" class="Magento\Customer\Block\Adminhtml\Group\Edit\ResetButton"/>
+            <button name="delete" class="Magento\Customer\Block\Adminhtml\Group\Edit\DeleteButton"/>
+            <button name="back" class="Magento\Customer\Block\Adminhtml\Group\Edit\BackButton"/>
+        </buttons>
+        <namespace>customer_group_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>customer_group_form.customer_group_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="customer_group_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="customer/group/save"/>
+        </settings>
+        <dataProvider class="Magento\Customer\Model\Group\DataProvider" name="customer_group_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>customer_group_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Group Information</item>
+                <item name="collapsible" xsi:type="boolean">false</item>
+                <item name="sortOrder" xsi:type="number">10</item>
+                <item name="opened" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+        <field name="customer_group_id" sortOrder="10" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">customer_group</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>customer_group_id</dataScope>
+            </settings>
+        </field>
+        <field name="customer_group_code" sortOrder="20" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">customer_group</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Group Name</label>
+                <dataScope>customer_group_code</dataScope>
+            </settings>
+        </field>
+        <field name="tax_class_id" sortOrder="30" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">customer_group</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>number</dataType>
+                <label translate="true">Tax Class</label>
+                <dataScope>tax_class_id</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Tax\Model\TaxClass\Source\Customer"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+</form>
