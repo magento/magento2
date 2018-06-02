@@ -67,5 +67,6 @@ class DbDataUpgradeCommand extends AbstractSetupCommand
         }
         $installer = $this->installFactory->create(new ConsoleLogger($output));
         $installer->installDataFixtures();
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

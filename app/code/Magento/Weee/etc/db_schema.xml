@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="weee_tax" resource="default" engine="innodb" comment="Weee Tax">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
                 comment="Value Id"/>
@@ -48,7 +48,7 @@
             <column name="attribute_id"/>
         </index>
     </table>
-    <table name="quote_item" resource="quote" comment="Sales Flat Quote Item">
+    <table name="quote_item" resource="checkout" comment="Sales Flat Quote Item">
         <column xsi:type="text" name="weee_tax_applied" nullable="true" comment="Weee Tax Applied"/>
         <column xsi:type="decimal" name="weee_tax_applied_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Applied Amount"/>

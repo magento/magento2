@@ -7,8 +7,8 @@
 namespace Magento\Bundle\Setup\Patch\Schema;
 
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
-use Magento\Setup\Model\Patch\SchemaPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 
 /**
  * Class UpdateBundleRelatedSchema

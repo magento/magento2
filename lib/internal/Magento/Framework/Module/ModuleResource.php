@@ -10,6 +10,9 @@ use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Resource Model
+ *
+ * @deprecated Declarative schema and data patches replace old functionality and setup_module table
+ * So all resources related to this table, will be deprecated since 2.3.0
  */
 class ModuleResource extends AbstractDb implements ResourceInterface
 {
@@ -138,11 +141,13 @@ class ModuleResource extends AbstractDb implements ResourceInterface
     /**
      * Flush all class cache
      *
+     * @deprecated This method was added as temporary solution, to increase modularity:
+     * Because before new modules appears in resource only on next bootstrap
      * @return void
      */
-    public function flush()
+    public static function flush()
     {
         self::$dataVersions = null;
-        self::$schemaVersions = null;
+        self::$schemaVersions = [];
     }
 }

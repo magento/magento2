@@ -9,12 +9,17 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminProductFormBundleSection">
+        <element name="bundleItemsToggle" type="button" selector="//span[text()='Bundle Items']"/>
         <element name="shipmentType" type="select" selector=".admin__control-select[name='product[shipment_type]']"/>
         <element name="addOption" type="button" selector="button[data-index='add_button']"/>
         <element name="firstOptionTitle" type="input" selector="[name='bundle_options[bundle_options][0][title]']"/>
         <element name="firstInputType" type="select" selector="[name='bundle_options[bundle_options][0][type]']"/>
         <element name="firstRequired" type="checkbox" selector="[name='bundle_options[bundle_options][0][required]']"/>
         <element name="firstProductQuantity" type="input" selector="[name='bundle_options[bundle_options][0][bundle_selections][0][selection_qty]']"/>
+        <element name="bundleOptionXTitle" type="input" selector="[name='bundle_options[bundle_options][{{x}}][title]']" parameterized="true"/>
+        <element name="bundleOptionXInputType" type="select" selector="[name='bundle_options[bundle_options][{{x}}][type]']" parameterized="true"/>
+        <element name="bundleOptionXRequired" type="checkbox" selector="[name='bundle_options[bundle_options][{{x}}][required]']" parameterized="true"/>
+        <element name="bundleOptionXProductYQuantity" type="input" selector="[name='bundle_options[bundle_options][{{x}}][bundle_selections][{{y}}][selection_qty]']" parameterized="true"/>
         <element name="addProductsToOption" type="button" selector="[data-index='modal_set']" timeout="30"/>
     </section>
 </sections>

@@ -106,7 +106,7 @@
                     <label>Live Account</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="unit_of_measure" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="unit_of_measure" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Weight Unit</label>
                     <source_model>Magento\Ups\Model\Config\Source\Unitofmeasure</source_model>
                 </field>
@@ -117,6 +117,11 @@
                 <field id="negotiated_active" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enable Negotiated Rates</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="include_taxes" translate="label" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Request Tax-Inclusive Rate</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>When applicable, taxes (sales tax, VAT etc.) are included in the rate</comment>
                 </field>
                 <field id="shipper_number" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Shipper Number</label>

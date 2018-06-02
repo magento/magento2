@@ -59,7 +59,7 @@ class AssertImportAdvancedPricing extends AbstractConstraint
 
         $resultArrays = $this->getPreparePrices();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $resultArrays['pageData'],
             $resultArrays['csvData'],
             'Tier prices from page and csv are not match.'

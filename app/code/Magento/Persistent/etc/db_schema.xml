@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="persistent_session" resource="default" engine="innodb" comment="Persistent Session">
         <column xsi:type="int" name="persistent_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Session id"/>
@@ -37,7 +37,7 @@
             <column name="updated_at"/>
         </index>
     </table>
-    <table name="quote" resource="quote" comment="Sales Flat Quote">
+    <table name="quote" resource="checkout" comment="Sales Flat Quote">
         <column xsi:type="smallint" name="is_persistent" padding="5" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Is Quote Persistent"/>
     </table>

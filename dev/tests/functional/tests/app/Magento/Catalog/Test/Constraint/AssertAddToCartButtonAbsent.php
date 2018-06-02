@@ -44,15 +44,15 @@ class AssertAddToCartButtonAbsent extends AbstractConstraint
         while (!$isProductVisible && $catalogCategoryView->getBottomToolbar()->nextPage()) {
             $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
         }
-        \PHPUnit_Framework_Assert::assertTrue($isProductVisible, 'Product is absent on category page.');
+        \PHPUnit\Framework\Assert::assertTrue($isProductVisible, 'Product is absent on category page.');
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisibleAddToCardButton(),
             "Button 'Add to Card' is present on Category page."
         );
 
         $catalogCategoryView->getListProductBlock()->getProductItem($product)->open();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $catalogProductView->getViewBlock()->isVisibleAddToCardButton(),
             "Button 'Add to Card' is present on Product page."
         );

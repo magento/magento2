@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="EndToEndB2CAdminTest">
         <!--Create configurable product-->
-        <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageConfigurable" after="seeSimpleProductInGrid"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageConfigurable" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadConfigurable" after="visitAdminProductPageConfigurable"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct" after="waitForProductPageLoadConfigurable">
             <argument name="product" value="BaseConfigurableProduct"/>
@@ -20,28 +20,28 @@
         </actionGroup>
         <!--Create product configurations-->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations" after="fillConfigurableProductMain"/>
-        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
         <!--Create new attribute-->
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickCreateNewAttribute" after="waitForConfigurationModalOpen"/>
         <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="enterAttributePanelIFrame" after="clickCreateNewAttribute"/>
         <wait time="2" stepKey="waitForModalIframeReady" after="enterAttributePanelIFrame"/>
-        <waitForElementVisible selector="{{AdminNewAttributePanel.defaultLabel}}" stepKey="waitForIframeLoad" after="waitForModalIframeReady"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.defaultLabel}}" time="30" stepKey="waitForIframeLoad" after="waitForModalIframeReady"/>
         <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{colorProductAttribute.default_label}}" stepKey="fillDefaultLabel" after="waitForIframeLoad"/>
         <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="{{colorProductAttribute.input_type}}" stepKey="selectAttributeInputType" after="fillDefaultLabel"/>
         <!--Add option 1 to attribute-->
         <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickAddOption1" after="selectAttributeInputType"/>
-        <waitForElementVisible selector="{{AdminNewAttributePanel.isDefault('1')}}" stepKey="waitForOptionRow1" after="clickAddOption1"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.isDefault('1')}}" time="30" stepKey="waitForOptionRow1" after="clickAddOption1"/>
         <fillField selector="{{AdminNewAttributePanel.optionAdminValue('0')}}" userInput="{{colorProductAttribute1.name}}" stepKey="fillAdminLabel1" after="waitForOptionRow1"/>
         <fillField selector="{{AdminNewAttributePanel.optionDefaultStoreValue('0')}}" userInput="{{colorProductAttribute1.name}}" stepKey="fillDefaultLabel1" after="fillAdminLabel1"/>
         <!--Add option 2 to attribute-->
         <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickAddOption2" after="fillDefaultLabel1"/>
-        <waitForElementVisible selector="{{AdminNewAttributePanel.isDefault('2')}}" stepKey="waitForOptionRow2" after="clickAddOption2"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.isDefault('2')}}" time="30" stepKey="waitForOptionRow2" after="clickAddOption2"/>
         <fillField selector="{{AdminNewAttributePanel.optionAdminValue('1')}}" userInput="{{colorProductAttribute2.name}}" stepKey="fillAdminLabel2" after="waitForOptionRow2"/>
         <fillField selector="{{AdminNewAttributePanel.optionDefaultStoreValue('1')}}" userInput="{{colorProductAttribute2.name}}" stepKey="fillDefaultLabel2" after="fillAdminLabel2"/>
         <!--Save new attribute-->
         <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickSaveAttribute" after="fillDefaultLabel2"/>
         <switchToIFrame stepKey="switchToParentPage" after="clickSaveAttribute"/>
-        <waitForElementNotVisible selector="{{AdminNewAttributePanel.container}}" stepKey="waitForNewAttributePanelClose" after="switchToParentPage"/>
+        <waitForElementNotVisible selector="{{AdminNewAttributePanel.container}}" time="30" stepKey="waitForNewAttributePanelClose" after="switchToParentPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSaveAttributeLoadingMask" after="waitForNewAttributePanelClose"/>
         <!--Find new attribute in grid and select-->
         <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="openFilterPanel" after="waitForSaveAttributeLoadingMask"/>
@@ -60,15 +60,16 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickGenerateProducts" after="clickNext3"/>
         <!--Save configurable product-->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveConfigurableProduct" after="clickGenerateProducts"/>
-        <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitForAttributeSetConfirmation" after="clickSaveConfigurableProduct"/>
+        <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" time="30" stepKey="waitForAttributeSetConfirmation" after="clickSaveConfigurableProduct"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickConfirmAttributeSet" after="waitForAttributeSetConfirmation"/>
         <see selector="You saved the product" stepKey="seeConfigurableSaveConfirmation" after="clickConfirmAttributeSet"/>
         <actionGroup ref="viewConfigurableProductInAdminGrid" stepKey="viewConfigurableProductInGrid" after="seeConfigurableSaveConfirmation">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
 
-        <!--TODO - Move to 'after' block when MQE-732 is fixed-->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProduct">
+        <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
+        <comment userInput="Clean up configurable product" stepKey="cleanUpConfigurableProduct" after="deleteSimpleProduct"/>
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProduct" after="cleanUpConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
     </test>

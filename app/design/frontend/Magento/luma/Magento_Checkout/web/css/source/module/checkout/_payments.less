@@ -46,6 +46,11 @@
                     .lib-css(border-top, @checkout-payment-method-title__border);
                 }
             }
+            form {
+                &.form-purchase-order {
+                    margin-bottom: 15px;
+                }
+            }
         }
 
         .payment-method-content {
@@ -160,6 +165,11 @@
     .checkout-payment-method {
         .payment-methods {
             .lib-css(margin, 0 -(@checkout-payment-method-title-mobile__padding));
+        }
+
+        .step-title {
+            .lib-css(padding-left, @checkout-payment-method-title-mobile__padding);
+            .lib-css(padding-right, @checkout-payment-method-title-mobile__padding)
         }
 
         .payment-method-title {
