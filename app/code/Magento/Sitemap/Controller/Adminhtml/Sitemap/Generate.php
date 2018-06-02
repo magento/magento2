@@ -45,7 +45,8 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         if ($sitemap->getId()) {
             try {
                 //We need to emulate to get the correct frontend URL for the product images
-                $this->appEmulation->startEnvironmentEmulation($sitemap->getStoreId(),
+                $this->appEmulation->startEnvironmentEmulation(
+                    $sitemap->getStoreId(),
                     \Magento\Framework\App\Area::AREA_FRONTEND,
                     true
                 );
