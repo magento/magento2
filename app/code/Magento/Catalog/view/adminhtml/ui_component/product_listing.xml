@@ -27,7 +27,6 @@
         </settings>
         <aclResource>Magento_Catalog::products</aclResource>
         <dataProvider class="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider" name="product_listing_data_source">
-            <storeId>1000</storeId>
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>entity_id</primaryFieldName>
