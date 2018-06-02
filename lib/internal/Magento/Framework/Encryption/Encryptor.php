@@ -298,11 +298,11 @@ class Encryptor implements EncryptorInterface
             $parts = explode(':', $data, 4);
             $partsCount = count($parts);
 
-            $initVector = false;
+            $initVector = null;
             // specified key, specified crypt, specified iv
             if (4 === $partsCount) {
                 list($keyVersion, $cryptVersion, $iv, $data) = $parts;
-                $initVector = $iv ? $iv : false;
+                $initVector = $iv ? $iv : null;
                 $keyVersion = (int)$keyVersion;
                 $cryptVersion = self::CIPHER_RIJNDAEL_256;
                 // specified key, specified crypt
@@ -337,10 +337,9 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
-     * Return crypt model, instantiate if it is empty
+     * Validate key contains only allowed characters
      *
      * @param string|null $key NULL value means usage of the default key specified on constructor
-     * @return EncryptionAdapterInterface
      * @throws \Exception
      */
     public function validateKey($key)
@@ -348,7 +347,6 @@ class Encryptor implements EncryptorInterface
         if (preg_match('/\s/s', $key)) {
             throw new \Exception((string)new \Magento\Framework\Phrase('The encryption key format is invalid.'));
         }
-        return $this->getCrypt($key);
     }
 
     /**
@@ -383,12 +381,15 @@ class Encryptor implements EncryptorInterface
      *
      * @param string $key
      * @param int $cipherVersion
-     * @param bool $initVector
+     * @param string $initVector
      * @return EncryptionAdapterInterface|null
      * @throws \Exception
      */
-    protected function getCrypt($key = null, $cipherVersion = null, $initVector = true)
-    {
+    private function getCrypt(
+        string $key = null,
+        int $cipherVersion = null,
+        string $initVector = null
+    ): ?EncryptionAdapterInterface {
         if (null === $key && null === $cipherVersion) {
             $cipherVersion = self::CIPHER_RIJNDAEL_256;
         }

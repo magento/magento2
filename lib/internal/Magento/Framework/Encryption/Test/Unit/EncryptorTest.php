@@ -216,12 +216,15 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateKey()
     {
-        $actual = $this->_model->validateKey(self::CRYPT_KEY_1);
-        $crypt = new Sodium(self::CRYPT_KEY_1);
-        $expectedEncryptedData = base64_encode($crypt->encrypt('data'));
-        $actualEncryptedData = base64_encode($actual->encrypt('data'));
-        $this->assertNotEquals($expectedEncryptedData, $actualEncryptedData);
-        $this->assertEquals($crypt->decrypt($expectedEncryptedData), $actual->decrypt($actualEncryptedData));
+        $this->_model->validateKey(self::CRYPT_KEY_1);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testValidateKeyInvalid()
+    {
+        $this->_model->validateKey('-----    ');
     }
 
     public function testUseSpecifiedHashingAlgoDataProvider()

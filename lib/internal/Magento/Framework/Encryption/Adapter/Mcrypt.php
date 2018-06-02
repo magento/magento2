@@ -114,7 +114,7 @@ class Mcrypt implements EncryptionAdapterInterface
      *
      * @return string
      */
-    public function getInitVector(): string
+    public function getInitVector(): ?string
     {
         return $this->initVector;
     }
