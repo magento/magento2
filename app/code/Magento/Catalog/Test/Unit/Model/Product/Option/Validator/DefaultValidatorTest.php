@@ -18,11 +18,18 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $valueMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $localeFormatMock;
+
     protected function setUp()
     {
         $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
         $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price($storeManagerMock);
+        $this->localeFormatMock = $this->createMock(\Magento\Framework\Locale\FormatInterface::class);
+
         $config = [
             [
                 'label' => 'group label 1',
@@ -48,7 +55,8 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
         $configMock->expects($this->once())->method('getAll')->will($this->returnValue($config));
         $this->validator = new \Magento\Catalog\Model\Product\Option\Validator\DefaultValidator(
             $configMock,
-            $priceConfigMock
+            $priceConfigMock,
+            $this->localeFormatMock
         );
     }
 
@@ -86,6 +94,9 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
         $valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue($priceType));
         $valueMock->expects($this->once())->method('getPrice')->will($this->returnValue($price));
         $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+
+        $this->localeFormatMock->expects($this->once())->method('getNumber')->will($this->returnValue($price));
+
         $this->assertEquals($result, $this->validator->isValid($valueMock));
         $this->assertEquals($messages, $this->validator->getMessages());
     }
@@ -156,6 +167,8 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
         $valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue($priceType));
         $valueMock->expects($this->once())->method('getPrice')->will($this->returnValue($price));
         $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+
+        $this->localeFormatMock->expects($this->once())->method('getNumber')->will($this->returnValue($price));
 
         $messages = [];
         $this->assertTrue($this->validator->isValid($valueMock));

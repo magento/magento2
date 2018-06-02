@@ -26,12 +26,19 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
     protected $priceTypes;
 
     /**
+     * @var \Magento\Framework\Locale\FormatInterface
+     */
+    private $localeFormat;
+
+    /**
      * @param \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig
      * @param \Magento\Catalog\Model\Config\Source\Product\Options\Price $priceConfig
+     * @param \Magento\Framework\Locale\FormatInterface|null $localeFormat
      */
     public function __construct(
         \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig,
-        \Magento\Catalog\Model\Config\Source\Product\Options\Price $priceConfig
+        \Magento\Catalog\Model\Config\Source\Product\Options\Price $priceConfig,
+        \Magento\Framework\Locale\FormatInterface $localeFormat = null
     ) {
         foreach ($productOptionConfig->getAll() as $option) {
             foreach ($option['types'] as $type) {
@@ -42,6 +49,9 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
         foreach ($priceConfig->toOptionArray() as $item) {
             $this->priceTypes[] = $item['value'];
         }
+
+        $this->localeFormat = $localeFormat ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Locale\FormatInterface::class);
     }
 
     /**
@@ -166,7 +176,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      */
     protected function isNegative($value)
     {
-        return intval($value) < 0;
+        return $this->localeFormat->getNumber($value) < 0;
     }
 
     /**
@@ -177,6 +187,6 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      */
     protected function isNumber($value)
     {
-        return is_numeric($value);
+        return is_numeric($this->localeFormat->getNumber($value));
     }
 }
