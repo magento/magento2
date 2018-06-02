@@ -8,12 +8,11 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition;
 
 use Magento\Framework\DB\Select;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Source Item status condition
+ * Still build Stock Item index even when there is no corresponding SKU in catalog_product_entity table
  */
-class SourceItemStatusCondition implements GetIsStockItemSalableConditionInterface
+class SkuIsAbsentInCatalogCondition implements GetIsStockItemSalableConditionInterface
 {
     /**
      * @inheritdoc
@@ -21,6 +20,6 @@ class SourceItemStatusCondition implements GetIsStockItemSalableConditionInterfa
      */
     public function execute(Select $select): string
     {
-        return 'MAX(source_item.' . SourceItemInterface::STATUS . ') = ' . SourceItemInterface::STATUS_IN_STOCK;
+        return 'product_entity.sku IS NULL';
     }
 }

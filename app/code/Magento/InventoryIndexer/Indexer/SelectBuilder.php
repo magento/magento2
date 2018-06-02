@@ -63,11 +63,11 @@ class SelectBuilder
         $sourceCodes = $this->getSourceCodes($stockId);
 
         $select = $connection->select();
-        $select->joinInner(
+        $select->joinLeft(
             ['product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
             'product_entity.sku = source_item.sku',
             []
-        )->joinInner(
+        )->joinLeft(
             ['legacy_stock_item' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
             'product_entity.entity_id = legacy_stock_item.product_id',
             []
