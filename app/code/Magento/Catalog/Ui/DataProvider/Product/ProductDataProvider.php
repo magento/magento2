@@ -62,7 +62,6 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($data['config']['storageConfig']['default_store'])
             && (bool) $data['config']['storageConfig']['default_store']
         ) {
-            print_r("Oh damn");exit;
             $this->collection->setStoreId($this->collection->getDefaultStoreId());
         }
     }
