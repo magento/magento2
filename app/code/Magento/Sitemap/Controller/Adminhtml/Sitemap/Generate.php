@@ -28,8 +28,8 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             $context
         );
     }
-    
-   /**
+
+    /**
      * Generate sitemap
      *
      * @return void
