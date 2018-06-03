@@ -314,6 +314,7 @@ class BundlePanel extends AbstractModifier
                         'template' => 'ui/dynamic-rows/templates/collapsible',
                         'additionalClasses' => 'admin__field-wide',
                         'dataScope' => 'data.bundle_options',
+                        'isDefaultFieldScope' => 'is_default',
                         'bundleSelectionsName' => 'product_bundle_container.bundle_selections'
                     ],
                 ],
@@ -379,6 +380,9 @@ class BundlePanel extends AbstractModifier
                                                     'selection_qty_is_integer' => 'selection_qty_is_integer',
                                                 ],
                                                 'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
+                                                'imports' => [
+                                                    'inputType' => '${$.provider}:${$.dataScope}.type'
+                                                ],
                                                 'source' => 'product'
                                             ],
                                         ],
@@ -595,10 +599,13 @@ class BundlePanel extends AbstractModifier
                     'config' => [
                         'componentType' => Container::NAME,
                         'isTemplate' => true,
-                        'component' => 'Magento_Bundle/js/components/bundle-record',
+                        'component' => 'Magento_Ui/js/dynamic-rows/record',
                         'is_collection' => true,
                         'imports' => [
-                            'onTypeChanged' => '${ $.provider }:${ $.bundleOptionsDataScope }.type'
+                            'inputType' => '${$.parentName}:inputType'
+                        ],
+                        'exports' => [
+                            'isDefaultValue' => '${$.parentName}:isDefaultValue.${$.index}'
                         ]
                     ],
                 ],
@@ -693,11 +700,15 @@ class BundlePanel extends AbstractModifier
                                 'componentType' => Form\Field::NAME,
                                 'formElement' => Form\Element\Checkbox::NAME,
                                 'dataType' => Form\Element\DataType\Price::NAME,
+                                'component' => 'Magento_Bundle/js/components/bundle-user-defined-checkbox',
                                 'label' => __('User Defined'),
                                 'dataScope' => 'selection_can_change_qty',
                                 'value' => '1',
                                 'valueMap' => ['true' => '1', 'false' => '0'],
                                 'sortOrder' => 110,
+                                'imports' => [
+                                    'inputType' => '${$.parentName}:inputType'
+                                ]
                             ],
                         ],
                     ],

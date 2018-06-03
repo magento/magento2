@@ -510,6 +510,7 @@ class AdvancedPricing extends AbstractModifier
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
+                                            'validate-number' => false,
                                             'validate-number' => true,
                                             'validate-digits' => $this->hasPriceQtyDigitsValidationPassed(),
                                         ],

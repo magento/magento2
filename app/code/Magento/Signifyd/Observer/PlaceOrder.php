@@ -9,6 +9,7 @@ use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Model\Config;
@@ -52,13 +53,10 @@ class PlaceOrder implements ObserverInterface
 
     /**
      * {@inheritdoc}
+     * @throws NotFoundException
      */
     public function execute(Observer $observer)
     {
-        if (!$this->signifydIntegrationConfig->isActive()) {
-            return;
-        }
-
         $orders = $this->extractOrders(
             $observer->getEvent()
         );
@@ -68,7 +66,10 @@ class PlaceOrder implements ObserverInterface
         }
 
         foreach ($orders as $order) {
-            $this->createCaseForOrder($order);
+            $storeId = $order->getStoreId();
+            if ($this->signifydIntegrationConfig->isActive($storeId)) {
+                $this->createCaseForOrder($order);
+            }
         }
     }
 
@@ -77,6 +78,7 @@ class PlaceOrder implements ObserverInterface
      *
      * @param OrderInterface $order
      * @return void
+     * @throws NotFoundException
      */
     private function createCaseForOrder($order)
     {
