@@ -83,10 +83,15 @@ class SodiumChachaPatch implements DataPatchInterface
 
         $this->scope->setCurrentScope(\Magento\Framework\App\Area::AREA_ADMINHTML);
 
-        $paths = $this->structure->getFieldPathsByAttribute(
-            'backend_model',
-            \Magento\Config\Model\Config\Backend\Encrypted::class
-        );
+        try {
+            $paths = $this->structure->getFieldPathsByAttribute(
+                'backend_model',
+                \Magento\Config\Model\Config\Backend\Encrypted::class
+            );
+        } catch (\Exception $e) {
+            // This is thrown during initial application installation
+            return;
+        }
 
         $this->scope->setCurrentScope($currentScope);
 
