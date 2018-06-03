@@ -21,6 +21,7 @@
         <element name="createNewValue" type="input" selector=".action-create-new" timeout="30"/>
         <element name="attributeName" type="input" selector="li[data-attribute-option-title=''] .admin__field-create-new .admin__control-text"/>
         <element name="saveAttribute" type="button" selector="li[data-attribute-option-title=''] .action-save" timeout="30"/>
+        <element name="attributeCheckboxByIndex" type="input" selector="li.attribute-option:nth-of-type({{var1}}) input" parameterized="true"/>
 
         <element name="applyUniquePricesByAttributeToEachSku" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']"/>
         <element name="selectAttribute" type="select" selector="#select-each-price" timeout="30"/>
