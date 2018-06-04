@@ -119,18 +119,11 @@
     </actionGroup>
 
     <!-- Actions to fill out a new category from the product page-->
+    <!-- The action assumes that you are already on an admin product configuration page -->
     <actionGroup name="FillNewProductCategory" >
         <arguments>
             <argument name="categoryName" defaultValue="Test Category" type="string"/>
         </arguments>
-
-        <!--Navigate to product page -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPage"/>
-
-        <!-- Click first example product -->
-        <click stepKey="clickFirstExampleProduct" selector="{{AdminProductCategoryCreationSection.firstExampleProduct}}" />
-        <waitForPageLoad stepKey="waitForSpecificProductPage"/>
 
         <!-- Click on new Category -->
         <click stepKey="clickNewCategory" selector="{{AdminProductCategoryCreationSection.newCategory}}" />

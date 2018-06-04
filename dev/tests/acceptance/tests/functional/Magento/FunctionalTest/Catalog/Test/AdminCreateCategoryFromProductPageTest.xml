@@ -21,6 +21,16 @@
             <!-- Create new category in the product page with the category of AdminCreateCategoryFromProductPage -->
             <createData entity="SimpleTwo" stepKey="simpleProduct" />
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--Navigate to product page -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <waitForPageLoad stepKey="waitForProductIndexPage"/>
+
+            <!-- Click first example product -->
+            <click stepKey="clickFirstExampleProduct" selector="{{AdminProductCategoryCreationSection.firstExampleProduct}}" />
+            <waitForPageLoad stepKey="waitForSpecificProductPage"/>
+
+            <!-- Fill out the form for the new category -->
             <actionGroup ref="FillNewProductCategory" stepKey="FillNewProductCategory">
                 <argument name="categoryName" value="{{_defaultCategory.name}}" />
             </actionGroup>
