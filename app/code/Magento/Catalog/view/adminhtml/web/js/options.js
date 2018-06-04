@@ -13,12 +13,16 @@ define([
     'jquery/ui',
     'prototype',
     'form',
-    'validation'
+    'validation',
+    'mage/translate'
 ], function (jQuery, mageTemplate, rg) {
     'use strict';
 
     return function (config) {
-        var attributeOption = {
+        var optionPanel = jQuery('#manage-options-panel'),
+            optionsValues = [],
+            editForm = jQuery('#edit_form'),
+            attributeOption = {
                 table: $('attribute-options-table'),
                 itemCount: 0,
                 totalItems: 0,
@@ -150,7 +154,7 @@ define([
             attributeOption.remove(event);
         });
 
-        jQuery('#manage-options-panel').on('render', function () {
+        optionPanel.on('render', function () {
             attributeOption.ignoreValidate();
 
             if (attributeOption.rendered) {
@@ -176,7 +180,23 @@ define([
                 });
             });
         }
-
+        editForm.on('submit', function () {
+            editForm
+                .find('input[name^="option"]')
+                .each(function() {
+                    optionsValues.push(this.name + '=' + jQuery(this).val());
+                    this.closest('tr').hide()
+                });
+            jQuery('<input>')
+                .attr({
+                    type: 'hidden',
+                    name: 'serialized_options'
+                })
+                .val(JSON.stringify(optionsValues))
+                .prependTo('#edit_form');
+            optionPanel.find('table')
+                .replaceWith(jQuery('<div>').text(jQuery.mage.__('Sending attribute values as package.')));
+        });
         window.attributeOption = attributeOption;
         window.optionDefaultInputType = attributeOption.getOptionInputType();
 
