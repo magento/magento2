@@ -809,9 +809,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private function getProductFromLocalCache(string $sku, string $cacheKey)
     {
         $preparedSku = $this->prepareSku($sku);
-        if (!isset($this->instances[$preparedSku])) {
-            return null;
-        }
 
         return $this->instances[$preparedSku][$cacheKey] ?? null;
     }
