@@ -538,9 +538,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getResourceCollection()
     {
-        $collection = parent::getResourceCollection();
-        $collection->setStoreId($this->getStoreId());
-        return $collection;
+        return parent::getResourceCollection();
     }
 
     /**
