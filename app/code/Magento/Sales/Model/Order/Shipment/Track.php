@@ -47,6 +47,13 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @var \Magento\Sales\Api\ShipmentRepositoryInterface
      */
     protected $shipmentRepository;
+    
+    /**
+     * Zend Validator Uri
+     *
+     * @var \Zend\Validator\Uri
+     */
+    protected $_zendValidatorUri;    
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -55,6 +62,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
+     * @param \Zend\Validator\Uri $zendValidatorUri
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -67,6 +75,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
+        \Zend\Validator\Uri $zendValidatorUri,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -82,6 +91,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         );
         $this->_storeManager = $storeManager;
         $this->shipmentRepository = $shipmentRepository;
+        $this->_zendValidatorUri = $zendValidatorUri;
+        $this->_zendValidatorUri->setAllowAbsolute(true)->setAllowRelative(false);
     }
 
     /**
@@ -222,6 +233,16 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     public function getTrackNumber()
     {
         return $this->getData(ShipmentTrackInterface::TRACK_NUMBER);
+    }
+
+    /**
+     * Returns track_url
+     *
+     * @return string
+     */
+    public function getTrackUrl()
+    {
+        return $this->getData(ShipmentTrackInterface::TRACK_URL);
     }
 
     /**
@@ -373,6 +394,14 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     /**
      * {@inheritdoc}
      */
+    public function setTrackUrl($trackUrl)
+    {
+        return $this->setData(ShipmentTrackInterface::TRACK_URL, $trackUrl);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setDescription($description)
     {
         return $this->setData(ShipmentTrackInterface::DESCRIPTION, $description);
@@ -415,5 +444,16 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 
+    /**
+     * Get Track Url for Track Item and return only if valid, absolute URI
+     *
+     * @return string|bool
+     */
+    public function getValidTrackUrl(){
+        if ($this->getTrackUrl() && $this->_zendValidatorUri->isValid($this->getTrackUrl())) {
+            return $this->getTrackUrl();
+        }
+        return false;
+    }
     //@codeCoverageIgnoreEnd
 }

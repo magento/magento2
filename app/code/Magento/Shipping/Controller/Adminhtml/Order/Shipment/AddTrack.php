@@ -46,6 +46,7 @@ class AddTrack extends \Magento\Backend\App\Action
             $carrier = $this->getRequest()->getPost('carrier');
             $number = $this->getRequest()->getPost('number');
             $title = $this->getRequest()->getPost('title');
+            $track_url = $this->getRequest()->getPost('track_url');
             if (empty($carrier)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a carrier.'));
             }
@@ -66,6 +67,8 @@ class AddTrack extends \Magento\Backend\App\Action
                     $carrier
                 )->setTitle(
                     $title
+                )->setTrackUrl(
+                    $track_url
                 );
                 $shipment->addTrack($track)->save();
 

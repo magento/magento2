@@ -31,6 +31,23 @@ interface TrackInterface
     public function getTrackNumber();
 
     /**
+     * Sets the track URL for the shipment package.
+     *
+     * @param string $trackUrl
+     * @return $this
+     * @since 100.1.2
+     */
+    public function setTrackUrl($trackUrl);
+
+    /**
+     * Gets the track URL for the shipment package.
+     *
+     * @return string Track number.
+     * @since 100.1.2
+     */
+    public function getTrackUrl();
+
+    /**
      * Sets the title for the shipment package.
      *
      * @param string $title
