@@ -445,7 +445,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Customer\Model\AddressFactory::class),
             $this->createMock(\Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class),
             $this->createMock(\Magento\Customer\Model\CustomerFactory::class),
-            $this->createMock(\Magento\Customer\Model\ResourceModel\Address\CollectionFactory::class),
             $this->createMock(\Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory::class),
             new \Magento\Framework\Stdlib\DateTime(),
             $this->createMock(\Magento\Customer\Model\Address\Validator\Postcode::class),
