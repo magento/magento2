@@ -66,7 +66,6 @@ define([
                 expect(model.disabled()).toEqual(false);
                 expect(model.source.set).toHaveBeenCalledWith('data.use_default.' + model.index, 0);
             });
-
             it('check with isUseDefault true', function () {
                 spyOn(model, 'isUseDefault').and.returnValue(true);
                 spyOn(model, 'isUseConfig').and.returnValue(false);
