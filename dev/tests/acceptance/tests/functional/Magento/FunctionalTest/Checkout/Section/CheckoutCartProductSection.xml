@@ -26,14 +26,5 @@
                  parameterized="true"/>
         <element name="RemoveItem" type="button"
                  selector="//table[@id='shopping-cart-table']//tbody//tr[contains(@class,'item-actions')]//a[contains(@class,'action-delete')]"/>
-        <element name="cartItemGiftOption" type="text" selector="//tr[contains(., '{{var1}}')]/following-sibling::*[contains(., '{{var2}}')]" parameterized="true"/>
-        <element name="cartGiftOptionAll" type="text" selector="//div[contains(@class,'cart-gift-item')][contains(., '{{var1}}')]" parameterized="true"/>
-        <element name="clickCartItemGiftOptions" type="button" selector=".gift-options-cart-item .action-gift"/>
-        <element name="clickCartGiftOptions" type="button" selector=".cart-gift-item div[data-role='title']"/>
-        <element name="cartVisibleSmallImage" type="text" selector=".gift-item-block .gift-options-content img"/>
-        <element name="cartItemVisibleSmallImage" type="text" selector="#shopping-cart-table .gift-options-content img"/>
-        <element name="cartGiftMessage" type="block" selector=".cart-gift-item .gift-message"/>
-        <element name="cartItemGiftMessage" type="block" selector="#shopping-cart-table .gift-options .gift-message"/>
-        <element name="cartItemClickButtonGiftUpdate" type="button" selector=".gift-options-cart-item button[type='submit']"/>
     </section>
 </sections>
