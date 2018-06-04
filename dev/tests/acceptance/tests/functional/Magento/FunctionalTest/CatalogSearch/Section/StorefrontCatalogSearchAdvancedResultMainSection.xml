@@ -15,5 +15,7 @@
         <element name="SuccessMsg" type="button" selector="div.message-success"/>
         <element name="productCount" type="text" selector="#toolbar-amount"/>
         <element name="message" type="text" selector="div.message div"/>
+        <element name="itemFound" type="text" selector=".search.found>strong"/>
+        <element name="productName" type="text" selector=".product.name.product-item-name>a"/>
     </section>
 </sections>

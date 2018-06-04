@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Ui\Component\Form\Element\DataType\Media;
 
 use Magento\Store\Model\StoreManagerInterface;
@@ -61,7 +64,10 @@ class Image extends Media
     public function prepare()
     {
         // dynamically set max file size based on php ini config if not present in XML
-        $maxFileSize = $this->getConfiguration()['maxFileSize'] ?? $this->fileSize->getMaxFileSize();
+        $maxFileSize = min(array_filter([
+            $this->getConfiguration()['maxFileSize'] ?? 0,
+            $this->fileSize->getMaxFileSize()
+        ]));
 
         $data = array_replace_recursive(
             $this->getData(),
@@ -69,8 +75,9 @@ class Image extends Media
                 'config' => [
                     'maxFileSize' => $maxFileSize,
                     'mediaGallery' => [
-                        'openDialogUrl' => $this->getContext()->getUrl('cms/wysiwyg_images/index'),
+                        'openDialogUrl' => $this->getContext()->getUrl('cms/wysiwyg_images/index', ['_secure' => true]),
                         'openDialogTitle' => $this->getConfiguration()['openDialogTitle'] ?? __('Insert Images...'),
+                        'initialOpenSubpath' => $this->getConfiguration()['initialMediaGalleryOpenSubpath'],
                         'storeId' => $this->storeManager->getStore()->getId(),
                     ],
                 ],

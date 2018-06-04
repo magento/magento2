@@ -224,6 +224,14 @@ define([
             return this;
         },
 
+        /** @inheritdoc */
+        destroy: function () {
+            if (this.dnd()) {
+                this.dnd().destroy();
+            }
+            this._super();
+        },
+
         /**
          * Calls 'initObservable' of parent
          *
@@ -547,7 +555,6 @@ define([
                         columnsHeaderClasses: cell.config.columnsHeaderClasses,
                         sortOrder: cell.config.sortOrder
                     });
-
                     labels.push(data);
                 }, this);
                 this.labels(_.sortBy(labels, 'sortOrder'));
@@ -714,6 +721,8 @@ define([
          * @param {Number} page - current page
          */
         changePage: function (page) {
+            this.clear();
+
             if (page === 1 && !this.recordData().length) {
                 return false;
             }
@@ -755,7 +764,6 @@ define([
          * Change page to next
          */
         nextPage: function () {
-            this.clear();
             this.currentPage(this.currentPage() + 1);
         },
 
@@ -763,7 +771,6 @@ define([
          * Change page to previous
          */
         previousPage: function () {
-            this.clear();
             this.currentPage(this.currentPage() - 1);
         },
 
@@ -903,7 +910,7 @@ define([
             prop = prop || this.identificationProperty;
 
             return _.reject(this.getChildItems(), function (recordData) {
-                return ~~recordData[prop] === ~~id;
+                return recordData[prop].toString() === id.toString();
             }, this);
         },
 

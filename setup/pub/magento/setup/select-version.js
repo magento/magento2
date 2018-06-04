@@ -13,6 +13,7 @@ angular.module('select-version', ['ngStorage'])
         $scope.upgradeReadyForNext = false;
         $scope.upgradeProcessed = false;
         $scope.upgradeProcessError = false;
+        $scope.upgradeAlreadyLatestVersion = false;
         $scope.upgradeProcessErrorMessage = '';
         $scope.componentsReadyForNext = true;
         $scope.componentsProcessed = false;
@@ -39,6 +40,7 @@ angular.module('select-version', ['ngStorage'])
 
                     if ($scope.upgradeProcessError) {
                         $scope.upgradeProcessErrorMessage = "You're already using the latest version, there's nothing for us to do.";
+                        $scope.upgradeAlreadyLatestVersion = true;
                     } else {
                         $scope.selectedOption = [];
                         $scope.versions = [];

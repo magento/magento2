@@ -3,62 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\TestModuleGraphQlQuery\Model\Resolver;
 
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
-use Magento\GraphQl\Model\ResolverInterface;
-use Magento\TestModuleGraphQlQuery\Api\Data\ItemInterface;
-use Magento\TestModuleGraphQlQuery\Model\Entity\ItemFactory;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 class Item implements ResolverInterface
 {
     /**
-     * @var ItemFactory
+     * @var ValueFactory
      */
-    private $itemFactory;
+    private $valueFactory;
 
     /**
-     * @var PostFetchProcessorInterface[]
+     * @param ValueFactory $valueFactory
      */
-    private $postFetchProcessors;
-
-    /**
-     * @param ItemFactory $itemFactory
-     * @param PostFetchProcessorInterface[] $postFetchProcessors
-     */
-    public function __construct(ItemFactory $itemFactory, array $postFetchProcessors = [])
-    {
-        $this->itemFactory = $itemFactory;
-        $this->postFetchProcessors = $postFetchProcessors;
+    public function __construct(
+        ValueFactory $valueFactory
+    ) {
+        $this->valueFactory = $valueFactory;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function resolve(array $args, \Magento\GraphQl\Model\ResolverContextInterface $context)
-    {
+    public function resolve(
+        Field $field,
+        $context,
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) : Value {
         $id = 0;
-        /** @var \Magento\Framework\GraphQl\ArgumentInterface $arg */
-        foreach ($args as $arg) {
-            if ($arg->getName() === "id") {
-                $id = (int)$arg->getValue();
+        foreach ($args as $key => $argValue) {
+            if ($key === "id") {
+                $id = (int)$argValue;
             }
         }
-
-        /** @var ItemInterface $item */
-        $item = $this->itemFactory->create();
-        $item->setItemId($id);
-        $item->setName("itemName");
         $itemData = [
-            'item_id' => $item->getItemId(),
-            'name' => $item->getName()
+            'item_id' => $id,
+            'name' => "itemName"
         ];
 
-        foreach ($this->postFetchProcessors as $postFetchProcessor) {
-            $itemData = $postFetchProcessor->process($itemData);
-        }
+        $result = function () use ($itemData) {
+            return $itemData;
+        };
 
-        return $itemData;
+        return $this->valueFactory->create($result);
     }
 }

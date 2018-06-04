@@ -13,8 +13,7 @@
         <arguments>
             <argument name="categoryEntity" defaultValue="_defaultCategory"/>
         </arguments>
-
-        <seeInCurrentUrl url="{{AdminCategoryPage}}" stepKey="seeOnCategoryPage"/>
+        <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Category" stepKey="seeCategoryPageTitle"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{categoryEntity.name}}" stepKey="enterCategoryName"/>
@@ -31,7 +30,6 @@
         <arguments>
             <argument name="categoryEntity" defaultValue="_defaultCategory"/>
         </arguments>
-
         <amOnPage url="/{{categoryEntity.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{categoryEntity.name_lwr}}" stepKey="assertCategoryOnStorefront"/>
@@ -43,13 +41,14 @@
         <arguments>
             <argument name="categoryEntity" defaultValue="_defaultCategory"/>
         </arguments>
-        <seeInCurrentUrl url="{{AdminCategoryPage}}" stepKey="seeOnCategoryPage"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryPage"/>
+        <waitForPageLoad time="60" stepKey="waitForCategoryPageLoad"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="clickCategoryLink"/>
         <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="clickDelete"/>
         <waitForElementVisible selector="{{AdminCategoryModalSection.message}}" stepKey="waitForConfirmationModal"/>
         <see selector="{{AdminCategoryModalSection.message}}" userInput="Are you sure you want to delete this category?" stepKey="seeDeleteConfirmationMessage"/>
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="confirmDelete"/>
-        <waitForPageLoad stepKey="waitForDeleteToFinish"/>
+        <waitForPageLoad time="60" stepKey="waitForDeleteToFinish"/>
         <see selector="You deleted the category." stepKey="seeDeleteSuccess"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
         <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="dontSeeCategoryInTree"/>
@@ -57,7 +56,7 @@
 
     <!--Check that name field is required-->
     <actionGroup name="CheckCategoryNameIsRequiredField">
-        <seeInCurrentUrl url="{{AdminCategoryPage}}" stepKey="seeOnCategoryPage"/>
+        <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
         <clearField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" stepKey="makeNameFieldEmpty"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
@@ -70,7 +69,7 @@
             <argument name="Category"/>
         </arguments>
         <amOnPage url="{{AdminCategoryPage.page}}" stepKey="amOnCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(Category.Name)}}" stepKey="navigateToCreatedCategory" />
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSpinner" />

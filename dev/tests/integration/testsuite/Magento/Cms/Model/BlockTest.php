@@ -9,6 +9,7 @@ use Magento\Cms\Model\ResourceModel\Block;
 use Magento\Cms\Model\BlockFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -81,18 +82,26 @@ class BlockTest extends TestCase
      */
     public function testUpdateTime(array $blockData)
     {
+
         # Prepare and save the temporary block
-        $tempBlock = $this->blockFactory->create();
+        $beforeTimestamp = $this->objectManager->get(DateTime::class)->timestamp();
+        $tempBlock       = $this->blockFactory->create();
         $tempBlock->setData($blockData);
         $this->blockResource->save($tempBlock);
 
         # Load previously created block and compare identifiers
-        $storeId = reset($blockData['stores']);
-        $block   = $this->blockIdentifier->execute($blockData['identifier'], $storeId);
-        $date    = $this->objectManager->get(DateTime::class)->date();
-        $this->markTestIncomplete('MAGETWO-87353: \Magento\Cms\Model\BlockTest::testUpdateTime randomly fails on CI. '
-            . 'Invalid assertion. Application node timestamp may significantly differ from DB node.');
-        $this->assertEquals($date, $block->getUpdateTime());
+        $storeId        = reset($blockData['stores']);
+        $block          = $this->blockIdentifier->execute($blockData['identifier'], $storeId);
+        $afterTimestamp = $this->objectManager->get(DateTime::class)->timestamp();
+        $blockTimestamp = strtotime($block->getUpdateTime());
+
+        /*
+         * This test used to fail due to a race condition @see MAGETWO-87353
+         * The DB time would be one second older than the check time. The new check allows the DB time
+         * to be between the test start time and right before the assertion.
+         */
+        $this->assertGreaterThanOrEqual($beforeTimestamp, $blockTimestamp);
+        $this->assertLessThanOrEqual($afterTimestamp, $blockTimestamp);
     }
 
     /**

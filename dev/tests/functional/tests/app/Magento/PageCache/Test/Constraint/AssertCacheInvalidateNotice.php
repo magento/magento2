@@ -35,12 +35,12 @@ class AssertCacheInvalidateNotice extends AbstractConstraint
         $adminCache->getSystemMessageDialog()->closePopup();
         foreach ($caches as $cacheType => $cacheStatus) {
             if ($cacheStatus === 'Invalidated') {
-                \PHPUnit_Framework_Assert::assertContains(
+                \PHPUnit\Framework\Assert::assertContains(
                     $this->cacheTypes[$cacheType],
                     $adminCache->getSystemMessageBlock()->getContent()
                 );
             } else {
-                \PHPUnit_Framework_Assert::assertNotContains(
+                \PHPUnit\Framework\Assert::assertNotContains(
                     $this->cacheTypes[$cacheType],
                     $adminCache->getSystemMessageBlock()->getContent()
                 );
