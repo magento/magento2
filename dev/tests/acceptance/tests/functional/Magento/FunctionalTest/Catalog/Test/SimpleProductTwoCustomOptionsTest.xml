@@ -37,5 +37,7 @@
 
         <click stepKey="clickCustomizableOptions" selector="{{AdminCustomOptionsSection.customizableOptions}}" />
 
+
+
     </test>
 </tests>
