@@ -638,14 +638,14 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function isValidGrandTotal()
     {
-        return !($this->getGrandTotal() <= 0 && !$this->getAllowZeroGrandTotal());
+        return !($this->getGrandTotal() <= 0 && !$this->hasAllowZeroGrandTotal());
     }
 
     /**
      * @return bool
      */
 
-    public function getAllowZeroGrandTotal()
+    public function hasAllowZeroGrandTotal()
     {
         $isAllowed = $this->scopeConfig->getValue(self::XML_PATH_ALLOW_ZERO_GRANDTOTAL,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
