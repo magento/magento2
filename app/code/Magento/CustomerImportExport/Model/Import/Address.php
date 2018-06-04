@@ -260,7 +260,6 @@ class Address extends AbstractCustomer
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionColFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory
      * @param \Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory $attributesFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator
@@ -285,7 +284,6 @@ class Address extends AbstractCustomer
         \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionColFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory,
         \Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory $attributesFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator,
