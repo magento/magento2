@@ -78,9 +78,17 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
      */
     private $priceCurrency;
 
+    /**
+     * @var \Magento\Directory\Model\Currency|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $currency;
+
     protected function setUp()
     {
         $this->priceCurrency = $this->getMock(PriceCurrencyInterface::class);
+        $this->currency = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->collectionFactory =
             $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class)
             ->setMethods(['create'])
@@ -122,6 +130,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCacheKeyInfo()
     {
+        $currencyCode = 'USD';
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()->setMethods(['getId'])->getMock();
         $store->expects($this->once())->method('getId')->willReturn(1);
@@ -136,11 +145,12 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->productsList->setData('page_var_name', 'page_number');
         $this->request->expects($this->once())->method('getParam')->with('page_number')->willReturn(1);
         $this->request->expects($this->once())->method('getParams')->willReturn('request_params');
-        $this->priceCurrency->expects($this->once())->method('getCurrencySymbol')->willReturn('$');
+        $this->priceCurrency->expects($this->once())->method('getCurrency')->willReturn($this->currency);
+        $this->currency->expects($this->once())->method('getCode')->willReturn($currencyCode);
 
         $cacheKey = [
             'CATALOG_PRODUCTS_LIST_WIDGET',
-            '$',
+            $currencyCode,
             1,
             'blank',
             'context_group',
