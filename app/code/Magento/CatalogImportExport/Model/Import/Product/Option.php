@@ -1223,6 +1223,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $typeTitles = [];
             $parentCount = [];
             $childCount = [];
+            $optionsToRemove = [];
 
             foreach ($bunch as $rowNumber => $rowData) {
                 if (isset($optionId, $valueId) && empty($rowData[PRODUCT::COL_STORE_VIEW_CODE])) {
@@ -1232,14 +1233,18 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $optionId = $nextOptionId;
                 $valueId = $nextValueId;
                 $multiRowData = $this->_getMultiRowFormat($rowData);
-
+                if (!empty($rowData[self::COLUMN_SKU]) && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
+                    $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
+                    if (array_key_exists('custom_options', $rowData) && trim($rowData['custom_options']) === '') {
+                        $optionsToRemove[] = $this->_rowProductId;
+                    }
+                }
                 foreach ($multiRowData as $optionData) {
                     $combinedData = array_merge($rowData, $optionData);
 
-                    if (!$this->isRowAllowedToImport($combinedData, $rowNumber)) {
-                        continue;
-                    }
-                    if (!$this->_parseRequiredData($combinedData)) {
+                    if (!$this->isRowAllowedToImport($combinedData, $rowNumber)
+                        || !$this->_parseRequiredData($combinedData)
+                    ) {
                         continue;
                     }
                     $optionData = $this->_collectOptionMainData(
@@ -1266,36 +1271,43 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
 
-            // Save prepared custom options data !!!
-            if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
-                $this->_deleteEntities(array_keys($products));
-            }
+            $this->removeExistingOptions($products, $optionsToRemove);
 
-            if ($this->_isReadyForSaving($options, $titles, $typeValues)) {
-                if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
-                    $this->_compareOptionsWithExisting($options, $titles, $prices, $typeValues);
-                    $this->restoreOriginalOptionTypeIds($typeValues, $typePrices, $typeTitles);
-                }
-
-                $this->_saveOptions(
-                    $options
-                )->_saveTitles(
-                    $titles
-                )->_savePrices(
-                    $prices
-                )->_saveSpecificTypeValues(
-                    $typeValues
-                )->_saveSpecificTypePrices(
-                    $typePrices
-                )->_saveSpecificTypeTitles(
-                    $typeTitles
-                )->_updateProducts(
-                    $products
-                );
-            }
+            $types = [
+                'values' => $typeValues,
+                'prices' => $typePrices,
+                'titles' => $typeTitles,
+            ];
+            //Save prepared custom options data.
+            $this->savePreparedCustomOptions(
+                $products,
+                $options,
+                $titles,
+                $prices,
+                $types
+            );
         }
 
         return true;
+    }
+
+    /**
+     * Remove all existing options if import behaviour is APPEND
+     * in other case remove options for products with empty "custom_options" row only.
+     *
+     * @param array $products
+     * @param array $optionsToRemove
+     *
+     * @return void
+     */
+    private function removeExistingOptions(array $products, array $optionsToRemove): void
+    {
+        if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+            $this->_deleteEntities(array_keys($products));
+        } elseif (!empty($optionsToRemove)) {
+            // Remove options for products with empty "custom_options" row
+            $this->_deleteEntities($optionsToRemove);
+        }
     }
 
     /**
@@ -1537,9 +1549,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _parseRequiredData(array $rowData)
     {
-        if ($rowData[self::COLUMN_SKU] != '' && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
-            $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
-        } elseif (!isset($this->_rowProductId)) {
+        if ($this->_rowProductId === null) {
             return false;
         }
 
@@ -1990,5 +2000,39 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 ->getIdentifierField();
         }
         return $this->productEntityIdentifierField;
+    }
+
+    /**
+     * Save prepared custom options.
+     *
+     * @param array $products
+     * @param array $options
+     * @param array $titles
+     * @param array $prices
+     * @param array $types
+     *
+     * @return void
+     */
+    private function savePreparedCustomOptions(
+        array $products,
+        array $options,
+        array $titles,
+        array $prices,
+        array $types
+    ): void {
+        if ($this->_isReadyForSaving($options, $titles, $types['values'])) {
+            if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+                $this->_compareOptionsWithExisting($options, $titles, $prices, $types['values']);
+                $this->restoreOriginalOptionTypeIds($types['values'], $types['prices'], $types['titles']);
+            }
+
+            $this->_saveOptions($options)
+                ->_saveTitles($titles)
+                ->_savePrices($prices)
+                ->_saveSpecificTypeValues($types['values'])
+                ->_saveSpecificTypePrices($types['prices'])
+                ->_saveSpecificTypeTitles($types['titles'])
+                ->_updateProducts($products);
+        }
     }
 }
