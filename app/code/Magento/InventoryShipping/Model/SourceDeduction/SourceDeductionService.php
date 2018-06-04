@@ -98,7 +98,8 @@ class SourceDeductionService implements SourceDeductionServiceInterface
                 $stockId
             );
 
-            if (!$stockItemConfiguration->isManageStock()) {
+            if ($stockItemConfiguration === null || !$stockItemConfiguration->isManageStock()) {
+                //Product not assigned to Given Stock or we No need to Manage Stock
                 continue;
             }
 

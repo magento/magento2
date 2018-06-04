@@ -36,13 +36,6 @@ class GetProductTypesBySkus implements GetProductTypesBySkusInterface
     public function execute(array $skus)
     {
         $typesBySkus = $this->getProductTypesBySkusResource->execute($skus);
-        $notFoundedSkus = array_diff($skus, array_keys($typesBySkus));
-
-        if (!empty($notFoundedSkus)) {
-            throw new InputException(
-                __('Following products with requested skus were not found: %1', implode($notFoundedSkus, ', '))
-            );
-        }
 
         $preparedTypesBySkus = [];
         foreach ($typesBySkus as $sku => $type) {
