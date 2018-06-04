@@ -15,29 +15,27 @@
             <description value="Admin should be able to create category from the product page" />
             <severity value="AVERAGE" />
             <testCaseId value="MC-234" />
-            <group value="Catalog" />
+            <group value="skrt" />
         </annotations>
         <before>
+            <!-- Create new category in the product page with the category of AdminCreateCategoryFromProductPage -->
             <createData entity="SimpleTwo" stepKey="simpleProduct" />
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="FillNewProductCategory" stepKey="FillNewProductCategory">
+                <argument name="categoryName" value="{{_defaultCategory.name}}" />
+            </actionGroup>
         </before>
         <after>
+            <!-- Delete the created category -->
+            <actionGroup ref="DeleteMostRecentCategory" stepKey="getRidOfCreatedCategory" />
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
         </after>
-
-        <!-- Create new category in the product page with the category of AdminCreateCategoryFromProductPage -->
-        <actionGroup ref="FillNewProductCategory" stepKey="FillNewProductCategory">
-            <argument name="categoryName" value="{{_defaultCategory.name}}" />
-        </actionGroup>
 
         <!-- Check that category was created -->
         <actionGroup ref="CategoryPresent" stepKey="checkIfCategoryPresent">
             <argument name="categoryName" value="{{_defaultCategory.name}}" />
         </actionGroup>
-
-        <!-- Delete the created category -->
-        <actionGroup ref="DeleteMostRecentCategory" stepKey="getRidOfCreatedCategory" />
 
     </test>
 </tests>

@@ -174,15 +174,14 @@
             <argument name="categoryName" defaultValue="Test Category" type="string"/>
         </arguments>
 
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryFrontPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryAdminPage"/>
+        <waitForPageLoad stepKey="waitForCategoryAdminPageLoad"/>
 
-        <see userInput="{{categoryName}}" stepKey="assertCategoryOnStorefront"/>
+        <see userInput="{{categoryName}}" stepKey="assertCategoryOnAdminPage" selector="{{AdminCategorySidebarTreeSection.treeContainer}}"/>
 
         <amOnPage url="/{{categoryName}}.html" stepKey="goToCustomerFrontPage"/>
 
-        <see userInput="{{categoryName}}" stepKey="assertCategoryNameOnStorefront"/>
-        <see userInput="Compare Products" stepKey="assertCategoryPageShowsUp"/>
+        <see userInput="{{categoryName}}" stepKey="assertCategoryNameOnStorefront" selector="{{StorefrontCategoryMainSection.CategoryTitle}}"/>
 
         <waitForPageLoad stepKey="waitForCustomerCategoryPageLoad"/>
     </actionGroup>
