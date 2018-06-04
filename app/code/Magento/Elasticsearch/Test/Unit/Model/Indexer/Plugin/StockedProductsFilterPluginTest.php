@@ -48,6 +48,9 @@ class StockedProductsFilterPluginTest extends \PHPUnit\Framework\TestCase
      */
     private $plugin;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->configMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();

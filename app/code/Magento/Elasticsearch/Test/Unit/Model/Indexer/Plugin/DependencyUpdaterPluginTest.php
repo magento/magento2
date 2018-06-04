@@ -33,6 +33,9 @@ class DependencyUpdaterPluginTest extends \PHPUnit\Framework\TestCase
      */
     private $providerMock;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->configMock = $this->getMockBuilder(Config::class)
