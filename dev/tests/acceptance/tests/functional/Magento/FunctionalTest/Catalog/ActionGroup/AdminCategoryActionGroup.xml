@@ -25,6 +25,70 @@
         <seeElement selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="seeCategoryInTree"/>
     </actionGroup>
 
+    <!-- Go to create new root or sub category page -->
+    <actionGroup name="goToCreateCategoryPage">
+        <arguments>
+            <argument name="selector" defaultValue="AdminCategorySidebarActionSection.AddSubcategoryButton"/>
+        </arguments>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnAdminCategoryPage"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{selector}}" stepKey="clickOnAddCategory"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Category" stepKey="seeCategoryPageTitle"/>
+    </actionGroup>
+
+    <!-- Fill category fields -->
+    <actionGroup name="fillCategoryForm">
+        <arguments>
+            <argument name="categoryEntity" defaultValue="_defaultCategory"/>
+        </arguments>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{categoryEntity.name}}" stepKey="enterCategoryName"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{categoryEntity.name_lwr}}" stepKey="enterURLKey"/>
+    </actionGroup>
+
+    <!-- Save category form -->
+    <actionGroup name="saveCategoryForm">
+        <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
+    </actionGroup>
+
+    <!--Upload image for category -->
+    <actionGroup name="addCategoryImage">
+        <arguments>
+            <argument name="image" defaultValue="ImageUpload"/>
+        </arguments>
+        <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.uploadButton}}" stepKey="seeImageSectionIsReady"/>
+        <attachFile selector="{{AdminCategoryContentSection.uploadImageFile}}" userInput="{{image.file}}" stepKey="uploadFile"/>
+        <waitForAjaxLoad time="30" stepKey="waitForAjaxUpload"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <see selector="{{AdminCategoryContentSection.imageFileName}}" userInput="{{image.file}}" stepKey="seeImage"/>
+    </actionGroup>
+
+    <!-- Remove image from category -->
+    <actionGroup name="removeCategoryImage">
+        <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.uploadButton}}" stepKey="seeImageSectionIsReady"/>
+        <click selector="{{AdminCategoryContentSection.removeImageButton}}" stepKey="clickRemoveImage"/>
+        <waitForAjaxLoad time="30" stepKey="waitForAjaxUpload"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <dontSee selector="{{AdminCategoryContentSection.imageFileName}}" stepKey="dontSeeImage"/>
+    </actionGroup>
+
+    <actionGroup name="checkCategoryImageInAdmin">
+        <arguments>
+            <argument name="image" defaultValue="ImageUpload"/>
+        </arguments>
+        <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.uploadButton}}" stepKey="seeImageSectionIsReady"/>
+        <see selector="{{AdminCategoryContentSection.imageFileName}}" userInput="{{image.file}}" stepKey="seeImage"/>
+    </actionGroup>
+
     <!--Actions to check if a category exists on StoreFront-->
     <actionGroup name="CheckCategoryOnStorefront">
         <arguments>

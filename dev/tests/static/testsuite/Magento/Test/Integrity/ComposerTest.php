@@ -144,7 +144,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertCodingStyle($contents)
     {
-        $this->assertNotRegExp('/" :\s*["{]/', $contents, 'Coding style: no space before colon.');
+        $this->assertNotRegExp('/" :\s*["{]/', $contents, 'Coding style: there should be no space before colon.');
         $this->assertNotRegExp('/":["{]/', $contents, 'Coding style: a space is necessary after colon.');
     }
 
