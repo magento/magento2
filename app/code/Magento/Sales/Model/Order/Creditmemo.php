@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 use Magento\Sales\Model\Order\InvoiceFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Order creditmemo model
@@ -39,6 +40,11 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
 
     const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
+
+    /**
+     * Allow Zero Grandtotal for Creditmemo path
+     */
+    const XML_PATH_ALLOW_ZERO_GRANDTOTAL = 'sales/zerograndtotal_creditmemo/allow_zero_grandtotal';
 
     /**
      * Identifier for order history item
@@ -120,6 +126,11 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     private $invoiceFactory;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -136,6 +147,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param InvoiceFactory $invoiceFactory
+     * @param ScopeConfigInterface $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -151,6 +163,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         \Magento\Sales\Model\Order\Creditmemo\CommentFactory $commentFactory,
         \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
+        ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
@@ -164,6 +177,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->priceCurrency = $priceCurrency;
+        $this->scopeConfig = $scopeConfig;
         $this->invoiceFactory = $invoiceFactory ?: ObjectManager::getInstance()->get(InvoiceFactory::class);
         parent::__construct(
             $context,
@@ -625,6 +639,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function isValidGrandTotal()
     {
         return !($this->getGrandTotal() <= 0 && !$this->getAllowZeroGrandTotal());
+    }
+
+    /**
+     * @return bool
+     */
+
+    public function getAllowZeroGrandTotal()
+    {
+        $isAllowed = $this->scopeConfig->getValue(self::XML_PATH_ALLOW_ZERO_GRANDTOTAL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $isAllowed;
     }
 
     /**
