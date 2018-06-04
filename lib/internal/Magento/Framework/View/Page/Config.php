@@ -7,6 +7,7 @@
 namespace Magento\Framework\View\Page;
 
 use Magento\Framework\App;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View;
 
 /**
@@ -33,6 +34,14 @@ class Config
     const ELEMENT_TYPE_HTML = 'html';
     const ELEMENT_TYPE_HEAD = 'head';
     /**#@-*/
+
+    const META_DESCRIPTION = 'description';
+    const META_CONTENT_TYPE = 'content_type';
+    const META_MEDIA_TYPE = 'media_type';
+    const META_CHARSET = 'charset';
+    const META_TITLE = 'title';
+    const META_KEYWORDS = 'keywords';
+    const META_ROBOTS = 'robots';
 
     /**
      * Constant body attribute class
@@ -341,11 +350,54 @@ class Config
     }
 
     /**
+     * Get rendered metadata
+     * @param string $fieldName
+     * @return string
+     * @throws LocalizedException
+     */
+    public function getRenderedMetaTagValue(string $fieldName)
+    {
+        switch ($fieldName) {
+            case self::META_DESCRIPTION:
+                return $this->getDescription();
+            case self::META_CONTENT_TYPE:
+                return $this->getContentType();
+            case self::META_MEDIA_TYPE:
+                return $this->getMediaType();
+            case self::META_CHARSET:
+                return $this->getCharset();
+            case self::META_KEYWORDS:
+                return $this->getKeywords();
+            case self::META_ROBOTS:
+                return $this->getRobots();
+            case self::META_TITLE:
+                return $this->getMetaTitle();
+            default:
+                throw new LocalizedException(__('No rendered meta function for %1', $fieldName));
+        }
+    }
+
+    /**
      * @param string $title
      */
     public function setMetaTitle($title)
     {
         $this->setMetadata('title', $title);
+    }
+
+    /**
+     * Retrieve meta title
+     *
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        $this->build();
+        if (empty($this->metadata['title'])) {
+            return '';
+        }
+
+        return $this->metadata['title'];
     }
 
     /**

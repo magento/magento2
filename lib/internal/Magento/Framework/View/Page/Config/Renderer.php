@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Page\Config;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\View\Page\Config;
 
@@ -131,22 +133,15 @@ class Renderer implements RendererInterface
     /**
      * @param string $name
      * @param string $content
-     * @return mixed
+     * @return string
      */
     protected function processMetadataContent($name, $content)
     {
-        $method = 'get' . $this->string->upperCaseWords($name, '_', '');
-        if ($name === 'title') {
-            if (!$content) {
-                $content = $this->escaper->escapeHtml($this->pageConfig->$method()->get());
-            }
-            return $content;
+        try {
+            return $this->pageConfig->getRenderedMetaTagValue((string) $name);
+        } catch (LocalizedException $e) {
+            return (string) $content;
         }
-        // We skip title, because PageConfig::getTitle() refers to the tag <title> and not to meta title.
-        if (!in_array($name, ['title']) && method_exists($this->pageConfig, $method)) {
-            $content = $this->pageConfig->$method();
-        }
-        return $content;
     }
 
     /**
