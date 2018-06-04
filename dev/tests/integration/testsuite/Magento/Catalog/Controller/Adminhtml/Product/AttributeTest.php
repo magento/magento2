@@ -317,12 +317,17 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             );
 
             foreach ($expectedOptionsLabels as $optionOrderNum => $label) {
-                $this->assertEquals($label, $options[$optionOrderNum]->getLabel(), 'Label does not match expected.');
+                $this->assertEquals(
+                    $label,
+                    $options[$optionOrderNum]->getLabel(),
+                    "Label for option #{$optionOrderNum} does not match expected."
+                );
             }
         } catch (LocalizedException $e) {
             $this->fail('Test failed with exception on attribute model load: ' . $e);
         }
     }
+
     /**
      * Return translation for a string literal belonging to backend area
      *
