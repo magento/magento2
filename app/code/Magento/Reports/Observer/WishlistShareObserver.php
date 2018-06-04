@@ -6,6 +6,7 @@
 namespace Magento\Reports\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Reports\Model\Event;
 
 /**
  * Reports Event observer model
@@ -18,12 +19,19 @@ class WishlistShareObserver implements ObserverInterface
     protected $eventSaver;
 
     /**
+     * @var \Magento\Reports\Model\ReportStatus
+     */
+    private $reportStatus;
+
+    /**
      * @param EventSaver $eventSaver
      */
     public function __construct(
-        EventSaver $eventSaver
+        EventSaver $eventSaver,
+        \Magento\Reports\Model\ReportStatus $reportStatus
     ) {
         $this->eventSaver = $eventSaver;
+        $this->reportStatus = $reportStatus;
     }
 
     /**
@@ -34,8 +42,12 @@ class WishlistShareObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        if (!$this->reportStatus->isReportEnabled(Event::EVENT_WISHLIST_SHARE)) {
+            return;
+        }
+
         $this->eventSaver->save(
-            \Magento\Reports\Model\Event::EVENT_WISHLIST_SHARE,
+            Event::EVENT_WISHLIST_SHARE,
             $observer->getEvent()->getWishlist()->getId()
         );
     }
