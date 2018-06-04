@@ -48,7 +48,7 @@ class SubtractQtyFromQuotesObserverTest extends \PHPUnit\Framework\TestCase
             ['getId', 'getStatus', '__wakeup']
         );
         $this->_eventMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
-        $this->_quoteMock->expects($this->once())->method('substractProductFromQuotes')->with($productMock);
+        $this->_quoteMock->expects($this->once())->method('subtractProductFromQuotes')->with($productMock);
         $this->_model->execute($this->_observerMock);
     }
 }
