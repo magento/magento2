@@ -171,8 +171,8 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     }
 
     /**
-    +     * @return Quote
-    +     */
+     * @return Quote
+     */
     private function getQuote(): Quote
     {
         return Bootstrap::getObjectManager()->create(
