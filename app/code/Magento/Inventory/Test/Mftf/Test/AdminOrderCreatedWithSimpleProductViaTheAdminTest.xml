@@ -61,11 +61,11 @@
             <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
         </actionGroup>
 
+        <conditionalClick selector="//*[contains(@class,'admin__collapsible-title')]//span[contains(text(), 'Content')]" dependentSelector="//span[contains(@data-bind, 'label')][contains(text(),'Content')]/../../..//div[contains(@class, '_show')]" visible="false" stepKey="clickOnTheContentHeaderIfClosed1"/>
+        <fillField selector="#product_form_description" userInput="Best Product" stepKey="fillDescriptionField1"/>
+
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultQuantityField1"/>
         <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillDefaultQuantityField2"/>
-
-        <click selector="//*[@class='admin__collapsible-title']//span[contains(text(), 'Content')]" stepKey="clickOnContent1"/>
-        <fillField selector="#product_form_description" userInput="Best Product" stepKey="fillDescriptionField1"/>
 
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose2"/>
 
