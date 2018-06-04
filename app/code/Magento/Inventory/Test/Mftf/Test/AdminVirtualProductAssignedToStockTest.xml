@@ -47,7 +47,12 @@
         <fillField userInput="{{VirtualMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSku1"/>
         <fillField userInput="{{VirtualMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice1"/>
         <waitForPageLoad time="5" stepKey="waitForPageLoad5"/>
+
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createPreReqCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
+
+        <conditionalClick selector="//*[contains(@class,'admin__collapsible-title')]//span[contains(text(), 'Content')]" dependentSelector="//span[contains(@data-bind, 'label')][contains(text(),'Content')]/../../..//div[contains(@class, '_show')]" visible="false" stepKey="clickOnTheContentHeaderIfClosed1"/>
+        <waitForPageLoad stepKey="waitForPageLoad8"/>
+        <fillField selector="#product_form_description" userInput="Best Product" stepKey="fillDescriptionField1"/>
 
         <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
             <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
@@ -55,10 +60,6 @@
         </actionGroup>
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillSourceQuantityField1"/>
-
-        <click selector="//*[@class='admin__collapsible-title']//span[contains(text(), 'Content')]//.." stepKey="clickOnContent1"/>
-        <waitForPageLoad stepKey="waitForPageLoad8"/>
-        <fillField selector="#product_form_description" userInput="Best Product" stepKey="fillDescriptionField1"/>
 
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage1"/>
