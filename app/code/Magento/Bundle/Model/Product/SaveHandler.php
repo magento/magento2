@@ -139,14 +139,12 @@ class SaveHandler implements ExtensionInterface
     {
         $optionIds = [];
 
-        if (empty($options)) {
-            return $optionIds;
-        }
-
-        /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
-        foreach ($options as $option) {
-            if ($option->getOptionId()) {
-                $optionIds[] = $option->getOptionId();
+        if (!empty($options)) {
+            /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
+            foreach ($options as $option) {
+                if ($option->getOptionId()) {
+                    $optionIds[] = $option->getOptionId();
+                }
             }
         }
 

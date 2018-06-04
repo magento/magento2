@@ -46,7 +46,10 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
     }
 
-    public function testOptionTitlesOnDifferentStores()
+    /**
+     * @return void
+     */
+    public function testOptionTitlesOnDifferentStores(): void
     {
         /**
          * @var \Magento\Bundle\Model\Product\OptionList $optionList
