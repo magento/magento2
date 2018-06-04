@@ -64,7 +64,8 @@ class WebsiteDataProvider implements DimensionProviderInterface
             $this->websitesDataIterator = \SplFixedArray::fromArray(
                 $this->collectionFactory->create()
                     ->addFieldToFilter('code', ['neq' => Store::ADMIN_CODE])
-                    ->getAllIds()
+                    ->getAllIds(),
+                false
             );
         }
 

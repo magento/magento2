@@ -1128,4 +1128,11 @@
             <argument name="connectionName" xsi:type="string">indexer</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\SimpleProductPrice">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="customOptionPriceModifier" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CustomOptionPriceModifier</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

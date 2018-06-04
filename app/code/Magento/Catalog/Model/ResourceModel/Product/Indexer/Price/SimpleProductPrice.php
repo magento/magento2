@@ -75,6 +75,9 @@ class SimpleProductPrice implements DimensionalIndexerInterface
      */
     public function executeByDimension(array $dimensions, \Traversable $entityIds = null)
     {
+        // TODO: hot fix for rows reindex
+        $this->tableMaintainer->createMainTmpTable($dimensions);
+
         $temporaryPriceTable = $this->indexTableStructureFactory->create([
             'tableName' => $this->tableMaintainer->getMainTmpTable($dimensions),
             'entityField' => 'entity_id',

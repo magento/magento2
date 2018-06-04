@@ -354,7 +354,7 @@ abstract class AbstractAction
         foreach ($productsTypes as $productType => $entityIds) {
             $indexer = $this->_getIndexer($productType);
             if ($indexer instanceof DimensionalIndexerInterface) {
-                $indexer->executeByDimension([], \SplFixedArray::fromArray($entityIds));
+                $indexer->executeByDimension([], \SplFixedArray::fromArray($entityIds, false));
             } else {
                 $indexer->reindexEntity($entityIds);
             }

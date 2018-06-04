@@ -40,7 +40,7 @@ class TableMaintainer
     /**
      * Catalog tmp category index table name
      */
-    private $tmpTableSuffix = '_tmp';
+    private $tmpTableSuffix = '_temp'; //TODO: align with \Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy::TEMP_SUFFIX
 
     /**
      * Catalog tmp category index table name
@@ -150,7 +150,7 @@ class TableMaintainer
      */
     private function getArrayKeyForTmpTable(array $dimensions): string
     {
-        $key = 'tmp';
+        $key = 'temp';
         foreach ($dimensions as $dimension) {
             $key .= $dimension->getName() . '_' . $dimension->getValue();
         }

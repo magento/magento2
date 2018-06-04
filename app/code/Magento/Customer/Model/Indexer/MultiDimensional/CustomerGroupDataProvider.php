@@ -57,7 +57,8 @@ class CustomerGroupDataProvider implements DimensionProviderInterface
     {
         if ($this->customerGroupsDataIterator === null) {
             $this->customerGroupsDataIterator = \SplFixedArray::fromArray(
-                $this->collectionFactory->create()->getAllIds()
+                $this->collectionFactory->create()->getAllIds(),
+                false
             );
         }
 

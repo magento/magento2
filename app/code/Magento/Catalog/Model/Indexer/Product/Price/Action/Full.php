@@ -276,7 +276,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             // TODO: handle inside index model and move index fulfilment into index model
             $this->_prepareTierPriceIndex($entityIds);
 
-            $priceIndexer->executeByDimension($dimensions, \SplFixedArray::fromArray($entityIds));
+            $priceIndexer->executeByDimension($dimensions, \SplFixedArray::fromArray($entityIds, false));
 
             // Sync data from temp table to index table
             $this->_insertFromTable(

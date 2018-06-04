@@ -169,7 +169,11 @@ class BaseFinalPrice
         $select->where(sprintf("e.type_id = '%s'", $productType));
 
         if ($entityIds !== null) {
-            $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
+            if (count($entityIds) > 1) {
+                $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
+            } else {
+                $select->where('e.entity_id = ?', $entityIds);
+            }
         }
 
         /**
