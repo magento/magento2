@@ -15,7 +15,7 @@
             <description value="Admin should be able to create category from the product page" />
             <severity value="AVERAGE" />
             <testCaseId value="MC-234" />
-            <group value="skrt" />
+            <group value="Catalog" />
         </annotations>
         <before>
             <!-- Create new category in the product page with the category of AdminCreateCategoryFromProductPage -->
