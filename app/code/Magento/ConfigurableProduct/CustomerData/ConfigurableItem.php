@@ -63,7 +63,11 @@ class ConfigurableItem extends DefaultItem
         );
 
         $product = $config == ThumbnailSource::OPTION_USE_PARENT_IMAGE
-            || (!$this->getChildProduct()->getThumbnail() || $this->getChildProduct()->getThumbnail() == 'no_selection')
+            || (
+                !$this->getChildProduct() ||
+                !$this->getChildProduct()->getThumbnail() ||
+                $this->getChildProduct()->getThumbnail() == 'no_selection'
+            )
             ? $this->getProduct()
             : $this->getChildProduct();
 
