@@ -12,12 +12,11 @@
         <annotations>
             <features value="SalesRule"/>
             <stories value="Create cart price rule"/>
-            <title value=""/>
-            <description value=""/>
+            <title value="Customer should only see cart price rule discount if condition shipping state/province"/>
+            <description value="Customer should only see cart price rule discount if condition shipping state/province"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-239"/>
             <group value="SalesRule"/>
-            <group value="banana"/>
         </annotations>
 
         <before>
