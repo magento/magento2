@@ -18,5 +18,6 @@
         <element name="shippingHeading" type="button" selector="#block-shipping-heading"/>
         <element name="postcode" type="input" selector="input[name='postcode']"/>
         <element name="stateProvince" type="select" selector="select[name='region_id']"/>
+        <element name="country" type="select" selector="select[name='country_id']"/>
     </section>
 </sections>
