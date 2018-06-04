@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * Test class for \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage
+ */
 namespace Magento\CustomerImportExport\Test\Unit\Model\ResourceModel\Import\Customer;
 
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
@@ -18,7 +22,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Storage
      */
-    private $_model;
+    private $model;
 
     /**
      * @var CollectionByPagesIterator|\PHPUnit_Framework_MockObject_MockObject
@@ -29,11 +33,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      * @var Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionMock;
-
-    /**
-     * @var string
-     */
-    protected $_entityTable = 'test';
 
     protected function setUp()
     {
@@ -65,7 +64,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->method('getSelect')
             ->willReturn($selectMock);
 
-        $this->_model = new Storage(
+        $this->model = new Storage(
             $collectionFactoryMock,
             $iteratorFactoryMock,
             []
@@ -74,7 +73,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_model);
+        unset($this->model);
     }
 
     public function testAddCustomerByArray()
@@ -82,9 +81,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $propertyName = '_customerIds';
         $customer = $this->_addCustomerToStorage();
 
-        $this->assertAttributeCount(1, $propertyName, $this->_model);
+        $this->assertAttributeCount(1, $propertyName, $this->model);
         $expectedCustomerData = [$customer['website_id'] => $customer['entity_id']];
-        $this->assertAttributeContains($expectedCustomerData, $propertyName, $this->_model);
+        $this->assertAttributeContains($expectedCustomerData, $propertyName, $this->model);
     }
 
     public function testGetCustomerId()
@@ -117,10 +116,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             );
         $this->assertEquals(
             $existingId,
-            $this->_model->getCustomerId($existingEmail, $existingWebsiteId)
+            $this->model->getCustomerId($existingEmail, $existingWebsiteId)
         );
         $this->assertFalse(
-            $this->_model->getCustomerId(
+            $this->model->getCustomerId(
                 $nonExistingEmail,
                 $nonExistingWebsiteId
             )
@@ -133,7 +132,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected function _addCustomerToStorage()
     {
         $customer = ['entity_id' => 1, 'website_id' => 1, 'email' => 'test@test.com'];
-        $this->_model->addCustomerByArray($customer);
+        $this->model->addCustomerByArray($customer);
 
         return $customer;
     }

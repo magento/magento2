@@ -261,8 +261,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(
                 function ($email, $websiteId) {
                     foreach ($this->_customers as $customerData) {
-                        if ($customerData['email'] == $email
-                            && $customerData['website_id'] == $websiteId
+                        if ($customerData['email'] === $email
+                            && $customerData['website_id'] === $websiteId
                         ) {
                             return $customerData['entity_id'];
                         }
@@ -334,7 +334,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * Create mock for custom behavior test
      *
      * @return Address|\PHPUnit_Framework_MockObject_MockObject
-     * @throws \ReflectionException
      */
     protected function _getModelMockForTestImportDataWithCustomBehaviour()
     {

@@ -5,6 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
+use Magento\CustomerImportExport\Test\Unit\Model\Import\CustomerCompositeTest;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
@@ -15,11 +16,17 @@ use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
 class Storage
 {
     /**
+     *  Flag to not load collection more than one time
+     *
+     * @var bool
      * @deprecated
      */
     protected $_isCollectionLoaded = false;
 
     /**
+     * Customer collection
+     *
+     * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
      * @deprecated
      */
     protected $_customerCollection;
@@ -78,8 +85,9 @@ class Storage
     }
 
     /**
-     * @return void
+     * Load needed data from customer collection
      *
+     * @return void
      * @deprecated
      * @see prepareCustomers
      */
@@ -104,7 +112,6 @@ class Storage
      * @param array[] $customerIdentifiers With keys "email" and "website_id".
      *
      * @return CustomerCollection
-     * @throws \Zend_Db_Select_Exception
      */
     private function prepareCollection(array $customerIdentifiers): CustomerCollection
     {
@@ -132,7 +139,6 @@ class Storage
      * @param array $customerIdentifiers With keys "email" and "website_id".
      *
      * @return void
-     * @throws \Zend_Db_Select_Exception
      */
     private function loadCustomersData(array $customerIdentifiers)
     {
@@ -147,7 +153,7 @@ class Storage
      * @param array $customer
      * @return $this
      */
-    public function addCustomerByArray(array $customer): self
+    public function addCustomerByArray(array $customer): Storage
     {
         $email = strtolower(trim($customer['email']));
         if (!isset($this->_customerIds[$email])) {
@@ -165,7 +171,7 @@ class Storage
      * @param DataObject $customer
      * @return $this
      */
-    public function addCustomer(DataObject $customer): self
+    public function addCustomer(DataObject $customer): Storage
     {
         $customerData = $customer->toArray();
         if (!isset($customerData['entity_id']) && isset($customer['id'])) {
@@ -182,7 +188,6 @@ class Storage
      * @param string $email
      * @param int $websiteId
      * @return bool|int
-     * @throws \Zend_Db_Select_Exception
      */
     public function getCustomerId(string $email, int $websiteId)
     {
@@ -205,9 +210,8 @@ class Storage
      *
      * @param array[] $customersToFind With keys: email, website_id.
      * @return void
-     * @throws \Zend_Db_Select_Exception
      */
-    public function prepareCustomers(array $customersToFind)
+    public function prepareCustomers(array $customersToFind): void
     {
         $identifiers = [];
         foreach ($customersToFind as $customerToFind) {
@@ -221,7 +225,7 @@ class Storage
                 $uniqueKey = $email .'_' .$websiteId;
                 $identifiers[$uniqueKey] = [
                     'email' => $email,
-                    'website_id' => $websiteId
+                    'website_id' => $websiteId,
                 ];
                 //Recording that we've searched for a customer.
                 if (!array_key_exists($email, $this->_customerIds)) {

@@ -67,13 +67,11 @@ class Storage
      *
      * @return void
      */
-    private function addRecord(string $customerId, string $addressId)
+    private function addRecord(string $customerId, string $addressId): void
     {
         if (!$customerId || !$addressId) {
             return;
         }
-        $customerId = (string)$customerId;
-        $addressId = (string)$addressId;
         if (!array_key_exists($customerId, $this->addresses)) {
             $this->addresses[$customerId] = [];
         }
@@ -89,9 +87,8 @@ class Storage
      * @param string[] $customerIds
      *
      * @return void
-     * @throws \Zend_Db_Select_Exception
      */
-    private function loadAddresses(array $customerIds)
+    private function loadAddresses(array $customerIds): void
     {
         /** @var AddressCollection $collection */
         $collection = $this->addressCollectionFactory->create();
@@ -122,7 +119,7 @@ class Storage
     {
         return array_key_exists($forCustomerId, $this->addresses)
             && in_array(
-                (string)$addressId,
+                $addressId,
                 $this->addresses[$forCustomerId],
                 true
             );
@@ -133,9 +130,8 @@ class Storage
      *
      * @param string[] $forCustomersIds
      * @return void
-     * @throws \Zend_Db_Select_Exception
      */
-    public function prepareAddresses(array $forCustomersIds)
+    public function prepareAddresses(array $forCustomersIds): void
     {
         if (!$forCustomersIds) {
             return;

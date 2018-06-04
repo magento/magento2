@@ -300,7 +300,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         foreach ($source as $row) {
             $rows[] = [
                 Address::COLUMN_EMAIL => $row[Customer::COLUMN_EMAIL],
-                Address::COLUMN_WEBSITE => $row[Customer::COLUMN_WEBSITE]
+                Address::COLUMN_WEBSITE => $row[Customer::COLUMN_WEBSITE],
             ];
         }
         $source->rewind();

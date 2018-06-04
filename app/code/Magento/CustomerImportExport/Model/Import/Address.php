@@ -169,6 +169,9 @@ class Address extends AbstractCustomer
     protected $_attributeCollection;
 
     /**
+     * Collection of existent addresses
+     *
+     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
      * @deprecated
      */
     protected $_addressCollection;
@@ -227,7 +230,7 @@ class Address extends AbstractCustomer
     protected $postcodeValidator;
 
     /**
-     * @deprecated
+     * @var CountryWithWebsitesSource
      */
     private $countryWithWebsites;
 
@@ -319,9 +322,6 @@ class Address extends AbstractCustomer
             $data
         );
 
-        $this->_addressCollection = isset(
-            $data['address_collection']
-        ) ? $data['address_collection'] : $addressColFactory->create();
         $this->_entityTable = isset(
             $data['entity_table']
         ) ? $data['entity_table'] : $addressFactory->create()->getResource()->getEntityTable();
@@ -459,18 +459,17 @@ class Address extends AbstractCustomer
      *
      * @return void
      */
-    public function prepareCustomerData($rows)
+    public function prepareCustomerData($rows): void
     {
         $customersPresent = [];
         foreach ($rows as $rowData) {
-            $email = isset($rowData[static::COLUMN_EMAIL])
-                ? $rowData[static::COLUMN_EMAIL] : null;
+            $email = $rowData[static::COLUMN_EMAIL] ?? null;
             $websiteId = isset($rowData[static::COLUMN_WEBSITE])
                 ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
             if ($email && $websiteId !== false) {
                 $customersPresent[] = [
                     'email' => $email,
-                    'website_id' => $websiteId
+                    'website_id' => $websiteId,
                 ];
             }
         }
@@ -917,7 +916,7 @@ class Address extends AbstractCustomer
                 if (!strlen($addressId)) {
                     $this->addRowError(self::ERROR_ADDRESS_ID_IS_EMPTY, $rowNumber);
                 } elseif (!$this->addressStorage->doesExist(
-                    $addressId,
+                    (string)$addressId,
                     (string)$customerId
                 )) {
                     $this->addRowError(self::ERROR_ADDRESS_NOT_FOUND, $rowNumber);

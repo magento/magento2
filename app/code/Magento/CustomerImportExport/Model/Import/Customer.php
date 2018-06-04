@@ -347,26 +347,23 @@ class Customer extends AbstractCustomer
     }
 
     /**
-     * Pre-loading customers for existing customers checks in order
-     * to perform mass validation/import efficiently.
+     * Prepare customers data for existing customers checks to perform mass validation/import efficiently.
      *
      * @param array|AbstractSource $rows
-     * and website code.
      *
      * @return void
      */
-    public function prepareCustomerData($rows)
+    public function prepareCustomerData($rows): void
     {
         $customersPresent = [];
         foreach ($rows as $rowData) {
-            $email = isset($rowData[static::COLUMN_EMAIL])
-                ? $rowData[static::COLUMN_EMAIL] : null;
+            $email = $rowData[static::COLUMN_EMAIL] ?? null;
             $websiteId = isset($rowData[static::COLUMN_WEBSITE])
                 ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
             if ($email && $websiteId !== false) {
                 $customersPresent[] = [
                     'email' => $email,
-                    'website_id' => $websiteId
+                    'website_id' => $websiteId,
                 ];
             }
         }

@@ -91,7 +91,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
                     '_saveCustomerAttributes',
                     '_deleteCustomerEntities',
                     'getErrorAggregator',
-                    'getCustomerStorage'
+                    'getCustomerStorage',
                 ]
             )
             ->getMock();
