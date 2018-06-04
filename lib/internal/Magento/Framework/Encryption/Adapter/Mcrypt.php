@@ -68,7 +68,7 @@ class Mcrypt implements EncryptionAdapterInterface
                     )
                 );
             }
-            $this->_initVector = $initVector;
+            $this->initVector = $initVector;
         } catch (\Exception $e) {
             // @codingStandardIgnoreLine
             @mcrypt_module_close($this->handle);
