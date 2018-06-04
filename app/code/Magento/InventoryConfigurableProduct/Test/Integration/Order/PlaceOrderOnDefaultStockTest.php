@@ -15,7 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use PHPUnit\Framework\TestCase;
@@ -88,7 +88,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
     public function testPlaceOrderWithInStockProduct()
@@ -110,7 +109,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
     public function testPlaceOrderWithOutOffStockProduct()
@@ -130,7 +128,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/item_options/backorders 1
      */
@@ -153,7 +150,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/item_options/manage_stock 0
      */
@@ -175,18 +171,21 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     }
 
     /**
-     * @return CartInterface
-     */
-    private function getQuote(): CartInterface
+    +     * @return Quote
+    +     */
+    private function getQuote(): Quote
     {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('reserved_order_id', 'test_order_1')
-            ->create();
-        /** @var CartInterface $cart */
-        $cart = current($this->cartRepository->getList($searchCriteria)->getItems());
-        $cart->setStoreId(1);
-
-        return $cart;
+        return Bootstrap::getObjectManager()->create(
+            Quote::class,
+            [
+                'data' => [
+                    'store_id' => 1,
+                    'is_active' => 0,
+                    'is_multi_shipping' => 0,
+                    'id' => 1
+                ]
+            ]
+        );
     }
 
     /**
@@ -220,10 +219,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
         $this->orderRepository->delete($this->orderRepository->get($orderId));
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', false);
-    }
-
-    protected function tearDown()
-    {
         $this->cleanupReservations->execute();
     }
 }
