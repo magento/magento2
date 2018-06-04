@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model;
 
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Config\Model\Config\Structure\Element\Field;
+
 /**
  * Backend config model
  * Used to save configuration
@@ -126,9 +129,9 @@ class Config extends \Magento\Framework\DataObject
 
         $oldConfig = $this->_getConfig(true);
 
-        /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
+        /** @var \Magento\Framework\DB\Transaction $deleteTransaction */
         $deleteTransaction = $this->_transactionFactory->create();
-        /* @var $saveTransaction \Magento\Framework\DB\Transaction */
+        /** @var \Magento\Framework\DB\Transaction $saveTransaction */
         $saveTransaction = $this->_transactionFactory->create();
 
         $changedPaths = [];
@@ -147,17 +150,8 @@ class Config extends \Magento\Framework\DataObject
                 $deleteTransaction
             );
 
-            if (isset($groupData['fields'])) {
-                $groupPath = $sectionId . '/' . $groupId;
-                foreach ($groupData['fields'] as $fieldId => $fieldData) {
-                    /** @var $field \Magento\Config\Model\Config\Structure\Element\Field */
-                    $field = $this->_configStructure->getElement($groupPath . '/' . $fieldId);
-                    $path = $field->getGroupPath() . '/' . $fieldId;
-                    if ($this->isValueChanged($oldConfig, $path, $fieldData)) {
-                        $changedPaths[] = $path;
-                    }
-                }
-            }
+            $groupChangedPaths = $this->getChangedPaths($sectionId, $groupId, $groupData, $oldConfig, $extraOldGroups);
+            $changedPaths = \array_merge($changedPaths, $groupChangedPaths);
         }
 
         try {
@@ -186,6 +180,79 @@ class Config extends \Magento\Framework\DataObject
     }
 
     /**
+     * Map field name if they were cloned
+     *
+     * @param Group $group
+     * @param string $fieldId
+     * @return string
+     */
+    private function getOriginalFieldId(Group $group, string $fieldId): string
+    {
+        if ($group->shouldCloneFields()) {
+            $cloneModel = $group->getCloneModel();
+
+            /** @var \Magento\Config\Model\Config\Structure\Element\Field $field */
+            foreach ($group->getChildren() as $field) {
+                foreach ($cloneModel->getPrefixes() as $prefix) {
+                    if ($prefix['field'] . $field->getId() === $fieldId) {
+                        $fieldId = $field->getId();
+                        break(2);
+                    }
+                }
+            }
+        }
+
+        return $fieldId;
+    }
+
+    /**
+     * Get field object
+     *
+     * @param string $sectionId
+     * @param string $groupId
+     * @param string $fieldId
+     * @return Field
+     */
+    private function getField(string $sectionId, string $groupId, string $fieldId): Field
+    {
+        /** @var \Magento\Config\Model\Config\Structure\Element\Group $group */
+        $group = $this->_configStructure->getElement($sectionId . '/' . $groupId);
+        $fieldPath = $group->getPath() . '/' . $this->getOriginalFieldId($group, $fieldId);
+        $field = $this->_configStructure->getElement($fieldPath);
+
+        return $field;
+    }
+
+    /**
+     * Get field path
+     *
+     * @param Field $field
+     * @param array &$oldConfig Need for compatibility with _processGroup()
+     * @param array &$extraOldGroups Need for compatibility with _processGroup()
+     * @return string
+     */
+    private function getFieldPath(Field $field, array &$oldConfig, array &$extraOldGroups): string
+    {
+        $path = $field->getGroupPath() . '/' . $field->getId();
+
+        /**
+         * Look for custom defined field path
+         */
+        $configPath = $field->getConfigPath();
+        if ($configPath && strrpos($configPath, '/') > 0) {
+            // Extend old data with specified section group
+            $configGroupPath = substr($configPath, 0, strrpos($configPath, '/'));
+            if (!isset($extraOldGroups[$configGroupPath])) {
+                $oldConfig = $this->extendConfig($configGroupPath, true, $oldConfig);
+                $extraOldGroups[$configGroupPath] = true;
+            }
+            $path = $configPath;
+        }
+
+        return $path;
+    }
+
+    /**
      * Check is config value changed
      *
      * @param array $oldConfig
@@ -193,7 +260,7 @@ class Config extends \Magento\Framework\DataObject
      * @param array $fieldData
      * @return bool
      */
-    private function isValueChanged(array $oldConfig, string $path, array $fieldData)
+    private function isValueChanged(array $oldConfig, string $path, array $fieldData): bool
     {
         if (isset($oldConfig[$path]['value'])) {
             $result = !isset($fieldData['value']) || $oldConfig[$path]['value'] !== $fieldData['value'];
@@ -202,6 +269,52 @@ class Config extends \Magento\Framework\DataObject
         }
 
         return $result;
+    }
+
+    /**
+     * Get changed paths
+     *
+     * @param string $sectionId
+     * @param string $groupId
+     * @param array $groupData
+     * @param array &$oldConfig
+     * @param array &$extraOldGroups
+     * @return array
+     */
+    private function getChangedPaths(
+        string $sectionId,
+        string $groupId,
+        array $groupData,
+        array &$oldConfig,
+        array &$extraOldGroups
+    ): array {
+        $changedPaths = [];
+
+        if (isset($groupData['fields'])) {
+            foreach ($groupData['fields'] as $fieldId => $fieldData) {
+                $field = $this->getField($sectionId, $groupId, $fieldId);
+                $path = $this->getFieldPath($field, $oldConfig, $extraOldGroups);
+                if ($this->isValueChanged($oldConfig, $path, $fieldData)) {
+                    $changedPaths[] = $path;
+                }
+            }
+        }
+
+        if (isset($groupData['groups'])) {
+            $subSectionId = $sectionId . '/' . $groupId;
+            foreach ($groupData['groups'] as $subGroupId => $subGroupData) {
+                $subGroupChangedPaths = $this->getChangedPaths(
+                    $subSectionId,
+                    $subGroupId,
+                    $subGroupData,
+                    $oldConfig,
+                    $extraOldGroups
+                );
+                $changedPaths = \array_merge($changedPaths, $subGroupChangedPaths);
+            }
+        }
+
+        return $changedPaths;
     }
 
     /**
@@ -216,9 +329,6 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Framework\DB\Transaction $saveTransaction
      * @param \Magento\Framework\DB\Transaction $deleteTransaction
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _processGroup(
         $groupId,
@@ -231,92 +341,42 @@ class Config extends \Magento\Framework\DataObject
         \Magento\Framework\DB\Transaction $deleteTransaction
     ) {
         $groupPath = $sectionPath . '/' . $groupId;
-        $scope = $this->getScope();
-        $scopeId = $this->getScopeId();
-        $scopeCode = $this->getScopeCode();
-        /**
-         *
-         * Map field names if they were cloned
-         */
-        /** @var $group \Magento\Config\Model\Config\Structure\Element\Group */
-        $group = $this->_configStructure->getElement($groupPath);
 
-        // set value for group field entry by fieldname
-        // use extra memory
-        $fieldsetData = [];
         if (isset($groupData['fields'])) {
-            if ($group->shouldCloneFields()) {
-                $cloneModel = $group->getCloneModel();
-                $mappedFields = [];
+            /** @var \Magento\Config\Model\Config\Structure\Element\Group $group */
+            $group = $this->_configStructure->getElement($groupPath);
 
-                /** @var $field \Magento\Config\Model\Config\Structure\Element\Field */
-                foreach ($group->getChildren() as $field) {
-                    foreach ($cloneModel->getPrefixes() as $prefix) {
-                        $mappedFields[$prefix['field'] . $field->getId()] = $field->getId();
-                    }
-                }
-            }
+            // set value for group field entry by fieldname
+            // use extra memory
+            $fieldsetData = [];
             foreach ($groupData['fields'] as $fieldId => $fieldData) {
-                $fieldsetData[$fieldId] = is_array(
-                    $fieldData
-                ) && isset(
-                    $fieldData['value']
-                ) ? $fieldData['value'] : null;
-            }
-
-            foreach ($groupData['fields'] as $fieldId => $fieldData) {
-                $originalFieldId = $fieldId;
-                if ($group->shouldCloneFields() && isset($mappedFields[$fieldId])) {
-                    $originalFieldId = $mappedFields[$fieldId];
-                }
-                /** @var $field \Magento\Config\Model\Config\Structure\Element\Field */
-                $field = $this->_configStructure->getElement($groupPath . '/' . $originalFieldId);
-
+                $field = $this->getField($sectionPath, $groupId, $fieldId);
                 /** @var \Magento\Framework\App\Config\ValueInterface $backendModel */
-                $backendModel = $field->hasBackendModel() ? $field
-                    ->getBackendModel() : $this
-                    ->_configValueFactory
-                    ->create();
+                $backendModel = $field->hasBackendModel()
+                    ? $field->getBackendModel()
+                    : $this->_configValueFactory->create();
 
+                if (!isset($fieldData['value'])) {
+                    $fieldData['value'] = null;
+                }
+                $fieldsetData[$fieldId] = $fieldData['value'];
                 $data = [
                     'field' => $fieldId,
                     'groups' => $groups,
                     'group_id' => $group->getId(),
-                    'scope' => $scope,
-                    'scope_id' => $scopeId,
-                    'scope_code' => $scopeCode,
+                    'scope' => $this->getScope(),
+                    'scope_id' => $this->getScopeId(),
+                    'scope_code' => $this->getScopeCode(),
                     'field_config' => $field->getData(),
-                    'fieldset_data' => $fieldsetData
+                    'fieldset_data' => $fieldsetData,
                 ];
                 $backendModel->addData($data);
-
                 $this->_checkSingleStoreMode($field, $backendModel);
 
-                if (false == isset($fieldData['value'])) {
-                    $fieldData['value'] = null;
-                }
-
-                $path = $field->getGroupPath() . '/' . $fieldId;
-                /**
-                 * Look for custom defined field path
-                 */
-                if ($field && $field->getConfigPath()) {
-                    $configPath = $field->getConfigPath();
-                    if (!empty($configPath) && strrpos($configPath, '/') > 0) {
-                        // Extend old data with specified section group
-                        $configGroupPath = substr($configPath, 0, strrpos($configPath, '/'));
-                        if (!isset($extraOldGroups[$configGroupPath])) {
-                            $oldConfig = $this->extendConfig($configGroupPath, true, $oldConfig);
-                            $extraOldGroups[$configGroupPath] = true;
-                        }
-                        $path = $configPath;
-                    }
-                }
-
-                $inherit = !empty($fieldData['inherit']);
-
+                $path = $this->getFieldPath($field, $extraOldGroups, $oldConfig);
                 $backendModel->setPath($path)->setValue($fieldData['value']);
 
+                $inherit = !empty($fieldData['inherit']);
                 if (isset($oldConfig[$path])) {
                     $backendModel->setConfigId($oldConfig[$path]['config_id']);
 

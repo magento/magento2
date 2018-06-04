@@ -162,7 +162,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->method(
             'dispatch'
         )->with(
-            $this->equalTo('admin_system_config_changed_section_'),
+            $this->equalTo('admin_system_config_changed_section_section'),
             $this->arrayHasKey('website')
         );
 
@@ -171,30 +171,59 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->method(
             'dispatch'
         )->with(
-            $this->equalTo('admin_system_config_changed_section_'),
+            $this->equalTo('admin_system_config_changed_section_section'),
             $this->arrayHasKey('store')
         );
 
         $group = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
+        $group->method('getPath')->willReturn('section/1');
 
         $field = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
+        $field->method('getGroupPath')->willReturn('section/1');
+        $field->method('getId')->willReturn('key');
 
         $this->_configStructure->expects(
             $this->at(0)
         )->method(
             'getElement'
         )->with(
-            '/1'
+            'section/1'
         )->will(
             $this->returnValue($group)
         );
-
         $this->_configStructure->expects(
             $this->at(1)
         )->method(
             'getElement'
         )->with(
-            '/1/key'
+            'section/1'
+        )->will(
+            $this->returnValue($group)
+        );
+        $this->_configStructure->expects(
+            $this->at(2)
+        )->method(
+            'getElement'
+        )->with(
+            'section/1/key'
+        )->will(
+            $this->returnValue($field)
+        );
+        $this->_configStructure->expects(
+            $this->at(3)
+        )->method(
+            'getElement'
+        )->with(
+            'section/1'
+        )->will(
+            $this->returnValue($group)
+        );
+        $this->_configStructure->expects(
+            $this->at(4)
+        )->method(
+            'getElement'
+        )->with(
+            'section/1/key'
         )->will(
             $this->returnValue($field)
         );
@@ -206,7 +235,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->_storeManager->expects($this->any())->method('isSingleStoreMode')->will($this->returnValue(true));
 
         $this->_model->setWebsite('website');
-
+        $this->_model->setSection('section');
         $this->_model->setGroups(['1' => ['fields' => ['key' => ['data']]]]);
 
         $backendModel = $this->createPartialMock(
@@ -234,7 +263,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->method(
             'setPath'
         )->with(
-            '/key'
+            'section/1/key'
         )->will(
             $this->returnValue($backendModel)
         );
