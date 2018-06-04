@@ -5,8 +5,6 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Framework\Serialize\SerializerInterface;
-
 class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 {
     /**
@@ -55,11 +53,20 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     private $serializer;
 
     /**
+     * Store Config
+     *
+     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
+     */
+    protected $config;
+
+    /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Store\Model\StoreResolver\ReaderList $readerList
+     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param string $runMode
      * @param null $scopeCode
      */
@@ -69,6 +76,8 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Store\Model\StoreResolver\ReaderList $readerList,
+        \Magento\Framework\App\Config\ReinitableConfigInterface $config,
+        \Magento\Framework\Serialize\SerializerInterface $serializer,
         $runMode = ScopeInterface::SCOPE_STORE,
         $scopeCode = null
     ) {
@@ -77,6 +86,8 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         $this->request = $request;
         $this->cache = $cache;
         $this->readerList = $readerList;
+        $this->config = $config;
+        $this->serializer = $serializer;
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
         $this->scopeCode = $scopeCode;
     }
@@ -88,27 +99,87 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     {
         list($stores, $defaultStoreId) = $this->getStoresData();
 
-        $storeCode = $this->request->getParam(self::PARAM_NAME, $this->storeCookieManager->getStoreCodeFromCookie());
+        $storeCode = $this->getStoreCodeFromUrl();
+        if (!$storeCode) {
+            $storeCode = $this->request->getParam(
+                self::PARAM_NAME,
+                $this->storeCookieManager->getStoreCodeFromCookie()
+            );
+        }
+
         if (is_array($storeCode)) {
             if (!isset($storeCode['_data']['code'])) {
                 throw new \InvalidArgumentException(__('Invalid store parameter.'));
             }
             $storeCode = $storeCode['_data']['code'];
         }
-        if ($storeCode) {
-            try {
-                $store = $this->getRequestedStoreByCode($storeCode);
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $store = $this->getDefaultStoreById($defaultStoreId);
-            }
 
+        try {
+            $store = $this->getRequestedStoreByCode($storeCode);
             if (!in_array($store->getId(), $stores)) {
-                $store = $this->getDefaultStoreById($defaultStoreId);
+                return $defaultStoreId;
             }
-        } else {
-            $store = $this->getDefaultStoreById($defaultStoreId);
+            return $store->getId();
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            return $defaultStoreId;
         }
-        return $store->getId();
+    }
+
+    /**
+     * Get store code from url when 'use store code in url' is enabled
+     *
+     * @return null|string
+     */
+    private function getStoreCodeFromUrl() : ?string
+    {
+        $requestUri = $this->request->getRequestUri();
+        if ($this->isUseStoreCodeInUrlEnabled() && '/' !== $requestUri) {
+            try {
+                //get path Info - without stripping store
+                $requestUri = $this->removeRepeatedSlashes($requestUri);
+                $parsedRequestUri = explode('?', $requestUri, 2);
+                $baseUrl = $this->request->getBaseUrl();
+                $pathInfo = (string)substr($parsedRequestUri[0], (int)strlen($baseUrl));
+
+                $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
+                /** @var \Magento\Store\Model\Store $store */
+                $store = $this->getRequestedStoreByCode($pathParts[0]);
+
+                if (!$this->request->isDirectAccessFrontendName($pathParts[0])
+                    && $store->getCode() != Store::ADMIN_CODE) {
+                    return $store->getCode();
+                }
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get the use store code in the url setting enabled
+     *
+     * @return bool
+     */
+    private function isUseStoreCodeInUrlEnabled() : bool
+    {
+        return (bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL);
+    }
+
+    /**
+     * Remove repeated slashes from the start of the path.
+     *
+     * @param string $pathInfo
+     * @return string
+     */
+    private function removeRepeatedSlashes($pathInfo) : string
+    {
+        $firstChar = (string)substr($pathInfo, 0, 1);
+        if ($firstChar == '/') {
+            $pathInfo = '/' . ltrim($pathInfo, '/');
+        }
+
+        return $pathInfo;
     }
 
     /**
@@ -116,15 +187,15 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      *
      * @return array
      */
-    protected function getStoresData()
+    protected function getStoresData() : array
     {
         $cacheKey = 'resolved_stores_' . md5($this->runMode . $this->scopeCode);
         $cacheData = $this->cache->load($cacheKey);
         if ($cacheData) {
-            $storesData = $this->getSerializer()->unserialize($cacheData);
+            $storesData = $this->serializer->unserialize($cacheData);
         } else {
             $storesData = $this->readStoresData();
-            $this->cache->save($this->getSerializer()->serialize($storesData), $cacheKey, [self::CACHE_TAG]);
+            $this->cache->save($this->serializer->serialize($storesData), $cacheKey, [self::CACHE_TAG]);
         }
         return $storesData;
     }
@@ -134,7 +205,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      *
      * @return array
      */
-    protected function readStoresData()
+    protected function readStoresData() : array
     {
         $reader = $this->readerList->getReader($this->runMode);
         return [$reader->getAllowedStoreIds($this->scopeCode), $reader->getDefaultStoreId($this->scopeCode)];
@@ -147,7 +218,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @return \Magento\Store\Api\Data\StoreInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getRequestedStoreByCode($storeCode)
+    protected function getRequestedStoreByCode($storeCode) : \Magento\Store\Api\Data\StoreInterface
     {
         try {
             $store = $this->storeRepository->getActiveStoreByCode($storeCode);
@@ -165,7 +236,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @return \Magento\Store\Api\Data\StoreInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getDefaultStoreById($id)
+    protected function getDefaultStoreById($id) : \Magento\Store\Api\Data\StoreInterface
     {
         try {
             $store = $this->storeRepository->getActiveStoreById($id);
@@ -174,20 +245,5 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         }
 
         return $store;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 100.2.0
-     */
-    private function getSerializer()
-    {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 }
