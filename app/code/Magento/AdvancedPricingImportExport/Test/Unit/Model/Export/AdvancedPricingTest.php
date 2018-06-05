@@ -347,6 +347,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      * @param $object
      * @param $property
      * @return mixed
+     * @throws \ReflectionException
      */
     protected function getPropertyValue($object, $property)
     {
@@ -362,6 +363,8 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      * @param $object
      * @param $property
      * @param $value
+     * @return mixed
+     * @throws \ReflectionException
      */
     protected function setPropertyValue(&$object, $property, $value)
     {
