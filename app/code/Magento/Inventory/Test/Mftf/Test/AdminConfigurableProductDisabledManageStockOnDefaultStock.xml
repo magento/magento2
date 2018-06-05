@@ -7,26 +7,33 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminConfigurableProductManageStockOnDefaultStock">
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductDisabledManageStockOnDefaultStock">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Update Configurable Product"/>
-            <title value="Manage Configurable Product Variations Stock"/>
-            <description value="Stock status of configurable product variation should affect configurable product appearance on storefront."/>
+            <stories value="Check 'Manage Stock' system configuration value affection on configurable product on default source."/>
+            <title value="Check 'Manage Stock' system configuration value affection on configurable product on default source."/>
+            <description value="Verify, that configurable product with children on default source and 'Out of Stock' status is visible on storefront in case 'Manage Stock' system configuration value is set to 'No'."/>
             <testCaseId value="969"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
-            <group value="single_mode"/>
         </annotations>
 
         <before>
             <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="FullSource1" stepKey="customSource"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
+
+            <comment userInput="Enable 'Manage Stock' configuration." stepKey="revertManageStockConfigurationComment"/>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableMangeStock"/>
+
+            <comment userInput="Perform reindex and cache flush after save stock related config." stepKey="reindexCacheFlushComment"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
         </after>
 
         <comment userInput="Create Configurable product with two options 'In Stock' on 'Default' stock" stepKey="CreateConfigurableProductComment"/>
@@ -40,8 +47,7 @@
         <fillField userInput="{{ConfigurableMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
         <fillField userInput="{{ConfigurableMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice"/>
         <fillField userInput="{{ConfigurableMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSku"/>
-        <fillField userInput="{{ConfigurableMsiProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillProductQty"/>
-        <selectOption userInput="{{ConfigurableMsiProduct.status}}" selector="{{AdminProductFormSection.productStockStatus}}" stepKey="selectStockStatus"/>
+        <fillField userInput="{{ConfigurableMsiProduct.quantity}}" selector="{{AdminConfigurableProductFormSection.productQuantity}}" stepKey="fillProductQuantity"/>
         <fillField userInput="{{ConfigurableMsiProduct.weight}}" selector="{{AdminConfigurableProductFormSection.productWeight}}" stepKey="fillProductWeight"/>
 
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]"  stepKey="searchAndSelectCategory"/>
@@ -62,8 +68,13 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStep"/>
 
         <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="selectSources"/>
 
-        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="fillQuantityForDefaultSource"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter"/>
+        <click selector="{{AdminGridRow.checkboxByValue('default')}}" stepKey="selectDefaultSource"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="daneAssignSources"/>
+
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSource}}" userInput="100" stepKey="fillQuantityForDefaultSource"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariations"/>
 
@@ -76,7 +87,7 @@
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkRedAttributeVariationName"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute1.name}}" stepKey="checkWhiteAttributeVariationSku"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkRedAttributeVariationSku"/>
-        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsQuantityCells}}" userInput="100" stepKey="checkQtyIsCorrectForDefaultSource"/>
+        <see selector="{{AdminConfigurableProductFormSection.currentVariationsQuantityCells}}" userInput="100" stepKey="checkQtyIsCorrectForDefaultSource"/>
 
         <comment userInput="Check, configurable product is present on category page and has 'In Stock' status" stepKey="checkConfigurableIsPresentOnCategoryPageComment"/>
 
@@ -102,7 +113,7 @@
             <argument name="product" value="colorProductAttribute1"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="editWhiteConfigurableVariation"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="setWhiteConfigurableVariationToOutOfStock"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setWhiteConfigurableVariationToOutOfStock"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveWhiteConfigurableVariation"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkWhiteConfigurableVariationSaveMessage"/>
 
@@ -112,7 +123,7 @@
             <argument name="product" value="colorProductAttribute2"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="editConfigurableRedVariation"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="setConfigurableRedVariationToOutOfStock"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setConfigurableRedVariationToOutOfStock"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableRedVariation"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkRedConfigurableVariationSaveMessage"/>
 
@@ -126,5 +137,26 @@
         <waitForPageLoad stepKey="waitForPageLoad8"/>
         <seeInTitle userInput="{{ConfigurableMsiProduct.name}}" stepKey="checkProductIsCorrectByName"/>
         <see userInput="Out of Stock" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="checkConfigurableProductHasOutOfStockStatus"/>
+
+        <comment userInput="Disable 'Manage Stock' configuration" stepKey="disableMangeStockConfigurationComment"/>
+        <magentoCLI command="config:set cataloginventory/item_options/manage_stock 0" stepKey="disableMangeStock"/>
+
+        <comment userInput="Perform reindex and cache flush after disable 'Mange Stock' configuration config." stepKey="reindexCacheFlushAfterDisableManageStockComment"/>
+        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock"/>
+
+        <comment userInput="Check, configurable product back to category page and has 'In Stock' status on product view page." stepKey="checkConfigurableProductBackOnStorefront"/>
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="checkConfigurableIsBackToCategoryPage">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="checkConfigurableBackToStockOnProductViewPage">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+
+        <selectOption selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute1.name}}" stepKey="checkCanSelectWhiteVariation"/>
+        <seeOptionIsSelected selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute1.name}}" stepKey="checkWhiteVariationCanBeSelected"/>
+        <selectOption selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkCanSelectRedVariation"/>
+        <seeOptionIsSelected selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkRedVariationCanBeSelected"/>
     </test>
 </tests>

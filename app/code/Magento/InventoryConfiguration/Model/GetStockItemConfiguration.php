@@ -15,6 +15,7 @@ use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\InputException;
 
 /**
  * @inheritdoc
@@ -94,17 +95,21 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     {
         $searchCriteria = $this->legacyStockItemCriteriaFactory->create();
 
-        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+        try {
+            $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+        } catch (InputException $skuNotFoundInCatalog) {
+            $stockItem = \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
+            $stockItem->setManageStock(true);  // Make possible to Manage Stock for Products removed from Catalog
+            return $stockItem;
+        }
         $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
 
-        // TODO We use Stock::DEFAULT_STOCK_ID until we have proper multi-stock item configuration
+        // Stock::DEFAULT_STOCK_ID is used until we have proper multi-stock item configuration
         $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, Stock::DEFAULT_STOCK_ID);
 
         $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
         if ($stockItemCollection->getTotalCount() === 0) {
-            // TODO:
             return \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
-            #throw new LocalizedException(__('Legacy stock item is not found'));
         }
 
         $stockItems = $stockItemCollection->getItems();
