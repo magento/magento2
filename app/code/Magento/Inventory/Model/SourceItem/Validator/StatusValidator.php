@@ -9,7 +9,6 @@ namespace Magento\Inventory\Model\SourceItem\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\OptionSource\SourceItemStatus;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Model\SourceItemValidatorInterface;
 
@@ -24,20 +23,20 @@ class StatusValidator implements SourceItemValidatorInterface
     private $validationResultFactory;
 
     /**
-     * @var SourceItemStatus
+     * @var array
      */
-    private $sourceItemStatus;
+    private $allowedSourceItemStatuses;
 
     /**
      * @param ValidationResultFactory $validationResultFactory
-     * @param SourceItemStatus $sourceItemStatus
+     * @param array $allowedSourceItemStatuses
      */
     public function __construct(
         ValidationResultFactory $validationResultFactory,
-        SourceItemStatus $sourceItemStatus
+        array $allowedSourceItemStatuses = []
     ) {
         $this->validationResultFactory = $validationResultFactory;
-        $this->sourceItemStatus = $sourceItemStatus;
+        $this->allowedSourceItemStatuses = $allowedSourceItemStatuses;
     }
 
     /**
@@ -55,10 +54,8 @@ class StatusValidator implements SourceItemValidatorInterface
             return $this->validationResultFactory->create(['errors' => $errors]);
         }
 
-        $allowedStatuses = array_column($this->sourceItemStatus->toOptionArray(), 'value');
-
         $errors = [];
-        if (!in_array((int)$value, $allowedStatuses, true)) {
+        if (!in_array((int)$value, array_values($this->allowedSourceItemStatuses), true)) {
             $errors[] = __(
                 '"%field" should a known status.',
                 ['field' => SourceItemInterface::STATUS]

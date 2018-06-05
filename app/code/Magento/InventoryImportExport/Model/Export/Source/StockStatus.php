@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryImportExport\Model\Export\Source;
 
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
-use Magento\Inventory\Model\OptionSource\SourceItemStatus;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
  * @inheritdoc
@@ -16,26 +16,21 @@ use Magento\Inventory\Model\OptionSource\SourceItemStatus;
 class StockStatus extends AbstractSource
 {
     /**
-     * @var SourceItemStatus
-     */
-    private $sourceItemStatus;
-
-    /**
-     * @param SourceItemStatus $sourceItemStatus
-     */
-    public function __construct(
-        SourceItemStatus $sourceItemStatus
-    ) {
-        $this->sourceItemStatus = $sourceItemStatus;
-    }
-
-    /**
      * Retrieve All options
      *
      * @return array
      */
     public function getAllOptions()
     {
-        return $this->sourceItemStatus->toOptionArray();
+        return [
+            [
+                'value' => SourceItemInterface::STATUS_IN_STOCK,
+                'label' => __('In Stock'),
+            ],
+            [
+                'value' => SourceItemInterface::STATUS_OUT_OF_STOCK,
+                'label' => __('Out of Stock'),
+            ],
+        ];
     }
 }
