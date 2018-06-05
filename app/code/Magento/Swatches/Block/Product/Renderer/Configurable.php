@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Block\Product\Renderer;
@@ -10,6 +10,7 @@ use Magento\Catalog\Helper\Product as CatalogProduct;
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Catalog\Model\Product;
@@ -117,6 +118,12 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
             $configurableAttributeData,
             $data
         );
+
+        $this->addData(
+            [
+                'cache_lifetime' => isset($data['cache_lifetime']) ? $data['cache_lifetime'] : 3600
+            ]
+        );
     }
 
     /**
@@ -209,7 +216,14 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function getSwatchAttributesData()
     {
-        return $this->swatchHelper->getSwatchAttributesAsArray($this->getProduct());
+        $swatchAttributes = [];
+        try {
+            $swatchAttributes = $this->swatchHelper->getSwatchAttributesAsArray($this->getProduct());
+        } catch (LocalizedException $e) {
+            $this->_logger->critical("Cannot get swatch attributes data\n" . $e->getMessage());
+        }
+
+        return $swatchAttributes;
     }
 
     /**
@@ -221,7 +235,11 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function initIsProductHasSwatchAttribute()
     {
-        $this->isProductHasSwatchAttribute = $this->swatchHelper->isProductHasSwatch($this->getProduct());
+        try {
+            $this->isProductHasSwatchAttribute = $this->swatchHelper->isProductHasSwatch($this->getProduct());
+        } catch (LocalizedException $e) {
+            $this->_logger->critical("Cannot check if product has swatch\n" . $e->getMessage());
+        }
     }
 
     /**

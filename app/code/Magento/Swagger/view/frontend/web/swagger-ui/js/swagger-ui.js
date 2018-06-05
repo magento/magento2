@@ -6,7 +6,7 @@
  *
  * The original name of this file, as part of the swagger-ui package, was dist/index.html.
  *
- * Modified by Magento, Modifications Copyright © 2013-2017 Magento, Inc.
+ * Modified by Magento, Modifications Copyright © Magento, Inc.
  */
 (function(){this["Handlebars"] = this["Handlebars"] || {};
     this["Handlebars"]["templates"] = this["Handlebars"]["templates"] || {};

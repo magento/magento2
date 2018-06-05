@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\EntityManager\HydratorPool;
 
 /**
  * Class Repository
@@ -58,15 +58,30 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource
      * @param Converter $converter
+     * @param \Magento\Catalog\Model\Product\OptionFactory|null $optionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory|null $collectionFactory
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource,
-        \Magento\Catalog\Model\Product\Option\Converter $converter
+        \Magento\Catalog\Model\Product\Option\Converter $converter,
+        \Magento\Catalog\Model\Product\OptionFactory $optionFactory = null,
+        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->optionResource = $optionResource;
         $this->converter = $converter;
+        if (null === $optionFactory) {
+            $optionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\Product\OptionFactory::class);
+        }
+        $this->optionFactory = $optionFactory;
+        if (null === $collectionFactory) {
+            $collectionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class);
+        }
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -83,7 +98,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      */
     public function getProductOptions(ProductInterface $product, $requiredOnly = false)
     {
-        return $this->getCollectionFactory()->create()->getProductOptions(
+        return $this->collectionFactory->create()->getProductOptions(
             $product->getEntityId(),
             $product->getStoreId(),
             $requiredOnly
@@ -122,7 +137,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         $hydrator = $this->getHydratorPool()->getHydrator(ProductInterface::class);
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         return $this->optionResource->duplicate(
-            $this->getOptionFactory()->create([]),
+            $this->optionFactory->create([]),
             $hydrator->extract($product)[$metadata->getLinkField()],
             $hydrator->extract($duplicate)[$metadata->getLinkField()]
         );
@@ -229,32 +244,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     }
 
     /**
-     * @return \Magento\Catalog\Model\Product\OptionFactory
-     * @deprecated
-     */
-    private function getOptionFactory()
-    {
-        if (null === $this->optionFactory) {
-            $this->optionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\Product\OptionFactory::class);
-        }
-        return $this->optionFactory;
-    }
-
-    /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory
-     * @deprecated
-     */
-    private function getCollectionFactory()
-    {
-        if (null === $this->collectionFactory) {
-            $this->collectionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class);
-        }
-        return $this->collectionFactory;
-    }
-
-    /**
      * @return \Magento\Framework\EntityManager\MetadataPool
      * @deprecated
      */
@@ -269,6 +258,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * @return \Magento\Framework\EntityManager\HydratorPool
+     * @throws \RuntimeException
      * @deprecated
      */
     private function getHydratorPool()

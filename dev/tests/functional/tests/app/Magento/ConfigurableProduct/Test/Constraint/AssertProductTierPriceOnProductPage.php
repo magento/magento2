@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Catalog\Test\Constraint\AssertProductPage;
 use Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions;
 
 /**
- * Open created configurble product on frontend and choose variation with tier price.
+ * Open created configurable product on frontend and choose variation with tier price.
  */
 class AssertProductTierPriceOnProductPage extends AssertProductPage
 {

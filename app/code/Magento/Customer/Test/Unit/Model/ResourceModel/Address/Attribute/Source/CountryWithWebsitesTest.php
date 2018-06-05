@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,13 @@ use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Tests for \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -40,6 +46,9 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
      */
     private $shareConfigMock;
 
+    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $objectManagerMock;
+
     public function setUp()
     {
         $this->countriesFactoryMock =
@@ -62,6 +71,21 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
         $this->shareConfigMock = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->setMethods(['get'])
+            ->getMockForAbstractClass();
+
+        $escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        ObjectManager::setInstance($this->objectManagerMock);
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(\Magento\Framework\Escaper::class)
+            ->willReturn($escaper);
+
         $this->countryByWebsite = new CountryWithWebsites(
             $eavCollectionFactoryMock,
             $optionsFactoryMock,
@@ -116,5 +140,13 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             ['value' => 'AM', 'label' => 'UZ', 'website_ids' => [1, 2]]
         ], $this->countryByWebsite->getAllOptions());
+    }
+
+    protected function tearDown()
+    {
+        $property = (new \ReflectionClass(ObjectManager::class))->getProperty('_instance');
+        $property->setAccessible(true);
+        $property->setValue(null, null);
+        parent::tearDown();
     }
 }

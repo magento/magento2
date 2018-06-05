@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -19,8 +19,10 @@ define([
         optionConfig: {},
         optionHandlers: {},
         optionTemplate: '<%= data.label %>' +
-        '<% if (data.finalPrice.value) { %>' +
+        '<% if (data.finalPrice.value > 0) { %>' +
         ' +<%- data.finalPrice.formatted %>' +
+        '<% } else if (data.finalPrice.value < 0) { %>' +
+        ' <%- data.finalPrice.formatted %>' +
         '<% } %>',
         controlContainer: 'dd'
     };

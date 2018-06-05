@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -313,6 +313,9 @@
     <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
     </type>
+    <type name="Magento\PageCache\Observer\FlushFormKey">
+        <plugin name="customerFlushFormKey" type="Magento\Customer\Model\Plugin\CustomerFlushFormKey"/>
+    </type>
     <type name="Magento\Customer\Model\Customer\NotificationStorage">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Customer\Model\Cache\Type\Notification</argument>
@@ -327,6 +330,11 @@
                     <item name="identifierField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\AccountManagement">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Framework\Session\SessionManagerInterface\Proxy</argument>
         </arguments>
     </type>
 </config>

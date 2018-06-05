@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
@@ -11,6 +11,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection as AttributeOptionCollection;
+use Magento\Framework\Escaper;
 
 /**
  * Tests \Magento\Eav\Model\Entity\Attribute\Source\Table.
@@ -60,6 +61,11 @@ class TableTest extends \PHPUnit_Framework_TestCase
      */
     private $attributeOptionCollectionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Escaper
+     */
+    private $escaper;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -106,11 +112,16 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = $objectManager->getObject(
             \Magento\Eav\Model\Entity\Attribute\Source\Table::class,
             [
                 'attrOptionCollectionFactory' => $this->collectionFactory,
-                'attrOptionFactory' => $this->attrOptionFactory
+                'attrOptionFactory' => $this->attrOptionFactory,
+                'escaper' => $this->escaper,
             ]
         );
 
@@ -222,7 +233,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getOptionTextProvider
-     * @param array $optionsIds
+     * @param array|string $optionsIds
      * @param array|string $value
      * @param array $options
      * @param array|string $expectedResult
@@ -263,6 +274,10 @@ class TableTest extends \PHPUnit_Framework_TestCase
         $this->collectionFactory->expects($this->once())
             ->method('toOptionArray')
             ->willReturn($options);
+        $this->escaper
+            ->expects($this->atLeastOnce())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
         $this->assertEquals($expectedResult, $this->model->getOptionText($value));
     }
@@ -273,11 +288,24 @@ class TableTest extends \PHPUnit_Framework_TestCase
             [
                 ['1', '2'],
                 '1,2',
-                [['label' => 'test label 1', 'value' => '1'], ['label' => 'test label 2', 'value' => '1']],
+                [
+                    ['label' => 'test label 1', 'value' => '1'],
+                    ['label' => 'test label 2', 'value' => '1'],
+                ],
                 ['test label 1', 'test label 2'],
             ],
-            ['1', '1', [['label' => 'test label', 'value' => '1']], 'test label'],
-            ['5', '5', [['label' => 'test label', 'value' => '5']], 'test label']
+            [
+                '1',
+                '1',
+                [['label' => 'test label', 'value' => '1']],
+                'test label',
+            ],
+            [
+                '5',
+                '5',
+                [['label' => 'test label', 'value' => '5']],
+                'test label',
+            ],
         ];
     }
 

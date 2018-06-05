@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -948,9 +948,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         ];
         if ($aPosition == $bPosition) {
             return 0;
-        } else {
-            return $aPosition < $bPosition ? -1 : 1;
         }
+        return $aPosition < $bPosition ? -1 : 1;
     }
 
     /**

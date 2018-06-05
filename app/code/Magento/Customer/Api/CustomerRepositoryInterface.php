@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,7 @@ interface CustomerRepositoryInterface
     public function get($email, $websiteId = null);
 
     /**
-     * Get customer by customer ID.
+     * Get customer by Customer ID.
      *
      * @param int $customerId
      * @return \Magento\Customer\Api\Data\CustomerInterface
@@ -69,7 +69,7 @@ interface CustomerRepositoryInterface
     public function delete(\Magento\Customer\Api\Data\CustomerInterface $customer);
 
     /**
-     * Delete customer by ID.
+     * Delete customer by Customer ID.
      *
      * @param int $customerId
      * @return bool true on success

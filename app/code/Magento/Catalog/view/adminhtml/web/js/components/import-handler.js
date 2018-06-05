@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -141,6 +141,7 @@ define([
 
             // strip tags
             tmpElement = document.createElement('div');
+            str = str.replace(/(<([^>]+)>)/ig, '');
             tmpElement.innerHTML = str;
             str =  tmpElement.textContent || tmpElement.innerText || '';
 

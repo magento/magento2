@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Controller\Payment;
@@ -63,7 +63,10 @@ class GetNonce extends Action
         try {
             $publicHash = $this->getRequest()->getParam('public_hash');
             $customerId = $this->session->getCustomerId();
-            $result = $this->command->execute(['public_hash' => $publicHash, 'customer_id' => $customerId])->get();
+            $result = $this->command->execute(
+                ['public_hash' => $publicHash, 'customer_id' => $customerId, 'store_id' => $this->session->getStoreId()]
+            )
+                ->get();
             $response->setData(['paymentMethodNonce' => $result['paymentMethodNonce']]);
 
         } catch (\Exception $e) {

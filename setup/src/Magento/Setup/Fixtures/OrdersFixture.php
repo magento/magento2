@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -622,7 +622,8 @@ class OrdersFixture extends Fixture
         foreach ($productIds as $key => $configurableId) {
             $configurableProduct = $this->productRepository->getById($configurableId);
             $options = $this->optionRepository->getList($configurableProduct->getSku());
-            $configurableChild = $this->linkManagement->getChildren($configurableProduct->getSku())[0];
+            $configurableChild = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
+            $configurableChild = reset($configurableChild);
             $simpleSku = $configurableChild->getSku();
             $simpleId = $this->productRepository->get($simpleSku)->getId();
 

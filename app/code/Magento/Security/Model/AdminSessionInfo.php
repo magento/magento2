@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model;
@@ -154,7 +154,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Setter for isOtherSessionsTerminated
      *
      * @param bool $isOtherSessionsTerminated
-     * @return this
+     * @return $this
      */
     public function setIsOtherSessionsTerminated($isOtherSessionsTerminated)
     {

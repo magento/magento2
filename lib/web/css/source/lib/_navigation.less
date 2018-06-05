@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -305,6 +305,10 @@
             .lib-css(border-top, none);
         }
 
+        li.level1 {
+            position: relative;
+        }
+
         .level0 {
             .lib-css(margin, @_nav-level0-item-margin);
             display: inline-block;
@@ -324,6 +328,7 @@
                 .lib-css(text-decoration, @_nav-level0-item-text-decoration);
                 box-sizing: border-box;
                 position: relative;
+                display: inline-block;
 
                 &:hover, &.ui-state-focus {
                     .lib-css(background, @_nav-level0-item-background-color-hover);

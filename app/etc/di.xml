@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -1218,6 +1218,13 @@
                 <item name="INNODB" xsi:type="string">INNODB</item>
                 <item name="MEMORY" xsi:type="string">MEMORY</item>
                 <item name="MYISAM" xsi:type="string">MYISAM</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Mview\View\Subscription">
+        <arguments>
+            <argument name="ignoredUpdateColumns" xsi:type="array">
+                <item name="updated_at" xsi:type="string">updated_at</item>
             </argument>
         </arguments>
     </type>

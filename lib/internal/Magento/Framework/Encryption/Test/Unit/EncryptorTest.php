@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Encryption\Test\Unit;
@@ -206,5 +206,33 @@ class EncryptorTest extends \PHPUnit_Framework_TestCase
         $actualEncryptedData = base64_encode($actual->encrypt('data'));
         $this->assertEquals($expectedEncryptedData, $actualEncryptedData);
         $this->assertEquals($crypt->decrypt($expectedEncryptedData), $actual->decrypt($actualEncryptedData));
+    }
+
+    public function testUseSpecifiedHashingAlgoDataProvider()
+    {
+        return [
+            ['password', 'salt', Encryptor::HASH_VERSION_MD5,
+             '67a1e09bb1f83f5007dc119c14d663aa:salt:0'],
+            ['password', 'salt', Encryptor::HASH_VERSION_SHA256,
+             '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1'],
+            ['password', false, Encryptor::HASH_VERSION_MD5,
+             '5f4dcc3b5aa765d61d8327deb882cf99'],
+            ['password', false, Encryptor::HASH_VERSION_SHA256,
+             '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8']
+        ];
+    }
+
+    /**
+     * @dataProvider testUseSpecifiedHashingAlgoDataProvider
+     *
+     * @param $password
+     * @param $salt
+     * @param $hashAlgo
+     * @param $expected
+     */
+    public function testGetHashMustUseSpecifiedHashingAlgo($password, $salt, $hashAlgo, $expected)
+    {
+        $hash = $this->_model->getHash($password, $salt, $hashAlgo);
+        $this->assertEquals($expected, $hash);
     }
 }

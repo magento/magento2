@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -86,6 +86,14 @@ define([
             events['keyup ' + this.options.item.qty] = function (event) {
                 self._showItemButton($(event.target));
             };
+
+            /**
+             * @param {jQuery.Event} event
+             */
+            events['change ' + this.options.item.qty] = function (event) {
+                self._showItemButton($(event.target));
+            };
+
             events['click ' + this.options.item.button] = function (event) {
                 event.stopPropagation();
                 self._updateItemQty($(event.currentTarget));

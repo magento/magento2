@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,7 @@ class WebsiteIds extends DataSource
     private $fixtureFactory;
 
     /**
-     * Rought fixture field data.
+     * Rough fixture field data.
      *
      * @var array
      */

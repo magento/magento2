@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,7 +52,7 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
             ->with($productId)
             ->willReturn($stockItemMock);
 
-        $this->productExtensionMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductExtension')
+        $this->productExtensionMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductExtensionInterface')
             ->setMethods(['setStockItem'])
             ->getMock();
         $this->productExtensionMock->expects($this->once())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Converter\Dom;
@@ -100,9 +100,9 @@ class Flat
             }
         } else {
             if ($result) {
-                $result['value'] = $value;
+                $result['value'] = trim($value);
             } else {
-                $result = $value;
+                $result = trim($value);
             }
         }
         return $result;

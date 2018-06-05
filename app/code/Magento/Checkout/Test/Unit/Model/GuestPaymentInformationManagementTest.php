@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\Unit\Model;
+
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -46,6 +49,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
      */
     private $loggerMock;
 
+    /**
+     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceConnectionMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -66,6 +74,10 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = $objectManager->getObject(
             \Magento\Checkout\Model\GuestPaymentInformationManagement::class,
             [
@@ -73,7 +85,8 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
                 'cartManagement' => $this->cartManagementMock,
                 'cartRepository' => $this->cartRepositoryMock,
-                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock
+                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
+                'connectionPull' => $this->resourceConnectionMock
             ]
         );
         $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
@@ -88,6 +101,27 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $billingAddressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
+
+        $adapterMockForSales = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $adapterMockForCheckout = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->resourceConnectionMock->expects($this->at(0))
+            ->method('getConnection')
+            ->with('sales')
+            ->willReturn($adapterMockForSales);
+        $adapterMockForSales->expects($this->once())->method('beginTransaction');
+        $adapterMockForSales->expects($this->once())->method('commit');
+
+        $this->resourceConnectionMock->expects($this->at(1))
+            ->method('getConnection')
+            ->with('checkout')
+            ->willReturn($adapterMockForCheckout);
+        $adapterMockForCheckout->expects($this->once())->method('beginTransaction');
+        $adapterMockForCheckout->expects($this->once())->method('commit');
 
         $this->billingAddressManagementMock->expects($this->once())
             ->method('assign')
@@ -113,6 +147,27 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $billingAddressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
+
+        $adapterMockForSales = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $adapterMockForCheckout = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->resourceConnectionMock->expects($this->at(0))
+            ->method('getConnection')
+            ->with('sales')
+            ->willReturn($adapterMockForSales);
+        $adapterMockForSales->expects($this->once())->method('beginTransaction');
+        $adapterMockForSales->expects($this->once())->method('rollback');
+
+        $this->resourceConnectionMock->expects($this->at(1))
+            ->method('getConnection')
+            ->with('checkout')
+            ->willReturn($adapterMockForCheckout);
+        $adapterMockForCheckout->expects($this->once())->method('beginTransaction');
+        $adapterMockForCheckout->expects($this->once())->method('rollback');
 
         $this->billingAddressManagementMock->expects($this->once())
             ->method('assign')
@@ -175,6 +230,27 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $billingAddressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
+
+        $adapterMockForSales = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $adapterMockForCheckout = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->resourceConnectionMock->expects($this->at(0))
+            ->method('getConnection')
+            ->with('sales')
+            ->willReturn($adapterMockForSales);
+        $adapterMockForSales->expects($this->once())->method('beginTransaction');
+        $adapterMockForSales->expects($this->once())->method('rollback');
+
+        $this->resourceConnectionMock->expects($this->at(1))
+            ->method('getConnection')
+            ->with('checkout')
+            ->willReturn($adapterMockForCheckout);
+        $adapterMockForCheckout->expects($this->once())->method('beginTransaction');
+        $adapterMockForCheckout->expects($this->once())->method('rollback');
 
         $this->billingAddressManagementMock->expects($this->once())
             ->method('assign')

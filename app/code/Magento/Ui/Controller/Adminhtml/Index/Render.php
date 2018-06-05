@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Controller\Adminhtml\Index;
@@ -37,6 +37,11 @@ class Render extends AbstractAction
         }
 
         $this->prepareComponent($component);
+
+        if ($component->getContext()->getAcceptType() === 'json') {
+            $this->_response->setHeader('Content-Type', 'application/json');
+        }
+
         $this->_response->appendBody((string) $component->render());
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Page;
@@ -15,5 +15,5 @@ class Copyright extends \Magento\Backend\Block\Template
      *
      * @var string
      */
-    protected $_template = 'page/copyright.phtml';
+    protected $_template = 'Magento_Backend::page/copyright.phtml';
 }

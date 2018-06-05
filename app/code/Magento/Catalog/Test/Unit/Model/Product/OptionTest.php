@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
@@ -8,6 +8,9 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 use \Magento\Catalog\Model\Product\Option;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Tests \Magento\Catalog\Model\Product\Option.
+ */
 class OptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -22,9 +25,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Catalog\Model\Product\Option');
+        $this->model = $objectManager->getObject(\Magento\Catalog\Model\Product\Option::class);
         $this->model->setProduct($this->productMock);
     }
 
@@ -38,7 +41,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     public function testGetRegularPrice()
     {
         $priceInfoMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Pricing\PriceInfoInterface',
+            \Magento\Framework\Pricing\PriceInfoInterface::class,
             [],
             '',
             false,
@@ -47,7 +50,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ['getAmount', 'getPrice']
         );
         $priceInfoMock->expects($this->once())->method('getPrice')->willReturnSelf();
-        $amountMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
+        $amountMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $priceInfoMock->expects($this->once())->method('getAmount')->willReturn($amountMock);
 
         $this->productMock->expects($this->once())->method('getPriceInfo')->willReturn($priceInfoMock);
@@ -58,5 +61,42 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(25, $this->model->getRegularPrice());
         $this->model->setPriceType(null);
         $this->assertEquals(50, $this->model->getRegularPrice());
+    }
+
+    /**
+     * Tests removing ineligible characters from file_extension.
+     *
+     * @param string $rawExtensions
+     * @param string $expectedExtensions
+     * @dataProvider beforeSaveFileOptionDataProvider
+     */
+    public function testBeforeSaveFileOption($rawExtensions, $expectedExtensions)
+    {
+        $this->model->setType(Option::OPTION_GROUP_FILE);
+        $this->model->setFileExtension($rawExtensions);
+        $this->model->beforeSave();
+        $actualExtensions = $this->model->getFileExtension();
+        $this->assertEquals(
+            $expectedExtensions,
+            $actualExtensions
+        );
+    }
+
+    /**
+     * Data provider for testBeforeSaveFileOption.
+     *
+     * @return array
+     */
+    public function beforeSaveFileOptionDataProvider()
+    {
+        return [
+            ['JPG, PNG, GIF', 'jpg, png, gif'],
+            ['jpg, jpg, jpg', 'jpg'],
+            ['jpg, png, gif', 'jpg, png, gif'],
+            ['jpg png gif', 'jpg, png, gif'],
+            ['!jpg@png#gif%', 'jpg, png, gif'],
+            ['jpg, png, 123', 'jpg, png, 123'],
+            ['', ''],
+        ];
     }
 }

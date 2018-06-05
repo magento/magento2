@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -65,6 +65,7 @@
     <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
     <preference for="Magento\Sales\Api\OrderManagementInterface" type="Magento\Sales\Model\Service\OrderService"/>
     <preference for="Magento\Sales\Api\OrderStatusHistoryRepositoryInterface" type="Magento\Sales\Api\Data\OrderStatusHistory\Repository"/>
+    <preference for="Magento\Sales\Api\PaymentFailuresInterface" type="Magento\Sales\Model\Service\PaymentFailuresService" />
     <preference for="Magento\Sales\Api\ShipmentCommentRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentComment\Repository"/>
     <preference for="Magento\Sales\Api\ShipmentItemRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentItem\Repository"/>
     <preference for="Magento\Sales\Api\ShipmentRepositoryInterface" type="Magento\Sales\Model\Order\ShipmentRepository"/>

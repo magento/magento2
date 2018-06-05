@@ -3,7 +3,7 @@
  * Abstract class that helps in writing tests that validate config xml files
  * are valid both individually and when merged.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase;
@@ -47,7 +47,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\App\Arguments\FileResolver\Primary'
             )->disableOriginalConstructor()->getMock();
 
-            /* Enable Validation regardles of MAGE_MODE */
+            /* Enable Validation regardless of MAGE_MODE */
             $validateStateMock = $this->getMockBuilder(
                 'Magento\Framework\Config\ValidationStateInterface'
             )->disableOriginalConstructor()->getMock();

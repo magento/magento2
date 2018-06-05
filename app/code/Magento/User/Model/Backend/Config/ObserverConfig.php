@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -72,7 +72,7 @@ class ObserverConfig
     }
 
     /**
-     * Get admin maxiumum security failures from config
+     * Get admin maximum security failures from config
      *
      * @return int
      */

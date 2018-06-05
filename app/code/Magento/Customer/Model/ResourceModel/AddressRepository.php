@@ -2,7 +2,7 @@
 /**
  * Customer address entity resource model
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel;
@@ -84,7 +84,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $this->addressFactory = $addressFactory;
         $this->addressRegistry = $addressRegistry;
         $this->customerRegistry = $customerRegistry;
-        $this->addressResource = $addressResourceModel;
+        $this->addressResourceModel = $addressResourceModel;
         $this->directoryData = $directoryData;
         $this->addressSearchResultsFactory = $addressSearchResultsFactory;
         $this->addressCollectionFactory = $addressCollectionFactory;
@@ -219,7 +219,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $address = $this->addressRegistry->retrieve($addressId);
         $customerModel = $this->customerRegistry->retrieve($address->getCustomerId());
         $customerModel->getAddressesCollection()->clear();
-        $this->addressResource->delete($address);
+        $this->addressResourceModel->delete($address);
         $this->addressRegistry->remove($addressId);
         return true;
     }
@@ -237,7 +237,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $address = $this->addressRegistry->retrieve($addressId);
         $customerModel = $this->customerRegistry->retrieve($address->getCustomerId());
         $customerModel->getAddressesCollection()->clear();
-        $this->addressResource->delete($address);
+        $this->addressResourceModel->delete($address);
         $this->addressRegistry->remove($addressId);
         return true;
     }
@@ -285,24 +285,53 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
             $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'postcode']));
         }
 
-        if (!\Zend_Validate::is($customerAddressModel->getCountryId(), 'NotEmpty')) {
+        $countryId = (string)$customerAddressModel->getCountryId();
+        if (!\Zend_Validate::is($countryId, 'NotEmpty')) {
             $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'countryId']));
-        }
+        } else {
+            //Checking if such country exists.
+            if (!in_array($countryId, $this->directoryData->getCountryCollection()->getAllIds(), true)) {
+                $exception->addError(
+                    __(
+                        'Invalid value of "%value" provided for the %fieldName field.',
+                        [
+                            'fieldName' => 'countryId',
+                            'value' => htmlspecialchars($countryId)
+                        ]
+                    )
+                );
+            } else {
+                //If country is valid then validating selected region ID.
+                $countryModel = $customerAddressModel->getCountryModel();
+                $regionCollection = $countryModel->getRegionCollection();
+                $region = $customerAddressModel->getRegion();
+                $regionId = (string)$customerAddressModel->getRegionId();
+                $allowedRegions = $regionCollection->getAllIds();
+                $isRegionRequired = $this->directoryData->isRegionRequired($countryId);
 
-        if ($this->directoryData->isRegionRequired($customerAddressModel->getCountryId())) {
-            $regionCollection = $customerAddressModel->getCountryModel()->getRegionCollection();
-            if (!$regionCollection->count() && empty($customerAddressModel->getRegion())) {
-                $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'region']));
-            } elseif (
-                $regionCollection->count()
-                && !in_array(
-                    $customerAddressModel->getRegionId(),
-                    array_column($regionCollection->getData(), 'region_id')
-                )
-            ) {
-                $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'regionId']));
+                if ($isRegionRequired && empty($allowedRegions) && !\Zend_Validate::is($region, 'NotEmpty')) {
+                    //If region is required for country and country doesn't provide regions list
+                    //region must be provided.
+                    $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'region']));
+                } elseif ($isRegionRequired && $allowedRegions && !\Zend_Validate::is($regionId, 'NotEmpty')) {
+                    //If country actually has regions and requires you to
+                    //select one then it must be selected.
+                    $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'regionId']));
+                } elseif ($regionId && !in_array($regionId, $allowedRegions, true)) {
+                    //If a region is selected then checking if it exists.
+                    $exception->addError(
+                        __(
+                            'Invalid value of "%value" provided for the %fieldName field.',
+                            [
+                                'fieldName' => 'regionId',
+                                'value' => htmlspecialchars($regionId)
+                            ]
+                        )
+                    );
+                }
             }
         }
+
         return $exception;
     }
 }

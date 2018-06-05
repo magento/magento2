@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -324,6 +324,43 @@ class Customer extends AbstractCustomer
     }
 
     /**
+     * Pre-loading customers for existing customers checks in order
+     * to perform mass validation/import efficiently.
+     *
+     * @param \Traversable $rows Each row must contain data from columns email
+     * and website code.
+     *
+     * @return void
+     */
+    public function prepareCustomerData(\Traversable $rows)
+    {
+        $customersPresent = [];
+        foreach ($rows as $rowData) {
+            $email = isset($rowData[static::COLUMN_EMAIL])
+                ? $rowData[static::COLUMN_EMAIL] : null;
+            $websiteId = isset($rowData[static::COLUMN_WEBSITE])
+                ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
+            if ($email && $websiteId !== false) {
+                $customersPresent[] = [
+                    'email' => $email,
+                    'website_id' => $websiteId
+                ];
+            }
+        }
+        $this->getCustomerStorage()->prepareCustomers($customersPresent);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        $this->prepareCustomerData($this->getSource());
+
+        return parent::validateData();
+    }
+
+    /**
      * Prepare customer data for update
      *
      * @param array $rowData
@@ -428,6 +465,7 @@ class Customer extends AbstractCustomer
     protected function _importData()
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            $this->prepareCustomerData(new \ArrayObject($bunch));
             $entitiesToCreate = [];
             $entitiesToUpdate = [];
             $entitiesToDelete = [];

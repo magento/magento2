@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -88,6 +88,13 @@ class Options extends Section
      * @var array
      */
     protected $sortRowsData = [];
+
+    /**
+     * Locator for file_extension field.
+     *
+     * @var string
+     */
+    private $hintMessage = "div[data-index='file_extension'] div[id^='notice']";
 
     /**
      * Fill custom options form on tab.
@@ -381,5 +388,15 @@ class Options extends Section
         if (isset($field['type']) && !empty($options)) {
             $this->setOptionTypeData($options, $field['type'], $rootElement);
         }
+    }
+
+    /**
+     * Returns notice-message elements for 'file_extension' fields.
+     *
+     * @return ElementInterface[]
+     */
+    public function getFileOptionElements()
+    {
+        return $this->_rootElement->getElements($this->hintMessage);
     }
 }

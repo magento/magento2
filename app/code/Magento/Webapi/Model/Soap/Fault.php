@@ -2,7 +2,7 @@
 /**
  * Magento-specific SOAP fault.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap;
@@ -39,7 +39,9 @@ class Fault
     const NODE_DETAIL_WRAPPER = 'GenericFault';
     /**#@-*/
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_soapFaultCode;
 
     /**
@@ -114,7 +116,7 @@ class Fault
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         State $appState
     ) {
-        $this->_soapCode = $exception->getOriginator();
+        $this->_soapFaultCode = $exception->getOriginator();
         $this->_parameters = $exception->getDetails();
         $this->_wrappedErrors = $exception->getErrors();
         $this->stackTrace = $exception->getStackTrace() ?: $exception->getTraceAsString();
@@ -194,7 +196,7 @@ class Fault
      */
     public function getSoapCode()
     {
-        return $this->_soapCode;
+        return $this->_soapFaultCode;
     }
 
     /**

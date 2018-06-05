@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,8 @@ define([
     'ko',
     'underscore',
     'sidebar',
-    'mage/translate'
+    'mage/translate',
+    'mage/dropdown'
 ], function (Component, customerData, $, ko, _) {
     'use strict';
 

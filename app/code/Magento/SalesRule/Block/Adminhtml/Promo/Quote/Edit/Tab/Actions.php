@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\SalesRule\Model\RuleFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
@@ -48,6 +52,8 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Rule\Block\Actions $ruleActions
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
      * @param array $data
+     * @param RuleFactory|null $ruleFactory
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -56,27 +62,17 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Config\Model\Config\Source\Yesno $sourceYesno,
         \Magento\Rule\Block\Actions $ruleActions,
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
-        array $data = []
+        array $data = [],
+        RuleFactory $ruleFactory = null
     ) {
         $this->_rendererFieldset = $rendererFieldset;
         $this->_ruleActions = $ruleActions;
         $this->_sourceYesno = $sourceYesno;
         parent::__construct($context, $registry, $formFactory, $data);
-    }
-
-    /**
-     * The getter function to get the new RuleFactory dependency
-     *
-     * @return \Magento\SalesRule\Model\RuleFactory
-     *
-     * @deprecated
-     */
-    private function getRuleFactory()
-    {
-        if ($this->ruleFactory === null) {
-            $this->ruleFactory = ObjectManager::getInstance()->get('Magento\SalesRule\Model\RuleFactory');
+        if ($ruleFactory === null) {
+            $ruleFactory = ObjectManager::getInstance()->get(RuleFactory::class);
         }
-        return $this->ruleFactory;
+        $this->ruleFactory = $ruleFactory;
     }
 
     /**
@@ -169,7 +165,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     {
         if (!$model) {
             $id = $this->getRequest()->getParam('id');
-            $model = $this->getRuleFactory()->create();
+            $model = $this->ruleFactory->create();
             $model->load($id);
         }
 

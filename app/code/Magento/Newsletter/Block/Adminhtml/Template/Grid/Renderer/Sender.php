@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,7 @@ class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
             $str .= htmlspecialchars($row->getTemplateSenderName()) . ' ';
         }
         if ($row->getTemplateSenderEmail()) {
-            $str .= '[' . $row->getTemplateSenderEmail() . ']';
+            $str .= '[' . htmlspecialchars($row->getTemplateSenderEmail()) . ']';
         }
         if ($str == '') {
             $str .= '---';

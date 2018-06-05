@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
@@ -239,15 +239,19 @@ interface CurrencyInterface
     /**
      * Returns the set service class
      *
-     * @return \Zend_Service
+     * @return \Zend_Currency_CurrencyInterface
+     * @deprecated
+     * @see \Magento\Directory\Model\Currency\Import\ImportInterface
      */
     public function getService();
 
     /**
      * Sets a new exchange service
      *
-     * @param string|\Magento\Framework\Locale\CurrencyInterface $service Service class
-     * @return \Magento\Framework\CurrencyInterface
+     * @param string|\Zend_Currency_CurrencyInterface $service Service class
+     * @return \Zend_Currency_CurrencyInterface
+     * @deprecated
+     * @see \Magento\Directory\Model\Currency\Import\ImportInterface
      */
     public function setService($service);
 }
