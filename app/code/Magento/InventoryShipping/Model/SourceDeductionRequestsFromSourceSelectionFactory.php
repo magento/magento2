@@ -14,6 +14,9 @@ use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionReque
 use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 
 class SourceDeductionRequestsFromSourceSelectionFactory
 {
@@ -28,15 +31,31 @@ class SourceDeductionRequestsFromSourceSelectionFactory
     private $itemToDeductFactory;
 
     /**
+     * @var SalesChannelInterfaceFactory
+     */
+    private $salesChannelFactory;
+
+    /**
+     * @var WebsiteRepositoryInterface
+     */
+    private $websiteRepository;
+
+    /**
      * @param SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory
      * @param ItemToDeductInterfaceFactory $itemToDeductFactory
+     * @param SalesChannelInterfaceFactory $salesChannelFactory
+     * @param WebsiteRepositoryInterface $websiteRepository
      */
     public function __construct(
         SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory,
-        ItemToDeductInterfaceFactory $itemToDeductFactory
+        ItemToDeductInterfaceFactory $itemToDeductFactory,
+        SalesChannelInterfaceFactory $salesChannelFactory,
+        WebsiteRepositoryInterface $websiteRepository
     ) {
         $this->sourceDeductionRequestFactory = $sourceDeductionRequestFactory;
         $this->itemToDeductFactory = $itemToDeductFactory;
+        $this->salesChannelFactory = $salesChannelFactory;
+        $this->websiteRepository = $websiteRepository;
     }
 
     /**
@@ -51,12 +70,20 @@ class SourceDeductionRequestsFromSourceSelectionFactory
         int $websiteId
     ): array {
         $sourceDeductionRequests = [];
+        $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
+        $salesChannel = $this->salesChannelFactory->create([
+            'data' => [
+                'type' => SalesChannelInterface::TYPE_WEBSITE,
+                'code' => $websiteCode
+            ]
+        ]);
+
         foreach ($this->getItemsPerSource($sourceSelectionResult->getSourceSelectionItems()) as $sourceCode => $items) {
             /** @var SourceDeductionRequestInterface[] $sourceDeductionRequests */
             $sourceDeductionRequests[] = $this->sourceDeductionRequestFactory->create([
-                'websiteId' => $websiteId,
                 'sourceCode' => $sourceCode,
                 'items' => $items,
+                'salesChannel' => $salesChannel,
                 'salesEvent' => $salesEvent
             ]);
         }

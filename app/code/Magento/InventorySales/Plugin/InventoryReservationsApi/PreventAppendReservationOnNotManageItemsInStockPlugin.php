@@ -61,7 +61,7 @@ class PreventAppendReservationOnNotManageItemsInStockPlugin
                 $reservation->getStockId()
             );
 
-            if ($stockItemConfiguration->isManageStock()) {
+            if ($stockItemConfiguration === null || $stockItemConfiguration->isManageStock()) {
                 $reservationToAppend[] = $reservation;
             }
         }

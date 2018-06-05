@@ -35,6 +35,14 @@
     <preference for="Magento\InventoryApi\Api\Data\SourceItemInterface" type="Magento\Inventory\Model\SourceItem"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface" type="Magento\Inventory\Model\SourceItemSearchResults"/>
     <preference for="Magento\Inventory\Model\SourceItem\Command\GetListInterface" type="Magento\Inventory\Model\SourceItem\Command\GetList"/>
+    <type name="Magento\Inventory\Model\SourceItem\Validator\StatusValidator">
+        <arguments>
+            <argument name="allowedSourceItemStatuses" xsi:type="array">
+                <item xsi:type="const" name="in_stock">Magento\InventoryApi\Api\Data\SourceItemInterface::STATUS_IN_STOCK</item>
+                <item xsi:type="const" name="out_of_stock">Magento\InventoryApi\Api\Data\SourceItemInterface::STATUS_OUT_OF_STOCK</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\InventoryApi\Model\SourceItemValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
