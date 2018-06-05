@@ -51,7 +51,7 @@
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickOnAddSimpleProduct"/>
         <waitForPageLoad stepKey="waitForProductEditToLoad"/>
-        <dontSeeCheckboxIsChecked selector="{{AdminProductFormSection.enableProduct}}" stepKey="dontSeeCheckboxEnableProductIsChecked"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="dontSeeCheckboxEnableProductIsChecked"/>
 
     </test>
 </tests>
