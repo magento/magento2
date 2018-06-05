@@ -17,22 +17,46 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
-
+    
+    /*
+     * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     */
+    private $attributeSetFactory;
+    
+    /*
+     * @var \Magento\Framework\Filter\FilterManagerFactory
+     */
+    private $filterManagerFactory;
+    
+    /*
+     * @var \Magento\Framework\Json\Helper\DataFactory
+     */
+    private $jsonHelperDataFactory;
+    
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
+     * @param \Magento\Framework\Filter\FilterManagerFactory $filterManagerFactory
+     * @param \Magento\Framework\Json\Helper\DataFactory $jsonHelperDataFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory = null,
+        \Magento\Framework\Filter\FilterManagerFactory $filterManagerFactory = null,
+        \Magento\Framework\Json\Helper\DataFactory $jsonHelperDataFactory = null
     ) {
         parent::__construct($context, $coreRegistry);
         $this->layoutFactory = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->attributeSetFactory =  $attributeSetFactory ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Eav\Model\Entity\Attribute\SetFactory::class);
+        $this->filterManagerFactory =  $filterManagerFactory ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Filter\FilterManagerFactory::class);
+        $this->jsonHelperDataFactory =  $jsonHelperDataFactory ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Json\Helper\DataFactory::class);
     }
 
     /**
@@ -65,11 +89,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
         $isNewSet = $this->getRequest()->getParam('gotoEdit', false) == '1';
 
         /* @var $model \Magento\Eav\Model\Entity\Attribute\Set */
-        $model = $this->_objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class)
-            ->setEntityTypeId($entityTypeId);
+        $model = $this->attributeSetFactory->create()->setEntityTypeId($entityTypeId);
 
         /** @var $filterManager \Magento\Framework\Filter\FilterManager */
-        $filterManager = $this->_objectManager->get(\Magento\Framework\Filter\FilterManager::class);
+        $filterManager = $this->filterManagerFactory->create();
 
         try {
             if ($isNewSet) {
@@ -85,8 +108,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                         __('This attribute set no longer exists.')
                     );
                 }
-                $data = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)
-                    ->jsonDecode($this->getRequest()->getPost('data'));
+                $data = $this->jsonHelperDataFactory->create()->jsonDecode($this->getRequest()->getPost('data'));
 
                 //filter html tags
                 $data['attribute_set_name'] = $filterManager->stripTags($data['attribute_set_name']);
