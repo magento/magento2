@@ -42,6 +42,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
+     * @param UrlHelper $urlHelper
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -234,16 +235,13 @@ class Switcher extends \Magento\Framework\View\Element\Template
     public function getTargetStorePostData(\Magento\Store\Model\Store $store, $data = [])
     {
         $data[\Magento\Store\Api\StoreResolverInterface::PARAM_NAME] = $store->getCode();
-
-        $urlPath = $store->getCurrentUrl(false);
-        $data[ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl($urlPath);
         $data['___from_store'] = $this->_storeManager->getStore()->getCode();
 
-        $url = $this->getUrl('stores/store/switch', ['_scope' => $store->getCode()]);
-        if ($this->_sidResolver->getUseSessionInUrl()) {
-            $sidName = $this->_sidResolver->getSessionIdQueryParam($this->_session);
-            $url = $this->urlHelper->addRequestParam($url, [$sidName => $this->_session->getSessionId()]);
-        }
+        $urlOnTargetStore = $store->getCurrentUrl(false);
+        $data[ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl($urlOnTargetStore);
+
+        $url = $this->getUrl('stores/store/redirect');
+
         return $this->_postDataHelper->getPostData(
             $url,
             $data
