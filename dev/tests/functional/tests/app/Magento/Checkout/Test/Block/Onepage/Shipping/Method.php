@@ -100,6 +100,7 @@ class Method extends Block
 
     /**
      * @deprecated
+     * @see isShippingMethodAvailable
      * @param array $method
      * @return bool
      */
