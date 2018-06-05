@@ -61,12 +61,6 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $collection->expects($this->any())
             ->method('getSelect')
             ->will($this->returnValue($select));
-        $collection->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn(1);
-        $collection->expects($this->once())
-            ->method('getDefaultStoreId')
-            ->willReturn(1);
 
         $resource->expects($this->once())
             ->method('getConnection')
