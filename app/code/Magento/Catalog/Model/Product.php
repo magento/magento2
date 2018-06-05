@@ -531,17 +531,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get collection instance
-     *
-     * @return object
-     * @deprecated 101.1.0 because collections should be used directly via factory
-     */
-    public function getResourceCollection()
-    {
-        return parent::getResourceCollection();
-    }
-
-    /**
      * Get product url model
      *
      * @return Product\Url
