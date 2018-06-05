@@ -11,6 +11,7 @@ namespace Magento\Setup\Console\Command;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -89,13 +90,13 @@ class ModuleStatusCommand extends AbstractSetupCommand
         $allModules = $this->getAllModules();
         if (!in_array($moduleName, $allModules->getNames())) {
             $output->writeln('<error>Module does not exist</error>');
-            return;
+            return Cli::RETURN_FAILURE;
         }
 
         $enabledModules = $this->getEnabledModules();
         if (in_array($moduleName, $enabledModules->getNames())) {
             $output->writeln('<info>Module is enabled</info>');
-            return;
+            return Cli::RETURN_FAILURE;
         }
 
         $output->writeln('<info>Module is disabled</info>');
@@ -110,9 +111,10 @@ class ModuleStatusCommand extends AbstractSetupCommand
         $enabledModuleNames = $enabledModules->getNames();
         if (count($enabledModuleNames) === 0) {
             $output->writeln('None');
-        } else {
-            $output->writeln(join("\n", $enabledModuleNames));
+            return Cli::RETURN_FAILURE;
         }
+        
+        $output->writeln(join("\n", $enabledModuleNames));
     }
 
     /**
@@ -123,9 +125,10 @@ class ModuleStatusCommand extends AbstractSetupCommand
         $disabledModuleNames = $this->getDisabledModuleNames();
         if (count($disabledModuleNames) === 0) {
             $output->writeln('None');
-        } else {
-            $output->writeln(join("\n", $disabledModuleNames));
+            return Cli::RETURN_FAILURE;
         }
+        
+        $output->writeln(join("\n", $disabledModuleNames));
     }
 
     /**
