@@ -46,6 +46,18 @@ $params = $block->getParams();
                     });
                 }
             );
+        <?php elseif (isset($params['multishipping'])): ?>
+            var require = window.top.require;
+            require(
+                [
+                    'jquery'
+                ],
+                function($) {
+                    var parent = window.top;
+                    $(parent).trigger('clearTimeout');
+                    $(parent.document).find('#multishipping-billing-form').submit();
+                }
+            );
         <?php elseif (isset($params['order_success'])): ?>
             window.top.location = "<?= $block->escapeUrl($params['order_success']) ?>";
         <?php else: ?>

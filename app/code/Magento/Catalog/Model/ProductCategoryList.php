@@ -5,9 +5,11 @@
  */
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\UnionExpression;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Provides info about product categories.
@@ -30,15 +32,31 @@ class ProductCategoryList
     private $category;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var TableMaintainer
+     */
+    private $tableMaintainer;
+
+    /**
      * @param ResourceModel\Product $productResource
      * @param ResourceModel\Category $category
+     * @param StoreManagerInterface $storeManager
+     * @param TableMaintainer|null $tableMaintainer
      */
     public function __construct(
         ResourceModel\Product $productResource,
-        ResourceModel\Category $category
+        ResourceModel\Category $category,
+        StoreManagerInterface $storeManager = null,
+        TableMaintainer $tableMaintainer = null
     ) {
         $this->productResource = $productResource;
         $this->category = $category;
+        $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -50,14 +68,15 @@ class ProductCategoryList
     public function getCategoryIds($productId)
     {
         if (!isset($this->categoryIdList[$productId])) {
+            $unionTables[] = $this->getCategorySelect($productId, $this->category->getCategoryProductTable());
+            foreach ($this->storeManager->getStores() as $store) {
+                $unionTables[] = $this->getCategorySelect(
+                    $productId,
+                    $this->tableMaintainer->getMainTable($store->getId())
+                );
+            }
             $unionSelect = new UnionExpression(
-                [
-                    $this->getCategorySelect($productId, $this->category->getCategoryProductTable()),
-                    $this->getCategorySelect(
-                        $productId,
-                        $this->productResource->getTable(AbstractAction::MAIN_INDEX_TABLE)
-                    )
-                ],
+                $unionTables,
                 Select::SQL_UNION_ALL
             );
 

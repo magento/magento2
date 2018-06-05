@@ -17,7 +17,7 @@ class SelectGenerator
     /**
      * @var int
      */
-    private $batchSize = 12000;
+    private $batchSize = 30000;
 
     /**
      * @var int
@@ -36,7 +36,7 @@ class SelectGenerator
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        $baseBatchSize = 15000
+        $baseBatchSize = 30000
     ) {
         $this->baseBatchSize = $baseBatchSize;
         $this->resourceConnection = $resourceConnection;

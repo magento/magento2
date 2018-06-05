@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminUpdateAttributesSection">
+        <element name="saveButton" type="button" selector="button[title='Save']" timeout="30"/>
+
+        <element name="toggleCountryOfManufacture" type="checkbox" selector="#toggle_country_of_manufacture"/>
+        <element name="toggleCustomDesign" type="checkbox" selector="#toggle_custom_design"/>
+        <element name="toggleCustomDesignFrom" type="checkbox" selector="#toggle_custom_design_from"/>
+        <element name="toggleCustomDesignTo" type="checkbox" selector="#toggle_custom_design_to"/>
+        <element name="toggleCustomLayout" type="checkbox" selector="#toggle_custom_layout"/>
+        <element name="toggleCustomLayoutUpdate" type="checkbox" selector="#toggle_custom_layout_update"/>
+        <element name="toggleDescription" type="checkbox" selector="#toggle_description"/>
+        <element name="toggleMetaDescription" type="checkbox" selector="#toggle_meta_description"/>
+        <element name="toggleMetaKeyword" type="checkbox" selector="#toggle_meta_keyword"/>
+        <element name="toggleMetaTitle" type="checkbox" selector="#toggle_meta_title"/>
+        <element name="toggleName" type="checkbox" selector="#toggle_name"/>
+        <element name="toggleNewsFromDate" type="checkbox" selector="#toggle_news_from_date"/>
+        <element name="toggleNewsToDate" type="checkbox" selector="#toggle_news_to_date"/>
+        <element name="toggleOptionsContainer" type="checkbox" selector="#toggle_options_container"/>
+        <element name="togglePageLayout" type="checkbox" selector="#toggle_page_layout"/>
+        <element name="togglePrice" type="checkbox" selector="#toggle_price"/>
+        <element name="toggleShortDescription" type="checkbox" selector="#toggle_short_description"/>
+        <element name="toggleSpecialFromDate" type="checkbox" selector="#toggle_special_from_date"/>
+        <element name="toggleSpecialPrice" type="checkbox" selector="#toggle_special_price"/>
+        <element name="toggleSpecialToDate" type="checkbox" selector="#toggle_special_to_date"/>
+        <element name="toggleTaxClass" type="checkbox" selector="#toggle_tax_class_id"/>
+        <element name="toggleVisibility" type="checkbox" selector="#toggle_visibility"/>
+        <element name="toggleWeight" type="checkbox" selector="#toggle_weight"/>
+        <element name="toggleColor" type="checkbox" selector="#toggle_color"/>
+
+        <element name="description" type="input" selector="#description"/>
+    </section>
+</sections>

@@ -19,6 +19,7 @@
             <xs:element ref="button" maxOccurs="unbounded"/>
             <xs:element ref="checkbox" maxOccurs="unbounded"/>
             <xs:element ref="checkboxset" maxOccurs="unbounded"/>
+            <xs:element ref="colorPicker" maxOccurs="unbounded"/>
             <xs:element ref="component" maxOccurs="unbounded"/>
             <xs:element ref="container" maxOccurs="unbounded"/>
             <xs:element ref="dataSource" maxOccurs="unbounded"/>
@@ -66,6 +67,7 @@
             <xs:element ref="button" maxOccurs="unbounded"/>
             <xs:element ref="checkbox" maxOccurs="unbounded"/>
             <xs:element ref="checkboxset" maxOccurs="unbounded"/>
+            <xs:element ref="colorPicker" maxOccurs="unbounded"/>
             <xs:element ref="column" maxOccurs="unbounded"/>
             <xs:element ref="columns" maxOccurs="unbounded"/>
             <xs:element ref="columnsControls" maxOccurs="unbounded"/>
@@ -158,6 +160,7 @@
             <xs:element ref="button" maxOccurs="unbounded"/>
             <xs:element ref="checkbox" maxOccurs="unbounded"/>
             <xs:element ref="checkboxset" maxOccurs="unbounded"/>
+            <xs:element ref="colorPicker" maxOccurs="unbounded"/>
             <xs:element ref="column" maxOccurs="unbounded"/>
             <xs:element ref="columns" maxOccurs="unbounded"/>
             <xs:element ref="columnsControls" maxOccurs="unbounded"/>
@@ -203,6 +206,30 @@
             <xs:element ref="text" maxOccurs="unbounded"/>
             <xs:element ref="textarea" maxOccurs="unbounded"/>
             <xs:element ref="wysiwyg" maxOccurs="unbounded"/>
+        </xs:choice>
+    </xs:group>
+
+    <xs:group name="formElementsConfig">
+        <xs:choice>
+            <xs:element name="hidden" type="formElementHidden" maxOccurs="unbounded"/>
+            <xs:element name="file" type="formElementFile" maxOccurs="unbounded"/>
+            <xs:element name="input" type="formElementInput" maxOccurs="unbounded"/>
+            <xs:element name="date" type="formElementDate" maxOccurs="unbounded"/>
+            <xs:element name="boolean" type="formElementBoolean" maxOccurs="unbounded"/>
+            <xs:element name="checkbox" type="formElementCheckbox" maxOccurs="unbounded"/>
+            <xs:element name="checkboxset" type="formElementCheckboxset" maxOccurs="unbounded"/>
+            <xs:element name="email" type="formElementEmail" maxOccurs="unbounded"/>
+            <xs:element name="colorPicker" type="formElementColorPicker" maxOccurs="unbounded"/>
+            <xs:element name="select" type="formElementSelect" maxOccurs="unbounded"/>
+            <xs:element name="multiselect" type="formElementMultiselect" maxOccurs="unbounded"/>
+            <xs:element name="text" type="formElementText" maxOccurs="unbounded"/>
+            <xs:element name="textarea" type="formElementTextarea" maxOccurs="unbounded"/>
+            <xs:element name="price" type="formElementPrice" maxOccurs="unbounded"/>
+            <xs:element name="radioset" type="formElementRadioset" maxOccurs="unbounded"/>
+            <xs:element name="wysiwyg" type="formElementWysiwyg" maxOccurs="unbounded"/>
+            <xs:element name="fileUploader" type="formElementFileUploader" maxOccurs="unbounded"/>
+            <xs:element name="imageUploader" type="formElementImageUploader" maxOccurs="unbounded"/>
+            <xs:element name="button" type="formElementButton" maxOccurs="unbounded"/>
         </xs:choice>
     </xs:group>
 
@@ -284,7 +311,7 @@
                         </xs:annotation>
                         <xs:complexType>
                             <xs:choice minOccurs="1" maxOccurs="unbounded">
-                                <xs:group ref="formElements"/>
+                                <xs:group ref="formElementsConfig"/>
                             </xs:choice>
                         </xs:complexType>
                     </xs:element>
@@ -446,6 +473,14 @@
             <xs:documentation>
                 The Checkboxset component implements a group of selection elements type of which can be either
                 "checkbox" (default) or "radio".
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="colorPicker" type="componentColorPicker">
+        <xs:annotation>
+            <xs:documentation>
+                The ColorPicker component uses the Spectrum and tinycolor .js libraries to make it easier to choose and
+                implement color values.
             </xs:documentation>
         </xs:annotation>
     </xs:element>

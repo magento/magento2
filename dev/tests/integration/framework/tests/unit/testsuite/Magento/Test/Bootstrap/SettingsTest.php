@@ -199,7 +199,8 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAsConfigFileException($settingName, $expectedExceptionMsg)
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $expectedExceptionMsg);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage((string)$expectedExceptionMsg);
         $this->_object->getAsConfigFile($settingName);
     }
 

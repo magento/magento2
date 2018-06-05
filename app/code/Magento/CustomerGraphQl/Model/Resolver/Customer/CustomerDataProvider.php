@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver\Customer;
 
@@ -11,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
+use Magento\Customer\Api\Data\CustomerInterface;
 
 /**
  * Customer field data provider, used for GraphQL request processing.
@@ -48,19 +50,19 @@ class CustomerDataProvider
     }
 
     /**
-     * Get customer data by Id
+     * Get customer data by Id or empty array
      *
      * @param int $customerId
-     * @return array|null
+     * @return array
      * @throws NoSuchEntityException|LocalizedException
      */
-    public function getCustomerById(int $customerId)
+    public function getCustomerById(int $customerId) : array
     {
         try {
             $customerObject = $this->customerRepository->getById($customerId);
         } catch (NoSuchEntityException $e) {
             // No error should be thrown, null result should be returned
-            return null;
+            return [];
         }
         return $this->processCustomer($customerObject);
     }
@@ -68,10 +70,10 @@ class CustomerDataProvider
     /**
      * Transform single customer data from object to in array format
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customerObject
-     * @return array|null
+     * @param CustomerInterface $customerObject
+     * @return array
      */
-    private function processCustomer(\Magento\Customer\Api\Data\CustomerInterface $customerObject)
+    private function processCustomer(CustomerInterface $customerObject) : array
     {
         $customer = $this->serviceOutputProcessor->process(
             $customerObject,
