@@ -266,8 +266,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        cursor: not-allowed;
-        pointer-events: none; // Disabling of clicks
+        pointer-events: none; // Disabling of all pointer events
         .lib-css(opacity, @button__disabled__opacity);
     }
 }
