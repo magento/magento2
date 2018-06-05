@@ -17,9 +17,6 @@
             <testCaseId value="526"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
-            <!-- SKIPPING DUE TO BUG #815 -->
-            <!-- https://app.zenhub.com/workspace/o/magento-engcom/msi/issues/815 -->
-            <group value="skip"/>
             <group value="multi_mode"/>
         </annotations>
 
@@ -78,10 +75,7 @@
         <click selector="{{AdminGridRow.editByValue($$createStock1.stock[name]$$)}}" stepKey="clickOnEditForDefaultStock2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
 
-        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="selectNewWebsite1"/>
-        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite2.name}}" stepKey="selectNewWebsite2"/>
-        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite3.name}}" stepKey="selectNewWebsite3"/>
-        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{BasicMsiWebsite4.name}}" stepKey="selectNewWebsite4"/>
+        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" parameterArray="[{{BasicMsiWebsite1.name}},{{BasicMsiWebsite2.name}},{{BasicMsiWebsite3.name}},{{BasicMsiWebsite4.name}}]" stepKey="stuff"/>
 
         <click selector="#save-button" stepKey="clickOnSaveWebSite5"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
