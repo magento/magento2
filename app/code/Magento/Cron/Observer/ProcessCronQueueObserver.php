@@ -290,8 +290,15 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         try {
             call_user_func_array($callback, [$schedule]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
+            if (!$e instanceof \Exception) {
+                $e = new \RuntimeException(
+                    'Error when running a cron job',
+                    0,
+                    $e
+                );
+            }
             throw $e;
         }
 

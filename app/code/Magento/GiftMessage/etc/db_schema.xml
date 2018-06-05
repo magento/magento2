@@ -19,19 +19,19 @@
             <column name="gift_message_id"/>
         </constraint>
     </table>
-    <table name="quote" resource="quote" comment="Sales Flat Quote">
+    <table name="quote" resource="checkout" comment="Sales Flat Quote">
         <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Gift Message Id"/>
     </table>
-    <table name="quote_address" resource="quote" comment="Sales Flat Quote Address">
+    <table name="quote_address" resource="checkout" comment="Sales Flat Quote Address">
         <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Gift Message Id"/>
     </table>
-    <table name="quote_item" resource="quote" comment="Sales Flat Quote Item">
+    <table name="quote_item" resource="checkout" comment="Sales Flat Quote Item">
         <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Gift Message Id"/>
     </table>
-    <table name="quote_address_item" resource="quote" comment="Sales Flat Quote Address Item">
+    <table name="quote_address_item" resource="checkout" comment="Sales Flat Quote Address Item">
         <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Gift Message Id"/>
     </table>

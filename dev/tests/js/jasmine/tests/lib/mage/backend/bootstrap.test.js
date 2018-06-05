@@ -19,6 +19,14 @@ define([
                 done();
             });
         });
+
+        afterEach(function () {
+            try {
+                injector.clean();
+                injector.remove();
+            } catch (e) {}
+        });
+
         describe('"sendPostponeRequest" method', function () {
             it('should insert "Error" notification if request failed', function (done) {
                 jQuery('<div class="page-main-actions"></div>').appendTo('body');

@@ -11,12 +11,12 @@
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
-        <element name="productWeight" type="input" selector=".admin__field[data-index=weight] input"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
         <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']"/>
         <element name="productWeight" type="input" selector=".admin__field[data-index=weight] input"/>
+        <element name="productWeightSelect" type="select" selector="select[name='product[product_has_weight]']"/>
         <element name="contentTab" type="button" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Content']"/>
         <element name="fieldError" type="text" selector="//input[@name='product[{{fieldName}}]']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
         <element name="priceFieldError" type="text" selector="//input[@name='product[price]']/parent::div/parent::div/label[@class='admin__field-error']"/>
@@ -46,7 +46,6 @@
         <element name="v4" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 4.3.6']" />
         <element name="v3" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 3.6(Deprecated)']" />
         <element name="TinymceDescription3" type ="button" selector="//span[text()='Description']" />
-        <element name="Tinymce3MSG" type="button" selector=".admin__field-error"/>
         <element name="SaveConfig" type ="button" selector="#save" />
         <element name="v4" type="button" selector="#category_form_description_v4"/>
         <element name="WYSIWYGBtn" type="button" selector=".//button[@class='action-default scalable action-wysiwyg']"/>

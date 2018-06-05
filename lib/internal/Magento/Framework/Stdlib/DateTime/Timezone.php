@@ -260,8 +260,8 @@ class Timezone implements TimezoneInterface
      * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
-     * @param null $locale
-     * @param null $timezone
+     * @param string|null $locale
+     * @param string|null $timezone
      * @param string|null $pattern
      * @return string
      */
@@ -309,10 +309,16 @@ class Timezone implements TimezoneInterface
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {
+        $zendFormat = $this->getDateTimeFormat(\IntlDateFormatter::MEDIUM);
+        $zendDate = new \Zend_Date($date, $zendFormat, $this->_localeResolver->getLocale());
+        $time = $zendDate->getTimestamp();
+        $dateTime = new DateTime($this);
+
         if (!($date instanceof \DateTimeInterface)) {
             if ($date instanceof \DateTimeImmutable) {
                 $date = new \DateTime($date->format('Y-m-d H:i:s'), new \DateTimeZone($this->getConfigTimezone()));
             } else {
+                $date = $dateTime->gmtDate(null, $time);
                 $date = new \DateTime($date, new \DateTimeZone($this->getConfigTimezone()));
             }
         } else {

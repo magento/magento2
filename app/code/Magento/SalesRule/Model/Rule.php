@@ -521,7 +521,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                         $coupon->setCode(
                             $couponCode . self::getCouponCodeGenerator()->getDelimiter() . sprintf(
                                 '%04u',
-                                rand(0, 9999)
+                                random_int(0, 9999)
                             )
                         );
                         continue;

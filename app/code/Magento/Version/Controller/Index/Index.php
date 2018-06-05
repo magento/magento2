@@ -9,7 +9,6 @@ namespace Magento\Version\Controller\Index;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\Exception\StateException;
 
 /**
  * Magento Version controller
