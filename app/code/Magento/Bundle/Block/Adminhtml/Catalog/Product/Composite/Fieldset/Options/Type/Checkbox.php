@@ -15,7 +15,7 @@ class Checkbox extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Op
     /**
      * @var string
      */
-    protected $_template = 'product/composite/fieldset/options/type/checkbox.phtml';
+    protected $_template = 'Magento_Bundle::product/composite/fieldset/options/type/checkbox.phtml';
 
     /**
      * @param  string $elementId
