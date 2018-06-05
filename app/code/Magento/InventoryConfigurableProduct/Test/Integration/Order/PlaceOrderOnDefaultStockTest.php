@@ -84,6 +84,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
         $this->orderManagement = Bootstrap::getObjectManager()->get(OrderManagementInterface::class);
         $this->dataObjectFactory = Bootstrap::getObjectManager()->get(DataObjectFactory::class);
+        $this->cleanupReservations->execute();
     }
 
     /**

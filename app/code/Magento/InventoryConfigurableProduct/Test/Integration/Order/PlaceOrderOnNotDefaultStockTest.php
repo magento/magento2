@@ -99,6 +99,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $this->dataObjectFactory = Bootstrap::getObjectManager()->get(DataObjectFactory::class);
         $this->cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $this->cleanupReservations->execute();
     }
 
     /**
