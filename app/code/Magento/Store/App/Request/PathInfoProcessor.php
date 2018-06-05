@@ -56,7 +56,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
 
             try {
                 /** @var \Magento\Store\Api\Data\StoreInterface $store */
-                $this->storeRepository->get($storeCode);
+                $this->storeRepository->getActiveStoreByCode($storeCode);
             } catch (NoSuchEntityException $e) {
                 return $pathInfo;
             }

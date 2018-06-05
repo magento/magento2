@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 /**
  * Class used to resolve store from url path or get parameters or cookie
  */
@@ -63,7 +65,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Store\Model\StoreResolver\ReaderList $readerList
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param string $runMode
      * @param null $scopeCode
      */
@@ -73,7 +74,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Store\Model\StoreResolver\ReaderList $readerList,
-        \Magento\Framework\Serialize\SerializerInterface $serializer,
         $runMode = ScopeInterface::SCOPE_STORE,
         $scopeCode = null
     ) {
@@ -82,7 +82,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         $this->request = $request;
         $this->cache = $cache;
         $this->readerList = $readerList;
-        $this->serializer = $serializer;
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
         $this->scopeCode = $scopeCode;
     }
@@ -109,15 +108,20 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
             $storeCode = $storeCode['_data']['code'];
         }
 
-        try {
-            $store = $this->getRequestedStoreByCode($storeCode);
-            if (!in_array($store->getId(), $stores)) {
-                return $defaultStoreId;
+        if ($storeCode) {
+            try {
+                $store = $this->getRequestedStoreByCode($storeCode);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $store = $this->getDefaultStoreById($defaultStoreId);
             }
-            return $store->getId();
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            return $defaultStoreId;
+
+            if (!in_array($store->getId(), $stores)) {
+                $store = $this->getDefaultStoreById($defaultStoreId);
+            }
+        } else {
+            $store = $this->getDefaultStoreById($defaultStoreId);
         }
+        return $store->getId();
     }
 
     /**
@@ -148,11 +152,11 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         $cacheKey = 'resolved_stores_' . md5($this->runMode . $this->scopeCode);
         $cacheData = $this->cache->load($cacheKey);
         if ($cacheData) {
-            $storesData = $this->serializer->unserialize($cacheData);
+            $storesData = $this->getSerializer()->unserialize($cacheData);
         } else {
             $storesData = $this->readStoresData();
             $this->cache->save(
-                $this->serializer->serialize($storesData),
+                $this->getSerializer()->serialize($storesData),
                 $cacheKey,
                 [
                     \Magento\Store\Model\Store::CACHE_TAG,
@@ -208,5 +212,20 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         }
 
         return $store;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated 100.2.0
+     */
+    private function getSerializer() : \Magento\Framework\Serialize\SerializerInterface
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }
