@@ -911,12 +911,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MyIntervals/emogrifier.git",
-                "reference": "8babf8ddbf348f26b29674e2f84db66ff7e3d95e"
+                "reference": "a1db453bb504597d821efcc04b21c79a6021e00c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MyIntervals/emogrifier/zipball/8babf8ddbf348f26b29674e2f84db66ff7e3d95e",
-                "reference": "8babf8ddbf348f26b29674e2f84db66ff7e3d95e",
+                "url": "https://api.github.com/repos/MyIntervals/emogrifier/zipball/a1db453bb504597d821efcc04b21c79a6021e00c",
+                "reference": "a1db453bb504597d821efcc04b21c79a6021e00c",
                 "shasum": ""
             },
             "require": {
