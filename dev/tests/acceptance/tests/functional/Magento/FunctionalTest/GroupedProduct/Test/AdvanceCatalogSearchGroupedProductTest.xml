@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchGroupedProductByNameTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="createProductOne"/>
+            <createData entity="ApiGroupedProduct" stepKey="createProductOne"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="deleteProductOne"/>
+        </after>
+    </test>
+    <test name="AdvanceCatalogSearchGroupedProductBySkuTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="createProductOne"/>
+            <createData entity="ApiGroupedProduct" stepKey="createProductOne"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="deleteProductOne"/>
+        </after>
+    </test>
+    <test name="AdvanceCatalogSearchGroupedProductByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="createProductOne"/>
+            <createData entity="ApiGroupedProduct" stepKey="createProductOne"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="deleteProductOne"/>
+        </after>
+    </test>
+    <test name="AdvanceCatalogSearchGroupedProductByShortDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="createProductOne"/>
+            <createData entity="ApiGroupedProduct" stepKey="createProductOne"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="deleteProductOne"/>
+        </after>
+    </test>
+    <test name="AdvanceCatalogSearchGroupedProductByPriceTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="createProductOne"/>
+            <createData entity="ApiGroupedProduct" stepKey="createProductOne"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="createProductOne"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="deleteProductOne"/>
+        </after>
+    </test>
+</tests>
