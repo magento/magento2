@@ -8,6 +8,8 @@ namespace Magento\Swatches\Controller\Adminhtml\Product;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
+ * Test for product attribute save controller.
+ *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  */
@@ -98,8 +100,6 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             'expected_store_labels' => $expectedOptionsLabels
         ];
     }
-
-    // ["optiontext[order][option_0]=1","defaulttext[]=option_0","swatchtext[value][option_0][0]=1","optiontext[value][option_0][0]=111","swatchtext[value][option_0][1]=1","optiontext[value][option_0][1]=111","swatchtext[value][option_0][2]=","optiontext[value][option_0][2]=","optiontext[delete][option_0]=","optiontext[order][option_1]=2","defaulttext[]=option_1","swatchtext[value][option_1][0]=2","optiontext[value][option_1][0]=222","swatchtext[value][option_1][1]=2","optiontext[value][option_1][1]=222","swatchtext[value][option_1][2]=","optiontext[value][option_1][2]=","optiontext[delete][option_1]=","text_swatch_validation=","text_swatch_validation_unique="]
 
     /**
      * Get data preset for new attribute.
