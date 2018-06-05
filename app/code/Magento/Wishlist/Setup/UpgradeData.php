@@ -11,7 +11,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\Select\QueryModifierFactory;
-use Magento\Framework\DB\Select\InQueryModifier;
 use Magento\Framework\DB\Query\Generator;
 
 class UpgradeData implements UpgradeDataInterface
