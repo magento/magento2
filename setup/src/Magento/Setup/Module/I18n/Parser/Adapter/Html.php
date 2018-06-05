@@ -16,8 +16,9 @@ class Html extends AbstractAdapter
      * Covers
      * <span><!-- ko i18n: 'Next'--><!-- /ko --></span>
      * <th class="col col-method" data-bind="i18n: 'Select Method'"></th>
+     * <translate args="'Items in Cart'"/>
      */
-    const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/i";
+    const HTML_FILTER = "/i18n:\s?'(?<value_i18n>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)|translate args=\"'(?<value_translate_args>[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)'\"/i";
 
     /**
      * {@inheritdoc}
@@ -44,8 +45,11 @@ class Html extends AbstractAdapter
 
         preg_match_all(self::HTML_FILTER, $data, $results, PREG_SET_ORDER);
         for ($i = 0; $i < count($results); $i++) {
-            if (!empty($results[$i]['value'])) {
-                $this->_addPhrase($results[$i]['value']);
+            if (!empty($results[$i]['value_i18n'])) {
+                $this->_addPhrase($results[$i]['value_i18n']);
+            }
+            if (!empty($results[$i]['value_translate_args'])) {
+                $this->_addPhrase($results[$i]['value_translate_args']);
             }
         }
     }
