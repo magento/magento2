@@ -7,13 +7,12 @@
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
 <p><?= $block->escapeHtml(__('You have signed out and will go to our homepage in 5 seconds.')) ?></p>
-<script>
-require([
-    "jquery",
-    "mage/mage"
-], function($){
-
-    $($.mage.redirect("<?= $block->escapeJs($block->escapeUrl($block->getUrl())) ?>", "assign", 5000));
-
-});
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Customer/js/logout-redirect": {
+                "url": "<?= $block->escapeJs($block->escapeUrl($block->getUrl())) ?>"
+            }
+        }
+    }
 </script>
