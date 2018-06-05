@@ -6,7 +6,6 @@
 
 namespace Magento\Wishlist\Test\Unit\Model;
 
-use Magento\Framework\Exception\LocalizedException;
 use \Magento\Wishlist\Model\Item;
 
 /**
