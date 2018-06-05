@@ -16,22 +16,6 @@ use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
 class Storage
 {
     /**
-     *  Flag to not load collection more than one time
-     *
-     * @var bool
-     * @deprecated
-     */
-    protected $_isCollectionLoaded = false;
-
-    /**
-     * Customer collection
-     *
-     * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
-     * @deprecated
-     */
-    protected $_customerCollection;
-
-    /**
      * Existing customers information. In form of:
      *
      * [customer email] => array(
@@ -82,28 +66,6 @@ class Storage
             $data['collection_by_pages_iterator']
         ) ? $data['collection_by_pages_iterator'] : $colIteratorFactory->create();
         $this->customerCollectionFactory = $collectionFactory;
-    }
-
-    /**
-     * Load needed data from customer collection
-     *
-     * @return void
-     * @deprecated
-     * @see prepareCustomers
-     */
-    public function load()
-    {
-        if ($this->_isCollectionLoaded == false) {
-            $connection = $this->_customerCollection->getConnection();
-            $select = $connection->select();
-            $select->from($this->_customerCollection->getMainTable(), ['entity_id', 'website_id', 'email']);
-            $results = $connection->fetchAll($select);
-            foreach ($results as $customer) {
-                $this->addCustomerByArray($customer);
-            }
-
-            $this->_isCollectionLoaded = true;
-        }
     }
 
     /**

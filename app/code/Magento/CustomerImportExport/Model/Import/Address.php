@@ -169,14 +169,6 @@ class Address extends AbstractCustomer
     protected $_attributeCollection;
 
     /**
-     * Collection of existent addresses
-     *
-     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
-     * @deprecated
-     */
-    protected $_addressCollection;
-
-    /**
      * Store imported row primary keys
      *
      * @var array
