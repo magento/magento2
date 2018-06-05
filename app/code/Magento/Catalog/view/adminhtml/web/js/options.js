@@ -182,10 +182,9 @@ define([
         }
         editForm.on('submit', function () {
             editForm
-                .find('input[name^="option"]')
+                .find('#manage-options-panel input[name^="option"]')
                 .each(function() {
                     optionsValues.push(this.name + '=' + jQuery(this).val());
-                    this.closest('tr').hide()
                 });
             jQuery('<input>')
                 .attr({
@@ -193,7 +192,7 @@ define([
                     name: 'serialized_options'
                 })
                 .val(JSON.stringify(optionsValues))
-                .prependTo('#edit_form');
+                .prependTo(editForm);
             optionPanel.find('table')
                 .replaceWith(jQuery('<div>').text(jQuery.mage.__('Sending attribute values as package.')));
         });

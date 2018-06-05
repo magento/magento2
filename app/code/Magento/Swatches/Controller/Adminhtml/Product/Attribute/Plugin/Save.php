@@ -24,6 +24,8 @@ class Save
     public function beforeDispatch(Attribute\Save $subject, RequestInterface $request)
     {
         $data = $request->getPostValue();
+        $data['serialized_options'] = $data['serialized_swatch_values'];
+        unset($data['serialized_swatch_values']);
         if (isset($data['frontend_input'])) {
             switch ($data['frontend_input']) {
                 case 'swatch_visual':
