@@ -130,6 +130,7 @@ class Builder
      * @param bool $isDefaultStoreUsed
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _getMappedSqlCondition(AbstractCondition $condition, $value = '', $isDefaultStoreUsed = true)
     {
