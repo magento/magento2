@@ -158,8 +158,8 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
             if ($this->isNoRouteUri($baseUrl, $pathInfo)) {
                 $pathInfo = 'noroute';
             }
-            $pathInfo = $this->pathInfoProcessor->process($this, $pathInfo);
             $this->originalPathInfo = (string)$pathInfo;
+            $pathInfo = $this->pathInfoProcessor->process($this, $pathInfo);
             $this->requestString = $pathInfo . $queryString;
         }
         $this->pathInfo = (string)$pathInfo;

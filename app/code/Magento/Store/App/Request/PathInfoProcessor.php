@@ -50,25 +50,25 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
      */
     public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo) : string
     {
-        $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
-        $storeCode = $pathParts[0];
+        if ((bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)) {
+            $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
+            $storeCode = $pathParts[0];
 
-        try {
-            /** @var \Magento\Store\Api\Data\StoreInterface $store */
-            $this->storeRepository->get($storeCode);
-        } catch (NoSuchEntityException $e) {
-            return $pathInfo;
-        }
+            try {
+                /** @var \Magento\Store\Api\Data\StoreInterface $store */
+                $this->storeRepository->get($storeCode);
+            } catch (NoSuchEntityException $e) {
+                return $pathInfo;
+            }
 
-        if ((bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)
-            && $request instanceof Http
-            && !$request->isDirectAccessFrontendName($storeCode)
-            && $storeCode != Store::ADMIN_CODE
-        ) {
-            $pathInfo = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
-            return $pathInfo;
-        } elseif (!empty($storeCode)) {
-            $request->setActionName('noroute');
+            if ($request instanceof Http
+                && !$request->isDirectAccessFrontendName($storeCode)
+                && $storeCode != Store::ADMIN_CODE
+            ) {
+                $pathInfo = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
+            } elseif (!empty($storeCode)) {
+                $request->setActionName('noroute');
+            }
         }
         return $pathInfo;
     }

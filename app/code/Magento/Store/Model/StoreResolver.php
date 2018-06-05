@@ -126,46 +126,21 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     }
 
     /**
-     * Get store code from url when 'use store code in url' is enabled
+     * Get store code from request when 'use store code in url' is enabled
      *
      * @return null|string
      */
     private function getStoreCodeFromUrl() : ?string
     {
-        $requestUri = $this->request->getRequestUri();
-        if ('/' !== $this->request->getRequestUri()) {
-            try {
-                $requestUri = $this->removeRepeatedSlashes($requestUri);
-                $parsedRequestUri = explode('?', $requestUri, 2);
-                $baseUrl = $this->request->getBaseUrl();
-                $pathInfo = ltrim((string)substr($parsedRequestUri[0], (int)strlen($baseUrl)), '/');
-
-                $processedPathInfo = ltrim($this->pathInfoProcessor->process($this->request, $pathInfo), '/');
-                $urlStoreCode = trim(str_replace($processedPathInfo, '', $pathInfo), '/');
-                if (!empty($urlStoreCode)) {
-                    return $urlStoreCode;
-                }
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                return null;
+        if ($this->request instanceof \Magento\Framework\App\Request\Http) {
+            $processedPathInfo = ltrim($this->request->getPathInfo(), '/');
+            $originalPathInfo = $this->request->getOriginalPathInfo();
+            $urlStoreCode = trim(str_replace($processedPathInfo, '', $originalPathInfo), '/');
+            if (!empty(trim($urlStoreCode))) {
+                return $urlStoreCode;
             }
         }
         return null;
-    }
-
-    /**
-     * Remove repeated slashes from the start of the path.
-     *
-     * @param string $pathInfo
-     * @return string
-     */
-    private function removeRepeatedSlashes($pathInfo) : string
-    {
-        $firstChar = (string)substr($pathInfo, 0, 1);
-        if ($firstChar == '/') {
-            $pathInfo = '/' . ltrim($pathInfo, '/');
-        }
-
-        return $pathInfo;
     }
 
     /**
