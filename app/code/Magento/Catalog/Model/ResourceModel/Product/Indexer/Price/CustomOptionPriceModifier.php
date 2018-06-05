@@ -186,16 +186,8 @@ class CustomOptionPriceModifier implements PriceModifierInterface
                 'e.entity_id = i.entity_id',
                 []
             )->join(
-                ['cw' => $this->getTable('store_website')],
-                'cw.website_id = i.website_id',
-                []
-            )->join(
-                ['csg' => $this->getTable('store_group')],
-                'csg.group_id = cw.default_group_id',
-                []
-            )->join(
-                ['cs' => $this->getTable('store')],
-                'cs.store_id = csg.default_store_id',
+                ['cwd' => $this->getTable('catalog_product_index_website')],
+                'i.website_id = cwd.website_id',
                 []
             )->join(
                 ['o' => $this->getTable('catalog_product_option')],
@@ -221,7 +213,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
         if (!$this->isPriceGlobal()) {
             $select->joinLeft(
                 ['otps' => $this->getTable('catalog_product_option_type_price')],
-                'otps.option_type_id = otpd.option_type_id AND otpd.store_id = cs.store_id',
+                'otps.option_type_id = otpd.option_type_id AND otpd.store_id = cwd.default_store_id',
                 []
             );
 
@@ -231,7 +223,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
 
         $minPriceRound = $this->columnValueExpressionFactory
             ->create([
-                'expression' => "ROUND(i.price * ({$optPriceValue} / 100), 4)"
+                'expression' => "ROUND(i.final_price * ({$optPriceValue} / 100), 4)"
             ]);
         $minPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $minPriceRound);
         $minPriceMin = $this->columnValueExpressionFactory
@@ -242,7 +234,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
 
         $tierPriceRound = $this->columnValueExpressionFactory
             ->create([
-                'expression' => "ROUND(i.base_tier * ({$optPriceValue} / 100), 4)"
+                'expression' => "ROUND(i.tier_price * ({$optPriceValue} / 100), 4)"
             ]);
         $tierPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
         $tierPriceMin = $this->columnValueExpressionFactory
@@ -250,11 +242,11 @@ class CustomOptionPriceModifier implements PriceModifierInterface
                 'expression' => "MIN({$tierPriceExpr})"
             ]);
         $tierPriceValue = $connection->getCheckSql("MIN(o.is_require) > 0", $tierPriceMin, 0);
-        $tierPrice = $connection->getCheckSql("MIN(i.base_tier) IS NOT NULL", $tierPriceValue, "NULL");
+        $tierPrice = $connection->getCheckSql("MIN(i.tier_price) IS NOT NULL", $tierPriceValue, "NULL");
 
         $maxPriceRound = $this->columnValueExpressionFactory
             ->create([
-                'expression' => "ROUND(i.price * ({$optPriceValue} / 100), 4)"
+                'expression' => "ROUND(i.final_price * ({$optPriceValue} / 100), 4)"
             ]);
         $maxPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $maxPriceRound);
         $maxPrice = $connection->getCheckSql(
@@ -295,16 +287,8 @@ class CustomOptionPriceModifier implements PriceModifierInterface
                 'e.entity_id = i.entity_id',
                 []
             )->join(
-                ['cw' => $this->getTable('store_website')],
-                'cw.website_id = i.website_id',
-                []
-            )->join(
-                ['csg' => $this->getTable('store_group')],
-                'csg.group_id = cw.default_group_id',
-                []
-            )->join(
-                ['cs' => $this->getTable('store')],
-                'cs.store_id = csg.default_store_id',
+                ['cwd' => $this->getTable('catalog_product_index_website')],
+                'i.website_id = cwd.website_id',
                 []
             )->join(
                 ['o' => $this->getTable('catalog_product_option')],
@@ -324,7 +308,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
         if (!$this->isPriceGlobal()) {
             $select->joinLeft(
                 ['ops' => $this->getTable('catalog_product_option_price')],
-                'ops.option_id = opd.option_id AND ops.store_id = cs.store_id',
+                'ops.option_id = opd.option_id AND ops.store_id = cwd.default_store_id',
                 []
             );
 
@@ -334,7 +318,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
 
         $minPriceRound = $this->columnValueExpressionFactory
             ->create([
-                'expression' => "ROUND(i.price * ({$optPriceValue} / 100), 4)"
+                'expression' => "ROUND(i.final_price * ({$optPriceValue} / 100), 4)"
             ]);
         $priceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $minPriceRound);
         $minPrice = $connection->getCheckSql("{$priceExpr} > 0 AND o.is_require = 1", $priceExpr, 0);
@@ -343,11 +327,11 @@ class CustomOptionPriceModifier implements PriceModifierInterface
 
         $tierPriceRound = $this->columnValueExpressionFactory
             ->create([
-                'expression' => "ROUND(i.base_tier * ({$optPriceValue} / 100), 4)"
+                'expression' => "ROUND(i.tier_price * ({$optPriceValue} / 100), 4)"
             ]);
         $tierPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
         $tierPriceValue = $connection->getCheckSql("{$tierPriceExpr} > 0 AND o.is_require = 1", $tierPriceExpr, 0);
-        $tierPrice = $connection->getCheckSql("i.base_tier IS NOT NULL", $tierPriceValue, "NULL");
+        $tierPrice = $connection->getCheckSql("i.tier_price IS NOT NULL", $tierPriceValue, "NULL");
 
         $select->columns(
             [
