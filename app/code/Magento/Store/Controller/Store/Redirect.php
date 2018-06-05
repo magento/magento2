@@ -102,7 +102,7 @@ class Redirect extends \Magento\Framework\App\Action\Action
                         $sidName => $this->session->getSessionId()
                     ]
             ];
-            $this->_redirect->redirect($this->_response,'stores/store/switch', $arguments);
+            $this->_redirect->redirect($this->_response, 'stores/store/switch', $arguments);
         }
     }
 }
