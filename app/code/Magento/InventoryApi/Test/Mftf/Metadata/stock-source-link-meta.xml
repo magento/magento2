@@ -15,8 +15,8 @@
         </array>
     </operation>
     <operation name="LinkSourceStock" dataType="source-stock-link" type="create" auth="adminOauth" method="POST">
-            <field key="stock_id">integer</field>
-            <field key="source_code">string</field>
-            <field key="priority">integer</field>
+        <field key="stock_id">integer</field>
+        <field key="source_code">string</field>
+        <field key="priority">integer</field>
     </operation>
 </operations>
