@@ -8,6 +8,7 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NotFoundException;
 
 class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
@@ -15,6 +16,7 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
      * Delete store view post action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws NotFoundException
      */
     public function execute()
     {
@@ -25,10 +27,7 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
             ResultFactory::TYPE_REDIRECT
         );
         if (!$request->isPost()) {
-            $this->messageManager->addErrorMessage(
-                __('Something went wrong. Please try again.')
-            );
-            return $redirectResult->setPath('adminhtml/*/');
+            throw new NotFoundException(__('Page not found.'));
         }
 
         $itemId = $request->getParam('item_id');
