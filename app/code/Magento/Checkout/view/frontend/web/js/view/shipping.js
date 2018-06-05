@@ -92,6 +92,7 @@ define([
             }
             checkoutDataResolver.resolveShippingAddress();
 
+
             hasNewAddress = addressList.some(function (address) {
                 return address.getType() == 'new-customer-address'; //eslint-disable-line eqeqeq
             });

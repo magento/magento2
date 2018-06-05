@@ -18,6 +18,8 @@ define([
     'Magento_Checkout/js/model/address-converter',
     'Magento_Checkout/js/action/select-billing-address',
     'Magento_Checkout/js/action/create-billing-address',
+    'Magento_Customer/js/model/customer-addresses',
+    'jquery',
     'underscore'
 ], function (
     addressList,
@@ -31,7 +33,9 @@ define([
     addressConverter,
     selectBillingAddress,
     createBillingAddress,
-    _
+    address,
+    $,
+   _
 ) {
     'use strict';
 
@@ -73,6 +77,8 @@ define([
                 createShippingAddress(newCustomerShippingAddress);
             }
             this.applyShippingAddress();
+            this.resolveBillingAddress();
+
         },
 
         /**
@@ -227,12 +233,20 @@ define([
             }
             shippingAddress = quote.shippingAddress();
 
-            if (shippingAddress &&
+            if (shippingAddress && shippingAddress.isDefaultBilling() &&
                 shippingAddress.canUseForBilling() &&
                 (shippingAddress.isDefaultShipping() || !quote.isVirtual())
             ) {
                 //set billing address same as shipping by default if it is not empty
                 selectBillingAddress(quote.shippingAddress());
+            }else {
+                var addressesList=address.getAddressItems();
+            $.each(addressesList, function (key,item) {
+            if (item.isDefaultBilling()) {
+                selectBillingAddress(item);
+            return;
+             }
+            });
             }
         }
     };
