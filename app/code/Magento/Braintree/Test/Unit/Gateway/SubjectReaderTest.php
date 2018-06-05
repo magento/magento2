@@ -126,7 +126,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
      * @expectedException \InvalidArgumentException
      * @return void
      */
-    public function testReadTransactionWithInvalidResponse(array $response, string $expectedMessage):void
+    public function testReadTransactionWithInvalidResponse(array $response, string $expectedMessage): void
     {
         $this->expectExceptionMessage($expectedMessage);
         $this->subjectReader->readTransaction($response);

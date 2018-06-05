@@ -101,7 +101,7 @@ class CancelResponseValidatorTest extends TestCase
                 [
                     'code' => 91504,
                     'message' => 'Transaction can only be voided if status is authorized.',
-                ]
+                ],
             ],
         ];
         $buildSubject = [
