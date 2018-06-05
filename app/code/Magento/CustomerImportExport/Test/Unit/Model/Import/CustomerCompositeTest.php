@@ -265,7 +265,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return Address|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getAddressEntityMock()
+    private function _getAddressEntityMock()
     {
         $addressEntity = $this->createMock(Address::class);
 
