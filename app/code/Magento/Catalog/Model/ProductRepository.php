@@ -345,30 +345,27 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
-        $this->assignProductToWebsites($product, $createNew);
+        if ($createNew) {
+            $this->assignProductToWebsites($product);
+        }
 
         return $product;
     }
 
     /**
      * @param \Magento\Catalog\Model\Product $product
-     * @param bool $createNew
      * @return void
      */
-    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product, $createNew)
+    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
-        $websiteIds = $product->getWebsiteIds();
+        $websiteIds = array_unique(
+            array_merge(
+                $product->getWebsiteIds(),
+                [$this->storeManager->getStore()->getWebsiteId()]
+            )
+        );
 
-        if (!$this->storeManager->hasSingleStore()) {
-            $websiteIds = array_unique(
-                array_merge(
-                    $websiteIds,
-                    [$this->storeManager->getStore()->getWebsiteId()]
-                )
-            );
-        }
-
-        if ($createNew && $this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+        if ($this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
             $websiteIds = array_keys($this->storeManager->getWebsites());
         }
 
