@@ -14,5 +14,6 @@
         <element name="shipping" type="text" selector="//*[@id='cart-totals']//tr[@class='totals shipping excl']//td//span[@class='price']"/>
         <element name="total" type="text" selector="//*[@id='cart-totals']//tr[@class='grand totals']//td//span[@class='price']"/>
         <element name="proceedToCheckout" type="button" selector=".action.primary.checkout span" timeout="30"/>
+        <element name="discountAmount" type="text" selector="td[data-th='Discount']"/>
     </section>
 </sections>
