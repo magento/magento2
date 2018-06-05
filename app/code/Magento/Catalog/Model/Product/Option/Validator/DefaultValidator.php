@@ -185,7 +185,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      * @param string $value
      * @return bool
      */
-    protected function isNumber($value)
+    public function isNumber($value)
     {
         return is_numeric($this->localeFormat->getNumber($value));
     }
