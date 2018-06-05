@@ -70,7 +70,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $designElementMock->expects($this->once())->method('getValue')->willReturn($fieldConfig['field']);
 
         $templateMock = $this->getMockBuilder(\Magento\Email\Model\TemplateInterface::class)
-            ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign'])
+            ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
             ->getMock();
 
         $this->templateFactoryMock->expects($this->once())->method('create')->willReturn($templateMock);
@@ -115,7 +115,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $designElementMock->expects($this->once())->method('getValue')->willReturn($fieldConfig['field']);
 
         $templateMock = $this->getMockBuilder(\Magento\Email\Model\TemplateInterface::class)
-            ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign'])
+            ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
             ->getMock();
 
         $this->templateFactoryMock->expects($this->once())->method('create')->willReturn($templateMock);
