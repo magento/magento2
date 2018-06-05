@@ -152,28 +152,22 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testSaveToCheckScopeDataSet()
     {
         $transactionMock = $this->createMock(\Magento\Framework\DB\Transaction::class);
-
         $this->_transFactoryMock->expects($this->any())->method('create')->will($this->returnValue($transactionMock));
 
         $this->_configLoaderMock->expects($this->any())->method('getConfigByPath')->will($this->returnValue([]));
 
-        $this->_eventManagerMock->expects(
-            $this->at(0)
-        )->method(
-            'dispatch'
-        )->with(
-            $this->equalTo('admin_system_config_changed_section_section'),
-            $this->arrayHasKey('website')
-        );
-
-        $this->_eventManagerMock->expects(
-            $this->at(0)
-        )->method(
-            'dispatch'
-        )->with(
-            $this->equalTo('admin_system_config_changed_section_section'),
-            $this->arrayHasKey('store')
-        );
+        $this->_eventManagerMock->expects($this->at(0))
+            ->method('dispatch')
+            ->with(
+                $this->equalTo('admin_system_config_changed_section_section'),
+                $this->arrayHasKey('website')
+            );
+        $this->_eventManagerMock->expects($this->at(0))
+            ->method('dispatch')
+            ->with(
+                $this->equalTo('admin_system_config_changed_section_section'),
+                $this->arrayHasKey('store')
+            );
 
         $group = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
         $group->method('getPath')->willReturn('section/1');
@@ -182,51 +176,26 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $field->method('getGroupPath')->willReturn('section/1');
         $field->method('getId')->willReturn('key');
 
-        $this->_configStructure->expects(
-            $this->at(0)
-        )->method(
-            'getElement'
-        )->with(
-            'section/1'
-        )->will(
-            $this->returnValue($group)
-        );
-        $this->_configStructure->expects(
-            $this->at(1)
-        )->method(
-            'getElement'
-        )->with(
-            'section/1'
-        )->will(
-            $this->returnValue($group)
-        );
-        $this->_configStructure->expects(
-            $this->at(2)
-        )->method(
-            'getElement'
-        )->with(
-            'section/1/key'
-        )->will(
-            $this->returnValue($field)
-        );
-        $this->_configStructure->expects(
-            $this->at(3)
-        )->method(
-            'getElement'
-        )->with(
-            'section/1'
-        )->will(
-            $this->returnValue($group)
-        );
-        $this->_configStructure->expects(
-            $this->at(4)
-        )->method(
-            'getElement'
-        )->with(
-            'section/1/key'
-        )->will(
-            $this->returnValue($field)
-        );
+        $this->_configStructure->expects($this->at(0))
+            ->method('getElement')
+            ->with('section/1')
+            ->will($this->returnValue($group));
+        $this->_configStructure->expects($this->at(1))
+            ->method('getElement')
+            ->with('section/1')
+            ->will($this->returnValue($group));
+        $this->_configStructure->expects($this->at(2))
+            ->method('getElement')
+            ->with('section/1/key')
+            ->will($this->returnValue($field));
+        $this->_configStructure->expects($this->at(3))
+            ->method('getElement')
+            ->with('section/1')
+            ->will($this->returnValue($group));
+        $this->_configStructure->expects($this->at(4))
+            ->method('getElement')
+            ->with('section/1/key')
+            ->will($this->returnValue($field));
 
         $website = $this->createMock(\Magento\Store\Model\Website::class);
         $website->expects($this->any())->method('getCode')->will($this->returnValue('website_code'));
@@ -242,12 +211,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\App\Config\Value::class,
             ['setPath', 'addData', '__sleep', '__wakeup']
         );
-        $backendModel->expects(
-            $this->once()
-        )->method(
-            'addData'
-        )->with(
-            [
+        $backendModel->expects($this->once())
+            ->method('addData')
+            ->with([
                 'field' => 'key',
                 'groups' => [1 => ['fields' => ['key' => ['data']]]],
                 'group_id' => null,
@@ -256,17 +222,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'scope_code' => 'website_code',
                 'field_config' => null,
                 'fieldset_data' => ['key' => null],
-            ]
-        );
-        $backendModel->expects(
-            $this->once()
-        )->method(
-            'setPath'
-        )->with(
-            'section/1/key'
-        )->will(
-            $this->returnValue($backendModel)
-        );
+            ]);
+        $backendModel->expects($this->once())
+            ->method('setPath')
+            ->with('section/1/key')
+            ->will($this->returnValue($backendModel));
 
         $this->_dataFactoryMock->expects($this->any())->method('create')->will($this->returnValue($backendModel));
 
