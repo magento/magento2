@@ -89,7 +89,10 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
         $reservations = [];
         /** @var ItemToSellInterface $item */
         foreach ($items as $item) {
-            if (true === $this->isSourceItemManagementAllowedForProductType->execute($productTypes[$item->getSku()])) {
+            $currentSku = $item->getSku();
+            $skuNotExistInCatalog = !isset($productTypes[$currentSku]);
+            if ($skuNotExistInCatalog ||
+                $this->isSourceItemManagementAllowedForProductType->execute($productTypes[$currentSku])) {
                 $reservations[] = $this->reservationBuilder
                     ->setSku($item->getSku())
                     ->setQuantity((float)$item->getQuantity())
