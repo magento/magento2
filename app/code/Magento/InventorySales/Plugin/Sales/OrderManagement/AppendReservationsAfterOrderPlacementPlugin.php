@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Plugin\Sales\OrderManagement;
 
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
@@ -63,6 +65,16 @@ class AppendReservationsAfterOrderPlacementPlugin
     private $stockByWebsiteIdResolver;
 
     /**
+     * @var GetProductTypesBySkusInterface
+     */
+    private $getProductTypesBySkus;
+
+    /**
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemManagementAllowedForProductType;
+
+    /**
      * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param WebsiteRepositoryInterface $websiteRepository
@@ -71,6 +83,8 @@ class AppendReservationsAfterOrderPlacementPlugin
      * @param ItemToSellInterfaceFactory $itemsToSellFactory
      * @param CheckItemsQuantity $checkItemsQuantity
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
+     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      */
     public function __construct(
         PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent,
@@ -80,7 +94,9 @@ class AppendReservationsAfterOrderPlacementPlugin
         SalesEventInterfaceFactory $salesEventFactory,
         ItemToSellInterfaceFactory $itemsToSellFactory,
         CheckItemsQuantity $checkItemsQuantity,
-        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
+        GetProductTypesBySkusInterface $getProductTypesBySkus,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
     ) {
         $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
         $this->getSkusByProductIds = $getSkusByProductIds;
@@ -90,6 +106,8 @@ class AppendReservationsAfterOrderPlacementPlugin
         $this->itemsToSellFactory = $itemsToSellFactory;
         $this->checkItemsQuantity = $checkItemsQuantity;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
+        $this->getProductTypesBySkus = $getProductTypesBySkus;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
     }
 
     /**
@@ -108,7 +126,13 @@ class AppendReservationsAfterOrderPlacementPlugin
             $itemsById[$item->getProductId()] += $item->getQtyOrdered();
         }
         $productSkus = $this->getSkusByProductIds->execute(array_keys($itemsById));
+        $productTypes = $this->getProductTypesBySkus->execute($productSkus);
+
         foreach ($productSkus as $productId => $sku) {
+            if (false === $this->isSourceItemManagementAllowedForProductType->execute($productTypes[$sku])) {
+                continue;
+            }
+
             $itemsBySku[$sku] = (float)$itemsById[$productId];
             $itemsToSell[] = $this->itemsToSellFactory->create([
                 'sku' => $sku,

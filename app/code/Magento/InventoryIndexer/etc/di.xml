@@ -6,8 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventoryIndexer\Indexer\IndexHandlerInterface" type="Magento\InventoryIndexer\Indexer\IndexHandler"/>
-    <preference for="Magento\InventoryIndexer\Indexer\IndexStructureInterface" type="Magento\InventoryIndexer\Indexer\IndexStructure"/>
+    <preference for="Magento\InventoryMultiDimensionalIndexerApi\Model\IndexHandlerInterface" type="Magento\InventoryIndexer\Indexer\IndexHandler"/>
+    <preference for="Magento\InventoryMultiDimensionalIndexerApi\Model\IndexStructureInterface" type="Magento\InventoryIndexer\Indexer\IndexStructure"/>
     <type name="Magento\InventoryIndexer\Indexer\IndexHandler">
         <arguments>
             <argument name="batchSize" xsi:type="string">100</argument>

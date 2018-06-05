@@ -192,7 +192,7 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
         $productType = $this->getProductTypesBySkus->execute([$sku])[$sku];
         if (false === $this->isSourceItemManagementAllowedForProductType->execute($productType)) {
             throw new LocalizedException(
-                __('Can\'t check requested quantity for products without Source Items supporting.')
+                __('Can\'t check requested quantity for products without Source Items support.')
             );
         }
     }
