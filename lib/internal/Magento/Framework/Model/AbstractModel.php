@@ -190,6 +190,10 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
             $this->_idFieldName = $this->_getResource()->getIdFieldName();
         }
 
+        if (!empty($data)) {
+            $this->_hasDataChanges = true;
+        }
+
         parent::__construct($data);
         $this->_construct();
     }
