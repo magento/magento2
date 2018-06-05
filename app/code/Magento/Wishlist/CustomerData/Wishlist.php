@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2018 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\CustomerData;
@@ -142,7 +142,7 @@ class Wishlist implements SectionSourceInterface
      * Retrieve product image data
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Block\Product\Image
+     * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getImageData($product)
