@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model;
 
+/**
+ * Class used to resolve store from url path or get parameters or cookie
+ */
 class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 {
     /**
@@ -55,18 +58,12 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     private $serializer;
 
     /**
-     * @var \Magento\Framework\App\Request\PathInfoProcessorInterface
-     */
-    private $pathInfoProcessor;
-
-    /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Store\Model\StoreResolver\ReaderList $readerList
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
-     * @param \Magento\Framework\App\Request\PathInfoProcessorInterface $pathInfoProcessor,
      * @param string $runMode
      * @param null $scopeCode
      */
@@ -77,7 +74,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Store\Model\StoreResolver\ReaderList $readerList,
         \Magento\Framework\Serialize\SerializerInterface $serializer,
-        \Magento\Framework\App\Request\PathInfoProcessorInterface $pathInfoProcessor,
         $runMode = ScopeInterface::SCOPE_STORE,
         $scopeCode = null
     ) {
@@ -87,7 +83,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         $this->cache = $cache;
         $this->readerList = $readerList;
         $this->serializer = $serializer;
-        $this->pathInfoProcessor = $pathInfoProcessor;
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
         $this->scopeCode = $scopeCode;
     }
