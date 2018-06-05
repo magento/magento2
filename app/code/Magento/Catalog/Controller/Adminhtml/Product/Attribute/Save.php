@@ -333,7 +333,7 @@ class Save extends Attribute
             foreach ($serializedOptions as $serializedOption) {
                 $option = [];
                 parse_str($serializedOption, $option);
-                $data = array_replace_recursive($data, $option);
+                $data = array_merge_recursive($data, $option);
             }
         }
     }

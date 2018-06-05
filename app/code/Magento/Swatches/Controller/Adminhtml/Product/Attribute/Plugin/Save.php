@@ -11,7 +11,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Swatches\Model\Swatch;
 
 /**
- * Class Save
+ * Plugin for product attribute save controller.
  */
 class Save
 {
@@ -24,7 +24,11 @@ class Save
     public function beforeDispatch(Attribute\Save $subject, RequestInterface $request)
     {
         $data = $request->getPostValue();
-        $data['serialized_options'] = $data['serialized_swatch_values'];
+        //Data is serialized to overcome issues caused by max_input_vars value if it's modification is unavailable.
+        //See subject controller code and comments for more info.
+        if (isset($data['serialized_swatch_values'])) {
+            $data['serialized_options'] = $data['serialized_swatch_values'];
+        }
         unset($data['serialized_swatch_values']);
         if (isset($data['frontend_input'])) {
             switch ($data['frontend_input']) {
