@@ -319,6 +319,7 @@ class Save extends Attribute
 
     /**
      * Extract options data from serialized options field.
+     * 
      * This logic is required to overcome max_input_vars php limit
      * that may vary and/or be inaccessible to change on different instances.
      *
