@@ -8,12 +8,14 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurableProduct\Test\Integration\Order;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
-use Magento\Quote\Model\Quote;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -74,6 +76,16 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      */
     private $dataObjectFactory;
 
+    /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
     protected function setUp()
     {
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
@@ -85,6 +97,8 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
         $this->orderManagement = Bootstrap::getObjectManager()->get(OrderManagementInterface::class);
         $this->dataObjectFactory = Bootstrap::getObjectManager()->get(DataObjectFactory::class);
+        $this->cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -96,6 +110,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/source_items_configurable.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @magentoDbIsolation disabled
@@ -126,6 +141,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/source_items_configurable.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/set_product_configurable_out_of_stock.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @magentoDbIsolation disabled
@@ -157,6 +173,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/set_product_configurable_out_of_stock.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoConfigFixture store_for_global_website_store cataloginventory/item_options/backorders 1
      *
      * @magentoDbIsolation disabled
@@ -187,6 +204,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/source_items_configurable.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/set_product_configurable_out_of_stock.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/item_options/manage_stock 0
      *
@@ -209,26 +227,24 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
     }
 
     /**
-     * @return Quote
+     * @return CartInterface
      */
-    private function getQuote(): Quote
+    private function getQuote(): CartInterface
     {
         $storeCode = 'store_for_us_website';
+
         /** @var StoreInterface $store */
         $store = $this->storeRepository->get($storeCode);
         $this->storeManager->setCurrentStore($storeCode);
 
-        return Bootstrap::getObjectManager()->create(
-            Quote::class,
-            [
-                'data' => [
-                    'store_id' => $store->getId(),
-                    'is_active' => 0,
-                    'is_multi_shipping' => 0,
-                    'id' => 1
-                ]
-            ]
-        );
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('reserved_order_id', 'test_order_1')
+            ->create();
+
+        /** @var CartInterface $cart */
+        $cart = current($this->cartRepository->getList($searchCriteria)->getItems());
+        $cart->setStoreId($store->getId());
+        return $cart;
     }
 
     /**
@@ -261,6 +277,10 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $this->orderRepository->delete($this->orderRepository->get($orderId));
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', false);
+    }
+
+    protected function tearDown()
+    {
         $this->cleanupReservations->execute();
     }
 }
