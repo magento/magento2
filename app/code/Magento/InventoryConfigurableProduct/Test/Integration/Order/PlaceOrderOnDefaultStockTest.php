@@ -10,7 +10,7 @@ namespace Magento\InventoryConfigurableProduct\Test\Integration\Order;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DataObject;
-use Magento\Framework\DataObjectFactory;
+use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Quote\Api\CartManagementInterface;
@@ -90,7 +90,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
     public function testPlaceOrderWithInStockProduct()
     {
@@ -101,6 +100,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
         $quote = $this->getQuote();
 
         $quote->addProduct($product, $this->getByRequest($product, $qty));
+        $this->cartRepository->save($quote);
         $orderId = $this->cartManagement->placeOrder($quote->getId());
 
         self::assertNotNull($orderId);
@@ -112,7 +112,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
     public function testPlaceOrderWithOutOffStockProduct()
     {
@@ -121,9 +120,10 @@ class PlaceOrderOnDefaultStockTest extends TestCase
 
         $quote = $this->getQuote();
         $product = $this->productRepository->get($sku);
-        $quote->addProduct($product, $this->getByRequest($product, $qty));
 
         self::expectException(LocalizedException::class);
+        $quote->addProduct($product, $this->getByRequest($product, $qty));
+        $this->cartRepository->save($quote);
         $orderId = $this->cartManagement->placeOrder($quote->getId());
 
         self::assertNull($orderId);
@@ -132,7 +132,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/item_options/backorders 1
      */
     public function testPlaceOrderWithOutOffStockProductAndBackOrdersTurnedOn()
@@ -143,7 +142,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
         $product = $this->productRepository->get($sku);
         $quote = $this->getQuote();
         $quote->addProduct($product, $this->getByRequest($product, $qty));
-
+        $this->cartRepository->save($quote);
         $orderId = $this->cartManagement->placeOrder($quote->getId());
 
         self::assertNotNull($orderId);
@@ -155,7 +154,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/item_options/manage_stock 0
      */
     public function testPlaceOrderWithOutOffStockProductAndManageStockTurnedOff()
@@ -166,7 +164,7 @@ class PlaceOrderOnDefaultStockTest extends TestCase
         $product = $this->productRepository->get($sku);
         $quote = $this->getQuote();
         $quote->addProduct($product, $this->getByRequest($product, $qty));
-
+        $this->cartRepository->save($quote);
         $orderId = $this->cartManagement->placeOrder($quote->getId());
 
         self::assertNotNull($orderId);

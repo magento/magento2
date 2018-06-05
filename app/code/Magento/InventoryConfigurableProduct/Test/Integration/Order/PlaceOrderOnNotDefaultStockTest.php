@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\DataObjectFactory;
+use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Api\OrderManagementInterface;
@@ -112,7 +112,6 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/source_items_configurable.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @magentoDbIsolation disabled
      */
@@ -121,10 +120,11 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $sku = 'configurable';
         $qty = 3;
 
-        $product = $this->productRepository->get($sku);
+        $product = $this->getProductBySku($sku);
         $quote = $this->getQuote();
 
         $quote->addProduct($product, $this->getByRequest($product, $qty));
+        $this->cartRepository->save($quote);
         $orderId = $this->cartManagement->placeOrder($quote->getId());
 
         self::assertNotNull($orderId);
@@ -143,7 +143,6 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/set_product_configurable_out_of_stock.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @magentoDbIsolation disabled
      */
@@ -152,12 +151,12 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $sku = 'configurable';
         $qty = 6;
 
-        $product = $this->productRepository->get($sku);
+        $product = $this->getProductBySku($sku);
         $quote = $this->getQuote();
 
-        $quote->addProduct($product, $this->getByRequest($product, $qty));
-
         self::expectException(LocalizedException::class);
+        $quote->addProduct($product, $this->getByRequest($product, $qty));
+        $this->cartRepository->save($quote);
         $orderId = $this->cartManagement->placeOrder($quote->getId());
 
         self::assertNull($orderId);
@@ -173,7 +172,6 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/source_items_configurable.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/set_product_configurable_out_of_stock.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoConfigFixture store_for_global_website_store cataloginventory/item_options/backorders 1
      *
@@ -184,10 +182,11 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $sku = 'configurable';
         $qty = 6;
 
-        $product = $this->productRepository->get($sku);
+        $product = $this->getProductBySku($sku);
         $quote = $this->getQuote();
 
         $quote->addProduct($product, $this->getByRequest($product, $qty));
+        $this->cartRepository->save($quote);
         $orderId = $this->cartManagement->placeOrder($quote->getId());
 
         self::assertNotNull($orderId);
@@ -206,7 +205,6 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/set_product_configurable_out_of_stock.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/item_options/manage_stock 0
      *
      * @magentoDbIsolation disabled
@@ -216,10 +214,11 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $sku = 'configurable';
         $qty = 6;
 
-        $product = $this->productRepository->get($sku);
+        $product = $this->getProductBySku($sku);
         $quote = $this->getQuote();
 
         $quote->addProduct($product, $this->getByRequest($product, $qty));
+        $this->cartRepository->save($quote);
         $orderId = $this->cartManagement->placeOrder($quote->getId());
 
         self::assertNotNull($orderId);
@@ -233,15 +232,12 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
     private function getQuote(): CartInterface
     {
         $storeCode = 'store_for_us_website';
-
         /** @var StoreInterface $store */
         $store = $this->storeRepository->get($storeCode);
         $this->storeManager->setCurrentStore($storeCode);
-
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('reserved_order_id', 'test_order_1')
             ->create();
-
         /** @var CartInterface $cart */
         $cart = current($this->cartRepository->getList($searchCriteria)->getItems());
         $cart->setStoreId($store->getId());
@@ -265,6 +261,15 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
                 'qty' => $productQty
             ]
         );
+    }
+
+    /**
+     * @param string $sku
+     * @return ProductInterface
+     */
+    private function getProductBySku(string $sku): ProductInterface
+    {
+        return $this->productRepository->get($sku, false, 'store_for_us_website');
     }
 
     /**
