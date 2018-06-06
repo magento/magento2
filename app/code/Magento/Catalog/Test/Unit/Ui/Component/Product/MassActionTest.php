@@ -203,4 +203,36 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
+
+    /**
+     * @param bool $expected
+     * @param string $actionType
+     * @param int $callNum
+     * @param string $resource
+     * @param bool $isAllowed
+     * @dataProvider isActionAllowedDataProvider
+     */
+    public function testIsActionAllowed($expected, $actionType, $callNum, $resource = '', $isAllowed = true )
+    {
+        $this->authorizationMock->expects($this->exactly($callNum))
+            ->method('isAllowed')
+            ->with($resource)
+            ->willReturn($isAllowed);
+
+        $this->assertEquals($expected, $this->massAction->isActionAllowed($actionType));
+    }
+
+    public function isActionAllowedDataProvider()
+    {
+        return [
+            'other' => [true, 'other', 0,],
+            'delete-allowed' => [true, 'delete', 1, 'Magento_Catalog::products'],
+            'delete-not-allowed' => [false, 'delete', 1, 'Magento_Catalog::products', false],
+            'status-allowed' => [true, 'status', 1, 'Magento_Catalog::products'],
+            'status-not-allowed' => [false, 'status', 1, 'Magento_Catalog::products', false],
+            'attributes-allowed' => [true, 'attributes', 1, 'Magento_Catalog::update_attributes'],
+            'attributes-not-allowed' => [false, 'attributes', 1, 'Magento_Catalog::update_attributes', false],
+
+        ];
+    }
 }

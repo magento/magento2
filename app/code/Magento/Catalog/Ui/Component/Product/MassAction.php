@@ -80,7 +80,7 @@ class MassAction extends AbstractComponent
      * @param string $actionType
      * @return bool
      */
-    private function isActionAllowed($actionType) : bool
+    public function isActionAllowed($actionType) : bool
     {
         $isAllowed = true;
         switch ($actionType) {
