@@ -79,7 +79,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
      * @return void
      */
-    public function testGetMinPrice() : void
+    public function testGetMinPrice(): void
     {
         $productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $product = $productRepository->get('simple');
