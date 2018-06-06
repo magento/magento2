@@ -188,8 +188,8 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
     }
 
     /**
-     * @param null $valueField
-     * @param null $labelField
+     * @param string $labelField
+     * @param string $labelField
      * @param array $additional
      * @return array
      */
