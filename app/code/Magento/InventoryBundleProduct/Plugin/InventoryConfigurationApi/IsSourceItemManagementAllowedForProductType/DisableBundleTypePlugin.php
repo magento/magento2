@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundle\Plugin\InventoryConfigurationApi\IsSourceItemManagementAllowedForProductType;
+namespace Magento\InventoryBundleProduct\Plugin\InventoryConfigurationApi\IsSourceItemManagementAllowedForProductType;
 
 use Magento\Bundle\Model\Product\Type as BundleType;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
