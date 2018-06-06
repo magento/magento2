@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\ObjectManager\Factory;
 
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\ObjectManagerInterface;
+use Psr\Log\LoggerInterface;
 
 abstract class AbstractFactory implements \Magento\Framework\ObjectManager\FactoryInterface
 {
@@ -111,8 +113,25 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
         try {
             return new $type(...array_values($args));
         } catch (\Throwable $e) {
-            throw new \Exception($e->getMessage(), null, $e);
+            $this->getLogger()->critical(__(
+                'Object create error: %1, %2',
+                [
+                    $type,
+                    $e->getMessage()
+                ]
+            ));
+            throw new RuntimeException(__($e->getMessage()));
         }
+    }
+
+    /**
+     * Logger Instance
+     *
+     * @return LoggerInterface
+     */
+    protected function getLogger()
+    {
+        return $this->objectManager->get(LoggerInterface::class);
     }
 
     /**
