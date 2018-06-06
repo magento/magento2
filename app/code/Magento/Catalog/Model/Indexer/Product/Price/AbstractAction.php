@@ -356,6 +356,8 @@ abstract class AbstractAction
             if ($indexer instanceof DimensionalIndexerInterface) {
                 $indexer->executeByDimension([], \SplFixedArray::fromArray($entityIds, false));
             } else {
+                // copy relation index data for backward compatibility
+                $this->_copyRelationIndexData($entityIds);
                 $indexer->reindexEntity($entityIds);
             }
         }
