@@ -73,6 +73,6 @@ define([
                 expect(model.disabled()).toEqual(true);
                 expect(model.source.set).toHaveBeenCalledWith('data.use_default.' + model.index, 1);
             });
-        })
+        });
     });
 });
