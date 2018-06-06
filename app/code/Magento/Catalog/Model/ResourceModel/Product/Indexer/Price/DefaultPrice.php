@@ -71,7 +71,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param string|null $connectionName
-     * @param IndexTableStructureFactory $indexTableStructureFactory
+     * @param null|IndexTableStructureFactory $indexTableStructureFactory
      * @param PriceModifierInterface[] $priceModifiers
      */
     public function __construct(

@@ -471,7 +471,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      *
      * @return  void
      */
-    private function applyBundlePrice() : void
+    private function applyBundlePrice(): void
     {
         $select = $this->getConnection()->select();
         $select->from(
@@ -499,7 +499,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
      *
      * @return void
      */
-    private function applyBundleOptionPrice() : void
+    private function applyBundleOptionPrice(): void
     {
         $connection = $this->getConnection();
 
@@ -524,7 +524,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         $select = $connection->select()->join(
             ['io' => $subSelect],
             'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
-            ' AND i.website_id = io.website_id',
+                ' AND i.website_id = io.website_id',
             []
         )->columns(
             [
