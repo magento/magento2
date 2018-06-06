@@ -124,7 +124,8 @@ class ProductUrlPathGenerator
      */
     public function getUrlKey($product)
     {
-        return (bool)$product->getUrlKey() === false  ? null : $this->prepareProductUrlKey($product);
+        $generatedProductUrlKey = $this->prepareProductUrlKey($product);
+        return $product->getUrlKey() === false || empty($generatedProductUrlKey) ? null : $generatedProductUrlKey;
     }
 
     /**
