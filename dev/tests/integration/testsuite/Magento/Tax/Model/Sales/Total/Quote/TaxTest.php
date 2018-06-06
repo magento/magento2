@@ -125,6 +125,161 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test taxes collection with full discount for quote.
+     *
+     * Test tax calculation with certain configuration and price calculation of items when the discount may be bigger than total
+     * This method will test the collector through $quote->collectTotals() method
+     *
+     * @see \Magento\SalesRule\Model\Utility::deltaRoundingFix
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testFullDiscountWithDeltaRoundingFix()
+    {
+        $configData = array (
+            'config_overrides' =>
+                array (
+                    'tax/calculation/apply_after_discount' => 0,
+                    'tax/calculation/discount_tax' => 1,
+                    'tax/calculation/algorithm' => 'ROW_BASE_CALCULATION',
+                    'tax/classes/shipping_tax_class' => SetupUtil::SHIPPING_TAX_CLASS,
+                ),
+            'tax_rate_overrides' =>
+                array (
+                    SetupUtil::TAX_RATE_TX => 18,
+                    SetupUtil::TAX_RATE_SHIPPING => 0,
+                ),
+            'tax_rule_overrides' =>
+                array (
+                        array (
+                            'code' => 'Product Tax Rule',
+                            'product_tax_class_ids' =>
+                                array (
+                                    SetupUtil::PRODUCT_TAX_CLASS_1
+                                ),
+                        ),
+                        array (
+                            'code' => 'Shipping Tax Rule',
+                            'product_tax_class_ids' =>
+                                array (
+                                    SetupUtil::SHIPPING_TAX_CLASS
+                                ),
+                            'tax_rate_ids' =>
+                                array (
+                                    SetupUtil::TAX_RATE_SHIPPING,
+                                ),
+                        ),
+                ),
+        );
+
+        $quoteData = array (
+            'billing_address' =>
+                array (
+                    'region_id' => SetupUtil::REGION_TX,
+                ),
+            'shipping_address' =>
+                array (
+                    'region_id' => SetupUtil::REGION_TX,
+                ),
+            'items' =>
+                [
+                    [
+                        'sku' => 'simple1',
+                        'price' => 2542.37,
+                        'qty' => 2,
+                    ]
+                ],
+            'shipping_method' => 'free',
+            'shopping_cart_rules' =>
+                array (
+                        array (
+                            'discount_amount' => 100,
+                        ),
+                ),
+        );
+
+        $expectedResults = array (
+            'address_data' =>
+                array (
+                    'subtotal' => 5084.74,
+                    'base_subtotal' => 5084.74,
+                    'subtotal_incl_tax' => 5999.99,
+                    'base_subtotal_incl_tax' => 5999.99,
+                    'tax_amount' => 915.25,
+                    'base_tax_amount' => 915.25,
+                    'shipping_amount' => 0,
+                    'base_shipping_amount' => 0,
+                    'shipping_incl_tax' => 0,
+                    'base_shipping_incl_tax' => 0,
+                    'shipping_tax_amount' => 0,
+                    'base_shipping_tax_amount' => 0,
+                    'discount_amount' => -5999.99,
+                    'base_discount_amount' => -5999.99,
+                    'discount_tax_compensation_amount' => 0,
+                    'base_discount_tax_compensation_amount' => 0,
+                    'shipping_discount_tax_compensation_amount' => 0,
+                    'base_shipping_discount_tax_compensation_amount' => 0,
+                    'grand_total' => 0,
+                    'base_grand_total' => 0,
+                    'applied_taxes' =>
+                        array (
+                            SetupUtil::TAX_RATE_TX =>
+                                array (
+                                    'percent' => 18,
+                                    'amount' => 915.25,
+                                    'base_amount' => 915.25,
+                                    'rates' =>
+                                        array (
+                                                array (
+                                                    'code' => SetupUtil::TAX_RATE_TX,
+                                                    'title' => SetupUtil::TAX_RATE_TX,
+                                                    'percent' => 18,
+                                                ),
+                                        ),
+                                )
+                        ),
+                ),
+            'items_data' =>
+                array (
+                    'simple1' =>
+                        array (
+                            'row_total' => 5084.74,
+                            'base_row_total' => 5084.74,
+                            'tax_percent' => 18,
+                            'price' => 2542.37,
+                            'base_price' => 2542.37,
+                            'price_incl_tax' => 3000,
+                            'base_price_incl_tax' => 3000,
+                            'row_total_incl_tax' => 5999.99,
+                            'base_row_total_incl_tax' => 5999.99,
+                            'tax_amount' => 915.25,
+                            'base_tax_amount' => 915.25,
+                            'discount_amount' => 5999.99,
+                            'base_discount_amount' => 5999.99,
+                            'discount_percent' => 100,
+                            'discount_tax_compensation_amount' => 0,
+                            'base_discount_tax_compensation_amount' => 0,
+                        ),
+                ),
+        );
+
+        /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = Bootstrap::getObjectManager();
+
+        //Setup tax configurations
+        $this->setupUtil = new SetupUtil($objectManager);
+        $this->setupUtil->setupTax($configData);
+
+        $quote = $this->setupUtil->setupQuote($quoteData);
+
+        $quote->collectTotals();
+
+        $quoteAddress = $quote->getShippingAddress();
+
+        $this->verifyResult($quoteAddress, $expectedResults);
+    }
+
+    /**
      * Verify fields in quote item
      *
      * @param \Magento\Quote\Model\Quote\Address\Item $item
