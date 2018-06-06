@@ -127,7 +127,7 @@ class Builder
      *
      * @param AbstractCondition $condition
      * @param string $value
-     * @param bool $isDefaultStoreUsed
+     * @param bool $isDefaultStoreUsed no longer used because caused an issue about not existing table alias
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
