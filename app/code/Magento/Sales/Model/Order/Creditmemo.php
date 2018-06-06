@@ -179,7 +179,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->priceCurrency = $priceCurrency;
-        $this->scopeConfig = $scopeConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->invoiceFactory = $invoiceFactory ?: ObjectManager::getInstance()->get(InvoiceFactory::class);
         parent::__construct(
             $context,
@@ -649,7 +649,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
 
     public function hasAllowZeroGrandTotal()
     {
-        $isAllowed = $this->scopeConfig->getValue(self::XML_PATH_ALLOW_ZERO_GRANDTOTAL,
+        $isAllowed = $this->_scopeConfig->getValue(self::XML_PATH_ALLOW_ZERO_GRANDTOTAL,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         return $isAllowed;
     }
