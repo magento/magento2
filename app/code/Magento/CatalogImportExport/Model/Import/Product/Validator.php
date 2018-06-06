@@ -150,7 +150,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             $doCheck = true;
         }
 
-        return $doCheck ? isset($rowData[$attrCode]) && strlen(trim($rowData[$attrCode])) : true;
+        if ($doCheck === true) {
+            return isset($rowData[$attrCode])
+                && strlen(trim($rowData[$attrCode]))
+                && trim($rowData[$attrCode]) !== $this->context->getEmptyAttributeValueConstant();
+        }
+        return true;
     }
 
     /**
