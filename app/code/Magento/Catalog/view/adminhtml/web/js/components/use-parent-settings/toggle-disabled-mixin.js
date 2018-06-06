@@ -12,7 +12,9 @@ define([
         defaults: {
             imports: {
                 toggleDisabled: '${ $.parentName }.custom_use_parent_settings:checked'
-            }
+            },
+            useParent: false,
+            useDefaults: false
         },
 
         /**
@@ -22,13 +24,35 @@ define([
          * @param {Boolean} isUseParent
          */
         toggleDisabled: function (isUseParent) {
-            var disabled = isUseParent;
+            var disabled = this.useParent = isUseParent;
 
             if (!disabled && !_.isUndefined(this.service)) {
-                disabled = !!this.isUseDefault() || this.disabled();
+                disabled = !!this.isUseDefault();
             }
 
+            this.saveUseDefaults();
             this.disabled(disabled);
+        },
+
+        /**
+         * Stores original state of the field.
+         */
+        saveUseDefaults: function () {
+            this.useDefaults = this.disabled();
+        },
+
+        /** @inheritdoc */
+        setInitialValue: function () {
+            this._super();
+            this.isUseDefault(this.useDefaults);
+
+            return this;
+        },
+
+        /** @inheritdoc */
+        toggleUseDefault: function (state) {
+            this._super();
+            this.disabled(state || this.useParent);
         }
     };
 
