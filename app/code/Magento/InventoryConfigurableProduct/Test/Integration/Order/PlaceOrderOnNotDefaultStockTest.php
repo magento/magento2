@@ -179,6 +179,8 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      */
     public function testPlaceOrderWithOutOffStockProductAndBackOrdersTurnedOn()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/1314');
+
         $sku = 'configurable';
         $qty = 6;
 
