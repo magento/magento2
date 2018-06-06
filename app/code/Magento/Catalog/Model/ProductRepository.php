@@ -233,7 +233,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
         $cacheKey = $this->getCacheKey([$editMode, $storeId]);
-        if (!isset($this->instances[$sku][$cacheKey]) || $forceReload) {
+        $cachedProduct = $this->getProductFromLocalCache($sku, $cacheKey);
+        if ($cachedProduct === null || $forceReload) {
             $product = $this->productFactory->create();
 
             $productId = $this->resourceModel->getIdBySku($sku);
@@ -250,11 +251,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
             $product->load($productId);
             $this->cacheProduct($cacheKey, $product);
+            $cachedProduct = $product;
         }
-        if (!isset($this->instances[$sku])) {
-            $sku = trim($sku);
-        }
-        return $this->instances[$sku][$cacheKey];
+
+        return $cachedProduct;
     }
 
     /**
@@ -312,7 +312,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product)
     {
         $this->instancesById[$product->getId()][$cacheKey] = $product;
-        $this->instances[$product->getSku()][$cacheKey] = $product;
+        $this->saveProductInLocalCache($product, $cacheKey);
 
         if ($this->cacheLimit && count($this->instances) > $this->cacheLimit) {
             $offset = round($this->cacheLimit / -2);
@@ -338,7 +338,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
             }
         } else {
-            unset($this->instances[$productData['sku']]);
+            $this->removeProductFromLocalCache($productData['sku']);
             $product = $this->get($productData['sku']);
         }
 
@@ -613,7 +613,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);
             }
-            unset($this->instances[$product->getSku()]);
+            $this->removeProductFromLocalCache($product->getSku());
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->save($product);
         } catch (ConnectionException $exception) {
@@ -650,8 +650,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $e
             );
         }
-        unset($this->instances[$product->getSku()]);
+        $this->removeProductFromLocalCache($product->getSku());
         unset($this->instancesById[$product->getId()]);
+
         return $this->get($product->getSku(), false, $product->getStoreId());
     }
 
@@ -663,7 +664,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $sku = $product->getSku();
         $productId = $product->getId();
         try {
-            unset($this->instances[$product->getSku()]);
+            $this->removeProductFromLocalCache($product->getSku());
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
         } catch (ValidatorException $e) {
@@ -673,8 +674,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 __('The "%1" product couldn\'t be removed.', $sku)
             );
         }
-        unset($this->instances[$sku]);
+        $this->removeProductFromLocalCache($sku);
         unset($this->instancesById[$productId]);
+
         return true;
     }
 
@@ -795,5 +797,55 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             );
         }
         return $this->collectionProcessor;
+    }
+
+    /**
+     * Gets product from the local cache by SKU.
+     *
+     * @param string $sku
+     * @param string $cacheKey
+     * @return Product|null
+     */
+    private function getProductFromLocalCache(string $sku, string $cacheKey)
+    {
+        $preparedSku = $this->prepareSku($sku);
+
+        return $this->instances[$preparedSku][$cacheKey] ?? null;
+    }
+
+    /**
+     * Removes product in the local cache.
+     *
+     * @param string $sku
+     * @return void
+     */
+    private function removeProductFromLocalCache(string $sku) :void
+    {
+        $preparedSku = $this->prepareSku($sku);
+        unset($this->instances[$preparedSku]);
+    }
+
+    /**
+     * Saves product in the local cache.
+     *
+     * @param Product $product
+     * @param string $cacheKey
+     * @return void
+     */
+    private function saveProductInLocalCache(Product $product, string $cacheKey) : void
+    {
+        $preparedSku = $this->prepareSku($product->getSku());
+        $this->instances[$preparedSku][$cacheKey] = $product;
+    }
+
+    /**
+     * Converts SKU to lower case and trims.
+     *
+     * @param string $sku
+     * @return string
+     */
+    private function prepareSku(string $sku): string
+    {
+        return mb_strtolower(trim($sku));
     }
 }
