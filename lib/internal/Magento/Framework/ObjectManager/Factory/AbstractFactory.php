@@ -104,11 +104,15 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * @param array $args
      *
      * @return object
-     *
+     * @throws \Exception
      */
     protected function createObject($type, $args)
     {
-        return new $type(...array_values($args));
+        try {
+            return new $type(...array_values($args));
+        } catch (\Throwable $e) {
+            throw new \Exception($e->getMessage(), null, $e);
+        }
     }
 
     /**
