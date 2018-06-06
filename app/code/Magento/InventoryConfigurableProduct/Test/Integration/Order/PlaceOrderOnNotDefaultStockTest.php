@@ -173,16 +173,14 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/set_product_configurable_out_of_stock.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoConfigFixture store_for_global_website_store cataloginventory/item_options/backorders 1
+     * @magentoConfigFixture store_for_us_website_store cataloginventory/item_options/backorders 1
      *
      * @magentoDbIsolation disabled
      */
     public function testPlaceOrderWithOutOffStockProductAndBackOrdersTurnedOn()
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/1314');
-
         $sku = 'configurable';
-        $qty = 6;
+        $qty = 8;
 
         $product = $this->getProductBySku($sku);
         $quote = $this->getQuote();

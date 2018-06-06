@@ -112,6 +112,28 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
+     * @magentoConfigFixture current_store cataloginventory/item_options/backorders 1
+     */
+    public function testPlaceOrderWithOutOffStockProductAndBackOrdersTurnedOn()
+    {
+        $sku = 'configurable_out_of_stock';
+        $qty = 8;
+
+        $product = $this->productRepository->get($sku);
+        $quote = $this->getQuote();
+        $quote->addProduct($product, $this->getByRequest($product, $qty));
+        $this->cartRepository->save($quote);
+        $orderId = $this->cartManagement->placeOrder($quote->getId());
+
+        self::assertNotNull($orderId);
+
+        //cleanup
+        $this->deleteOrderById((int)$orderId);
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      */
     public function testPlaceOrderWithOutOffStockProduct()
     {
@@ -127,30 +149,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
         $orderId = $this->cartManagement->placeOrder($quote->getId());
 
         self::assertNull($orderId);
-    }
-
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/default_stock_configurable_products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoConfigFixture current_store cataloginventory/item_options/backorders 1
-     */
-    public function testPlaceOrderWithOutOffStockProductAndBackOrdersTurnedOn()
-    {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/1314');
-
-        $sku = 'configurable_out_of_stock';
-        $qty = 8;
-
-        $product = $this->productRepository->get($sku);
-        $quote = $this->getQuote();
-        $quote->addProduct($product, $this->getByRequest($product, $qty));
-        $this->cartRepository->save($quote);
-        $orderId = $this->cartManagement->placeOrder($quote->getId());
-
-        self::assertNotNull($orderId);
-
-        //cleanup
-        $this->deleteOrderById((int)$orderId);
     }
 
     /**
