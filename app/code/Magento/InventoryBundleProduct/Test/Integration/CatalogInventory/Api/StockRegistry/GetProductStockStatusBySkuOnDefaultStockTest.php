@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundle\Test\Integration\CatalogInventory\Api\StockRegistry;
+namespace Magento\InventoryBundleProduct\Test\Integration\CatalogInventory\Api\StockRegistry;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
@@ -34,7 +34,7 @@ class GetProductStockStatusBySkuOnDefaultStockTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/default_stock_bundle_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/default_stock_bundle_products.php
      *
      * @dataProvider getStockDataProvider
      * @param string $sku
@@ -49,7 +49,7 @@ class GetProductStockStatusBySkuOnDefaultStockTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/default_stock_bundle_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/default_stock_bundle_products.php
      *
      * @dataProvider getStockDataProvider
      * @param string $sku

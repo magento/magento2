@@ -5,19 +5,25 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundle\Test\Integration\CatalogInventory\Api\StockRegistry;
+namespace Magento\InventoryBundleProduct\Test\Integration\CatalogInventory\Api\StockRegistry;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class GetStockStatusBySkuOnDefaultStockTest extends TestCase
+class GetStockStatusOnDefaultStockTest extends TestCase
 {
     /**
      * @var StockRegistryInterface
      */
     private $stockRegistry;
+
+    /**
+     * @var GetProductIdsBySkusInterface
+     */
+    private $getProductIdsBySkus;
 
     /**
      * @var DefaultStockProviderInterface
@@ -30,11 +36,12 @@ class GetStockStatusBySkuOnDefaultStockTest extends TestCase
     protected function setUp()
     {
         $this->stockRegistry = Bootstrap::getObjectManager()->get(StockRegistryInterface::class);
+        $this->getProductIdsBySkus = Bootstrap::getObjectManager()->get(GetProductIdsBySkusInterface::class);
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/default_stock_bundle_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/default_stock_bundle_products.php
      *
      * @dataProvider getStockDataProvider
      * @param string $sku
@@ -43,14 +50,15 @@ class GetStockStatusBySkuOnDefaultStockTest extends TestCase
      */
     public function testGetStatusIfScopeIdParameterIsNotPassed(string $sku, int $status): void
     {
-        $stockStatus = $this->stockRegistry->getStockStatusBySku($sku);
+        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+        $stockStatus = $this->stockRegistry->getStockStatus($productId);
 
         self::assertEquals($status, $stockStatus->getStockStatus());
         self::assertEquals(0, $stockStatus->getQty());
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundle/Test/_files/default_stock_bundle_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/default_stock_bundle_products.php
      *
      * @dataProvider getStockDataProvider
      * @param string $sku
@@ -59,7 +67,8 @@ class GetStockStatusBySkuOnDefaultStockTest extends TestCase
      */
     public function testGetStatusIfScopeIdParameterIsPassed(string $sku, int $status): void
     {
-        $stockStatus = $this->stockRegistry->getStockStatusBySku($sku, $this->defaultStockProvider->getId());
+        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+        $stockStatus = $this->stockRegistry->getStockStatus($productId, $this->defaultStockProvider->getId());
 
         self::assertEquals($status, $stockStatus->getStockStatus());
         self::assertEquals(0, $stockStatus->getQty());

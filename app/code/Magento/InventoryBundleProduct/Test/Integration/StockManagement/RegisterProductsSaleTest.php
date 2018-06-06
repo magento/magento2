@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundle\Test\Integration\StockManagement;
+namespace Magento\InventoryBundleProduct\Test\Integration\StockManagement;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\StockManagement;
