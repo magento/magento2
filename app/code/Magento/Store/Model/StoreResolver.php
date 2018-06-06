@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model;
 
-use Magento\Framework\Serialize\SerializerInterface;
-
 /**
  * Class used to resolve store from url path or get parameters or cookie
  */
@@ -30,12 +28,12 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     protected $storeCookieManager;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface
+     * @deprecated
      */
     protected $cache;
 
     /**
-     * @var \Magento\Store\Model\StoreResolver\ReaderList
+     * @deprecated
      */
     protected $readerList;
 
@@ -55,35 +53,44 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     protected $request;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var StoresData
      */
-    private $serializer;
+    private $storesData;
 
     /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Cache\FrontendInterface $cache
-     * @param \Magento\Store\Model\StoreResolver\ReaderList $readerList
-     * @param string $runMode
-     * @param null $scopeCode
+     * @param \Magento\Framework\Cache\FrontendInterface|null $cache
+     * @param \Magento\Store\Model\StoreResolver\ReaderList|null $readerList
+     * @param string|null $runMode
+     * @param string|null $scopeCode
+     * @param \Magento\Store\Model\StoresData|null $storesData
      */
     public function __construct(
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
         \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Store\Model\StoreResolver\ReaderList $readerList,
+        $cache = null,
+        $readerList = null,
         $runMode = ScopeInterface::SCOPE_STORE,
-        $scopeCode = null
+        $scopeCode = null,
+        \Magento\Store\Model\StoresData $storesData = null
     ) {
         $this->storeRepository = $storeRepository;
         $this->storeCookieManager = $storeCookieManager;
         $this->request = $request;
-        $this->cache = $cache;
-        $this->readerList = $readerList;
+        $this->cache = $cache ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            'Magento\Framework\App\Cache\Type\Config'
+        );
+        $this->readerList = $readerList ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            'Magento\Store\Model\StoreResolver\ReaderList'
+        );
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
         $this->scopeCode = $scopeCode;
+        $this->storesData = $storesData ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Store\Model\StoresData::class
+        );
     }
 
     /**
@@ -149,33 +156,18 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      */
     protected function getStoresData() : array
     {
-        $cacheKey = 'resolved_stores_' . md5($this->runMode . $this->scopeCode);
-        $cacheData = $this->cache->load($cacheKey);
-        if ($cacheData) {
-            $storesData = $this->getSerializer()->unserialize($cacheData);
-        } else {
-            $storesData = $this->readStoresData();
-            $this->cache->save(
-                $this->getSerializer()->serialize($storesData),
-                $cacheKey,
-                [
-                    \Magento\Store\Model\Store::CACHE_TAG,
-                    self::CACHE_TAG
-                ]
-            );
-        }
-        return $storesData;
+        return $this->storesData->getStoresData($this->runMode, $this->scopeCode);
     }
 
     /**
      * Read stores data. First element is allowed store ids, second is default store id
      *
      * @return array
+     * @deprecated
      */
     protected function readStoresData() : array
     {
-        $reader = $this->readerList->getReader($this->runMode);
-        return [$reader->getAllowedStoreIds($this->scopeCode), $reader->getDefaultStoreId($this->scopeCode)];
+        return $this->storesData->getStoresData($this->runMode, $this->scopeCode);
     }
 
     /**
@@ -212,20 +204,5 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         }
 
         return $store;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 100.2.0
-     */
-    private function getSerializer() : \Magento\Framework\Serialize\SerializerInterface
-    {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 }
