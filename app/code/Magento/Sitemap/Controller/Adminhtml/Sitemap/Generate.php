@@ -43,7 +43,6 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         $sitemap->load($id);
         // if sitemap record exists
         if ($sitemap->getId()) {
-            
             try {
                 //We need to emulate to get the correct frontend URL for the product images
                 $this->appEmulation->startEnvironmentEmulation(
