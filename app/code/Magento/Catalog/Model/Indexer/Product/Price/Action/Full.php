@@ -246,6 +246,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $idxTableName = $this->_defaultIndexerResource->getIdxTable();
             $this->_emptyTable($idxTableName);
 
+            if ($priceIndexer->getIsComposite()) {
+                $this->_copyRelationIndexData($entityIds);
+            }
             $this->_prepareTierPriceIndex($entityIds);
 
             // Reindex entities by id
