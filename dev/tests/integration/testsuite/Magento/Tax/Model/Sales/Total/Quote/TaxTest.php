@@ -11,6 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 require_once __DIR__ . '/SetupUtil.php';
 require_once __DIR__ . '/../../../../_files/tax_calculation_data_aggregated.php';
+require_once __DIR__ . '/../../../../_files/full_discount_with_tax.php';
 
 /**
  * Class TaxTest
@@ -131,135 +132,16 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      * This method will test the collector through $quote->collectTotals() method
      *
      * @see \Magento\SalesRule\Model\Utility::deltaRoundingFix
+     * @magentoDataFixture Magento/Tax/_files/full_discount_with_tax.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testFullDiscountWithDeltaRoundingFix()
     {
-        $configData = [
-            'config_overrides' =>
-                [
-                    'tax/calculation/apply_after_discount' => 0,
-                    'tax/calculation/discount_tax' => 1,
-                    'tax/calculation/algorithm' => 'ROW_BASE_CALCULATION',
-                    'tax/classes/shipping_tax_class' => SetupUtil::SHIPPING_TAX_CLASS,
-                ],
-            'tax_rate_overrides' =>
-                [
-                    SetupUtil::TAX_RATE_TX => 18,
-                    SetupUtil::TAX_RATE_SHIPPING => 0,
-                ],
-            'tax_rule_overrides' =>
-                [
-                    [
-                            'code' => 'Product Tax Rule',
-                            'product_tax_class_ids' =>
-                                [
-                                    SetupUtil::PRODUCT_TAX_CLASS_1
-                                ],
-                        ],
-                    [
-                            'code' => 'Shipping Tax Rule',
-                            'product_tax_class_ids' =>
-                                [
-                                    SetupUtil::SHIPPING_TAX_CLASS
-                                ],
-                            'tax_rate_ids' =>
-                                [
-                                    SetupUtil::TAX_RATE_SHIPPING,
-                                ],
-                        ],
-                ],
-        ];
-
-        $quoteData = [
-            'billing_address' =>
-                [
-                    'region_id' => SetupUtil::REGION_TX,
-                ],
-            'shipping_address' =>
-                [
-                    'region_id' => SetupUtil::REGION_TX,
-                ],
-            'items' =>
-                [
-                    [
-                        'sku' => 'simple1',
-                        'price' => 2542.37,
-                        'qty' => 2,
-                    ]
-                ],
-            'shipping_method' => 'free',
-            'shopping_cart_rules' =>
-                [
-                    ['discount_amount' => 100],
-                ],
-        ];
-
-        $expectedResults = [
-            'address_data' =>
-                [
-                    'subtotal' => 5084.74,
-                    'base_subtotal' => 5084.74,
-                    'subtotal_incl_tax' => 5999.99,
-                    'base_subtotal_incl_tax' => 5999.99,
-                    'tax_amount' => 915.25,
-                    'base_tax_amount' => 915.25,
-                    'shipping_amount' => 0,
-                    'base_shipping_amount' => 0,
-                    'shipping_incl_tax' => 0,
-                    'base_shipping_incl_tax' => 0,
-                    'shipping_tax_amount' => 0,
-                    'base_shipping_tax_amount' => 0,
-                    'discount_amount' => -5999.99,
-                    'base_discount_amount' => -5999.99,
-                    'discount_tax_compensation_amount' => 0,
-                    'base_discount_tax_compensation_amount' => 0,
-                    'shipping_discount_tax_compensation_amount' => 0,
-                    'base_shipping_discount_tax_compensation_amount' => 0,
-                    'grand_total' => 0,
-                    'base_grand_total' => 0,
-                    'applied_taxes' =>
-                        [
-                            SetupUtil::TAX_RATE_TX =>
-                                [
-                                    'percent' => 18,
-                                    'amount' => 915.25,
-                                    'base_amount' => 915.25,
-                                    'rates' =>
-                                        [
-                                                [
-                                                    'code' => SetupUtil::TAX_RATE_TX,
-                                                    'title' => SetupUtil::TAX_RATE_TX,
-                                                    'percent' => 18,
-                                                ],
-                                        ],
-                                ]
-                        ],
-                ],
-            'items_data' =>
-                [
-                    'simple1' =>
-                        [
-                            'row_total' => 5084.74,
-                            'base_row_total' => 5084.74,
-                            'tax_percent' => 18,
-                            'price' => 2542.37,
-                            'base_price' => 2542.37,
-                            'price_incl_tax' => 3000,
-                            'base_price_incl_tax' => 3000,
-                            'row_total_incl_tax' => 5999.99,
-                            'base_row_total_incl_tax' => 5999.99,
-                            'tax_amount' => 915.25,
-                            'base_tax_amount' => 915.25,
-                            'discount_amount' => 5999.99,
-                            'base_discount_amount' => 5999.99,
-                            'discount_percent' => 100,
-                            'discount_tax_compensation_amount' => 0,
-                            'base_discount_tax_compensation_amount' => 0,
-                        ],
-                ],
-    ];
+        global $fullTaxDiscountWithTax;
+        $configData = $fullTaxDiscountWithTax['config_data'];
+        $quoteData = $fullTaxDiscountWithTax['quote_data'];
+        $expectedResults = $fullTaxDiscountWithTax['expected_result'];
 
         /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = Bootstrap::getObjectManager();
