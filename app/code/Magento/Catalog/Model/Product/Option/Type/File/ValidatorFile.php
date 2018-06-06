@@ -91,7 +91,7 @@ class ValidatorFile extends Validator
         $this->httpFactory = $httpFactory;
         $this->isImageValidator = $isImageValidator;
         $this->random = $random
-            ?? ObjectManager::getInstance()->get(Random::class);
+            ? $random : ObjectManager::getInstance()->get(Random::class);
         parent::__construct($scopeConfig, $filesystem, $fileSize);
     }
 
