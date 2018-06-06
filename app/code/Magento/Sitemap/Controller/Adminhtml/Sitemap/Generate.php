@@ -43,6 +43,7 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         $sitemap->load($id);
         // if sitemap record exists
         if ($sitemap->getId()) {
+            
             try {
                 //We need to emulate to get the correct frontend URL for the product images
                 $this->appEmulation->startEnvironmentEmulation(
@@ -51,7 +52,6 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
                     true
                 );
                 $sitemap->generateXml();
-                $this->appEmulation->stopEnvironmentEmulation();
 
                 $this->messageManager->addSuccess(
                     __('The sitemap "%1" has been generated.', $sitemap->getSitemapFilename())
@@ -60,6 +60,8 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('We can\'t generate the sitemap right now.'));
+            } finally {
+                $this->appEmulation->stopEnvironmentEmulation();
             }
         } else {
             $this->messageManager->addError(__('We can\'t find a sitemap to generate.'));
