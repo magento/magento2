@@ -17,4 +17,10 @@
     <section name="Group">
         <element name="FolderName" type="text" selector="//span[text()='{{var1}}']" parameterized="true"/>
     </section>
+    <section name="ModifyAttributes">
+        <!-- Parameter is the order number of the attribute on the page (1 is the newest) -->
+        <element name="nthExistingAttribute" type="block" selector=".admin__field:nth-of-type({{numElement}}) .admin__control-select" parameterized="true"/>
+        <!-- First parameter is the order number of the attribute on the page, 2nd parameter is the number option in the dropdown (1 for blank) -->
+        <element name="nthAttributeOption" type="block" selector=".admin__field:nth-of-type({{numElement}}) .admin__control-select option:nth-of-type({{numOption}})" parameterized="true"/>
+    </section>
 </sections>
