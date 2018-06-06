@@ -18,6 +18,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Test for Magento\Signifyd\Observer\PlaceOrderTest class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -146,7 +151,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $event = $this->objectManager->create(
             Event::class,
             [
-                'data' => ['order' => $order]
+                'data' => ['order' => $order],
             ]
         );
 
