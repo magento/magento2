@@ -8,6 +8,7 @@ namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
 use Magento\Backend\App\Action;
 use Magento\Store\Model\App\Emulation;
+use Magento\Framework\App\ObjectManager;
 
 class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
@@ -17,16 +18,15 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     /**
      * Generate constructor.
      * @param Action\Context $context
-     * @param \Magento\Store\Model\App\Emulation $appEmulation
+     * @param \Magento\Store\Model\App\Emulation|null $appEmulation
      */
     public function __construct(
         Action\Context $context,
-        Emulation $appEmulation
+        Emulation $appEmulation = null
     ) {
-        $this->appEmulation = $appEmulation;
-        parent::__construct(
-            $context
-        );
+        parent::__construct($context);
+        $this->appEmulation = $appEmulation ?: ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\App\Emulation::class);
     }
 
     /**
