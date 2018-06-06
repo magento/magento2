@@ -127,7 +127,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test taxes collection with full discount for quote.
      *
-     * Test tax calculation with certain configuration and price calculation of items when the discount may be bigger than total
+     * Test tax calculation and price when the discount may be bigger than total
      * This method will test the collector through $quote->collectTotals() method
      *
      * @see \Magento\SalesRule\Model\Utility::deltaRoundingFix
@@ -136,51 +136,51 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testFullDiscountWithDeltaRoundingFix()
     {
-        $configData = array (
+        $configData = [
             'config_overrides' =>
-                array (
+                [
                     'tax/calculation/apply_after_discount' => 0,
                     'tax/calculation/discount_tax' => 1,
                     'tax/calculation/algorithm' => 'ROW_BASE_CALCULATION',
                     'tax/classes/shipping_tax_class' => SetupUtil::SHIPPING_TAX_CLASS,
-                ),
+                ],
             'tax_rate_overrides' =>
-                array (
+                [
                     SetupUtil::TAX_RATE_TX => 18,
                     SetupUtil::TAX_RATE_SHIPPING => 0,
-                ),
+                ],
             'tax_rule_overrides' =>
-                array (
-                        array (
+                [
+                    [
                             'code' => 'Product Tax Rule',
                             'product_tax_class_ids' =>
-                                array (
+                                [
                                     SetupUtil::PRODUCT_TAX_CLASS_1
-                                ),
-                        ),
-                        array (
+                                ],
+                        ],
+                    [
                             'code' => 'Shipping Tax Rule',
                             'product_tax_class_ids' =>
-                                array (
+                                [
                                     SetupUtil::SHIPPING_TAX_CLASS
-                                ),
+                                ],
                             'tax_rate_ids' =>
-                                array (
+                                [
                                     SetupUtil::TAX_RATE_SHIPPING,
-                                ),
-                        ),
-                ),
-        );
+                                ],
+                        ],
+                ],
+        ];
 
-        $quoteData = array (
+        $quoteData = [
             'billing_address' =>
-                array (
+                [
                     'region_id' => SetupUtil::REGION_TX,
-                ),
+                ],
             'shipping_address' =>
-                array (
+                [
                     'region_id' => SetupUtil::REGION_TX,
-                ),
+                ],
             'items' =>
                 [
                     [
@@ -191,16 +191,14 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
                 ],
             'shipping_method' => 'free',
             'shopping_cart_rules' =>
-                array (
-                        array (
-                            'discount_amount' => 100,
-                        ),
-                ),
-        );
+                [
+                    ['discount_amount' => 100],
+                ],
+        ];
 
-        $expectedResults = array (
+        $expectedResults = [
             'address_data' =>
-                array (
+                [
                     'subtotal' => 5084.74,
                     'base_subtotal' => 5084.74,
                     'subtotal_incl_tax' => 5999.99,
@@ -222,27 +220,27 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
                     'grand_total' => 0,
                     'base_grand_total' => 0,
                     'applied_taxes' =>
-                        array (
+                        [
                             SetupUtil::TAX_RATE_TX =>
-                                array (
+                                [
                                     'percent' => 18,
                                     'amount' => 915.25,
                                     'base_amount' => 915.25,
                                     'rates' =>
-                                        array (
-                                                array (
+                                        [
+                                                [
                                                     'code' => SetupUtil::TAX_RATE_TX,
                                                     'title' => SetupUtil::TAX_RATE_TX,
                                                     'percent' => 18,
-                                                ),
-                                        ),
-                                )
-                        ),
-                ),
+                                                ],
+                                        ],
+                                ]
+                        ],
+                ],
             'items_data' =>
-                array (
+                [
                     'simple1' =>
-                        array (
+                        [
                             'row_total' => 5084.74,
                             'base_row_total' => 5084.74,
                             'tax_percent' => 18,
@@ -259,9 +257,9 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
                             'discount_percent' => 100,
                             'discount_tax_compensation_amount' => 0,
                             'base_discount_tax_compensation_amount' => 0,
-                        ),
-                ),
-        );
+                        ],
+                ],
+    ];
 
         /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = Bootstrap::getObjectManager();
