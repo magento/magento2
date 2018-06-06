@@ -9,11 +9,12 @@ namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 
 /**
- * Provides all product SKUs by ProductIds. Key is sku, value is product id
+ * @inheritdoc
  */
-class GetProductTypesBySkus
+class GetProductTypesBySkus implements GetProductTypesBySkusInterface
 {
     /**
      * @var ResourceConnection
@@ -30,8 +31,7 @@ class GetProductTypesBySkus
     }
 
     /**
-     * @param array $skus
-     * @return array
+     * @inheritdoc
      */
     public function execute(array $skus): array
     {
@@ -49,7 +49,7 @@ class GetProductTypesBySkus
 
         $result = [];
         foreach ($connection->fetchPairs($select) as $sku => $productType) {
-            $result[$this->getResultKey((string)$sku, $skus)] = $productType;
+            $result[$this->getResultKey((string)$sku, $skus)] = (string)$productType;
         }
 
         return $result;

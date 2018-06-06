@@ -14,11 +14,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
-        <arguments>
-            <argument name="conditions" xsi:type="array">
-                <item name="configurable" xsi:type="object">Magento\InventoryConfigurableProduct\Model\ResourceModel\IsStockItemSalableCondition\GetConfigurableCondition</item>
-            </argument>
-        </arguments>
-    </type>
 </config>
