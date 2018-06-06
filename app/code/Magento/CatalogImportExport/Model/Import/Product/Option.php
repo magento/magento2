@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection as ProductOptionValueCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory as ProductOptionValueCollectionFactory;
 use Magento\Store\Model\Store;
+use Magento\ImportExport\Model\Import;
 
 /**
  * Entity class which provide possibility to import product custom options
@@ -1090,7 +1091,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         // Parse custom options.
         $rowData = $this->_parseCustomOptions($rowData);
         $multiRow = [];
-        if (empty($rowData['custom_options'])) {
+        if (empty($rowData['custom_options']) || !is_array($rowData['custom_options'])) {
             return $multiRow;
         }
 
@@ -1235,7 +1236,12 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $multiRowData = $this->_getMultiRowFormat($rowData);
                 if (!empty($rowData[self::COLUMN_SKU]) && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
                     $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
-                    if (array_key_exists('custom_options', $rowData) && trim($rowData['custom_options']) === '') {
+                    if (array_key_exists('custom_options', $rowData)
+                        && (
+                            trim($rowData['custom_options']) === '' ||
+                            trim($rowData['custom_options']) === $this->_productEntity->getEmptyAttributeValueConstant()
+                        )
+                    ) {
                         $optionsToRemove[] = $this->_rowProductId;
                     }
                 }
@@ -1923,7 +1929,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _parseCustomOptions($rowData)
     {
         $beforeOptionValueSkuDelimiter = ';';
-        if (empty($rowData['custom_options'])) {
+        if (empty($rowData['custom_options'])
+            || $rowData['custom_options'] === Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT) {
             return $rowData;
         }
         $rowData['custom_options'] = str_replace(
