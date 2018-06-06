@@ -334,9 +334,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         unset($productData['media_gallery']);
         if ($createNew) {
             $product = $this->productFactory->create();
-            if ($this->storeManager->hasSingleStore()) {
-                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
-            }
+            $this->assignProductToWebsites($product);
         } else {
             unset($this->instances[$productData['sku']]);
             $product = $this->get($productData['sku']);
@@ -344,9 +342,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
-        }
-        if ($createNew) {
-            $this->assignProductToWebsites($product);
         }
 
         return $product;
@@ -358,15 +353,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
-        $websiteIds = array_unique(
-            array_merge(
-                $product->getWebsiteIds(),
-                [$this->storeManager->getStore()->getWebsiteId()]
-            )
-        );
-
         if ($this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
             $websiteIds = array_keys($this->storeManager->getWebsites());
+        } else {
+            $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
         }
 
         $product->setWebsiteIds($websiteIds);
