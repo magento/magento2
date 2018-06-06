@@ -14,6 +14,7 @@
         <element name="productAttributeOptions1" type="select" selector="#product-options-wrapper div[tabindex='0'] option"/>
         <element name="productAttributeOptionsSelectButton" type="select" selector="#product-options-wrapper .super-attribute-select"/>
         <element name="productAttributeOptionsError" type="text" selector="//div[@class='mage-error']"/>
-        <element name="firstAttributeOnPage" type="block" selector="tr:nth-of-type(1) .data"/>
+        <!-- Parameter is the order number of the attribute on the page (1 is the newest) -->
+        <element name="nthAttributeOnPage" type="block" selector="tr:nth-of-type({{numElement}}) .data" parameterized="true"/>
     </section>
 </sections>
