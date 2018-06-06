@@ -444,11 +444,7 @@ abstract class AbstractType
         $error = false;
         $rowScope = $this->_entityModel->getRowScope($rowData);
         if (\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL != $rowScope
-            && (
-                !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])
-                || $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]
-                    !== $this->_entityModel->getEmptyAttributeValueConstant()
-            )
+            && !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])
         ) {
             foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
                 // check value for non-empty in the case of required attribute?
