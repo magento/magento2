@@ -456,19 +456,23 @@ class EavTest extends AbstractModifierTest
      * @param string $attrValue
      * @param string $note
      * @param array $expected
+     * @param bool $locked
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      * @dataProvider setupAttributeMetaDataProvider
      */
-    public function testSetupAttributeMetaDefaultAttribute($productId, $productRequired, $attrValue, $note, $expected)
+    public function testSetupAttributeMetaDefaultAttribute($productId, $productRequired, $attrValue, $note, $expected, $locked = false)
     {
-        $configPath =  'arguments/data/config';
         $groupCode = 'product-details';
         $sortOrder = '0';
 
         $this->productMock->expects($this->any())
             ->method('getId')
             ->willReturn($productId);
+
+        $this->productMock->expects($this->any())
+            ->method('isLockedAttribute')
+            ->willReturn($locked);
 
         $this->productAttributeMock->expects($this->any())
             ->method('getIsRequired')
@@ -509,12 +513,7 @@ class EavTest extends AbstractModifierTest
 
         $this->arrayManagerMock->expects($this->any())
             ->method('set')
-            ->with(
-                $configPath,
-                [],
-                $expected
-            )
-            ->willReturn($expected);
+            ->willReturnArgument(2);
 
         $this->arrayManagerMock->expects($this->any())
             ->method('merge')
@@ -540,8 +539,10 @@ class EavTest extends AbstractModifierTest
     {
         return [
             'default_null_prod_not_new_and_required' => $this->defaultNullProdNotNewAndRequired(),
+            'default_null_prod_not_new_locked_and_required' => $this->defaultNullProdNotNewLockedAndRequired(),
             'default_null_prod_not_new_and_not_required' => $this->defaultNullProdNotNewAndNotRequired(),
             'default_null_prod_new_and_not_required' => $this->defaultNullProdNewAndNotRequired(),
+            'default_null_prod_new_locked_and_not_required' => $this->defaultNullProdNewLOckedAndNotRequired(),
             'default_null_prod_new_and_required' => $this->defaultNullProdNewAndRequired(),
             'default_null_prod_new_and_required_and_filled_notice' =>
                 $this->defaultNullProdNewAndRequiredAndFilledNotice()
@@ -572,6 +573,32 @@ class EavTest extends AbstractModifierTest
                 'globalScope' => false,
                 'sortOrder'   => 0
             ],
+        ];
+    }
+
+    private function defaultNullProdNotNewLockedAndRequired()
+    {
+        return [
+            'productId'       => 1,
+            'productRequired' => true,
+            'attrValue'       => 'val',
+            'note'            => null,
+            'expected'        => [
+                'dataType'    => null,
+                'formElement' => null,
+                'visible'     => null,
+                'required'    => true,
+                'notice'      => null,
+                'default'     => null,
+                'label'       => new Phrase('mylabel'),
+                'code'        => 'code',
+                'source'      => 'product-details',
+                'scopeLabel'  => '',
+                'globalScope' => false,
+                'sortOrder'   => 0,
+                'disabled'    => true,
+            ],
+            'locked' => true
         ];
     }
 
@@ -626,6 +653,32 @@ class EavTest extends AbstractModifierTest
                 'globalScope' => false,
                 'sortOrder'   => 0
             ],
+        ];
+    }
+
+    private function defaultNullProdNewLockedAndNotRequired()
+    {
+        return [
+            'productId'       => null,
+            'productRequired' => false,
+            'attrValue'       => null,
+            'note'            => null,
+            'expected'        => [
+                'dataType'    => null,
+                'formElement' => null,
+                'visible'     => null,
+                'required'    => false,
+                'notice'      => null,
+                'default'     => 'required_value',
+                'label'       => new Phrase('mylabel'),
+                'code'        => 'code',
+                'source'      => 'product-details',
+                'scopeLabel'  => '',
+                'globalScope' => false,
+                'sortOrder'   => 0,
+                'disabled'    => true,
+            ],
+            'locked' => true,
         ];
     }
 
