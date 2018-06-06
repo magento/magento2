@@ -47,7 +47,7 @@ define([
             it('check input length less than character limit', function () {
                 var testData = {
                     input: 'abc',
-                    action: 'keyup',
+                    action: 'change',
                     expectedText: '(7 remaining)'
                 };
 
@@ -71,7 +71,7 @@ define([
             it('check input length greater than character limit', function () {
                 var testData = {
                     input: 'abcdefghijkl',
-                    action: 'keyup',
+                    action: 'change',
                     expectedText: '(2 too many)'
                 };
 

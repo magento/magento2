@@ -58,7 +58,7 @@ class CustomOptions extends Form
      *
      * @var string
      */
-    protected $maxCharacters = './/div[@class="control"]/p[@class="note"]/strong';
+    protected $maxCharacters = './/div[@class="control"]/p[contains(@class, "note")]/strong';
 
     /**
      * Selector for label of option value element
@@ -72,7 +72,7 @@ class CustomOptions extends Form
      *
      * @var string
      */
-    protected $noteByNumber = './/*[@class="note"][%d]/strong';
+    protected $noteByNumber = './/*[contains(@class, "note")][%d]/strong';
 
     /**
      * Selector for select element of option
