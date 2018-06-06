@@ -190,19 +190,6 @@
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
         <waitForLoadingMaskToDisappear stepKey="waitForShipmentPageLoaded"/>
 
-        <!--<selectOption selector="{{AdminSelectSourceSection.sourceSelection}}" userInput="$$createSource1.source[name]$$"-->
-                      <!--stepKey="sourceSelectionSelectSecondSource"/>-->
-
-        <!--<see selector="{{AdminItemsOrderedSection.availableSourcesSource('0', '1')}}"-->
-             <!--userInput="$$createSource1.source[name]$$" stepKey="sourceSelectionCheckSourceName"/>-->
-        <!--<see selector="{{AdminItemsOrderedSection.availableSourcesQtyAvailable('0', '1')}}"-->
-             <!--userInput="{{SimpleMsiProduct.quantity}}" stepKey="sourceSelectionCheckSourceQtyAvailable"/>-->
-        <!--<fillField selector="{{AdminItemsOrderedSection.availableSourcesQtyToDeduct('0', '1')}}" userInput="3"-->
-                   <!--stepKey="sourceSelectionCheckQtyToDeduct"/>-->
-
-        <!--<click selector="{{AdminSourceSelectionControlsSection.proceedToShipmentButton}}" stepKey="proceedToShipment"/>-->
-        <!--<waitForPageLoad stepKey="waitShipmentPage"/>-->
-
         <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="3" stepKey="ship3Items"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
         <waitForPageLoad stepKey="waitShipmentCreated"/>
