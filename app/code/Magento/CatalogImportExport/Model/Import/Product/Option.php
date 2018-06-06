@@ -1236,7 +1236,13 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $multiRowData = $this->_getMultiRowFormat($rowData);
                 if (!empty($rowData[self::COLUMN_SKU]) && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
                     $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
-                    if (array_key_exists('custom_options', $rowData) && trim($rowData['custom_options']) === '') {
+                    if (
+                        array_key_exists('custom_options', $rowData)
+                        && (
+                            trim($rowData['custom_options']) === ''
+                            || trim ($rowData['custom_options']) === $this->_productEntity->getEmptyAttributeValueConstant()
+                        )
+                    ) {
                         $optionsToRemove[] = $this->_rowProductId;
                     }
                 }
