@@ -263,6 +263,11 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection->update($this->getMainTable(), $value, $where);
     }
 
+    /**
+     * Build select for products with types from config
+     *
+     * @return Select
+     */
     private function buildProductsSelectByConfigTypes(): Select
     {
         $select = $this->getConnection()->select()
