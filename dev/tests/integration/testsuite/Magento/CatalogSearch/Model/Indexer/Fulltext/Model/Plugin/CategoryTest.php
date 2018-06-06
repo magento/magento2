@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace integration\testsuite\Magento\CatalogSearch\Model\Indexer\Fulltext\Model\Plugin;
+namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Model\Plugin;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
