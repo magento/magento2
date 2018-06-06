@@ -60,7 +60,10 @@
         </object>
         <field key="saveOptions">boolean</field>
     </operation>
-    <operation name="deleteProduct" dataType="product" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
+    <operation name="DeleteProduct" dataType="product" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+    <operation name="GetProduct" dataType="product" type="get" auth="adminOauth" url="/V1/products/{sku}" method="GET">
         <contentType>application/json</contentType>
     </operation>
     <operation name="CreateProduct2" dataType="product2" type="create" auth="adminOauth" url="/V1/products" method="POST">
@@ -115,7 +118,10 @@
         </object>
         <field key="saveOptions">boolean</field>
     </operation>
-    <operation name="deleteProduct2" dataType="product2" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
+    <operation name="DeleteProduct2" dataType="product2" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+    <operation name="GetProduct2" dataType="product2" type="get" auth="adminOauth" url="/V1/products/{sku}" method="GET">
         <contentType>application/json</contentType>
     </operation>
     <!-- Data type product3 is to work around MQE-1035 -->
@@ -146,6 +152,9 @@
     </operation>
     <!-- Data type product3 is to work around MQE-1035 -->
     <operation name="DeleteProduct3" dataType="product3" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+    <operation name="GetProduct3" dataType="product3" type="get" auth="adminOauth" url="/V1/products/{sku}" method="GET">
         <contentType>application/json</contentType>
     </operation>
 </operations>

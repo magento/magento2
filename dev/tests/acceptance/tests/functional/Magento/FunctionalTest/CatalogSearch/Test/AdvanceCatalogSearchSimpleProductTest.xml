@@ -11,77 +11,68 @@
     <test name="AdvanceCatalogSearchSimpleProductByNameTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced Catalog Product Search for all product types"/>
-            <title value="Guest customer should be able to advance search simple product with product name"/>
-            <description value="Guest customer should be able to advance search simple product with product name"/>
-            <severity value="MAJOR"/>
-            <testCaseId value="MC-132"/>
             <group value="CatalogSearch"/>
         </annotations>
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameActionGroup" stepKey="search">
-            <argument name="name" value="$$createProductOne.name$$"/>
+            <argument name="name" value="$$product.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
-        <see userInput="$$createProductOne.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
     </test>
-    <test name="AdvanceCatalogSearchSimpleProductBySkuTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+    <test name="AdvanceCatalogSearchSimpleProductBySkuTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced Catalog Product Search for all product types"/>
-            <title value="Guest customer should be able to advance search simple product with product sku"/>
-            <description value="Guest customer should be able to advance search simple product with product sku"/>
-            <severity value="MAJOR"/>
-            <testCaseId value="MC-133"/>
             <group value="CatalogSearch"/>
         </annotations>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductSkuActionGroup" stepKey="search">
-            <argument name="sku" value="$$createProductOne.sku$$"/>
+            <argument name="sku" value="$$product.sku$$"/>
         </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
     </test>
-    <test name="AdvanceCatalogSearchSimpleProductByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+    <test name="AdvanceCatalogSearchSimpleProductByDescriptionTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced Catalog Product Search for all product types"/>
-            <title value="Guest customer should be able to advance search simple product with product description"/>
-            <description value="Guest customer should be able to advance search simple product with product description"/>
-            <severity value="MAJOR"/>
-            <testCaseId value="MC-134"/>
             <group value="CatalogSearch"/>
         </annotations>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByDescriptionActionGroup" stepKey="search">
-            <argument name="description" value="$$createProductOne.custom_attributes[description]$$"/>
+            <argument name="description" value="$$product.custom_attributes[description]$$"/>
         </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
     </test>
-    <test name="AdvanceCatalogSearchSimpleProductByShortDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+    <test name="AdvanceCatalogSearchSimpleProductByShortDescriptionTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced Catalog Product Search for all product types"/>
-            <title value="Guest customer should be able to advance search simple product with product short description"/>
-            <description value="Guest customer should be able to advance search simple product with product short description"/>
-            <severity value="MAJOR"/>
-            <testCaseId value="MC-135"/>
             <group value="CatalogSearch"/>
         </annotations>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByShortDescriptionActionGroup" stepKey="search">
-            <argument name="shortDescription" value="$$createProductOne.custom_attributes[short_description]$$"/>
+            <argument name="shortDescription" value="$$product.custom_attributes[short_description]$$"/>
         </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
     </test>
-    <test name="AdvanceCatalogSearchSimpleProductByPriceTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+    <test name="AdvanceCatalogSearchSimpleProductByPriceTest">
         <annotations>
             <features value="CatalogSearch"/>
-            <stories value="Advanced Catalog Product Search for all product types"/>
-            <title value="Guest customer should be able to advance search simple product with product price"/>
-            <description value="Guest customer should be able to advance search simple product with product price"/>
-            <severity value="MAJOR"/>
-            <testCaseId value="MC-136"/>
             <group value="CatalogSearch"/>
         </annotations>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="search">
-            <argument name="name" value="$$createProductOne.name$$"/>
-            <argument name="priceFrom" value="$$createProductOne.price$$"/>
-            <argument name="priceTo" value="$$createProductOne.price$$"/>
+            <argument name="name" value="$$arg1.name$$"/>
+            <argument name="priceFrom" value="$$arg2.price$$"/>
+            <argument name="priceTo" value="$$arg3.price$$"/>
         </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$arg1.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
     </test>
 </tests>
