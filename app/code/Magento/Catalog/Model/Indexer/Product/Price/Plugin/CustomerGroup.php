@@ -76,7 +76,8 @@ class CustomerGroup
      *
      * @param GroupRepositoryInterface $subject
      * @param \Closure $proceed
-     * @param GroupInterface $result
+     * @param GroupInterface $group
+     *
      * @return GroupInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -97,6 +98,8 @@ class CustomerGroup
     }
 
     /**
+     * Update price index after customer group deleted
+     *
      * @param GroupRepositoryInterface $subject
      * @param bool $result
      * @param string $groupId

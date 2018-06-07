@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
-use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -18,11 +17,6 @@ use Magento\Framework\Model\AbstractModel;
 
 class Website
 {
-    /**
-     * @var Processor
-     */
-    private $processor;
-
     /**
      * @var TableMaintainer
      */
@@ -48,20 +42,17 @@ class Website
     private $configReader;
 
     /**
-     * @param Processor $processor
      * @param TableMaintainer $tableMaintainer
      * @param DimensionFactory $dimensionFactory
      * @param CustomerGroupCollectionFactory $customerGroupCollectionFactory
      * @param ScopeConfigInterface $configReader
      */
     public function __construct(
-        Processor $processor,
         TableMaintainer $tableMaintainer,
         DimensionFactory $dimensionFactory,
         CustomerGroupCollectionFactory $customerGroupCollectionFactory,
         ScopeConfigInterface $configReader
     ) {
-        $this->processor = $processor;
         $this->tableMaintainer = $tableMaintainer;
         $this->dimensionFactory = $dimensionFactory;
         $this->customerGroupCollectionFactory = $customerGroupCollectionFactory;
@@ -69,6 +60,8 @@ class Website
     }
 
     /**
+     * Update price index after website deleted
+     *
      * @param AbstractDb $subject
      * @param AbstractDb $objectResource
      * @param AbstractModel $website
@@ -78,8 +71,6 @@ class Website
      */
     public function afterDelete(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $website)
     {
-        $this->processor->markIndexerAsInvalid();
-
         foreach ($this->getAffectedDimensions($website->getId()) as $dimensions) {
             $this->tableMaintainer->dropTablesForDimensions($dimensions);
         }
@@ -88,6 +79,8 @@ class Website
     }
 
     /**
+     * Update price index after website created
+     *
      * @param AbstractDb $subject
      * @param AbstractDb $objectResource
      * @param AbstractModel $website
