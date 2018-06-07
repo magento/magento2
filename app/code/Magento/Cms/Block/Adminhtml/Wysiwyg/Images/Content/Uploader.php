@@ -19,6 +19,11 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
     protected $_imagesStorage;
 
     /**
+     * @var \Magento\Framework\Image\Adapter\Config
+     */
+    protected $imageConfig;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Cms\Model\Wysiwyg\Images\Storage $imagesStorage
@@ -28,10 +33,12 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
         \Magento\Cms\Model\Wysiwyg\Images\Storage $imagesStorage,
+        \Magento\Framework\Image\Adapter\Config $imageConfig,
         array $data = []
     ) {
         $this->_imagesStorage = $imagesStorage;
-        parent::__construct($context, $fileSize, $data);
+        $this->imageConfig = $imageConfig;
+        parent::__construct($context, $fileSize, $imageConfig, $data);
     }
 
     /**
