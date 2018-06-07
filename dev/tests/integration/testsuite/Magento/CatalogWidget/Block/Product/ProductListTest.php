@@ -115,6 +115,9 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
             . $dropdownAttributeOptionIds[1] . '`^]^]';
         $this->block->setData('conditions_encoded', $encodedConditions);
         $this->performAssertions(2);
+        $attribute->setUsedInProductListing(0);
+        $attribute->save();
+        $this->performAssertions(2);
     }
 
     /**
