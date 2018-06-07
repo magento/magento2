@@ -91,11 +91,22 @@ class Method extends Block
      * @param array $method
      * @return bool
      */
-    public function isShippingMethodAvaiable(array $method)
+    public function isShippingMethodAvailable(array $method)
     {
         $this->waitForShippingRates();
         $selector = sprintf($this->shippingMethod, $method['shipping_method'], $method['shipping_service']);
         return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * @deprecated
+     * @see isShippingMethodAvailable
+     * @param array $method
+     * @return bool
+     */
+    public function isShippingMethodAvaiable(array $method)
+    {
+        return $this->isShippingMethodAvailable($method);
     }
 
     /**
