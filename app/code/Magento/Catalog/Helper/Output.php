@@ -151,7 +151,7 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
                 $attributeHtml = nl2br($attributeHtml);
             }
         }
-        if ($attribute->getIsHtmlAllowedOnFront() && $attribute->getIsWysiwygEnabled()) {
+        if ($attribute->getIsHtmlAllowedOnFront() || $attribute->getIsWysiwygEnabled()) {
             if ($this->_catalogData->isUrlDirectivesParsingAllowed()) {
                 $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
             }
