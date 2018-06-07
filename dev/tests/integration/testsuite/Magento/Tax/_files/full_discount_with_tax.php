@@ -8,51 +8,42 @@ use Magento\Tax\Model\Sales\Total\Quote\SetupUtil;
 
 $fullTaxDiscountWithTax = [
         'config_data' => [
-                'config_overrides' =>
-                    [
+                'config_overrides' => [
                         Config::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT => 0,
                         Config::CONFIG_XML_PATH_DISCOUNT_TAX => 1,
                         Config::XML_PATH_ALGORITHM => 'ROW_BASE_CALCULATION',
                         Config::CONFIG_XML_PATH_SHIPPING_TAX_CLASS => SetupUtil::SHIPPING_TAX_CLASS,
                     ],
-                'tax_rate_overrides' =>
-                    [
+                'tax_rate_overrides' => [
                         SetupUtil::TAX_RATE_TX => 18,
                         SetupUtil::TAX_RATE_SHIPPING => 0,
                     ],
-                'tax_rule_overrides' =>
-                    [
+                'tax_rule_overrides' => [
                         [
                             'code' => 'Product Tax Rule',
-                            'product_tax_class_ids' =>
-                                [
+                            'product_tax_class_ids' => [
                                     SetupUtil::PRODUCT_TAX_CLASS_1
                                 ],
                         ],
                         [
                             'code' => 'Shipping Tax Rule',
-                            'product_tax_class_ids' =>
-                                [
+                            'product_tax_class_ids' => [
                                     SetupUtil::SHIPPING_TAX_CLASS
                                 ],
-                            'tax_rate_ids' =>
-                                [
+                            'tax_rate_ids' => [
                                     SetupUtil::TAX_RATE_SHIPPING,
                                 ],
                         ],
                     ],
         ],
         'quote_data' => [
-                'billing_address' =>
-                    [
+                'billing_address' => [
                         'region_id' => SetupUtil::REGION_TX,
                     ],
-                'shipping_address' =>
-                    [
+                'shipping_address' => [
                         'region_id' => SetupUtil::REGION_TX,
                     ],
-                'items' =>
-                    [
+                'items' => [
                         [
                             'sku' => 'simple1',
                             'price' => 2542.37,
@@ -60,14 +51,14 @@ $fullTaxDiscountWithTax = [
                         ]
                     ],
                 'shipping_method' => 'free',
-                'shopping_cart_rules' =>
-                    [
-                        ['discount_amount' => 100],
+                'shopping_cart_rules' => [
+                        [
+                            'discount_amount' => 100
+                        ],
                     ],
         ],
         'expected_result' => [
-                'address_data' =>
-                    [
+                'address_data' => [
                         'subtotal' => 5084.74,
                         'base_subtotal' => 5084.74,
                         'subtotal_incl_tax' => 5999.99,
@@ -88,15 +79,12 @@ $fullTaxDiscountWithTax = [
                         'base_shipping_discount_tax_compensation_amount' => 0,
                         'grand_total' => 0,
                         'base_grand_total' => 0,
-                        'applied_taxes' =>
-                            [
-                                SetupUtil::TAX_RATE_TX =>
-                                    [
+                        'applied_taxes' => [
+                                SetupUtil::TAX_RATE_TX => [
                                         'percent' => 18,
                                         'amount' => 915.25,
                                         'base_amount' => 915.25,
-                                        'rates' =>
-                                            [
+                                        'rates' => [
                                                 [
                                                     'code' => SetupUtil::TAX_RATE_TX,
                                                     'title' => SetupUtil::TAX_RATE_TX,
@@ -106,10 +94,8 @@ $fullTaxDiscountWithTax = [
                                     ]
                             ],
                     ],
-                'items_data' =>
-                    [
-                        'simple1' =>
-                            [
+                'items_data' => [
+                        'simple1' => [
                                 'row_total' => 5084.74,
                                 'base_row_total' => 5084.74,
                                 'tax_percent' => 18,
