@@ -15,33 +15,33 @@
         <!-- ActionGroup will add a single custom option to a product -->
         <!-- You must already be on the product creation page -->
         <arguments>
-            <argument name="categoryName"/>
+            <argument name="customOptionName"/>
             <argument name="productOption"/>
             <argument name="productOption2"/>
         </arguments>
 
         <!-- opens the custom option panel and clicks add options -->
-        <click stepKey="openCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}" />
-        <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" />
+        <click stepKey="openCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}"/>
+        <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
 
         <!-- Fill in the option and select the type of radio (once) -->
-        <fillField stepKey="fillInOptionTitle" selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{categoryName}}" />
-        <click stepKey="clickOptionTypeParent" selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}" />
-        <click stepKey="clickOptionType" selector="{{AdminProductCustomizableOptionsSection.optionType('Radio Buttons')}}" />
+        <fillField stepKey="fillInOptionTitle" selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{customOptionName}}"/>
+        <click stepKey="clickOptionTypeParent" selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}"/>
+        <click stepKey="clickOptionType" selector="{{AdminProductCustomizableOptionsSection.optionType('Radio Buttons')}}"/>
 
         <!-- Add three radio options based on the parameter -->
-        <click stepKey="clickAddValue" selector="{{AdminProductCustomizableOptionsSection.addValue}}" />
+        <click stepKey="clickAddValue" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
 
-        <fillField stepKey="fillInValueTitle" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{productOption.title}}" />
-        <fillField stepKey="fillInValuePrice" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{productOption.price}}" />
+        <fillField stepKey="fillInValueTitle" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{productOption.title}}"/>
+        <fillField stepKey="fillInValuePrice" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{productOption.price}}"/>
 
-        <click stepKey="clickAddValue2" selector="{{AdminProductCustomizableOptionsSection.addValue}}" />
+        <click stepKey="clickAddValue2" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
 
-        <fillField stepKey="fillInValueTitle2" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{productOption2.title}}" />
-        <fillField stepKey="fillInValuePrice2" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{productOption2.price}}" />
+        <fillField stepKey="fillInValueTitle2" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{productOption2.title}}"/>
+        <fillField stepKey="fillInValuePrice2" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{productOption2.price}}"/>
 
         <!-- close the custom option dropdown -->
-        <click stepKey="closeCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}" />
+        <click stepKey="closeCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}"/>
 
     </actionGroup>
 
