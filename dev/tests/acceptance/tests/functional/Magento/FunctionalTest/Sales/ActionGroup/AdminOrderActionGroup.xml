@@ -107,7 +107,7 @@
             <argument name="quantity" type="string" defaultValue="1"/>
         </arguments>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
-        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterConfigurable"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterGrouped"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchGrouped"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectGroupedProduct"/>
