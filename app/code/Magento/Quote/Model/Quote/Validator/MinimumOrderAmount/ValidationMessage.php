@@ -64,13 +64,9 @@ class ValidationMessage
                 'sales/minimum_order/amount',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ), true, false);
-
+            
             $message = __('Minimum order amount is %1', $minimumAmount);
-        } else {
-            //Added in order to address the issue: https://github.com/magento/magento2/issues/8287
-            $message = __($message);
         }
-
         return $message;
     }
 }
