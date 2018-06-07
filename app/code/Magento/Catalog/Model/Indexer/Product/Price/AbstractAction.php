@@ -349,7 +349,6 @@ abstract class AbstractAction
 //        if (!empty($compositeIds)) {
 //            $this->_copyRelationIndexData($compositeIds, $notCompositeIds);
 //        }
-        $this->_prepareTierPriceIndex($changedIds);
 
         foreach ($productsTypes as $productType => $entityIds) {
             $indexer = $this->_getIndexer($productType);

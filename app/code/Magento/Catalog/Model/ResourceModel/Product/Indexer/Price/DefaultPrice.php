@@ -360,9 +360,29 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             'pw.product_id = e.entity_id AND pw.website_id = cw.website_id',
             []
         )->joinLeft(
-            ['tp' => $this->_getTierPriceIndexTable()],
-            'tp.entity_id = e.entity_id AND tp.website_id = cw.website_id' .
-            ' AND tp.customer_group_id = cg.customer_group_id',
+            // we need this only for BCC in case someone expects table `tp` to be present in query
+            ['tp' => $this->getTable('catalog_product_index_tier_price')],
+            'tp.entity_id = e.entity_id AND tp.customer_group_id = cg.customer_group_id AND tp.website_id = pw.website_id',
+            []
+        )->joinLeft(
+            // calculate tier price specified as Website = `All Websites` and Customer Group = `Specific Customer Group`
+            ['tier_price_1' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_1.row_id = e.row_id AND tier_price_1.all_groups = 0 AND tier_price_1.customer_group_id = cg.customer_group_id AND tier_price_1.qty = 1 AND tier_price_1.website_id = 0',
+            []
+        )->joinLeft(
+            // calculate tier price specified as Website = `Specific Website` and Customer Group = `Specific Customer Group`
+            ['tier_price_2' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_2.row_id = e.row_id AND tier_price_2.all_groups = 0 AND tier_price_2.customer_group_id = cg.customer_group_id AND tier_price_2.qty = 1 AND tier_price_2.website_id = cw.website_id',
+            []
+        )->joinLeft(
+            // calculate tier price specified as Website = `All Websites` and Customer Group = `ALL GROUPS`
+            ['tier_price_3' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_3.row_id = e.row_id AND tier_price_3.all_groups = 1 AND tier_price_3.customer_group_id = 0 AND tier_price_3.qty = 1 AND tier_price_3.website_id = 0',
+            []
+        )->joinLeft(
+            // calculate tier price specified as Website = `Specific Website` and Customer Group = `ALL GROUPS`
+            ['tier_price_4' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_4.row_id = e.row_id AND tier_price_4.all_groups = 1 AND tier_price_4.customer_group_id = 0 AND tier_price_4.qty = 1 AND tier_price_4.website_id = cw.website_id',
             []
         );
 
@@ -431,11 +451,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             $specialPrice,
             $maxUnsignedBigint
         );
-        $tierPrice = new \Zend_Db_Expr('tp.min_price');
-        $tierPriceExpr = $connection->getIfNullSql(
-            $tierPrice,
-            $maxUnsignedBigint
-        );
+        $tierPrice = $this->getTotalTierPriceExpression($price);
+        $tierPriceExpr = $connection->getIfNullSql($tierPrice, $maxUnsignedBigint);
         $finalPrice = $connection->getLeastSql([
             $price,
             $specialPriceExpr,
@@ -794,5 +811,50 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         }
 
         return $this->hasEntity;
+    }
+
+    protected function getTotalTierPriceExpression(\Zend_Db_Expr $priceExpression)
+    {
+        $maxUnsignedBigint = '~0';
+
+        return $this->getConnection()->getCheckSql(
+            implode(
+                ' AND ',
+                [
+                    'tier_price_1.value_id is NULL',
+                    'tier_price_2.value_id is NULL',
+                    'tier_price_3.value_id is NULL',
+                    'tier_price_4.value_id is NULL'
+                ]
+            ),
+            'NULL',
+            $this->getConnection()->getLeastSql([
+                $this->getConnection()->getIfNullSql(
+                    $this->getTierPriceExpressionForTable('tier_price_1', $priceExpression),
+                    $maxUnsignedBigint
+                ),
+                $this->getConnection()->getIfNullSql(
+                    $this->getTierPriceExpressionForTable('tier_price_2', $priceExpression),
+                    $maxUnsignedBigint
+                ),
+                $this->getConnection()->getIfNullSql(
+                    $this->getTierPriceExpressionForTable('tier_price_3', $priceExpression),
+                    $maxUnsignedBigint
+                ),
+                $this->getConnection()->getIfNullSql(
+                    $this->getTierPriceExpressionForTable('tier_price_4', $priceExpression),
+                    $maxUnsignedBigint
+                ),
+            ])
+        );
+    }
+
+    private function getTierPriceExpressionForTable($tableAlias, \Zend_Db_Expr $priceExpression)
+    {
+        return $this->getConnection()->getCheckSql(
+            sprintf('%s.value = 0', $tableAlias),
+            sprintf('ROUND(%s * (1 - ROUND(%s.percentage_value * cwd.rate, 4) / 100), 4)', $priceExpression, $tableAlias),
+            sprintf('ROUND(%s.value * cwd.rate, 4)', $tableAlias)
+        );
     }
 }

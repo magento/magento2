@@ -249,7 +249,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             if ($priceIndexer->getIsComposite()) {
                 $this->_copyRelationIndexData($entityIds);
             }
-            $this->_prepareTierPriceIndex($entityIds);
 
             // Reindex entities by id
             $priceIndexer->reindexEntity($entityIds);
@@ -275,9 +274,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             // if ($priceIndexer->getIsComposite()) {
             //    $this->_copyRelationIndexData($entityIds);
             // }
-
-            // TODO: handle inside index model and move index fulfilment into index model
-            $this->_prepareTierPriceIndex($entityIds);
 
             $priceIndexer->executeByDimension($dimensions, \SplFixedArray::fromArray($entityIds, false));
 
