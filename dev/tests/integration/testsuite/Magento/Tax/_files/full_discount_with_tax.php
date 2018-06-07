@@ -6,7 +6,7 @@
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Sales\Total\Quote\SetupUtil;
 
-$fullTaxDiscountWithTax = [
+$fullDiscountIncTax = [
         'config_data' => [
                 'config_overrides' => [
                         Config::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT => 0,

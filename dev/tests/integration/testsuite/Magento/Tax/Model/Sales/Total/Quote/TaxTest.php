@@ -122,10 +122,10 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      */
     public function testFullDiscountWithDeltaRoundingFix()
     {
-        global $fullTaxDiscountWithTax;
-        $configData = $fullTaxDiscountWithTax['config_data'];
-        $quoteData = $fullTaxDiscountWithTax['quote_data'];
-        $expectedResults = $fullTaxDiscountWithTax['expected_result'];
+        global $fullDiscountIncTax;
+        $configData = $fullDiscountIncTax['config_data'];
+        $quoteData = $fullDiscountIncTax['quote_data'];
+        $expectedResults = $fullDiscountIncTax['expected_result'];
 
         /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = Bootstrap::getObjectManager();
