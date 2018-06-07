@@ -207,8 +207,7 @@
             }
 
             &-loading {
-                .lib-url('Magento_Swatches/images/loader-2.gif');
-                content: url("@{url}");
+                .lib-css(content, @loading__background-image);
             }
 
             &-tooltip {
