@@ -13,7 +13,7 @@
         <arguments>
             <argument name="product"/>
             <argument name="optionProduct"/>
-            <argument name="productQuantity"/>
+            <argument name="productQuantity" defaultValue="1" type="string"/>
         </arguments>
         <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName(product.name)}}" stepKey="assertProductName"/>
         <see userInput="${{optionProduct.price}}.00" selector="{{CheckoutCartProductSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>

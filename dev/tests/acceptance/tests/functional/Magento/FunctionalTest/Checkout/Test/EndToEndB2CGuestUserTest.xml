@@ -54,8 +54,7 @@
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartGrabSimpleProduct2ImageSrc" stepKey="cartAssertSimpleProduct2ImageNotDefault" after="cartGrabSimpleProduct2ImageSrc"/>
         <actionGroup ref="StorefrontAddCategoryProductToCartActionGroup" stepKey="cartAddProduct2ToCart" after="cartAssertSimpleProduct2ImageNotDefault">
             <argument name="product" value="$$createSimpleProduct2$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.two"/>
+            <argument name="productCount" value="2"/>
         </actionGroup>
 
         <!-- Check products in minicart -->
@@ -96,22 +95,17 @@
         <comment userInput="Check cart information" stepKey="commentCheckCartInformation" after="cartMinicartAssertSimpleProduct2PageImageNotDefault" />
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" after="commentCheckCartInformation"/>
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssertCart" after="cartOpenCart">
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="subtotal" value="E2EB2CQuote.subtotal"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="shipping" value="E2EB2CQuote.shipping"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="shippingMethod" value="E2EB2CQuote.shippingMethod"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="total" value="E2EB2CQuote.total"/>
+            <argument name="subtotal" value="480.00"/>
+            <argument name="shipping" value="15.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="495.00"/>
         </actionGroup>
 
         <!-- Check simple product 1 in cart -->
         <comment userInput="Check simple product 1 in cart" stepKey="commentCheckSimpleProduct1InCart" after="cartAssertCart"/>
         <actionGroup ref="StorefrontCheckCartSimpleProductActionGroup" stepKey="cartAssertCartSimpleProduct1" after="commentCheckSimpleProduct1InCart">
             <argument name="product" value="$$createSimpleProduct1$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productQuantity" value="CONST.one"/>
+            <argument name="productQuantity" value="1"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{CheckoutCartProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="cartCartGrabSimpleProduct1ImageSrc" after="cartAssertCartSimpleProduct1"/>
@@ -130,8 +124,7 @@
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart1" after="commentCheckSimpleProduct2InCart"/>
         <actionGroup ref="StorefrontCheckCartSimpleProductActionGroup" stepKey="cartAssertCartSimpleProduct2" after="cartOpenCart1">
             <argument name="product" value="$$createSimpleProduct2$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productQuantity" value="CONST.one"/>
+            <argument name="productQuantity" value="1"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{CheckoutCartProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="cartCartGrabSimpleProduct2ImageSrc" after="cartAssertCartSimpleProduct2"/>
@@ -157,14 +150,10 @@
         <!-- Check order summary in checkout -->
         <comment userInput="Check order summary in checkout" stepKey="commentCheckOrderSummaryInCheckout" after="guestCheckoutFillingShippingSection" />
         <actionGroup ref="CheckOrderSummaryInCheckoutActionGroup" stepKey="guestCheckoutCheckOrderSummary" after="commentCheckOrderSummaryInCheckout">
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="subtotal" value="E2EB2CQuote.subtotal"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="shippingTotal" value="E2EB2CQuote.shipping"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="shippingMethod" value="E2EB2CQuote.shippingMethod"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="total" value="E2EB2CQuote.total"/>
+            <argument name="subtotal" value="480.00"/>
+            <argument name="shippingTotal" value="15.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="495.00"/>
         </actionGroup>
 
         <!-- Check ship to information in checkout -->
@@ -177,7 +166,7 @@
         <!-- Check shipping method in checkout -->
         <comment userInput="Check shipping method in checkout" stepKey="commentCheckShippingMethodInCheckout" after="guestCheckoutCheckShipToInformation" />
         <actionGroup ref="CheckShippingMethodInCheckoutActionGroup" stepKey="guestCheckoutCheckShippingMethod" after="commentCheckShippingMethodInCheckout">
-            <argument name="shippingMethod" value="E2EB2CQuote.shippingMethod" />
+            <argument name="shippingMethod" value="Flat Rate - Fixed" />
         </actionGroup>
 
         <!-- Verify Simple Product 1 is in checkout cart items -->
@@ -199,8 +188,8 @@
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
         </actionGroup>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder" after="guestSeeBillingAddress">
-            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="orderNumberMessage" value="Your order # is:" />
+            <argument name="emailYouMessage" value="We'll email you an order confirmation with details and tracking info." />
         </actionGroup>
         <comment userInput="End of checking out" stepKey="endOfCheckingOut" after="guestPlaceorder" />
     </test>

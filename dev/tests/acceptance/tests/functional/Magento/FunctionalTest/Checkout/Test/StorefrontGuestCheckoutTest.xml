@@ -48,8 +48,8 @@
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
         </actionGroup>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
-            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="orderNumberMessage" value="Your order # is:" />
+            <argument name="emailYouMessage" value="We'll email you an order confirmation with details and tracking info." />
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 

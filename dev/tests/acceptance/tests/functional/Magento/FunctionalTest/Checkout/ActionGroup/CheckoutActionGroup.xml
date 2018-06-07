@@ -74,10 +74,10 @@
     <!-- Check order summary in checkout -->
     <actionGroup name="CheckOrderSummaryInCheckoutActionGroup">
         <arguments>
-            <argument name="subtotal"/>
-            <argument name="shippingTotal"/>
-            <argument name="shippingMethod"/>
-            <argument name="total"/>
+            <argument name="subtotal" type="string"/>
+            <argument name="shippingTotal" type="string"/>
+            <argument name="shippingMethod" type="string"/>
+            <argument name="total" type="string"/>
         </arguments>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
         <see userInput="${{subtotal}}" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="assertSubtotal"/>
@@ -105,7 +105,7 @@
     <!-- Check shipping method in checkout -->
     <actionGroup name="CheckShippingMethodInCheckoutActionGroup">
         <arguments>
-            <argument name="shippingMethod"/>
+            <argument name="shippingMethod" type="string"/>
         </arguments>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
         <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.shippingMethodInfomation}}" stepKey="assertshippingMethodInfomation"/>
@@ -136,8 +136,8 @@
     <!-- Checkout place order -->
     <actionGroup name="CheckoutPlaceOrderActionGroup">
         <arguments>
-            <argument name="orderNumberMessage"/>
-            <argument name="emailYouMessage"/>
+            <argument name="orderNumberMessage" type="string"/>
+            <argument name="emailYouMessage" type="string"/>
         </arguments>
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>

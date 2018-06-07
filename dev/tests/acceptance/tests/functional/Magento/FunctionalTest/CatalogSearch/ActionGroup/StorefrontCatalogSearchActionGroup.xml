@@ -11,7 +11,7 @@
     <!-- Quick search the phrase and check if the result page contains correct information -->
     <actionGroup name="StorefrontCheckQuickSearchActionGroup">
         <arguments>
-            <argument name="phrase"/>
+            <argument name="phrase" type="string"/>
         </arguments>
         <fillField userInput="{{phrase}}" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillQuickSearch"/>
         <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickQuickSearchButton" />
