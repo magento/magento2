@@ -14,6 +14,8 @@
     <section name="AdminManageSourcesGridControls">
         <element name="addNewSource" type="button" selector="#add" timeout="30"/>
         <element name="done" type="button" selector=".page-main-actions button.action-primary" timeout="10"/>
+        <element name="multicheckDropdown" type="button" selector="div[data-role='grid-wrapper'] th.data-grid-multicheck-cell button.action-multicheck-toggle"/>
+        <element name="multicheckOption" type="button" selector="//div[@data-role='grid-wrapper']//th[contains(@class, data-grid-multicheck-cell)]//li//span[text() = '{{label}}']" parameterized="true"/>
     </section>
     <section name="AdminManageSourcesGridFilterControls">
         <element name="dropDown" type="button" selector=".admin__data-grid-header .admin__data-grid-filters-current._show"/>
@@ -33,5 +35,10 @@
         <element name="changeStatusButton" type="text" selector="div.action-menu-items>ul.action-menu>li:nth-of-type(1)>span.action-menu-item"/>
         <element name="changeStatusEnableButton" type="text" selector="div.action-menu-items>ul.action-menu>li:nth-of-type(1)>ul.action-submenu>li:nth-of-type(1)>span.action-menu-item"/>
         <element name="changeStatusDisableButton" type="text" selector="div.action-menu-items>ul.action-menu>li:nth-of-type(1)>ul.action-submenu>li:nth-of-type(2)>span.action-menu-item"/>
+    </section>
+    <section name="AdminManageSourceGridBody">
+        <element name="dataRows" type="input" selector=".data-row"/>
+        <element name="sourceSelectedCheckbox" type="checkbox" selector="#idscheck{{code}}" parameterized="true"/>
+        <element name="idSelectedCheckbox" type="checkbox" selector="table[data-role='grid'] tr.data-row[data-repeat-index='{{id}}'] input[type='checkbox']" parameterized="true"/>
     </section>
 </sections>
