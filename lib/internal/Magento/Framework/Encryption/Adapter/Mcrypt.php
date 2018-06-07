@@ -25,6 +25,8 @@ class Mcrypt implements EncryptionAdapterInterface
     private $initVector;
 
     /**
+     * Encryption algorithm module handle
+     *
      * @var resource
      */
     private $handle;
@@ -117,6 +119,16 @@ class Mcrypt implements EncryptionAdapterInterface
     public function getInitVector(): ?string
     {
         return $this->initVector;
+    }
+
+    /**
+     * Get the current mcrypt handle
+     *
+     * @return resource
+     */
+    public function getHandle()
+    {
+        return $this->handle;
     }
 
     /**
