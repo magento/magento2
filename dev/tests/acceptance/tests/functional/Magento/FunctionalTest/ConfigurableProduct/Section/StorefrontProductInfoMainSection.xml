@@ -16,5 +16,6 @@
         <element name="productAttributeOptionsError" type="text" selector="//div[@class='mage-error']"/>
         <!-- Parameter is the order number of the attribute on the page (1 is the newest) -->
         <element name="nthAttributeOnPage" type="block" selector="tr:nth-of-type({{numElement}}) .data" parameterized="true"/>
+        <element name="stockIndication" type="block" selector=".stock" />
     </section>
 </sections>
