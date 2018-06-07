@@ -71,14 +71,14 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
         CookieMetadataFactory $cookieMetadataFactory,
         Context $context,
         DateTime $dateTime,
-        ConfigInterface $sessionConfig = null
+        ConfigInterface $sessionConfig
     ) {
         $this->request = $request;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->context = $context;
         $this->dateTime = $dateTime;
-        $this->sessionConfig = $sessionConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->sessionConfig = $sessionConfig;
     }
 
     /**
