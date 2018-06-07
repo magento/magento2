@@ -181,8 +181,7 @@ define([
             });
         }
         editForm.on('submit', function () {
-            editForm
-                .find('#manage-options-panel input[name^="option"]')
+                optionPanel.find('input[name^="option"]')
                 .each(function() {
                     optionsValues.push(this.name + '=' + jQuery(this).val());
                 });
