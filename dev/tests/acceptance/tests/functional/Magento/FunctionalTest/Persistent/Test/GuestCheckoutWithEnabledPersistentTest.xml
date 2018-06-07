@@ -62,7 +62,7 @@
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" />
         <!-- Reload payment section -->
         <amOnPage url="{{GuestCheckoutReviewAndPaymentsPage.url}}" stepKey="amOnCheckoutPaymentsPage"/>
-        <waitForPageLoad stepKey="waitForPaymentPageReload"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton2"/>
         <!-- Check that address block contains correct information -->
         <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.firstName}}" stepKey="seeBilllingFirstName" />
         <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.lastName}}" stepKey="seeBilllingLastName" />
