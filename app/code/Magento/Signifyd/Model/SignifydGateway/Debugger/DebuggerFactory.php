@@ -30,7 +30,7 @@ class DebuggerFactory
     /**
      * DebuggerFactory constructor.
      *
-     * @param objectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param Config $config
      */
     public function __construct(
