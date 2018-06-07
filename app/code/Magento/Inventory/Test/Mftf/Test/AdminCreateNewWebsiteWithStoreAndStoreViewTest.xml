@@ -55,6 +55,7 @@
         <fillField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{BasicMsiStoreView.code}}" stepKey="fillStoreViewCode1"/>
         <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="{{BasicMsiStoreView.status}}" stepKey="setStoreViewStatus1"/>
         <click selector="{{StoreConfigSection.Save}}" stepKey="clickOnSaveWebSite3"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad1"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="clickOnOk1"/>
 
         <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeTheNewWebsite3"/>
