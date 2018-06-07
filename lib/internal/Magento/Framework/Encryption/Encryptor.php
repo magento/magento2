@@ -12,7 +12,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Encryption\Adapter\EncryptionAdapterInterface;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Math\Random;
-use Magento\Framework\Encryption\Adapter\Sodium;
+use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
 use Magento\Framework\Encryption\Adapter\Mcrypt;
 
 /**
@@ -274,7 +274,7 @@ class Encryptor implements EncryptorInterface
      */
     public function encrypt($data)
     {
-        $crypt = new Sodium($this->keys[$this->keyVersion]);
+        $crypt = new SodiumChachaIetf($this->keys[$this->keyVersion]);
 
         return $this->keyVersion .
             ':' . self::CIPHER_AEAD_CHACHA20POLY1305 .
@@ -408,7 +408,7 @@ class Encryptor implements EncryptorInterface
         $cipherVersion = $this->validateCipher($cipherVersion);
 
         if ($cipherVersion >= self::CIPHER_AEAD_CHACHA20POLY1305) {
-            return new Sodium($key);
+            return new SodiumChachaIetf($key);
         }
 
         if ($cipherVersion === self::CIPHER_RIJNDAEL_128) {

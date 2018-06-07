@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Encryption\Test\Unit;
 
 use Magento\Framework\Encryption\Adapter\Mcrypt;
-use Magento\Framework\Encryption\Adapter\Sodium;
+use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\Crypt;
 use Magento\Framework\App\DeploymentConfig;
@@ -159,7 +159,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $parts = explode(':', $actual, 3);
         list(, , $encryptedData) = $parts;
 
-        $crypt = new Sodium(self::CRYPT_KEY_1);
+        $crypt = new SodiumChachaIetf(self::CRYPT_KEY_1);
         // Verify decrypted matches original data
         $this->assertEquals($data, $crypt->decrypt(base64_decode((string)$encryptedData)));
     }

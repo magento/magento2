@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Encryption\Adapter;
 
-use Magento\Framework\Encryption\Encryptor;
-
 /**
  * Sodium adapter for encrypting and decrypting strings
  */
-class Sodium implements EncryptionAdapterInterface
+class SodiumChachaIetf implements EncryptionAdapterInterface
 {
     /**
      * @var string
