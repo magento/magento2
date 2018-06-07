@@ -16,7 +16,7 @@
             <description value="You should be able to create shipment for whole order from Custom Source."/>
             <testCaseId value="1139"/>
             <severity value="CRITICAL"/>
-            <group value="tmp"/>
+            <group value="msi"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
