@@ -13,6 +13,7 @@ namespace Magento\Framework\App\Router;
  */
 class Base implements \Magento\Framework\App\RouterInterface
 {
+    const NO_ROUTE = 'noroute';
     /**
      * @var \Magento\Framework\App\ActionFactory
      */
@@ -303,7 +304,7 @@ class Base implements \Magento\Framework\App\RouterInterface
             if ($actionInstance === null) {
                 return null;
             }
-            $action = 'noroute';
+            $action = self::NO_ROUTE;
         }
 
         // set values only after all the checks are done

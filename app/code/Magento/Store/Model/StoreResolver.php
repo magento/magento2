@@ -58,6 +58,11 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     private $storesData;
 
     /**
+     * @var \Magento\Store\App\Request\PathInfoProcessor
+     */
+    private $pathInfoProcessor;
+
+    /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager
      * @param \Magento\Framework\App\RequestInterface $request
@@ -66,6 +71,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @param string|null $runMode
      * @param string|null $scopeCode
      * @param \Magento\Store\Model\StoresData|null $storesData
+     * @param \Magento\Store\App\Request\PathInfoProcessor|null $pathInfoProcessor
      */
     public function __construct(
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
@@ -75,7 +81,8 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         $readerList = null,
         $runMode = ScopeInterface::SCOPE_STORE,
         $scopeCode = null,
-        \Magento\Store\Model\StoresData $storesData = null
+        \Magento\Store\Model\StoresData $storesData = null,
+        \Magento\Store\App\Request\PathInfoProcessor $pathInfoProcessor = null
     ) {
         $this->storeRepository = $storeRepository;
         $this->storeCookieManager = $storeCookieManager;
@@ -91,6 +98,9 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         $this->storesData = $storesData ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Store\Model\StoresData::class
         );
+        $this->pathInfoProcessor = $pathInfoProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Store\App\Request\PathInfoProcessor::class
+        );
     }
 
     /**
@@ -100,7 +110,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     {
         list($stores, $defaultStoreId) = $this->getStoresData();
 
-        $storeCode = $this->getStoreCodeFromUrl();
+        $storeCode = $this->pathInfoProcessor->resolveStoreFrontStoreFromPathInfo($this->request);
         if (!$storeCode) {
             $storeCode = $this->request->getParam(
                 self::PARAM_NAME,
@@ -129,24 +139,6 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
             $store = $this->getDefaultStoreById($defaultStoreId);
         }
         return $store->getId();
-    }
-
-    /**
-     * Get store code from request when 'use store code in url' is enabled
-     *
-     * @return null|string
-     */
-    private function getStoreCodeFromUrl() : ?string
-    {
-        if ($this->request instanceof \Magento\Framework\App\Request\Http) {
-            $processedPathInfo = ltrim($this->request->getPathInfo(), '/');
-            $originalPathInfo = $this->request->getOriginalPathInfo();
-            $urlStoreCode = trim(str_replace($processedPathInfo, '', $originalPathInfo), '/');
-            if (!empty(trim($urlStoreCode))) {
-                return $urlStoreCode;
-            }
-        }
-        return null;
     }
 
     /**

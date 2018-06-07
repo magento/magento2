@@ -30,15 +30,30 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
     private $storeRepository;
 
     /**
+     * @var \Magento\Framework\App\Request\PathInfo
+     */
+    private $pathInfo;
+
+    /**
+     * @var string
+     */
+    private $resolvedStore = '';
+
+    /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
+     * @param \Magento\Framework\App\Request\PathInfo $pathInfo
      */
     public function __construct(
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Store\Api\StoreRepositoryInterface $storeRepository
+        \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
+        \Magento\Framework\App\Request\PathInfo $pathInfo
     ) {
         $this->config = $config;
         $this->storeRepository = $storeRepository;
+        $this->pathInfo = $pathInfo ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Request\PathInfo::class
+        );
     }
 
     /**
@@ -50,6 +65,39 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
      */
     public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo) : string
     {
+        if ($this->getAndValidateStoreFrontStoreCode($request, $pathInfo)) {
+            $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
+            $pathInfo = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
+        }
+        return $pathInfo;
+    }
+
+    /**
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return string
+     */
+    public function resolveStoreFrontStoreFromPathInfo(
+        \Magento\Framework\App\RequestInterface $request
+    ) : ?string {
+        if ($request instanceof \Magento\Framework\App\Request\Http) {
+            $pathInfo = $this->pathInfo->computePathInfo($request->getRequestUri(), $request->getBaseUrl());
+            if (!empty($pathInfo)) {
+                return $this->getAndValidateStoreFrontStoreCode($request, $pathInfo);
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param string $pathInfo
+     * @return null|string
+     */
+    private function getAndValidateStoreFrontStoreCode(
+        \Magento\Framework\App\RequestInterface $request,
+        string $pathInfo
+    ) : ?string {
         if ((bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)) {
             $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
             $storeCode = $pathParts[0];
@@ -58,18 +106,16 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
                 /** @var \Magento\Store\Api\Data\StoreInterface $store */
                 $this->storeRepository->getActiveStoreByCode($storeCode);
             } catch (NoSuchEntityException $e) {
-                return $pathInfo;
+                return null;
             }
 
             if ($request instanceof Http
                 && !$request->isDirectAccessFrontendName($storeCode)
                 && $storeCode != Store::ADMIN_CODE
             ) {
-                $pathInfo = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
-            } elseif (!empty($storeCode)) {
-                $request->setActionName('noroute');
+                return $storeCode;
             }
         }
-        return $pathInfo;
+        return null;
     }
 }

@@ -78,6 +78,7 @@ class StoreCookie
         ) {
             $storeId = $this->storeManager->getStore()->getId();
             $store = $this->storeRepository->getActiveStoreById($storeId);
+            $this->storeCookieManager->deleteStoreCookie($store);
             $this->storeCookieManager->setStoreCookie($store);
         }
     }
