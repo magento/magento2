@@ -219,7 +219,6 @@ class Category extends AbstractResource
         return parent::_afterDelete($object);
     }
 
-
     /**
      * Delete children categories of specific category
      *
