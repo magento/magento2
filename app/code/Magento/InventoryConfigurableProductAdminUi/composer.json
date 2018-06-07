@@ -5,11 +5,11 @@
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-catalog": "*",
+        "magento/module-configurable-product": "*",
         "magento/module-ui": "*",
         "magento/module-inventory-api": "*",
         "magento/module-inventory-catalog-api": "*",
-        "magento/module-inventory-catalog-admin-ui": "*",
-        "magento/module-inventory-configurable-product": "*"
+        "magento/module-inventory-catalog-admin-ui": "*"
     },
     "type": "magento2-module",
     "license": [
