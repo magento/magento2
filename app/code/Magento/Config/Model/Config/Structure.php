@@ -281,6 +281,10 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     public function getFieldPathsByAttribute($attributeName, $attributeValue)
     {
         $result = [];
+        if (empty($this->_data['sections'])) {
+            return $result;
+        }
+
         foreach ($this->_data['sections'] as $section) {
             if (!isset($section['children'])) {
                 continue;
