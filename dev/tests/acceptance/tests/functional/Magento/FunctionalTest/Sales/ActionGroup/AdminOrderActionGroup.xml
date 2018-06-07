@@ -108,7 +108,7 @@
         </arguments>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterDownloadable"/>
-        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchConfigurable"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchDownloadable"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectDownloadableProduct"/>
         <waitForElementVisible selector="{{AdminOrderFormDownloadableProductSection.optionSelect(link.title)}}" stepKey="waitForLinkLoad"/>
