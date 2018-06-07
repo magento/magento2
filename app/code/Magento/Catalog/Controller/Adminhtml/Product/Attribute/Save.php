@@ -125,7 +125,7 @@ class Save extends Attribute
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {
-            $this->extractOptionsData($data);
+            $this->preprocessOptionsData($data);
             $setId = $this->getRequest()->getParam('set');
 
             $attributeSet = null;
@@ -318,7 +318,7 @@ class Save extends Attribute
     }
 
     /**
-     * Extract options data from serialized options field.
+     * Extract options data from serialized options field and append to data array.
      *
      * This logic is required to overcome max_input_vars php limit
      * that may vary and/or be inaccessible to change on different instances.
@@ -326,10 +326,9 @@ class Save extends Attribute
      * @param array $data
      * @return void
      */
-    private function extractOptionsData(&$data)
+    private function preprocessOptionsData(&$data)
     {
         if (isset($data['serialized_options'])) {
-            unset($data['option']);
             $serializedOptions = json_decode($data['serialized_options'], JSON_OBJECT_AS_ARRAY);
             foreach ($serializedOptions as $serializedOption) {
                 $option = [];
@@ -337,6 +336,7 @@ class Save extends Attribute
                 $data = array_merge_recursive($data, $option);
             }
         }
+        unset($data['serialized_options']);
     }
 
     /**
