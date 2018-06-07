@@ -15,7 +15,7 @@
             <title value="Configurable Product goes 'Out of Stock' if all associated Simple Products are 'Out of Stock'"/>
             <description value="Configurable Product goes 'Out of Stock' if all associated Simple Products are 'Out of Stock'"/>
             <testCaseId value="MC-181"/>
-            <group value="Catalog"/>
+            <group value="ConfigurableProduct"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
