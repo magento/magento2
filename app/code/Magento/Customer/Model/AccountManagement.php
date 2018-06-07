@@ -873,6 +873,8 @@ class AccountManagement implements AccountManagementInterface
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
+        } catch (\UnexpectedValueException $e) {
+            $this->logger->error($e);
         }
     }
 

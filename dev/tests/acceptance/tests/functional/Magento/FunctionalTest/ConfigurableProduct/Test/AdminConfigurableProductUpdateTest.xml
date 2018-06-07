@@ -246,4 +246,107 @@
         <dontSee selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option1" stepKey="dontSeeOption1InStorefront"/>
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Again"/>
     </test>
+
+    <test name="AdminConfigurableProductRemoveConfigurationTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Edit a configurable product in admin"/>
+            <title value="Admin should be able to remove a configuration from a Configurable Product"/>
+            <description value="Admin should be able to remove a configuration from a Configurable Product"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-86"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+        </after>
+
+        <!-- Create a configurable product via the UI -->
+        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!--
+            After saving, we are still on the product edit page. There is no need to reload or go to this page
+            again, because a round trip to the server has already happened.
+        -->
+
+        <!-- Remove a configuration option from the configurable product -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickEditConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckboxByIndex('1')}}" stepKey="deselectOption"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+
+        <!-- Verify that the removed option is not present in the storefront -->
+        <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="amOnStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPage"/>
+        <dontSee selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeInDropDown1"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeInDropDown2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute3.name}}" stepKey="seeInDropDown3"/>
+    </test>
+
+    <test name="AdminConfigurableProductAddConfigurationTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Edit a configurable product in admin"/>
+            <title value="Admin should be able to edit configuration to add a value to an existing attribute"/>
+            <description value="Admin should be able to edit configuration to add a value to an existing attribute"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-95"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+        </after>
+
+        <!-- Create a configurable product via the UI -->
+        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!--
+            After saving, we are still on the product edit page. There is no need to reload or go to this page
+            again, because a round trip to the server has already happened.
+        -->
+
+        <!-- Add a configuration option to the configurable product -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickEditConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
+        <fillField userInput="{{colorProductAttribute4.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="42" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+
+        <!-- Verify that the added option is present in the storefront -->
+        <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="amOnStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeInDropDown1"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeInDropDown2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute3.name}}" stepKey="seeInDropDown3"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute4.name}}" stepKey="seeInDropDown4"/>
+    </test>
 </tests>

@@ -10,6 +10,9 @@
     <section name="AdminProductFormSection">
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
+        <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
+        <element name="enableProductLabel" type="checkbox" selector="input[name='product[status]']+label"/>
+        <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
@@ -31,6 +34,11 @@
         <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
     </section>
+    <section name="ProductInWebsitesSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
+        <!--<element name="websites" type="checkbox" selector="input[name='product[website_ids][{{var1}}]']" parameterized="true"/>-->
+        <element name="website" type="checkbox" selector="//label[contains(text(), '{{var1}}')]/parent::div//input[@type='checkbox']" parameterized="true"/>
+    </section>
     <section name="ProductDesignSection">
         <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
         <element name="LayoutDropdown" type="select" selector="select[name='product[page_layout]']"/>
@@ -46,7 +54,6 @@
         <element name="v4" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 4.3.6']" />
         <element name="v3" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 3.6(Deprecated)']" />
         <element name="TinymceDescription3" type ="button" selector="//span[text()='Description']" />
-        <element name="Tinymce3MSG" type="button" selector=".admin__field-error"/>
         <element name="SaveConfig" type ="button" selector="#save" />
         <element name="v4" type="button" selector="#category_form_description_v4"/>
         <element name="WYSIWYGBtn" type="button" selector=".//button[@class='action-default scalable action-wysiwyg']"/>
