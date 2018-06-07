@@ -99,6 +99,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'lo_LA', /*Laotian*/
         'es_VE', /*Spanish (Venezuela)*/
         'en_IE', /*English (Ireland)*/
+        'es_BO', /*Spanish (Bolivia)*/
     ];
 
     /**
