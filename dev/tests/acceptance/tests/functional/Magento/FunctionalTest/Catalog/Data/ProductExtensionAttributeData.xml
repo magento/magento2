@@ -11,7 +11,4 @@
     <entity name="EavStockItem" type="product_extension_attribute">
         <requiredEntity type="stock_item">Qty_1000</requiredEntity>
     </entity>
-    <entity name="NoStockItem" type="product_extension_attribute">
-        <requiredEntity type="stock_item">Qty_0</requiredEntity>
-    </entity>
 </entities>
