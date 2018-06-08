@@ -432,7 +432,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testCreateOrders(): void
+    public function testCreateOrders()
     {
         $addressTotal = 5;
         $productType = \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE;
