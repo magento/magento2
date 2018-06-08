@@ -495,8 +495,7 @@ class Data
     {
         $currentStoreId = $this->storeManager->getStore()->getId();
         foreach ($fallbackValues as $optionId => $optionsArray) {
-            if (isset($optionsArray[$currentStoreId], $swatches[$optionId]['type'])
-                && $swatches[$optionId]['type'] === $optionsArray[$currentStoreId]['type']
+            if (isset($optionsArray[$currentStoreId])
             ) {
                 $swatches[$optionId] = $optionsArray[$currentStoreId];
             } else {
