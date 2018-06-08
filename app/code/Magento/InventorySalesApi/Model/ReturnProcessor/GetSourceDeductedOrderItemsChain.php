@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model\ReturnProcessor;
+namespace Magento\InventorySalesApi\Model\ReturnProcessor;
 
-use Magento\InventorySales\Model\ReturnProcessor\GetSourceDeductedOrderItemsInterface;
-use Magento\Sales\Model\Order as OrderModel;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsInterface;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResultFactory;
 use Magento\Framework\Exception\InputException;
-use Magento\InventorySales\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResultInterfaceFactory;
 
 class GetSourceDeductedOrderItemsChain implements GetSourceDeductedOrderItemsInterface
 {
@@ -20,17 +20,17 @@ class GetSourceDeductedOrderItemsChain implements GetSourceDeductedOrderItemsInt
     private $sourceDeductedItemsSelector;
 
     /**
-     * @var SourceDeductedOrderItemsResultInterfaceFactory
+     * @var SourceDeductedOrderItemsResultFactory
      */
     private $sourceDeductedOrderItemsResultFactory;
 
     /**
-     * @param SourceDeductedOrderItemsResultInterfaceFactory $sourceDeductedOrderItemsResultFactory
+     * @param SourceDeductedOrderItemsResultFactory $sourceDeductedOrderItemsResultFactory
      * @param array $sourceDeductedItemsSelector
      * @throws InputException
      */
     public function __construct(
-        SourceDeductedOrderItemsResultInterfaceFactory $sourceDeductedOrderItemsResultFactory,
+        SourceDeductedOrderItemsResultFactory $sourceDeductedOrderItemsResultFactory,
         array $sourceDeductedItemsSelector = []
     ) {
         foreach ($sourceDeductedItemsSelector as $selector) {
@@ -47,7 +47,7 @@ class GetSourceDeductedOrderItemsChain implements GetSourceDeductedOrderItemsInt
     /**
      * @inheritdoc
      */
-    public function execute(OrderModel $order, array $returnToStockItems): array
+    public function execute(OrderInterface $order, array $returnToStockItems): array
     {
         $sourceDeductedItems = [];
         foreach ($this->sourceDeductedItemsSelector as $selector) {
@@ -57,14 +57,14 @@ class GetSourceDeductedOrderItemsChain implements GetSourceDeductedOrderItemsInt
             }
         }
 
-        return $this->groupBySourceCode($sourceDeductedItems);
+        return $this->groupResultBySourceCode($sourceDeductedItems);
     }
 
     /**
      * @param $sourceDeductedItems
      * @return array
      */
-    private function groupBySourceCode($sourceDeductedItems): array
+    private function groupResultBySourceCode($sourceDeductedItems): array
     {
         $groupedItems = $result = [];
         foreach ($sourceDeductedItems as $resultItems) {

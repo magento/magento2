@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\ReturnProcessor;
 
-use Magento\Sales\Model\Order as OrderModel;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice as InvoiceModel;
 use Magento\Sales\Model\Order\Item as OrderItemModel;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
@@ -16,9 +16,10 @@ use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventorySales\Model\ReturnProcessor\Result\SourceDeductedOrderItemInterfaceFactory;
-use Magento\InventorySales\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResultInterfaceFactory;
-use Magento\InventorySales\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResultInterface;
+use Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsInterface;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemFactory;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResultFactory;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResult;
 
 class GetInvoicedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsInterface
 {
@@ -48,12 +49,12 @@ class GetInvoicedItemsPerSourceByPriority implements GetSourceDeductedOrderItems
     private $defaultSourceProvider;
 
     /**
-     * @var SourceDeductedOrderItemInterfaceFactory
+     * @var SourceDeductedOrderItemFactory
      */
     private $sourceDeductedOrderItemFactory;
 
     /**
-     * @var SourceDeductedOrderItemsResultInterfaceFactory
+     * @var SourceDeductedOrderItemsResultFactory
      */
     private $sourceDeductedOrderItemsResultFactory;
 
@@ -63,8 +64,8 @@ class GetInvoicedItemsPerSourceByPriority implements GetSourceDeductedOrderItems
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
      * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param SourceDeductedOrderItemInterfaceFactory $sourceDeductedOrderItemFactory
-     * @param SourceDeductedOrderItemsResultInterfaceFactory $sourceDeductedOrderItemsResultFactory
+     * @param SourceDeductedOrderItemFactory $sourceDeductedOrderItemFactory
+     * @param SourceDeductedOrderItemsResultFactory $sourceDeductedOrderItemsResultFactory
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
@@ -72,8 +73,8 @@ class GetInvoicedItemsPerSourceByPriority implements GetSourceDeductedOrderItems
         GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
         GetSourceItemsBySkuInterface $getSourceItemsBySku,
         DefaultSourceProviderInterface $defaultSourceProvider,
-        SourceDeductedOrderItemInterfaceFactory $sourceDeductedOrderItemFactory,
-        SourceDeductedOrderItemsResultInterfaceFactory $sourceDeductedOrderItemsResultFactory
+        SourceDeductedOrderItemFactory $sourceDeductedOrderItemFactory,
+        SourceDeductedOrderItemsResultFactory $sourceDeductedOrderItemsResultFactory
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
@@ -85,12 +86,12 @@ class GetInvoicedItemsPerSourceByPriority implements GetSourceDeductedOrderItems
     }
 
     /**
-     * @param OrderModel $order
+     * @param OrderInterface $order
      * @param array $returnToStockItems
-     * @return SourceDeductedOrderItemsResultInterface[]
+     * @return SourceDeductedOrderItemsResult[]
      * @throws \Magento\Framework\Exception\InputException
      */
-    public function execute(OrderModel $order, array $returnToStockItems): array
+    public function execute(OrderInterface $order, array $returnToStockItems): array
     {
         $invoicedItems = [];
         /** @var InvoiceModel $invoice */
@@ -112,7 +113,7 @@ class GetInvoicedItemsPerSourceByPriority implements GetSourceDeductedOrderItems
     /**
      * @param array $invoicedItems
      * @param int $websiteId
-     * @return SourceDeductedOrderItemsResultInterface[]
+     * @return SourceDeductedOrderItemsResult[]
      */
     private function getSourceDeductedInvoiceItemsResult(array $invoicedItems, int $websiteId): array
     {

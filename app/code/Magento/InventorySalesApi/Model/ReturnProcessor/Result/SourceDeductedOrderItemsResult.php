@@ -5,12 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model\ReturnProcessor\Result;
+namespace Magento\InventorySalesApi\Model\ReturnProcessor\Result;
 
-use Magento\InventorySales\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResultInterface;
-use Magento\InventorySales\Model\ReturnProcessor\Result\SourceDeductedOrderItemInterface;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItem;
 
-class SourceDeductedOrderItemsResult implements SourceDeductedOrderItemsResultInterface
+/**
+ * DTO used as returned type of GetSourceDeductedOrderItemsInterface
+ */
+class SourceDeductedOrderItemsResult
 {
     /**
      * @var string
@@ -18,7 +20,7 @@ class SourceDeductedOrderItemsResult implements SourceDeductedOrderItemsResultIn
     private $sourceCode;
 
     /**
-     * @var SourceDeductedOrderItemInterface[]
+     * @var SourceDeductedOrderItem[]
      */
     private $items;
 
@@ -33,7 +35,7 @@ class SourceDeductedOrderItemsResult implements SourceDeductedOrderItemsResultIn
     }
 
     /**
-     * @inheritdoc
+     * @return string
      */
     public function getSourceCode(): string
     {
@@ -41,7 +43,7 @@ class SourceDeductedOrderItemsResult implements SourceDeductedOrderItemsResultIn
     }
 
     /**
-     * @inheritdoc
+     * @return SourceDeductedOrderItem[]
      */
     public function getItems(): array
     {

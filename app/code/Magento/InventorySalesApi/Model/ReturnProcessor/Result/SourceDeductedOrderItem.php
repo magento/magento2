@@ -5,11 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model\ReturnProcessor\Result;
+namespace Magento\InventorySalesApi\Model\ReturnProcessor\Result;
 
-use Magento\InventorySales\Model\ReturnProcessor\Result\SourceDeductedOrderItemInterface;
-
-class SourceDeductedOrderItem implements SourceDeductedOrderItemInterface
+/**
+ * DTO used as the type for values of `$items` array passed in SourceDeductedOrderItemsResult
+ */
+class SourceDeductedOrderItem
 {
     /**
      * @var string
@@ -32,7 +33,7 @@ class SourceDeductedOrderItem implements SourceDeductedOrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string
      */
     public function getSku(): string
     {
@@ -40,7 +41,7 @@ class SourceDeductedOrderItem implements SourceDeductedOrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * @return float
      */
     public function getQuantity(): float
     {

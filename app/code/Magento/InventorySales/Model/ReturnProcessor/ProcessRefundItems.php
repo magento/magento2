@@ -13,8 +13,10 @@ use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
-use Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefundInterface;
-use Magento\InventorySales\Model\ReturnProcessor\Request\BackItemQtyRequestInterfaceFactory;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Request\ItemsToRefundInterface;
+use Magento\InventorySalesApi\Model\ReturnProcessor\ProcessRefundItemsInterface;
+use Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsInterface;
+use Magento\InventorySales\Model\ReturnProcessor\Request\BackItemQtyRequestFactory;
 use Magento\InventorySales\Model\ReturnProcessor\ProcessBackItemQtyToSource;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
@@ -37,7 +39,7 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
     private $processBackItemQtyToSource;
 
     /**
-     * @var BackItemQtyRequestInterfaceFactory
+     * @var BackItemQtyRequestFactory
      */
     private $backItemQtyRequestFactory;
 
@@ -64,7 +66,7 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
     /**
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param SalesChannelInterfaceFactory $salesChannelFactory
-     * @param BackItemQtyRequestInterfaceFactory $backItemQtyRequestFactory
+     * @param BackItemQtyRequestFactory $backItemQtyRequestFactory
      * @param ProcessBackItemQtyToSource $processBackItemQtyToSource
      * @param SalesEventInterfaceFactory $salesEventFactory
      * @param ItemToSellInterfaceFactory $itemsToSellFactory
@@ -74,7 +76,7 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
     public function __construct(
         WebsiteRepositoryInterface $websiteRepository,
         SalesChannelInterfaceFactory $salesChannelFactory,
-        BackItemQtyRequestInterfaceFactory $backItemQtyRequestFactory,
+        BackItemQtyRequestFactory $backItemQtyRequestFactory,
         ProcessBackItemQtyToSource $processBackItemQtyToSource,
         SalesEventInterfaceFactory $salesEventFactory,
         ItemToSellInterfaceFactory $itemsToSellFactory,
