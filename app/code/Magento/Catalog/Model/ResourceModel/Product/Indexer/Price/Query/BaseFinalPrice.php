@@ -61,6 +61,11 @@ class BaseFinalPrice
     private $connection;
 
     /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * BaseFinalPrice constructor.
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param JoinAttributeProcessor $joinAttributeProcessor
@@ -72,6 +77,7 @@ class BaseFinalPrice
         JoinAttributeProcessor $joinAttributeProcessor,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $connectionName = 'indexer'
     ) {
         $this->resource = $resource;
@@ -79,6 +85,7 @@ class BaseFinalPrice
         $this->joinAttributeProcessor = $joinAttributeProcessor;
         $this->moduleManager = $moduleManager;
         $this->eventManager = $eventManager;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -93,6 +100,8 @@ class BaseFinalPrice
     public function getQuery(array $dimensions, string $productType, array $entityIds = []): Select
     {
         $connection = $this->getConnection();
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $linkField = $metadata->getLinkField();
 
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -122,22 +131,22 @@ class BaseFinalPrice
         )->joinLeft(
             // calculate tier price specified as Website = `All Websites` and Customer Group = `Specific Customer Group`
             ['tier_price_1' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_1.row_id = e.row_id AND tier_price_1.all_groups = 0 AND tier_price_1.customer_group_id = cg.customer_group_id AND tier_price_1.qty = 1 AND tier_price_1.website_id = 0',
+            'tier_price_1.' . $linkField . ' = e.' . $linkField . ' AND tier_price_1.all_groups = 0 AND tier_price_1.customer_group_id = cg.customer_group_id AND tier_price_1.qty = 1 AND tier_price_1.website_id = 0',
             []
         )->joinLeft(
             // calculate tier price specified as Website = `Specific Website` and Customer Group = `Specific Customer Group`
             ['tier_price_2' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_2.row_id = e.row_id AND tier_price_2.all_groups = 0 AND tier_price_2.customer_group_id = cg.customer_group_id AND tier_price_2.qty = 1 AND tier_price_2.website_id = pw.website_id',
+            'tier_price_2.' . $linkField . ' = e.' . $linkField . ' AND tier_price_2.all_groups = 0 AND tier_price_2.customer_group_id = cg.customer_group_id AND tier_price_2.qty = 1 AND tier_price_2.website_id = pw.website_id',
             []
         )->joinLeft(
             // calculate tier price specified as Website = `All Websites` and Customer Group = `ALL GROUPS`
             ['tier_price_3' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_3.row_id = e.row_id AND tier_price_3.all_groups = 1 AND tier_price_3.customer_group_id = 0 AND tier_price_3.qty = 1 AND tier_price_3.website_id = 0',
+            'tier_price_3.' . $linkField . ' = e.' . $linkField . ' AND tier_price_3.all_groups = 1 AND tier_price_3.customer_group_id = 0 AND tier_price_3.qty = 1 AND tier_price_3.website_id = 0',
             []
         )->joinLeft(
             // calculate tier price specified as Website = `Specific Website` and Customer Group = `ALL GROUPS`
             ['tier_price_4' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_4.row_id = e.row_id AND tier_price_4.all_groups = 1 AND tier_price_4.customer_group_id = 0 AND tier_price_4.qty = 1 AND tier_price_4.website_id = pw.website_id',
+            'tier_price_4.' . $linkField . ' = e.' . $linkField . ' AND tier_price_4.all_groups = 1 AND tier_price_4.customer_group_id = 0 AND tier_price_4.qty = 1 AND tier_price_4.website_id = pw.website_id',
             []
         );
 

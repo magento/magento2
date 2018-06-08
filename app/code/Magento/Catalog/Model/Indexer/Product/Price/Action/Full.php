@@ -164,6 +164,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                     continue;
                 }
 
+                //TODO: fix dirty hac
+                $priceIndexer->setIsPartial(false);
+
                 $priceIndexer->getTableStrategy()->setUseIdxTable(false);
                 $this->reindexProductType($priceIndexer, $typeId);
             }
@@ -182,6 +185,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
         // Prepare replica table for indexation.
         $this->_defaultIndexerResource->getConnection()->truncateTable($this->getReplicaTable());
+
+        // TODO: truncate by dimensions
+//        $this->dimensionTableMaintainer->getConnection()->truncateTable(
+//            $this->dimensionTableMaintainer->getMainReplicaTable($dimensions)
+//        );
+
     }
 
     private function switchTables()
@@ -223,9 +232,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($currentMode);
 
         foreach ($dimensionsProviders as $dimensions) {
-            $this->dimensionTableMaintainer->getConnection()->truncateTable(
-                $this->dimensionTableMaintainer->getMainReplicaTable($dimensions)
-            );
             $this->reindexDimensions($priceIndexer, $dimensions, $typeId);
         }
     }
@@ -245,10 +251,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             // Temporary table will created if not exists
             $idxTableName = $this->_defaultIndexerResource->getIdxTable();
             $this->_emptyTable($idxTableName);
-
-            if ($priceIndexer->getIsComposite()) {
-                $this->_copyRelationIndexData($entityIds);
-            }
 
             // Reindex entities by id
             $priceIndexer->reindexEntity($entityIds);

@@ -327,40 +327,20 @@ abstract class AbstractAction
         $this->_prepareWebsiteDateTable();
 
         $productsTypes = $this->getProductsTypes($changedIds);
-
-        //TODO: tests with composite products
-//        foreach ($productsTypes as $productType => $entityIds) {
-//            $indexer = $this->_getIndexer($productType);
-//            if ($indexer->getIsComposite()) {
-//                $compositeIds += $entityIds;
-//            } else {
-//                $notCompositeIds += $entityIds;
-//            }
-//        }
-
         $parentProductsTypes = $this->getParentProductsTypes($changedIds);
-        $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
-        foreach ($parentProductsTypes as $parentProductsIds) {
-            $changedIds = array_merge($changedIds, $parentProductsIds);
-        }
-        $changedIds = array_unique($changedIds);
 
-        //TODO: check that it handled for composite products
-//        if (!empty($compositeIds)) {
-//            $this->_copyRelationIndexData($compositeIds, $notCompositeIds);
-//        }
+        $changedIds = array_merge($changedIds, ...array_values($parentProductsTypes));
+        $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
 
         foreach ($productsTypes as $productType => $entityIds) {
             $indexer = $this->_getIndexer($productType);
             if ($indexer instanceof DimensionalIndexerInterface) {
                 $indexer->executeByDimension([], \SplFixedArray::fromArray($entityIds, false));
             } else {
-                // copy relation index data for backward compatibility
-                $this->_copyRelationIndexData($entityIds);
                 $indexer->reindexEntity($entityIds);
             }
+            $this->_syncData($entityIds);
         }
-        $this->_syncData($changedIds);
 
         return $changedIds;
     }
@@ -371,7 +351,10 @@ abstract class AbstractAction
      * @param null|array $parentIds
      * @param array $excludeIds
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
-     */
+     * @deprecated Not used anymore. All composite products read data directly from main price indexer table or replica
+     * table for partial or full reindex correspondingly
+     * @see \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice::getIndexTableForCompositeProducts
+    */
     protected function _copyRelationIndexData($parentIds, $excludeIds = null)
     {
         $linkField = $this->getProductIdFieldName();

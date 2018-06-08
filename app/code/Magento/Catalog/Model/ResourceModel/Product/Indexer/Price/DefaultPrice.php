@@ -67,6 +67,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     private $priceModifiers = [];
 
     /**
+    * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+    */
+    private $activeTableSwitcher;
+
+    /**
      * DefaultPrice constructor.
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -86,7 +91,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Framework\Module\Manager $moduleManager,
         $connectionName = null,
         IndexTableStructureFactory $indexTableStructureFactory = null,
-        array $priceModifiers = []
+        array $priceModifiers = [],
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
@@ -103,6 +109,9 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
 
             $this->priceModifiers[] = $priceModifier;
         }
+        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
+        );
     }
 
     /**
@@ -331,6 +340,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     protected function getSelect($entityIds = null, $type = null)
     {
         $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $linkField = $metadata->getLinkField();
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -367,22 +377,22 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         )->joinLeft(
             // calculate tier price specified as Website = `All Websites` and Customer Group = `Specific Customer Group`
             ['tier_price_1' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_1.row_id = e.row_id AND tier_price_1.all_groups = 0 AND tier_price_1.customer_group_id = cg.customer_group_id AND tier_price_1.qty = 1 AND tier_price_1.website_id = 0',
+            'tier_price_1.' . $linkField . ' = e.' . $linkField . ' AND tier_price_1.all_groups = 0 AND tier_price_1.customer_group_id = cg.customer_group_id AND tier_price_1.qty = 1 AND tier_price_1.website_id = 0',
             []
         )->joinLeft(
             // calculate tier price specified as Website = `Specific Website` and Customer Group = `Specific Customer Group`
             ['tier_price_2' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_2.row_id = e.row_id AND tier_price_2.all_groups = 0 AND tier_price_2.customer_group_id = cg.customer_group_id AND tier_price_2.qty = 1 AND tier_price_2.website_id = cw.website_id',
+            'tier_price_2.' . $linkField . ' = e.' . $linkField . ' AND tier_price_2.all_groups = 0 AND tier_price_2.customer_group_id = cg.customer_group_id AND tier_price_2.qty = 1 AND tier_price_2.website_id = cw.website_id',
             []
         )->joinLeft(
             // calculate tier price specified as Website = `All Websites` and Customer Group = `ALL GROUPS`
             ['tier_price_3' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_3.row_id = e.row_id AND tier_price_3.all_groups = 1 AND tier_price_3.customer_group_id = 0 AND tier_price_3.qty = 1 AND tier_price_3.website_id = 0',
+            'tier_price_3.' . $linkField . ' = e.' . $linkField . ' AND tier_price_3.all_groups = 1 AND tier_price_3.customer_group_id = 0 AND tier_price_3.qty = 1 AND tier_price_3.website_id = 0',
             []
         )->joinLeft(
             // calculate tier price specified as Website = `Specific Website` and Customer Group = `ALL GROUPS`
             ['tier_price_4' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_4.row_id = e.row_id AND tier_price_4.all_groups = 1 AND tier_price_4.customer_group_id = 0 AND tier_price_4.qty = 1 AND tier_price_4.website_id = cw.website_id',
+            'tier_price_4.' . $linkField . ' = e.' . $linkField . ' AND tier_price_4.all_groups = 1 AND tier_price_4.customer_group_id = 0 AND tier_price_4.qty = 1 AND tier_price_4.website_id = cw.website_id',
             []
         );
 
@@ -398,7 +408,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $this->_addAttributeToSelect(
             $select,
             'status',
-            'e.' . $metadata->getLinkField(),
+            'e.' . $linkField,
             'cs.store_id',
             $statusCond,
             true
@@ -407,7 +417,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             $taxClassId = $this->_addAttributeToSelect(
                 $select,
                 'tax_class_id',
-                'e.' . $metadata->getLinkField(),
+                'e.' . $linkField,
                 'cs.store_id'
             );
         } else {
@@ -418,25 +428,25 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $price = $this->_addAttributeToSelect(
             $select,
             'price',
-            'e.' . $metadata->getLinkField(),
+            'e.' . $linkField,
             'cs.store_id'
         );
         $specialPrice = $this->_addAttributeToSelect(
             $select,
             'special_price',
-            'e.' . $metadata->getLinkField(),
+            'e.' . $linkField,
             'cs.store_id'
         );
         $specialFrom = $this->_addAttributeToSelect(
             $select,
             'special_from_date',
-            'e.' . $metadata->getLinkField(),
+            'e.' . $linkField,
             'cs.store_id'
         );
         $specialTo = $this->_addAttributeToSelect(
             $select,
             'special_to_date',
-            'e.' . $metadata->getLinkField(),
+            'e.' . $linkField,
             'cs.store_id'
         );
         $currentDate = 'cwd.website_date';
@@ -790,6 +800,32 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     public function getIdxTable($table = null)
     {
         return $this->tableStrategy->getTableName('catalog_product_index_price');
+    }
+
+    /**
+     * Return index table name depends in indexation mode: main price index table for partial reindex
+     *  and replica table for full reindex
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function getIndexTableForCompositeProducts()
+    {
+        // TODO: temporary fix, move to composite products
+        return $this->isPartial
+            ? $this->getMainTable()
+            : $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable());
+    }
+
+    private $isPartial = true;
+
+    /**
+     * @param bool $isPartial
+     * TODO: fix dirty hac
+     */
+    public function setIsPartial(bool $isPartial)
+    {
+        $this->isPartial = $isPartial;
     }
 
     /**
