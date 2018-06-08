@@ -473,7 +473,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
                 \Magento\Sales\Api\Data\OrderInterface::class,
                 $orderMock,
                 $orderMock
-           )->willReturnSelf();
+            )->willReturnSelf();
         $this->priceMock->expects($this->once())->method('round')->with($addressTotal)->willReturn($addressTotal);
 
         $this->toOrderMock
@@ -611,7 +611,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $billingAddressMock->method('validate')->willReturn(true);
 
-        return array($shippingAddressMock, $billingAddressMock);
+        return [$shippingAddressMock, $billingAddressMock];
     }
 
     /**
