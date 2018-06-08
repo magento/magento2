@@ -89,8 +89,7 @@ $storeGroup->save();
 $store->setGroupId($storeGroup->getId())->save();
 
 /* Refresh stores memory cache */
-$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
+//$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
 ///* Dispatch "store_group_save" event */
 //$objectManager->get(\Magento\Framework\Event\ManagerInterface::class)
 //    ->dispatch('store_group_save', ['group' => $storeGroup]);
-
