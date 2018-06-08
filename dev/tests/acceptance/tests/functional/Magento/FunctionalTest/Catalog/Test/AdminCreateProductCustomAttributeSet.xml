@@ -45,8 +45,7 @@
         <fillField selector="{{AdminProductAttributeSetSection.name}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillName"/>
         <selectOption selector="{{AdminProductAttributeSetSection.basedOn}}" userInput="Default" stepKey="selectDefaultSet"/>
         <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave1"/>
-        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('news_from_date')}}" selector2="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" stepKey="unassign1"/>
-        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('news_to_date')}}" selector2="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" stepKey="unassign2"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('meta_keyword')}}" selector2="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" stepKey="unassign1"/>
         <click selector="{{AdminProductAttributeSetSection.addNewGroupBtn}}" stepKey="clickAddNewGroup"/>
         <fillField selector="{{AdminProductAttributeSetSection.newGroupName}}" userInput="TestGroupName" stepKey="fillNewGroupName"/>
         <click selector="{{AdminProductAttributeSetSection.modalOk}}" stepKey="clickOkInModal"/>
@@ -56,20 +55,20 @@
         <!-- Go to new product page and see a default attribute -->
         <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToNewProductPage"/>
         <waitForPageLoad stepKey="wait2"/>
-        <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('news_from_date')}}" stepKey="seeNewsFromDate"/>
-        <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('news_to_date')}}" stepKey="seeNewsToDate"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="expandSEOSection"/>
+        <waitForPageLoad stepKey="wait3"/>
+        <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('meta_keyword')}}" stepKey="seeMetaKeyword"/>
         <dontSeeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="dontSeeTestGroupName"/>
 
         <!-- Switch from default attribute set to new attribute set -->
         <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
         <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="searchForAttrSet"/>
         <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
-        <waitForPageLoad stepKey="wait3"/>
+        <waitForPageLoad stepKey="wait4"/>
 
         <!-- See new attibute set -->
         <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="seeTestGroupName"/>
-        <dontSeeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('news_from_date')}}" stepKey="dontSeeNewsFromDate"/>
-        <dontSeeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('news_to_date')}}" stepKey="dontSeeNewsToDate"/>
+        <dontSeeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('meta_keyword')}}" stepKey="dontSeeMetaKeyword"/>
 
         <!-- Finish filling the new product page -->
         <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillSimpleProductMain">
