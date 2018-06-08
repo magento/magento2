@@ -34,6 +34,11 @@ class Save extends \Magento\Backend\App\Action
     protected $resultForwardFactory;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param CreditmemoSender $creditmemoSender
@@ -41,10 +46,12 @@ class Save extends \Magento\Backend\App\Action
      */
     public function __construct(
         Action\Context $context,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
         CreditmemoSender $creditmemoSender,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
+        $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
         $this->creditmemoLoader = $creditmemoLoader;
         $this->creditmemoSender = $creditmemoSender;
         $this->resultForwardFactory = $resultForwardFactory;
@@ -122,7 +129,7 @@ class Save extends \Magento\Backend\App\Action
             $this->messageManager->addError($e->getMessage());
             $this->_getSession()->setFormData($data);
         } catch (\Exception $e) {
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->logger->critical($e);
             $this->messageManager->addError(__('We can\'t save the credit memo right now.'));
         }
         $resultRedirect->setPath('sales/*/new', ['_current' => true]);
