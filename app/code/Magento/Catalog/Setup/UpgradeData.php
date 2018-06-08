@@ -497,7 +497,7 @@ class UpgradeData implements UpgradeDataInterface
                 'scope' => 'default',
                 'scope_id' => 0,
                 'path' => \Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE,
-                'value' => 'none'
+                'value' => \Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_NONE
             ]
         );
     }
