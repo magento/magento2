@@ -70,8 +70,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
             );
         }
         $storeModel->save();
-        $this->_objectManager->get(\Magento\Store\Model\StoreManager::class)->reinitStores();
-        $this->_eventManager->dispatch($eventName, ['store' => $storeModel]);
+        //$this->_objectManager->get(\Magento\Store\Model\StoreManager::class)->reinitStores();
+        //$this->_eventManager->dispatch($eventName, ['store' => $storeModel]);
         $this->messageManager->addSuccess(__('You saved the store view.'));
 
         return $postData;
@@ -102,7 +102,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
             );
         }
         $groupModel->save();
-        $this->_eventManager->dispatch('store_group_save', ['group' => $groupModel]);
+        //$this->_eventManager->dispatch('store_group_save', ['group' => $groupModel]);
         $this->messageManager->addSuccess(__('You saved the store.'));
 
         return $postData;

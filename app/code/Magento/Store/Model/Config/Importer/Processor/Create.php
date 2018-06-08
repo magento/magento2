@@ -182,7 +182,7 @@ class Create implements ProcessorInterface
                 $group->setWebsite($website);
                 $group->getResource()->save($group);
 
-                $this->eventManager->dispatch('store_group_save', ['group' => $group]);
+                //$this->eventManager->dispatch('store_group_save', ['group' => $group]);
             });
         }
     }
@@ -218,7 +218,7 @@ class Create implements ProcessorInterface
                 $store->setWebsite($website);
                 $store->getResource()->save($store);
 
-                $this->eventManager->dispatch('store_add', ['store' => $store]);
+                //$this->eventManager->dispatch('store_add', ['store' => $store]);
             });
         }
     }
