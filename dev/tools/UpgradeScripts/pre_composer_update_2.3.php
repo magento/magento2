@@ -83,7 +83,7 @@ try {
         throw new InvalidArgumentException("Supplied Magento root directory '$rootDir' does not exist");
     }
 
-    $tempDir = findUnusedFilename("$rootDir/temp_project");
+    $tempDir = findUnusedFilename($rootDir, "temp_project");
 
     // The composer command uses the Magento root as the working directory so this script can be run from anywhere
     $cmd = (!empty($opts['composer']) ? $opts['composer'] : 'composer') . " --working-dir='$rootDir'";
@@ -176,7 +176,7 @@ try {
 
     /**** Execute Updates ****/
 
-    $composerBackup = findUnusedFilename("$rootDir/composer.json.bak");
+    $composerBackup = findUnusedFilename($rootDir, "composer.json.bak");
     output("Backing up $rootDir/composer.json to $composerBackup");
     copy("$rootDir/composer.json", $composerBackup);
 
@@ -185,9 +185,13 @@ try {
         $repoLabels = array_map('strtolower',array_keys($composer['repositories']));
         $newLabel = 'magento';
         if (in_array($newLabel, $repoLabels)) {
-            $i = 1;
-            while (in_array("$newLabel-$i", $repoLabels)) $i++;
-            $newLabel = "$newLabel-$i";
+            $count = count($repoLabels);
+            for ($i = 1; $i <= $count; $i++) {
+                if (!in_array("$newLabel-$i", $repoLabels)) {
+                    $newLabel = "$newLabel-$i";
+                    break;
+                }
+            }
         }
         output("Adding $repo to composer repositories under label '$newLabel'");
         runComposer("config repositories.$newLabel composer $repo");
@@ -226,7 +230,7 @@ try {
 
     // Update Magento/Updater if it's installed
     if (file_exists("$rootDir/update")) {
-        $updateBackup = findUnusedFilename("$rootDir/update.bak");
+        $updateBackup = findUnusedFilename($rootDir, "update.bak");
         output("Backing up Magento/Updater directory $rootDir/update to $updateBackup");
         rename("$rootDir/update", $updateBackup);
         output('Updating Magento/Updater');
@@ -272,16 +276,17 @@ try {
 /**
  * Gets a variant of a filename that doesn't already exist so we don't overwrite anything
  *
+ * @param string $dir
  * @param string $filename
  * @return string
  */
-function findUnusedFilename($filename) {
-    if (file_exists($filename)) {
-        $i = 1;
-        while (file_exists($filename . "_$i")) $i++;
-        $filename = $filename . "_$i";
+function findUnusedFilename($dir, $filename) {
+    $unique = "$dir/$filename";
+    if (file_exists($unique)) {
+        $unique = tempnam($dir, "$filename.");
+        unlink($unique);
     }
-    return $filename;
+    return $unique;
 }
 
 /**
