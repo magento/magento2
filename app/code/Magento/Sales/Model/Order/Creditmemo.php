@@ -15,7 +15,6 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 use Magento\Sales\Model\Order\InvoiceFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Order creditmemo model
@@ -128,9 +127,9 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     private $invoiceFactory;
 
     /**
-     * @var ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface;
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -149,7 +148,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param InvoiceFactory $invoiceFactory
-     * @param ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -165,11 +164,11 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         \Magento\Sales\Model\Order\Creditmemo\CommentFactory $commentFactory,
         \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
-        ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        InvoiceFactory $invoiceFactory = null
+        InvoiceFactory $invoiceFactory = null,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null
     ) {
         $this->_creditmemoConfig = $creditmemoConfig;
         $this->_orderFactory = $orderFactory;
@@ -179,8 +178,9 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->priceCurrency = $priceCurrency;
-        $this->_scopeConfig = $scopeConfig;
         $this->invoiceFactory = $invoiceFactory ?: ObjectManager::getInstance()->get(InvoiceFactory::class);
+        $this->_scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -640,14 +640,14 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function isValidGrandTotal()
     {
-        return !($this->getGrandTotal() <= 0 && !$this->hasAllowZeroGrandTotal());
+        return !($this->getGrandTotal() <= 0 && !$this->getAllowZeroGrandTotal());
     }
 
     /**
      * @return bool
      */
 
-    public function hasAllowZeroGrandTotal()
+    public function getAllowZeroGrandTotal()
     {
         $isAllowed = $this->_scopeConfig->getValue(self::XML_PATH_ALLOW_ZERO_GRANDTOTAL,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
