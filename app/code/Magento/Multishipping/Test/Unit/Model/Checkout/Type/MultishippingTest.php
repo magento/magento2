@@ -619,7 +619,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @param Address|PHPUnit_Framework_MockObject_MockObject $shippingAddressMock
      * @param Address|PHPUnit_Framework_MockObject_MockObject $billingAddressMock
      */
-    private function setQuoteMockData(string $paymentProviderCode, $shippingAddressMock, $billingAddressMock): void
+    private function setQuoteMockData(string $paymentProviderCode, $shippingAddressMock, $billingAddressMock)
     {
         $quoteId = 1;
         $paymentMock = $this->getPaymentMock($paymentProviderCode);
