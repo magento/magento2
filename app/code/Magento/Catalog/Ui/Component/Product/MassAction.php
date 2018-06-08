@@ -12,9 +12,6 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\AbstractComponent;
 
-/**
- * Class MassAction
- */
 class MassAction extends AbstractComponent
 {
     const NAME = 'massaction';
