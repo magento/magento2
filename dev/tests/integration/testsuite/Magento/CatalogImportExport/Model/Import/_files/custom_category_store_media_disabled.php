@@ -56,4 +56,3 @@ $objectManager->create(\Magento\Eav\Model\AttributeSetManagement::class)
 //\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
 //    \Magento\Framework\Event\ManagerInterface::class
 //)->dispatch('store_add', ['store' => $store]);
-
