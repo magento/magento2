@@ -13,19 +13,19 @@
             <features value="Catalog"/>
             <stories value="Create/Edit Category in Admin"/>
             <description value="Admin should be able to create category from the product page" />
-            <severity value="AVERAGE" />
-            <testCaseId value="MC-234" />
-            <group value="Catalog"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-234"/>
+            <group value="Levi"/>
         </annotations>
         <before>
             <!-- Login as admin -->
-            <createData entity="SimpleTwo" stepKey="simpleProduct" />
+            <createData entity="SimpleTwo" stepKey="simpleProduct"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
             <!-- Delete the created category -->
-            <actionGroup ref="DeleteMostRecentCategory" stepKey="getRidOfCreatedCategory" />
+            <actionGroup ref="DeleteMostRecentCategory" stepKey="getRidOfCreatedCategory"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
         </after>
@@ -43,12 +43,12 @@
 
         <!-- Fill out the form for the new category -->
         <actionGroup ref="FillNewProductCategory" stepKey="FillNewProductCategory">
-            <argument name="categoryName" value="{{_defaultCategory.name}}" />
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
 
         <!-- Check that category was created -->
         <actionGroup ref="CategoryPresent" stepKey="checkIfCategoryPresent">
-            <argument name="categoryName" value="{{_defaultCategory.name}}" />
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
 
     </test>

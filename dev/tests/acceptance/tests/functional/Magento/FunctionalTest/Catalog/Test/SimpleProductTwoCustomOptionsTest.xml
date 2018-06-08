@@ -16,7 +16,7 @@
             <description value="Admin should be able to create simple product with two custom options"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-248"/>
-            <group value="Catalog"/>
+            <group value="Levi"/>
         </annotations>
         <before>
             <!-- log in as admin -->
@@ -39,7 +39,10 @@
             </actionGroup>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
-        <!-- ADD TEST STEPS HERE -->
+
+        <!-- opens the custom option panel and clicks add options -->
+        <click stepKey="openCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}"/>
+        <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
 
         <!-- Create a custom option with 2 values -->
         <actionGroup ref="CreateCustomRadioOptions" stepKey="createCustomOption1">
