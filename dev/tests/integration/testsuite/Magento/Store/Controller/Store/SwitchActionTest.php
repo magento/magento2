@@ -49,7 +49,7 @@ class SwitchActionTest extends \Magento\TestFramework\TestCase\AbstractControlle
         $store->setCode($to);
         $store->save();
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
-        $storeManager->reinitStores();
+//        $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+//        $storeManager->reinitStores();
     }
 }

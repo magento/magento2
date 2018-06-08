@@ -415,6 +415,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function afterDelete()
     {
         $result = parent::afterDelete();
+        $this->_storeManager->reinitStores();
 
         if ($this->getId() === $this->getWebsite()->getDefaultGroupId()) {
             $ids = $this->getWebsite()->getGroupIds();
@@ -435,6 +436,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function afterSave()
     {
+        $this->_storeManager->reinitStores();
         $this->eventManager->dispatch($this->_eventPrefix . '_save', ['group' => $this]);
 
         return parent::afterSave();

@@ -37,6 +37,6 @@ if (!$store->load('test', 'code')->getId()) {
         $store->save();
     }
 }
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+//$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /* Refresh stores memory cache */
-$objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();
+//$objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();

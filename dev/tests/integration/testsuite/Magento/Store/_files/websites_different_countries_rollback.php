@@ -48,8 +48,8 @@ $registry->register('isSecureArea', false);
 
 /* Refresh stores memory cache */
 /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-$storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
-$storeManager->reinitStores();
+//$storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+//$storeManager->reinitStores();
 /* Refresh CatalogSearch index */
 /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
 $indexerRegistry = $objectManager->create(\Magento\Framework\Indexer\IndexerRegistry::class);

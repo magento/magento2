@@ -1063,12 +1063,6 @@ class Store extends AbstractExtensibleModel implements
             $event = $this->_eventPrefix . '_edit';
         }
         $this->eventManager->dispatch($event, ['store' => $this]);
-
-        /* Refresh stores memory cache */
-//        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-//            \Magento\Store\Model\StoreManagerInterface::class
-//        )->reinitStores();
-
         return parent::afterSave();
     }
 
@@ -1250,6 +1244,7 @@ class Store extends AbstractExtensibleModel implements
     public function afterDelete()
     {
         parent::afterDelete();
+        $this->_storeManager->reinitStores();
         $this->_configCacheType->clean();
 
         if ($this->getId() === $this->getGroup()->getDefaultStoreId()) {
@@ -1263,6 +1258,7 @@ class Store extends AbstractExtensibleModel implements
             $this->getGroup()->setDefaultStoreId($defaultId);
             $this->getGroup()->save();
         }
+
         return $this;
     }
 

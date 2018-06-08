@@ -48,9 +48,9 @@ $objectManager->create(\Magento\Eav\Model\AttributeSetManagement::class)
     ->create($entityTypeCode, $attributeSet, $defaultSetId);
 
 /* Refresh stores memory cache */
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get(\Magento\Store\Model\StoreManagerInterface::class)
-    ->reinitStores();
+//\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+//    ->get(\Magento\Store\Model\StoreManagerInterface::class)
+//    ->reinitStores();
 
 /* Dispatch "store_add" event */
 //\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

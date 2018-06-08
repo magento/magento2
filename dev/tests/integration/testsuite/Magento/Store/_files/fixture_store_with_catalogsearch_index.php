@@ -27,5 +27,5 @@ if (!$store->load($storeCode)->getId()) {
 //        ->dispatch('store_add', ['store' => $store]);
 
     /* Refresh stores memory cache */
-    Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
+//    Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
 }

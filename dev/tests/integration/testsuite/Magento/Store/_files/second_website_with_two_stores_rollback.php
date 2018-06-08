@@ -29,6 +29,6 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
 /* Refresh stores memory cache */
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    \Magento\Store\Model\StoreManagerInterface::class
-)->reinitStores();
+//\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+//    \Magento\Store\Model\StoreManagerInterface::class
+//)->reinitStores();

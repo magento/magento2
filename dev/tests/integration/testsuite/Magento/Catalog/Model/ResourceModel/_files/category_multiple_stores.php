@@ -43,9 +43,9 @@ if (!$store->load('second_category_store', 'code')->getId()) {
 }
 
 /* Refresh stores memory cache */
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    \Magento\Store\Model\StoreManagerInterface::class
-)->reinitStores();
+//\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+//    \Magento\Store\Model\StoreManagerInterface::class
+//)->reinitStores();
 /* Dispatch "store_add" event */
 //\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
 //    \Magento\Framework\Event\ManagerInterface::class

@@ -213,7 +213,7 @@ class StoresFixture extends Fixture
         $this->generateStoreViews();
 
         //clean cache
-        $this->storeManager->reinitStores();
+//        $this->storeManager->reinitStores();
     }
 
     /**

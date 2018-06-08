@@ -32,6 +32,6 @@ if (!$store->load('fixture_second_store', 'code')->getId()) {
 }
 
 /* Refresh stores memory cache */
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    \Magento\Store\Model\StoreManagerInterface::class
-)->reinitStores();
+//\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+//    \Magento\Store\Model\StoreManagerInterface::class
+//)->reinitStores();

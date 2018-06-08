@@ -29,6 +29,6 @@ $store->setCode('thirdstore')->setName('Third Store')->setSortOrder(10)->setIsAc
 $store->save();
 
 /* Refresh stores memory cache */
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    \Magento\Store\Model\StoreManagerInterface::class
-)->reinitStores();
+//\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+//    \Magento\Store\Model\StoreManagerInterface::class
+//)->reinitStores();

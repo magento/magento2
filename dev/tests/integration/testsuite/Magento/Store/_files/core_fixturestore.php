@@ -23,7 +23,7 @@ if (!$store->load($storeCode)->getId()) {
     $store->save();
 
     /* Refresh stores memory cache */
-    Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
+    //Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
 }
 
 //if test using this fixture relies on full text functionality it is required to explicitly perform re-indexation
