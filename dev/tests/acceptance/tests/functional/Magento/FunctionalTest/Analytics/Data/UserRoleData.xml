@@ -11,10 +11,6 @@
     <entity name="adminNoReportRole" type="user_role">
         <data key="rolename" unique="suffix">noreport</data>
         <data key="current_password">123123q</data>
-        <!--<data key="gws_is_all">0</data>-->
-        <!--<array key="gws_websites">-->
-            <!--<item>1</item>-->
-        <!--</array>-->
         <array key="resource">
             <item>Magento_Backend::dashboard</item>
             <item>Magento_Sales::sales</item>
