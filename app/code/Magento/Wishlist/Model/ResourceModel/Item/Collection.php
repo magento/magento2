@@ -292,7 +292,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $productCollection->addPriceData()
             ->addTaxPercents()
             ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect($this->_wishlistConfig->getProductAttributes())
+            ->addAttributeToSelect($this->_wishlistConfig->getProductAttributes());
+
+        $this->_eventManager->dispatch(
+            'wishlist_item_collection_products_before_load',
+            ['product_collection' => $productCollection]
+        );
+
+        $productCollection
             ->addOptionsToResult()
             ->addUrlRewrite();
 
