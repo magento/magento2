@@ -389,7 +389,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     public function testReindex(
         array $productIds,
         \PHPUnit_Framework_MockObject_Matcher_InvokedCount $callCount
-    ): void {
+    ) {
         $this->objectManager->setBackwardCompatibleProperty($this->rule, '_productIds', $productIds);
         $this->_ruleProductProcessor->expects($callCount)->method('reindexList');
         $this->rule->reindex();
