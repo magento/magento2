@@ -20,7 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher;
 
 /**
- * Switch current store view.
+ * Handles store switching url and makes redirect.
  */
 class SwitchAction extends Action
 {
@@ -78,6 +78,9 @@ class SwitchAction extends Action
 
     /**
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     public function execute()
     {

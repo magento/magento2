@@ -17,7 +17,7 @@ use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\Session\Generic as Session;
 
 /**
- * Redirect to store switch action with to store, from store, sid & encoded url params to avoid its caching on frontend.
+ * Builds correct url to target store and performs redirect.
  */
 class Redirect extends \Magento\Framework\App\Action\Action
 {
