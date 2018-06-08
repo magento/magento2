@@ -15,7 +15,7 @@
             <description value="Admin should be able to create category from the product page" />
             <severity value="AVERAGE"/>
             <testCaseId value="MC-234"/>
-            <group value="Levi"/>
+            <group value="Catalog"/>
         </annotations>
         <before>
             <!-- Login as admin -->

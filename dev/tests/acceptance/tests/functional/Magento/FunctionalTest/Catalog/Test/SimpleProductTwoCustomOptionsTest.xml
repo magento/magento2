@@ -16,7 +16,7 @@
             <description value="Admin should be able to create simple product with two custom options"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-248"/>
-            <group value="Levi"/>
+            <group value="Catalog"/>
         </annotations>
         <before>
             <!-- log in as admin -->
