@@ -22,7 +22,10 @@
 
         <!-- opens the custom option panel and clicks add options -->
         <click stepKey="openCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}"/>
+        <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
+
         <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
+        <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
 
         <!-- Fill in the option and select the type of radio (once) -->
         <fillField stepKey="fillInOptionTitle" selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{customOptionName}}"/>
@@ -42,6 +45,7 @@
 
         <!-- close the custom option dropdown -->
         <click stepKey="closeCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}"/>
+        <waitForPageLoad stepKey="waitForCustomOptionsClose"/>
 
     </actionGroup>
 
