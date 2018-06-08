@@ -49,6 +49,7 @@ class CouponManagementTest extends \PHPUnit\Framework\TestCase
                 'save',
                 'getShippingAddress',
                 'getCouponCode',
+                'getStoreId',
                 '__wakeup'
             ]);
         $this->quoteAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, [
@@ -100,6 +101,9 @@ class CouponManagementTest extends \PHPUnit\Framework\TestCase
         $cartId = 33;
         $couponCode = '153a-ABC';
 
+        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
+
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(12));
@@ -127,6 +131,9 @@ class CouponManagementTest extends \PHPUnit\Framework\TestCase
         $cartId = 33;
         $couponCode = '153a-ABC';
 
+        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
+
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(12));
@@ -145,6 +152,9 @@ class CouponManagementTest extends \PHPUnit\Framework\TestCase
     {
         $cartId = 33;
         $couponCode = '153a-ABC';
+
+        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
