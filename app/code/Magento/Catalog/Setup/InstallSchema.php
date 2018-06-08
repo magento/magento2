@@ -674,7 +674,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Attriute Set ID'
+                'Attribute Set ID'
             )
             ->addColumn(
                 'parent_id',
