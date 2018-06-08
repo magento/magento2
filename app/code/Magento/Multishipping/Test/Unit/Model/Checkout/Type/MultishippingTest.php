@@ -52,6 +52,7 @@ use Magento\Directory\Model\AllowedCountries;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class MultishippingTest extends \PHPUnit\Framework\TestCase
 {
