@@ -42,7 +42,7 @@ class RulesApplier
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\SalesRule\Model\Utility $utility
-     * @param ChildrenValidationLocator $childrenValidationLocator
+     * @param ChildrenValidationLocator|null $childrenValidationLocator
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,

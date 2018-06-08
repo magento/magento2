@@ -35,7 +35,7 @@ $salesRule->setData(
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Store\Model\StoreManagerInterface::class
-            )->getWebsite()->getId()
+            )->getWebsite()->getId(),
         ],
     ]
 );
@@ -49,24 +49,24 @@ $salesRule->getConditions()->loadArray([
     'aggregator' => 'all',
     'conditions' =>
         [
-                [
-                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
-                    'attribute' => null,
-                    'operator' => null,
-                    'value' => '1',
-                    'is_value_processed' => null,
-                    'aggregator' => 'all',
-                    'conditions' =>
+            [
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                'attribute' => null,
+                'operator' => null,
+                'value' => '1',
+                'is_value_processed' => null,
+                'aggregator' => 'all',
+                'conditions' =>
+                    [
                         [
-                                [
-                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
-                                    'attribute' => 'sku',
-                                    'operator' => '!=',
-                                    'value' => 'product-bundle',
-                                    'is_value_processed' => false,
-                                ],
+                            'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                            'attribute' => 'sku',
+                            'operator' => '!=',
+                            'value' => 'product-bundle',
+                            'is_value_processed' => false,
                         ],
-                ],
+                    ],
+            ],
         ],
 ]);
 

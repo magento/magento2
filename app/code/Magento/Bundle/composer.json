@@ -26,7 +26,7 @@
     "suggest": {
         "magento/module-webapi": "*",
         "magento/module-bundle-sample-data": "*",
-        "magento/module-sales-rule": "101.0.*"
+        "magento/module-sales-rule": "*"
     },
     "type": "magento2-module",
     "license": [
