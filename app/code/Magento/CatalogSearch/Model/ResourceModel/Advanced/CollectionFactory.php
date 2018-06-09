@@ -27,8 +27,10 @@ class CollectionFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = '\\Magento\\CatalogSearch\\Model\\ResourceModel\\Advanced\\Collection')
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        $instanceName = '\\Magento\\CatalogSearch\\Model\\ResourceModel\\Advanced\\Collection'
+    ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
     }
@@ -39,7 +41,7 @@ class CollectionFactory
      * @param array $data
      * @return \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
      */
-    public function create(array $data = array())
+    public function create(array $data = [])
     {
         return $this->_objectManager->create($this->_instanceName, $data);
     }
