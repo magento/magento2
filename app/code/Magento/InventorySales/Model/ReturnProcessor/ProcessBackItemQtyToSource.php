@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\ReturnProcessor;
 
-use Magento\InventorySales\Model\ReturnProcessor\Request\BackItemQtyRequestInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\InventorySales\Model\ReturnProcessor\Request\BackItemQtyRequest;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 
 class ProcessBackItemQtyToSource
@@ -27,9 +29,14 @@ class ProcessBackItemQtyToSource
     private $getStockItemConfiguration;
 
     /**
-     * @var GetSourceItemBySourceCodeAndSku
+     * @var SourceItemRepositoryInterface
      */
-    private $getSourceItemBySourceCodeAndSku;
+    private $sourceItemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @var SourceItemsSaveInterface
@@ -39,34 +46,33 @@ class ProcessBackItemQtyToSource
     /**
      * @param StockResolverInterface $stockResolver
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
-     * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
+     * @param SourceItemRepositoryInterface $sourceItemRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceItemsSaveInterface $sourceItemsSave
      */
     public function __construct(
         StockResolverInterface $stockResolver,
         GetStockItemConfigurationInterface $getStockItemConfiguration,
-        GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku,
+        SourceItemRepositoryInterface $sourceItemRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         SourceItemsSaveInterface $sourceItemsSave
     ) {
         $this->stockResolver = $stockResolver;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
-        $this->getSourceItemBySourceCodeAndSku = $getSourceItemBySourceCodeAndSku;
         $this->sourceItemsSave = $sourceItemsSave;
+        $this->sourceItemRepository = $sourceItemRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * @param BackItemQtyRequestInterface $backItemQtyRequest
+     * @param BackItemQtyRequest $backItemQtyRequest
      * @param SalesChannelInterface $salesChannel
      * @return void
      *
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Validation\ValidationException
      */
     public function execute(
-        BackItemQtyRequestInterface $backItemQtyRequest,
+        BackItemQtyRequest $backItemQtyRequest,
         SalesChannelInterface $salesChannel
     ) {
         $backQty = $backItemQtyRequest->getQuantity();
@@ -85,11 +91,32 @@ class ProcessBackItemQtyToSource
             return;
         }
 
-        $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute(
+        $sourceItem = $this->getSourceItemBySourceCodeAndSku(
             $backItemQtyRequest->getSourceCode(),
             $backItemQtyRequest->getSku()
         );
-        $sourceItem->setQuantity($sourceItem->getQuantity() + $backQty);
-        $this->sourceItemsSave->execute([$sourceItem]);
+
+        if (!empty($sourceItem)) {
+            $sourceItem->setQuantity($sourceItem->getQuantity() + $backQty);
+            $this->sourceItemsSave->execute([$sourceItem]);
+        }
+    }
+
+    /**
+     * Returns source item from specific source by given SKU. Return null if source item is not found
+     *
+     * @param string $sourceCode
+     * @param string $sku
+     * @return SourceItemInterface|null
+     */
+    private function getSourceItemBySourceCodeAndSku(string $sourceCode, string $sku)
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)
+            ->addFilter(SourceItemInterface::SKU, $sku)
+            ->create();
+        $sourceItemsResult = $this->sourceItemRepository->getList($searchCriteria);
+
+        return $sourceItemsResult->getTotalCount() > 0 ? current($sourceItemsResult->getItems()) : null;
     }
 }
