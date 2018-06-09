@@ -78,6 +78,7 @@ class SalesChannels extends Column
                     ];
                 } catch (NoSuchEntityException $e) {
                     // We must handle the scenario in which a previous website was removed/renamed
+                    // See issue https://github.com/magento-engcom/msi/issues/1306
                     continue;
                 }
             }
