@@ -43,6 +43,11 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
 
     /**
+     * Allow Zero Grandtotal for Creditmemo path
+     */
+    const XML_PATH_ALLOW_ZERO_GRANDTOTAL = 'sales/zerograndtotal_creditmemo/allow_zero_grandtotal';
+
+    /**
      * Identifier for order history item
      *
      * @var string
@@ -122,6 +127,11 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     private $invoiceFactory;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface;
+     */
+    private $scopeConfig;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -138,6 +148,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param InvoiceFactory $invoiceFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -156,7 +167,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        InvoiceFactory $invoiceFactory = null
+        InvoiceFactory $invoiceFactory = null,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null
     ) {
         $this->_creditmemoConfig = $creditmemoConfig;
         $this->_orderFactory = $orderFactory;
@@ -167,6 +179,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->priceCurrency = $priceCurrency;
         $this->invoiceFactory = $invoiceFactory ?: ObjectManager::getInstance()->get(InvoiceFactory::class);
+        $this->_scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -627,6 +641,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function isValidGrandTotal()
     {
         return !($this->getGrandTotal() <= 0 && !$this->getAllowZeroGrandTotal());
+    }
+
+    /**
+     * @return bool
+     */
+
+    public function getAllowZeroGrandTotal()
+    {
+        $isAllowed = $this->_scopeConfig->getValue(self::XML_PATH_ALLOW_ZERO_GRANDTOTAL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $isAllowed;
     }
 
     /**
