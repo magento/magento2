@@ -116,7 +116,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin">
+    <type name="Magento\InventorySales\Model\CheckItemsQuantity">
         <arguments>
             <argument name="isProductSalableForRequestedQty" xsi:type="object">IsProductSalableForRequestedQtyConditionChainOnPlaceOrder</argument>
         </arguments>
