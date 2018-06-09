@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-inventory-frontend-ui",
+    "name": "magento/module-inventory-sales-frontend-ui",
     "description": "N/A",
     "require": {
         "php": "~7.1.3||~7.2.0",
@@ -7,6 +7,7 @@
         "magento/module-inventory-api": "*",
         "magento/module-inventory-sales": "*",
         "magento/module-inventory-configuration": "*",
+        "magento/module-inventory-configuration-api": "*",
         "magento/module-ui": "*"
     },
     "type": "magento2-module",
@@ -19,7 +20,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\InventoryFrontendUi\\": ""
+            "Magento\\InventorySalesFrontendUi\\": ""
         }
     }
 }

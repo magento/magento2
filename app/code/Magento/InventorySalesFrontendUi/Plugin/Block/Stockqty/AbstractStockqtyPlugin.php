@@ -1,12 +1,13 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: alessandro
- * Date: 09/06/18
- * Time: 15.35
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-namespace Magento\InventoryFrontendUi\Plugin\Block\Stockqty;
+declare(strict_types=1);
 
+namespace Magento\InventorySalesFrontendUi\Plugin\Block\Stockqty;
+
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
@@ -28,6 +29,11 @@ class AbstractStockqtyPlugin
      */
     private $getProductSalableQty;
 
+    /**
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteId
+     * @param GetStockItemConfigurationInterface $getStockItemConfig
+     * @param GetProductSalableQtyInterface $getProductSalableQty
+     */
     public function __construct(
         StockByWebsiteIdResolverInterface $stockByWebsiteId,
         GetStockItemConfigurationInterface $getStockItemConfig,
@@ -39,6 +45,9 @@ class AbstractStockqtyPlugin
     }
 
     /**
+     * @param \Magento\CatalogInventory\Block\Stockqty\AbstractStockqty $subject
+     * @param callable $proceed
+     * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -47,17 +56,21 @@ class AbstractStockqtyPlugin
         callable $proceed
     ): bool {
         $sku = $subject->getProduct()->getSku();
-        $websiteId = $subject->getProduct()->getStore()->getWebsiteId();
-        $stockId = $this->stockByWebsiteId->execute($websiteId)->getStockId();
+        $websiteId = (int)$subject->getProduct()->getStore()->getWebsiteId();
+        $stockId = (int)$this->stockByWebsiteId->execute($websiteId)->getStockId();
         $stockItemConfig = $this->getStockItemConfiguration->execute($sku, $stockId);
         if (null === $stockItemConfig) {
             return false;
         }
-        return $this->getProductSalableQty->execute($sku, $stockId) > 0
+        return $stockItemConfig->getBackorders() === StockItemConfigurationInterface::BACKORDERS_NO
+            && $this->getProductSalableQty->execute($sku, $stockId) > 0
             && $this->getStockQtyLeft($sku, $stockId) <= $stockItemConfig->getStockThresholdQty();
     }
 
     /**
+     * @param \Magento\CatalogInventory\Block\Stockqty\AbstractStockqty $subject
+     * @param callable $proceed
+     * @return float
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -66,15 +79,15 @@ class AbstractStockqtyPlugin
         callable $proceed
     ): float {
         $sku = $subject->getProduct()->getSku();
-        $websiteId = $subject->getProduct()->getStore()->getWebsiteId();
-        $stockId = $this->stockByWebsiteId->execute($websiteId)->getStockId();
+        $websiteId = (int)$subject->getProduct()->getStore()->getWebsiteId();
+        $stockId = (int)$this->stockByWebsiteId->execute($websiteId)->getStockId();
         return $this->getStockQtyLeft($sku, $stockId);
     }
 
     /**
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getStockQtyLeft(string $sku, int $stockId): float
+    private function getStockQtyLeft(string $sku, int $stockId): float
     {
         $stockItemConfig = $this->getStockItemConfiguration->execute($sku, $stockId);
         if (null === $stockItemConfig) {

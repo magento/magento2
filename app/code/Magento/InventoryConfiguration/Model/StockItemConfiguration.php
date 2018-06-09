@@ -359,7 +359,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function getStockStatusChangedAuto(): bool
     {
-        return (bool) $this->stockItem->getStockStatusChangedAuto();
+        return (bool)$this->stockItem->getStockStatusChangedAuto();
     }
 
     /**
