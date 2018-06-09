@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model\ReturnProcessor;
 
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Api\Data\OrderItemInterface;
@@ -61,7 +62,7 @@ class GetShippedItemsPerSourceByPriority
      * @param OrderInterface $order
      * @param array $returnToStockItems
      * @return array
-     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function execute(OrderInterface $order, array $returnToStockItems): array
     {

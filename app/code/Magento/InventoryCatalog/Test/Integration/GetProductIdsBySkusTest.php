@@ -38,7 +38,7 @@ class GetProductIdsBySkusTest extends TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_for_search.php
      *
-     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage Following products with requested skus were not found: not_existed_1, not_existed_2
      */
     public function testExecuteWithNotExistedSkus()

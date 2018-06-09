@@ -9,6 +9,7 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
@@ -100,7 +101,7 @@ class ProcessBackItemQtyPlugin
 
         try {
             $productSku = $this->getSkusByProductIds->execute([$productId])[$productId];
-        } catch (InputException $e) {
+        } catch (NoSuchEntityException $e) {
             /**
              * As it was decided the Inventory should not use data constraints depending on Catalog
              * (these two systems are not highly coupled, i.e. Magento does not sync data between them, so that
