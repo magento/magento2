@@ -5,10 +5,8 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Observer\Website;
+namespace Magento\InventorySales\Model;
 
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventorySalesApi\Model\GetAssignedStockIdForWebsiteInterface;
@@ -20,7 +18,7 @@ use Magento\Store\Model\Website;
 /**
  * Assign the website to the default stock
  */
-class AssignWebsiteToDefaultStock implements ObserverInterface
+class AssignWebsiteToDefaultStock
 {
     /**
      * @var StockRepositoryInterface
@@ -61,12 +59,13 @@ class AssignWebsiteToDefaultStock implements ObserverInterface
     }
 
     /**
-     * @inheritdoc
+     * @param Website $website
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Validation\ValidationException
      */
-    public function execute(Observer $observer)
+    public function execute(Website $website)
     {
-        /** @var Website $website */
-        $website = $observer->getData('website');
         $websiteCode = $website->getCode();
 
         if ($websiteCode === WebsiteInterface::ADMIN_CODE) {

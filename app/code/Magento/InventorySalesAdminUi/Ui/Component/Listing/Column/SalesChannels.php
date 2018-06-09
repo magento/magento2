@@ -71,16 +71,10 @@ class SalesChannels extends Column
         $preparedChannelData = [];
         foreach ($salesChannelData as $type => $salesChannel) {
             foreach ($salesChannel as $code) {
-                try {
-                    $preparedChannelData[$type][] = [
-                        'name' => $this->salesChannelNameResolver->resolve($type, $code),
-                        'code' => $code,
-                    ];
-                } catch (NoSuchEntityException $e) {
-                    // We must handle the scenario in which a previous website was removed/renamed
-                    // See issue https://github.com/magento-engcom/msi/issues/1306
-                    continue;
-                }
+                $preparedChannelData[$type][] = [
+                    'name' => $this->salesChannelNameResolver->resolve($type, $code),
+                    'code' => $code,
+                ];
             }
         }
         return $preparedChannelData;

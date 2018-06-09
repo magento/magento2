@@ -8,78 +8,84 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Plugin\Store;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySales\Model\AssignWebsiteToDefaultStock;
+use Magento\InventorySales\Model\ResourceModel\UpdateSalesChannelWebsiteCode;
 
 class WebsiteResourcePlugin
 {
     /**
+     * @var UpdateSalesChannelWebsiteCode
+     */
+    private $updateSalesChannelWebsiteCode;
+
+    /**
      * @var ResourceConnection
      */
-    private $resource;
+    private $resourceConnection;
+
+    /**
+     * @var AssignWebsiteToDefaultStock
+     */
+    private $assignWebsiteToDefaultStock;
 
     /**
      * WebsiteResourcePlugin constructor.
-     * @param ResourceConnection $resource
+     * @param UpdateSalesChannelWebsiteCode $updateSalesChannelWebsiteCode
+     * @param AssignWebsiteToDefaultStock $assignWebsiteToDefaultStock
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        ResourceConnection $resource
+        UpdateSalesChannelWebsiteCode $updateSalesChannelWebsiteCode,
+        AssignWebsiteToDefaultStock $assignWebsiteToDefaultStock,
+        ResourceConnection $resourceConnection
     ) {
-        $this->resource = $resource;
+        $this->updateSalesChannelWebsiteCode = $updateSalesChannelWebsiteCode;
+        $this->resourceConnection = $resourceConnection;
+        $this->assignWebsiteToDefaultStock = $assignWebsiteToDefaultStock;
     }
 
     /**
      * Get code from database
-     * @param \Magento\Store\Model\ResourceModel\Website $resourceModel
      * @param int $websiteId
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getCodeFromDatabase(
-        \Magento\Store\Model\ResourceModel\Website $resourceModel,
-        int $websiteId
-    ) {
-        $connection = $resourceModel->getConnection();
-        $qry = $connection->select()->from($resourceModel->getMainTable(), 'code')->where('website_id = ?', $websiteId);
-        return (string) $connection->fetchOne($qry);
-    }
-
-    /**
-     * @param string $oldCode
-     * @param string $newCode
-     */
-    private function updateSalesChannel(
-        string $oldCode,
-        string $newCode
-    ) {
-        $connection = $this->resource->getConnection();
-        $tableName = $this->resource->getTableName('inventory_stock_sales_channel');
-        $connection->update($tableName, [
-            SalesChannelInterface::CODE => $newCode,
-        ], $connection->quoteInto(SalesChannelInterface::CODE . "=? and type='website'", $oldCode));
+    private function getCodeFromDatabase(int $websiteId): string
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $connection->getTableName('store_website');
+        $selectQry = $connection->select()->from($tableName, 'code')->where('website_id = ?', $websiteId);
+        return (string) $connection->fetchOne($selectQry);
     }
 
     /**
      * @param \Magento\Store\Model\ResourceModel\Website $subject
      * @param callable $proceed
      * @param \Magento\Store\Model\Website $object
-     * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Store\Model\ResourceModel\Website
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Validation\ValidationException
      */
     public function aroundSave(
         \Magento\Store\Model\ResourceModel\Website $subject,
         callable $proceed,
         \Magento\Store\Model\Website $object
     ) {
+        $newCode = $object->getCode();
+        $oldCode = '';
+
         if ($object->getId()) {
-            // Keep database consistency while updating the website code
-            // See https://github.com/magento-engcom/msi/issues/1306
-            $oldCode = $this->getCodeFromDatabase($subject, (int) $object->getId());
-            if ($oldCode !== $object->getCode()) {
-                $this->updateSalesChannel($oldCode, $object->getCode());
-            }
+            $oldCode = $this->getCodeFromDatabase((int) $object->getId());
         }
 
         $res = $proceed($object);
+
+        if ($oldCode && ($oldCode !== $newCode)) {
+            $this->updateSalesChannelWebsiteCode->execute($oldCode, $newCode);
+        }
+
+        $this->assignWebsiteToDefaultStock->execute($object);
+
         return $res;
     }
 }
