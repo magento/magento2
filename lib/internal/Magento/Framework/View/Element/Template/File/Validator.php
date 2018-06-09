@@ -105,12 +105,6 @@ class Validator
     {
         $filename = str_replace('\\', '/', $filename);
         if (!isset($this->_templatesValidationResults[$filename])) {
-            /**
-             * Whether the file is out of Magento and Symlinks is allowed.
-             * Fix for issue 13375.
-             *
-             * @author Tiago Sampaio <tiago@tiagosampaio.com>
-             */
             if ($this->_isAllowSymlinks && $this->isOutsourceFile($filename)) {
                 $result = true;
 
