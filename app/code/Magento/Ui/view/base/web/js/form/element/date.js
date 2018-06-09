@@ -159,7 +159,7 @@ define([
                 if (this.options.showsTime) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
-                    dateFormat = this.shiftedValue() ?
+                    dateFormat = this.shiftedValue(value) ?
                         this.outputDateFormat :
                         this.inputDateFormat;
 
