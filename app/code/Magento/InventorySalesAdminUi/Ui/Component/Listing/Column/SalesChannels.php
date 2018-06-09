@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesAdminUi\Ui\Component\Listing\Column;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventorySalesAdminUi\Ui\SalesChannelNameResolverInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -70,10 +71,15 @@ class SalesChannels extends Column
         $preparedChannelData = [];
         foreach ($salesChannelData as $type => $salesChannel) {
             foreach ($salesChannel as $code) {
-                $preparedChannelData[$type][] = [
-                    'name' => $this->salesChannelNameResolver->resolve($type, $code),
-                    'code' => $code,
-                ];
+                try {
+                    $preparedChannelData[$type][] = [
+                        'name' => $this->salesChannelNameResolver->resolve($type, $code),
+                        'code' => $code,
+                    ];
+                } catch (NoSuchEntityException $e) {
+                    // We must handle the scenario in which a previous website was removed/renamed
+                    continue;
+                }
             }
         }
         return $preparedChannelData;
