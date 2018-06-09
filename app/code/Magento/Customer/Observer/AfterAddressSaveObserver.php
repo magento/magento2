@@ -7,6 +7,8 @@
 namespace Magento\Customer\Observer;
 
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Helper\Address as HelperAddress;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Address\AbstractAddress;
@@ -72,6 +74,16 @@ class AfterAddressSaveObserver implements ObserverInterface
      * @var Escaper
      */
     protected $escaper;
+    
+    /**
+     * @var CustomerFactory
+     */
+    protected $customerFactory;
+    
+    /**
+     * @var DateTime
+     */
+    protected $date;
 
     /**
      * @var CustomerSession
@@ -80,6 +92,8 @@ class AfterAddressSaveObserver implements ObserverInterface
 
     /**
      * @param Vat $customerVat
+     * @param DateTime $date
+     * @param CustomerFactory $customerFactory
      * @param HelperAddress $customerAddress
      * @param Registry $coreRegistry
      * @param GroupManagementInterface $groupManagement
@@ -91,6 +105,8 @@ class AfterAddressSaveObserver implements ObserverInterface
      */
     public function __construct(
         Vat $customerVat,
+        DateTime $date,
+        CustomerFactory $customerFactory,
         HelperAddress $customerAddress,
         Registry $coreRegistry,
         GroupManagementInterface $groupManagement,
@@ -101,6 +117,8 @@ class AfterAddressSaveObserver implements ObserverInterface
         CustomerSession $customerSession
     ) {
         $this->_customerVat = $customerVat;
+        $this->date = $date;
+        $this->_customerFactory = $customerFactory;
         $this->_customerAddress = $customerAddress;
         $this->_coreRegistry = $coreRegistry;
         $this->_groupManagement = $groupManagement;
@@ -123,7 +141,14 @@ class AfterAddressSaveObserver implements ObserverInterface
         /** @var $customerAddress Address */
         $customerAddress = $observer->getCustomerAddress();
         $customer = $customerAddress->getCustomer();
-
+        
+        if ($customer->getId()) {
+            $currentTimestamp = $this->date->gmtDate();
+            $customerModel = $this->_customerFactory->create()->load($customer->getId());
+            $customerModel->setUpdatedAt($currentTimestamp);
+            $customerModel->save();
+        }
+        
         if (!$this->_customerAddress->isVatValidationEnabled($customer->getStore())
             || $this->_coreRegistry->registry(self::VIV_PROCESSED_FLAG)
             || !$this->_canProcessAddress($customerAddress)
