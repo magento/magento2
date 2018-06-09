@@ -11,7 +11,6 @@
         "magento/module-inventory-configuration-api": "*",
         "magento/module-inventory-reservations-api": "*",
         "magento/module-inventory-sales-api": "*",
-        "magento/module-inventory-shipping": "*",
         "magento/module-sales-inventory": "*",
         "magento/module-store": "*",
         "magento/module-sales": "*"
