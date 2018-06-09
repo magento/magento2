@@ -126,7 +126,6 @@ class Validator
         return $this->_templatesValidationResults[$filename];
     }
 
-
     /**
      * Checks if the filename is out of Magento's root installation.
      *
@@ -139,7 +138,6 @@ class Validator
         $isOutsourceFile = strpos($filename, $this->getRootDirectory()->getAbsolutePath());
         return !($isOutsourceFile === 0);
     }
-
 
     /**
      * Checks whether path related to the directory
