@@ -13,7 +13,6 @@ use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 use Magento\CatalogInventory\Model\Stock;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;

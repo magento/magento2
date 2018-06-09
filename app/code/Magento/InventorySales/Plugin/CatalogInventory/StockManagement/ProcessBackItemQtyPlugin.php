@@ -16,7 +16,6 @@ use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProd
 use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\Framework\Exception\InputException;
 
 /**
  * Class provides around Plugin on \Magento\CatalogInventory\Model\StockManagement::backItemQty

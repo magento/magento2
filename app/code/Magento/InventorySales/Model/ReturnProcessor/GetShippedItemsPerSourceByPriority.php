@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\ReturnProcessor;
 
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Shipment;

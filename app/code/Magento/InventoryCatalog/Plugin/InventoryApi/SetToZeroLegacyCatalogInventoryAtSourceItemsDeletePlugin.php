@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model;
 
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
