@@ -8,6 +8,7 @@ namespace Magento\Bundle\Test\Unit\Model\Product\CopyConstructor;
 use Magento\Bundle\Api\Data\BundleOptionInterface;
 use Magento\Bundle\Model\Product\CopyConstructor\Bundle;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
+use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -61,12 +62,8 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->willReturn($extensionAttributesProduct);
 
         $bundleOptions = [
-            $this->getMockBuilder(BundleOptionInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass(),
-            $this->getMockBuilder(BundleOptionInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass()
+            $this->createBundleOption(),
+            $this->createBundleOption()
         ];
         $extensionAttributesProduct->expects($this->once())
             ->method('getBundleProductOptions')
@@ -86,7 +83,6 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $extensionAttributesDuplicate->expects($this->once())
             ->method('setBundleProductOptions')
             ->withConsecutive([$bundleOptions]);
-
         $this->model->build($product, $duplicate);
     }
 
@@ -130,5 +126,33 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->with([]);
 
         $this->model->build($product, $duplicate);
+    }
+
+    /**
+     * @return BundleOptionInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createBundleOption()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|BundleOptionInterface $bundleOptionMock */
+        $bundleOptionMock = $this->getMockBuilder(BundleOptionInterface::class)
+            ->setMethods(['getProductLinks'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ProductLinkInterface $productLinkMock */
+        $productLinkMock = $this->getMockBuilder(ProductLinkInterface::class)
+            ->setMethods(['setSelectionId'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $productLinkMock->expects($this->once())
+            ->method('setSelectionId')
+            ->with(null);
+
+        $bundleOptionMock->expects($this->once())
+            ->method('getProductLinks')
+            ->willReturn([$productLinkMock]);
+
+        return $bundleOptionMock;
     }
 }

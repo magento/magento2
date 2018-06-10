@@ -24,10 +24,22 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
             return;
         }
 
+        /** @var \Magento\Bundle\Api\Data\OptionInterface[]|null $bundleOptions */
         $bundleOptions = $product->getExtensionAttributes()->getBundleProductOptions() ?: [];
+
+        /** @var \Magento\Bundle\Api\Data\OptionInterface[]|null $duplicatedBundleOptions */
         $duplicatedBundleOptions = [];
+
         foreach ($bundleOptions as $key => $bundleOption) {
             $duplicatedBundleOptions[$key] = clone $bundleOption;
+            $duplicatedBundleOptions[$key]->setOptionId(null);
+            /** @var \Magento\Bundle\Api\Data\LinkInterface[]|null $bundleSelections */
+            $bundleSelections = $duplicatedBundleOptions[$key]->getProductLinks();
+
+            /** @var \Magento\Bundle\Api\Data\LinkInterface $bundleSelection */
+            foreach($bundleSelections as $bundleSelection){
+                $bundleSelection->setSelectionId(null);
+            }
         }
         $duplicate->getExtensionAttributes()->setBundleProductOptions($duplicatedBundleOptions);
     }
