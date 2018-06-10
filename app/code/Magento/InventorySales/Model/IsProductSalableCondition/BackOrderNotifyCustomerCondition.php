@@ -42,6 +42,9 @@ class BackOrderNotifyCustomerCondition implements IsProductSalableForRequestedQt
 
     /**
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
+     * @param GetStockItemDataInterface $getStockItemData
+     * @param ProductSalableResultInterfaceFactory $productSalableResultFactory
+     * @param ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory
      */
     public function __construct(
         GetStockItemConfigurationInterface $getStockItemConfiguration,
