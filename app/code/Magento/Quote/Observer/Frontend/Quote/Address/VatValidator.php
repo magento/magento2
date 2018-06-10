@@ -5,32 +5,49 @@
  */
 namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Vat;
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\ResourceModel\UpdateValidationResult;
+
 class VatValidator
 {
     /**
      * Customer address
      *
-     * @var \Magento\Customer\Helper\Address
+     * @var Address
      */
     protected $customerAddress;
 
     /**
      * Customer VAT
      *
-     * @var \Magento\Customer\Model\Vat
+     * @var Vat
      */
     protected $customerVat;
 
     /**
-     * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Customer\Model\Vat $customerVat
+     * @var UpdateValidationResult|null
+     */
+    private $updateValidationResult;
+
+    /**
+     * @param Address $customerAddress
+     * @param Vat $customerVat
      */
     public function __construct(
-        \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Customer\Model\Vat $customerVat
+        Address $customerAddress,
+        Vat $customerVat,
+        UpdateValidationResult $updateValidationResult = null
     ) {
         $this->customerVat = $customerVat;
         $this->customerAddress = $customerAddress;
+        $this->updateValidationResult = $updateValidationResult;
+
+        // Backward compatibility object injection
+        if ($this->updateValidationResult === null) {
+            $this->updateValidationResult = ObjectManager::getInstance()->get(UpdateValidationResult::class);
+        }
     }
 
     /**
@@ -64,13 +81,10 @@ class VatValidator
             );
 
             // Store validation results in corresponding quote address
-            $quoteAddress->setVatIsValid((int)$validationResult->getIsValid());
-            $quoteAddress->setVatRequestId($validationResult->getRequestIdentifier());
-            $quoteAddress->setVatRequestDate($validationResult->getRequestDate());
-            $quoteAddress->setVatRequestSuccess($validationResult->getRequestSuccess());
             $quoteAddress->setValidatedVatNumber($customerVatNumber);
             $quoteAddress->setValidatedCountryCode($customerCountryCode);
-            $quoteAddress->save();
+
+            $this->updateValidationResult->execute($quoteAddress, $validationResult);
         } else {
             // Restore validation results from corresponding quote address
             $validationResult = new \Magento\Framework\DataObject(

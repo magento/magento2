@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Test\Unit\Observer\Frontend\Quote\Address;
 
+use Magento\Quote\Model\ResourceModel\UpdateValidationResult;
+
 class VatValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -41,6 +43,11 @@ class VatValidatorTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\DataObject
      */
     protected $validationResult;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $updateValidationResultMock;
 
     protected function setUp()
     {
@@ -109,9 +116,12 @@ class VatValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->validationResult = new \Magento\Framework\DataObject($this->testData);
 
+        $this->updateValidationResultMock = $this->createMock(UpdateValidationResult::class);
+
         $this->model = new \Magento\Quote\Observer\Frontend\Quote\Address\VatValidator(
             $this->customerAddressMock,
-            $this->customerVatMock
+            $this->customerVatMock,
+            $this->updateValidationResultMock
         );
     }
 
@@ -194,7 +204,8 @@ class VatValidatorTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('testVatID')
         );
 
-        $this->quoteAddressMock->expects($this->once())->method('save');
+        $this->quoteAddressMock->expects($this->never())->method('save');
+        $this->updateValidationResultMock->expects($this->once())->method('execute');
 
         $this->assertEquals(
             $this->validationResult,
@@ -237,7 +248,8 @@ class VatValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteAddressMock->expects($this->any())->method('getVatId')->will($this->returnValue('testVatID'));
 
-        $this->quoteAddressMock->expects($this->once())->method('save');
+        $this->quoteAddressMock->expects($this->never())->method('save');
+        $this->updateValidationResultMock->expects($this->once())->method('execute');
 
         $this->assertEquals(
             $this->validationResult,
@@ -280,7 +292,8 @@ class VatValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteAddressMock->expects($this->any())->method('getVatId')->will($this->returnValue('someVatID'));
 
-        $this->quoteAddressMock->expects($this->once())->method('save');
+        $this->quoteAddressMock->expects($this->never())->method('save');
+        $this->updateValidationResultMock->expects($this->once())->method('execute');
 
         $this->assertEquals(
             $this->validationResult,
