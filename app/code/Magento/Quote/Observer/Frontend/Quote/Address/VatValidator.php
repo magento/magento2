@@ -38,11 +38,11 @@ class VatValidator
     public function __construct(
         Address $customerAddress,
         Vat $customerVat,
-        UpdateValidationResult $updateValidationResult = null
+        UpdateValidationResult $updateValidationRes = null
     ) {
         $this->customerVat = $customerVat;
         $this->customerAddress = $customerAddress;
-        $this->updateValidationResult = $updateValidationResult;
+        $this->updateValidationResult = $updateValidationRes;
 
         // Backward compatibility object injection
         if ($this->updateValidationResult === null) {
