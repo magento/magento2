@@ -64,7 +64,7 @@ class AbstractStockqtyPlugin
         }
         return $stockItemConfig->getBackorders() === StockItemConfigurationInterface::BACKORDERS_NO
             && $this->getProductSalableQty->execute($sku, $stockId) > 0
-            && $this->getStockQtyLeft($sku, $stockId) <= $stockItemConfig->getStockThresholdQty();
+            && $this->getProductSalableQty->execute($sku, $stockId) <= $stockItemConfig->getStockThresholdQty();
     }
 
     /**
@@ -81,19 +81,6 @@ class AbstractStockqtyPlugin
         $sku = $subject->getProduct()->getSku();
         $websiteId = (int)$subject->getProduct()->getStore()->getWebsiteId();
         $stockId = (int)$this->stockByWebsiteId->execute($websiteId)->getStockId();
-        return $this->getStockQtyLeft($sku, $stockId);
-    }
-
-    /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function getStockQtyLeft(string $sku, int $stockId): float
-    {
-        $stockItemConfig = $this->getStockItemConfiguration->execute($sku, $stockId);
-        if (null === $stockItemConfig) {
-            return $this->getProductSalableQty->execute($sku, $stockId);
-        }
-        $minStockQty = $stockItemConfig->getMinQty();
-        return $this->getProductSalableQty->execute($sku, $stockId) - $minStockQty;
+        return $this->getProductSalableQty->execute($sku, $stockId);
     }
 }
