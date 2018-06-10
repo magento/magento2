@@ -58,7 +58,7 @@ class CustomOptions extends Form
      *
      * @var string
      */
-    protected $maxCharacters = './/div[@class="control"]/p[@class="note"]/strong';
+    protected $maxCharacters = './/div[@class="control"]/p[contains(@class, "note")]';
 
     /**
      * Selector for label of option value element
@@ -72,7 +72,7 @@ class CustomOptions extends Form
      *
      * @var string
      */
-    protected $noteByNumber = './/*[@class="note"][%d]/strong';
+    protected $noteByNumber = './/*[contains(@class, "note")][%d]/strong';
 
     /**
      * Selector for select element of option
@@ -220,13 +220,19 @@ class CustomOptions extends Form
     protected function getFieldData(SimpleElement $option)
     {
         $price = $this->getOptionPriceNotice($option);
-        $maxCharacters = $option->find($this->maxCharacters, Locator::SELECTOR_XPATH);
+        $maxCharactersElement = $option->find($this->maxCharacters, Locator::SELECTOR_XPATH);
+
+        $maxCharacters = null;
+        if ($maxCharactersElement->isVisible()) {
+            preg_match('/\s([0-9]+)\s/', $maxCharactersElement->getText(), $match);
+            $maxCharacters = isset($match[1]) ? $match[1] : $maxCharactersElement->getText();
+        }
 
         return [
             'options' => [
                 [
                     'price' => floatval($price),
-                    'max_characters' => $maxCharacters->isVisible() ? $maxCharacters->getText() : null,
+                    'max_characters' => $maxCharacters,
                 ],
             ]
         ];
