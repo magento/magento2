@@ -9,6 +9,7 @@ namespace Magento\InventorySalesFrontendUi\Plugin\Block\Stockqty;
 
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 
@@ -30,6 +31,11 @@ class AbstractStockqtyPlugin
     private $getProductSalableQty;
 
     /**
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemManagementAllowedForProductType;
+
+    /**
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteId
      * @param GetStockItemConfigurationInterface $getStockItemConfig
      * @param GetProductSalableQtyInterface $getProductSalableQty
@@ -37,11 +43,13 @@ class AbstractStockqtyPlugin
     public function __construct(
         StockByWebsiteIdResolverInterface $stockByWebsiteId,
         GetStockItemConfigurationInterface $getStockItemConfig,
-        GetProductSalableQtyInterface $getProductSalableQty
+        GetProductSalableQtyInterface $getProductSalableQty,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
     ) {
         $this->getStockItemConfiguration = $getStockItemConfig;
         $this->stockByWebsiteId = $stockByWebsiteId;
         $this->getProductSalableQty = $getProductSalableQty;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
     }
 
     /**
@@ -55,6 +63,10 @@ class AbstractStockqtyPlugin
         \Magento\CatalogInventory\Block\Stockqty\AbstractStockqty $subject,
         callable $proceed
     ): bool {
+        $productType = $subject->getProduct()->getTypeId();
+        if (!$this->isSourceItemManagementAllowedForProductType->execute($productType)) {
+            return false;
+        }
         $sku = $subject->getProduct()->getSku();
         $websiteId = (int)$subject->getProduct()->getStore()->getWebsiteId();
         $stockId = (int)$this->stockByWebsiteId->execute($websiteId)->getStockId();
