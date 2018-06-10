@@ -1080,4 +1080,10 @@
             <argument name="nativeAttributeConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\NativeAttributeCondition</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\MassDelete">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\Ui\Component\MassAction\DeleteFilter</argument>
+        </arguments>
+    </type>
 </config>

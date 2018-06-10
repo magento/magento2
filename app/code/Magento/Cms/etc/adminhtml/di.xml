@@ -52,4 +52,16 @@
             <argument name="path" xsi:type="string">web/default_layouts/default_cms_layout</argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Cms\Controller\Adminhtml\Block\MassDelete">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\Ui\Component\MassAction\DeleteFilter</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Cms\Controller\Adminhtml\Page\MassDelete">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\Ui\Component\MassAction\DeleteFilter</argument>
+        </arguments>
+    </type>
 </config>

@@ -48,20 +48,27 @@ class Filter
      * @var DataProviderInterface
      */
     private $dataProvider;
+    /**
+     * @var bool
+     */
+    private $avoidEmptyFilter;
 
     /**
      * @param UiComponentFactory $factory
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
+     * @param bool $avoidEmptyFilter
      */
     public function __construct(
         UiComponentFactory $factory,
         RequestInterface $request,
-        FilterBuilder $filterBuilder
+        FilterBuilder $filterBuilder,
+        $avoidEmptyFilter = false
     ) {
         $this->factory = $factory;
         $this->request = $request;
         $this->filterBuilder = $filterBuilder;
+        $this->avoidEmptyFilter = $avoidEmptyFilter;
     }
 
     /**
@@ -101,10 +108,10 @@ class Filter
         }
         /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
         $idsArray = $this->getFilterIds();
-        if (!empty($idsArray)) {
+        if (!empty($idsArray) || $this->avoidEmptyFilter) {
             $collection->addFieldToFilter(
                 $collection->getIdFieldName(),
-                ['in' => $idsArray]
+                ['in' => (array) $idsArray]
             );
         }
         return $collection;

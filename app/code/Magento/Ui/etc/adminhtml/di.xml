@@ -61,4 +61,10 @@
             </argument>
         </arguments>
     </type>
+
+    <virtualType name="Magento\Ui\Component\MassAction\DeleteFilter" type="Magento\Ui\Component\MassAction\Filter">
+        <arguments>
+            <argument name="avoidEmptyFilter" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
 </config>
