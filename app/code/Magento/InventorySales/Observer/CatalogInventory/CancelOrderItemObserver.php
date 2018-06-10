@@ -7,19 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Observer\CatalogInventory;
 
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
+use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\Framework\Exception\InputException;
 
 class CancelOrderItemObserver implements ObserverInterface
 {
@@ -99,7 +99,7 @@ class CancelOrderItemObserver implements ObserverInterface
                 $productSku = $this->getSkusByProductIds->execute(
                     [$item->getProductId()]
                 )[$item->getProductId()];
-            } catch (InputException $e) {
+            } catch (NoSuchEntityException $e) {
                 /**
                  * As it was decided the Inventory should not use data constraints depending on Catalog
                  * (these two systems are not highly coupled, i.e. Magento does not sync data between them, so that
