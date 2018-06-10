@@ -59,7 +59,7 @@
                                 <span><?= $block->escapeHtml(__('Street Address %1', $_i + 1)) ?></span>
                             </label>
                             <div class="control">
-                                <input type="text" name="street[<?php /* @noEscape */ echo $i;?>]"
+                                <input type="text" name="street[<?php /* @noEscape */ echo $_i;?>]"
                                        value="<?= $block->escapeHtmlAttr($block->getStreetLine($_i + 1)) ?>"
                                        title="<?= $block->escapeHtmlAttr(__('Street Address %1', $_i + 1)) ?>"
                                        id="street_<?= /* @noEscape */ $_i + 1 ?>"
