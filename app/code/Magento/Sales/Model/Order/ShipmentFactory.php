@@ -104,7 +104,8 @@ class ShipmentFactory
 
             /** @var \Magento\Sales\Model\Order\Shipment\Item $item */
             $item = $this->converter->itemToShipmentItem($orderItem);
-            if ($orderItem->getIsVirtual() || ($orderItem->getParentItemId() && !$orderItem->isShipSeparately())) {
+            if ($orderItem->getIsVirtual() ||
+                ($orderItem->getProductType() === \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE && !$orderItem->isShipSeparately())) {
                 $item->isDeleted(true);
             }
 
