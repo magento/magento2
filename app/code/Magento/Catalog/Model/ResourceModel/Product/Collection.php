@@ -279,6 +279,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $tableMaintainer;
 
     /**
+     * @var bool
+     */
+    private $canApplyProductLimitations = false;
+
+    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -650,6 +655,25 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * Apply product limitation filters.
+     *
+     * @return $this
+     */
+    protected function _beforeLoad()
+    {
+        if (isset($this->_productLimitationFilters['category_id'])
+            && $this->getStoreId() == Store::DEFAULT_STORE_ID
+            && !$this->canApplyProductLimitations
+        ) {
+            $this->_applyZeroStoreProductLimitations();
+        } elseif ($this->canApplyProductLimitations) {
+            $this->_applyProductLimitations();
+        }
+
+        return $this;
+    }
+
+    /**
      * Processing collection items after loading
      * Adding url rewrites, minimal prices, final prices, tax percents
      *
@@ -821,7 +845,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($store->getId() != Store::DEFAULT_STORE_ID) {
             $this->setStoreId($store);
             $this->_productLimitationFilters['store_id'] = $store->getId();
-            $this->_applyProductLimitations();
+            $this->canApplyProductLimitations = true;
         }
 
         return $this;
@@ -840,7 +864,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         $this->_productLimitationFilters['website_ids'] = $websites;
-        $this->_applyProductLimitations();
+        $this->canApplyProductLimitations = true;
 
         return $this;
     }
@@ -868,12 +892,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             unset($this->_productLimitationFilters['category_is_anchor']);
         } else {
             $this->_productLimitationFilters['category_is_anchor'] = 1;
-        }
-
-        if ($this->getStoreId() == Store::DEFAULT_STORE_ID) {
-            $this->_applyZeroStoreProductLimitations();
-        } else {
-            $this->_applyProductLimitations();
         }
 
         return $this;
@@ -1489,7 +1507,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->_productLimitationFilters['website_id'] = $websiteId;
         }
 
-        $this->_applyProductLimitations();
+        $this->canApplyProductLimitations = true;
 
         return $this;
     }
@@ -1645,7 +1663,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function setVisibility($visibility)
     {
         $this->_productLimitationFilters['visibility'] = $visibility;
-        $this->_applyProductLimitations();
+        $this->canApplyProductLimitations = true;
 
         return $this;
     }
@@ -1933,7 +1951,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
             $this->_productLimitationFilters['website_id'] = $websiteId;
         }
-        $this->_applyProductLimitations();
+        $this->canApplyProductLimitations = true;
+
         return $this;
     }
 
