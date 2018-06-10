@@ -76,15 +76,15 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
             return 0;
         }
 
-        $outOfStockThreshold = 0;
+        $minQty = 0;
         $stockItemConfig = $this->getStockItemConfiguration->execute($sku, $stockId);
         if (null !== $stockItemConfig) {
-            $outOfStockThreshold = $stockItemConfig->getMinQty();
+            $minQty = $stockItemConfig->getMinQty();
         }
 
         $productQtyInStock = $stockItemData[GetStockItemDataInterface::QUANTITY]
             + $this->getReservationsQuantity->execute($sku, $stockId)
-            - $outOfStockThreshold;
+            - $minQty;
 
         return $productQtyInStock;
     }
