@@ -48,8 +48,7 @@ class BackOrderNotifyCustomerCondition implements IsProductSalableForRequestedQt
         GetStockItemDataInterface $getStockItemData,
         ProductSalableResultInterfaceFactory $productSalableResultFactory,
         ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory
-    )
-    {
+    ) {
         $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->getStockItemData = $getStockItemData;
         $this->productSalableResultFactory = $productSalableResultFactory;
@@ -81,8 +80,7 @@ class BackOrderNotifyCustomerCondition implements IsProductSalableForRequestedQt
                                 'We don\'t have as many quantity as you requested, '
                                 . 'but we\'ll back order the remaining %1.',
                                 $backOrderQty * 1
-                            )]
-                    )
+                            )])
                 ];
                 return $this->productSalableResultFactory->create(['errors' => $errors]);
             }
