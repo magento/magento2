@@ -60,16 +60,17 @@ class WebsiteResourcePlugin
     /**
      * @param \Magento\Store\Model\ResourceModel\Website $subject
      * @param callable $proceed
-     * @param \Magento\Store\Model\Website $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Store\Model\ResourceModel\Website
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Validation\ValidationException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(
         \Magento\Store\Model\ResourceModel\Website $subject,
         callable $proceed,
-        \Magento\Store\Model\Website $object
+        \Magento\Framework\Model\AbstractModel $object
     ) {
         $newCode = $object->getCode();
         $oldCode = '';
