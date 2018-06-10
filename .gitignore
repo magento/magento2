@@ -68,3 +68,6 @@ atlassian*
 /generated/*
 !/generated/.htaccess
 .DS_Store
+
+/README.md
+README.md
