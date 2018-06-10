@@ -5,8 +5,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 /**
  * Factory class for @see \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
  */
-class CollectionFactory
-    extends \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+class CollectionFactory extends \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
 {
     /**
      * Instance name to create
@@ -29,7 +28,7 @@ class CollectionFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\\Magento\\CatalogSearch\\Model\\ResourceModel\\Advanced\\Collection'
+        \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection $instanceName
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
