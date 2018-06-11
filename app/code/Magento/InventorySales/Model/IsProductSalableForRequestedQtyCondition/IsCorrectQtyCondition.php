@@ -84,12 +84,6 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
     {
         /** @var StockItemConfigurationInterface $stockItemConfiguration */
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
-        if (null === $stockItemConfiguration) {
-            return $this->createErrorResult(
-                'is_correct_qty-no_config',
-                __('Missing stock item configuration')
-            );
-        }
 
         if ($this->isMinSaleQuantityCheckFailed($stockItemConfiguration, $requestedQty)) {
             return $this->createErrorResult(

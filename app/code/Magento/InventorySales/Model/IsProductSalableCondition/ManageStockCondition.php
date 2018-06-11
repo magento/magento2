@@ -44,9 +44,6 @@ class ManageStockCondition implements IsProductSalableInterface
     public function execute(string $sku, int $stockId): bool
     {
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
-        if (null === $stockItemConfiguration) {
-            return false;
-        }
 
         $globalManageStock = $this->configuration->getManageStock();
         $manageStock = false;

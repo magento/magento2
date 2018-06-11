@@ -14,19 +14,12 @@ use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
-use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @inheritdoc
  */
 class GetStockItemConfiguration implements GetStockItemConfigurationInterface
 {
-    /**
-     * @var GetStockItemDataInterface
-     */
-    private $getStockItemData;
-
     /**
      * @var StockItemCriteriaInterfaceFactory
      */
@@ -48,20 +41,17 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     private $stockItemConfigurationFactory;
 
     /**
-     * @param GetStockItemDataInterface $getStockItemData
      * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory
      * @param StockItemRepositoryInterface $legacyStockItemRepository
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      * @param StockItemConfigurationFactory $stockItemConfigurationFactory
      */
     public function __construct(
-        GetStockItemDataInterface $getStockItemData,
         StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory,
         StockItemRepositoryInterface $legacyStockItemRepository,
         GetProductIdsBySkusInterface $getProductIdsBySkus,
         StockItemConfigurationFactory $stockItemConfigurationFactory
     ) {
-        $this->getStockItemData = $getStockItemData;
         $this->legacyStockItemCriteriaFactory = $legacyStockItemCriteriaFactory;
         $this->legacyStockItemRepository = $legacyStockItemRepository;
         $this->getProductIdsBySkus = $getProductIdsBySkus;
@@ -73,12 +63,6 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
      */
     public function execute(string $sku, int $stockId)
     {
-        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-        if (null === $stockItemData) {
-            // Sku is not assigned to Stock
-            return null;
-        }
-
         return $this->stockItemConfigurationFactory->create(
             [
                 'stockItem' => $this->getLegacyStockItem($sku),
