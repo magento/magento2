@@ -230,11 +230,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                 $mainTablesByDimension
             );
         }
-
-        //Clean data from indexers with old realisation (old replica table)
-        $this->_defaultIndexerResource->getConnection()->truncateTable(
-            $this->dimensionTableMaintainer->getMainReplicaTable([])
-        );
     }
 
     private function reindexProductType(PriceInterface $priceIndexer, string $typeId)
