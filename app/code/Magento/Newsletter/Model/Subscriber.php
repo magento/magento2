@@ -364,7 +364,17 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     public function loadByEmail($subscriberEmail)
     {
-        $this->addData($this->getResource()->loadByEmail($subscriberEmail));
+        $storeId = $this->_storeManager->getStore()->getId();
+        $customerData = ['store_id' => $storeId, 'email'=> $subscriberEmail];
+
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        $customer = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $customerData,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        $this->addData($this->getResource()->loadByCustomerData($customer));
         return $this;
     }
 
@@ -423,17 +433,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     public function subscribe($email)
     {
-        $storeId = $this->_storeManager->getStore()->getId();
-        $customerData = ['store_id' => $storeId, 'email'=> $email];
-
-        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
-        $customer = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $customer,
-            $customerData,
-            \Magento\Customer\Api\Data\CustomerInterface::class
-        );
-        $this->getResource()->loadByCustomerData($customer);
+        $this->loadByEmail($email);
 
         if ($this->getId() && $this->getStatus() == self::STATUS_SUBSCRIBED) {
             return $this->getStatus();

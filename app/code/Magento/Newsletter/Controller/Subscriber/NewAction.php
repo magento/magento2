@@ -125,10 +125,8 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
                 $this->validateEmailAvailable($email);
 
                 $subscriber = $this->_subscriberFactory->create()->loadByEmail($email);
-                $storeId = $this->_storeManager->getStore()->getId();
                 if ($subscriber->getId()
                     && $subscriber->getSubscriberStatus() == \Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED
-                    && $subscriber->getStoreId() === $storeId
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('This email address is already subscribed.')
