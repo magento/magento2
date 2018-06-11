@@ -63,16 +63,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private $configReader;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
-     */
-    private $resource;
-
-    /**
-     * @var string
-     */
-    private $connectionName;
-
-    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -86,6 +76,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      * @param \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer|null $dimensionTableMaintainer
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $configReader
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -104,9 +95,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
         \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionCollectionFactory = null,
         \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $dimensionTableMaintainer = null,
-        \Magento\Framework\App\Config\ScopeConfigInterface $configReader = null,
-        \Magento\Framework\App\ResourceConnection $resource = null,
-        $connectionName = 'indexer'
+        \Magento\Framework\App\Config\ScopeConfigInterface $configReader = null
     ) {
         parent::__construct(
             $config,
@@ -139,10 +128,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         $this->configReader = $configReader ?: ObjectManager::getInstance()->get(
             \Magento\Framework\App\Config\ScopeConfigInterface::class
         );
-        $this->resource = $resource ?? ObjectManager::getInstance()->get(
-                \Magento\Framework\App\ResourceConnection::class
-            );
-        $this->connectionName = $connectionName;
     }
 
     /**
@@ -326,7 +311,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
     private function getEntityIdsFromBatch(string $typeId, array $batch)
     {
-        $connection = $this->resource->getConnection($this->connectionName);
+        $connection = $this->_defaultIndexerResource->getConnection();
         // Get entity ids from batch
         $select = $connection
             ->select()
@@ -358,7 +343,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
     private function getBatchesForIndexer(string $typeId)
     {
-        $connection = $this->resource->getConnection($this->connectionName);
+        $connection = $this->_defaultIndexerResource->getConnection();
         return $this->batchProvider->getBatches(
             $connection,
             $this->getProductMetaData()->getEntityTable(),
