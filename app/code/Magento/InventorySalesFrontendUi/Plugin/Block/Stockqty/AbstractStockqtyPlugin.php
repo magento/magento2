@@ -75,7 +75,6 @@ class AbstractStockqtyPlugin
             return false;
         }
         return $stockItemConfig->getBackorders() === StockItemConfigurationInterface::BACKORDERS_NO
-            && $this->getProductSalableQty->execute($sku, $stockId) > 0
             && $this->getProductSalableQty->execute($sku, $stockId) <= $stockItemConfig->getStockThresholdQty();
     }
 
