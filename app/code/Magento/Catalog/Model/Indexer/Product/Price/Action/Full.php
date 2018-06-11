@@ -145,7 +145,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $indexer */
             foreach ($this->getTypeIndexers() as $typeId => $priceIndexer) {
-
                 if ($priceIndexer instanceof DimensionalIndexerInterface) {
                     $this->reindexProductTypeWithDimensions($priceIndexer, $typeId);
                     continue;
@@ -225,17 +224,17 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             }
         }
 
-        //Clean data from indexers with old realisation (old replica table)
-        $this->_defaultIndexerResource->getConnection()->truncateTable(
-            $this->dimensionTableMaintainer->getMainReplicaTable([])
-        );
-
         if (count($mainTablesByDimension) > 0) {
             $this->activeTableSwitcher->switchTable(
                 $this->_defaultIndexerResource->getConnection(),
                 $mainTablesByDimension
             );
         }
+
+        //Clean data from indexers with old realisation (old replica table)
+        $this->_defaultIndexerResource->getConnection()->truncateTable(
+            $this->dimensionTableMaintainer->getMainReplicaTable([])
+        );
     }
 
     private function reindexProductType(PriceInterface $priceIndexer, string $typeId)
