@@ -7,6 +7,7 @@
 declare(strict_types=1);
 
 namespace Magento\Quote\Model\ResourceModel;
+
 use Magento\Framework\App\ResourceConnection;
 
 /**
