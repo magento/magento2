@@ -12,6 +12,7 @@ use Magento\Robots\Model\Config\Value;
 use Magento\Sitemap\Helper\Data as SitemapHelper;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreResolver;
 
 /**
  * Prepares sitemap links to add to the robots.txt file
@@ -38,13 +39,17 @@ class Robots extends AbstractBlock implements IdentityInterface
 
     /**
      * @param Context $context
+     * @param StoreResolver $storeResolver
      * @param CollectionFactory $sitemapCollectionFactory
      * @param SitemapHelper $sitemapHelper
      * @param StoreManagerInterface $storeManager
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
+        StoreResolver $storeResolver,
         CollectionFactory $sitemapCollectionFactory,
         SitemapHelper $sitemapHelper,
         StoreManagerInterface $storeManager,

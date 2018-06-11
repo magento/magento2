@@ -38,11 +38,15 @@ class StoreCookie
      * @param StoreManagerInterface $storeManager
      * @param StoreCookieManagerInterface $storeCookieManager
      * @param StoreRepositoryInterface $storeRepository
+     * @param StoreResolverInterface $storeResolver
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         StoreCookieManagerInterface $storeCookieManager,
-        StoreRepositoryInterface $storeRepository
+        StoreRepositoryInterface $storeRepository,
+        StoreResolverInterface $storeResolver = null
     ) {
         $this->storeManager = $storeManager;
         $this->storeCookieManager = $storeCookieManager;
@@ -78,7 +82,9 @@ class StoreCookie
         ) {
             $storeId = $this->storeManager->getStore()->getId();
             $store = $this->storeRepository->getActiveStoreById($storeId);
+            //delete initial cookie for the same store
             $this->storeCookieManager->deleteStoreCookie($store);
+            //set cookie for the store
             $this->storeCookieManager->setStoreCookie($store);
         }
     }

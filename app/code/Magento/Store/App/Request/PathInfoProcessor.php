@@ -35,25 +35,24 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
     private $pathInfo;
 
     /**
-     * @var string
-     */
-    private $resolvedStore = '';
-
-    /**
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Framework\App\Request\PathInfo $pathInfo
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
         \Magento\Framework\App\Request\PathInfo $pathInfo
     ) {
-        $this->config = $config;
-        $this->storeRepository = $storeRepository;
-        $this->pathInfo = $pathInfo ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\App\Request\PathInfo::class
-        );
+        $this->config = $config ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $this->storeRepository = $storeRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Store\Api\StoreRepositoryInterface::class);
+        $this->pathInfo = new \Magento\Framework\App\Request\PathInfo();
     }
 
     /**
@@ -73,6 +72,8 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
     }
 
     /**
+     * Compute store from path info in request
+     *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return string
      */
@@ -88,8 +89,9 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
         return null;
     }
 
-
     /**
+     * Get store code and validate it if config value is enabled and if not in directFrontNames return no route
+     *
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $pathInfo
      * @return null|string
@@ -114,6 +116,8 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
                 && $storeCode != Store::ADMIN_CODE
             ) {
                 return $storeCode;
+            } elseif (!empty($storeCode)) {
+                $request->setActionName(\Magento\Framework\App\Router\Base::NO_ROUTE);
             }
         }
         return null;

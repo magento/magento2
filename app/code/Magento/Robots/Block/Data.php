@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Context;
 use Magento\Robots\Model\Config\Value;
 use Magento\Robots\Model\Robots;
+use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -34,17 +35,22 @@ class Data extends AbstractBlock implements IdentityInterface
     /**
      * @param Context $context
      * @param Robots $robots
-     * @param StoreManagerInterface $storeManager
+     * @param StoreResolver $storeResolver
+     * @param StoreManagerInterface|null $storeManager
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
         Robots $robots,
-        StoreManagerInterface $storeManager,
+        StoreResolver $storeResolver,
+        StoreManagerInterface $storeManager = null,
         array $data = []
     ) {
         $this->robots = $robots;
-        $this->storeManager = $storeManager;
+        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
 
         parent::__construct($context, $data);
     }
