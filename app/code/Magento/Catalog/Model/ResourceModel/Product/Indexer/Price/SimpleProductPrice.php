@@ -33,7 +33,7 @@ class SimpleProductPrice implements DimensionalIndexerInterface
     /**
      * @var string
      */
-    private $typeId;
+    private $productType;
 
     /**
      * @var PriceModifierInterface[]
@@ -44,21 +44,21 @@ class SimpleProductPrice implements DimensionalIndexerInterface
      * @param BaseFinalPrice $baseFinalPrice
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
-     * @param string $typeId
+     * @param string $productType
      * @param array $priceModifiers
      */
     public function __construct(
         BaseFinalPrice $baseFinalPrice,
         IndexTableStructureFactory $indexTableStructureFactory,
         TableMaintainer $tableMaintainer,
-        $typeId = \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
+        $productType = \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
         array $priceModifiers = []
     ) {
 
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
-        $this->typeId = $typeId;
+        $this->productType = $productType;
         $this->priceModifiers = $priceModifiers;
     }
 
@@ -90,7 +90,7 @@ class SimpleProductPrice implements DimensionalIndexerInterface
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
         ]);
-        $select = $this->baseFinalPrice->getQuery($dimensions, $this->typeId, iterator_to_array($entityIds));
+        $select = $this->baseFinalPrice->getQuery($dimensions, $this->productType, iterator_to_array($entityIds));
         $query = $select->insertFromSelect($temporaryPriceTable->getTableName(), [], false);
         $this->tableMaintainer->getConnection()->query($query);
 

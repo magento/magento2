@@ -13,7 +13,7 @@
         </customAttributes>
     </type>
     <type name="virtual" label="Virtual Product" modelInstance="Magento\Catalog\Model\Product\Type\Virtual" indexPriority="20" sortOrder="40">
-        <!--<indexerModel instance="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\SimpleProductPrice" />-->
+        <indexerModel instance="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\VirtualProductPrice" />
         <customAttributes>
             <attribute name="is_real_product" value="false"/>
             <attribute name="refundable" value="false"/>

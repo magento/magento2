@@ -6,8 +6,10 @@
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
+use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
+use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
 /**
  * Abstract action reindex class
@@ -80,6 +82,21 @@ abstract class AbstractAction
     private $tierPriceIndexResource;
 
     /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory
+     */
+    private $dimensionCollectionFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer
+     */
+    private $configReader;
+
+    /**
+     * @var TableMaintainer
+     */
+    private $tableMaintainer;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -99,7 +116,10 @@ abstract class AbstractAction
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory,
         DefaultPrice $defaultIndexerResource,
-        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice $tierPriceIndexResource = null
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice $tierPriceIndexResource = null,
+        \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionCollectionFactory = null,
+        \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer = null,
+        \Magento\Framework\App\Config\ScopeConfigInterface $configReader = null
     ) {
         $this->_config = $config;
         $this->_storeManager = $storeManager;
@@ -110,8 +130,17 @@ abstract class AbstractAction
         $this->_indexerPriceFactory = $indexerPriceFactory;
         $this->_defaultIndexerResource = $defaultIndexerResource;
         $this->_connection = $this->_defaultIndexerResource->getConnection();
-        $this->tierPriceIndexResource = $tierPriceIndexResource ?: ObjectManager::getInstance()->get(
+        $this->tierPriceIndexResource = $tierPriceIndexResource ?? ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice::class
+        );
+        $this->dimensionCollectionFactory = $dimensionCollectionFactory ?? ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory::class
+        );
+        $this->configReader = $configReader ?? ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
+        );
+        $this->tableMaintainer = $tableMaintainer ?? ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer::class
         );
     }
 
@@ -131,12 +160,67 @@ abstract class AbstractAction
      */
     protected function _syncData(array $processIds = [])
     {
+        $currentMode = $this->configReader
+            ->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?: ModeSwitcher::INPUT_KEY_NONE;
+        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($currentMode);
+
+        // for backward compatibility split data from old idx table on dimension tables
+        foreach ($dimensionsProviders as $dimensions) {
+            $insertSelect = $this->_connection->select()->from(
+                ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()]
+            );
+
+            // delete invalid rows
+            $select = $this->_connection->select()->from(
+                ['index_price' => $this->tableMaintainer->getMainTable($dimensions)],
+                null
+            )->joinLeft(
+                ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()],
+                'index_price.entity_id = ip_tmp.entity_id AND index_price.website_id = ip_tmp.website_id',
+                []
+            )->where(
+                'ip_tmp.entity_id IS NULL'
+            );
+            if (!empty($processIds)) {
+                $select->where('index_price.entity_id IN(?)', $processIds);
+            }
+            foreach ($dimensions as $dimension) {
+                if ($dimension->getName() === WebsiteDataProvider::DIMENSION_NAME) {
+                    $select->where('ip_tmp.website_id = ?', $dimension->getValue());
+                    $insertSelect->where('ip_tmp.website_id = ?', $dimension->getValue());
+                }
+                if ($dimension->getName() === CustomerGroupDataProvider::DIMENSION_NAME) {
+                    $select->where('ip_tmp.customer_group_id = ?', $dimension->getValue());
+                    $insertSelect->where('ip_tmp.customer_group_id = ?', $dimension->getValue());
+                }
+            }
+
+            $query = $select->deleteFromSelect('index_price');
+            $this->_connection->query($query);
+            $query = $insertSelect->insertFromSelect($this->tableMaintainer->getMainTable($dimensions));
+            $this->_connection->query($query);
+
+        }
+        return $this;
+    }
+
+
+    /**
+     * Synchronize data between index storage and original storage
+     *
+     * @param array $dimensions
+     * @param array $processIds
+     * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
+     * @throws \Exception
+     */
+    private function syncDataByDimensions(array $dimensions, array $processIds = [])
+    {
         // delete invalid rows
         $select = $this->_connection->select()->from(
-            ['index_price' => $this->getIndexTargetTable()],
+            ['index_price' => $this->tableMaintainer->getMainTable($dimensions)],
             null
         )->joinLeft(
-            ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()],
+            ['ip_tmp' => $this->tableMaintainer->getMainTmpTable($dimensions)],
             'index_price.entity_id = ip_tmp.entity_id AND index_price.website_id = ip_tmp.website_id',
             []
         )->where(
@@ -149,8 +233,8 @@ abstract class AbstractAction
         $this->_connection->query($sql);
 
         $this->_insertFromTable(
-            $this->_defaultIndexerResource->getIdxTable(),
-            $this->getIndexTargetTable()
+            $this->tableMaintainer->getMainTmpTable($dimensions),
+            $this->tableMaintainer->getMainTable($dimensions)
         );
         return $this;
     }
@@ -323,7 +407,6 @@ abstract class AbstractAction
      */
     protected function _reindexRows($changedIds = [])
     {
-        $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
         $this->_prepareWebsiteDateTable();
 
         $productsTypes = $this->getProductsTypes($changedIds);
@@ -331,15 +414,28 @@ abstract class AbstractAction
 
         $changedIds = array_merge($changedIds, ...array_values($parentProductsTypes));
         $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
+        $syncDataForNonDimensionalIndexers = false;
 
         foreach ($productsTypes as $productType => $entityIds) {
             $indexer = $this->_getIndexer($productType);
             if ($indexer instanceof DimensionalIndexerInterface) {
-                $indexer->executeByDimension([], \SplFixedArray::fromArray($entityIds, false));
+                $currentMode = $this->configReader
+                    ->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?: ModeSwitcher::INPUT_KEY_NONE;
+                $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($currentMode);
+                foreach ($dimensionsProviders as $dimensions) {
+                    $this->tableMaintainer->createMainTmpTable($dimensions);
+                    $this->_emptyTable($this->tableMaintainer->getMainTmpTable($dimensions));
+                    $indexer->executeByDimension($dimensions, \SplFixedArray::fromArray($entityIds, false));
+                    $this->syncDataByDimensions($dimensions, $entityIds);
+                }
             } else {
+                $syncDataForNonDimensionalIndexers = true;
+                $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
                 $indexer->reindexEntity($entityIds);
             }
-            $this->_syncData($entityIds);
+            if ($syncDataForNonDimensionalIndexers) {
+                $this->_syncData($entityIds);
+            }
         }
 
         return $changedIds;

@@ -1133,4 +1133,9 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\VirtualProductPrice" type="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\SimpleProductPrice">
+        <arguments>
+            <argument name="productType" xsi:type="string">virtual</argument>
+        </arguments>
+    </virtualType>
 </config>
