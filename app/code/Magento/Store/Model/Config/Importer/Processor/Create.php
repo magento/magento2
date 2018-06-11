@@ -218,9 +218,7 @@ class Create implements ProcessorInterface
             $store->getResource()->addCommitCallback(function () use ($store, $group, $website) {
                 $store->setGroup($group);
                 $store->setWebsite($website);
-                $store->getResource()->save($store);
-
-                //$this->eventManager->dispatch('store_add', ['store' => $store]);
+                $store->save();
             });
         }
     }

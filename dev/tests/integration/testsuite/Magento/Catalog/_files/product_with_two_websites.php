@@ -19,7 +19,7 @@ $website->setData(
 
 $website->save();
 
-//$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
+$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

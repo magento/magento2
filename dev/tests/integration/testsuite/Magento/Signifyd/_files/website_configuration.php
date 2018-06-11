@@ -38,7 +38,7 @@ $storeResourceModel = $objectManager->create(StoreResourceModel::class);
 $storeResourceModel->save($store);
 
 /* Refresh stores memory cache */
-//$objectManager->get(StoreManagerInterface::class)->reinitStores();
+$objectManager->get(StoreManagerInterface::class)->reinitStores();
 
 $processConfigData = function (Config $config, array $data) {
     foreach ($data as $key => $value) {

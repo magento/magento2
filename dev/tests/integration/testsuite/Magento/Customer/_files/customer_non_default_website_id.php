@@ -15,9 +15,9 @@ $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\
 $website->setName('new Website')->setCode('newwebsite')->save();
 
 $websiteId = $website->getId();
-//$storeManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-//    ->get(\Magento\Store\Model\StoreManager::class);
-//$storeManager->reinitStores();
+$storeManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\Store\Model\StoreManager::class);
+$storeManager->reinitStores();
 $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Customer\Model\Customer::class);
 /** @var Magento\Customer\Model\Customer $customer */

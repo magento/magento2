@@ -42,15 +42,6 @@ if (!$store->load('second_category_store', 'code')->getId()) {
     $store->save();
 }
 
-/* Refresh stores memory cache */
-//\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-//    \Magento\Store\Model\StoreManagerInterface::class
-//)->reinitStores();
-/* Dispatch "store_add" event */
-//\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-//    \Magento\Framework\Event\ManagerInterface::class
-//)->dispatch('store_add', ['store' => $store]);
-
 /** @var \Magento\Catalog\Model\Category $newCategory */
 $newCategory = $factory->create();
 $newCategory
