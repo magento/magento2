@@ -46,7 +46,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
      */
     private function processStoreSave($postData)
     {
-        $eventName = 'store_edit';
+        //$eventName = 'store_edit';
         /** @var \Magento\Store\Model\Store $storeModel */
         $storeModel = $this->_objectManager->create(\Magento\Store\Model\Store::class);
         $postData['store']['name'] = $this->filterManager->removeTags($postData['store']['name']);
@@ -56,7 +56,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
         $storeModel->setData($postData['store']);
         if ($postData['store']['store_id'] == '') {
             $storeModel->setId(null);
-            $eventName = 'store_add';
+            //$eventName = 'store_add';
         }
         $groupModel = $this->_objectManager->create(
             \Magento\Store\Model\Group::class

@@ -247,8 +247,6 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         $this->storeResourceMock->expects($this->once())
             ->method('save')
             ->with($this->storeMock);
-        $this->storeResourceMock->expects($this->once())
-            ->method('addCommitCallback');
 
         $this->model->run($data);
     }
