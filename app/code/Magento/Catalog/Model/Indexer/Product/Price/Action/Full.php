@@ -18,6 +18,7 @@ use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
 /**
  * Class Full reindex action
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
@@ -135,152 +136,169 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      *
      * @param array|int|null $ids
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($ids = null)
     {
         try {
+            //Prepare indexer tables before full reindex
             $this->prepareTables();
 
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $indexer */
             foreach ($this->getTypeIndexers() as $typeId => $priceIndexer) {
                 if ($priceIndexer instanceof DimensionalIndexerInterface) {
+                    //New price reindex mechanism
                     $this->reindexProductTypeWithDimensions($priceIndexer, $typeId);
                     continue;
                 }
 
                 //TODO: fix dirty hac
                 $priceIndexer->setIsPartial(false);
-
                 $priceIndexer->getTableStrategy()->setUseIdxTable(false);
+
+                //Old price reindex mechanism
                 $this->reindexProductType($priceIndexer, $typeId);
             }
 
+            //Final replacement of tables from replica to main
             $this->switchTables();
         } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()), $e);
         }
     }
 
+    /**
+     * Prepare indexer tables before full reindex
+     *
+     * @return void
+     * @throws \Exception
+     */
     private function prepareTables()
     {
         $this->_defaultIndexerResource->getTableStrategy()->setUseIdxTable(false);
 
         $this->_prepareWebsiteDateTable();
 
-        // Prepare replica table for indexation.
+        $this->truncateReplicaTable();
+
+        $this->truncateReplicaTablesByDimensions();
+    }
+
+    /**
+     * Get current price indexer mode
+     *
+     * @return string
+     */
+    private function getCurrentMode()
+    {
+        return $this->configReader->getValue(
+            ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE
+        ) ?: ModeSwitcher::INPUT_KEY_NONE;
+    }
+
+    /**
+     * Truncate main replica table
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function truncateReplicaTable()
+    {
         $this->_defaultIndexerResource->getConnection()->truncateTable($this->getReplicaTable());
+    }
 
-        //Truncate replica tables by dimensions
-        $currentMode = $this->configReader
-            ->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?: ModeSwitcher::INPUT_KEY_NONE;
-
+    /**
+     * Truncate replica tables by dimensions
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function truncateReplicaTablesByDimensions()
+    {
         /** @var DimensionProviderInterface $dimensionsProviders */
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($currentMode);
+        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
         foreach ($dimensionsProviders as $dimension) {
             $dimensionTable = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
             $this->_defaultIndexerResource->getConnection()->truncateTable($dimensionTable);
         }
     }
 
-    private function switchTables()
-    {
-        $currentMode = $this->configReader
-            ->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?: ModeSwitcher::INPUT_KEY_NONE;
-
-        /** @var DimensionProviderInterface $dimensionsProviders */
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($currentMode);
-
-        // Switch dimension tables
-        $mainTablesByDimension = [];
-
-        //Get data from indexers with old realisation (old replica table)
-        $select = $this->dimensionTableMaintainer->getConnection()->select()->from(
-            $this->dimensionTableMaintainer->getMainReplicaTable([])
-        );
-
-        foreach ($dimensionsProviders as $dimensions) {
-            $mainTablesByDimension[] = $this->dimensionTableMaintainer->getMainTable($dimensions);
-
-            //Move data from indexers with old realisation
-            if ($currentMode !== ModeSwitcher::INPUT_KEY_NONE) {
-                $replicaTablesByDimension = $this->dimensionTableMaintainer->getMainReplicaTable($dimensions);
-
-                foreach ($dimensions as $dimension) {
-                    if ($dimension->getName() === WebsiteDataProvider::DIMENSION_NAME) {
-                        $select->where('website_id = ?', $dimension->getValue());
-                    }
-                    if ($dimension->getName() === CustomerGroupDataProvider::DIMENSION_NAME) {
-                        $select->where('customer_group_id = ?', $dimension->getValue());
-                    }
-                }
-                $this->dimensionTableMaintainer->getConnection()->query(
-                    $this->dimensionTableMaintainer->getConnection()->insertFromSelect(
-                        $select,
-                        $replicaTablesByDimension
-                    )
-                );
-            }
-        }
-
-        if (count($mainTablesByDimension) > 0) {
-            $this->activeTableSwitcher->switchTable(
-                $this->_defaultIndexerResource->getConnection(),
-                $mainTablesByDimension
-            );
-        }
-    }
-
-    private function reindexProductType(PriceInterface $priceIndexer, string $typeId)
-    {
-        foreach ($this->getBatchesForIndexer($typeId) as $batch) {
-            $this->reindexBatch($priceIndexer, $batch, $typeId);
-        }
-    }
-
+    /**
+     * Reindex new 'Dimensional' price indexer by product type
+     *
+     * @param DimensionalIndexerInterface $priceIndexer
+     * @param string $typeId
+     *
+     * @return void
+     * @throws \Exception
+     */
     private function reindexProductTypeWithDimensions(DimensionalIndexerInterface $priceIndexer, string $typeId)
     {
-        $currentMode = $this->configReader
-            ->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?: ModeSwitcher::INPUT_KEY_NONE;
-
         /** @var DimensionProviderInterface $dimensionsProviders */
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($currentMode);
+        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
 
         foreach ($dimensionsProviders as $dimensions) {
-            $this->reindexDimensions($priceIndexer, $dimensions, $typeId);
+            $this->reindexByBatches($priceIndexer, $dimensions, $typeId);
         }
     }
 
-    private function reindexDimensions(DimensionalIndexerInterface $priceIndexer, array $dimensions, string $typeId)
+    /**
+     * Reindex new 'Dimensional' price indexer by batches
+     *
+     * @param DimensionalIndexerInterface $priceIndexer
+     * @param array $dimensions
+     * @param string $typeId
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function reindexByBatches(DimensionalIndexerInterface $priceIndexer, array $dimensions, string $typeId)
     {
         foreach ($this->getBatchesForIndexer($typeId) as $batch) {
-            $this->reindexBatchWithinDimension($priceIndexer, $batch, $dimensions, $typeId);
+            $this->reindexByBatchWithDimensions($priceIndexer, $batch, $dimensions, $typeId);
         }
     }
 
-    private function reindexBatch(PriceInterface $priceIndexer, array $batch, string $typeId)
+    /**
+     * Get batches for new 'Dimensional' price indexer
+     *
+     * @param string $typeId
+     *
+     * @return \Generator
+     * @throws \Exception
+     */
+    private function getBatchesForIndexer(string $typeId)
     {
-        $entityIds = $this->getEntityIdsFromBatch($typeId, $batch);
-
-        if (!empty($entityIds)) {
-            // Temporary table will created if not exists
-            $idxTableName = $this->_defaultIndexerResource->getIdxTable();
-            $this->_emptyTable($idxTableName);
-
-            // Reindex entities by id
-            $priceIndexer->reindexEntity($entityIds);
-
-            // Sync data from temp table to index table
-            $this->_insertFromTable($idxTableName, $this->getReplicaTable());
-
-            // Drop temporary index table
-            $priceIndexer->getConnection()->dropTable($idxTableName);
-        }
+        $connection = $this->_defaultIndexerResource->getConnection();
+        return $this->batchProvider->getBatches(
+            $connection,
+            $this->getProductMetaData()->getEntityTable(),
+            $this->getProductMetaData()->getIdentifierField(),
+            $this->batchSizeCalculator->estimateBatchSize(
+                $connection,
+                $typeId
+            )
+        );
     }
 
-    private function reindexBatchWithinDimension(DimensionalIndexerInterface $priceIndexer, array $batch, array $dimensions, string $typeId)
-    {
+    /**
+     * Reindex by batch for new 'Dimensional' price indexer
+     *
+     * @param DimensionalIndexerInterface $priceIndexer
+     * @param array $batch
+     * @param array $dimensions
+     * @param string $typeId
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function reindexByBatchWithDimensions(
+        DimensionalIndexerInterface $priceIndexer,
+        array $batch,
+        array $dimensions,
+        string $typeId
+    ) {
         $entityIds = $this->getEntityIdsFromBatch($typeId, $batch);
 
         if (!empty($entityIds)) {
@@ -303,9 +321,65 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         }
     }
 
+    /**
+     * Reindex old price indexer by product type
+     *
+     * @param PriceInterface $priceIndexer
+     * @param string $typeId
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function reindexProductType(PriceInterface $priceIndexer, string $typeId)
+    {
+        foreach ($this->getBatchesForIndexer($typeId) as $batch) {
+            $this->reindexBatch($priceIndexer, $batch, $typeId);
+        }
+    }
+
+    /**
+     * Reindex by batch for old price indexer
+     *
+     * @param PriceInterface $priceIndexer
+     * @param array $batch
+     * @param string $typeId
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function reindexBatch(PriceInterface $priceIndexer, array $batch, string $typeId)
+    {
+        $entityIds = $this->getEntityIdsFromBatch($typeId, $batch);
+
+        if (!empty($entityIds)) {
+            // Temporary table will created if not exists
+            $idxTableName = $this->_defaultIndexerResource->getIdxTable();
+            $this->_emptyTable($idxTableName);
+
+            // Reindex entities by id
+            $priceIndexer->reindexEntity($entityIds);
+
+            // Sync data from temp table to index table
+            $this->_insertFromTable($idxTableName, $this->getReplicaTable());
+
+            // Drop temporary index table
+            $this->_defaultIndexerResource->getConnection()->dropTable($idxTableName);
+        }
+    }
+
+    /**
+     * Get Entity Ids from batch
+     *
+     * @param string $typeId
+     * @param array $batch
+     *
+     * @return array
+     * @throws \Exception
+     */
     private function getEntityIdsFromBatch(string $typeId, array $batch)
     {
         $connection = $this->_defaultIndexerResource->getConnection();
+
         // Get entity ids from batch
         $select = $connection
             ->select()
@@ -319,6 +393,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         return $this->batchProvider->getBatchIds($connection, $select, $batch);
     }
 
+    /**
+     * Get product meta data
+     *
+     * @return EntityMetadataInterface
+     * @throws \Exception
+     */
     private function getProductMetaData()
     {
         if ($this->productMetaDataCached === null) {
@@ -328,6 +408,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         return $this->productMetaDataCached;
     }
 
+    /**
+     * Get replica table
+     *
+     * @return string
+     * @throws \Exception
+     */
     private function getReplicaTable()
     {
         return $this->activeTableSwitcher->getAdditionalTableName(
@@ -335,21 +421,73 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         );
     }
 
-    private function getBatchesForIndexer(string $typeId)
+    /**
+     * Replacement of tables from replica to main
+     *
+     * @return void
+     */
+    private function switchTables()
     {
-        $connection = $this->_defaultIndexerResource->getConnection();
-        return $this->batchProvider->getBatches(
-            $connection,
-            $this->getProductMetaData()->getEntityTable(),
-            $this->getProductMetaData()->getIdentifierField(),
-            $this->batchSizeCalculator->estimateBatchSize(
-                $connection,
-                $typeId
-            )
-        );
+        /** @var DimensionProviderInterface $dimensionsProviders */
+        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
+
+        // Switch dimension tables
+        $mainTablesByDimension = [];
+
+        foreach ($dimensionsProviders as $dimensions) {
+            $mainTablesByDimension[] = $this->dimensionTableMaintainer->getMainTable($dimensions);
+
+            //Move data from indexers with old realisation
+            $this->moveDataFromReplicaTableToReplicaTables($dimensions);
+        }
+
+        if (count($mainTablesByDimension) > 0) {
+            $this->activeTableSwitcher->switchTable(
+                $this->_defaultIndexerResource->getConnection(),
+                $mainTablesByDimension
+            );
+        }
     }
 
     /**
+     * Move data from replica table to replica tables (by dimensions)
+     * Data from old price indexer mechanism moves to data with new indexer mechanism by dimensions
+     *
+     * @param array $dimensions
+     *
+     * @return void
+     */
+    private function moveDataFromReplicaTableToReplicaTables(array $dimensions)
+    {
+        //TODO: need to update logic for run this move only when replica table is not empty
+        $select = $this->dimensionTableMaintainer->getConnection()->select()->from(
+            $this->dimensionTableMaintainer->getMainReplicaTable([])
+        );
+
+        if ($this->getCurrentMode() !== ModeSwitcher::INPUT_KEY_NONE) {
+            $replicaTablesByDimension = $this->dimensionTableMaintainer->getMainReplicaTable($dimensions);
+
+            foreach ($dimensions as $dimension) {
+                if ($dimension->getName() === WebsiteDataProvider::DIMENSION_NAME) {
+                    $select->where('website_id = ?', $dimension->getValue());
+                }
+                if ($dimension->getName() === CustomerGroupDataProvider::DIMENSION_NAME) {
+                    $select->where('customer_group_id = ?', $dimension->getValue());
+                }
+            }
+
+            $this->dimensionTableMaintainer->getConnection()->query(
+                $this->dimensionTableMaintainer->getConnection()->insertFromSelect(
+                    $select,
+                    $replicaTablesByDimension
+                )
+            );
+        }
+    }
+
+    /**
+     * @deprecated
+     *
      * @inheritdoc
      */
     protected function getIndexTargetTable()
