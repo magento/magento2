@@ -9,6 +9,7 @@ namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Model\UpdateSalesChannelWebsiteCodeInterface;
 
 /**
  * This class handles website code change and should not be used directly, but only
@@ -17,7 +18,7 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
  *
  * See: https://github.com/magento-engcom/msi/issues/1306
  */
-class UpdateSalesChannelWebsiteCode
+class UpdateSalesChannelWebsiteCode implements UpdateSalesChannelWebsiteCodeInterface
 {
     /**
      * @var ResourceConnection

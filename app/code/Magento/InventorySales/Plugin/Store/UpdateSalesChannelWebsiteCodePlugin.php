@@ -9,12 +9,12 @@ namespace Magento\InventorySales\Plugin\Store;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySales\Model\AssignWebsiteToDefaultStock;
-use Magento\InventorySales\Model\ResourceModel\UpdateSalesChannelWebsiteCode;
+use Magento\InventorySalesApi\Model\UpdateSalesChannelWebsiteCodeInterface;
 
 class UpdateSalesChannelWebsiteCodePlugin
 {
     /**
-     * @var UpdateSalesChannelWebsiteCode
+     * @var UpdateSalesChannelWebsiteCodeInterface
      */
     private $updateSalesChannelWebsiteCode;
 
@@ -30,12 +30,12 @@ class UpdateSalesChannelWebsiteCodePlugin
 
     /**
      * WebsiteResourcePlugin constructor.
-     * @param UpdateSalesChannelWebsiteCode $updateSalesChannelWebsiteCode
+     * @param UpdateSalesChannelWebsiteCodeInterface $updateSalesChannelWebsiteCode
      * @param AssignWebsiteToDefaultStock $assignWebsiteToDefaultStock
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        UpdateSalesChannelWebsiteCode $updateSalesChannelWebsiteCode,
+        UpdateSalesChannelWebsiteCodeInterface $updateSalesChannelWebsiteCode,
         AssignWebsiteToDefaultStock $assignWebsiteToDefaultStock,
         ResourceConnection $resourceConnection
     ) {
