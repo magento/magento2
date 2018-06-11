@@ -240,7 +240,7 @@
         <waitForPageLoad stepKey="waitForEditConfig"/>
         <click stepKey="clickNextWizard" selector="{{AdminCreateProductConfigurationsPanel.next}}"/>
         <click stepKey="createNewValue" selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}"/>
-        <fillField stepKey="fillNewAttribute" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" userInput="{{_defaultProduct.type_id}}"/>
+        <fillField stepKey="fillNewAttribute" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" userInput="simple"/>
         <click stepKey="confirmNewAttribute" selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}"/>
         <click stepKey="clickNextWizard2" selector="{{AdminCreateProductConfigurationsPanel.next}}"/>
 
@@ -263,7 +263,7 @@
 
         <!-- Find the simple product that we just created using the product grid and delete it -->
         <actionGroup ref="deleteProductUsingProductGrid2" stepKey="findCreatedProduct2">
-            <argument name="sku" value="{{ApiConfigurableProduct.sku}}2-{{_defaultProduct.type_id}}"/>
+            <argument name="sku" value="{{ApiConfigurableProduct.sku}}2-simple"/>
         </actionGroup>
     </test>
 </tests>
