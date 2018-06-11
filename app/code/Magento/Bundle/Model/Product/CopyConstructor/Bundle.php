@@ -37,7 +37,7 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
             $bundleSelections = $duplicatedBundleOptions[$key]->getProductLinks();
 
             /** @var \Magento\Bundle\Api\Data\LinkInterface $bundleSelection */
-            foreach($bundleSelections as $bundleSelection){
+            foreach ($bundleSelections as $bundleSelection) {
                 $bundleSelection->setSelectionId(null);
             }
         }
