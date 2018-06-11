@@ -7,7 +7,7 @@
 namespace Magento\UrlRewrite\Plugin\Store;
 
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreSwitcher;
+use Magento\Store\Model\StoreSwitcherInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
@@ -39,7 +39,7 @@ class RewriteUrlAfterStoreSwitching
     }
 
     /**
-     * @param StoreSwitcher $subject
+     * @param StoreSwitcherInterface $subject
      * @param string $result
      * @param StoreInterface $fromStore
      * @param StoreInterface $targetStore
@@ -47,7 +47,7 @@ class RewriteUrlAfterStoreSwitching
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSwitch(
-        StoreSwitcher $subject,
+        StoreSwitcherInterface $subject,
         string $result,
         StoreInterface $fromStore,
         StoreInterface $targetStore

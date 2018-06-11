@@ -12,6 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreSwitcher;
+use Magento\Store\Model\StoreSwitcherInterface;
 
 /**
  * Test class for \Magento\Store\Controller\Store\SwitchAction
@@ -58,7 +59,7 @@ class SwitchActionTest extends \PHPUnit\Framework\TestCase
      */
     private $redirectMock;
 
-    /** @var StoreSwitcher|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreSwitcherInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $storeSwitcher;
 
     protected function setUp()

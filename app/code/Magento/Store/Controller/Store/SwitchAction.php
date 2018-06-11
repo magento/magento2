@@ -18,9 +18,11 @@ use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher;
+use Magento\Store\Model\StoreSwitcherInterface;
 
 /**
  * Handles store switching url and makes redirect.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitchAction extends Action
 {
@@ -31,6 +33,7 @@ class SwitchAction extends Action
 
     /**
      * @var HttpContext
+     * @deprecated
      */
     protected $httpContext;
 
@@ -41,11 +44,12 @@ class SwitchAction extends Action
 
     /**
      * @var StoreManagerInterface
+     * @deprecated
      */
     protected $storeManager;
 
     /**
-     * @var StoreSwitcher
+     * @var StoreSwitcherInterface
      */
     private $storeSwitcher;
 
@@ -57,7 +61,7 @@ class SwitchAction extends Action
      * @param HttpContext $httpContext
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreManagerInterface $storeManager
-     * @param StoreSwitcher $storeSwitcher
+     * @param StoreSwitcherInterface $storeSwitcher
      */
     public function __construct(
         ActionContext $context,
@@ -65,7 +69,7 @@ class SwitchAction extends Action
         HttpContext $httpContext,
         StoreRepositoryInterface $storeRepository,
         StoreManagerInterface $storeManager,
-        StoreSwitcher $storeSwitcher = null
+        StoreSwitcherInterface $storeSwitcher = null
     ) {
         parent::__construct($context);
         $this->storeCookieManager = $storeCookieManager;
