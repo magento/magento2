@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="StorefrontBundledSection">
+        <element name="nthBundledOption" type="input" selector=".option:nth-of-type({{numOption}}) .choice:nth-of-type({{numOptionSelect}}) input" parameterized="true"/>
+        <element name="addToCart" type="button" selector="#bundle-slide"/>
+        <element name="addToCartConfigured" type="button" selector="#product-addtocart-button"/>
+        <element name="configuredPrice" type="block" selector=".price-configured_price .price"/>
+    </section>
+</sections>

@@ -11,7 +11,7 @@
     <section name="AdminProductFormBundleSection">
         <element name="bundleItemsToggle" type="button" selector="//span[text()='Bundle Items']"/>
         <element name="shipmentType" type="select" selector=".admin__control-select[name='product[shipment_type]']"/>
-        <element name="addOption" type="button" selector="button[data-index='add_button']"/>
+        <element name="addOption" type="button" selector="button[data-index='add_button'] span"/>
         <element name="firstOptionTitle" type="input" selector="[name='bundle_options[bundle_options][0][title]']"/>
         <element name="firstInputType" type="select" selector="[name='bundle_options[bundle_options][0][type]']"/>
         <element name="firstRequired" type="checkbox" selector="[name='bundle_options[bundle_options][0][required]']"/>
@@ -21,5 +21,6 @@
         <element name="bundleOptionXRequired" type="checkbox" selector="[name='bundle_options[bundle_options][{{x}}][required]']" parameterized="true"/>
         <element name="bundleOptionXProductYQuantity" type="input" selector="[name='bundle_options[bundle_options][{{x}}][bundle_selections][{{y}}][selection_qty]']" parameterized="true"/>
         <element name="addProductsToOption" type="button" selector="[data-index='modal_set']" timeout="30"/>
+        <element name="bundledItems" type="block" selector="[data-index=bundle-items]"/>
     </section>
 </sections>
