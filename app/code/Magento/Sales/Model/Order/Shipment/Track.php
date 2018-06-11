@@ -53,7 +53,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      *
      * @var \Zend\Validator\Uri
      */
-    protected $_zendValidatorUri;    
+    protected $_zendValidatorUri;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -450,7 +450,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @return string|bool
      */
     public function getValidTrackUrl(){
-        if ($this->getTrackUrl() && $this->_zendValidatorUri->isValid($this->getTrackUrl())) {
+        if ($this->getTrackUrl() && $this->_zendValidatorUri->isValid($this->getTrackUrl()))
+        {
             return $this->getTrackUrl();
         }
         return false;
