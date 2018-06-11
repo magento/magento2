@@ -16,6 +16,7 @@ use Magento\Store\Model\StoreSwitcherInterface;
 
 /**
  * Test class for \Magento\Store\Controller\Store\SwitchAction
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitchActionTest extends \PHPUnit\Framework\TestCase
 {
