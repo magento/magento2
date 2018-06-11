@@ -118,4 +118,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="inventoryProductPriceIndexFilter" xsi:type="object">Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
+        <plugin name="priceIndexUpdater" type="Magento\CatalogInventory\Model\Plugin\PriceIndexUpdater" />
+    </type>
 </config>
