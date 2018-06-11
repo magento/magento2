@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\UrlRewrite\Plugin\Store;
+namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreSwitcherInterface;
@@ -12,9 +12,9 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- * Plugin handles url rewrites for redirect url
+ * Handle url rewrites for redirect url
  */
-class RewriteUrlAfterStoreSwitching
+class RewriteUrl implements StoreSwitcherInterface
 {
     /**
      * @var UrlFinderInterface
@@ -39,20 +39,14 @@ class RewriteUrlAfterStoreSwitching
     }
 
     /**
-     * @param StoreSwitcherInterface $subject
-     * @param string $result
      * @param StoreInterface $fromStore
      * @param StoreInterface $targetStore
+     * @param string $redirectUrl
      * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSwitch(
-        StoreSwitcherInterface $subject,
-        string $result,
-        StoreInterface $fromStore,
-        StoreInterface $targetStore
-    ): string {
-        $targetUrl = $result;
+    public function switch(StoreInterface $fromStore, StoreInterface $targetStore, string $redirectUrl): string
+    {
+        $targetUrl = $redirectUrl;
         /** @var \Magento\Framework\HTTP\PhpEnvironment\Request $request */
         $request = $this->requestFactory->create(['uri' => $targetUrl]);
 

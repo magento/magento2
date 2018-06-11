@@ -231,6 +231,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * @param \Magento\Store\Model\Store $store
      * @param array $data
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getTargetStorePostData(\Magento\Store\Model\Store $store, $data = [])
     {

@@ -82,9 +82,7 @@ class SwitchAction extends Action
 
     /**
      * @return void
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
-     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
+     * @throws StoreSwitcher\CannotSwitchStoreException
      */
     public function execute()
     {

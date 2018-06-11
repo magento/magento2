@@ -21,9 +21,17 @@ class StoreSwitcher implements StoreSwitcherInterface
 
     /**
      * @param StoreSwitcherInterface[] $storeSwitchers
+     * @throws \Exception
      */
     public function __construct(array $storeSwitchers)
     {
+        foreach ($storeSwitchers as $switcherName => $switcherInstance) {
+            if (!$switcherInstance instanceof StoreSwitcherInterface) {
+                throw new \InvalidArgumentException(
+                    "Store switcher '{$switcherName}' is expected to be instance of " . StoreSwitcherInterface::class
+                );
+            }
+        }
         $this->storeSwitchers = $storeSwitchers;
     }
 
