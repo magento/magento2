@@ -628,18 +628,47 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return false;
         }
 
+
         /**
          * We can have problem with float in php (on some server $a=762.73;$b=762.73; $a-$b!=0)
          * for this we have additional diapason for 0
          * TotalPaid - contains amount, that were not rounded.
          */
+
         $totalRefunded = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
-        if (abs($totalRefunded) < .0001) {
-            return false;
-        }
-        // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
-        if (abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) {
-            return false;
+
+        //case when order is of Zero Amount
+        if (abs($this->getGrandTotal()) < .0001) {
+
+            //case when amount is due for invoice
+            if ($this->canInvoice() && ($this->getTotalPaid() <= $this->getGrandTotal())) {
+                return false;
+
+            }
+
+            //case when paid amount is refunded and order has creditmemo created
+            if ($this->getTotalRefunded() == $this->getTotalPaid() && count($this->getCreditmemosCollection()) > 0) {
+                return false;
+
+            }
+
+            // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
+            if (!($this->getTotalPaid() <= $this->getGrandTotal()) &&
+                abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) {
+                return false;
+            }
+
+        } else {
+
+            if (abs($totalRefunded) < .0001) {
+                return false;
+            }
+
+            // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
+            if (abs($this->getTotalPaid() + $this->getAdjustmentNegative()) == $this->getGrandTotal() ||
+                abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) {
+                return false;
+            }
         }
 
         if ($this->getActionFlag(self::ACTION_FLAG_EDIT) === false) {
