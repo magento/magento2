@@ -47,7 +47,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @var \Magento\Sales\Api\ShipmentRepositoryInterface
      */
     protected $shipmentRepository;
-    
+
     /**
      * Zend Validator Uri
      *
@@ -449,7 +449,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      *
      * @return string|bool
      */
-    public function getValidTrackUrl(){
+    public function getValidTrackUrl()
+    {
         if ($this->getTrackUrl() && $this->_zendValidatorUri->isValid($this->getTrackUrl()))
         {
             return $this->getTrackUrl();
