@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Price;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
 
 /**
  * Class encapsulate logic of work with tables per store in Product Price indexer
