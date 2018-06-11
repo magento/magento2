@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySales\Model\AssignWebsiteToDefaultStock;
 use Magento\InventorySales\Model\ResourceModel\UpdateSalesChannelWebsiteCode;
 
-class WebsiteResourcePlugin
+class UpdateSalesChannelWebsiteCodePlugin
 {
     /**
      * @var UpdateSalesChannelWebsiteCode
@@ -49,10 +49,10 @@ class WebsiteResourcePlugin
      * @param int $websiteId
      * @return string
      */
-    private function getCodeFromDatabase(int $websiteId): string
+    private function getCodeFromDatabase(int $websiteId): ?string
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $connection->getTableName('store_website');
+        $tableName = $this->resourceConnection->getTableName('store_website');
         $selectQry = $connection->select()->from($tableName, 'code')->where('website_id = ?', $websiteId);
         return (string) $connection->fetchOne($selectQry);
     }

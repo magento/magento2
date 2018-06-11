@@ -148,6 +148,6 @@
     <preference for="Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface" type="Magento\InventorySales\Model\StockByWebsiteIdResolver"/>
     <type name="Magento\Store\Model\ResourceModel\Website">
         <plugin name="magentoInventorySalesAbstractDb"
-                type="Magento\InventorySales\Plugin\Store\WebsiteResourcePlugin"/>
+                type="Magento\InventorySales\Plugin\Store\UpdateSalesChannelWebsiteCodePlugin"/>
     </type>
 </config>
