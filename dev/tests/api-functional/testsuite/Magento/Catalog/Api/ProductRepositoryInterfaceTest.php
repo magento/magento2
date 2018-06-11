@@ -147,9 +147,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     private function loadWebsiteByCode($websiteCode)
     {
         $websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepository::class);
-        try{
+        try {
             $website = $websiteRepository->get($websiteCode);
-        } catch (NoSuchEntityException $e){
+        } catch (NoSuchEntityException $e) {
             $this->fail("Couldn`t load website: {$websiteCode}");
         }
 
@@ -186,8 +186,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testDeleteAllWebsiteAssociations()
     {
         $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
-        /** @var Website $website */
-        $website = $this->loadWebsiteByCode('second_website');
 
         $websitesData = [
             'website_ids' => []
@@ -271,26 +269,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             'website_ids' => [
                 $website->getId(),
             ]
-        ];
-        $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
-        $response = $this->updateProduct($productBuilder);
-        $this->assertEquals(
-            $websitesData["website_ids"],
-            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]
-        );
-    }
-
-    /**
-     * Update product to be associated with no websites
-     *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
-     */
-    public function testUpdateWithNoWebsite()
-    {
-        $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
-
-        $websitesData = [
-            'website_ids' => []
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);

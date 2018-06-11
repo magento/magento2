@@ -550,7 +550,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveExisting()
     {
-        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->resourceModelMock->expects($this->any())->method('getIdBySku')->will($this->returnValue(100));
         $this->productFactoryMock->expects($this->any())
             ->method('create')
@@ -563,7 +562,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
-        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
         $this->productMock->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
 
         $this->assertEquals($this->productMock, $this->model->save($this->productMock));
@@ -585,7 +583,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
-        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         $this->assertEquals($this->productMock, $this->model->save($this->productMock));
     }
@@ -610,7 +607,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
-        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         $this->model->save($this->productMock);
     }
@@ -636,7 +632,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
-        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         $this->model->save($this->productMock);
     }
@@ -660,7 +655,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
-        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         $this->model->save($this->productMock);
     }
@@ -689,9 +683,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
-        $this->productMock->expects($this->once())
-            ->method('getWebsiteIds')
-            ->willReturn([]);
 
         $this->model->save($this->productMock);
     }
@@ -839,7 +830,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
 
-        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
         $this->initializedProductMock->expects($this->atLeastOnce())
             ->method('getSku')->willReturn($this->productData['sku']);
         $this->productMock->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
@@ -1075,7 +1065,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 $outputLinks[] = $outputLink;
             }
         }
-        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         if (!empty($outputLinks)) {
             $this->initializedProductMock->expects($this->once())
@@ -1256,7 +1245,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                     'media_type' => 'media_type',
                 ]
             );
-        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
         $this->initializedProductMock->expects($this->atLeastOnce())
             ->method('getSku')->willReturn($this->productData['sku']);
         $this->productMock->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
@@ -1297,7 +1285,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 2 => ['second'],
                 3 => ['third']
             ]);
-        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([1,2,3]);
         $this->productMock->expects($this->once())->method('setWebsiteIds')->willReturn([2,3]);
 
         $this->assertEquals($this->productMock, $this->model->save($this->productMock));
@@ -1368,7 +1355,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->mediaGalleryProcessor->expects($this->once())
             ->method('setMediaAttribute')
             ->with($this->initializedProductMock, ['image', 'small_image'], 'filename1');
-        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
         $this->initializedProductMock->expects($this->atLeastOnce())
             ->method('getSku')->willReturn($this->productData['sku']);
         $this->productMock->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
