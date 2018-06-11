@@ -451,8 +451,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      */
     public function getValidTrackUrl()
     {
-        if ($this->getTrackUrl() && $this->_zendValidatorUri->isValid($this->getTrackUrl()))
-        {
+        if ($this->getTrackUrl() && $this->_zendValidatorUri->isValid($this->getTrackUrl())) {
             return $this->getTrackUrl();
         }
         return false;
