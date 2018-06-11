@@ -20,6 +20,22 @@
         </annotations>
 
         <before>
+            <!-- Create the attribute we will be modifying -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createModifiableProductAttribute"/>
+
+            <!-- Create the two attributes the product will have -->
+            <createData entity="productAttributeOption1" stepKey="createModifiableProductAttributeOption1">
+                <requiredEntity createDataKey="createModifiableProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createModifiableProductAttributeOption2">
+                <requiredEntity createDataKey="createModifiableProductAttribute"/>
+            </createData>
+
+            <!-- Add the product to the default set -->
+            <createData entity="AddToDefaultSet" stepKey="createModifiableAddToAttributeSet">
+                <requiredEntity createDataKey="createModifiableProductAttribute"/>
+            </createData>
+
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
             <!-- Create the category the product will be a part of -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -87,37 +103,39 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createModifiableProductAttribute" stepKey="deleteModifiableProductAttribute"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
         </after>
 
         <!-- Get the current option of the attribute before it was changed -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>
-        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad" />
-        <grabTextFrom stepKey="getBeforeOption" selector="{{StorefrontProductInfoMainSection.nthAttributeOnPage('1')}}" />
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+
+        <grabTextFrom stepKey="getBeforeOption" selector="{{StorefrontProductInfoMainSection.nthAttributeOnPage('1')}}"/>
 
         <!-- Find the product that we just created using the product grid -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
-            <argument name="product" value="ApiConfigurableProduct" />
+            <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
+        <waitForPageLoad stepKey="waitForProductFilterLoad"/>
 
         <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad" />
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- change the option on the first attribute -->
-        <click stepKey="clickFirstAttribute" selector="{{ModifyAttributes.nthExistingAttribute('1')}}" />
-        <click stepKey="clickSecondAttributeOption" selector="{{ModifyAttributes.nthAttributeOption('1', '2')}}" />
+        <selectOption stepKey="clickFirstAttribute" selector="{{ModifyAttributes.nthExistingAttribute($$createModifiableProductAttribute.default_frontend_label$$)}}" userInput="option1"/>
 
         <!-- Save the product -->
-        <click stepKey="saveProductAttribute" selector="{{AdminProductFormActionSection.saveButton}}" />
-        <waitForPageLoad stepKey="waitForProductSaved" />
-        <see stepKey="assertSuccess" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." />
+        <click stepKey="saveProductAttribute" selector="{{AdminProductFormActionSection.saveButton}}"/>
+        <see stepKey="assertSuccess" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."/>
 
         <!-- Go back to the configurable product page and check to see if it has changed -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage2"/>
-        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad2" />
-        <grabTextFrom stepKey="getCurrentOption" selector="{{StorefrontProductInfoMainSection.nthAttributeOnPage('1')}}" />
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad2"/>
+        <grabTextFrom stepKey="getCurrentOption" selector="{{StorefrontProductInfoMainSection.nthAttributeOnPage('1')}}"/>
         <assertNotEquals expected="{$getBeforeOption}" expectedType="string" actual="{$getCurrentOption}" actualType="string"  stepKey="assertNotEquals"/>
 
     </test>

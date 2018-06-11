@@ -39,7 +39,10 @@
             </actionGroup>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
-        <!-- ADD TEST STEPS HERE -->
+
+        <!-- opens the custom option panel and clicks add options -->
+        <click stepKey="openCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}"/>
+        <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
 
         <!-- Create a custom option with 2 values -->
         <actionGroup ref="CreateCustomRadioOptions" stepKey="createCustomOption1">

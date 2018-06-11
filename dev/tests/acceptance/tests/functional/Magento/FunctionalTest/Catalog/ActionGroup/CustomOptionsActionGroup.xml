@@ -20,13 +20,13 @@
             <argument name="productOption2"/>
         </arguments>
 
-        <!-- opens the custom option panel and clicks add options -->
-        <click stepKey="openCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}"/>
         <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
+        <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
 
         <!-- Fill in the option and select the type of radio (once) -->
         <fillField stepKey="fillInOptionTitle" selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{customOptionName}}"/>
         <click stepKey="clickOptionTypeParent" selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}"/>
+        <waitForPageLoad stepKey="waitForDropdownOpen"/>
         <click stepKey="clickOptionType" selector="{{AdminProductCustomizableOptionsSection.optionType('Radio Buttons')}}"/>
 
         <!-- Add three radio options based on the parameter -->
@@ -40,8 +40,6 @@
         <fillField stepKey="fillInValueTitle2" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{productOption2.title}}"/>
         <fillField stepKey="fillInValuePrice2" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{productOption2.price}}"/>
 
-        <!-- close the custom option dropdown -->
-        <click stepKey="closeCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}"/>
 
     </actionGroup>
 

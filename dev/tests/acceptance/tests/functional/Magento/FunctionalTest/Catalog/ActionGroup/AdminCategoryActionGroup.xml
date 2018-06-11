@@ -123,23 +123,24 @@
     <actionGroup name="FillNewProductCategory" >
         <arguments>
             <argument name="categoryName" defaultValue="Test Category" type="string"/>
+            <argument name="parentCategoryName" defaultValue="default" type="string"/>
         </arguments>
 
         <!-- Click on new Category -->
-        <click stepKey="clickNewCategory" selector="{{AdminProductCategoryCreationSection.newCategory}}" />
+        <click stepKey="clickNewCategory" selector="{{AdminProductCategoryCreationSection.newCategory}}"/>
         <waitForPageLoad stepKey="waitForFieldSet"/>
 
-        <fillField stepKey="fillCategoryName" selector="{{AdminProductCategoryCreationSection.nameInput}}" userInput="{{categoryName}}" />
+        <fillField stepKey="fillCategoryName" selector="{{AdminProductCategoryCreationSection.nameInput}}" userInput="{{categoryName}}"/>
 
-        <click stepKey="clickParentCategory" selector="{{AdminProductCategoryCreationSection.parentCategory}}" />
+        <!-- Search and select a parent catagory for the product -->
+        <click stepKey="clickParentCategory" selector="{{AdminProductCategoryCreationSection.parentCategory}}"/>
         <waitForPageLoad stepKey="waitForDropDownVisible"/>
+        <fillField stepKey="searchForParent" userInput="{{parentCategoryName}}" selector="{{AdminProductCategoryCreationSection.parentSearch}}"/>
+        <waitForPageLoad stepKey="waitForFieldResults"/>
+        <click stepKey="clickParent" selector="{{AdminProductCategoryCreationSection.parentSearchResult}}"/>
 
-        <click stepKey="clickDefaultParentCategory" selector="{{AdminProductCategoryCreationSection.parentCategoryDropdownDefaultOption}}" />
-
-        <click stepKey="createCategory" selector="{{AdminProductCategoryCreationSection.createCategory}}" />
-
+        <click stepKey="createCategory" selector="{{AdminProductCategoryCreationSection.createCategory}}"/>
         <waitForPageLoad stepKey="waitForCategoryCreated"/>
-
     </actionGroup>
 
     <!-- Actions to delete the category last made -->
