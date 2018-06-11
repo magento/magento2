@@ -7,19 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model\ReturnProcessor;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Order\Shipment;
-use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
-use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventoryShipping\Model\ResourceModel\ShipmentSource\GetSourceCodeByShipmentId;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsInterface;
 use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemFactory;
-use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResultFactory;
 use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResult;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResultFactory;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
+use Magento\InventoryShipping\Model\ResourceModel\ShipmentSource\GetSourceCodeByShipmentId;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\Order\Shipment;
 
 class GetShippedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsInterface
 {
@@ -81,7 +81,7 @@ class GetShippedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsI
      * @param OrderInterface $order
      * @param array $returnToStockItems
      * @return SourceDeductedOrderItemsResult[]
-     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function execute(OrderInterface $order, array $returnToStockItems): array
     {
