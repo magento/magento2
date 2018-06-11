@@ -47,14 +47,16 @@ class UpdateSalesChannelWebsiteCodePlugin
     /**
      * Get code from database
      * @param int $websiteId
-     * @return string
+     * @return string|null
      */
     private function getCodeFromDatabase(int $websiteId): ?string
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('store_website');
         $selectQry = $connection->select()->from($tableName, 'code')->where('website_id = ?', $websiteId);
-        return (string) $connection->fetchOne($selectQry);
+
+        $res = $connection->fetchOne($selectQry);
+        return $res ?: null;
     }
 
     /**
@@ -73,7 +75,7 @@ class UpdateSalesChannelWebsiteCodePlugin
         \Magento\Framework\Model\AbstractModel $object
     ) {
         $newCode = $object->getCode();
-        $oldCode = '';
+        $oldCode = null;
 
         if ($object->getId()) {
             $oldCode = $this->getCodeFromDatabase((int) $object->getId());
@@ -81,7 +83,7 @@ class UpdateSalesChannelWebsiteCodePlugin
 
         $res = $proceed($object);
 
-        if ($oldCode && ($oldCode !== $newCode)) {
+        if (($oldCode !== null) && ($oldCode !== $newCode)) {
             $this->updateSalesChannelWebsiteCode->execute($oldCode, $newCode);
         }
 
