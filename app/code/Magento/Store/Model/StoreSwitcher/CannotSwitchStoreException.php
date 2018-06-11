@@ -15,5 +15,4 @@ class CannotSwitchStoreException extends RuntimeException
     {
         parent::__construct($phrase ?: __('The store cannot be switched.'), $cause, $code);
     }
-
 }
