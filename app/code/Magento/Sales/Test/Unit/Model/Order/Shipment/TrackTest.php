@@ -17,7 +17,7 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
             'shipmentRepository' => $this->createMock(\Magento\Sales\Model\Order\ShipmentRepository::class),
-            'zendValidatorUri' => \Zend\Validator\Uri::class,
+            'zendValidatorUri' => \Zend\Validator\Uri,
         ];
 
         $this->_model = $objectManagerHelper->getObject(\Magento\Sales\Model\Order\Shipment\Track::class, $arguments);
