@@ -1062,7 +1062,11 @@ class Store extends AbstractExtensibleModel implements
         } else {
             $event = $this->_eventPrefix . '_edit';
         }
-        $this->eventManager->dispatch($event, ['store' => $this]);
+        $store  = $this;
+        $this->getResource()->addCommitCallback(function () use ($event, $store) {
+            $this->_storeManager->reinitStores();
+            $this->eventManager->dispatch($event, ['store' => $store]);
+        });
         return parent::afterSave();
     }
 
@@ -1258,7 +1262,11 @@ class Store extends AbstractExtensibleModel implements
             $this->getGroup()->setDefaultStoreId($defaultId);
             $this->getGroup()->save();
         }
-
+        $store = $this;
+        $this->getResource()->addCommitCallback(function () use ($store) {
+            $this->_storeManager->reinitStores();
+            $this->eventManager->dispatch($this->_eventPrefix . '_delete', ['store' => $store]);
+        });
         return $this;
     }
 

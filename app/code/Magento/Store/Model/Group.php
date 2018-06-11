@@ -414,8 +414,12 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function afterDelete()
     {
-        $result = parent::afterDelete();
         $this->_storeManager->reinitStores();
+        $group = $this;
+        $this->getResource()->addCommitCallback(function () use ($group) {
+            $this->_storeManager->reinitStores();
+            $this->eventManager->dispatch($this->_eventPrefix . '_delete', ['group' => $group]);
+        });
 
         if ($this->getId() === $this->getWebsite()->getDefaultGroupId()) {
             $ids = $this->getWebsite()->getGroupIds();
@@ -428,7 +432,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $this->getWebsite()->setDefaultGroupId($defaultId);
             $this->getWebsite()->save();
         }
-        return $result;
+        return parent::afterDelete();
     }
 
     /**
@@ -437,8 +441,11 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function afterSave()
     {
         $this->_storeManager->reinitStores();
-        $this->eventManager->dispatch($this->_eventPrefix . '_save', ['group' => $this]);
-
+        $group = $this;
+        $this->getResource()->addCommitCallback(function () use ($group) {
+            $this->_storeManager->reinitStores();
+            $this->eventManager->dispatch($this->_eventPrefix . '_save', ['group' => $group]);
+        });
         return parent::afterSave();
     }
 
