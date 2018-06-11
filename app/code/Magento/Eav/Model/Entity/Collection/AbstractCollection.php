@@ -393,6 +393,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
+        $joinType = $condition ? 'inner' : 'left';
         return $this->addAttributeToFilter($attribute, $condition);
     }
 
