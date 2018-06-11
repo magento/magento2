@@ -27,11 +27,6 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
     protected $_storageHelper;
 
     /**
-     * @var \Magento\Framework\Image\Adapter\Config
-     */
-    protected $imageConfig;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Theme\Helper\Storage $storageHelper
@@ -40,8 +35,8 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
-        \Magento\Theme\Helper\Storage $storageHelper,
         \Magento\Framework\Image\Adapter\Config $imageConfig,
+        \Magento\Theme\Helper\Storage $storageHelper,
         array $data = []
     ) {
         $this->_storageHelper = $storageHelper;
