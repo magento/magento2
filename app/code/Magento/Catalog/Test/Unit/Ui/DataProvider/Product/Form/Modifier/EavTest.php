@@ -522,14 +522,14 @@ class EavTest extends AbstractModifierTest
             )
             ->willReturn($expected);
 
-        $this->arrayManagerMock->expects($this->once())
+        $this->arrayManagerMock->expects($this->any())
             ->method('merge')
             ->with(
                 $this->anything(),
                 $this->anything(),
                 $this->callback(
                     function ($value) use ($attributeOptionsExpected) {
-                        return $value['options'] === $attributeOptionsExpected;
+                        return isset($value['options']) ? $value['options'] === $attributeOptionsExpected : true;
                     }
                 )
             )
