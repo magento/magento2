@@ -129,7 +129,7 @@ define([
         },
 
         /**
-         * Prepare storages congfig.
+         * Prepare storages config.
          *
          * @returns {Object} Chainable.
          */
