@@ -60,12 +60,13 @@ class ShipmentGetTest extends WebapiAbstract
         foreach ($data as $key => $value) {
             if (!empty($value)) {
                 if ($key === ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY) {
-                    foreach ($value as $extensionAttributeKey => $extensionAttributeValue) {
+                    foreach ($value as $key => $value) {
+                        $simpleObject = $this->objectManager->get(Magento\Framework\Api\SimpleDataObjectConverter::class);
                         $methodName = 'get' .
-                            SimpleDataObjectConverter::snakeCaseToUpperCamelCase($extensionAttributeKey);
+                            $simpleObject->snakeCaseToUpperCamelCase($key);
                         $this->assertEquals(
                             $shipment->getExtensionAttributes()->$methodName(),
-                            $extensionAttributeValue
+                            $value
                         );
                     }
                 } else {
