@@ -40,7 +40,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testIndexerInvalidatedAfterCategoryDelete(): void
+    public function testIndexerInvalidatedAfterCategoryDelete()
     {
         $this->indexerProcessor->reindexAll();
         $isIndexerValid = (bool)$this->indexerProcessor->getIndexer()->isValid();

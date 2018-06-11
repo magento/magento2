@@ -215,7 +215,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testCatalogCategoryProductIndexInvalidateAfterDelete(): void
+    public function testCatalogCategoryProductIndexInvalidateAfterDelete()
     {
         $indexerShouldBeValid = (bool)$this->indexer->isInvalid();
 
