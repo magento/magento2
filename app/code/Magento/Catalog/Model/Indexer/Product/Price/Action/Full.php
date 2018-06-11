@@ -13,6 +13,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
 use Magento\Framework\Indexer\DimensionProviderInterface;
+use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
+use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
 /**
  * Class Full reindex action
@@ -186,11 +188,16 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         // Prepare replica table for indexation.
         $this->_defaultIndexerResource->getConnection()->truncateTable($this->getReplicaTable());
 
-        // TODO: truncate by dimensions
-//        $this->dimensionTableMaintainer->getConnection()->truncateTable(
-//            $this->dimensionTableMaintainer->getMainReplicaTable($dimensions)
-//        );
+        //Truncate replica tables by dimensions
+        $currentMode = $this->configReader
+            ->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?: ModeSwitcher::INPUT_KEY_NONE;
 
+        /** @var DimensionProviderInterface $dimensionsProviders */
+        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($currentMode);
+        foreach ($dimensionsProviders as $dimension) {
+            $dimensionTable = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
+            $this->_defaultIndexerResource->getConnection()->truncateTable($dimensionTable);
+        }
     }
 
     private function switchTables()
@@ -202,16 +209,46 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($currentMode);
 
         // Switch dimension tables
-        $dimensionTables = [];
+        $mainTablesByDimension = [];
 
-        foreach ($dimensionsProviders as $dimension) {
-            $dimensionTables[] = $this->dimensionTableMaintainer->getMainTable($dimension);
+        //Get data from indexers with old realisation (old replica table)
+        $select = $this->dimensionTableMaintainer->getConnection()->select()->from(
+            $this->dimensionTableMaintainer->getMainReplicaTable([])
+        );
+
+        foreach ($dimensionsProviders as $dimensions) {
+            $mainTablesByDimension[] = $this->dimensionTableMaintainer->getMainTable($dimensions);
+
+            //Move data from indexers with old realisation
+            if ($currentMode !== ModeSwitcher::INPUT_KEY_NONE) {
+                $replicaTablesByDimension = $this->dimensionTableMaintainer->getMainReplicaTable($dimensions);
+
+                foreach ($dimensions as $dimension) {
+                    if ($dimension->getName() === WebsiteDataProvider::DIMENSION_NAME) {
+                        $select->where('website_id = ?', $dimension->getValue());
+                    }
+                    if ($dimension->getName() === CustomerGroupDataProvider::DIMENSION_NAME) {
+                        $select->where('customer_group_id = ?', $dimension->getValue());
+                    }
+                }
+                $this->dimensionTableMaintainer->getConnection()->query(
+                    $this->dimensionTableMaintainer->getConnection()->insertFromSelect(
+                        $select,
+                        $replicaTablesByDimension
+                    )
+                );
+            }
         }
 
-        if (count($dimensionTables) > 0) {
+        //Clean data from indexers with old realisation (old replica table)
+        $this->_defaultIndexerResource->getConnection()->truncateTable(
+            $this->dimensionTableMaintainer->getMainReplicaTable([])
+        );
+
+        if (count($mainTablesByDimension) > 0) {
             $this->activeTableSwitcher->switchTable(
                 $this->_defaultIndexerResource->getConnection(),
-                $dimensionTables
+                $mainTablesByDimension
             );
         }
     }
