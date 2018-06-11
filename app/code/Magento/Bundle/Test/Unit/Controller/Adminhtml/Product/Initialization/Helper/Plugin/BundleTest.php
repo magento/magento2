@@ -140,11 +140,10 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $extentionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
         $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extentionAttribute);
         $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extentionAttribute);
-
         $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
 
-    public function testAfterInitializeIfBundleSelectionsAndCustomOptionsExist()
+    public function testAfterInitializeIfBundleSelectionsDoNotExist()
     {
         $bundleOptionsRawWithoutSelections = $this->bundleOptionsRaw;
         $bundleOptionsRawWithoutSelections['bundle_options'][0]['bundle_selections'] = false;
@@ -154,13 +153,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         ];
         $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($valueMap));
         $this->productMock->expects($this->any())->method('getCompositeReadonly')->will($this->returnValue(false));
-        $this->productMock->expects($this->never())
-            ->method('setBundleOptionsData')
-            ->with($this->bundleOptionsCleaned);
-        $this->productMock->expects($this->never())->method('setBundleSelectionsData');
-        $this->productMock->expects($this->once())->method('getPriceType')->will($this->returnValue(2));
-        $this->productMock->expects($this->any())->method('getOptionsReadonly')->will($this->returnValue(true));
-        $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(false);
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
         $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
 }
