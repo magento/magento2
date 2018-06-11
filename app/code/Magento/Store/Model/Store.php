@@ -1248,7 +1248,6 @@ class Store extends AbstractExtensibleModel implements
     public function afterDelete()
     {
         parent::afterDelete();
-        $this->_storeManager->reinitStores();
         $this->_configCacheType->clean();
 
         if ($this->getId() === $this->getGroup()->getDefaultStoreId()) {
