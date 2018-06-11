@@ -211,9 +211,12 @@ class Menu extends \Magento\Backend\Block\Template
     protected function _renderAnchor($menuItem, $level)
     {
         if ($level == 1 && $menuItem->getUrl() == '#') {
-            $output = '<strong class="submenu-group-title" role="presentation">'
-                . '<span>' . $this->_getAnchorLabel($menuItem) . '</span>'
-                . '</strong>';
+            $output = '';
+            if ($menuItem->hasChildren()) {
+                $output = '<strong class="submenu-group-title" role="presentation">'
+                    . '<span>' . $this->_getAnchorLabel($menuItem) . '</span>'
+                    . '</strong>';
+            }
         } else {
             $output = '<a href="' . $menuItem->getUrl() . '" ' . $this->_renderItemAnchorTitle(
                 $menuItem
