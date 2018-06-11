@@ -28,5 +28,5 @@
         <arguments>
             <argument name="filter" xsi:type="object">Magento\Ui\Component\MassAction\DeleteFilter</argument>
         </arguments>
-    </type
+    </type>
 </config>
