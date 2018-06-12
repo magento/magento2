@@ -264,7 +264,7 @@
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
 
         <!-- Find the simple product that we just created using the product grid and delete it -->
-        <actionGroup ref="deleteProductUsingProductGrid2" stepKey="findCreatedProduct2">
+        <actionGroup ref="deleteProductBySku" stepKey="findCreatedProduct2">
             <argument name="sku" value="{{ApiConfigurableProduct.sku}}2-simple"/>
         </actionGroup>
     </test>

@@ -154,7 +154,7 @@
     </actionGroup>
 
     <!--Delete a product by filtering grid and using delete action-->
-    <actionGroup name="deleteProductUsingProductGrid2">
+    <actionGroup name="deleteProductBySku">
         <arguments>
             <argument name="sku" type="string"/>
         </arguments>
