@@ -57,7 +57,7 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
         $link = $this->_objectManager->getObject(\Magento\Framework\View\Element\Html\Link\Current::class);
         $link->setCurrent(true);
-        $this->assertTrue($link->IsCurrent());
+        $this->assertTrue($link->isCurrent());
     }
 
     public function testIsCurrent()

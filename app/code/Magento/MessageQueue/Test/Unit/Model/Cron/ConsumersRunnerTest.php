@@ -51,7 +51,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->phpExecutableFinderMock = $this->getMockBuilder(phpExecutableFinder::class)
+        $this->phpExecutableFinderMock = $this->getMockBuilder(PhpExecutableFinder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->pidConsumerManagerMock = $this->getMockBuilder(PidConsumerManager::class)
