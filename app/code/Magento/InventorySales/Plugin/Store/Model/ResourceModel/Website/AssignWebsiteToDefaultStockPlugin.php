@@ -9,6 +9,7 @@ namespace Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
@@ -65,7 +66,7 @@ class AssignWebsiteToDefaultStockPlugin
     /**
      * @param WebsiteResourceModel $subject
      * @param WebsiteResourceModel $result
-     * @param Website $website
+     * @param Website|AbstractModel $website
      * @return WebsiteResourceModel
      * @throws CouldNotSaveException
      * @throws NoSuchEntityException
@@ -75,7 +76,7 @@ class AssignWebsiteToDefaultStockPlugin
     public function afterSave(
         WebsiteResourceModel $subject,
         WebsiteResourceModel $result,
-        Website $website
+        AbstractModel $website
     ) {
         $websiteCode = $website->getCode();
 

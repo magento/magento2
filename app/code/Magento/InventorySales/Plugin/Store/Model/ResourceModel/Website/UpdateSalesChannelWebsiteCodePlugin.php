@@ -10,6 +10,7 @@ namespace Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventorySales\Model\ResourceModel\GetWebsiteCodeByWebsiteId;
 use Magento\InventorySales\Model\ResourceModel\UpdateSalesChannelWebsiteCode;
@@ -44,7 +45,7 @@ class UpdateSalesChannelWebsiteCodePlugin
     /**
      * @param WebsiteResourceModel $subject
      * @param callable $proceed
-     * @param Website $website
+     * @param Website|AbstractModel $website
      * @return WebsiteResourceModel
      * @throws CouldNotSaveException
      * @throws NoSuchEntityException
@@ -54,7 +55,7 @@ class UpdateSalesChannelWebsiteCodePlugin
     public function aroundSave(
         WebsiteResourceModel $subject,
         callable $proceed,
-        Website $website
+        AbstractModel $website
     ) {
         $newCode = $website->getCode();
         $oldCode = null;
