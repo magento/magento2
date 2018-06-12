@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Block\Media;
 
 /**
@@ -28,20 +30,20 @@ class Uploader extends \Magento\Backend\Block\Widget
     protected $_fileSizeService;
 
     /**
-     * @var \Magento\Framework\Image\Config
+     * @var \Magento\Framework\Image\Adapter\ConfigInterface
      */
     protected $imageConfig;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
+     * @param \Magento\Framework\Image\Adapter\ConfigInterface $imageConfig
      * @param array $data
-     * @param \Magento\Framework\Image\Adapter\Config $imageConfig
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
-        \Magento\Framework\Image\Adapter\Config $imageConfig,
+        \Magento\Framework\Image\Adapter\ConfigInterface $imageConfig,
         array $data = []
     ) {
         $this->_fileSizeService = $fileSize;
@@ -90,7 +92,7 @@ class Uploader extends \Magento\Backend\Block\Widget
     /**
      * Get image config
      *
-     * @return \Magento\Framework\Image\Adapter\Config
+     * @return \Magento\Framework\Image\Adapter\ConfigInterface
      */
     public function getImageConfigService()
     {
