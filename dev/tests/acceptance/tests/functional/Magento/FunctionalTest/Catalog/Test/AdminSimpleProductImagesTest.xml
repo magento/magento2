@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminSimpleProductImagesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add images of different types and sizes to Simple Product"/>
+            <description value="Admin should be able to add images of different types and sizes to Simple Product"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-189"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="_defaultProduct" stepKey="createPreReqProduct">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Go to the product edit page of the product that was created in the before block -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid"/>
+
+        <!-- Set url key so that we can go to this product later -->
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{_defaultProduct.urlKey}}" stepKey="fillUrlKey"/>
+
+        <click selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="expandImages"/>
+
+        <!-- *.bmp is not allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="bmp.bmp" stepKey="attachBmp"/>
+        <waitForPageLoad stepKey="waitForUploadBmp"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="bmp.bmp was not uploaded. Disallowed file type." stepKey="seeErrorBmp"/>
+        <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalBmp"/>
+
+        <!-- *.ico is not allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="ico.ico" stepKey="attachIco"/>
+        <waitForPageLoad stepKey="waitForUploadIco"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="ico.ico was not uploaded. Disallowed file type." stepKey="seeErrorIco"/>
+        <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalIco"/>
+
+        <!-- *.svg is not allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="svg.svg" stepKey="attachSvg"/>
+        <waitForPageLoad stepKey="waitForUploadSvg"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="svg.svg was not uploaded. Disallowed file type." stepKey="seeErrorSvg"/>
+        <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalSvg"/>
+
+        <!-- 0kb size is not allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="empty.jpg" stepKey="attachEmpty"/>
+        <waitForPageLoad stepKey="waitForUploadEmpty"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="empty.jpg was not uploaded." stepKey="seeErrorEmpty"/>
+        <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalEmpty"/>
+
+        <!-- 1~ kb is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="small.jpg" stepKey="attachSmall"/>
+        <waitForPageLoad stepKey="waitForUploadSmall"/>
+        <dontSeeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="dontSeeErrorSmall"/>
+
+        <!-- 1~ mb is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="medium.jpg" stepKey="attachMedium"/>
+        <waitForPageLoad stepKey="waitForUploadMedium"/>
+        <dontSeeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="dontSeeErrorMedium"/>
+
+        <!-- 10~ mb is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="large.jpg" stepKey="attachLarge"/>
+        <waitForPageLoad stepKey="waitForUploadLarge"/>
+        <dontSeeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="dontSeeErrorLarge"/>
+
+        <!-- *.gif is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="gif.gif" stepKey="attachGif"/>
+        <waitForPageLoad stepKey="waitForUploadGif"/>
+        <dontSeeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="dontSeeErrorGif"/>
+
+        <!-- *.jpg is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="jpg.jpg" stepKey="attachJpg"/>
+        <waitForPageLoad stepKey="waitForUploadJpg"/>
+        <dontSeeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="dontSeeErrorJpg"/>
+
+        <!-- *.png is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="png.png" stepKey="attachPng"/>
+        <waitForPageLoad stepKey="waitForUploadPng"/>
+        <dontSeeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="dontSeeErrorPng"/>
+
+        <!-- Save the product and go to the storefront -->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <amOnPage url="{{_defaultProduct.urlkey}}.html" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+
+        <!-- See all of the images that we uploaded -->
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('small')}}" stepKey="seeSmall"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('medium')}}" stepKey="seeMedium"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('gif')}}" stepKey="seeGif"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('jpg')}}" stepKey="seeJpg"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('png')}}" stepKey="seePng"/>
+    </test>
+</tests>
