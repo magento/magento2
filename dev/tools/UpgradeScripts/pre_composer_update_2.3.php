@@ -12,14 +12,14 @@ define(
     'SYNOPSIS',
 <<<SYNOPSIS
 Updates Magento with 2.3 requirements that can't be done by `composer update` or `bin/magento setup:upgrade`. 
-This should be run prior to running `composer update` or `bin/magento setup:upgrade`.
+Run this script after upgrading to PHP 7.1/7.2 and before running `composer update` or `bin/magento setup:upgrade`.
 
 Steps included:
  - Require new version of the metapackage
  - Update "require-dev" section
  - Add "Zend\\Mvc\\Controller\\": "setup/src/Zend/Mvc/Controller/" to composer.json "autoload":"psr-4" section
  - Update Magento/Updater if it's installed
- - Update root version label
+ - Update name, version, and description fields in the root composer.json 
 
 Usage: php -f $_scriptName -- --root='</path/to/magento/root/>' [--composer='</path/to/composer/executable>'] 
            [--edition='<community|enterprise>'] [--repo='<composer_repo_url>'] [--version='<version_constraint>']
@@ -32,7 +32,7 @@ Required:
 Optional:
  --composer='</path/to/composer/executable>'
     Path to the composer executable
-    - Default: The composer found in PATH
+    - Default: The composer found in the system PATH
     
  --edition='<community|enterprise>'
     Target Magento edition for the update.  Open Source = 'community', Commerce = 'enterprise'
@@ -72,44 +72,40 @@ if (isset($opts['help'])) {
 }
 
 try {
+    if (version_compare(PHP_VERSION, '7.1', '<') || version_compare(PHP_VERSION, '7.3', '>=')) {
+        preg_match('/^\d+\.\d+\.\d+/',PHP_VERSION, $matches);
+        $phpVersion = $matches[0];
+        throw new Exception("Invalid PHP version '$phpVersion'. Magento 2.3 requires PHP 7.1 or 7.2");
+    }
+
     /**** Populate and Validate Settings ****/
 
-    if (empty($opts['root'])) {
-        throw new BadMethodCallException('Magento root must be supplied with --root');
+    if (empty($opts['root']) || !is_dir($opts['root'])) {
+        throw new BadMethodCallException('Existing Magento root directory must be supplied with --root');
     }
-
     $rootDir = $opts['root'];
-    if (!is_dir($rootDir)) {
-        throw new InvalidArgumentException("Supplied Magento root directory '$rootDir' does not exist");
+
+    $composerFile = "$rootDir/composer.json";
+    if (!file_exists($composerFile)) {
+        throw new InvalidArgumentException("Supplied Magento root directory '$rootDir' does not contain composer.json");
     }
 
-    $tempDir = findUnusedFilename($rootDir, "temp_project");
+    $composerData = json_decode(file_get_contents($composerFile), true);
 
-    // The composer command uses the Magento root as the working directory so this script can be run from anywhere
-    $cmd = (!empty($opts['composer']) ? $opts['composer'] : 'composer') . " --working-dir='$rootDir'";
+    $metapackageMatcher = '/^magento\/product\-(?<edition>community|enterprise)\-edition$/';
+    foreach (array_keys($composerData['require']) as $requiredPackage) {
+        if (preg_match($metapackageMatcher, $requiredPackage, $matches)) {
+            $edition = $matches['edition'];
+            break;
+        }
+    }
+    if (empty($edition)) {
+        throw new InvalidArgumentException("No Magento metapackage found in $composerFile");
+    }
 
-    // Set the version constraint to any 2.3 package if not specified
-    $constraint = !empty($opts['version']) ? $opts['version'] : '2.3.*';
-
-    // Grab the root composer.json contents to pull defaults or other data from when necessary
-    $composer = json_decode(file_get_contents("$rootDir/composer.json"), true);
-
-    // Get the target Magento edition
+    // Override composer.json edition if one is passed to the script
     if (!empty($opts['edition'])) {
         $edition = $opts['edition'];
-    }
-    else {
-        $metapackageMatcher = '|^magento/product\-(?<edition>[a-z]+)\-edition$|';
-
-        foreach (array_keys($composer['require']) as $requiredPackage) {
-            if (preg_match($metapackageMatcher, $requiredPackage, $matches)) {
-                $edition = $matches['edition'];
-                break;
-            }
-        }
-        if (empty($edition)) {
-            throw new InvalidArgumentException('No Magento metapackage found in composer.json requirements');
-        }
     }
     $edition = strtolower($edition);
 
@@ -117,33 +113,62 @@ try {
         throw new InvalidArgumentException("Only 'community' and 'enterprise' editions allowed; '$edition' given");
     }
 
+    $composerExec = (!empty($opts['composer']) ? $opts['composer'] : 'composer');
+    if (basename($composerExec, '.phar') != 'composer') {
+        throw new InvalidArgumentException("'$composerExec' is not a composer executable");
+    }
+
+    // Use 'command -v' to check if composer is executable
+    exec("command -v $composerExec", $out, $composerFailed);
+    if ($composerFailed) {
+        if ($composerExec == 'composer') {
+            $message = 'Composer executable is not available in the system PATH';
+        }
+        else {
+            $message = "Invalid composer executable '$composerExec'";
+        }
+        throw new InvalidArgumentException($message);
+    }
+
+    // The composer command uses the Magento root as the working directory so this script can be run from anywhere
+    $composerExec = "$composerExec --working-dir='$rootDir'";
+
+    // Set the version constraint to any 2.3 package if not specified
+    $constraint = !empty($opts['version']) ? $opts['version'] : '2.3.*';
+
     // Composer package names
     $project = "magento/project-$edition-edition";
     $metapackage = "magento/product-$edition-edition";
 
     // Get the list of potential Magento repositories to search for the update package
-    $repoUrls = array_map(function ($r) { return $r['url']; }, $composer['repositories']);
     $mageUrls = [];
+    $authFailed = [];
     if (!empty($opts['repo'])) {
         $mageUrls[] = $opts['repo'];
     }
     else {
-        $mageUrls = array_filter($repoUrls, function($u) { return strpos($u, '.mage') !== false; });
+        foreach ($composerData['repositories'] as $label => $repo) {
+            if (strpos(strtolower($label), 'mage') !== false || strpos($repo['url'], '.mage') !== false) {
+                $mageUrls[] = $repo['url'];
+            }
+        }
 
         if (count($mageUrls) == 0) {
             throw new InvalidArgumentException('No Magento repository urls found in composer.json');
         }
     }
 
+    $tempDir = findUnusedFilename($rootDir, 'temp_project');
     $projectConstraint = "$project='$constraint'";
     $version = null;
     $description = null;
-    $versionValidator = '/^2\.3\.\d/';
+
+    output("**** Searching for a matching version of $project ****");
 
     // Try to retrieve a 2.3 package from each Magento repository until one is found
     foreach ($mageUrls as $repoUrl) {
         try {
-            output("Checking $repoUrl for a matching version of $project");
+            output("\\nChecking $repoUrl");
             deleteFilepath($tempDir);
             runComposer("create-project --repository=$repoUrl $projectConstraint $tempDir --no-install");
 
@@ -152,12 +177,12 @@ try {
             $version = $newComposer['version'];
             $description = $newComposer['description'];
 
-            if (!preg_match($versionValidator, $version)) {
+            if (strpos($version, '2.3.') !== 0) {
                 throw new InvalidArgumentException("Bad 2.3 version constraint '$constraint'; version $version found");
             }
 
-            // If no errors occur, set this as the correct repo, forget errors from previous repos, and move forward
-            output("Found $project version $version");
+            // If no errors occurred, set this as the correct repo, forget errors from previous repos, and move forward
+            output("\\n**** Found compatible $project version: $version ****");
             $repo = $repoUrl;
             unset($exception);
             break;
@@ -174,15 +199,16 @@ try {
         throw $exception;
     }
 
-    /**** Execute Updates ****/
+    output("\\n**** Executing Updates ****");
 
-    $composerBackup = findUnusedFilename($rootDir, "composer.json.bak");
-    output("Backing up $rootDir/composer.json to $composerBackup");
-    copy("$rootDir/composer.json", $composerBackup);
+    $composerBackup = findUnusedFilename($rootDir, 'composer.json.bak');
+    output("\\nBacking up $composerFile to $composerBackup");
+    copy($composerFile, $composerBackup);
 
     // Add the repository to composer.json if needed without overwriting any existing ones
+    $repoUrls = array_map(function ($r) { return $r['url']; }, $composerData['repositories']);
     if (!in_array($repo, $repoUrls)) {
-        $repoLabels = array_map('strtolower',array_keys($composer['repositories']));
+        $repoLabels = array_map('strtolower',array_keys($composerData['repositories']));
         $newLabel = 'magento';
         if (in_array($newLabel, $repoLabels)) {
             $count = count($repoLabels);
@@ -193,18 +219,19 @@ try {
                 }
             }
         }
-        output("Adding $repo to composer repositories under label '$newLabel'");
+        output("\\nAdding $repo to composer repositories under label '$newLabel'");
         runComposer("config repositories.$newLabel composer $repo");
     }
 
-    output("Updating Magento metapackage requirement to $metapackage=$version");
+    output("\\nUpdating Magento metapackage requirement to $metapackage=$version");
     if ($edition == 'enterprise') {
         // Community -> Enterprise upgrades need to remove the community edition metapackage
         runComposer('remove magento/product-community-edition --no-update');
+        output('');
     }
     runComposer("require $metapackage=$version --no-update");
 
-    output('Updating "require-dev" section of composer.json');
+    output('\nUpdating "require-dev" section of composer.json');
     runComposer('require --dev ' .
         'phpunit/phpunit:~6.2.0 ' .
         'friendsofphp/php-cs-fixer:~2.10.1 ' .
@@ -212,54 +239,59 @@ try {
         'pdepend/pdepend:2.5.2 ' .
         'sebastian/phpcpd:~3.0.0 ' .
         'squizlabs/php_codesniffer:3.2.2 --no-update');
+    output('');
     runComposer('remove --dev sjparkinson/static-review fabpot/php-cs-fixer --no-update');
 
-    output('Adding "Zend\\\\Mvc\\\\Controller\\\\": "setup/src/Zend/Mvc/Controller/" to "autoload": "psr-4"');
-    $composer['autoload']['psr-4']['Zend\\Mvc\\Controller\\'] = 'setup/src/Zend/Mvc/Controller/';
+    output('\nAdding "Zend\\\\Mvc\\\\Controller\\\\": "setup/src/Zend/Mvc/Controller/" to "autoload": "psr-4"');
+    $composerData['autoload']['psr-4']['Zend\\Mvc\\Controller\\'] = 'setup/src/Zend/Mvc/Controller/';
 
-    output('Updating root version label from ' . $composer['version'] . " to $version");
-    $composer['version'] = $version;
-
-    if ($composer['name'] !== $project) {
-        output('Updating root project name and description from ' . $composer['name'] . " to $project");
-        $composer['name'] = $project;
-        $composer['description'] = $description;
+    if (preg_match('/^magento\/project\-(community|enterprise)\-edition$/', $composerData['name'])) {
+        output('\nUpdating project name, version, and description');
+        $composerData['name'] = $project;
+        $composerData['version'] = $version;
+        $composerData['description'] = $description;
     }
 
-    file_put_contents("$rootDir/composer.json", json_encode($composer, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));
+    file_put_contents($composerFile, json_encode($composerData, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));
 
     // Update Magento/Updater if it's installed
-    if (file_exists("$rootDir/update")) {
-        $updateBackup = findUnusedFilename($rootDir, "update.bak");
-        output("Backing up Magento/Updater directory $rootDir/update to $updateBackup");
-        rename("$rootDir/update", $updateBackup);
-        output('Updating Magento/Updater');
-        rename("$tempDir/update", "$rootDir/update");
+    $updateDir = "$rootDir/update";
+    if (file_exists($updateDir)) {
+        $updateBackup = findUnusedFilename($rootDir, 'update.bak');
+        output("\\nBacking up Magento/Updater directory $updateDir to $updateBackup");
+        rename($updateDir, $updateBackup);
+        output('\nUpdating Magento/Updater');
+        rename("$tempDir/update", $updateDir);
     }
 
     // Remove temp project directory that was used for repo/version validation and new source for Magento/Updater
     deleteFilepath($tempDir);
 
-    output('\n**** Script Complete! ****');
+    output("\\n**** Script Complete! $composerFile updated to Magento version $version ****");
+    if (count($authFailed) > 0) {
+        output('Repository authentication failures occurred!', WARN);
+        output(' * Failed authentication could result in incorrect package versions', WARN);
+        output(' * To resolve, add credentials for the repositories to auth.json', WARN);
+        output(' * URL(s) failing authentication: ' . join(', ', array_keys($authFailed)), WARN);
+    }
 } catch (Exception $e) {
     if ($e->getPrevious()) {
-        $message = (string)$e->getPrevious();
-    } else {
-        $message = $e->getMessage();
+        $e = $e->getPrevious();
     }
 
     try {
-        output($message . '\n\nScript failed! See usage information with --help', ERROR);
+        output($e->getMessage(), ERROR, get_class($e));
+        output('Script failed! See usage information with --help', ERROR);
 
         if (isset($composerBackup) && file_exists($composerBackup)) {
-            output('Resetting composer.json backup');
-            deleteFilepath("$rootDir/composer.json");
-            rename($composerBackup, "$rootDir/composer.json");
+            output("Resetting $composerFile backup");
+            deleteFilepath($composerFile);
+            rename($composerBackup, $composerFile);
         }
         if (isset($updateBackup) && file_exists($updateBackup)) {
-            output('Resetting Magento/Updater backup');
-            deleteFilepath("$rootDir/update");
-            rename($updateBackup, "$rootDir/update");
+            output("Resetting $updateDir backup");
+            deleteFilepath($updateDir);
+            rename($updateBackup, $updateDir);
         }
         if (isset($tempDir) && file_exists($tempDir)) {
             output('Removing temporary project directory');
@@ -267,7 +299,8 @@ try {
         }
     }
     catch (Exception $e2) {
-        output($e2->getMessage() . '\n\nBackup restoration/directory cleanup failed', ERROR);
+        output($e2->getMessage(), ERROR, get_class($e2));
+        output('Backup restoration or directory cleanup failed', ERROR);
     }
 
     exit($e->getCode() == 0 ? 1 : $e->getCode());
@@ -290,7 +323,7 @@ function findUnusedFilename($dir, $filename) {
 }
 
 /**
- * Execute a composer command and output the results
+ * Execute a composer command, reload $composerData afterwards, and check for repo authentication warnings
  *
  * @param string $command
  * @return array Command output split by lines
@@ -298,20 +331,28 @@ function findUnusedFilename($dir, $filename) {
  */
 function runComposer($command)
 {
-    global $cmd, $composer, $rootDir;
-    $command = "$cmd $command";
-    output(' Running command: \n  ' . $command);
+    global $composerExec, $composerData, $composerFile, $authFailed;
+    $command = "$composerExec $command --no-interaction";
+    output(" Running command:\\n  $command");
     exec("$command 2>&1", $lines, $exitCode);
-    $output = join(PHP_EOL, $lines);
+    $output = '    ' . join('\n    ', $lines);
 
     // Reload composer object from the updated composer.json
-    $composer = json_decode(file_get_contents("$rootDir/composer.json"), true);
+    $composerData = json_decode(file_get_contents($composerFile), true);
 
     if (0 !== $exitCode) {
-        $output = 'Error encountered running command:' . PHP_EOL . " $command" . PHP_EOL . $output;
+        $output = "Error encountered running command:\\n $command\\n$output";
         throw new RuntimeException($output, $exitCode);
     }
     output($output);
+
+    if (strpos($output, 'URL required authentication.') !== false) {
+        preg_match("/'(https?:\/\/)?(?<url>[^\/']+)(\/[^']*)?' URL required authentication/", $output, $matches);
+        $authUrl = $matches['url'];
+        $authFailed[$authUrl] = 1;
+        output("Repository authentication failed; make sure '$authUrl' exists in auth.json", WARN);
+    }
+
     return $lines;
 }
 
@@ -345,17 +386,29 @@ function deleteFilepath($path) {
  *
  * @param string $string Text to log
  * @param int $level One of INFO, WARN, or ERROR
+ * @param string $label Optional message label; defaults to WARNING for $level = WARN and ERROR for $level = ERROR
  */
-function output($string, $level = INFO) {
-    $string = str_replace('\n', PHP_EOL, $string) . PHP_EOL;
+function output($string, $level = INFO, $label = '') {
+    $string = str_replace('\n', PHP_EOL, $string);
+
+    if (!empty($label)) {
+        $label = "$label: ";
+    }
+    else if ($level == WARN) {
+        $label = 'WARNING: ';
+    }
+    else if ($level == ERROR) {
+        $label = 'ERROR: ';
+    }
+    $string = "$label$string";
 
     if ($level == WARN) {
-        error_log("WARNING: $string");
+        error_log($string);
     }
     elseif ($level == ERROR) {
-        error_log(PHP_EOL . "ERROR: $string");
+        error_log(PHP_EOL . $string);
     }
     else {
-        echo $string;
+        echo $string . PHP_EOL;
     }
 }
