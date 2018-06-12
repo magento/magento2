@@ -211,7 +211,6 @@ class ProductViewTest extends GraphQlAbstract
             special_price
             special_to_date
             swatch_image
-            tax_class_id
             thumbnail
             thumbnail_label
             tier_price
@@ -460,7 +459,6 @@ QUERY;
             special_price
             special_to_date
             swatch_image
-            tax_class_id
             thumbnail
             thumbnail_label
             tier_price
@@ -922,7 +920,6 @@ QUERY;
             'meta_keyword',
             'meta_title',
             'short_description',
-            'tax_class_id',
             'country_of_manufacture',
             'gift_message_available',
             'news_from_date',
