@@ -71,7 +71,7 @@ class PriceBoxTags
             '-',
             [
                 $result,
-                $this->priceCurrency->getCurrencySymbol(),
+                $this->priceCurrency->getCurrency()->getCode(),
                 $this->dateTime->scopeDate($this->scopeResolver->getScope()->getId())->format('Ymd'),
                 $this->scopeResolver->getScope()->getId(),
                 $this->customerSession->getCustomerGroupId(),
