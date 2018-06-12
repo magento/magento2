@@ -141,7 +141,16 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($attributes);
-        $searchResults->setTotalCount($attributeCollection->getSize());
+
+        // if $searchCriteria has no page size - we can use count() on $attributeCollection
+        // otherwise - we have to use getSize() on $attributeCollection
+        // with this approach we can eliminate excessive COUNT requests in case page size is empty
+        if ($searchCriteria->getPageSize()) {
+            $searchResults->setTotalCount($attributeCollection->getSize());
+        } else {
+            $searchResults->setTotalCount(count($attributeCollection));
+        }
+
         return $searchResults;
     }
 

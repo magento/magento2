@@ -31,6 +31,7 @@ use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 
 /**
  * Class Eav
@@ -188,6 +189,12 @@ class Eav extends AbstractModifier
     private $localeCurrency;
 
     /**
+     * internal cache for attribute models
+     * @var array
+     */
+    private $attributesCache = [];
+
+    /**
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
      * @param Config $eavConfig
@@ -228,7 +235,8 @@ class Eav extends AbstractModifier
         ScopeOverriddenValue $scopeOverriddenValue,
         DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
-        $attributesToEliminate = []
+        $attributesToEliminate = [],
+        AttributeCollectionFactory $attributeCollectionFactory = null
     ) {
         $this->locator = $locator;
         $this->catalogEavValidationRules = $catalogEavValidationRules;
@@ -249,6 +257,8 @@ class Eav extends AbstractModifier
         $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
+        $this->attributeCollectionFactory = $attributeCollectionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(AttributeCollectionFactory::class);
     }
 
     /**
@@ -485,9 +495,7 @@ class Eav extends AbstractModifier
     private function getAttributes()
     {
         if (!$this->attributes) {
-            foreach ($this->getGroups() as $group) {
-                $this->attributes[$this->calculateGroupCode($group)] = $this->loadAttributes($group);
-            }
+            $this->attributes = $this->loadAttributesForGroups($this->getGroups());
         }
 
         return $this->attributes;
@@ -518,6 +526,60 @@ class Eav extends AbstractModifier
             $isRelated = !$applyTo || in_array($productType, $applyTo);
             if ($isRelated) {
                 $attributes[] = $attribute;
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * @param AttributeGroupInterface[] ...$groups
+     * @return @return ProductAttributeInterface[]
+     */
+    private function loadAttributesForGroups(array $groups)
+    {
+        $attributes = [];
+        $groupIds = [];
+
+        // foreach just works faster than array_walk() or array_column()
+        foreach ($groups as $group) {
+            $groupIds[$group->getAttributeGroupId()] = $this->calculateGroupCode($group);
+            $attributes[$this->calculateGroupCode($group)] = [];
+        }
+
+        $collection = $this->attributeCollectionFactory->create();
+        $collection->setAttributeGroupFilter(array_keys($groupIds));
+
+        $attrs = $collection->getItems();
+
+        $map = [];
+
+        foreach ($attrs as $a) {
+            $map[$a->getAttributeId()] = $a->getAttributeGroupId();
+        }
+
+        $sortOrder = $this->sortOrderBuilder
+            ->setField('sort_order')
+            ->setAscendingDirection()
+            ->create();
+
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(AttributeGroupInterface::GROUP_ID, array_keys($groupIds), 'in')
+            ->addFilter(ProductAttributeInterface::IS_VISIBLE, 1)
+            ->addSortOrder($sortOrder)
+            ->create();
+
+        $groupAttributes = $this->attributeRepository->getList($searchCriteria)->getItems();
+
+        $productType = $this->getProductType();
+
+        foreach ($groupAttributes as $attribute) {
+            $applyTo = $attribute->getApplyTo();
+            $isRelated = !$applyTo || in_array($productType, $applyTo);
+            if ($isRelated) {
+                $attributeGroupId = $map[$attribute->getAttributeId()];
+                $attributeGroupCode = $groupIds[$attributeGroupId];
+                $attributes[$attributeGroupCode][] = $attribute;
             }
         }
 
@@ -905,7 +967,13 @@ class Eav extends AbstractModifier
      */
     private function getAttributeModel($attribute)
     {
-        return $this->eavAttributeFactory->create()->load($attribute->getAttributeId());
+        $attributeId = $attribute->getAttributeId();
+
+        if (!array_key_exists($attributeId, $this->attributesCache)) {
+            $this->attributesCache[$attributeId] = $this->eavAttributeFactory->create()->load($attributeId);
+        }
+
+        return $this->attributesCache[$attributeId];
     }
 
     /**

@@ -83,4 +83,9 @@ class Helper extends \Magento\Framework\DB\Helper
         }
         return $mainGroup;
     }
+
+    public function mergeToOneGroup($selects)
+    {
+        return [$this->getLoadAttributesSelectGroups($selects)];
+    }
 }
