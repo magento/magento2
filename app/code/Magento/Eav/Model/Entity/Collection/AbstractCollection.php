@@ -1175,7 +1175,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 $attributeTypes[$table]
             );
         }
-        $selectGroups = $this->_resourceHelper->mergeToOneGroup($selects);
+        $selectGroups = $this->_resourceHelper->getLoadAttributesSelectGroups($selects);
         foreach ($selectGroups as $selects) {
             if (!empty($selects)) {
                 try {
