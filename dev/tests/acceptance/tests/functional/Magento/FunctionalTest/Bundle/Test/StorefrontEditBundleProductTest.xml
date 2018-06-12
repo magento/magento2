@@ -16,7 +16,7 @@
             <description value="Customer should be able to change chosen options for Bundle Product when clicking Edit button in Shopping Cart page"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-290"/>
-            <group value="Levi"/>
+            <group value="Bundle"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -71,18 +71,47 @@
         <click stepKey="customizeAndAddToCart" selector="{{StorefrontBundledSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitCustomizableOptionsPopUp"/>
 
+        <!-- add two products to the shopping cart, each with one different page -->
         <click stepKey="selectFirstBundleOption" selector="{{StorefrontBundledSection.nthBundledOption('1','1')}}"/>
-
+        <waitForPageLoad stepKey="waitForPriceUpdate"/>
         <see stepKey="seeSinglePrice" selector="{{StorefrontBundledSection.configuredPrice}}" userInput="1,230.00"/>
         <click stepKey="addFirstItemToCart" selector="{{StorefrontBundledSection.addToCartConfigured}}"/>
         <waitForPageLoad stepKey="waitForElementAdded"/>
 
         <click stepKey="unselectFirstBundleOption" selector="{{StorefrontBundledSection.nthBundledOption('1','1')}}"/>
         <click stepKey="selectSecondBundleOption" selector="{{StorefrontBundledSection.nthBundledOption('1','2')}}"/>
-
+        <waitForPageLoad stepKey="waitForPriceUpdate2"/>
         <see stepKey="seeSinglePrice2" selector="{{StorefrontBundledSection.configuredPrice}}" userInput="1,230.00"/>
         <click stepKey="addSecondItemToCart" selector="{{StorefrontBundledSection.addToCartConfigured}}"/>
         <waitForPageLoad stepKey="waitForElementAdded2"/>
+
+        <!-- Go to the shopping cart page and edit the first product -->
+        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart"/>
+        <waitForPageLoad stepKey="waitForCartPageLoad"/>
+        <waitForElementVisible stepKey="waitForInfoDropdown" selector="{{CheckoutCartSummarySection.total}}"/>
+        <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalBefore"/>
+        <click stepKey="clickEdit" selector="{{CheckoutCartProductSection.nthEditButton('1')}}"/>
+        <waitForPageLoad stepKey="waitForStorefront2"/>
+
+        <!-- Choose both of the options on the storefront -->
+        <click stepKey="selectFirstBundleOption2" selector="{{StorefrontBundledSection.nthBundledOption('1','1')}}"/>
+        <click stepKey="selectSecondBundleOption2" selector="{{StorefrontBundledSection.nthBundledOption('1','2')}}"/>
+
+        <waitForPageLoad stepKey="waitForPriceUpdate3"/>
+        <see stepKey="seeDoublePrice" selector="{{StorefrontBundledSection.configuredPrice}}" userInput="2,460.00"/>
+
+        <click stepKey="addFirstItemToCart2" selector="{{StorefrontBundledSection.updateCart}}"/>
+        <waitForPageLoad stepKey="waitForElementAdded3"/>
+
+        <!-- Go to the shopping cart page -->
+        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart2"/>
+        <waitForPageLoad stepKey="waitForCartPageLoad2"/>
+
+        <!-- Assert that the options are both there and the proce no longer matches -->
+        <see stepKey="assertBothOptions" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct1.sku$$"/>
+        <see stepKey="assertBothOptions2" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct2.sku$$"/>
+        <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalAfter"/>
+        <assertNotEquals expected="{$grabTotalBefore}" expectedType="string" actual="{$grabTotalAfter}" actualType="string"  stepKey="assertNotEquals"/>
 
     </test>
 </tests>
