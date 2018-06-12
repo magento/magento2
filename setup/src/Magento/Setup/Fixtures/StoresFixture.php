@@ -211,9 +211,6 @@ class StoresFixture extends Fixture
         $this->generateWebsites();
         $this->generateStoreGroups();
         $this->generateStoreViews();
-
-        //clean cache
-        $this->storeManager->reinitStores();
     }
 
     /**
