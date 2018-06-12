@@ -32,11 +32,11 @@ class UpdateSalesChannelWebsiteCodePlugin
 
     /**
      * @param UpdateSalesChannelWebsiteCode $updateSalesChannelWebsiteCode
-     * @param ResourceConnection $getWebsiteCodeByWebsiteId
+     * @param GetWebsiteCodeByWebsiteId $getWebsiteCodeByWebsiteId
      */
     public function __construct(
         UpdateSalesChannelWebsiteCode $updateSalesChannelWebsiteCode,
-        ResourceConnection $getWebsiteCodeByWebsiteId
+        GetWebsiteCodeByWebsiteId $getWebsiteCodeByWebsiteId
     ) {
         $this->updateSalesChannelWebsiteCode = $updateSalesChannelWebsiteCode;
         $this->getWebsiteCodeByWebsiteId = $getWebsiteCodeByWebsiteId;
