@@ -16,7 +16,7 @@
         </arguments>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
         <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart" />
-        <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAdnAddToCartButton}}" stepKey="waitForBundleProductPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="waitForBundleProductPageLoad"/>
         <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
         <waitForElementVisible selector="{{StorefrontBundleProductActionSection.quantityField}}" stepKey="waitForQuantityVisible"/>
         <fillField selector="{{StorefrontBundleProductActionSection.quantityField}}" userInput="{{quantity}}" stepKey="fillBundleProductQuantity"/>
