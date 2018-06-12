@@ -63,8 +63,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         ConfigGenerator $configGenerator,
         DbValidator $dbValidator,
         DriverOptions $driverOptions
-    )
-    {
+    ) {
         $this->configGenerator = $configGenerator;
         $this->dbValidator = $dbValidator;
         foreach ($this->configOptionsListClasses as $className) {
