@@ -174,7 +174,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         array $attributeData,
         int $expectedOptionsCount,
         array $expectedLabels
-    ) {
+    ) : void {
         $this->getRequest()->setPostValue($attributeData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $entityTypeId = $this->_objectManager->create(
