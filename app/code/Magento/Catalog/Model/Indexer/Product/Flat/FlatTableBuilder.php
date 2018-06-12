@@ -324,9 +324,7 @@ class FlatTableBuilder
                     $joinCondition = sprintf('t.%s = e.%s', $linkField, $linkField) .
                         ' AND t.attribute_id=' .
                         $attribute->getId() .
-                        ' AND t.store_id = ' .
-                        $storeId .
-                        ' AND t.value IS NOT NULL';
+                        ' AND t.store_id = ' . $storeId;
                     /** @var $select \Magento\Framework\DB\Select */
                     $select = $this->_connection->select()
                         ->joinInner(
