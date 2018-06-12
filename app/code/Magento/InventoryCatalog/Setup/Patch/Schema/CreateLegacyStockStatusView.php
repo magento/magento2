@@ -62,22 +62,23 @@ class CreateLegacyStockStatusView implements SchemaPatchInterface
     {
         $this->schemaSetup->startSetup();
         $defaultStockId = $this->defaultStockProvider->getId();
-        $legacyView = $this->stockIndexTableNameResolver->execute($defaultStockId);
-        $cataloginventoryStockStatus = $this->schemaSetup->getTable('cataloginventory_stock_status');
-        $catalogProductEntity = $this->schemaSetup->getTable('catalog_product_entity');
+        $viewToLegacyIndex = $this->stockIndexTableNameResolver->execute($defaultStockId);
+        $legacyStockStatusTable = $this->schemaSetup->getTable('cataloginventory_stock_status');
+        $productTable = $this->schemaSetup->getTable('catalog_product_entity');
         $sql = "CREATE
-                VIEW {$legacyView}
+                VIEW {$viewToLegacyIndex}
                   AS
                     SELECT
-                      css.product_id,
-                      css.website_id,
-                      css.stock_id,
-                      css.qty          AS quantity,
-                      css.stock_status AS is_salable,
-                      cpe.sku
-                    FROM {$cataloginventoryStockStatus} AS css
-                      INNER JOIN {$catalogProductEntity} AS cpe
-                        ON css.product_id = cpe.entity_id;";
+                    DISTINCT    
+                      legacy_stock_status.product_id,
+                      legacy_stock_status.website_id,
+                      legacy_stock_status.stock_id,
+                      legacy_stock_status.qty quantity,
+                      legacy_stock_status.stock_status is_salable,
+                      product.sku
+                    FROM {$legacyStockStatusTable} legacy_stock_status
+                      INNER JOIN {$productTable} product
+                        ON legacy_stock_status.product_id = product.entity_id;";
         $this->schemaSetup->getConnection()->query($sql);
         $this->schemaSetup->endSetup();
 

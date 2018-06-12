@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Inventory\Model\ResourceModel\SourceItem;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
  * Provides product ids related to specified source items ids.
@@ -21,46 +22,20 @@ class GetProductIdsBySourceItemIds
     private $resource;
 
     /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
-    /**
      * @var string
      */
-    private $tableNameSourceItem;
+    private $productTableName;
 
     /**
-     * @var string
-     */
-    private $sourceItemIdFieldName;
-
-    /**
-     * @var string
-     */
-    private $productInterfaceClassName;
-
-    /**
-     * GetProductIdsByStockIds constructor.
-     *
      * @param ResourceConnection $resource
-     * @param MetadataPool $metadataPool
-     * @param string $tableNameSourceItem
-     * @param string $sourceItemIdFieldName
-     * @param string $productInterfaceClassName
+     * @param string $productTableName
      */
     public function __construct(
         ResourceConnection $resource,
-        MetadataPool $metadataPool,
-        string $tableNameSourceItem,
-        string $sourceItemIdFieldName,
-        string $productInterfaceClassName
+        string $productTableName
     ) {
         $this->resource = $resource;
-        $this->metadataPool = $metadataPool;
-        $this->tableNameSourceItem = $tableNameSourceItem;
-        $this->sourceItemIdFieldName = $sourceItemIdFieldName;
-        $this->productInterfaceClassName = $productInterfaceClassName;
+        $this->productTableName = $productTableName;
     }
 
     /**
@@ -68,25 +43,22 @@ class GetProductIdsBySourceItemIds
      *
      * @param array $sourceItemIds
      * @return array
-     * @throws \Exception in case catalog product entity type hasn't been initialize.
      */
     public function execute(array $sourceItemIds): array
     {
-        $productLinkField = $this->metadataPool->getMetadata($this->productInterfaceClassName)->getLinkField();
         $connection = $this->resource->getConnection();
-        $sourceItemTable = $this->resource->getTableName($this->tableNameSourceItem);
         $select = $connection->select()
             ->from(
-                ['source_items_table' => $sourceItemTable],
+                ['source_item' => $this->resource->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM)],
                 []
             )->where(
-                $this->sourceItemIdFieldName . ' IN (?)',
+                'source_item.' . SourceItem::ID_FIELD_NAME . ' IN (?)',
                 $sourceItemIds
             )->join(
-                ['product_table' => $this->resource->getTableName('catalog_product_entity')],
-                'source_items_table.sku = product_table.sku',
-                [$productLinkField]
-            )->distinct(true);
+                ['product' => $this->resource->getTableName($this->productTableName)],
+                'source_item.' . SourceItemInterface::SKU . ' = product.sku',
+                ['product.entity_id']
+            )->distinct();
 
         return $connection->fetchCol($select);
     }
