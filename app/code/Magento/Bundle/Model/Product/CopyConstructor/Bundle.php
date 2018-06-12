@@ -6,20 +6,20 @@
 namespace Magento\Bundle\Model\Product\CopyConstructor;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\CopyConstructorInterface;
 use Magento\Catalog\Model\Product\Type;
 
-class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
+class Bundle implements CopyConstructorInterface
 {
     /**
      * Duplicating bundle options and selections
-     *
      * @param Product $product
      * @param Product $duplicate
      * @return void
      */
-    public function build(Product $product, Product $duplicate)
+    public function build(Product $product, Product $duplicate): void
     {
-        if ($product->getTypeId() != Type::TYPE_BUNDLE) {
+        if ($product->getTypeId() !== Type::TYPE_BUNDLE) {
             //do nothing if not bundle
             return;
         }
@@ -35,8 +35,6 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
             $duplicatedBundleOptions[$key]->setOptionId(null);
             /** @var \Magento\Bundle\Api\Data\LinkInterface[]|null $bundleSelections */
             $bundleSelections = $duplicatedBundleOptions[$key]->getProductLinks();
-
-            /** @var \Magento\Bundle\Api\Data\LinkInterface $bundleSelection */
             foreach ($bundleSelections as $bundleSelection) {
                 $bundleSelection->setSelectionId(null);
             }
