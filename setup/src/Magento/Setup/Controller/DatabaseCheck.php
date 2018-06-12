@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Validator\DbValidator;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -37,12 +38,34 @@ class DatabaseCheck extends AbstractActionController
         try {
             $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
             $password = isset($params['password']) ? $params['password'] : '';
-            $this->dbValidator->checkDatabaseConnection($params['name'], $params['host'], $params['user'], $password);
+            $driverOptions = [];
+            if ($this->isDriverOptionsGiven($params)) {
+                $driverOptions = [
+                    ConfigOptionsListConstants::KEY_MYSQL_SSL_KEY => $params['driverOptionsSslKey'],
+                    ConfigOptionsListConstants::KEY_MYSQL_SSL_CERT => $params['driverOptionsSslCert'],
+                    ConfigOptionsListConstants::KEY_MYSQL_SSL_CA => $params['driverOptionsSslCa'],
+                    ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY => (int) $params['driverOptionsSslVerify'],
+                ];
+            }
+            $this->dbValidator->checkDatabaseConnectionWithDriverOptions($params['name'], $params['host'], $params['user'], $password, $driverOptions);
             $tablePrefix = isset($params['tablePrefix']) ? $params['tablePrefix'] : '';
             $this->dbValidator->checkDatabaseTablePrefix($tablePrefix);
             return new JsonModel(['success' => true]);
         } catch (\Exception $e) {
             return new JsonModel(['success' => false, 'error' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * @param array $params
+     * @return boolean
+     */
+    protected function isDriverOptionsGiven($params)
+    {
+        return !(
+            empty($params['driverOptionsSslKey']) ||
+            empty($params['driverOptionsSslCert']) ||
+            empty($params['driverOptionsSslCa'])
+        );
     }
 }

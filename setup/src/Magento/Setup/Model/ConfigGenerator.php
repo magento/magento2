@@ -14,6 +14,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\State;
 use Magento\Framework\Math\Random;
+use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
 /**
  * Creates deployment config data based on user input array
@@ -62,6 +63,11 @@ class ConfigGenerator
     private $cryptKeyGenerator;
 
     /**
+     * @var DriverOptions
+     */
+    private $driverOptions;
+
+    /**
      * Constructor
      *
      * @param Random $random Deprecated since 100.2.0
@@ -72,11 +78,13 @@ class ConfigGenerator
     public function __construct(
         Random $random,
         DeploymentConfig $deploymentConfig,
+        DriverOptions $driverOptions,
         ConfigDataFactory $configDataFactory = null,
         CryptKeyGeneratorInterface $cryptKeyGenerator = null
     ) {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
+        $this->driverOptions = $driverOptions;
         $this->configDataFactory = $configDataFactory ?? ObjectManager::getInstance()->get(ConfigDataFactory::class);
         $this->cryptKeyGenerator = $cryptKeyGenerator ?? ObjectManager::getInstance()->get(CryptKeyGenerator::class);
     }
@@ -178,6 +186,9 @@ class ConfigGenerator
         if ($currentStatus === null) {
             $configData->set($dbConnectionPrefix . ConfigOptionsListConstants::KEY_ACTIVE, '1');
         }
+
+        $driverOptions = $this->driverOptions->getDriverOptions($data);
+        $configData->set($dbConnectionPrefix . ConfigOptionsListConstants::KEY_DRIVER_OPTIONS, $driverOptions);
 
         return $configData;
     }
