@@ -5,6 +5,10 @@
  */
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\Value;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreSwitcher;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -40,7 +44,6 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      */
     public function testSwitchToNonExistingPage()
     {
-        $expectedUrl = "http://localhost/";
         $fromStoreCode = 'default';
         /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
@@ -51,7 +54,10 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
         $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
         $toStore = $storeRepository->get($toStoreCode);
 
+        $this->setBaseUrl($toStore);
+
         $redirectUrl = "http://domain.com/simple-product.html";
+        $expectedUrl = $toStore->getBaseUrl();
 
         $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
     }
@@ -64,7 +70,6 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      */
     public function testSwitchToExistingPage()
     {
-        $expectedUrl = "http://localhost/page-c";
         $fromStoreCode = 'default';
         /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
@@ -75,8 +80,31 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
         $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
         $toStore = $storeRepository->get($toStoreCode);
 
-        $redirectUrl = "http://localhost/page-c";
+        $redirectUrl = $expectedUrl = "http://localhost/page-c";
 
         $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
+    }
+
+    /**
+     * Set base url to store.
+     *
+     * @param StoreInterface $targetStore
+     * @return void
+     */
+    private function setBaseUrl(StoreInterface $targetStore)
+    {
+        $configValue = $this->objectManager->create(Value::class);
+        $configValue->load('web/unsecure/base_url', 'path');
+        $baseUrl = 'http://domain.com/';
+        if (!$configValue->getPath()) {
+            $configValue->setPath('web/unsecure/base_url');
+        }
+        $configValue->setValue($baseUrl);
+        $configValue->setScope(ScopeInterface::SCOPE_STORES);
+        $configValue->setScopeId($targetStore->getId());
+        $configValue->save();
+
+        $reinitibleConfig = $this->objectManager->create(ReinitableConfigInterface::class);
+        $reinitibleConfig->reinit();
     }
 }
