@@ -325,10 +325,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
                 return $function();
             });
 
-        $this->eventManagerMock->expects($this->once())
-            ->method('dispatch')
-            ->with('store_group_save', ['group' => $this->groupMock]);
-
         $this->processor->run($this->data);
     }
 
@@ -381,10 +377,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(function ($function) {
                 return $function();
             });
-
-        $this->eventManagerMock->expects($this->once())
-            ->method('dispatch')
-            ->with('store_add', ['store' => $this->storeMock]);
 
         $this->processor->run($this->data);
     }

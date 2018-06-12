@@ -244,8 +244,6 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('test')
             ->willReturn($this->storeMock);
-        $this->storeResourceMock->expects($this->once())
-            ->method('addCommitCallback');
 
         $this->registryMock->expects($this->once())
             ->method('unregister')

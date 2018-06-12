@@ -55,7 +55,7 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation  enabled
-     * @magentoDbIsolation   enabled
+     * @magentoDbIsolation   disabled
      * @magentoDataFixture   Magento/Sales/_files/invoice_list_different_stores.php
      */
     public function testInvoiceEmailSenderExecute()
