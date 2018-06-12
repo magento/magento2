@@ -10,7 +10,7 @@
     <section name="AdminProductFormSection">
         <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
         <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input"/>
-        <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last"/>
+        <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
         <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>

@@ -56,7 +56,6 @@
         <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToNewProductPage"/>
         <waitForPageLoad stepKey="wait2"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="expandSEOSection"/>
-        <waitForPageLoad stepKey="wait3"/>
         <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('meta_keyword')}}" stepKey="seeMetaKeyword"/>
         <dontSeeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="dontSeeTestGroupName"/>
 
@@ -66,7 +65,6 @@
         <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
         <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="searchForAttrSet"/>
         <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
-        <waitForPageLoad stepKey="wait4"/>
 
         <!-- See new attibute set -->
         <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="seeTestGroupName"/>
