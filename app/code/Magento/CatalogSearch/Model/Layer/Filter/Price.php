@@ -215,7 +215,7 @@ class Price extends AbstractFilter
                 if (strpos($key, '_') === false) {
                     continue;
                 }
-                $data[] = $this->prepareData($key, $count, $data);
+                $data[] = $this->prepareData($key, $count);
             }
         }
 

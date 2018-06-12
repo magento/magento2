@@ -24,7 +24,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method float getBaseDiscountAmount()
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountAmount(float $amount)
  * @method float getDiscountPercent()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountPercent()
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountPercent(float $discountPercent)
  * @method float getOriginalDiscountAmount()
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setOriginalDiscountAmount()
  * @method float getBaseOriginalDiscountAmount()

@@ -116,8 +116,7 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
             0
         )->addAttributeToSelect(
             'name',
-            'type_id',
-            'attribute_set_id'
+            'type_id'
         );
 
         $this->setCollection($collection);

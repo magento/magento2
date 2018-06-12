@@ -210,7 +210,7 @@ class QuantityValidator
                     $option->setHasError(true);
                     //Setting this to false, so no error statuses are cleared
                     $removeError = false;
-                    $this->addErrorInfoToQuote($result, $quoteItem, $removeError);
+                    $this->addErrorInfoToQuote($result, $quoteItem);
                 }
             }
             if ($removeError) {

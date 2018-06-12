@@ -62,7 +62,7 @@ class Access extends \Magento\Framework\App\Action\Action
     {
         try {
             $requestUrl = $this->helper->getRequestUrl($this->getRequest());
-            $request = $this->helper->prepareRequest($this->getRequest(), $requestUrl);
+            $request = $this->helper->prepareRequest($this->getRequest());
 
             // Request access token in exchange of a pre-authorized token
             $response = $this->oauthService->getAccessToken($request, $requestUrl, $this->getRequest()->getMethod());
