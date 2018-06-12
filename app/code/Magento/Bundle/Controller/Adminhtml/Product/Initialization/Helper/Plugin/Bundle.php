@@ -6,11 +6,12 @@
 
 namespace Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Api\Data\OptionInterfaceFactory as OptionFactory;
 use Magento\Bundle\Api\Data\LinkInterfaceFactory as LinkFactory;
+use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
@@ -60,7 +61,7 @@ class Bundle
      * @param StoreManager $storeManager
      * @param ProductCustomOptionInterfaceFactory $customOptionFactory
      */
-    public function __construct (
+    public function __construct(
         RequestInterface $request,
         OptionFactory $optionFactory,
         LinkFactory $linkFactory,
@@ -79,20 +80,18 @@ class Bundle
     /**
      * Setting Bundle Items Data to product for further processing
      *
-     * @param Helper $subject
      * @param Product $product
      * @return Product
+     * @throws CouldNotSaveException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @throws CouldNotSaveException
      */
-    public function afterInitialize (Helper $subject, Product $product): Product
+    public function afterInitialize(Product $product): Product
     {
         $compositeReadonly = $product->getCompositeReadonly();
         $result['bundle_selections'] = $result['bundle_options'] = [];
-
-        /** @var bool $bool */
         $requestBundleOptions = reset($this->request->getPost('bundle_options')['bundle_options']);
         $emptyBundleSelection = !isset($requestBundleOptions['bundle_selections'])
             || empty($requestBundleOptions['bundle_selections']);
@@ -107,7 +106,6 @@ class Bundle
                 )
             );
         }
-
         if (isset($this->request->getPost('bundle_options')['bundle_options'])) {
             foreach ($this->request->getPost('bundle_options')['bundle_options'] as $key => $option) {
                 if (empty($option['bundle_selections'])) {
@@ -135,9 +133,10 @@ class Bundle
     /**
      * @param Product $product
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function processBundleOptionsData (Product $product)
+    protected function processBundleOptionsData(Product $product): void
     {
         $bundleOptionsData = $product->getBundleOptionsData();
         if (!$bundleOptionsData) {
@@ -174,24 +173,20 @@ class Bundle
         $extension = $product->getExtensionAttributes();
         $extension->setBundleProductOptions($options);
         $product->setExtensionAttributes($extension);
-        return;
     }
 
     /**
      * @param Product $product
      * @param array $linkData
      *
-     * @return \Magento\Bundle\Api\Data\LinkInterface
+     * @return LinkInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function buildLink (
-        Product $product,
-        array $linkData
-    ): \Magento\Bundle\Api\Data\LinkInterface
+    private function buildLink(Product $product, array $linkData): LinkInterface
     {
         $link = $this->linkFactory->create(['data' => $linkData]);
 
-        if ((int)$product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+        if ((int)$product->getPriceType() !== Price::PRICE_TYPE_DYNAMIC) {
             if (array_key_exists('selection_price_value', $linkData)) {
                 $link->setPrice($linkData['selection_price_value']);
             }
@@ -207,7 +202,6 @@ class Bundle
         if (array_key_exists('selection_can_change_qty', $linkData)) {
             $link->setCanChangeQuantity($linkData['selection_can_change_qty']);
         }
-
         return $link;
     }
 
@@ -215,9 +209,9 @@ class Bundle
      * @param Product $product
      * @return void
      */
-    protected function processDynamicOptionsData (Product $product): void
+    protected function processDynamicOptionsData(Product $product): void
     {
-        if ((int)$product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+        if ((int)$product->getPriceType() !== Price::PRICE_TYPE_DYNAMIC) {
             return;
         }
 
@@ -243,6 +237,4 @@ class Bundle
         }
         $product->setOptions($newOptions);
     }
-
-
 }

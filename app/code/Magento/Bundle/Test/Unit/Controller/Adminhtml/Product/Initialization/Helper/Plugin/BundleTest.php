@@ -7,10 +7,24 @@
  */
 namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
-class BundleTest extends \PHPUnit\Framework\TestCase
+use Magento\Bundle\Api\Data\LinkInterfaceFactory;
+use Magento\Bundle\Api\Data\OptionInterfaceFactory;
+use Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\TestCase;
+
+class BundleTest extends TestCase
 {
     /**
-     * @var \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle
+     * @var Bundle
      */
     protected $model;
 
@@ -46,7 +60,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->requestMock = $this->createMock(Http::class);
         $methods = [
             'getCompositeReadonly',
             'setBundleOptionsData',
@@ -62,26 +76,26 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             'getExtensionAttributes',
             'setExtensionAttributes',
         ];
-        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methods);
-        $optionInterfaceFactory = $this->getMockBuilder(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
+        $this->productMock = $this->createPartialMock(Product::class, $methods);
+        $optionInterfaceFactory = $this->getMockBuilder(OptionInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $linkInterfaceFactory = $this->getMockBuilder(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class)
+        $linkInterfaceFactory = $this->getMockBuilder(LinkInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRepository = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
+        $productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $customOptionFactory = $this->getMockBuilder(
-            \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class
+            ProductCustomOptionInterfaceFactory::class
         )->disableOriginalConstructor()->getMock();
         $this->subjectMock = $this->createMock(
-            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class
+            Helper::class
         );
-        $this->model = new \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle(
+        $this->model = new Bundle(
             $this->requestMock,
             $optionInterfaceFactory,
             $linkInterfaceFactory,
@@ -105,7 +119,11 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         unset($this->bundleOptionsCleaned[0]['bundle_selections']);
     }
 
-    public function testAfterInitializeIfBundleAnsCustomOptionsAndBundleSelectionsExist()
+    /**
+     * @throws CouldNotSaveException
+     * @throws NoSuchEntityException
+     */
+    public function testAfterInitializeIfBundleAnsCustomOptionsAndBundleSelectionsExist(): void
     {
         $productOptionsBefore = [0 => ['key' => 'value'], 1 => ['is_delete' => false]];
         $valueMap = [
@@ -133,17 +151,21 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())
             ->method('getBundleOptionsData')
             ->willReturn(['option_1' => ['delete' => 1]]);
-        $extentionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+        $extentionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setBundleProductOptions'])
             ->getMockForAbstractClass();
         $extentionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
         $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extentionAttribute);
         $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extentionAttribute);
-        $this->model->afterInitialize($this->subjectMock, $this->productMock);
+        $this->model->afterInitialize($this->productMock);
     }
 
-    public function testAfterInitializeIfBundleSelectionsDoNotExist()
+    /**
+     * @throws CouldNotSaveException
+     * @throws NoSuchEntityException
+     */
+    public function testAfterInitializeIfBundleSelectionsDoNotExist(): void
     {
         $bundleOptionsRawWithoutSelections = $this->bundleOptionsRaw;
         $bundleOptionsRawWithoutSelections['bundle_options'][0]['bundle_selections'] = false;
@@ -153,7 +175,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         ];
         $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($valueMap));
         $this->productMock->expects($this->any())->method('getCompositeReadonly')->will($this->returnValue(false));
-        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
-        $this->model->afterInitialize($this->subjectMock, $this->productMock);
+        $this->expectException(CouldNotSaveException::class);
+        $this->model->afterInitialize($this->productMock);
     }
 }
