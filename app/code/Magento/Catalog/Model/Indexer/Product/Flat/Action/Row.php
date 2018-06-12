@@ -61,6 +61,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param int|null $id
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function execute($id = null)
     {
@@ -75,17 +76,43 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
             if ($tableExists) {
                 $this->flatItemEraser->removeDeletedProducts($ids, $store->getId());
             }
-            if (isset($ids[0])) {
-                if (!$tableExists) {
-                    $this->_flatTableBuilder->build(
-                        $store->getId(),
-                        [$ids[0]],
-                        $this->_valueFieldSuffix,
-                        $this->_tableDropSuffix,
-                        false
-                    );
+
+            /* @var $status \Magento\Eav\Model\Entity\Attribute */
+            $status = $this->_productIndexerHelper->getAttribute('status');
+            $statusTable = $status->getBackend()->getTable();
+            $statusConditions = [
+                'store_id IN(0,' . (int)$store->getId() . ')',
+                'attribute_id = ' . (int)$status->getId(),
+                'entity_id = ' . (int)$id
+            ];
+            $select = $this->_connection->select();
+            $select->from(
+                $statusTable,
+                ['value']
+            )->where(
+                implode(' AND ', $statusConditions)
+            )->order(
+                'store_id DESC'
+            );
+            $result = $this->_connection->query($select);
+            $status = $result->fetch(1);
+
+            if ($status['value'] == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
+                if (isset($ids[0])) {
+                    if (!$tableExists) {
+                        $this->_flatTableBuilder->build(
+                            $store->getId(),
+                            [$ids[0]],
+                            $this->_valueFieldSuffix,
+                            $this->_tableDropSuffix,
+                            false
+                        );
+                    }
+                    $this->flatItemWriter->write($store->getId(), $ids[0], $this->_valueFieldSuffix);
                 }
-                $this->flatItemWriter->write($store->getId(), $ids[0], $this->_valueFieldSuffix);
+            }
+            if ($status['value'] == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED) {
+                $this->flatItemEraser->deleteProductsFromStore($id, $store->getId());
             }
         }
         return $this;
