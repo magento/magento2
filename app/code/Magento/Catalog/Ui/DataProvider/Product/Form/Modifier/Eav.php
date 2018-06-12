@@ -195,6 +195,11 @@ class Eav extends AbstractModifier
     private $attributesCache = [];
 
     /**
+     * @var AttributeCollectionFactory
+     */
+    private $attributeCollectionFactory;
+
+    /**
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
      * @param Config $eavConfig
@@ -214,6 +219,7 @@ class Eav extends AbstractModifier
      * @param DataPersistorInterface $dataPersistor
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
+     * @param AttributeCollectionFactory $attributeCollectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -257,8 +263,8 @@ class Eav extends AbstractModifier
         $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
-        $this->attributeCollectionFactory = $attributeCollectionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(AttributeCollectionFactory::class);
+        $this->attributeCollectionFactory = $attributeCollectionFactory
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
     }
 
     /**
@@ -502,37 +508,8 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * Loading product attributes from group
+     * Loads attributes for specified groups at once
      *
-     * @param AttributeGroupInterface $group
-     * @return ProductAttributeInterface[]
-     */
-    private function loadAttributes(AttributeGroupInterface $group)
-    {
-        $attributes = [];
-        $sortOrder = $this->sortOrderBuilder
-            ->setField('sort_order')
-            ->setAscendingDirection()
-            ->create();
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(AttributeGroupInterface::GROUP_ID, $group->getAttributeGroupId())
-            ->addFilter(ProductAttributeInterface::IS_VISIBLE, 1)
-            ->addSortOrder($sortOrder)
-            ->create();
-        $groupAttributes = $this->attributeRepository->getList($searchCriteria)->getItems();
-        $productType = $this->getProductType();
-        foreach ($groupAttributes as $attribute) {
-            $applyTo = $attribute->getApplyTo();
-            $isRelated = !$applyTo || in_array($productType, $applyTo);
-            if ($isRelated) {
-                $attributes[] = $attribute;
-            }
-        }
-
-        return $attributes;
-    }
-
-    /**
      * @param AttributeGroupInterface[] ...$groups
      * @return @return ProductAttributeInterface[]
      */
@@ -541,7 +518,6 @@ class Eav extends AbstractModifier
         $attributes = [];
         $groupIds = [];
 
-        // foreach just works faster than array_walk() or array_column()
         foreach ($groups as $group) {
             $groupIds[$group->getAttributeGroupId()] = $this->calculateGroupCode($group);
             $attributes[$this->calculateGroupCode($group)] = [];
@@ -550,12 +526,10 @@ class Eav extends AbstractModifier
         $collection = $this->attributeCollectionFactory->create();
         $collection->setAttributeGroupFilter(array_keys($groupIds));
 
-        $attrs = $collection->getItems();
+        $mapAttributeToGroup = [];
 
-        $map = [];
-
-        foreach ($attrs as $a) {
-            $map[$a->getAttributeId()] = $a->getAttributeGroupId();
+        foreach ($collection->getItems() as $attribute) {
+            $mapAttributeToGroup[$attribute->getAttributeId()] = $attribute->getAttributeGroupId();
         }
 
         $sortOrder = $this->sortOrderBuilder
@@ -577,7 +551,7 @@ class Eav extends AbstractModifier
             $applyTo = $attribute->getApplyTo();
             $isRelated = !$applyTo || in_array($productType, $applyTo);
             if ($isRelated) {
-                $attributeGroupId = $map[$attribute->getAttributeId()];
+                $attributeGroupId = $mapAttributeToGroup[$attribute->getAttributeId()];
                 $attributeGroupCode = $groupIds[$attributeGroupId];
                 $attributes[$attributeGroupCode][] = $attribute;
             }
