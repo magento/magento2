@@ -161,6 +161,8 @@ abstract class AbstractAction
      *
      * @param array $processIds
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated Used only for backward compatibility for indexer, which not support indexation by dimensions
      */
     protected function _syncData(array $processIds = [])
     {
@@ -172,72 +174,19 @@ abstract class AbstractAction
                 ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()]
             );
 
-            // delete invalid rows
-            $select = $this->_connection->select()->from(
-                ['index_price' => $this->tableMaintainer->getMainTable($dimensions)],
-                null
-            )->joinLeft(
-                ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()],
-                'index_price.entity_id = ip_tmp.entity_id AND index_price.website_id = ip_tmp.website_id',
-                []
-            )->where(
-                'ip_tmp.entity_id IS NULL'
-            );
-            if (!empty($processIds)) {
-                $select->where('index_price.entity_id IN(?)', $processIds);
-            }
             foreach ($dimensions as $dimension) {
                 if ($dimension->getName() === WebsiteDataProvider::DIMENSION_NAME) {
-                    $select->where('ip_tmp.website_id = ?', $dimension->getValue());
                     $insertSelect->where('ip_tmp.website_id = ?', $dimension->getValue());
                 }
                 if ($dimension->getName() === CustomerGroupDataProvider::DIMENSION_NAME) {
-                    $select->where('ip_tmp.customer_group_id = ?', $dimension->getValue());
                     $insertSelect->where('ip_tmp.customer_group_id = ?', $dimension->getValue());
                 }
             }
 
-            $query = $select->deleteFromSelect('index_price');
-            $this->_connection->query($query);
             $query = $insertSelect->insertFromSelect($this->tableMaintainer->getMainTable($dimensions));
             $this->_connection->query($query);
 
         }
-        return $this;
-    }
-
-
-    /**
-     * Synchronize data between index storage and original storage
-     *
-     * @param array $dimensions
-     * @param array $processIds
-     * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
-     * @throws \Exception
-     */
-    private function syncDataByDimensions(array $dimensions, array $processIds = [])
-    {
-        // delete invalid rows
-        $select = $this->_connection->select()->from(
-            ['index_price' => $this->tableMaintainer->getMainTable($dimensions)],
-            null
-        )->joinLeft(
-            ['ip_tmp' => $this->tableMaintainer->getMainTmpTable($dimensions)],
-            'index_price.entity_id = ip_tmp.entity_id AND index_price.website_id = ip_tmp.website_id',
-            []
-        )->where(
-            'ip_tmp.entity_id IS NULL'
-        );
-        if (!empty($processIds)) {
-            $select->where('index_price.entity_id IN(?)', $processIds);
-        }
-        $sql = $select->deleteFromSelect('index_price');
-        $this->_connection->query($sql);
-
-        $this->_insertFromTable(
-            $this->tableMaintainer->getMainTmpTable($dimensions),
-            $this->tableMaintainer->getMainTable($dimensions)
-        );
         return $this;
     }
 
@@ -423,11 +372,17 @@ abstract class AbstractAction
                 $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
                 foreach ($dimensionsProviders as $dimensions) {
                     $this->tableMaintainer->createMainTmpTable($dimensions);
-                    $this->_emptyTable($this->tableMaintainer->getMainTmpTable($dimensions));
+                    $temporaryTable = $this->tableMaintainer->getMainTmpTable($dimensions);
+                    $this->_emptyTable($temporaryTable);
                     $indexer->executeByDimension($dimensions, \SplFixedArray::fromArray($entityIds, false));
-                    $this->syncDataByDimensions($dimensions, $entityIds);
+                    // copy to index
+                    $this->_insertFromTable(
+                        $temporaryTable,
+                        $this->tableMaintainer->getMainTable($dimensions)
+                    );
                 }
             } else {
+                // handle 3d-party indexers for backward compatibility
                 $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
                 $this->_copyRelationIndexData($entityIds);
                 $indexer->reindexEntity($entityIds);
@@ -435,7 +390,29 @@ abstract class AbstractAction
             }
         }
 
+        if (!$productsTypes && $changedIds) {
+            $this->deleteIndexData($changedIds);
+        }
+
         return $changedIds;
+    }
+
+    /**
+     * @param array $entityIds
+     * @return void
+     */
+    private function deleteIndexData(array $entityIds)
+    {
+        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
+
+        foreach ($dimensionsProviders as $dimensions) {
+            $select = $this->_connection->select()->from(
+                ['index_price' => $this->tableMaintainer->getMainTable($dimensions)],
+                null
+            )->where('index_price.entity_id IN (?)', $entityIds);
+            $query = $select->deleteFromSelect('index_price');
+            $this->_connection->query($query);
+        }
     }
 
     /**
@@ -444,8 +421,10 @@ abstract class AbstractAction
      * @param null|array $parentIds
      * @param array $excludeIds
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
-     * @deprecated Not used anymore. All composite products read data directly from main price indexer table or replica
-     * table for partial or full reindex correspondingly
+     * @deprecated Used only for backward compatibility for do not broke custom indexer implementation
+     * which do not work by dimensions.
+     * For indexers, which support dimensions all composite products read data directly from main price indexer table
+     * or replica table for partial or full reindex correspondingly.
      * @see \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice::getIndexTableForCompositeProducts
     */
     protected function _copyRelationIndexData($parentIds, $excludeIds = null)

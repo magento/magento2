@@ -247,12 +247,10 @@ class TableMaintainer
      */
     public function createMainTmpTable(array $dimensions)
     {
-        if (!isset($this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)])) {
-            $originTableName = $this->getMainTable($dimensions);
-            $temporaryTableName = $this->getMainTable($dimensions) . $this->tmpTableSuffix;
-            $this->getConnection()->createTemporaryTableLike($temporaryTableName, $originTableName, true);
-            $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)] = $temporaryTableName;
-        }
+        $originTableName = $this->getMainTable($dimensions);
+        $temporaryTableName = $this->getMainTable($dimensions) . $this->tmpTableSuffix;
+        $this->getConnection()->createTemporaryTableLike($temporaryTableName, $originTableName, true);
+        $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)] = $temporaryTableName;
     }
 
     /**
