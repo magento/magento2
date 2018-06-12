@@ -5,6 +5,7 @@
  */
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Store\Api\Data\StoreInterface;
@@ -26,6 +27,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * Class dependencies initialization
      *
      * @return void
@@ -34,10 +40,12 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeSwitcher = $this->objectManager->get(StoreSwitcher::class);
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
     }
 
     /**
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
+     * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -56,7 +64,9 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
 
         $this->setBaseUrl($toStore);
 
-        $redirectUrl = "http://domain.com/some-random-url/absent-in-url-rewrite.html";
+        $product = $this->productRepository->get('simple333');
+
+        $redirectUrl = "http://domain.com/{$product->getUrlKey()}.html";
         $expectedUrl = $toStore->getBaseUrl();
 
         $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));

@@ -90,17 +90,22 @@ class Redirect extends \Magento\Framework\App\Action\Action
             $this->_redirect->redirect($this->_response, $currentStore->getBaseUrl());
         } else {
             $encodedUrl = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED);
-            $sidName = $this->sidResolver->getSessionIdQueryParam($this->session);
+
+            $query = [
+                '___from_store' => $fromStore->getCode(),
+                StoreResolverInterface::PARAM_NAME => $targetStoreCode,
+                \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl,
+            ];
+
+            if ($this->sidResolver->getUseSessionInUrl()) {
+                // allow customers to stay logged in during store switching
+                $sidName = $this->sidResolver->getSessionIdQueryParam($this->session);
+                $query[$sidName] = $this->session->getSessionId();
+            }
 
             $arguments = [
                 '_nosid' => true,
-                '_query' =>
-                    [
-                        '___from_store' => $fromStore->getCode(),
-                        StoreResolverInterface::PARAM_NAME => $targetStoreCode,
-                        \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl,
-                        $sidName => $this->session->getSessionId()
-                    ]
+                '_query' => $query
             ];
             $this->_redirect->redirect($this->_response, 'stores/store/switch', $arguments);
         }
