@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Controller\Adminhtml\Product;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -20,7 +22,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      *
      * @return string
      */
-    private function getRandomColor()
+    private function getRandomColor() : string
     {
         return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
     }
@@ -31,7 +33,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      * @param int $optionsCount
      * @return array
      */
-    private function getSwatchVisualDataSet($optionsCount)
+    private function getSwatchVisualDataSet(int $optionsCount) : array
     {
         $optionsData = [];
         $expectedOptionsLabels = [];
@@ -69,7 +71,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      * @param int $optionsCount
      * @return array
      */
-    private function getSwatchTextDataSet($optionsCount)
+    private function getSwatchTextDataSet(int $optionsCount) : array
     {
         $optionsData = [];
         $expectedOptionsLabels = [];
@@ -106,7 +108,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      *
      * @return array
      */
-    private function getAttributePreset()
+    private function getAttributePreset() : array
     {
         return [
             'serialized_options' => '[]',
@@ -147,7 +149,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      *
      * @return array
      */
-    public function getLargeSwatchesAmountAttributeData()
+    public function getLargeSwatchesAmountAttributeData() : array
     {
         $maxInputVars = ini_get('max_input_vars');
         // Each option is at least 7 variables array for a visual swatch.
@@ -168,8 +170,11 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      * @param array $expectedLabels
      * @return void
      */
-    public function testLargeOptionsDataSet($attributeData, $expectedOptionsCount, $expectedLabels)
-    {
+    public function testLargeOptionsDataSet(
+        array $attributeData,
+        int $expectedOptionsCount,
+        array $expectedLabels
+    ) {
         $this->getRequest()->setPostValue($attributeData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $entityTypeId = $this->_objectManager->create(

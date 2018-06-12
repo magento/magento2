@@ -415,6 +415,7 @@ define([
 
         $(function () {
             var editForm = $('#edit_form');
+
             $('#frontend_input').bind('change', function () {
                 swatchProductAttributes.bindAttributeInputType();
             });
@@ -435,11 +436,11 @@ define([
                     swatchVisualPanel = $('#swatch-visual-options-panel'),
                     swatchTextPanel = $('#swatch-text-options-panel');
 
-                activePanel = swatchTextPanel.is(":visible") ? swatchTextPanel : swatchVisualPanel;
+                activePanel = swatchTextPanel.is(':visible') ? swatchTextPanel : swatchVisualPanel;
 
                 activePanel
                     .find('table input')
-                    .each(function() {
+                    .each(function () {
                         swatchValues.push(this.name + '=' + $(this).val());
                     });
 
@@ -451,7 +452,7 @@ define([
                     .val(JSON.stringify(swatchValues))
                     .prependTo(editForm);
 
-                [swatchVisualPanel, swatchTextPanel].forEach(function(el) {
+                [swatchVisualPanel, swatchTextPanel].forEach(function (el) {
                     $(el).find('table')
                         .replaceWith($('<div>').text($.mage.__('Sending swatch values as package.')));
                 });

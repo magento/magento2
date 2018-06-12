@@ -181,8 +181,8 @@ define([
             });
         }
         editForm.on('submit', function () {
-                optionPanel.find('input')
-                .each(function() {
+            optionPanel.find('input')
+                .each(function () {
                     optionsValues.push(this.name + '=' + jQuery(this).val());
                 });
             jQuery('<input>')
