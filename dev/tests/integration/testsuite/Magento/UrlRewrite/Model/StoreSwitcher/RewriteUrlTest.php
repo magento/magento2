@@ -56,7 +56,7 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
 
         $this->setBaseUrl($toStore);
 
-        $redirectUrl = "http://domain.com/simple-product.html";
+        $redirectUrl = "http://domain.com/some-random-url/absent-in-url-rewrite.html";
         $expectedUrl = $toStore->getBaseUrl();
 
         $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
