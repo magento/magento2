@@ -5,20 +5,24 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model;
+namespace Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website;
 
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventorySalesApi\Model\GetAssignedStockIdForWebsiteInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\ResourceModel\Website as WebsiteResourceModel;
 use Magento\Store\Model\Website;
 
 /**
  * Assign the website to the default stock
  */
-class AssignWebsiteToDefaultStock
+class AssignWebsiteToDefaultStockPlugin
 {
     /**
      * @var StockRepositoryInterface
@@ -59,22 +63,29 @@ class AssignWebsiteToDefaultStock
     }
 
     /**
+     * @param WebsiteResourceModel $subject
+     * @param WebsiteResourceModel $result
      * @param Website $website
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Validation\ValidationException
+     * @return WebsiteResourceModel
+     * @throws CouldNotSaveException
+     * @throws NoSuchEntityException
+     * @throws ValidationException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(Website $website)
-    {
+    public function afterSave(
+        WebsiteResourceModel $subject,
+        WebsiteResourceModel $result,
+        Website $website
+    ) {
         $websiteCode = $website->getCode();
 
         if ($websiteCode === WebsiteInterface::ADMIN_CODE) {
-            return;
+            return $result;
         }
 
         // checks is some stock already assigned to this website
         if ($this->getAssignedStockIdForWebsite->execute($websiteCode) !== null) {
-            return;
+            return $result;
         }
 
         $defaultStockId = $this->defaultStockProvider->getId();
@@ -86,6 +97,8 @@ class AssignWebsiteToDefaultStock
 
         $extensionAttributes->setSalesChannels($salesChannels);
         $this->stockRepository->save($defaultStock);
+
+        return $result;
     }
 
     /**

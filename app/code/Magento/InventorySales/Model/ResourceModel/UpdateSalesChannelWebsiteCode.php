@@ -9,16 +9,13 @@ namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventorySalesApi\Model\UpdateSalesChannelWebsiteCodeInterface;
 
 /**
  * This class handles website code change and should not be used directly, but only
  * from \Magento\InventorySales\Plugin\Store\WebsiteResourcePlugin to keep a soft integrity
  * between 'store_website' table and 'inventory_stock_sales_channel' table on changes.
- *
- * See: https://github.com/magento-engcom/msi/issues/1306
  */
-class UpdateSalesChannelWebsiteCode implements UpdateSalesChannelWebsiteCodeInterface
+class UpdateSalesChannelWebsiteCode
 {
     /**
      * @var ResourceConnection
@@ -26,7 +23,6 @@ class UpdateSalesChannelWebsiteCode implements UpdateSalesChannelWebsiteCodeInte
     private $resourceConnection;
 
     /**
-     * UpdateSalesChannelWebsiteCode constructor.
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
@@ -38,19 +34,24 @@ class UpdateSalesChannelWebsiteCode implements UpdateSalesChannelWebsiteCodeInte
     /**
      * @param string $oldCode
      * @param string $newCode
+     * @return void
      */
     public function execute(
         string $oldCode,
         string $newCode
-    ) {
+    ): void {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('inventory_stock_sales_channel');
 
-        $connection->update($tableName, [
-            SalesChannelInterface::CODE => $newCode,
-        ], [
-            $connection->quoteInto(SalesChannelInterface::CODE . "=?", $oldCode),
-            $connection->quoteInto(SalesChannelInterface::TYPE . "=?", SalesChannelInterface::TYPE_WEBSITE),
-        ]);
+        $connection->update(
+            $tableName,
+            [
+                SalesChannelInterface::CODE => $newCode,
+            ],
+            [
+                SalesChannelInterface::TYPE . ' = ?' => SalesChannelInterface::TYPE_WEBSITE,
+                SalesChannelInterface::CODE . ' = ?' => $oldCode,
+            ]
+        );
     }
 }
