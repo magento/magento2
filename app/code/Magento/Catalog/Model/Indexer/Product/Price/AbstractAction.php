@@ -10,6 +10,7 @@ use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Framework\Indexer\DimensionProviderInterface;
 
 /**
  * Abstract action reindex class
@@ -105,7 +106,10 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory
      * @param DefaultPrice $defaultIndexerResource
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice $tierPriceIndexResource
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice|null $tierPriceIndexResource
+     * @param DimensionProviderFactory|null $dimensionCollectionFactory
+     * @param TableMaintainer|null $tableMaintainer
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $configReader
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -160,9 +164,7 @@ abstract class AbstractAction
      */
     protected function _syncData(array $processIds = [])
     {
-        $currentMode = $this->configReader
-            ->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?: ModeSwitcher::INPUT_KEY_NONE;
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($currentMode);
+        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
 
         // for backward compatibility split data from old idx table on dimension tables
         foreach ($dimensionsProviders as $dimensions) {
@@ -414,14 +416,11 @@ abstract class AbstractAction
 
         $changedIds = array_merge($changedIds, ...array_values($parentProductsTypes));
         $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
-        $syncDataForNonDimensionalIndexers = false;
 
         foreach ($productsTypes as $productType => $entityIds) {
             $indexer = $this->_getIndexer($productType);
             if ($indexer instanceof DimensionalIndexerInterface) {
-                $currentMode = $this->configReader
-                    ->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?: ModeSwitcher::INPUT_KEY_NONE;
-                $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($currentMode);
+                $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
                 foreach ($dimensionsProviders as $dimensions) {
                     $this->tableMaintainer->createMainTmpTable($dimensions);
                     $this->_emptyTable($this->tableMaintainer->getMainTmpTable($dimensions));
@@ -429,11 +428,9 @@ abstract class AbstractAction
                     $this->syncDataByDimensions($dimensions, $entityIds);
                 }
             } else {
-                $syncDataForNonDimensionalIndexers = true;
                 $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
+                $this->_copyRelationIndexData($entityIds);
                 $indexer->reindexEntity($entityIds);
-            }
-            if ($syncDataForNonDimensionalIndexers) {
                 $this->_syncData($entityIds);
             }
         }
@@ -472,17 +469,57 @@ abstract class AbstractAction
         $children = $this->_connection->fetchCol($select);
 
         if ($children) {
-            $select = $this->_connection->select()->from(
-                $this->getIndexTargetTable()
-            )->where(
-                'entity_id IN(?)',
-                $children
-            );
-            $query = $select->insertFromSelect($this->_defaultIndexerResource->getIdxTable(), [], false);
-            $this->_connection->query($query);
+            /** @var DimensionProviderInterface $dimensionsProviders */
+            $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
+            foreach ($dimensionsProviders as $dimensions) {
+                $select = $this->_connection->select()->from(
+                    $this->getIndexTargetTableByDimension(
+                        $this->getIndexTargetTable(),
+                        $dimensions
+                    )
+                )->where(
+                    'entity_id IN(?)',
+                    $children
+                );
+                $query = $select->insertFromSelect($this->_defaultIndexerResource->getIdxTable(), [], false);
+                $this->_connection->query($query);
+            }
         }
 
         return $this;
+    }
+
+    /**
+     * Get current price indexer mode
+     *
+     * @return string
+     */
+    private function getCurrentMode()
+    {
+        return $this->configReader->getValue(
+            ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE
+        ) ?: ModeSwitcher::INPUT_KEY_NONE;
+    }
+
+    /**
+     * Retrieve index table by dimension that will be used for write operations.
+     *
+     * This method is used during both partial and full reindex to identify the table.
+     *
+     * @param string $indexTargetTable
+     * @param \Magento\Framework\Search\Request\Dimension[] $dimensions
+     *
+     * @return string
+     */
+    private function getIndexTargetTableByDimension(string $indexTargetTable, array $dimensions)
+    {
+        if ($indexTargetTable === self::getIndexTargetTable()) {
+            $indexTargetTable = $this->tableMaintainer->getMainTable($dimensions);
+        }
+        if ($indexTargetTable === self::getIndexTargetTable() . '_replica') {
+            $indexTargetTable = $this->tableMaintainer->getMainReplicaTable($dimensions);
+        }
+        return $indexTargetTable;
     }
 
     /**

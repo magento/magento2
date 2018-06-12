@@ -103,7 +103,7 @@ class Grouped extends DefaultPrice implements GroupedInterface
             'le.entity_id = l.linked_product_id',
             []
         )->joinLeft(
-            ['i' => $this->getIndexTableForCompositeProducts()],
+            ['i' => $table],
             'i.entity_id = l.linked_product_id AND i.website_id = cw.website_id' .
             ' AND i.customer_group_id = cg.customer_group_id',
             [

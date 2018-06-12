@@ -88,7 +88,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         $this->_prepareConfigurableOptionPriceTable();
 
         $select = $connection->select()->from(
-            ['i' => $this->getIndexTableForCompositeProducts()],
+            ['i' => $this->getIdxTable()],
             []
         )->join(
             ['l' => $this->getTable('catalog_product_super_link')],
