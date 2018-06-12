@@ -48,7 +48,7 @@ abstract class Category extends \Magento\Backend\App\Action
      */
     private function resolveStoreId() : int
     {
-        return (int) $this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID);
+        return (int) $this->getRequest()->getParam('store', Store::DEFAULT_STORE_ID);
     }
 
     /**
