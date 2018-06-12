@@ -1057,6 +1057,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function afterSave()
     {
+        $this->_storeManager->reinitStores();
         if ($this->isObjectNew()) {
             $event = $this->_eventPrefix . '_add';
         } else {
