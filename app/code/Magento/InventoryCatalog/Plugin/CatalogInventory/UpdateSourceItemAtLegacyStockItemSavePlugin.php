@@ -123,7 +123,7 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
 
         return
             $legacyStockItem->getIsInStock() ||
-            ($legacyStockItem->getQty() !== (float) 0) ||
+            ((float) $legacyStockItem->getQty() !== (float) 0) ||
             ($this->getDefaultSourceItemBySku->execute($productSku) !== null);
     }
 
