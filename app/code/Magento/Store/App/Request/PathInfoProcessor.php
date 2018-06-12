@@ -35,24 +35,18 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
     private $pathInfo;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Framework\App\Request\PathInfo $pathInfo
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
         \Magento\Framework\App\Request\PathInfo $pathInfo
     ) {
-        $this->config = $config ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $this->storeRepository = $storeRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Store\Api\StoreRepositoryInterface::class);
-        $this->pathInfo = new \Magento\Framework\App\Request\PathInfo();
+        $this->config = $config;
+        $this->storeRepository = $storeRepository;
+        $this->pathInfo = $pathInfo;
     }
 
     /**

@@ -17,11 +17,6 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $storeManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $requestMock;
 
     /**
@@ -48,7 +43,6 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
 
         $this->configMock = $this->createMock(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
 
@@ -58,7 +52,6 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->model = new \Magento\Store\App\Request\PathInfoProcessor(
-            $this->storeManagerMock,
             $this->configMock,
             $this->storeRepositoryMock,
             $this->pathInfoMock
