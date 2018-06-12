@@ -212,7 +212,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
      * @param bool $isAllowed
      * @dataProvider isActionAllowedDataProvider
      */
-    public function testIsActionAllowed($expected, $actionType, $callNum, $resource = '', $isAllowed = true )
+    public function testIsActionAllowed($expected, $actionType, $callNum, $resource = '', $isAllowed = true)
     {
         $this->authorizationMock->expects($this->exactly($callNum))
             ->method('isAllowed')
