@@ -39,19 +39,6 @@ abstract class Category extends \Magento\Backend\App\Action
     }
 
     /**
-     * Resolve store id
-     *
-     * Tries to take store id from store HTTP parameter
-     * @see Store
-     *
-     * @return int
-     */
-    private function resolveStoreId() : int
-    {
-        return (int) $this->getRequest()->getParam('store', Store::DEFAULT_STORE_ID);
-    }
-
-    /**
      * Initialize requested category and put it into registry.
      * Root category can be returned, if inappropriate store/category is specified
      *
@@ -87,7 +74,7 @@ abstract class Category extends \Magento\Backend\App\Action
         $this->_objectManager->get(\Magento\Framework\Registry::class)->register('category', $category);
         $this->_objectManager->get(\Magento\Framework\Registry::class)->register('current_category', $category);
         $this->_objectManager->get(\Magento\Cms\Model\Wysiwyg\Config::class)
-            ->setStoreId($this->getRequest()->getParam('store'));
+            ->setStoreId($storeId);
         return $category;
     }
 
@@ -96,11 +83,26 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return int
      */
-    private function resolveCategoryId()
+    private function resolveCategoryId() : int
     {
         $categoryId = (int)$this->getRequest()->getParam('id', false);
 
         return $categoryId ?: (int)$this->getRequest()->getParam('entity_id', false);
+    }
+
+    /**
+     * Resolve store id
+     *
+     * Tries to take store id from store HTTP parameter
+     * @see Store
+     *
+     * @return int
+     */
+    private function resolveStoreId() : int
+    {
+        $storeId = (int)$this->getRequest()->getParam('store', false);
+
+        return $storeId ?: (int)$this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID);
     }
 
     /**
