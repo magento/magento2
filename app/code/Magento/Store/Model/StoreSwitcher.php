@@ -28,7 +28,8 @@ class StoreSwitcher implements StoreSwitcherInterface
         foreach ($storeSwitchers as $switcherName => $switcherInstance) {
             if (!$switcherInstance instanceof StoreSwitcherInterface) {
                 throw new \InvalidArgumentException(
-                    "Store switcher '{$switcherName}' is expected to be instance of " . StoreSwitcherInterface::class
+                    "Store switcher '{$switcherName}' is expected to implement interface "
+                    . StoreSwitcherInterface::class
                 );
             }
         }
