@@ -1,4 +1,4 @@
-2.2.4
+ - f 2.2.4
 =============
 * GitHub issues:
     * [#7691](https://github.com/magento/magento2/issues/7691) -- address with saveInAddressBook 0 are still being added to the address book for new customers (fixed in [magento/magento2#12171](https://github.com/magento/magento2/pull/12171))
