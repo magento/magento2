@@ -1,14 +1,12 @@
 {
-    "name": "magento/module-inventory-configuration",
+    "name": "magento/module-inventory-sales-frontend-ui",
     "description": "N/A",
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-catalog-inventory": "*",
-        "magento/module-inventory-catalog-api": "*",
-        "magento/module-inventory-configuration-api": "*",
         "magento/module-inventory-sales-api": "*",
-        "magento/module-store": "*"
+        "magento/module-inventory-configuration-api": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -20,7 +18,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\InventoryConfiguration\\": ""
+            "Magento\\InventorySalesFrontendUi\\": ""
         }
     }
 }
