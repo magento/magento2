@@ -22,6 +22,7 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
  *
  * @method int getShared()
  * @method \Magento\Wishlist\Model\Wishlist setShared(int $value)
+ * @method string getSharingCode()
  * @method \Magento\Wishlist\Model\Wishlist setSharingCode(string $value)
  * @method string getUpdatedAt()
  * @method \Magento\Wishlist\Model\Wishlist setUpdatedAt(string $value)
