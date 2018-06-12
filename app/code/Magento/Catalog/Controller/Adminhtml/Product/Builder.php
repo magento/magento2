@@ -131,7 +131,7 @@ class Builder
             $product->setStoreId($storeId);
         }
 
-        if ($attributeSetId !== null) {
+        if ($attributeSetId) {
             $product->setAttributeSetId($attributeSetId);
         }
 
