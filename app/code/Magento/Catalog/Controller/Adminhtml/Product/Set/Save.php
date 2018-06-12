@@ -62,7 +62,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
         $this->filterManager = $filterManager ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Filter\FilterManager::class);
         $this->jsonHelper = $jsonHelper ?: \Magento\Framework\App\ObjectManager::getInstance()
-                    ->get(\Magento\Framework\Json\Helper\Data::class);
+            ->get(\Magento\Framework\Json\Helper\Data::class);
     }
 
     /**
