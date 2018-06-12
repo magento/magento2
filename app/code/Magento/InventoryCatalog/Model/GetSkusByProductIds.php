@@ -9,8 +9,8 @@ namespace Magento\InventoryCatalog\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
-use Magento\Framework\Exception\InputException;
 
 /**
  * @inheritdoc
@@ -44,7 +44,7 @@ class GetSkusByProductIds implements GetSkusByProductIdsInterface
         $notFoundedIds = array_diff($productIds, array_keys($skuByIds));
 
         if (!empty($notFoundedIds)) {
-            throw new InputException(
+            throw new NoSuchEntityException(
                 __('Following products with requested ids were not found: %1', implode($notFoundedIds, ', '))
             );
         }

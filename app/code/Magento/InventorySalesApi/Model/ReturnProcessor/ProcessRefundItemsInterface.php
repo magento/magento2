@@ -5,13 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model\ReturnProcessor;
+namespace Magento\InventorySalesApi\Model\ReturnProcessor;
 
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefundInterface;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Request\ItemsToRefundInterface;
 
 /**
  * Refund Items
+ *
  * @api
  */
 interface ProcessRefundItemsInterface

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminUserSetStatusForEachSourceItem">
+        <annotations>
+            <features value="Multi-Source Inventory"/>
+            <stories value="Admin user has ability to set status for each source item"/>
+            <title value="Admin user has ability to set status for each source item"/>
+            <description value="Admin user has ability to set status for each source item"/>
+            <testCaseId value="860"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createSimpleSubCategory"/>
+            <createData entity="_minimalSource" stepKey="createCustomSource1"/>
+            <createData entity="_minimalSource" stepKey="createCustomSource2"/>
+            <createData entity="_minimalSource" stepKey="createCustomSource3"/>
+            <createData entity="_minimalSource" stepKey="createCustomSource4"/>
+            <createData entity="BasicMsiStock1" stepKey="createCustomStock"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <waitForPageLoad stepKey="waitForPageLoadAfterLogin"/>
+
+            <!--assign sources and sales channel to stock-->
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomStockByKeyword">
+                <argument name="keyword" value="$$createCustomStock.stock[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createCustomStock.stock[name]$$)}}" stepKey="clickOnEditForCustomStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannel"/>
+
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesForSource1"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByKeywordForSource1">
+                <argument name="keyword" value="$$createCustomSource1.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$createCustomSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource1"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneForSource1"/>
+
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesForSource2"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByKeywordForSource2">
+                <argument name="keyword" value="$$createCustomSource2.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$createCustomSource2.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource2"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneForSource2"/>
+
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesForSource3"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByKeywordForSource3">
+                <argument name="keyword" value="$$createCustomSource3.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$createCustomSource3.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource3"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneForSource3"/>
+
+            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesForSource4"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByKeywordForSource4">
+                <argument name="keyword" value="$$createCustomSource4.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$createCustomSource4.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource4"/>
+            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneForSource4"/>
+
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
+
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGrid"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleSubCategory" stepKey="deleteCategory1"/>
+
+            <!-- Disable sources as it can broke single source mode tests. -->
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPageToDisableCustomSource1"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersToDisableCustomSource1"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToDisableCustomSource1">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$createCustomSource1.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createCustomSource1.source[source_code]$$)}}" stepKey="clickOnEditToDisableCustomSource1"/>
+            <waitForPageLoad time="30" stepKey="waitForEditPageLoadToDisableCustomSource1"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisableCustomSource1"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSource1"/>
+
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPageToDisableCustomSource2"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersToDisableCustomSource2"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToDisableCustomSource2">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$createCustomSource2.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createCustomSource2.source[source_code]$$)}}" stepKey="clickOnEditToDisableCustomSource2"/>
+            <waitForPageLoad time="30" stepKey="waitForEditPageLoadToDisableCustomSource2"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisableCustomSource2"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSource2"/>
+
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPageToDisableCustomSource3"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersToDisableCustomSource3"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToDisableCustomSource3">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$createCustomSource3.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createCustomSource3.source[source_code]$$)}}" stepKey="clickOnEditToDisableCustomSource3"/>
+            <waitForPageLoad time="30" stepKey="waitForEditPageLoadToDisableCustomSource3"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisableCustomSource3"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSource3"/>
+
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPageToDisableCustomSource4"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersToDisableCustomSource4"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToDisableCustomSource4">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$createCustomSource4.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$createCustomSource4.source[source_code]$$)}}" stepKey="clickOnEditToDisableCustomSource4"/>
+            <waitForPageLoad time="30" stepKey="waitForEditPageLoadToDisableCustomSource4"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisableCustomSource4"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSource4"/>
+
+            <!-- Assign Default Stock to Main Website -->
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPageToEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockPageLoadToEditDefaultStock"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeywordDefaultStock">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickOnEditForDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoadToEditDefaultStock"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage1">
+            <argument name="product" value="SimpleMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormInMultiSourceModeActionGroup" stepKey="fillMainProductFieldsInAdmin">
+            <argument name="product" value="SimpleMsiProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createSimpleSubCategory.name$$]" stepKey="searchAndSelectCategory"/>
+
+        <!-- Assign default source. -->
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesToAssignDefaultSource"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToAssignDefaultSource">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="_defaultSource.source_code"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode(_defaultSource.source_code)}}" stepKey="clickOnCheckboxToAssignDefaultSource"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDoneToAssignDefaultSource"/>
+
+        <!-- Assign custom source 1. -->
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesToAssignCustomSource1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToAssignCustomSource1">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createCustomSource1.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createCustomSource1.source[source_code]$$)}}" stepKey="clickOnCheckboxToAssignCustomSource1"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDoneToAssignCustomSource1"/>
+
+        <!-- Assign custom source 2. -->
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesToAssignCustomSource2"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToAssignCustomSource2">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createCustomSource2.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createCustomSource2.source[source_code]$$)}}" stepKey="clickOnCheckboxToAssignCustomSource2"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDoneToAssignCustomSource2"/>
+
+        <!-- Assign custom source 3. -->
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesToAssignCustomSource3"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToAssignCustomSource3">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createCustomSource3.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createCustomSource3.source[source_code]$$)}}" stepKey="clickOnCheckboxToAssignCustomSource3"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDoneToAssignCustomSource3"/>
+
+        <!-- Assign custom source 4. -->
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesToAssignCustomSource4"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsToAssignCustomSource4">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createCustomSource4.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode($$createCustomSource4.source[source_code]$$)}}" stepKey="clickOnCheckboxToAssignCustomSource4"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDoneToAssignCustomSource4"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillDefaultSourceQtyField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource1QtyField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource2QtyField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('3')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource3QtyField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('4')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource4QtyField"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSimpleProduct"/>
+        <waitForPageLoad stepKey="waitForSimpleProductGridPageLoad"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSimpleProduct">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="SimpleMsiProduct.sku"/>
+        </actionGroup>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{SimpleMsiProduct.name}}"  stepKey="seeSimpleProductNameInFirstRow"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="seeSimpleProductSkuInFirstRow"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" userInput="{{SimpleMsiProduct.price}}"  stepKey="seeSimpleProductPriceInFirstRow"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Quantity')}}" userInput="{{SimpleMsiProduct.quantity}}"  stepKey="seeSimpleProductQuantityInFirstRow"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Status')}}" userInput="Enabled" stepKey="seeSimpleProductStatusInFirstRow"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Websites')}}" userInput="Main Website" stepKey="seeSimpleProductWebsiteInFirstRow"/>
+
+        <click selector="{{AdminGridColumnsControls.cancel}}" stepKey="clickOnCancelToHideColumnsBlock"/>
+        <click selector="{{AdminGridRow.editByValue(SimpleMsiProduct.sku)}}" stepKey="clickOnEditSimpleMsiProduct"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="Out of Stock" stepKey="fillOutOfStockForCustomSource1Item"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinueToCheckCustomSource1ItemIsOutOfStock"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoadToSeeCustomSource1ItemIsOutOfStock"/>
+        <see selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="Out of Stock" stepKey="seeCustomSource1ItemIsOutOfStock"/>
+
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="In Stock" stepKey="fillInStockForCustomSource1Item"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinueToCheckCustomSource1ItemIsInStock"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoadToSeeCustomSource1ItemIsInStock"/>
+        <see selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="In Stock" stepKey="seeCustomSource1ItemIsInStock"/>
+
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('2')}}" userInput="Out of Stock" stepKey="fillOutOfStockForCustomSource2Item"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinueToCheckCustomSource2ItemIsOutOfStock"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoadToSeeCustomSource2ItemIsOutOfStock"/>
+        <see selector="{{AdminProductSourcesGrid.rowStatus('2')}}" userInput="Out of Stock" stepKey="seeCustomSource2ItemIsOutOfStock"/>
+
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('2')}}" userInput="In Stock" stepKey="fillInStockForCustomSource2Item"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinueToCheckCustomSource2ItemIsInStock"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoadToSeeCustomSource2ItemIsInStock"/>
+        <see selector="{{AdminProductSourcesGrid.rowStatus('2')}}" userInput="In Stock" stepKey="seeCustomSource2ItemIsInStock"/>
+    </test>
+</tests>
