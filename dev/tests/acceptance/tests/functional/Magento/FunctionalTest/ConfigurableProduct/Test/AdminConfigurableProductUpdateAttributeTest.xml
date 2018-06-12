@@ -148,7 +148,7 @@
             <description value="Admin should be able to update existing attributes of child products of a configurable product"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-288"/>
-            <group value="Levi"/>
+            <group value="ConfigurableProduct"/>
         </annotations>
 
         <before>
@@ -251,12 +251,14 @@
         <click stepKey="clickGenerateProducts" selector="{{AdminCreateProductConfigurationsPanel.next}}"/>
 
         <!-- Save the product -->
+        <waitForPageLoad stepKey="waitForGeneration"/>
         <click stepKey="saveProductAttribute" selector="{{AdminProductFormActionSection.saveButton}}"/>
         <see stepKey="assertSuccess" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."/>
 
         <!-- Check to make sure the created product has appeared on the configurable product storefront -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>
-        <selectOption stepKey="clickFirstAttribute" selector="{{ModifyAttributes.nthExistingAttribute($$createConfigProductAttribute.default_frontend_label$$)}}" userInput="{{_defaultProduct.type_id}}"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+        <selectOption stepKey="clickFirstAttribute" selector="{{ModifyAttributes.nthExistingAttribute($$createConfigProductAttribute.default_frontend_label$$)}}" userInput="simple"/>
         <waitForPageLoad stepKey="waitForPageExecution"/>
         <see stepKey="checkPrice" selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="0.00"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
