@@ -1064,7 +1064,6 @@ class Store extends AbstractExtensibleModel implements
         }
         $store  = $this;
         $this->getResource()->addCommitCallback(function () use ($event, $store) {
-            $this->_storeManager->reinitStores();
             $this->eventManager->dispatch($event, ['store' => $store]);
         });
         return parent::afterSave();
