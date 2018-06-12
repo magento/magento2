@@ -56,7 +56,7 @@ class ProcessReturnQtyOnCreditMemoPlugin
      * @param bool $isAutoReturn
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function aroundExecute(
         ReturnProcessor $subject,
