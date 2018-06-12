@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Wishlist\Api\data\WishlistInterface;
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as ResourceWishlist;
 use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
@@ -18,7 +22,6 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
  *
  * @method int getShared()
  * @method \Magento\Wishlist\Model\Wishlist setShared(int $value)
- * @method string getSharingCode()
  * @method \Magento\Wishlist\Model\Wishlist setSharingCode(string $value)
  * @method string getUpdatedAt()
  * @method \Magento\Wishlist\Model\Wishlist setUpdatedAt(string $value)
@@ -28,7 +31,7 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
  * @api
  * @since 100.0.2
  */
-class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
+class Wishlist extends AbstractModel implements IdentityInterface, WishlistInterface
 {
     /**
      * Cache tag
@@ -661,8 +664,8 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             foreach ($items as $_item) {
                 /* @var $_item Item */
                 if ($_item->getProductId() == $product->getId() && $_item->representProduct(
-                    $product
-                ) && $_item->getId() != $item->getId()
+                        $product
+                    ) && $_item->getId() != $item->getId()
                 ) {
                     // We do not add new wishlist item, but updating the existing one
                     $isForceSetQuantity = false;
