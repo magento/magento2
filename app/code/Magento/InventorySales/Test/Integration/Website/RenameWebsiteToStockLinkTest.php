@@ -42,6 +42,7 @@ class RenameWebsiteToStockLinkTest extends TestCase
 
     /**
      * @throws \Exception
+     * @magentoDbIsolation enabled
      */
     public function testRenameWebsiteToStockLink()
     {
