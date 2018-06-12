@@ -21,7 +21,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Framework/Search/_files/products.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdapterTest extends \Magento\TestFramework\Indexer\TestCase
+class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\AdapterInterface
@@ -170,8 +170,6 @@ class AdapterTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->assertEquals(5, $queryResponse->count());
         $this->assertOrderedProductIds($queryResponse, $expectedIds);
-
-        self::tearDownAfterClass();
     }
 
     /**
