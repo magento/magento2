@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Model\Config\Source;
 
 /**
@@ -11,6 +12,8 @@ namespace Magento\Config\Model\Config\Source;
  */
 class Yesno implements \Magento\Framework\Option\ArrayInterface
 {
+    private $optionArray = null;
+
     /**
      * Options getter
      *
@@ -18,7 +21,20 @@ class Yesno implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return [['value' => 1, 'label' => __('Yes')], ['value' => 0, 'label' => __('No')]];
+        if ($this->optionArray === null) {
+            $array = $this->toArray();
+            $array = array_reverse($array, true);
+
+            $optionArray = [];
+
+            foreach ($array as $value => $label) {
+                $optionArray[] = $this->toOption($value, $label);
+            }
+
+            $this->optionArray = $optionArray;
+        }
+
+        return $this->optionArray;
     }
 
     /**
@@ -29,5 +45,18 @@ class Yesno implements \Magento\Framework\Option\ArrayInterface
     public function toArray()
     {
         return [0 => __('No'), 1 => __('Yes')];
+    }
+
+    /**
+     * @param $value
+     * @param $label
+     * @return array
+     */
+    private function toOption($value, $label)
+    {
+        return [
+            'value' => $value,
+            'label' => $label
+        ];
     }
 }
