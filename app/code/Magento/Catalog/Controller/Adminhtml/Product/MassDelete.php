@@ -64,9 +64,12 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
             $this->productRepository->delete($product);
             $productDeleted++;
         }
-        $this->messageManager->addSuccess(
-            __('A total of %1 record(s) have been deleted.', $productDeleted)
-        );
+
+        if ($productDeleted) {
+            $this->messageManager->addSuccess(
+                __('A total of %1 record(s) have been deleted.', $productDeleted)
+            );
+        }
 
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('catalog/*/index');
     }
