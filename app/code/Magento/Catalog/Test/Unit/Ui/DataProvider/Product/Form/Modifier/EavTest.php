@@ -546,6 +546,7 @@ class EavTest extends AbstractModifierTest
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setupAttributeMetaDataProvider()
     {

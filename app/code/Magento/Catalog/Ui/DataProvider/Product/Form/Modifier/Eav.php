@@ -41,6 +41,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  * @since 101.0.0
  */
 class Eav extends AbstractModifier

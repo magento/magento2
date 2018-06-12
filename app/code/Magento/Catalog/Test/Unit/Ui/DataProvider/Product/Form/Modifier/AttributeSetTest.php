@@ -99,8 +99,11 @@ class AttributeSetTest extends AbstractModifierTest
             ->method('isLockedAttribute')
             ->willReturn($locked);
         $modifyMeta = $this->getModel()->modifyMeta([AbstractModifier::DEFAULT_GENERAL_PANEL => []]);
-        $this->assertEquals($locked,
-            $modifyMeta[AbstractModifier::DEFAULT_GENERAL_PANEL]['children']['attribute_set_id']['arguments']['data']['config']['disabled']);
+        $children = $modifyMeta[AbstractModifier::DEFAULT_GENERAL_PANEL]['children'];
+        $this->assertEquals(
+            $locked,
+            $children['attribute_set_id']['arguments']['data']['config']['disabled']
+        );
     }
 
     public function modifyMetaLockedDataProvider()
