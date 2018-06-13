@@ -112,6 +112,7 @@ abstract class AbstractAction
      * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $configReader
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
