@@ -44,7 +44,9 @@ class PriceTableResolver implements IndexScopeResolverInterface
      */
     public function resolve($index, array $dimensions)
     {
-        $dimensions = $this->getMixDimensions($dimensions);
+        if ($index == 'catalog_product_index_price') {
+            $dimensions = $this->getMixDimensions($dimensions);
+        }
         return $this->indexScopeResolver->resolve($index, $dimensions);
     }
 
@@ -53,7 +55,6 @@ class PriceTableResolver implements IndexScopeResolverInterface
         $existDimensions = [];
         foreach ($dimensions as $dimension) {
             if (!$dimension->getValue()) {
-                echo (new \Exception())->getTraceAsString(); die;
                 throw new \Exception('Dimension value can not be empty');
             }
             $existDimensions[$dimension->getName()] = $dimension;
