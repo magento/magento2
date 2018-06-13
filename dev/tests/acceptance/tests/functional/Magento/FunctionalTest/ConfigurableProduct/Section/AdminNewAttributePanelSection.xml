@@ -19,5 +19,13 @@
         <element name="optionAdminValue" type="input" selector="[data-role='options-container'] input[name='option[value][option_{{row}}][0]']" parameterized="true"/>
         <element name="optionDefaultStoreValue" type="input" selector="[data-role='options-container'] input[name='option[value][option_{{row}}][1]']" parameterized="true"/>
         <element name="deleteOption" type="button" selector="#delete_button_option_{{row}}" parameterized="true"/>
+
+        <element name="addTextSwatch" type="button" selector="#add_new_swatch_text_option_button"/>
+        <element name="isDefaultTextSwatch" type="radio" selector="[data-role='swatch-text-options-container'] tr:nth-of-type({{row}}) input[name='defaulttext[]']" parameterized="true"/>
+        <element name="textSwatchAdminSwatchValue" type="input" selector="[data-role='swatch-text-options-container'] input[name='swatchtext[value][option_{{row}}][0]']" parameterized="true"/>
+        <element name="textSwatchAdminDescriptionValue" type="input" selector="[data-role='swatch-text-options-container'] input[name='optiontext[value][option_{{row}}][0]']" parameterized="true"/>
+        <element name="textSwatchDefaultStoreSwatchValue" type="input" selector="[data-role='swatch-text-options-container'] input[name='swatchtext[value][option_{{row}}][1]']" parameterized="true"/>
+        <element name="textSwatchDefaultStoreDescriptionValue" type="input" selector="[data-role='swatch-text-options-container'] input[name='optiontext[value][option_{{row}}][1]']" parameterized="true"/>
+        <element name="deleteTextSwatch" type="button" selector="#delete_button_swatch_container_option_{{row}}" parameterized="true"/>
     </section>
 </sections>

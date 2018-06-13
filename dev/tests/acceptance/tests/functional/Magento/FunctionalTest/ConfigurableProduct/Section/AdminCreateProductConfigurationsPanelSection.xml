@@ -13,6 +13,7 @@
         <element name="createNewAttribute" type="button" selector=".select-attributes-actions button[title='Create New Attribute']" timeout="30"/>
         <element name="filters" type="button" selector="button[data-action='grid-filter-expand']"/>
         <element name="attributeCode" type="input" selector=".admin__control-text[name='attribute_code']"/>
+        <element name="attributeLabel" type="input" selector=".admin__control-text[name='frontend_label']"/>
         <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
         <element name="firstCheckbox" type="input" selector="tr[data-repeat-index='0'] .admin__control-checkbox"/>
         <element name="id" type="text" selector="//tr[contains(@data-repeat-index, '0')]/td[2]/div"/>
