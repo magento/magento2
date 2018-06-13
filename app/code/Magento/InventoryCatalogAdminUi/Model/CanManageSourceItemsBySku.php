@@ -11,6 +11,7 @@ use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Check source items should be managed for given product sku
@@ -61,14 +62,18 @@ class CanManageSourceItemsBySku
     {
         if (null !== $sku) {
             $stockId = $this->defaultStockProvider->getId();
-            $itemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
-
-            if (null !== $itemConfiguration) {
-                return $itemConfiguration->isUseConfigManageStock()
-                    ? (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK)
-                    : $itemConfiguration->isManageStock();
+            try {
+                $itemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+            } catch (NoSuchEntityException $e) {
+                // GetStockItemConfiguration throw NoSuchEntityException when SKU is not assigned to Stock
+                return (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK);
             }
+
+            return $itemConfiguration->isUseConfigManageStock()
+                ? (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK)
+                : $itemConfiguration->isManageStock();
         }
+
         return (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK);
     }
 }

@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterfaceFactory;
-use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @inheritdoc
@@ -57,16 +56,10 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
     private $isSourceItemManagementAllowedForProductType;
 
     /**
-     * @var GetStockItemDataInterface
-     */
-    private $getStockItemData;
-
-    /**
      * @param ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory
      * @param ProductSalableResultInterfaceFactory $productSalableResultFactory
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
-     * @param GetStockItemDataInterface $getStockItemData
      * @param array $conditions
      */
     public function __construct(
@@ -74,7 +67,6 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
         ProductSalableResultInterfaceFactory $productSalableResultFactory,
         GetProductTypesBySkusInterface $getProductTypesBySkus,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
-        GetStockItemDataInterface $getStockItemData,
         array $conditions
     ) {
         $this->productSalabilityErrorFactory = $productSalabilityErrorFactory;
@@ -82,7 +74,6 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
         $this->getProductTypesBySkus = $getProductTypesBySkus;
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->conditions = $conditions;
-        $this->getStockItemData = $getStockItemData;
     }
 
     /**
@@ -161,25 +152,12 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
             $this->setConditions();
         }
 
-        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-        if (null === $stockItemData) {
-            $errors = [
-                $this->productSalabilityErrorFactory->create([
-                    'code' => 'is_salable_with_reservations-no_data',
-                    'message' => __('The requested sku is not assigned to given stock.')
-                ])
-            ];
-            return $this->productSalableResultFactory->create(['errors' => $errors]);
-        }
-
         $requiredConditionsErrors = $this->processRequiredConditions($sku, $stockId, $requestedQty);
-        $requiredConditionsErrors = array_merge(...$requiredConditionsErrors);
         if (count($requiredConditionsErrors)) {
             return $this->productSalableResultFactory->create(['errors' => $requiredConditionsErrors]);
         }
 
         $sufficientConditionsErrors = $this->processSufficientConditions($sku, $stockId, $requestedQty);
-        $sufficientConditionsErrors = array_merge(...$sufficientConditionsErrors);
         if (count($sufficientConditionsErrors)) {
             return $this->productSalableResultFactory->create(['errors' => $sufficientConditionsErrors]);
         }
@@ -207,6 +185,7 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
             }
             $requiredConditionsErrors[] = $productSalableResult->getErrors();
         }
+        $requiredConditionsErrors = array_merge(...$requiredConditionsErrors);
 
         return $requiredConditionsErrors;
     }
@@ -227,10 +206,11 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
             /** @var ProductSalableResultInterface $productSalableResult */
             $productSalableResult = $condition->execute($sku, $stockId, $requestedQty);
             if ($productSalableResult->isSalable()) {
-                return [[]];
+                return [];
             }
             $sufficientConditionsErrors[] = $productSalableResult->getErrors();
         }
+        $sufficientConditionsErrors = array_merge(...$sufficientConditionsErrors);
 
         return $sufficientConditionsErrors;
     }

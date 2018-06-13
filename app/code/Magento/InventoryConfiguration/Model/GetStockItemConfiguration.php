@@ -11,9 +11,12 @@ use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Stock;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryApi\Model\IsProductAssignedToStockInterface;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @inheritdoc
@@ -41,21 +44,29 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     private $stockItemConfigurationFactory;
 
     /**
+     * @var IsProductAssignedToStockInterface
+     */
+    private $isProductAssignedToStock;
+
+    /**
      * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory
      * @param StockItemRepositoryInterface $legacyStockItemRepository
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      * @param StockItemConfigurationFactory $stockItemConfigurationFactory
+     * @param IsProductAssignedToStockInterface $isProductAssignedToStock
      */
     public function __construct(
         StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory,
         StockItemRepositoryInterface $legacyStockItemRepository,
         GetProductIdsBySkusInterface $getProductIdsBySkus,
-        StockItemConfigurationFactory $stockItemConfigurationFactory
+        StockItemConfigurationFactory $stockItemConfigurationFactory,
+        IsProductAssignedToStockInterface $isProductAssignedToStock
     ) {
         $this->legacyStockItemCriteriaFactory = $legacyStockItemCriteriaFactory;
         $this->legacyStockItemRepository = $legacyStockItemRepository;
         $this->getProductIdsBySkus = $getProductIdsBySkus;
         $this->stockItemConfigurationFactory = $stockItemConfigurationFactory;
+        $this->isProductAssignedToStock = $isProductAssignedToStock;
     }
 
     /**
@@ -63,6 +74,12 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
      */
     public function execute(string $sku, int $stockId)
     {
+        if (false === $this->isProductAssignedToStock->execute($sku, $stockId)) {
+            throw new NoSuchEntityException(
+                __('The requested sku is not assigned to given stock.')
+            );
+        }
+
         return $this->stockItemConfigurationFactory->create(
             [
                 'stockItem' => $this->getLegacyStockItem($sku),
@@ -73,6 +90,7 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     /**
      * @param string $sku
      * @return StockItemInterface
+     * @throws LocalizedException
      */
     private function getLegacyStockItem(string $sku): StockItemInterface
     {
@@ -81,7 +99,7 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
         try {
             $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
         } catch (NoSuchEntityException $skuNotFoundInCatalog) {
-            $stockItem = \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
+            $stockItem = ObjectManager::getInstance()->create(StockItemInterface::class);
             $stockItem->setManageStock(true);  // Make possible to Manage Stock for Products removed from Catalog
             return $stockItem;
         }
@@ -92,7 +110,7 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
 
         $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
         if ($stockItemCollection->getTotalCount() === 0) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
+            return ObjectManager::getInstance()->create(StockItemInterface::class);
         }
 
         $stockItems = $stockItemCollection->getItems();

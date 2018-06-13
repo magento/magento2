@@ -15,6 +15,7 @@ use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterfaceFactory;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @inheritdoc
@@ -84,10 +85,22 @@ class IsSalableWithReservationsCondition implements IsProductSalableForRequested
             return $this->productSalableResultFactory->create(['errors' => $errors]);
         }
 
+        try {
+            /** @var StockItemConfigurationInterface $stockItemConfiguration */
+            $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+        } catch (NoSuchEntityException $e) {
+            // GetStockItemConfiguration throw NoSuchEntityException when SKU is not assigned to Stock
+            $errors = [
+                $this->productSalabilityErrorFactory->create([
+                    'code' => 'is_salable_with_reservations-no_data',
+                    'message' => __('The requested sku is not assigned to given stock.')
+                ])
+            ];
+            return $this->productSalableResultFactory->create(['errors' => $errors]);
+        }
+
         $qtyWithReservation = $stockItemData[GetStockItemDataInterface::QUANTITY] +
             $this->getReservationsQuantity->execute($sku, $stockId);
-        /** @var StockItemConfigurationInterface $stockItemConfiguration */
-        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $qtyLeftInStock = $qtyWithReservation - $stockItemConfiguration->getMinQty() - $requestedQty;
         $isEnoughQty = (bool)$stockItemData[GetStockItemDataInterface::IS_SALABLE] && $qtyLeftInStock >= 0;
         if (!$isEnoughQty) {

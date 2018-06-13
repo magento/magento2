@@ -168,13 +168,15 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      */
     private function isManageStock($itemSku, $stockId)
     {
-        $stockItemConfiguration = $this->getStockItemConfiguration->execute($itemSku, $stockId);
-
-        if (!empty($stockItemConfiguration)) {
-            return $stockItemConfiguration->isManageStock();
+        try {
+            $stockItemConfiguration = $this->getStockItemConfiguration->execute($itemSku, $stockId);
+        } catch (NoSuchEntityException $e) {
+            // GetStockItemConfiguration throw NoSuchEntityException when SKU is not assigned to Stock
+            // and we shouldn't process this item
+            return false;
         }
 
-        return true;
+        return $stockItemConfiguration->isManageStock();
     }
 
     /**

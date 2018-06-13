@@ -23,6 +23,7 @@ interface GetStockItemConfigurationInterface
      * @param int $stockId
      * @return StockItemConfigurationInterface|null
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(string $sku, int $stockId);
 }

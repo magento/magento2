@@ -15,6 +15,7 @@ use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @inheritdoc
@@ -93,10 +94,16 @@ class SourceDeductionService implements SourceDeductionServiceInterface
         foreach ($sourceDeductionRequest->getItems() as $item) {
             $itemSku = $item->getSku();
             $qty = $item->getQty();
-            $stockItemConfiguration = $this->getStockItemConfiguration->execute(
-                $itemSku,
-                $stockId
-            );
+
+            try {
+                $stockItemConfiguration = $this->getStockItemConfiguration->execute(
+                    $itemSku,
+                    $stockId
+                );
+            } catch (NoSuchEntityException $e) {
+                // GetStockItemConfiguration throw NoSuchEntityException when SKU is not assigned to Stock
+                continue;
+            }
 
             if (!$stockItemConfiguration->isManageStock()) {
                 //We No need to Manage Stock

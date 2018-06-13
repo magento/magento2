@@ -18,6 +18,7 @@ use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterfaceFactory;
 use Magento\Framework\Phrase;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @inheritdoc
@@ -82,8 +83,16 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
      */
     public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface
     {
-        /** @var StockItemConfigurationInterface $stockItemConfiguration */
-        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+        try {
+            /** @var StockItemConfigurationInterface $stockItemConfiguration */
+            $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+        } catch (NoSuchEntityException $e) {
+            // GetStockItemConfiguration throw NoSuchEntityException when SKU is not assigned to Stock
+            return $this->createErrorResult(
+                'is_correct_qty-max_sale_qty',
+                __('The requested sku is not assigned to given stock.')
+            );
+        }
 
         if ($this->isMinSaleQuantityCheckFailed($stockItemConfiguration, $requestedQty)) {
             return $this->createErrorResult(

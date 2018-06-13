@@ -15,6 +15,7 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventorySales\Model\ReturnProcessor\Request\BackItemQtyRequest;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class ProcessBackItemQtyToSource
 {
@@ -82,10 +83,15 @@ class ProcessBackItemQtyToSource
 
         $stockId = (int)$this->stockResolver->get($salesChannel->getType(), $salesChannel->getCode())->getStockId();
 
-        $stockItemConfiguration = $this->getStockItemConfiguration->execute(
-            $backItemQtyRequest->getSku(),
-            $stockId
-        );
+        try {
+            $stockItemConfiguration = $this->getStockItemConfiguration->execute(
+                $backItemQtyRequest->getSku(),
+                $stockId
+            );
+        } catch (NoSuchEntityException $e) {
+            // GetStockItemConfiguration throw NoSuchEntityException when SKU is not assigned to Stock
+            return;
+        }
 
         if (!$stockItemConfiguration->isManageStock()) {
             return;

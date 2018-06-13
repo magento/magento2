@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableCondition;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
-use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @inheritdoc
@@ -17,25 +17,17 @@ use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
 class IsProductSalableConditionChain implements IsProductSalableInterface
 {
     /**
-     * @var GetStockItemDataInterface
-     */
-    private $getStockItemData;
-
-    /**
      * @var IsProductSalableInterface[]
      */
     private $conditions;
 
     /**
-     * @param GetStockItemDataInterface $getStockItemData
      * @param array $conditions
      */
     public function __construct(
-        GetStockItemDataInterface $getStockItemData,
         array $conditions
     ) {
         $this->setConditions($conditions);
-        $this->getStockItemData = $getStockItemData;
     }
 
     /**
@@ -92,16 +84,15 @@ class IsProductSalableConditionChain implements IsProductSalableInterface
      */
     public function execute(string $sku, int $stockId): bool
     {
-        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-        if (null === $stockItemData) {
-            // Sku is not assigned to Stock
-            return false;
-        }
-
-        foreach ($this->conditions as $condition) {
-            if ($condition->execute($sku, $stockId) === true) {
-                return true;
+        try {
+            foreach ($this->conditions as $condition) {
+                if ($condition->execute($sku, $stockId) === true) {
+                    return true;
+                }
             }
+        } catch (NoSuchEntityException $e) {
+            // GetStockItemConfiguration throw NoSuchEntityException when SKU is not assigned to Stock
+            return false;
         }
 
         return false;
