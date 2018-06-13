@@ -37,6 +37,7 @@
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
+        <data key="file">magento.jpg</data>
         <data key="value">magento.jpg</data>
         <data key="fileName">magento</data>
         <data key="extension">jpg</data>

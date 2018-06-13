@@ -39,7 +39,7 @@
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <actionGroup ref="addProductImage" stepKey="addImageForProductSimple">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ProductImage"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackToGridSimple"/>

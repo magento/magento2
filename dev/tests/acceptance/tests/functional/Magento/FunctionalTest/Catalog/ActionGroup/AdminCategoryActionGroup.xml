@@ -57,7 +57,7 @@
     <!--Upload image for category -->
     <actionGroup name="addCategoryImage">
         <arguments>
-            <argument name="image" defaultValue="ImageUpload"/>
+            <argument name="image" defaultValue="ProductImage"/>
         </arguments>
         <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
@@ -81,7 +81,7 @@
 
     <actionGroup name="checkCategoryImageInAdmin">
         <arguments>
-            <argument name="image" defaultValue="ImageUpload"/>
+            <argument name="image" defaultValue="ProductImage"/>
         </arguments>
         <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

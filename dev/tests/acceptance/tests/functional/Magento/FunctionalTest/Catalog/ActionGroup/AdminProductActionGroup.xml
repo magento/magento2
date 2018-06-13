@@ -77,7 +77,7 @@
     <!--Upload image for product-->
     <actionGroup name="addProductImage">
         <arguments>
-            <argument name="image" defaultValue="ImageUpload"/>
+            <argument name="image" defaultValue="ProductImage"/>
         </arguments>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
         <waitForPageLoad time="30" stepKey="waitForPageRefresh"/>

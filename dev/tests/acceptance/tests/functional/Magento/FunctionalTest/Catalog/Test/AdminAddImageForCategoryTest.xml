@@ -43,6 +43,6 @@
         <actionGroup ref="CheckCategoryOnStorefront" stepKey="CheckCategoryOnStorefront">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
-        <seeElement selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload.filename)}}" stepKey="seeImage"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.imageSource(ProductImage.filename)}}" stepKey="seeImage"/>
     </test>
 </tests>
