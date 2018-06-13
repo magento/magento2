@@ -15,7 +15,7 @@
             <title value="You should be able to save a product with custom options assigned to a different website"/>
             <description value="Custom Options should not be split when saving the product after assigning to a different website"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-87721"/>
+            <testCaseId value="MAGETWO-92749"/>
             <group value="product"/>
         </annotations>
 
