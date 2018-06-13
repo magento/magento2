@@ -36,7 +36,7 @@
         <element name="Browse" type="button" selector=".mce-i-browse"/>
         <element name="BrowseUploadImage" type="file" selector=".fileupload" />
         <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
-        <element name="imageOrImageCopy" type="text" selector="//img[@src='{{arg1}}']|//img[contains(@src,'{{arg2}}_') and contains(@src,'.{{arg3}}')]" parameterized="true"/>
+        <element name="imageOrImageCopy" type="text" selector="//img[contains(@src, '{{arg1}}')]|//img[contains(@src,'{{arg2}}_') and contains(@src,'.{{arg3}}')]" parameterized="true"/>
         <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
         <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open" />
         <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last" />
