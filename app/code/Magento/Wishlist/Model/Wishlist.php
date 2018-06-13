@@ -20,12 +20,6 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
 /**
  * Wishlist model
  *
- * @method int getShared()
- * @method \Magento\Wishlist\Model\Wishlist setShared(int $value)
- * @method string getSharingCode()
- * @method \Magento\Wishlist\Model\Wishlist setSharingCode(string $value)
- * @method string getUpdatedAt()
- * @method \Magento\Wishlist\Model\Wishlist setUpdatedAt(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
@@ -212,13 +206,20 @@ class Wishlist extends AbstractModel implements IdentityInterface, WishlistInter
     }
 
     /**
-     * Retrieve wishlist name
-     *
-     * @return string
+     * @inheritdoc
+     */
+    public function getId()
+    {
+        return $this->_getData($this->_idFieldName);
+    }
+
+
+    /**
+     * @inheritdoc
      */
     public function getName()
     {
-        $name = $this->_getData('name');
+        $name = $this->_getData(self::NAME);
         if (!strlen($name)) {
             return $this->_wishlistData->getDefaultWishlistName();
         }
@@ -490,17 +491,16 @@ class Wishlist extends AbstractModel implements IdentityInterface, WishlistInter
      */
     public function setCustomerId($customerId)
     {
-        return $this->setData($this->_getResource()->getCustomerIdFieldName(), $customerId);
+        return $this->setData(self::CUSTOMER_ID, $customerId);
     }
 
+
     /**
-     * Retrieve customer id
-     *
-     * @return int
+     * @inheritdoc
      */
     public function getCustomerId()
     {
-        return $this->getData($this->_getResource()->getCustomerIdFieldName());
+        return $this->getData(self::CUSTOMER_ID);
     }
 
     /**
@@ -708,5 +708,52 @@ class Wishlist extends AbstractModel implements IdentityInterface, WishlistInter
             $identities = [self::CACHE_TAG . '_' . $this->getId()];
         }
         return $identities;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getShared()
+    {
+        return $this->getData(self::SHARED);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setShared(int $amount)
+    {
+        return $this->setData(self::SHARED, $amount);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSharingCode()
+    {
+        return $this->getData(self::SHARING_CODE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setSharingCode(string $code)
+    {
+        return $this->setData(self::SHARING_CODE, $code);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getUpdatedAt()
+    {
+        return $this->getData(self::UPDATED_AT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setUpdatedAt($datetime) {
+        return $this->setData(self::UPDATED_AT, $datetime);
     }
 }
