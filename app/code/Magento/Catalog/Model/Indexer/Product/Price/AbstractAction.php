@@ -110,6 +110,7 @@ abstract class AbstractAction
      * @param DimensionProviderFactory|null $dimensionCollectionFactory
      * @param TableMaintainer|null $tableMaintainer
      * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $configReader
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -185,7 +186,6 @@ abstract class AbstractAction
 
             $query = $insertSelect->insertFromSelect($this->tableMaintainer->getMainTable($dimensions));
             $this->_connection->query($query);
-
         }
         return $this;
     }
@@ -426,7 +426,7 @@ abstract class AbstractAction
      * For indexers, which support dimensions all composite products read data directly from main price indexer table
      * or replica table for partial or full reindex correspondingly.
      * @see \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice::getIndexTableForCompositeProducts
-    */
+     */
     protected function _copyRelationIndexData($parentIds, $excludeIds = null)
     {
         $linkField = $this->getProductIdFieldName();

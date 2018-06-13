@@ -33,7 +33,8 @@ class CustomerGroupDataProvider implements DimensionProviderInterface
      */
     private $dimensionFactory;
 
-    public function __construct(CustomerGroupCollectionFactory $collectionFactory, DimensionFactory $dimensionFactory) {
+    public function __construct(CustomerGroupCollectionFactory $collectionFactory, DimensionFactory $dimensionFactory)
+    {
         $this->dimensionFactory = $dimensionFactory;
         $this->collectionFactory = $collectionFactory;
     }

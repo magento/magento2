@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\ColumnValueExpression;
 
-
 /**
  * Class for adding catalog rule prices to price index table.
  */
@@ -88,6 +87,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
      * @param array $entityIds
      * @return void
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = [])
     {
@@ -217,7 +217,11 @@ class CustomOptionPriceModifier implements PriceModifierInterface
                 []
             );
 
-            $optPriceType = $connection->getCheckSql('otps.option_type_price_id > 0', 'otps.price_type', 'otpd.price_type');
+            $optPriceType = $connection->getCheckSql(
+                'otps.option_type_price_id > 0',
+                'otps.price_type',
+                'otpd.price_type'
+            );
             $optPriceValue = $connection->getCheckSql('otps.option_type_price_id > 0', 'otps.price', 'otpd.price');
         }
 

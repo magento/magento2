@@ -13,8 +13,8 @@ namespace Magento\Framework\Indexer;
 interface DimensionProviderInterface extends \IteratorAggregate, \Countable
 {
     /**
-    * Get Dimension Iterator. Returns yielded value of \Magento\Framework\Indexer\Dimension
-    * @return \Traversable|\Magento\Framework\Indexer\Dimension[]
-    */
+     * Get Dimension Iterator. Returns yielded value of \Magento\Framework\Indexer\Dimension
+     * @return \Traversable|\Magento\Framework\Indexer\Dimension[]
+     */
     public function getIterator(): \Traversable;
 }

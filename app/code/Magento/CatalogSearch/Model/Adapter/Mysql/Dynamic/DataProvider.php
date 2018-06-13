@@ -99,7 +99,9 @@ class DataProvider implements DataProviderInterface
         $this->dataProvider = $dataProvider;
         $this->intervalFactory = $intervalFactory;
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManager::class);
-        $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(IndexScopeResolverInterface::class);
+        $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(
+            IndexScopeResolverInterface::class
+        );
         $this->dimensionFactory = $dimensionFactory ?: ObjectManager::getInstance()->get(DimensionFactory::class);
     }
 

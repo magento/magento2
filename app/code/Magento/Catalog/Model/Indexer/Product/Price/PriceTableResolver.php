@@ -51,7 +51,7 @@ class PriceTableResolver implements IndexScopeResolverInterface
     private function getMixDimensions($dimensions): array
     {
         $existDimensions = [];
-        foreach ($dimensions as $key => $dimension) {
+        foreach ($dimensions as $dimension) {
             $existDimensions[$dimension->getName()] = $dimension;
         }
 

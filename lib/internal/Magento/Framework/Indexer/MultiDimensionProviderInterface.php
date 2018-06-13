@@ -14,8 +14,8 @@ namespace Magento\Framework\Indexer;
 interface MultiDimensionProviderInterface extends \IteratorAggregate
 {
     /**
-    * Returns [\Magento\Framework\Indexer\Dimension, ...] for each iteration
-    * @return \Traversable|[\Magento\Framework\Indexer\Dimension,]
-    */
+     * Returns [\Magento\Framework\Indexer\Dimension, ...] for each iteration
+     * @return \Traversable|[\Magento\Framework\Indexer\Dimension,]
+     */
     public function getIterator(): \Traversable;
 }

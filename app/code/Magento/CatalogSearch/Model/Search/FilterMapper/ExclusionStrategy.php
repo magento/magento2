@@ -20,6 +20,8 @@ use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
 /**
  * Strategy which processes exclusions from general rules
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExclusionStrategy implements FilterStrategyInterface
 {
@@ -87,7 +89,9 @@ class ExclusionStrategy implements FilterStrategyInterface
         $this->aliasResolver = $aliasResolver;
         $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
         $this->dimensionFactory = $dimensionFactory ?: ObjectManager::getInstance()->get(DimensionFactory::class);
-        $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(IndexScopeResolverInterface::class);
+        $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(
+            IndexScopeResolverInterface::class
+        );
         $this->httpContext = $httpContext ?: ObjectManager::getInstance()->get(Context::class);
     }
 

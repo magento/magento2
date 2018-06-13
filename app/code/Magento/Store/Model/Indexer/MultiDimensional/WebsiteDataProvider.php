@@ -38,7 +38,8 @@ class WebsiteDataProvider implements DimensionProviderInterface
      * @param WebsiteCollectionFactory $collectionFactory
      * @param DimensionFactory $dimensionFactory
      */
-    public function __construct(WebsiteCollectionFactory $collectionFactory, DimensionFactory $dimensionFactory){
+    public function __construct(WebsiteCollectionFactory $collectionFactory, DimensionFactory $dimensionFactory)
+    {
         $this->dimensionFactory = $dimensionFactory;
         $this->collectionFactory = $collectionFactory;
     }

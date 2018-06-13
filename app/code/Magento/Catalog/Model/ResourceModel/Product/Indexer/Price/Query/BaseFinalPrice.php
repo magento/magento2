@@ -17,6 +17,7 @@ use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
 /**
  * Prepare base select for Product Price index limited by specified dimensions: website and customer group
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BaseFinalPrice
 {
@@ -126,27 +127,36 @@ class BaseFinalPrice
         )->joinLeft(
             // we need this only for BCC in case someone expects table `tp` to be present in query
             ['tp' => $this->getTable('catalog_product_index_tier_price')],
-            'tp.entity_id = e.entity_id AND tp.customer_group_id = cg.customer_group_id AND tp.website_id = pw.website_id',
+            'tp.entity_id = e.entity_id AND' .
+            ' tp.customer_group_id = cg.customer_group_id AND tp.website_id = pw.website_id',
             []
         )->joinLeft(
             // calculate tier price specified as Website = `All Websites` and Customer Group = `Specific Customer Group`
             ['tier_price_1' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_1.' . $linkField . ' = e.' . $linkField . ' AND tier_price_1.all_groups = 0 AND tier_price_1.customer_group_id = cg.customer_group_id AND tier_price_1.qty = 1 AND tier_price_1.website_id = 0',
+            'tier_price_1.' . $linkField . ' = e.' . $linkField . ' AND tier_price_1.all_groups = 0' .
+            ' AND tier_price_1.customer_group_id = cg.customer_group_id AND tier_price_1.qty = 1' .
+            ' AND tier_price_1.website_id = 0',
             []
         )->joinLeft(
-            // calculate tier price specified as Website = `Specific Website` and Customer Group = `Specific Customer Group`
+            // calculate tier price specified as Website = `Specific Website`
+            //and Customer Group = `Specific Customer Group`
             ['tier_price_2' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_2.' . $linkField . ' = e.' . $linkField . ' AND tier_price_2.all_groups = 0 AND tier_price_2.customer_group_id = cg.customer_group_id AND tier_price_2.qty = 1 AND tier_price_2.website_id = pw.website_id',
+            'tier_price_2.' . $linkField . ' = e.' . $linkField . ' AND tier_price_2.all_groups = 0 ' .
+            'AND tier_price_2.customer_group_id = cg.customer_group_id AND tier_price_2.qty = 1' .
+            ' AND tier_price_2.website_id = pw.website_id',
             []
         )->joinLeft(
             // calculate tier price specified as Website = `All Websites` and Customer Group = `ALL GROUPS`
             ['tier_price_3' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_3.' . $linkField . ' = e.' . $linkField . ' AND tier_price_3.all_groups = 1 AND tier_price_3.customer_group_id = 0 AND tier_price_3.qty = 1 AND tier_price_3.website_id = 0',
+            'tier_price_3.' . $linkField . ' = e.' . $linkField . ' AND tier_price_3.all_groups = 1 ' .
+            'AND tier_price_3.customer_group_id = 0 AND tier_price_3.qty = 1 AND tier_price_3.website_id = 0',
             []
         )->joinLeft(
             // calculate tier price specified as Website = `Specific Website` and Customer Group = `ALL GROUPS`
             ['tier_price_4' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_4.' . $linkField . ' = e.' . $linkField . ' AND tier_price_4.all_groups = 1 AND tier_price_4.customer_group_id = 0 AND tier_price_4.qty = 1 AND tier_price_4.website_id = pw.website_id',
+            'tier_price_4.' . $linkField . ' = e.' . $linkField . ' AND tier_price_4.all_groups = 1' .
+            ' AND tier_price_4.customer_group_id = 0 AND tier_price_4.qty = 1' .
+            ' AND tier_price_4.website_id = pw.website_id',
             []
         );
 
@@ -160,7 +170,7 @@ class BaseFinalPrice
         }
 
         if ($this->moduleManager->isEnabled('Magento_Tax')) {
-            $taxClassId = $this->joinAttributeProcessor->process($select,'tax_class_id');
+            $taxClassId = $this->joinAttributeProcessor->process($select, 'tax_class_id');
         } else {
             $taxClassId = new \Zend_Db_Expr(0);
         }
@@ -194,8 +204,10 @@ class BaseFinalPrice
 
         $select->columns(
             [
-                'price' => $connection->getIfNullSql($price, 0), //orig_price in catalog_product_index_price_final_tmp
-                'final_price' => $connection->getIfNullSql($finalPrice, 0), //price in catalog_product_index_price_final_tmp
+                //orig_price in catalog_product_index_price_final_tmp
+                'price' => $connection->getIfNullSql($price, 0),
+                //price in catalog_product_index_price_final_tmp
+                'final_price' => $connection->getIfNullSql($finalPrice, 0),
                 'min_price' => $connection->getIfNullSql($finalPrice, 0),
                 'max_price' => $connection->getIfNullSql($finalPrice, 0),
                 'tier_price' => $tierPrice,
@@ -268,7 +280,11 @@ class BaseFinalPrice
     {
         return $this->getConnection()->getCheckSql(
             sprintf('%s.value = 0', $tableAlias),
-            sprintf('ROUND(%s * (1 - ROUND(%s.percentage_value * cwd.rate, 4) / 100), 4)', $priceExpression, $tableAlias),
+            sprintf(
+                'ROUND(%s * (1 - ROUND(%s.percentage_value * cwd.rate, 4) / 100), 4)',
+                $priceExpression,
+                $tableAlias
+            ),
             sprintf('ROUND(%s.value * cwd.rate, 4)', $tableAlias)
         );
     }

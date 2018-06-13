@@ -7,6 +7,9 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**

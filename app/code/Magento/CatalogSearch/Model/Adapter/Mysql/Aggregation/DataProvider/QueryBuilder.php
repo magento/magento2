@@ -22,7 +22,9 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
 /**
- *  Attribute query builder
+ * Attribute query builder
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QueryBuilder
 {

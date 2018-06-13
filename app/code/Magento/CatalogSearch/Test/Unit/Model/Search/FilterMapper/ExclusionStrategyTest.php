@@ -15,6 +15,9 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Store\Api\Data\WebsiteInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ExclusionStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**

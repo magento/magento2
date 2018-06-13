@@ -17,7 +17,9 @@ use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
 /**
- *  Test for Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\QueryBuilder.
+ * Test for Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\QueryBuilder.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QueryBuilderTest extends \PHPUnit\Framework\TestCase
 {
