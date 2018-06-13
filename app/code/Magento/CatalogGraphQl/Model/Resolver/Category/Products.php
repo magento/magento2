@@ -63,7 +63,7 @@ class Products implements ResolverInterface
         array $args = null
     ): Value {
         $args['filter'] = [
-            'category_ids' => [
+            'category_id' => [
                 'eq' => $value['id']
             ]
         ];

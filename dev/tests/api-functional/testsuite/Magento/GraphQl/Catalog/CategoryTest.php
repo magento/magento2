@@ -254,7 +254,6 @@ QUERY;
           default_group_id
           is_default
         }
-        
       }
     }
   }
@@ -279,6 +278,41 @@ QUERY;
         $this->assertBaseFields($firstProduct, $response['category']['products']['items'][0]);
         $this->assertAttributes($response['category']['products']['items'][0]);
         $this->assertWebsites($firstProduct, $response['category']['products']['items'][0]['websites']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testAnchorCategory()
+    {
+        $categoryId = 3;
+        $query = <<<QUERY
+{
+  category(id: {$categoryId}) {
+    products(sort: {sku: ASC}) {
+      total_count
+      items {
+        sku
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $expectedResponse = [
+            'category' => [
+                'products' => [
+                    'total_count' => 3,
+                    'items' => [
+                        ['sku' => '12345'],
+                        ['sku' => 'simple'],
+                        ['sku' => 'simple-4']
+                    ]
+                ]
+            ]
+        ];
+        $this->assertEquals($expectedResponse, $response);
     }
 
     /**

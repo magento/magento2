@@ -441,7 +441,7 @@ input ProductFilterInput @doc(description: "ProductFilterInput defines the filte
     min_price: FilterTypeInput @doc(description:"The numeric minimal price of the product. Do not include the currency code.")
     max_price: FilterTypeInput @doc(description:"The numeric maximal price of the product. Do not include the currency code.")
     special_price: FilterTypeInput @doc(description:"The numeric special price of the product. Do not include the currency code.")
-    category_ids: FilterTypeInput @doc(description: "An array of category IDs the product belongs to")
+    category_id: FilterTypeInput @doc(description: "Category ID the product belongs to")
     options_container: FilterTypeInput @doc(description: "If the product has multiple options, determines where they appear on the product page")
     required_options: FilterTypeInput @doc(description: "Indicates whether the product has required options")
     has_options: FilterTypeInput @doc(description: "Indicates whether additional attributes have been created for the product")
