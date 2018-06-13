@@ -5,7 +5,6 @@
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-catalog": "*",
-        "magento/module-inventory-api": "*",
         "magento/module-inventory-sales": "*",
         "magento/module-inventory-sales-api": "*",
         "magento/module-inventory-indexer": "*",

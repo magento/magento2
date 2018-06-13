@@ -30,4 +30,8 @@
         <data key="website">Main Website</data>
         <requiredEntity type="stock_extension_attribute">MsiStockWebsite1</requiredEntity>
     </entity>
+    <!-- Please don't use this entity in your tests otherwise AdminPaginationWorkedInManageStocksGridTest will fail -->
+    <entity name="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" type="stock">
+        <data key="name" unique="suffix">Special Stock </data>
+    </entity>
 </entities>

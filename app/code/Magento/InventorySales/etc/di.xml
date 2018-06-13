@@ -116,7 +116,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin">
+    <type name="Magento\InventorySales\Model\CheckItemsQuantity">
         <arguments>
             <argument name="isProductSalableForRequestedQty" xsi:type="object">IsProductSalableForRequestedQtyConditionChainOnPlaceOrder</argument>
         </arguments>
@@ -133,11 +133,22 @@
         <plugin name="inventory_reservations_placement" type="Magento\InventorySales\Plugin\Sales\OrderManagement\AppendReservationsAfterOrderPlacementPlugin"/>
     </type>
     <!-- Return Processor -->
-    <preference for="Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefundInterface" type="Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefund" />
-    <preference for="Magento\InventorySales\Model\ReturnProcessor\Request\BackItemQtyRequestInterface" type="Magento\InventorySales\Model\ReturnProcessor\Request\BackItemQtyRequest" />
-    <preference for="Magento\InventorySales\Model\ReturnProcessor\ProcessRefundItemsInterface" type="Magento\InventorySales\Model\ReturnProcessor\ProcessRefundItems" />
+    <preference for="Magento\InventorySalesApi\Model\ReturnProcessor\Request\ItemsToRefundInterface" type="Magento\InventorySales\Model\ReturnProcessor\Request\ItemsToRefund" />
+    <preference for="Magento\InventorySalesApi\Model\ReturnProcessor\ProcessRefundItemsInterface" type="Magento\InventorySales\Model\ReturnProcessor\ProcessRefundItems" />
     <type name="Magento\SalesInventory\Model\Order\ReturnProcessor">
         <plugin name="process_return_product_qty_on_credit_memo" type="Magento\InventorySales\Plugin\SalesInventory\ProcessReturnQtyOnCreditMemoPlugin" />
     </type>
+    <type name="Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsChain">
+        <arguments>
+            <argument name="sourceDeductedItemsSelector" xsi:type="array">
+                <item name="source_deducted__virtual_invoice_items" xsi:type="object">Magento\InventorySales\Model\ReturnProcessor\GetInvoicedItemsPerSourceByPriority</item>
+            </argument>
+        </arguments>
+    </type>
     <preference for="Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface" type="Magento\InventorySales\Model\StockByWebsiteIdResolver"/>
+    <type name="Magento\Store\Model\ResourceModel\Website">
+        <plugin name="assign_website_to_default_stock" type="Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website\AssignWebsiteToDefaultStockPlugin"/>
+        <plugin name="delete_website_to_stock_link" type="Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website\DeleteWebsiteToStockLinkPlugin"/>
+        <plugin name="update_sales_channel_website_code" type="Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website\UpdateSalesChannelWebsiteCodePlugin"/>
+    </type>
 </config>

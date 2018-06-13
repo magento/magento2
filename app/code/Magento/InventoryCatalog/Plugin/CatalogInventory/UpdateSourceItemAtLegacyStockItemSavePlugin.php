@@ -11,6 +11,7 @@ use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
+use Magento\InventoryCatalog\Model\GetDefaultSourceItemBySku;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;
@@ -48,24 +49,32 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     private $getSkusByProductIds;
 
     /**
+     * @var GetDefaultSourceItemBySku
+     */
+    private $getDefaultSourceItemBySku;
+
+    /**
      * @param UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem
      * @param ResourceConnection $resourceConnection
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param GetProductTypesBySkusInterface $getProductTypeBySku
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
+     * @param GetDefaultSourceItemBySku $getDefaultSourceItemBySku
      */
     public function __construct(
         UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem,
         ResourceConnection $resourceConnection,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypeBySku,
-        GetSkusByProductIdsInterface $getSkusByProductIds
+        GetSkusByProductIdsInterface $getSkusByProductIds,
+        GetDefaultSourceItemBySku $getDefaultSourceItemBySku
     ) {
         $this->updateSourceItemBasedOnLegacyStockItem = $updateSourceItemBasedOnLegacyStockItem;
         $this->resourceConnection = $resourceConnection;
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->getProductTypeBySku = $getProductTypeBySku;
         $this->getSkusByProductIds = $getSkusByProductIds;
+        $this->getDefaultSourceItemBySku = $getDefaultSourceItemBySku;
     }
 
     /**
@@ -87,7 +96,9 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
 
             $typeId = $this->getTypeId($legacyStockItem);
             if ($this->isSourceItemManagementAllowedForProductType->execute($typeId)) {
-                $this->updateSourceItemBasedOnLegacyStockItem->execute($legacyStockItem);
+                if ($this->shouldAlignDefaultSourceWithLegacy($legacyStockItem)) {
+                    $this->updateSourceItemBasedOnLegacyStockItem->execute($legacyStockItem);
+                }
             }
 
             $connection->commit();
@@ -100,8 +111,27 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     }
 
     /**
+     * Return true if legacy stock item should update default source (if existing)
+     * @param Item $legacyStockItem
+     * @return bool
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    private function shouldAlignDefaultSourceWithLegacy(Item $legacyStockItem): bool
+    {
+        $productSku = $this->getSkusByProductIds
+            ->execute([$legacyStockItem->getProductId()])[$legacyStockItem->getProductId()];
+
+        $result = $legacyStockItem->getIsInStock() ||
+            ((float) $legacyStockItem->getQty() !== (float) 0) ||
+            ($this->getDefaultSourceItemBySku->execute($productSku) !== null);
+
+        return $result;
+    }
+
+    /**
      * @param Item $legacyStockItem
      * @return string
+     * @throws \Magento\Framework\Exception\InputException
      */
     private function getTypeId(Item $legacyStockItem): string
     {
