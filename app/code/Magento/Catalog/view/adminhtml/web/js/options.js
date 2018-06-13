@@ -183,7 +183,16 @@ define([
         editForm.on('submit', function () {
             optionPanel.find('input')
                 .each(function () {
-                    optionsValues.push(this.name + '=' + jQuery(this).val());
+                    if (this.disabled) {
+                        return;
+                    }
+                    if (this.type == 'checkbox' || this.type == 'radio') {
+                        if (this.checked) {
+                            optionsValues.push(this.name + '=' + jQuery(this).val());
+                        }
+                    } else {
+                        optionsValues.push(this.name + '=' + jQuery(this).val());
+                    }
                 });
             jQuery('<input>')
                 .attr({

@@ -26,7 +26,9 @@ class Save
         $data = $request->getPostValue();
         //Data is serialized to overcome issues caused by max_input_vars value if it's modification is unavailable.
         //See subject controller code and comments for more info.
-        if (isset($data['serialized_swatch_values'])) {
+        if (isset($data['serialized_swatch_values'])
+            && in_array($data['frontend_input'], ['swatch_visual', 'swatch_text'])
+        ) {
             $data['serialized_options'] = $data['serialized_swatch_values'];
         }
         unset($data['serialized_swatch_values']);
