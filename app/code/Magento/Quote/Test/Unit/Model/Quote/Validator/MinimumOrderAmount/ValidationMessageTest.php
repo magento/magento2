@@ -7,7 +7,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Validator\MinimumOrderAmount;
 
 use Magento\Framework\Phrase;
 
-class ValidationMessageTest extends \PHPUnit\Framework\TestCase
+class ValidationMessageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
