@@ -104,5 +104,10 @@
         <waitForPageLoad stepKey="waitForCartPageLoad1"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.nthBundleOptionName('1')}}" stepKey="grabTotalAfter"/>
         <assertNotEquals expected="{$grabTotalBefore}" expectedType="string" actual="{$grabTotalAfter}" actualType="string"  stepKey="assertNotEquals"/>
+
+        <!-- Delete the bundled product -->
+        <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
     </test>
 </tests>
