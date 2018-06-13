@@ -80,6 +80,9 @@ class StockStateProvider implements StockStateProviderInterface
         ) {
             return false;
         }
+        if ($stockItem->getQty() > 0 && !$stockItem->getIsInStock()) {
+            return false;
+        }
         return true;
     }
 
