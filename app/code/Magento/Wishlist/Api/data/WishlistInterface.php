@@ -34,15 +34,17 @@ interface WishlistInterface
     public function getName();
 
     /**
-     * Get if wishlist is shared
+     * Get amount of times wishlist has been shared
      *
      * @return int
      */
     public function getShared();
 
     /**
+     * Set amount of times wishlist has been shared
+     *
      * @param int $amount
-     * @return mixed
+     * @return $this
      */
     public function setShared(int $amount);
 
@@ -57,7 +59,7 @@ interface WishlistInterface
      * Set wishlist sharing code
      *
      * @param string $code
-     * @return $thisc
+     * @return $this
      */
     public function setSharingCode(string $code);
 
@@ -70,11 +72,14 @@ interface WishlistInterface
 
     /**
      * Get wishlist last updated time
+     *
      * @return string|null
      */
     public function getUpdatedAt();
 
     /**
+     * Set wishlist last updated time
+     *
      * @param string $datetime
      * @return $this
      */
