@@ -121,10 +121,11 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
         $productSku = $this->getSkusByProductIds
             ->execute([$legacyStockItem->getProductId()])[$legacyStockItem->getProductId()];
 
-        return
-            $legacyStockItem->getIsInStock() ||
+        $result = $legacyStockItem->getIsInStock() ||
             ((float) $legacyStockItem->getQty() !== (float) 0) ||
             ($this->getDefaultSourceItemBySku->execute($productSku) !== null);
+
+        return $result;
     }
 
     /**
