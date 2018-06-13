@@ -33,20 +33,26 @@ class SelectBuilder
     private $getIsStockItemSalableCondition;
 
     /**
+     * @var string
+     */
+    private $productTableName;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param GetIsStockItemSalableConditionInterface $getIsStockItemSalableCondition
+     * @param string $productTableName
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        GetIsStockItemSalableConditionInterface $getIsStockItemSalableCondition
+        GetIsStockItemSalableConditionInterface $getIsStockItemSalableCondition,
+        string $productTableName
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->getIsStockItemSalableCondition = $getIsStockItemSalableCondition;
+        $this->productTableName = $productTableName;
     }
 
     /**
-     * Prepare select.
-     *
      * @param int $stockId
      * @return Select
      */
@@ -64,12 +70,12 @@ class SelectBuilder
 
         $select = $connection->select();
         $select->joinLeft(
-            ['product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
-            'product_entity.sku = source_item.sku',
+            ['product' => $this->resourceConnection->getTableName($this->productTableName)],
+            'product.sku = source_item.' . SourceItemInterface::SKU,
             []
         )->joinLeft(
             ['legacy_stock_item' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
-            'product_entity.entity_id = legacy_stock_item.product_id',
+            'product.entity_id = legacy_stock_item.product_id',
             []
         );
 

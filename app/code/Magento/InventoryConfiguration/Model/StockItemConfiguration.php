@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 
 /**
@@ -21,12 +22,19 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     private $stockItem;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param StockItemInterface $stockItem
      */
     public function __construct(
-        StockItemInterface $stockItem
+        StockItemInterface $stockItem,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->stockItem = $stockItem;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -351,7 +359,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function getStockStatusChangedAuto(): bool
     {
-        return (bool) $this->stockItem->getStockStatusChangedAuto();
+        return (bool)$this->stockItem->getStockStatusChangedAuto();
     }
 
     /**
@@ -360,5 +368,16 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     public function setStockStatusChangedAuto(int $stockStatusChangedAuto): void
     {
         $this->stockItem->setStockStatusChangedAuto($stockStatusChangedAuto);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getStockThresholdQty(): float
+    {
+        return (float)$this->scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_STOCK_THRESHOLD_QTY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

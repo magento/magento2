@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
-use Magento\InventoryConfigurableProduct\Model\GetQuantityInformationPerSource;
+use Magento\InventoryConfigurableProductAdminUi\Model\GetQuantityInformationPerSource;
 use Magento\Ui\Component\Form;
 
 /**
