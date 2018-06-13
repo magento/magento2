@@ -5,8 +5,9 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway;
 
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface;
-use Magento\Signifyd\Model\SignifydGateway\ApiClient;
 
 /**
  * Signifyd Gateway.
@@ -54,17 +55,33 @@ class Gateway
     private $apiClient;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var CaseRepositoryInterface
+     */
+    private $caseRepository;
+
+    /**
      * Gateway constructor.
      *
      * @param CreateCaseBuilderInterface $createCaseBuilder
      * @param ApiClient $apiClient
+     * @param OrderRepositoryInterface $orderRepository
+     * @param CaseRepositoryInterface $caseRepository
      */
     public function __construct(
         CreateCaseBuilderInterface $createCaseBuilder,
-        ApiClient $apiClient
+        ApiClient $apiClient,
+        OrderRepositoryInterface $orderRepository,
+        CaseRepositoryInterface $caseRepository
     ) {
         $this->createCaseBuilder = $createCaseBuilder;
         $this->apiClient = $apiClient;
+        $this->orderRepository = $orderRepository;
+        $this->caseRepository = $caseRepository;
     }
 
     /**
@@ -78,11 +95,13 @@ class Gateway
     public function createCase($orderId)
     {
         $caseParams = $this->createCaseBuilder->build($orderId);
+        $storeId = $this->getStoreIdFromOrder($orderId);
 
         $caseCreationResult = $this->apiClient->makeApiCall(
             '/cases',
             'POST',
-            $caseParams
+            $caseParams,
+            $storeId
         );
 
         if (!isset($caseCreationResult['investigationId'])) {
@@ -102,12 +121,14 @@ class Gateway
      */
     public function submitCaseForGuarantee($signifydCaseId)
     {
+        $storeId = $this->getStoreIdFromCase($signifydCaseId);
         $guaranteeCreationResult = $this->apiClient->makeApiCall(
             '/guarantees',
             'POST',
             [
                 'caseId' => $signifydCaseId,
-            ]
+            ],
+            $storeId
         );
 
         $disposition = $this->processDispositionResult($guaranteeCreationResult);
@@ -124,12 +145,14 @@ class Gateway
      */
     public function cancelGuarantee($caseId)
     {
+        $storeId = $this->getStoreIdFromCase($caseId);
         $result = $this->apiClient->makeApiCall(
             '/cases/' . $caseId . '/guarantee',
             'PUT',
             [
                 'guaranteeDisposition' => self::GUARANTEE_CANCELED
-            ]
+            ],
+            $storeId
         );
 
         $disposition = $this->processDispositionResult($result);
@@ -171,5 +194,32 @@ class Gateway
         }
 
         return $disposition;
+    }
+
+    /**
+     * Returns store id by case.
+     *
+     * @param int $caseId
+     * @return int|null
+     */
+    private function getStoreIdFromCase(int $caseId)
+    {
+        $case = $this->caseRepository->getByCaseId($caseId);
+        $orderId = $case->getOrderId();
+
+        return $this->getStoreIdFromOrder($orderId);
+    }
+
+    /**
+     * Returns store id from order.
+     *
+     * @param int $orderId
+     * @return int|null
+     */
+    private function getStoreIdFromOrder(int $orderId)
+    {
+        $order = $this->orderRepository->get($orderId);
+
+        return $order->getStoreId();
     }
 }
