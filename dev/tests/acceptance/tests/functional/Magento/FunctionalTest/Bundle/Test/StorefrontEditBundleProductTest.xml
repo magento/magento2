@@ -62,7 +62,7 @@
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
 
-        <click stepKey="saveProductAttribute" selector="{{AdminProductFormActionSection.saveButton}}"/>
+        <click stepKey="saveProductBundle" selector="{{AdminProductFormActionSection.saveButton}}"/>
         <see stepKey="assertSuccess" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."/>
 
         <!-- Go to the storefront bundled product page -->
@@ -71,7 +71,7 @@
         <click stepKey="customizeAndAddToCart" selector="{{StorefrontBundledSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitCustomizableOptionsPopUp"/>
 
-        <!-- add two products to the shopping cart, each with one different page -->
+        <!-- add two products to the shopping cart, each with one different option -->
         <click stepKey="selectFirstBundleOption" selector="{{StorefrontBundledSection.nthBundledOption('1','1')}}"/>
         <waitForPageLoad stepKey="waitForPriceUpdate"/>
         <see stepKey="seeSinglePrice" selector="{{StorefrontBundledSection.configuredPrice}}" userInput="1,230.00"/>
