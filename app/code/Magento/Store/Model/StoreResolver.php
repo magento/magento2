@@ -66,41 +66,27 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Cache\FrontendInterface|null $cache
-     * @param \Magento\Store\Model\StoreResolver\ReaderList|null $readerList
-     * @param string|null $runMode
-     * @param string|null $scopeCode
      * @param \Magento\Store\Model\StoresData|null $storesData
      * @param \Magento\Store\App\Request\PathInfoProcessor|null $pathInfoProcessor
+     * @param string|null $runMode
+     * @param string|null $scopeCode
      */
     public function __construct(
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
         \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager,
         \Magento\Framework\App\RequestInterface $request,
-        $cache = null,
-        $readerList = null,
+        \Magento\Store\App\Request\PathInfoProcessor $pathInfoProcessor,
+        \Magento\Store\Model\StoresData $storesData,
         $runMode = ScopeInterface::SCOPE_STORE,
-        $scopeCode = null,
-        \Magento\Store\Model\StoresData $storesData = null,
-        \Magento\Store\App\Request\PathInfoProcessor $pathInfoProcessor = null
+        $scopeCode = null
     ) {
         $this->storeRepository = $storeRepository;
         $this->storeCookieManager = $storeCookieManager;
         $this->request = $request;
-        $this->cache = $cache ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            'Magento\Framework\App\Cache\Type\Config'
-        );
-        $this->readerList = $readerList ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            'Magento\Store\Model\StoreResolver\ReaderList'
-        );
+        $this->pathInfoProcessor = $pathInfoProcessor;
+        $this->storesData = $storesData;
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
         $this->scopeCode = $scopeCode;
-        $this->storesData = $storesData ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Store\Model\StoresData::class
-        );
-        $this->pathInfoProcessor = $pathInfoProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Store\App\Request\PathInfoProcessor::class
-        );
     }
 
     /**

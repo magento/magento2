@@ -31,7 +31,8 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = Bootstrap::getObjectManager()->create(\Magento\Framework\App\RequestInterface::class);
-        $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
+        $info = $this->pathProcessor->process($request, $pathInfo);
+        $this->assertEquals($pathInfo, $info);
     }
 
     public function notValidStoreCodeDataProvider()

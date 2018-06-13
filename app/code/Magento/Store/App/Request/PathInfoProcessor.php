@@ -94,17 +94,21 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
         \Magento\Framework\App\RequestInterface $request,
         string $pathInfo
     ) : ?string {
-        if ((bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)) {
             $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
-            $storeCode = $pathParts[0];
+            $storeCode = current($pathParts);
 
-            try {
-                /** @var \Magento\Store\Api\Data\StoreInterface $store */
-                $this->storeRepository->getActiveStoreByCode($storeCode);
-            } catch (NoSuchEntityException $e) {
-                return null;
-            }
+        try {
+            /** @var \Magento\Store\Api\Data\StoreInterface $store */
+            $this->storeRepository->getActiveStoreByCode($storeCode);
+        } catch (NoSuchEntityException $e) {
+            return null;
+        }
 
+        if ((bool)$this->config->getValue(
+            \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeCode
+        )) {
             if ($request instanceof Http
                 && !$request->isDirectAccessFrontendName($storeCode)
                 && $storeCode != Store::ADMIN_CODE
