@@ -11,8 +11,8 @@
         <arguments>
             <argument name="Image"/>
         </arguments>
-        <grabMultiple selector="{{MediaGallerySection.imageOrImageCopy(Image.value, Image.fileName, Image.extension)}}" stepKey="initialImages"/>
-        <click selector="{{MediaGallerySection.imageOrImageCopy(Image.value, Image.fileName, Image.extension)}}" stepKey="selectImage"/>
+        <grabMultiple selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="initialImages"/>
+        <click selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="selectImage"/>
         <waitForElementVisible selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="waitForDeleteBtn"/>
         <click selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
@@ -20,7 +20,7 @@
         <click selector="{{MediaGallerySection.confirmDelete}}" stepKey="clickConfirmBtn"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
-        <grabMultiple selector="{{MediaGallerySection.imageOrImageCopy(Image.value, Image.fileName, Image.extension)}}" stepKey="newImages"/>
+        <grabMultiple selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="newImages"/>
         <assertLessThan stepKey="assertLessImages">
             <expectedResult type="variable">initialImages</expectedResult>
             <actualResult type="variable">newImages</actualResult>

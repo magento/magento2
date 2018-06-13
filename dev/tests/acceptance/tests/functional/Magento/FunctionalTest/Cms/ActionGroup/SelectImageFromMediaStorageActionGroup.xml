@@ -42,7 +42,7 @@
         <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{Image.value}}" stepKey="uploadImage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
-        <waitForElementVisible  selector="{{MediaGallerySection.imageOrImageCopy(Image.value, Image.fileName, Image.extension)}}" stepKey="waitForUploadImage"/>
+        <waitForElementVisible  selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="waitForUploadImage"/>
     </actionGroup>
     <actionGroup name="deleteImage">
         <see selector="{{MediaGallerySection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn"/>
