@@ -336,11 +336,12 @@ define([
          * Set z-index and margin for modal and overlay.
          */
         _setActive: function () {
-            var zIndex = this.modal.zIndex();
+            var zIndex = this.modal.zIndex(),
+                baseIndex = zIndex + this._getVisibleCount();
 
+            this.overlay.zIndex(++baseIndex);
             this.prevOverlayIndex = this.overlay.zIndex();
-            this.modal.zIndex(zIndex + this._getVisibleCount());
-            this.overlay.zIndex(zIndex + (this._getVisibleCount() - 1));
+            this.modal.zIndex(this.overlay.zIndex() + 1);
 
             if (this._getVisibleSlideCount()) {
                 this.modal.css('marginLeft', this.options.modalLeftMargin * this._getVisibleSlideCount());
@@ -354,7 +355,14 @@ define([
             this.modal.removeAttr('style');
 
             if (this.overlay) {
-                this.overlay.zIndex(this.prevOverlayIndex);
+                // In cases when one modal is closed but there is another modal open (e.g. admin notifications)
+                // to avoid collisions between overlay and modal zIndexes
+                // overlay zIndex is set to be less than modal one
+                if (this._getVisibleCount() === 1) {
+                    this.overlay.zIndex(this.prevOverlayIndex - 1);
+                } else {
+                    this.overlay.zIndex(this.prevOverlayIndex);
+                }
             }
         },
 

@@ -10,7 +10,7 @@ use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-require __DIR__ . '/../../../Magento/Catalog/_files/multiple_products.php';
+require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
 require __DIR__ . '/store.php';
 
@@ -36,33 +36,28 @@ $payment->setMethod('paypal_express')
     ->setCcExpMonth('01')
     ->setCcExpYear('21');
 
-/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-
-$product1 = $productRepository->get('simple1');
 /** @var Item $orderItem */
 $orderItem1 = $objectManager->create(Item::class);
-$orderItem1->setProductId($product1->getId())
-    ->setSku($product1->getSku())
-    ->setName($product1->getName())
+$orderItem1->setProductId($product->getId())
+    ->setSku($product->getSku())
+    ->setName($product->getName())
     ->setQtyOrdered(1)
-    ->setBasePrice($product1->getPrice())
-    ->setPrice($product1->getPrice())
-    ->setRowTotal($product1->getPrice())
-    ->setProductType($product1->getTypeId());
+    ->setBasePrice($product->getPrice())
+    ->setPrice($product->getPrice())
+    ->setRowTotal($product->getPrice())
+    ->setProductType($product->getTypeId());
 
-$product2 = $productRepository->get('simple2');
 /** @var Item $orderItem */
 $orderItem2 = $objectManager->create(Item::class);
-$orderItem2->setProductId($product2->getId())
-    ->setSku($product2->getSku())
-    ->setName($product2->getName())
-    ->setPrice($product2->getPrice())
+$orderItem2->setProductId($product->getId())
+    ->setSku('simple2')
+    ->setName('Simple product')
+    ->setPrice(100)
     ->setQtyOrdered(2)
-    ->setBasePrice($product2->getPrice())
-    ->setPrice($product2->getPrice())
-    ->setRowTotal($product2->getPrice())
-    ->setProductType($product2->getTypeId());
+    ->setBasePrice($product->getPrice())
+    ->setPrice($product->getPrice())
+    ->setRowTotal($product->getPrice())
+    ->setProductType($product->getTypeId());
 
 $orderAmount = 100;
 $customerEmail = $billingAddress->getEmail();
