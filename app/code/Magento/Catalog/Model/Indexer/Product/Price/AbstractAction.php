@@ -110,6 +110,7 @@ abstract class AbstractAction
      * @param DimensionProviderFactory|null $dimensionCollectionFactory
      * @param TableMaintainer|null $tableMaintainer
      * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $configReader
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(

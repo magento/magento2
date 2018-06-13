@@ -97,6 +97,7 @@ class BaseFinalPrice
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_Db_Select_Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getQuery(array $dimensions, string $productType, array $entityIds = []): Select
     {
