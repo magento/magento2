@@ -186,7 +186,8 @@ define([
                     if (this.disabled) {
                         return;
                     }
-                    if (this.type == 'checkbox' || this.type == 'radio') {
+
+                    if (this.type === 'checkbox' || this.type === 'radio') {
                         if (this.checked) {
                             optionsValues.push(this.name + '=' + jQuery(this).val());
                         }
