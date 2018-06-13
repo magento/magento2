@@ -9,6 +9,11 @@ if (!isset($_GET['name'])) {
 }
 
 $name = urldecode($_GET['name']);
-$file = file_get_contents('../../../../var/log/' . $name);
+$logDir = realpath('../../../../var/log');
+$logFile = realpath($logDir .'/' .$name);
+if (!$logFile || !$logDir || mb_strpos($logFile, $logDir .'/') !== 0) {
+    throw new \InvalidArgumentException('Invalid log file name');
+}
+$file = file_get_contents($logFile);
 
 echo serialize($file);
