@@ -368,6 +368,9 @@ abstract class AbstractAction
         $changedIds = array_merge($changedIds, ...array_values($parentProductsTypes));
         $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
 
+        if ($changedIds) {
+            $this->deleteIndexData($changedIds);
+        }
         foreach ($productsTypes as $productType => $entityIds) {
             $indexer = $this->_getIndexer($productType);
             if ($indexer instanceof DimensionalIndexerInterface) {
@@ -390,10 +393,6 @@ abstract class AbstractAction
                 $indexer->reindexEntity($entityIds);
                 $this->_syncData($entityIds);
             }
-        }
-
-        if (!$productsTypes && $changedIds) {
-            $this->deleteIndexData($changedIds);
         }
 
         return $changedIds;
