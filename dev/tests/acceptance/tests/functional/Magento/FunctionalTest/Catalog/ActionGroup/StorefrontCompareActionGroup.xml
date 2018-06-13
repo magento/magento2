@@ -34,16 +34,16 @@
         <arguments>
             <argument name="productVar"/>
         </arguments>
-        <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName(productVar.name)}}" stepKey="waitForProduct"/>
+        <waitForElement selector="{{StorefrontComparisonSidebarSection.productTitleByName(productVar.name)}}" stepKey="waitForProduct"/>
     </actionGroup>
 
     <!-- Open and check comparison page -->
     <actionGroup name="StorefrontOpenAndCheckComparisionActionGroup">
-        <click selector="{{StorefrontComparisonSidebarSection.Compare}}" stepKey="clickCompare"/>
+        <click selector="{{StorefrontComparisonSidebarSection.compare}}" stepKey="clickCompare"/>
         <waitForLoadingMaskToDisappear stepKey="waitForComparePageloaded" />
         <seeInCurrentUrl url="{{StorefrontProductComparePage.url}}" stepKey="checkUrl"/>
         <seeInTitle userInput="Products Comparison List" stepKey="assertPageNameInTitle"/>
-        <see userInput="Compare Products" selector="{{StorefrontProductCompareMainSection.PageName}}" stepKey="assertPageName"/>
+        <see userInput="Compare Products" selector="{{StorefrontProductCompareMainSection.pageName}}" stepKey="assertPageName"/>
     </actionGroup>
 
     <!-- Check the simple product in comparison page -->
@@ -51,10 +51,10 @@
         <arguments>
             <argument name="productVar"/>
         </arguments>
-        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName(productVar.name)}}" stepKey="assertProductName"/>
-        <see userInput="${{productVar.price}}.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName(productVar.name)}}" stepKey="assertProductPrice1"/>
-        <see userInput="{{productVar.sku}}" selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName('SKU', productVar.name)}}" stepKey="assertProductPrice2"/>
-        <seeElement selector="{{StorefrontProductCompareMainSection.ProductAddToCartByName(productVar.name)}}" stepKey="assertProductAddToCart"/>
+        <seeElement selector="{{StorefrontProductCompareMainSection.productLinkByName(productVar.name)}}" stepKey="assertProductName"/>
+        <see userInput="${{productVar.price}}.00" selector="{{StorefrontProductCompareMainSection.productPriceByName(productVar.name)}}" stepKey="assertProductPrice1"/>
+        <see userInput="{{productVar.sku}}" selector="{{StorefrontProductCompareMainSection.productAttributeByCodeAndProductName('SKU', productVar.name)}}" stepKey="assertProductPrice2"/>
+        <seeElement selector="{{StorefrontProductCompareMainSection.productAddToCartByName(productVar.name)}}" stepKey="assertProductAddToCart"/>
     </actionGroup>
 
     <!-- Clear the compare list -->

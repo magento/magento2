@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontProductCompareMainSection">
-        <element name="ProductAddToCartByName" type="button" selector="//*[@id='product-comparison']//td[.//strong[@class='product-item-name']/a[contains(text(), '{{var1}}')]]//button[contains(@class, 'tocart')]" parameterized="true"/>
+        <element name="productAddToCartByName" type="button" selector="//*[@id='product-comparison']//td[.//strong[@class='product-item-name']/a[contains(text(), '{{var1}}')]]//button[contains(@class, 'tocart')]" parameterized="true"/>
     </section>
 </sections>

@@ -14,7 +14,7 @@
             <description value="Product attribute should not be visible on the product compare page if it is empty for all products that are being compared, not even displayed as N/A"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-92271"/>
-            <group value="productCompare1"/>
+            <group value="productCompare"/>
         </annotations>
         <before>
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createProductAttribute"/>
@@ -33,14 +33,16 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <waitForPageLoad stepKey="waitLoginAsAdmin"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
-        <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
+        <click selector="{{AdminProductAttributeSetGridSection.attributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
-        <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('testattribute')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
-        <click selector="{{AttributeSetSection.Save}}" stepKey="saveAttributeSet"/>
+        <dragAndDrop selector1="{{AdminProductAttributeUnassignedSection.productAttributeName('testattribute')}}" selector2="{{AdminProductAttributeGroupSection.folderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
+        <click selector="{{AdminProductAttributeSetSection.save}}" stepKey="saveAttributeSet"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
         <seeElement selector=".message-success" stepKey="assertSuccess"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
+        <waitForPageLoad stepKey="waitClearCache"/>
         <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="goProductPageOnStorefront1"/>
         <!-- View Simple Product 1 -->
         <comment userInput="View simple product 1" stepKey="commentViewSimpleProduct1" after="goProductPageOnStorefront1"/>
@@ -49,6 +51,7 @@
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="compareAddSimpleProduct1ToCompare">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
+        <waitForPageLoad stepKey="waitAddSimpleProduct1AddedToCompare"/>
         <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="goProductPageOnStorefront2"/>
         <!-- View Simple Product 2 -->
         <comment userInput="View simple product 2" stepKey="commentViewSimpleProduct2" after="goProductPageOnStorefront2"/>
@@ -57,6 +60,7 @@
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="compareAddSimpleProduct2ToCompare">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
+        <waitForPageLoad stepKey="waitAddSimpleProduct2AddedToCompare"/>
         <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="goProductPageOnStorefront3"/>
         <!-- Check products in comparison sidebar -->
         <!-- Check simple product 1 in comparison sidebar -->
@@ -75,7 +79,7 @@
         <actionGroup ref="StorefrontCheckCompareSimpleProductActionGroup" stepKey="compareAssertSimpleProduct1InComparison" after="compareOpenComparePage">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
-        <seeElement selector="//table[@id='product-comparison']/tbody/tr/th/*[contains(text(),'SKU')]" stepKey="seeCompareAttribute1"/>
-        <dontSeeElement selector="//table[@id='product-comparison']/tbody/tr/th/*[contains(text(),'testattribute')]" stepKey="seeCompareAttribute2"/>
+        <seeElement selector="{{StorefrontProductCompareMainSection.productAttributeByName('SKU')}}" stepKey="seeCompareAttributeSku"/>
+        <dontSeeElement selector="{{StorefrontProductCompareMainSection.productAttributeByName('testattribute')}}" stepKey="dontSeeCompareTestAttribute"/>
     </test>
 </tests>
