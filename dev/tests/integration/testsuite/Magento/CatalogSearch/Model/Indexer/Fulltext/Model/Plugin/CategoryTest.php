@@ -28,6 +28,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     private $categoryRepository;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->indexerProcessor = Bootstrap::getObjectManager()->create(Processor::class);
