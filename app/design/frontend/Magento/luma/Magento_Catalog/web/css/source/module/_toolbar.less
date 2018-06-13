@@ -235,10 +235,10 @@
         }
     }
 
-    .limiter {
-        float: right;
-        .products.wrapper ~ .toolbar & {
+    .toolbar {
+        .products.wrapper ~ & .limiter {
             display: block;
+            float: right;
         }
     }
 }
