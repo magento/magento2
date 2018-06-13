@@ -63,6 +63,10 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->adapter = $this->createAdapter();
+
+        $indexer = $this->objectManager->create(\Magento\Indexer\Model\Indexer::class);
+        $indexer->load('catalogsearch_fulltext');
+        $indexer->reindexAll();
     }
 
     /**
@@ -531,9 +535,15 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->create(Collection::class)
             ->setAttributeFilter($attribute->getId());
 
+        $visibility = [
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
+        ];
+
         $firstOption = $selectOptions->getFirstItem();
         $firstOptionId = $firstOption->getId();
         $this->requestBuilder->bind('test_configurable', $firstOptionId);
+        $this->requestBuilder->bind('visibility', $visibility);
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();
@@ -542,6 +552,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $secondOption = $selectOptions->getLastItem();
         $secondOptionId = $secondOption->getId();
         $this->requestBuilder->bind('test_configurable', $secondOptionId);
+        $this->requestBuilder->bind('visibility', $visibility);
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();
