@@ -7,6 +7,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
 
@@ -36,20 +37,30 @@ class General extends AbstractModifier
     private $localeCurrency;
 
     /**
+     * @var AttributeRepositoryInterface
+     */
+    private $attributeRepository;
+
+    /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
+     * @param AttributeRepositoryInterface|null $attributeRepository
      */
     public function __construct(
         LocatorInterface $locator,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        AttributeRepositoryInterface $attributeRepository = null
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
+        $this->attributeRepository = $attributeRepository
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeRepositoryInterface::class);
     }
 
     /**
      * {@inheritdoc}
      * @since 101.0.0
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function modifyData(array $data)
     {
@@ -58,7 +69,12 @@ class General extends AbstractModifier
         $modelId = $this->locator->getProduct()->getId();
 
         if (!isset($data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS])) {
-            $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] = '1';
+            $attributeStatus = $this->attributeRepository->get(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                ProductAttributeInterface::CODE_STATUS
+            );
+            $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] =
+                $attributeStatus->getDefaultValue() ?: 1;
         }
 
         return $data;
@@ -106,7 +122,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
+                    (float) $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
             }
         }
 
@@ -187,7 +203,7 @@ class General extends AbstractModifier
     protected function customizeWeightField(array $meta)
     {
         $weightPath = $this->arrayManager->findPath(ProductAttributeInterface::CODE_WEIGHT, $meta, null, 'children');
-
+        $disabled = $this->arrayManager->get($weightPath . '/arguments/data/config/disabled', $meta);
         if ($weightPath) {
             $meta = $this->arrayManager->merge(
                 $weightPath . static::META_CONFIG_PATH,
@@ -199,7 +215,7 @@ class General extends AbstractModifier
                     ],
                     'additionalClasses' => 'admin__field-small',
                     'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
-                    'imports' => [
+                    'imports' => $disabled ? [] : [
                         'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
                             . '.product_has_weight:value'
                     ]
@@ -239,6 +255,7 @@ class General extends AbstractModifier
                         ],
                     ],
                     'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
+                    'disabled' => $disabled,
                 ]
             );
         }
