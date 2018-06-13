@@ -89,6 +89,7 @@
         <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCartPageLoad"/>
         <waitForElementVisible stepKey="waitForInfoDropdown" selector="{{CheckoutCartSummarySection.total}}"/>
+        <waitForPageLoad stepKey="waitForCartPageLoad3"/>
         <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalBefore"/>
         <click stepKey="clickEdit" selector="{{CheckoutCartProductSection.nthEditButton('1')}}"/>
         <waitForPageLoad stepKey="waitForStorefront2"/>
@@ -110,8 +111,14 @@
         <!-- Assert that the options are both there and the proce no longer matches -->
         <see stepKey="assertBothOptions" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct1.sku$$"/>
         <see stepKey="assertBothOptions2" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct2.sku$$"/>
+        <waitForElementVisible stepKey="waitForInfoDropdown2" selector="{{CheckoutCartSummarySection.total}}"/>
+        <waitForPageLoad stepKey="waitForCartPageLoad4"/>
         <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalAfter"/>
         <assertNotEquals expected="{$grabTotalBefore}" expectedType="string" actual="{$grabTotalAfter}" actualType="string"  stepKey="assertNotEquals"/>
 
+        <!-- Delete the bundled product -->
+        <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
     </test>
 </tests>

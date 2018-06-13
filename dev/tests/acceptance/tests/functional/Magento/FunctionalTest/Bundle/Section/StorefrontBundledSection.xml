@@ -10,9 +10,9 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontBundledSection">
         <element name="nthBundledOption" type="input" selector=".option:nth-of-type({{numOption}}) .choice:nth-of-type({{numOptionSelect}}) input" parameterized="true"/>
-        <element name="addToCart" type="button" selector="#bundle-slide"/>
-        <element name="addToCartConfigured" type="button" selector="#product-addtocart-button"/>
-        <element name="updateCart" type="button" selector="#product-updatecart-button"/>
+        <element name="addToCart" type="button" selector="#bundle-slide" timeout="30"/>
+        <element name="addToCartConfigured" type="button" selector="#product-addtocart-button" timeout="30"/>
+        <element name="updateCart" type="button" selector="#product-updatecart-button" timeout="30"/>
         <element name="configuredPrice" type="block" selector=".price-configured_price .price"/>
     </section>
 </sections>
