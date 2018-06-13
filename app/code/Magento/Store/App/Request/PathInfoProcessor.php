@@ -12,8 +12,7 @@ use Magento\Store\Model\Store;
 use Magento\Framework\App\Request\Http;
 
 /**
- * Processes the path and looks for the store in the url and and removes it and modifies the request accordingly
- * Users of this class can compare the para
+ * Processes the path and looks for the store in the url and removes it and modifies the request accordingly.
  */
 class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProcessorInterface
 {
@@ -58,7 +57,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
      */
     public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo) : string
     {
-        if ($this->getAndValidateStoreFrontStoreCode($request, $pathInfo)) {
+        if ($this->getValidStoreCode($request, $pathInfo)) {
             $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
             $pathInfo = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
         }
@@ -68,17 +67,15 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
     /**
      * Compute store from path info in request
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\App\Request\Http $request
      * @return string
      */
     public function resolveStoreFrontStoreFromPathInfo(
-        \Magento\Framework\App\RequestInterface $request
+        \Magento\Framework\App\Request\Http $request
     ) : ?string {
-        if ($request instanceof \Magento\Framework\App\Request\Http) {
-            $pathInfo = $this->pathInfo->computePathInfo($request->getRequestUri(), $request->getBaseUrl());
-            if (!empty($pathInfo)) {
-                return $this->getAndValidateStoreFrontStoreCode($request, $pathInfo);
-            }
+        $pathInfo = $this->pathInfo->getPathInfo($request->getRequestUri(), $request->getBaseUrl());
+        if (!empty($pathInfo)) {
+            return $this->getValidStoreCode($request, $pathInfo);
         }
         return null;
     }
@@ -86,35 +83,35 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
     /**
      * Get store code and validate it if config value is enabled and if not in directFrontNames return no route
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\App\Request\Http $request
      * @param string $pathInfo
      * @return null|string
      */
-    private function getAndValidateStoreFrontStoreCode(
-        \Magento\Framework\App\RequestInterface $request,
+    private function getValidStoreCode(
+        \Magento\Framework\App\Request\Http $request,
         string $pathInfo
     ) : ?string {
             $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
             $storeCode = current($pathParts);
+        if (!$request->isDirectAccessFrontendName($storeCode)
+            && !empty($storeCode)
+            && $storeCode != Store::ADMIN_CODE
+        ) {
+            try {
+                /** @var \Magento\Store\Api\Data\StoreInterface $store */
+                $this->storeRepository->getActiveStoreByCode($storeCode);
+            } catch (NoSuchEntityException $e) {
+                return null;
+            }
 
-        try {
-            /** @var \Magento\Store\Api\Data\StoreInterface $store */
-            $this->storeRepository->getActiveStoreByCode($storeCode);
-        } catch (NoSuchEntityException $e) {
-            return null;
-        }
-
-        if ((bool)$this->config->getValue(
-            \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeCode
-        )) {
-            if ($request instanceof Http
-                && !$request->isDirectAccessFrontendName($storeCode)
-                && $storeCode != Store::ADMIN_CODE
+            if ((bool)$this->config->getValue(
+                \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeCode
+            )
             ) {
                 return $storeCode;
-            } elseif (!empty($storeCode)) {
+            } else {
                 $request->setActionName(\Magento\Framework\App\Router\Base::NO_ROUTE);
             }
         }

@@ -13,13 +13,13 @@ namespace Magento\Framework\App\Request;
 class PathInfo
 {
     /**
-     * Compute path info using from the request URI and base URL
+     * Get path info using from the request URI and base URL
      *
      * @param string $requestUri
      * @param string $baseUrl
      * @return string
      */
-    public function computePathInfo(string $requestUri, string $baseUrl) : string
+    public function getPathInfo(string $requestUri, string $baseUrl) : string
     {
         if ($requestUri === '/') {
             return '';
@@ -36,12 +36,12 @@ class PathInfo
     }
 
     /**
-     * Compute query string using from the request URI
+     * Get query string using from the request URI
      *
      * @param string $requestUri
      * @return string
      */
-    public function computeQueryString(string $requestUri) : string
+    public function getQueryString(string $requestUri) : string
     {
         $requestUri = $this->removeRepeatedSlashes($requestUri);
         $parsedRequestUri = explode('?', $requestUri, 2);

@@ -142,10 +142,11 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      *
      * @return array
      * @deprecated
+     * @see \Magento\Store\Model\StoreResolver::getStoresData
      */
     protected function readStoresData() : array
     {
-        return $this->storesData->getStoresData($this->runMode, $this->scopeCode);
+        return $this->getStoresData();
     }
 
     /**

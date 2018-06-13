@@ -84,16 +84,13 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testProcessIfStoreExistsAndDirectAccessToFrontName()
     {
-        $this->configMock->expects($this->once())->method('getValue')->willReturn(true);
+        $this->configMock->expects($this->never())->method('getValue');
 
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeRepositoryMock->expects(
-            $this->once()
+            $this->never()
         )->method(
             'getActiveStoreByCode'
-        )->with(
-            'storeCode'
-        )->willReturn($store);
+        );
         $this->requestMock->expects(
             $this->once()
         )->method(
@@ -103,23 +100,20 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(true)
         );
-        $this->requestMock->expects($this->once())->method('setActionName')->with('noroute');
+        $this->requestMock->expects($this->never())->method('setActionName')->with('noroute');
         $this->assertEquals($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
     }
 
     public function testProcessIfStoreIsEmpty()
     {
-        $this->configMock->expects($this->once())->method('getValue')->willReturn(true);
+        $this->configMock->expects($this->never())->method('getValue');
 
         $path = '/0/node_one/';
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeRepositoryMock->expects(
-            $this->once()
+            $this->never()
         )->method(
             'getActiveStoreByCode'
-        )->with(
-            0
-        )->willReturn($store);
+        );
         $this->requestMock->expects(
             $this->once()
         )->method(
@@ -135,11 +129,13 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testProcessIfStoreCodeIsNotExist()
     {
-        $this->configMock->expects($this->once())->method('getValue')->willReturn(true);
+        $this->configMock->expects($this->never())->method('getValue')->willReturn(true);
 
         $this->storeRepositoryMock->expects($this->once())->method('getActiveStoreByCode')->with('storeCode')
             ->willThrowException(new NoSuchEntityException());
-        $this->requestMock->expects($this->never())->method('isDirectAccessFrontendName');
+        $this->requestMock->expects($this->once())->method('isDirectAccessFrontendName')
+            ->with('storeCode')
+            ->will($this->returnValue(false));
 
         $this->assertEquals($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
     }
@@ -148,7 +144,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())->method('getValue')->willReturn(false);
 
-        $this->storeRepositoryMock->expects($this->never())->method('getActiveStoreByCode');
+        $this->storeRepositoryMock->expects($this->once())->method('getActiveStoreByCode')->willReturn(1);
 
         $this->assertEquals($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
     }
