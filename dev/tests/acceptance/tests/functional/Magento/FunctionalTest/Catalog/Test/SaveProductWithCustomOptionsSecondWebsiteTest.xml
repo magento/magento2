@@ -16,7 +16,7 @@
             <description value="Custom Options should not be split when saving the product after assigning to a different website"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-91436"/>
-            <group value="product"/>
+            <group value="thampy"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
