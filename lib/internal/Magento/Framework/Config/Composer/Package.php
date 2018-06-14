@@ -83,7 +83,7 @@ class Package
      * @param int $index
      * @return mixed
      */
-    private function traverseGet(\StdClass $json, array $chain, $index = 0)
+    private function traverseGet(\stdClass $json, array $chain, $index = 0)
     {
         $property = $chain[$index];
         if (!property_exists($json, $property)) {
