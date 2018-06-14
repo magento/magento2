@@ -52,7 +52,7 @@ $productFirst->setTypeId('simple')
     ->setStockData(['use_config_manage_stock' => 0])
     ->save();
 
-/** @var $productFirst \Magento\Catalog\Model\Product */
+/** @var $productSecond \Magento\Catalog\Model\Product */
 $productSecond = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productSecond->setTypeId('simple')
     ->setAttributeSetId(4)
@@ -68,7 +68,7 @@ $productSecond->setTypeId('simple')
     ->setStockData(['use_config_manage_stock' => 0])
     ->save();
 
-/** @var $productFirst \Magento\Catalog\Model\Product */
+/** @var $productThird \Magento\Catalog\Model\Product */
 $productThird = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productThird->setTypeId('simple')
     ->setAttributeSetId(4)
@@ -84,7 +84,7 @@ $productThird->setTypeId('simple')
     ->setStockData(['use_config_manage_stock' => 0])
     ->save();
 
-/** @var $productFirst \Magento\Catalog\Model\Product */
+/** @var $productFourth \Magento\Catalog\Model\Product */
 $productFourth = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productFourth->setTypeId('simple')
     ->setAttributeSetId(4)
@@ -100,7 +100,7 @@ $productFourth->setTypeId('simple')
     ->setStockData(['use_config_manage_stock' => 0])
     ->save();
 
-/** @var $productFirst \Magento\Catalog\Model\Product */
+/** @var $productFifth \Magento\Catalog\Model\Product */
 $productFifth = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productFifth->setTypeId('simple')
     ->setAttributeSetId(4)
