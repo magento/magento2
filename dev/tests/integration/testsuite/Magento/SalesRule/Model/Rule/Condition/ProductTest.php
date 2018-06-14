@@ -59,6 +59,28 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Bundle/_files/order_item_with_bundle_and_options.php
+     * @magentoDataFixture Magento/SalesRule/_files/rules_sku_exclude.php
+     *
+     * @return void
+     */
+    public function testValidateSalesRuleExcludesBundleChildren(): void
+    {
+        // Load the quote that contains a child of a bundle product
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
+            ->load('test_cart_with_bundle_and_options', 'reserved_order_id');
+
+        // Load the SalesRule looking for excluding products with selected sku
+        /** @var $rule \Magento\SalesRule\Model\Rule */
+        $rule = $this->objectManager->get(\Magento\Framework\Registry::class)
+            ->registry('_fixture/Magento_SalesRule_Sku_Exclude');
+
+        $this->assertEquals(false, $rule->validate($quote));
+    }
+
+    /**
      * @return array
      */
     public function validateProductConditionDataProvider()
