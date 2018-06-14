@@ -462,7 +462,7 @@ class EavTest extends AbstractModifierTest
      * @param bool $productRequired
      * @param string|null $attrValue
      * @param array $expected
-     * @return void
+     * @param bool $locked
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      * @dataProvider setupAttributeMetaDataProvider
@@ -471,7 +471,8 @@ class EavTest extends AbstractModifierTest
         $productId,
         bool $productRequired,
         $attrValue,
-        array $expected
+        array $expected,
+        $locked = false
     ) : void {
         $configPath = 'arguments/data/config';
         $groupCode = 'product-details';
@@ -492,6 +493,7 @@ class EavTest extends AbstractModifierTest
         ];
 
         $this->productMock->method('getId')->willReturn($productId);
+        $this->productMock->expects($this->any())->method('isLockedAttribute')->willReturn($locked);
         $this->productAttributeMock->method('getIsRequired')->willReturn($productRequired);
         $this->productAttributeMock->method('getDefaultValue')->willReturn('required_value');
         $this->productAttributeMock->method('getAttributeCode')->willReturn('code');
@@ -520,14 +522,14 @@ class EavTest extends AbstractModifierTest
             )
             ->willReturn($expected);
 
-        $this->arrayManagerMock->expects($this->once())
+        $this->arrayManagerMock->expects($this->any())
             ->method('merge')
             ->with(
                 $this->anything(),
                 $this->anything(),
                 $this->callback(
                     function ($value) use ($attributeOptionsExpected) {
-                        return $value['options'] === $attributeOptionsExpected;
+                        return isset($value['options']) ? $value['options'] === $attributeOptionsExpected : true;
                     }
                 )
             )
@@ -544,6 +546,7 @@ class EavTest extends AbstractModifierTest
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setupAttributeMetaDataProvider()
     {
@@ -566,6 +569,26 @@ class EavTest extends AbstractModifierTest
                     'globalScope' => false,
                     'sortOrder' => 0,
                 ],
+            ],
+            'default_null_prod_not_new_locked_and_required' => [
+                'productId' => 1,
+                'productRequired' => true,
+                'attrValue' => 'val',
+                'expected' => [
+                    'dataType' => null,
+                    'formElement' => null,
+                    'visible' => null,
+                    'required' => true,
+                    'notice' => null,
+                    'default' => null,
+                    'label' => new Phrase(null),
+                    'code' => 'code',
+                    'source' => 'product-details',
+                    'scopeLabel' => '',
+                    'globalScope' => false,
+                    'sortOrder' => 0,
+                ],
+                'locked' => true,
             ],
             'default_null_prod_not_new_and_not_required' => [
                 'productId' => 1,
@@ -604,6 +627,26 @@ class EavTest extends AbstractModifierTest
                     'globalScope' => false,
                     'sortOrder' => 0,
                 ],
+            ],
+            'default_null_prod_new_locked_and_not_required' => [
+                'productId' => null,
+                'productRequired' => false,
+                'attrValue' => null,
+                'expected' => [
+                    'dataType' => null,
+                    'formElement' => null,
+                    'visible' => null,
+                    'required' => false,
+                    'notice' => null,
+                    'default' => 'required_value',
+                    'label' => new Phrase(null),
+                    'code' => 'code',
+                    'source' => 'product-details',
+                    'scopeLabel' => '',
+                    'globalScope' => false,
+                    'sortOrder' => 0,
+                ],
+                'locked' => true,
             ],
             'default_null_prod_new_and_required' => [
                 'productId' => null,
