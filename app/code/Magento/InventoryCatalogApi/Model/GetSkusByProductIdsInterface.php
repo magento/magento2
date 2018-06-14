@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogApi\Model;
 
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Provides all product SKUs by ProductIds. Key is product id, value is sku
@@ -18,7 +18,7 @@ interface GetSkusByProductIdsInterface
     /**
      * @param array $productIds
      * @return array
-     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function execute(array $productIds): array;
 }

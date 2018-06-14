@@ -11,11 +11,11 @@ use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\InputException;
 
 /**
  * @inheritdoc
@@ -89,7 +89,6 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     /**
      * @param string $sku
      * @return StockItemInterface
-     * @throws LocalizedException
      */
     private function getLegacyStockItem(string $sku): StockItemInterface
     {
@@ -97,7 +96,7 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
 
         try {
             $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
-        } catch (InputException $skuNotFoundInCatalog) {
+        } catch (NoSuchEntityException $skuNotFoundInCatalog) {
             $stockItem = \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
             $stockItem->setManageStock(true);  // Make possible to Manage Stock for Products removed from Catalog
             return $stockItem;

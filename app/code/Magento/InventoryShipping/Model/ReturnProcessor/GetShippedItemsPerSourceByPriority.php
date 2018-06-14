@@ -5,19 +5,23 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model\ReturnProcessor;
+namespace Magento\InventoryShipping\Model\ReturnProcessor;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Order\Shipment;
-use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsInterface;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemFactory;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResult;
+use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResultFactory;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventoryShipping\Model\ResourceModel\ShipmentSource\GetSourceCodeByShipmentId;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\Order\Shipment;
 
-class GetShippedItemsPerSourceByPriority
+class GetShippedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsInterface
 {
     /**
      * @var GetSourceCodeByShipmentId
@@ -40,28 +44,44 @@ class GetShippedItemsPerSourceByPriority
     private $getSourcesAssignedToStockOrderedByPriority;
 
     /**
+     * @var SourceDeductedOrderItemFactory
+     */
+    private $sourceDeductedOrderItemFactory;
+
+    /**
+     * @var SourceDeductedOrderItemsResultFactory
+     */
+    private $sourceDeductedOrderItemsResultFactory;
+
+    /**
      * @param GetSourceCodeByShipmentId $getSourceCodeByShipmentId
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
+     * @param SourceDeductedOrderItemFactory $sourceDeductedOrderItemFactory
+     * @param SourceDeductedOrderItemsResultFactory $sourceDeductedOrderItemsResultFactory
      */
     public function __construct(
         GetSourceCodeByShipmentId $getSourceCodeByShipmentId,
         GetSkusByProductIdsInterface $getSkusByProductIds,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
-        GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
+        GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
+        SourceDeductedOrderItemFactory $sourceDeductedOrderItemFactory,
+        SourceDeductedOrderItemsResultFactory $sourceDeductedOrderItemsResultFactory
     ) {
         $this->getSourceCodeByShipmentId = $getSourceCodeByShipmentId;
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
+        $this->sourceDeductedOrderItemFactory = $sourceDeductedOrderItemFactory;
+        $this->sourceDeductedOrderItemsResultFactory = $sourceDeductedOrderItemsResultFactory;
     }
 
     /**
      * @param OrderInterface $order
      * @param array $returnToStockItems
-     * @return array
-     * @throws InputException
+     * @return SourceDeductedOrderItemsResult[]
+     * @throws NoSuchEntityException
      */
     public function execute(OrderInterface $order, array $returnToStockItems): array
     {
@@ -86,7 +106,31 @@ class GetShippedItemsPerSourceByPriority
         // Group items by SKU
         $sources = $this->groupItemsBySku($sources);
 
-        return $sources;
+        return $this->getSourceDeductedItemsResult($sources);
+    }
+
+    /**
+     * @param array $shippedItems
+     * @return SourceDeductedOrderItemsResult[]
+     */
+    private function getSourceDeductedItemsResult(array $shippedItems): array
+    {
+        $result = [];
+        foreach ($shippedItems as $sourceCode => $items) {
+            $deductedItems = [];
+            foreach ($items as $sku => $qty) {
+                $deductedItems[] = $this->sourceDeductedOrderItemFactory->create([
+                    'sku' => $sku,
+                    'quantity' => $qty
+                ]);
+            }
+            $result[] = $this->sourceDeductedOrderItemsResultFactory->create([
+                'sourceCode' => $sourceCode,
+                'items' => $deductedItems
+            ]);
+        }
+
+        return $result;
     }
 
     /**

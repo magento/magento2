@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model\ReturnProcessor\Request;
+namespace Magento\InventorySalesApi\Model\ReturnProcessor\Request;
 
 /**
  * DTO used as the type for values of `$items` array passed to PlaceReservationsForSalesEventInterface::execute()

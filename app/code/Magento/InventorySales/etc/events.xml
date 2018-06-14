@@ -6,12 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="website_save_after">
-        <observer name="assign_website_to_default_stock" instance="Magento\InventorySales\Observer\Website\AssignWebsiteToDefaultStock"/>
-    </event>
-    <event name="website_delete_after">
-        <observer name="delete_website_to_stock_link" instance="Magento\InventorySales\Observer\Website\DeleteWebsiteToStockLink"/>
-    </event>
     <event name="sales_model_service_quote_submit_failure">
         <observer name="inventory" instance="Magento\InventorySales\Observer\CatalogInventory\RevertQuoteInventoryObserver"/>
     </event>
