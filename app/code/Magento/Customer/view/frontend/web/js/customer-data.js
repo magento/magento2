@@ -75,7 +75,7 @@ define([
 
         /**
          * @param {Object} sectionNames
-         * @param {Number} updateSectionId
+         * @param {Boolean} updateSectionId
          * @return {*}
          */
         getFromServer: function (sectionNames, updateSectionId) {
@@ -326,7 +326,7 @@ define([
 
         /**
          * @param {Array} sectionNames
-         * @param {Number} updateSectionId
+         * @param {Boolean} updateSectionId
          * @return {*}
          */
         reload: function (sectionNames, updateSectionId) {
