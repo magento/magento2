@@ -293,5 +293,29 @@
         <data key="quantity">1000</data>
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    <entity name="GetProduct" type="product">
+        <var key="sku" entityKey="sku" entityType="product"/>
+    </entity>
+    <entity name="GetProduct2" type="product2">
+        <var key="sku" entityKey="sku" entityType="product2"/>
+    </entity>
+    <entity name="GetProduct3" type="product3">
+        <var key="sku" entityKey="sku" entityType="product3"/>
+    </entity>
+    <entity name="ApiSimplePrice1" type="product">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">1.00</data>
+    </entity>
+    <entity name="ApiSimplePrice100" type="product">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">100.00</data>
     </entity>
 </entities>
