@@ -27,7 +27,7 @@ class PathInfo
 
         $requestUri = $this->removeRepeatedSlashes($requestUri);
         $parsedRequestUri = explode('?', $requestUri, 2);
-        $pathInfo = (string)substr($parsedRequestUri[0], (int)strlen($baseUrl));
+        $pathInfo = (string)substr(current($parsedRequestUri), (int)strlen($baseUrl));
 
         if ($this->isNoRouteUri($baseUrl, $pathInfo)) {
             $pathInfo = \Magento\Framework\App\Router\Base::NO_ROUTE;

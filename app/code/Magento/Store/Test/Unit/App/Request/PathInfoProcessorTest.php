@@ -35,6 +35,11 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
     private $storeRepositoryMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storePathInfoValidator;
+
+    /**
      * @var string
      */
     protected $pathInfo = '/storeCode/node_one/';
@@ -48,13 +53,17 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->storeRepositoryMock = $this->createMock(\Magento\Store\Api\StoreRepositoryInterface::class);
 
-        $this->pathInfoMock = $this->getMockBuilder(\Magento\Framework\App\Request\PathInfo::class)
+        $this->pathInfoMock = $this->getMockBuilder(\Magento\Framework\App\Request\PathInfo ::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->model = new \Magento\Store\App\Request\PathInfoProcessor(
+        $this->storePathInfoValidator = new \Magento\Store\App\Request\StorePathInfoValidator(
             $this->configMock,
             $this->storeRepositoryMock,
             $this->pathInfoMock
+        );
+
+        $this->model = new \Magento\Store\App\Request\PathInfoProcessor(
+            $this->storePathInfoValidator
         );
     }
 
