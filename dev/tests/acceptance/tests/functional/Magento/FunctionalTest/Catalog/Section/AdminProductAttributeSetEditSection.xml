@@ -14,12 +14,12 @@
         <element name="attributeGroup" type="text" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']" parameterized="true"/>
         <element name="attributeGroupExtender" type="button" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']" parameterized="true"/>
         <element name="attributeGroupCollapsed" type="button" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']/parent::*/parent::*[contains(@class, 'collapsed')]" parameterized="true"/>
+        <element name="assignedAttribute" type="text" selector="//*[@id='tree-div1']//span[text()='{{attributeName}}']" parameterized="true"/>
         <element name="xThLineItemYthAttributeGroup" type="text" selector="//*[@id='tree-div1']/ul/div/li[{{y}}]//li[{{x}}]" parameterized="true"/>
         <element name="xThLineItemAttributeGroup" type="text" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']/parent::*/parent::*/parent::*//li[{{x}}]//a/span" parameterized="true"/>
         <!-- Unassigned Attributes Column -->
         <element name="unassignedAttributesTree" type="block" selector="#tree-div2"/>
         <element name="unassignedAttribute" type="text" selector="//*[@id='tree-div2']//span[text()='{{attributeName}}']" parameterized="true"/>
-        <element name="xThLineItemUnassignedAttribute" type="text" selector="//*[@id='tree-div2']//li[{{x}}]"  parameterized="true"/>
-        <element name="xThElbowLineUnassignedAttribute" type="text" selector="//*[@id='tree-div2']//li[{{x}}]//img[contains(@class, 'elbow')]"  parameterized="true"/>
+        <element name="xThLineItemUnassignedAttribute" type="text" selector="//*[@id='tree-div2']//li[{{x}}]//a/span" parameterized="true"/>
     </section>
 </sections>

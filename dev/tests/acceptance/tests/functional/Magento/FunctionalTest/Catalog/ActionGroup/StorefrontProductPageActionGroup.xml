@@ -21,4 +21,20 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
     </actionGroup>
+    <actionGroup name="checkAttributeInMoreInformationTab">
+        <arguments>
+            <argument name="attributeLabel" type="string"/>
+            <argument name="attributeValue" type="string"/>
+        </arguments>
+        <click selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="clickTab"/>
+        <see userInput="{{attributeLabel}}" selector="{{StorefrontProductMoreInformationSection.moreInformationTextArea}}" stepKey="seeAttributeLabel"/>
+        <see userInput="{{attributeValue}}" selector="{{StorefrontProductMoreInformationSection.moreInformationTextArea}}" stepKey="seeAttributeValue"/>
+    </actionGroup>
+    <actionGroup name="checkAttributeNotInMoreInformationTab">
+        <arguments>
+            <argument name="attributeLabel" type="string"/>
+        </arguments>
+        <click selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="clickTab"/>
+        <dontSee userInput="{{attributeLabel}}" selector="{{StorefrontProductMoreInformationSection.moreInformationTextArea}}" stepKey="seeAttributeLabel"/>
+    </actionGroup>
 </actionGroups>

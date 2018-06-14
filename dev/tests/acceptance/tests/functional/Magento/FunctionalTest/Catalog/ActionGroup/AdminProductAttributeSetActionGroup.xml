@@ -21,12 +21,14 @@
     </actionGroup>
     <actionGroup name="UnassignAttributeFromGroup">
         <arguments>
-            <argument name="ProductAttribute"/>
+            <argument name="group" type="string"/>
+            <argument name="attribute" type="string"/>
         </arguments>
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <conditionalClick selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(group)}}" dependentSelector="{{AdminProductAttributeSetEditSection.attributeGroupCollapsed(group)}}" visible="true" stepKey="extendGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <click selector="{{AdminProductAttributeGridSection.AttributeCode(ProductAttribute.attribute_code)}}" stepKey="navigateToAttributeEditPage1" />
-        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.assignedAttribute(attribute)}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemUnassignedAttribute('1')}}" stepKey="dragAndDropToUnassigned"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see userInput="{{attribute}}" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
     </actionGroup>
     <actionGroup name="SaveAttributeSet">
         <click selector="{{AdminProductAttributeSetActionSection.save}}" stepKey="clickSave"/>
