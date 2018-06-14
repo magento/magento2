@@ -30,7 +30,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_DELETE,
     ];
 
-
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -57,7 +56,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
         return $result;
     }
-
 
     /**
      * Merge service data related to synchronous-only method invocations.
