@@ -42,6 +42,8 @@
 
         <!-- Add two bundle items -->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+        <!-- scrollTo before click to fix flaky failure -->
+        <scrollTo selector="{{AdminProductFormBundleSection.addOption}}" stepKey="scrollToAddOption"/>
         <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
