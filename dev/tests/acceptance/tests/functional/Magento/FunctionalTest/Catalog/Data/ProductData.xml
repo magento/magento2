@@ -293,6 +293,7 @@
         <data key="quantity">1000</data>
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
     <entity name="GetProduct" type="product">
         <var key="sku" entityKey="sku" entityType="product"/>
     </entity>
