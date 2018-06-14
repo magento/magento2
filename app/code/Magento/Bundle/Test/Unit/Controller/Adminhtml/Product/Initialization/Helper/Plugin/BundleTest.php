@@ -21,6 +21,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
 
+/** @SuppressWarnings(PHPMD.CouplingBetweenObjects) */
 class BundleTest extends TestCase
 {
     /**
@@ -77,7 +78,7 @@ class BundleTest extends TestCase
             'setExtensionAttributes',
         ];
         $this->productMock = $this->createPartialMock(Product::class, $methods);
-        $optionInterfaceFactory = $this->getMockBuilder(OptionInterfaceFactory::class)
+        $optionFactory = $this->getMockBuilder(OptionInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $linkInterfaceFactory = $this->getMockBuilder(LinkInterfaceFactory::class)
@@ -97,7 +98,7 @@ class BundleTest extends TestCase
         );
         $this->model = new Bundle(
             $this->requestMock,
-            $optionInterfaceFactory,
+            $optionFactory,
             $linkInterfaceFactory,
             $productRepository,
             $storeManager,
