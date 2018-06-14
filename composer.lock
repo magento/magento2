@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a521e8d94a10edef043d49f142491ea",
+    "content-hash": "8251f2744a4ccef37e10596b1fb66393",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1518,26 +1518,29 @@
         },
         {
             "name": "tubalmartin/cssmin",
-            "version": "v2.4.8-p4",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tubalmartin/YUI-CSS-compressor-PHP-port.git",
-                "reference": "fe84d71e8420243544c0ce3bd0f5d7c1936b0f90"
+                "reference": "210b058bf9b3b43516e2c80e6db526c1ce215b04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/fe84d71e8420243544c0ce3bd0f5d7c1936b0f90",
-                "reference": "fe84d71e8420243544c0ce3bd0f5d7c1936b0f90",
+                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/210b058bf9b3b43516e2c80e6db526c1ce215b04",
+                "reference": "210b058bf9b3b43516e2c80e6db526c1ce215b04",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0"
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "cogpowered/finediff": "0.3.*"
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "cssmin.php"
-                ]
+                "psr-4": {
+                    "tubalmartin\\CssMin\\": "src"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1555,10 +1558,11 @@
                 "compress",
                 "compressor",
                 "css",
+                "cssmin",
                 "minify",
                 "yui"
             ],
-            "time": "2014-09-22T08:08:50+00:00"
+            "time": "2017-04-04T14:33:00+00:00"
         },
         {
             "name": "zendframework/zend-code",

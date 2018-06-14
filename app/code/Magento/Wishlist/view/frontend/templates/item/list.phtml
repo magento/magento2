@@ -20,7 +20,7 @@ $columns = $block->getColumns();
         <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li data-row="product-item" class="product-item" id="item_' . $item->getId() . '">' : '</li><li class="product-item" id="item_' . $item->getId() . '">' ?>
             <div class="product-item-info">
                 <?php foreach ($columns as $column): ?>
-                    <?php $column->setItem($item); echo $column->toHtml($item);?>
+                    <?= $column->setItem($item)->toHtml() ?>
                 <?php endforeach; ?>
             </div>
         <?php echo($iterator == count($block->getItems())+1) ? '</li>' : '' ?>

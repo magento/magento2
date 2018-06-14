@@ -149,6 +149,15 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('namespace')
             ->willReturn($name);
+
+        if ($isAllowed === false) {
+            $this->requestMock->expects($this->once())
+                ->method('isAjax')
+                ->willReturn(true);
+        }
+
+        $this->responseMock->expects($this->never())
+            ->method('setRedirect');
         $this->responseMock->expects($this->any())
             ->method('appendBody')
             ->with($renderedData);

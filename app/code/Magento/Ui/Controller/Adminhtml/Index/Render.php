@@ -32,7 +32,10 @@ class Render extends AbstractAction
         $aclResource = $component->getData('acl');
 
         if ($aclResource && !$this->_authorization->isAllowed($aclResource)) {
-            $this->_redirect('admin/noroute');
+            if (!$this->_request->isAjax()) {
+                $this->_redirect('admin/noroute');
+            }
+
             return;
         }
 
