@@ -21,5 +21,6 @@
         <element name="bundleOptionXRequired" type="checkbox" selector="[name='bundle_options[bundle_options][{{x}}][required]']" parameterized="true"/>
         <element name="bundleOptionXProductYQuantity" type="input" selector="[name='bundle_options[bundle_options][{{x}}][bundle_selections][{{y}}][selection_qty]']" parameterized="true"/>
         <element name="addProductsToOption" type="button" selector="[data-index='modal_set']" timeout="30"/>
+        <element name="bundledItems" type="block" selector="[data-index=bundle-items]"/>
     </section>
 </sections>
