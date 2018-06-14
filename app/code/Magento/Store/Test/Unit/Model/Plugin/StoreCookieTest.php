@@ -7,7 +7,6 @@
 namespace Magento\Store\Test\Unit\Model\Plugin;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreIsInactiveException;
 use \InvalidArgumentException;
@@ -55,11 +54,6 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
     private $storeRepositoryMock;
 
     /**
-     * @var \Magento\Store\Api\StoreResolverInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $storeResolverMock;
-
-    /**
      * Set up
      */
     protected function setUp()
@@ -92,18 +86,12 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->storeResolverMock = $this->getMockBuilder(\Magento\Store\Api\StoreResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
         $this->plugin = (new ObjectManager($this))->getObject(
             \Magento\Store\Model\Plugin\StoreCookie::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'storeCookieManager' => $this->storeCookieManagerMock,
-                'storeRepository' => $this->storeRepositoryMock,
-                'storeResolver' => $this->storeResolverMock
+                'storeRepository' => $this->storeRepositoryMock
             ]
         );
     }
@@ -125,7 +113,7 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
             ->with($this->storeMock);
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
-            ->with(StoreResolverInterface::PARAM_NAME)
+            ->with(\Magento\Store\Model\StoreManagerInterface::PARAM_NAME)
             ->willReturn(null);
 
         $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
@@ -148,7 +136,7 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
             ->with($this->storeMock);
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
-            ->with(StoreResolverInterface::PARAM_NAME)
+            ->with(\Magento\Store\Model\StoreManagerInterface::PARAM_NAME)
             ->willReturn(null);
 
         $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
@@ -171,7 +159,7 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
             ->with($this->storeMock);
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
-            ->with(StoreResolverInterface::PARAM_NAME)
+            ->with(\Magento\Store\Model\StoreManagerInterface::PARAM_NAME)
             ->willReturn(null);
 
         $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
@@ -237,7 +225,7 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
-            ->with(StoreResolverInterface::PARAM_NAME)
+            ->with(\Magento\Store\Model\StoreManagerInterface::PARAM_NAME)
             ->willReturn($storeCode);
 
         $this->storeManagerMock->expects($this->once())

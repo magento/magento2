@@ -15,7 +15,6 @@ use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreIsInactiveException;
-use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -73,7 +72,7 @@ class SwitchAction extends Action
     {
         $currentActiveStore = $this->storeManager->getStore();
         $storeCode = $this->_request->getParam(
-            StoreResolver::PARAM_NAME,
+            \Magento\Store\Model\StoreManagerInterface::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
 

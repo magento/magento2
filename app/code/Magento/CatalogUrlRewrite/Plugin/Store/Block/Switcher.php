@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Plugin\Store\Block;
 
 use Magento\Framework\Data\Helper\PostHelper;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -64,7 +63,7 @@ class Switcher
         Store $store,
         array $data = []
     ): string {
-        $data[StoreResolverInterface::PARAM_NAME] = $store->getCode();
+        $data[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME] = $store->getCode();
         $currentUrl = $store->getCurrentUrl(true);
         $baseUrl = $store->getBaseUrl();
         $urlPath = parse_url($currentUrl, PHP_URL_PATH);

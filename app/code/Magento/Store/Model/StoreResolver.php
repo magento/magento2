@@ -99,7 +99,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         $storeCode = $this->pathInfoProcessor->resolveStoreFrontStoreFromPathInfo($this->request);
         if (!$storeCode) {
             $storeCode = $this->request->getParam(
-                self::PARAM_NAME,
+                \Magento\Store\Model\StoreManagerInterface::PARAM_NAME,
                 $this->storeCookieManager->getStoreCodeFromCookie()
             );
         }
