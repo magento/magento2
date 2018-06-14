@@ -312,13 +312,11 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Wishlist\Model\Item::class)
             ->willReturn($item);
 
-        $this->request
-            ->expects($this->once())
-            ->method('getServer')
-            ->with('HTTP_REFERER')
+        $this->redirect
+            ->method('getRefererUrl')
+            ->with()
             ->willReturn($referer);
         $this->request
-            ->expects($this->exactly(3))
             ->method('getParam')
             ->willReturnMap(
                 [
@@ -398,12 +396,6 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($item);
 
         $this->request
-            ->expects($this->once())
-            ->method('getServer')
-            ->with('HTTP_REFERER')
-            ->willReturn($referer);
-        $this->request
-            ->expects($this->exactly(3))
             ->method('getParam')
             ->willReturnMap(
                 [

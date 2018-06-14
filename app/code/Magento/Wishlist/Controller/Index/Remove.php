@@ -10,6 +10,7 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Model\Item;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -56,7 +57,8 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         $id = (int)$this->getRequest()->getParam('item');
-        $item = $this->_objectManager->create(\Magento\Wishlist\Model\Item::class)->load($id);
+        /** @var Item $item */
+        $item = $this->_objectManager->create(Item::class)->load($id);
         if (!$item->getId()) {
             throw new NotFoundException(__('Page not found.'));
         }
@@ -67,6 +69,12 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
         try {
             $item->delete();
             $wishlist->save();
+            $this->messageManager->addComplexSuccessMessage(
+                'removeWishlistItemSuccessMessage',
+                [
+                    'product_name' => $item->getProduct()->getName()
+                ]
+            );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError(
                 __('We can\'t delete the item from Wish List right now because of an error: %1.', $e->getMessage())
@@ -76,13 +84,8 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
-        $request = $this->getRequest();
-        $refererUrl = (string)$request->getServer('HTTP_REFERER');
-        $url = (string)$request->getParam(\Magento\Framework\App\Response\RedirectInterface::PARAM_NAME_REFERER_URL);
-        if ($url) {
-            $refererUrl = $url;
-        }
-        if ($request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED) && $refererUrl) {
+        $refererUrl = $this->_redirect->getRefererUrl();
+        if ($refererUrl) {
             $redirectUrl = $refererUrl;
         } else {
             $redirectUrl = $this->_redirect->getRedirectUrl($this->_url->getUrl('*/*'));
