@@ -86,7 +86,7 @@ class CheckRegisterCheckoutObserverTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $onepageModelTypeMock = $this->createMock(Onepage::class);
-        $captchaDataHelperMock = $this->createMock(CaptchaDataHelper::class);
+        $captchaHelperMock = $this->createMock(CaptchaDataHelper::class);
         $this->objectManager = new ObjectManager($this);
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
@@ -101,7 +101,7 @@ class CheckRegisterCheckoutObserverTest extends \PHPUnit\Framework\TestCase
         $this->checkRegisterCheckoutObserver = $this->objectManager->getObject(
             CheckRegisterCheckoutObserver::class,
             [
-                'helper' => $captchaDataHelperMock,
+                'helper' => $captchaHelperMock,
                 'actionFlag' => $this->actionFlagMock,
                 'captchaStringResolver' => $this->captchaStringResolverMock,
                 'typeOnepage' => $onepageModelTypeMock,
@@ -109,7 +109,7 @@ class CheckRegisterCheckoutObserverTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $captchaDataHelperMock->expects($this->once())
+        $captchaHelperMock->expects($this->once())
             ->method('getCaptcha')
             ->with(self::FORM_ID)
             ->willReturn($this->captchaModelMock);
