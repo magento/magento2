@@ -8,17 +8,18 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Plugin;
 
-use Magento\WebapiAsync\Model\RouteCustomizationConfig;
+use Magento\WebapiAsync\Model\ServiceConfig;
 use Magento\Webapi\Controller\PathProcessor;
 use Magento\Webapi\Controller\Rest;
 use Magento\Framework\App\RequestInterface;
+use Magento\WebapiAsync\Model\ServiceConfig\Converter;
 
 class ControllerRest
 {
     /**
-     * @var RouteCustomizationConfig
+     * @var ServiceConfig
      */
-    private $routeCustomizationConfig;
+    private $serviceConfig;
 
     /**
      * @var PathProcessor
@@ -28,14 +29,14 @@ class ControllerRest
     /**
      * ControllerRest constructor.
      *
-     * @param RouteCustomizationConfig $routeCustomizationConfig
+     * @param ServiceConfig $serviceConfig
      * @param PathProcessor $pathProcessor
      */
     public function __construct(
-        RouteCustomizationConfig $routeCustomizationConfig,
+        ServiceConfig $serviceConfig,
         PathProcessor $pathProcessor
     ) {
-        $this->routeCustomizationConfig = $routeCustomizationConfig;
+        $this->serviceConfig = $serviceConfig;
         $this->pathProcessor = $pathProcessor;
     }
 
@@ -48,15 +49,16 @@ class ControllerRest
      */
     public function beforeDispatch(Rest $subject, RequestInterface $request)
     {
-        $originPath = $request->getPathInfo();
-        $routeCustomizations = $this->routeCustomizationConfig->getRouteCustomizations();
+        $routeCustomizations = $this->serviceConfig->getServices()[Converter::KEY_ROUTES] ?? [];
         if ($routeCustomizations) {
+            $originPath = $request->getPathInfo();
+            $requestMethod = $request->getMethod();
             $routePath = ltrim($this->pathProcessor->process($originPath), '/');
             if (array_key_exists($routePath, $routeCustomizations)) {
-                $endpointPath = ltrim($routeCustomizations[$routePath], '/');
-            }
-            if (isset($endpointPath)) {
-                $request->setPathInfo(str_replace($routePath, $endpointPath, $originPath));
+                if (isset($routeCustomizations[$routePath][$requestMethod])) {
+                    $path = ltrim($routeCustomizations[$routePath][$requestMethod], '/');
+                    $request->setPathInfo(str_replace($routePath, $path, $originPath));
+                }
             }
         }
         return [$request];
