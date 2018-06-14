@@ -80,7 +80,7 @@ abstract class AbstractIo implements IoInterface
         $pathParts = explode("/", $pathTokP);
         $realPathParts = [];
 
-        for ($i = 0, $realPathParts = []; $i < count($pathParts); $i++) {
+        for ($i = 0, $realPathParts = [], $iMax = count($pathParts); $i < $iMax; $i++) {
             if ($pathParts[$i] == '.') {
                 continue;
             } elseif ($pathParts[$i] == '..') {
