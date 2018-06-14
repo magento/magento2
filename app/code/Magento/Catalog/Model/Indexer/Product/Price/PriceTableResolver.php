@@ -54,8 +54,8 @@ class PriceTableResolver implements IndexScopeResolverInterface
     {
         $existDimensions = [];
         foreach ($dimensions as $dimension) {
-            if ((string)$dimension->getValue() !== '') {
-                throw new \Exception('Dimension value can not be empty');
+            if ((string)$dimension->getValue() === '') {
+                throw new \Exception(sprintf('Dimension value of "%s" can not be empty', $dimension->getName()));
             }
             $existDimensions[$dimension->getName()] = $dimension;
         }
