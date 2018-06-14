@@ -1923,11 +1923,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                     [
                         $this->dimensionFactory->create(
                             CustomerGroupDataProvider::DIMENSION_NAME,
-                            $filters['customer_group_id']
+                            (string)$filters['customer_group_id']
                         ),
                         $this->dimensionFactory->create(
                             WebsiteDataProvider::DIMENSION_NAME,
-                            $filters['website_id']
+                            (string)$filters['website_id']
                         )
                     ]
                 )

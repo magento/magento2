@@ -131,7 +131,7 @@ class ExclusionStrategy implements FilterStrategyInterface
         $tableName = $this->priceTableResolver->resolve(
             'catalog_product_index_price',
             [
-                $this->dimensionFactory->create(WebsiteDataProvider::DIMENSION_NAME, $websiteId),
+                $this->dimensionFactory->create(WebsiteDataProvider::DIMENSION_NAME, (string)$websiteId),
                 $this->dimensionFactory->create(
                     CustomerGroupDataProvider::DIMENSION_NAME,
                     (string)$this->httpContext->getValue(CustomerContext::CONTEXT_GROUP)

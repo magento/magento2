@@ -129,7 +129,9 @@ class CustomerGroup
 
         switch ($this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE)) {
             case ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP:
-                $return[] = [$this->dimensionFactory->create(CustomerGroupDataProvider::DIMENSION_NAME, $groupId)];
+                $return[] = [
+                    $this->dimensionFactory->create(CustomerGroupDataProvider::DIMENSION_NAME, (string)$groupId)
+                ];
                 break;
             case ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP:
                 $websiteIds = $this->websiteCollectionFactory->create()

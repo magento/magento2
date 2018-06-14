@@ -132,8 +132,8 @@ class DataProvider implements DataProviderInterface
         $tableName = $this->priceTableResolver->resolve(
             'catalog_product_index_price',
             [
-                $this->dimensionFactory->create(WebsiteDataProvider::DIMENSION_NAME, $websiteId),
-                $this->dimensionFactory->create(CustomerGroupDataProvider::DIMENSION_NAME, $customerGroupId),
+                $this->dimensionFactory->create(WebsiteDataProvider::DIMENSION_NAME, (string)$websiteId),
+                $this->dimensionFactory->create(CustomerGroupDataProvider::DIMENSION_NAME, (string)$customerGroupId),
             ]
         );
         /** @var Table $table */
