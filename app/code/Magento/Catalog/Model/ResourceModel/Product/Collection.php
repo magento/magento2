@@ -1881,7 +1881,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _productLimitationPrice($joinLeft = false)
     {
         $filters = $this->_productLimitationFilters;
-        if (!$filters->isUsingPriceIndex() || !$filters['website_id'] || !$filters['customer_group_id']) {
+        if (!$filters->isUsingPriceIndex() ||
+            (string)$filters['website_id'] === '' ||
+            (string)$filters['customer_group_id'] === ''
+        ) {
             return $this;
         }
 
