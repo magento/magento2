@@ -102,10 +102,6 @@ class PreventAssignSourcesToDefaultStockTest extends WebapiAbstract
                             'message' => 'Can not save link related to Default Source or Default Stock',
                             'parameters' => [],
                         ],
-                        [
-                            'message' => 'Can not save link related to Default Source or Default Stock',
-                            'parameters' => [],
-                        ],
                     ],
                 ],
             ],
