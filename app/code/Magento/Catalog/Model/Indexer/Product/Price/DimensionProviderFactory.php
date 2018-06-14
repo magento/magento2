@@ -5,59 +5,39 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
+use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Framework\Indexer\MultiDimensionProviderInterface;
 
 class DimensionProviderFactory
 {
-    /**
-     *
-     */
-    const EMPTY_CONFIGURATION = '-';
-
     /**
      * @var \Magento\Framework\Indexer\MultiDimensionProviderFactory
      */
     private $multiDimensionProviderFactory;
 
     /**
-     * @var array
+     * @var DimensionProviderInterface[]
      */
     private $dimensionProviders;
 
     /**
-     * @var array
+     * @var DimensionModeConfiguration
      */
-    private $modes;
-
-    /**
-     * @var array
-     */
-    private $modesConfiguration;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $scopeConfig;
+    private $dimensionModeConfiguration;
 
     /**
      * @param \Magento\Framework\Indexer\MultiDimensionProviderInterfaceFactory $multiDimensionProviderFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param DimensionModeConfiguration $dimensionModeConfiguration
      * @param array $dimensionProviders
-     * @param array $modes
-     * @param array $modesConfiguration
      */
     public function __construct(
         \Magento\Framework\Indexer\MultiDimensionProviderInterfaceFactory $multiDimensionProviderFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        array $dimensionProviders,
-        array $modes,
-        array $modesConfiguration
+        DimensionModeConfiguration $dimensionModeConfiguration,
+        array $dimensionProviders
     ) {
         $this->multiDimensionProviderFactory = $multiDimensionProviderFactory;
         $this->dimensionProviders = $dimensionProviders;
-        $this->modes = $modes;
-        $this->modesConfiguration = $modesConfiguration;
-        $this->scopeConfig = $scopeConfig;
+        $this->dimensionModeConfiguration = $dimensionModeConfiguration;
     }
 
     /**
@@ -68,49 +48,27 @@ class DimensionProviderFactory
      */
     public function createByMode(string $dimensionsMode = null): MultiDimensionProviderInterface
     {
-        if (null === $dimensionsMode) {
-            $dimensionsMode = $this->scopeConfig->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE)
-                ?: ModeSwitcher::INPUT_KEY_NONE;
-        }
-        if (!in_array($dimensionsMode, $this->modes)) {
-            throw new \InvalidArgumentException(
-                sprintf('Undefined dimension mode "%s".', $dimensionsMode)
-            );
+        $dimensionConfiguration = $this->dimensionModeConfiguration->getDimensionConfiguration($dimensionsMode);
+        $dimensionProvidersMap = [];
+        foreach ($this->dimensionProviders as $dimensionProvider) {
+            // TODO: fix hac by getDimensionName?
+            $dimensionProvidersMap[$dimensionProvider::DIMENSION_NAME] = $dimensionProvider;
         }
 
-        $modeConfigurationKey = array_search($dimensionsMode, $this->modes, true);
-        if (!array_key_exists($modeConfigurationKey, $this->modesConfiguration)) {
-            throw new \InvalidArgumentException(
-                sprintf('Missing configuration for mode "%s".', $dimensionsMode)
-            );
+        $providers = [];
+        foreach ($dimensionConfiguration as $dimensionName) {
+            if (!isset($dimensionProvidersMap[$dimensionName])) {
+                throw new \InvalidArgumentException(
+                    sprintf('Missing data provider for Dimension with name "%s".', $dimensionName)
+                );
+            }
+            $providers[] = clone $dimensionProvidersMap[$dimensionName];
         }
 
         return $this->multiDimensionProviderFactory->create(
             [
-                'dimensionProviders' => $this->getDataProviders($modeConfigurationKey)
+                'dimensionProviders' => $providers
             ]
         );
-    }
-
-    private function getDataProviders($modeConfigurationKey): array
-    {
-        $modeConfiguration = $this->modesConfiguration[$modeConfigurationKey];
-        $providers = [];
-
-        if ($modeConfiguration === self::EMPTY_CONFIGURATION) {
-            return $providers;
-        }
-
-        foreach ($modeConfiguration as $modeDataProviderName) {
-            if (!array_key_exists($modeDataProviderName, $this->dimensionProviders)) {
-                throw new \InvalidArgumentException(
-                    sprintf('Missing data provider "%s".', $modeDataProviderName)
-                );
-            }
-
-            $providers[] = clone $this->dimensionProviders[$modeDataProviderName];
-        }
-
-        return $providers;
     }
 }

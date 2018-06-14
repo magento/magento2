@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Setup;
 
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -497,7 +498,7 @@ class UpgradeData implements UpgradeDataInterface
                 'scope' => 'default',
                 'scope_id' => 0,
                 'path' => \Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE,
-                'value' => \Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_NONE
+                'value' => DimensionModeConfiguration::DIMENSION_NONE
             ]
         );
     }

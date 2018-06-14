@@ -5,17 +5,15 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
-use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Indexer\Dimension;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
-use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteCollectionFactory;
-use Magento\Store\Model\Store;
 
 class CustomerGroup
 {
@@ -37,38 +35,34 @@ class CustomerGroup
     private $dimensionFactory;
 
     /**
-     * @var WebsiteCollectionFactory
+     * @var DimensionModeConfiguration
      */
-    private $websiteCollectionFactory;
+    private $dimensionModeConfiguration;
 
     /**
-     * ScopeConfigInterface
-     *
-     * @var ScopeConfigInterface
+     * @var WebsiteDataProvider
      */
-    private $configReader;
+    private $websiteDataProvider;
 
     /**
-     * Constructor
-     *
      * @param UpdateIndexInterface $updateIndex
      * @param TableMaintainer $tableMaintainer
      * @param DimensionFactory $dimensionFactory
-     * @param WebsiteCollectionFactory $websiteCollectionFactory
-     * @param ScopeConfigInterface $configReader
+     * @param DimensionModeConfiguration $dimensionModeConfiguration
+     * @param WebsiteDataProvider $websiteDataProvider
      */
     public function __construct(
         UpdateIndexInterface $updateIndex,
         TableMaintainer $tableMaintainer,
         DimensionFactory $dimensionFactory,
-        WebsiteCollectionFactory $websiteCollectionFactory,
-        ScopeConfigInterface $configReader
+        DimensionModeConfiguration $dimensionModeConfiguration,
+        WebsiteDataProvider $websiteDataProvider
     ) {
         $this->updateIndex = $updateIndex;
         $this->tableMaintainer = $tableMaintainer;
         $this->dimensionFactory = $dimensionFactory;
-        $this->websiteCollectionFactory = $websiteCollectionFactory;
-        $this->configReader = $configReader;
+        $this->dimensionModeConfiguration = $dimensionModeConfiguration;
+        $this->websiteDataProvider = $websiteDataProvider;
     }
 
     /**
@@ -89,7 +83,7 @@ class CustomerGroup
         $isGroupNew = !$group->getId();
         $group = $proceed($group);
         if ($isGroupNew) {
-            foreach ($this->getAffectedDimensions($group->getId()) as $dimensions) {
+            foreach ($this->getAffectedDimensions((string)$group->getId()) as $dimensions) {
                 $this->tableMaintainer->createTablesForDimensions($dimensions);
             }
         }
@@ -109,7 +103,7 @@ class CustomerGroup
      */
     public function afterDeleteById(GroupRepositoryInterface $subject, bool $result, string $groupId)
     {
-        foreach ($this->getAffectedDimensions((int)$groupId) as $dimensions) {
+        foreach ($this->getAffectedDimensions($groupId) as $dimensions) {
             $this->tableMaintainer->dropTablesForDimensions($dimensions);
         }
 
@@ -119,39 +113,33 @@ class CustomerGroup
     /**
      * Get affected dimensions
      *
-     * @param int $groupId
-     *
-     * @return array
+     * @param string $groupId
+     * @return Dimension[][]
      */
-    private function getAffectedDimensions(int $groupId): array
+    private function getAffectedDimensions(string $groupId): array
     {
-        $return = [];
-
-        switch ($this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE)) {
-            case ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP:
-                $return[] = [
-                    $this->dimensionFactory->create(CustomerGroupDataProvider::DIMENSION_NAME, (string)$groupId)
-                ];
-                break;
-            case ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP:
-                $websiteIds = $this->websiteCollectionFactory->create()
-                    ->addFieldToFilter('code', ['neq' => Store::ADMIN_CODE])
-                    ->getAllIds();
-
-                foreach ($websiteIds as $websiteId) {
-                    $return[] = [
-                        $this->dimensionFactory->create(
-                            WebsiteDataProvider::DIMENSION_NAME,
-                            (string)$websiteId
-                        ),
-                        $this->dimensionFactory->create(
-                            CustomerGroupDataProvider::DIMENSION_NAME,
-                            (string)$groupId
-                        )
-                    ];
-                }
-                break;
+        $currentDimensions = $this->dimensionModeConfiguration->getDimensionConfiguration();
+        // do not return dimensions if Customer Group dimension is not present in configuration
+        if (!in_array( CustomerGroupDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
+            return [];
         }
-        return $return;
+        $customerGroupDimension = $this->dimensionFactory->create(
+            CustomerGroupDataProvider::DIMENSION_NAME,
+            $groupId
+        );
+
+        $dimensions = [];
+        if (in_array( WebsiteDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
+            foreach ($this->websiteDataProvider as $websiteDimension) {
+                $dimensions[] = [
+                    $customerGroupDimension,
+                    $websiteDimension
+                ];
+            }
+        } else {
+            $dimensions[] = [$customerGroupDimension];
+        }
+
+        return $dimensions;
     }
 }

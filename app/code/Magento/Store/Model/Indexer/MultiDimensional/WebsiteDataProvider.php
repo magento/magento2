@@ -6,6 +6,7 @@
 
 namespace Magento\Store\Model\Indexer\MultiDimensional;
 
+use Magento\Framework\Indexer\Dimension;
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteCollectionFactory;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Indexer\DimensionProviderInterface;
@@ -44,6 +45,9 @@ class WebsiteDataProvider implements DimensionProviderInterface
         $this->collectionFactory = $collectionFactory;
     }
 
+    /**
+     * @return Dimension[]|\Traversable
+     */
     public function getIterator(): \Traversable
     {
         foreach ($this->getWebsites() as $website) {

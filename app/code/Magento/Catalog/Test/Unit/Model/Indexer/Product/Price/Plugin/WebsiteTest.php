@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
+
 class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -66,7 +68,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
 
         $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(
-            \Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_WEBSITE
+            DimensionModeConfiguration::DIMENSION_WEBSITE
         );
         $this->dimensionFactory->expects($this->once())->method('create')->willReturn(
             $dimensionMock
@@ -93,7 +95,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
 
         $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(
-            \Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_WEBSITE
+            DimensionModeConfiguration::DIMENSION_WEBSITE
         );
         $this->dimensionFactory->expects($this->once())->method('create')->willReturn(
             $dimensionMock
