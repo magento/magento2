@@ -19,11 +19,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
-use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
-use Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory;
 use Magento\Framework\Indexer\DimensionFactory;
 
 /**
@@ -288,20 +286,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @var PriceTableResolver
      */
     private $priceTableResolver;
-    /**
-     * @var DimensionProviderFactory
-     */
-    private $dimensionProviderFactory;
 
     /**
      * @var DimensionFactory
      */
     private $dimensionFactory;
-
-    /**
-     * @var IndexScopeResolverInterface
-     */
-    private $indexScopeResolver;
 
     /**
      * Collection constructor
@@ -329,9 +318,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param MetadataPool|null $metadataPool
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
-     * @param DimensionProviderFactory|null $dimensionProviderFactory
      * @param DimensionFactory|null $dimensionFactory
-     * @param IndexScopeResolverInterface|null $indexScopeResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -359,9 +346,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         MetadataPool $metadataPool = null,
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
-        DimensionProviderFactory $dimensionProviderFactory = null,
-        DimensionFactory $dimensionFactory = null,
-        IndexScopeResolverInterface $indexScopeResolver = null
+        DimensionFactory $dimensionFactory = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -392,13 +377,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $connection
         );
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
-        $this->dimensionProviderFactory = $dimensionProviderFactory
-            ?: ObjectManager::getInstance()->get(DimensionProviderFactory::class);
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
         $this->dimensionFactory = $dimensionFactory
             ?: ObjectManager::getInstance()->get(DimensionFactory::class);
-        $this->indexScopeResolver = $indexScopeResolver
-            ?: ObjectManager::getInstance()->get(IndexScopeResolverInterface::class);
     }
 
     /**
@@ -1900,7 +1881,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _productLimitationPrice($joinLeft = false)
     {
         $filters = $this->_productLimitationFilters;
-        if (!$filters->isUsingPriceIndex()) {
+        if (!$filters->isUsingPriceIndex() || !$filters['website_id'] || !$filters['customer_group_id']) {
             return $this;
         }
 
@@ -1936,32 +1917,27 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'tier_price',
             ];
 
-            $joinFunction = $joinLeft
-                ? function ($tableName) use ($select, $joinLeft, $joinCond, $colls) {
-                    $select->joinLeft($tableName, $joinCond, $colls);
-                }
-                : function ($tableName) use ($select, $joinLeft, $joinCond, $colls) {
-                    $select->join($tableName, $joinCond, $colls);
-                };
+            $tableName = [
+                'price_index' => $this->priceTableResolver->resolve(
+                    'catalog_product_index_price',
+                    [
+                        $this->dimensionFactory->create(
+                            CustomerGroupDataProvider::DIMENSION_NAME,
+                            $filters['customer_group_id']
+                        ),
+                        $this->dimensionFactory->create(
+                            WebsiteDataProvider::DIMENSION_NAME,
+                            $filters['website_id']
+                        )
+                    ]
+                )
+            ];
 
-            if (isset($this->_productLimitationFilters['customer_group_id'])
-                || isset($this->_productLimitationFilters['website_id'])
-            ) {
-                $dimensions = $this->makeCurrentDimensions();
-
-                $tableName = [
-                    'price_index' => $this->priceTableResolver->resolve(
-                        'catalog_product_index_price',
-                        $dimensions
-                    )
-                ];
-                $joinFunction($tableName);
+            if ($joinLeft) {
+                $select->joinLeft($tableName, $joinCond, $colls);
             } else {
-                //handle rare case when price index is used on backend area where website/customer group is not passed.
-                $tableName = ['price_index' => $this->indexScopeResolver->resolve('catalog_product_index_price', [])];
-                $joinFunction($tableName);
+                $select->join($tableName, $joinCond, $colls);
             }
-
             // Set additional field filters
             foreach ($this->_priceDataFieldFilters as $filterData) {
                 $select->where(call_user_func_array('sprintf', $filterData));
@@ -2465,39 +2441,5 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         return $this->_pricesCount;
-    }
-
-    /**
-     * @return array
-     */
-    private function makeCurrentDimensions(): array
-    {
-        $dimensions = [];
-
-        if (isset($this->_productLimitationFilters['customer_group_id'])) {
-            $dimensions[] = $this->dimensionFactory->create(
-                CustomerGroupDataProvider::DIMENSION_NAME,
-                $this->_productLimitationFilters['customer_group_id']
-            );
-        } else {
-            $dimensions[] = $this->dimensionFactory->create(
-                CustomerGroupDataProvider::DIMENSION_NAME,
-                $this->_customerSession->getCustomerGroupId()
-            );
-        }
-
-        if (isset($this->_productLimitationFilters['website_id'])) {
-            $dimensions[] = $this->dimensionFactory->create(
-                WebsiteDataProvider::DIMENSION_NAME,
-                $this->_productLimitationFilters['website_id']
-            );
-        } else {
-            $dimensions[] = $this->dimensionFactory->create(
-                WebsiteDataProvider::DIMENSION_NAME,
-                $this->_storeManager->getStore($this->getStoreId())->getWebsiteId()
-            );
-        }
-
-        return $dimensions;
     }
 }
