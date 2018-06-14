@@ -156,7 +156,7 @@ class Wishlist implements SectionSourceInterface
             : 'Magento_Catalog/product/image_with_borders';
 
         try {
-            $imagesize = $helper->getResizedImageInfo();
+            $imagesize = [$helper->getWidth(), $helper->getHeight()];
         } catch (NotLoadInfoImageException $exception) {
             $imagesize = [$helper->getWidth(), $helper->getHeight()];
         }
