@@ -133,9 +133,11 @@ class Loader
         ksort($origList);
         $expanded = [];
         foreach ($origList as $moduleName => $value) {
+            $sequence = $this->expandSequence($origList, $moduleName);
+            asort($sequence);
             $expanded[] = [
                 'name' => $moduleName,
-                'sequence' => $this->expandSequence($origList, $moduleName),
+                'sequence' => $sequence,
             ];
         }
 
