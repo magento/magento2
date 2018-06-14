@@ -39,15 +39,16 @@ class RequestSender
      * debug information is recorded to debug.log.
      *
      * @param ZendClient $client
+     * @param int|null $storeId
      * @return \Zend_Http_Response
      * @throws ApiCallException
      */
-    public function send(ZendClient $client)
+    public function send(ZendClient $client, $storeId = null): \Zend_Http_Response
     {
         try {
             $response = $client->request();
 
-            $this->debuggerFactory->create()->success(
+            $this->debuggerFactory->create($storeId)->success(
                 $client->getUri(true),
                 $client->getLastRequest(),
                 $response->getStatus() . ' ' . $response->getMessage(),
@@ -56,7 +57,7 @@ class RequestSender
 
             return $response;
         } catch (\Exception $e) {
-            $this->debuggerFactory->create()->failure(
+            $this->debuggerFactory->create($storeId)->failure(
                 $client->getUri(true),
                 $client->getLastRequest(),
                 $e
