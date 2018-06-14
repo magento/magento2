@@ -20,9 +20,9 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
- * Resolver for categoriy objects the product is assigned to.
+ * Resolver for category objects the product is assigned to.
  */
-class Category implements ResolverInterface
+class Categories implements ResolverInterface
 {
     /**
      * @var Collection

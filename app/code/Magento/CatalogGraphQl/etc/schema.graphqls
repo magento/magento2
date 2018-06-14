@@ -278,7 +278,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     price: ProductPrices @doc(description: "A ProductPrices object, indicating the price of an item") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer")
-    categories: [CategoryInterface] @doc(description: "The categories assigned to a product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category")
+    categories: [CategoryInterface] @doc(description: "The categories assigned to a product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories")
     canonical_url: String @doc(description: "Canonical URL") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
 }
 
