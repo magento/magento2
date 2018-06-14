@@ -10,11 +10,17 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminManageStockGridControls">
         <element name="addNewStock" type="button" selector="#add" timeout="30"/>
+        <element name="multicheckDropdown" type="button" selector="div[data-role='grid-wrapper'] th.data-grid-multicheck-cell button.action-multicheck-toggle"/>
+        <element name="multicheckOption" type="button" selector="//div[@data-role='grid-wrapper']//th[contains(@class, data-grid-multicheck-cell)]//li//span[text() = '{{label}}']" parameterized="true"/>
     </section>
     <section name="AdminManageStockGridFilterControls">
         <element name="idFrom" type="input" selector=".admin__data-grid-filters-wrap input[name='stock_id[from]']"/>
         <element name="idTo" type="input" selector=".admin__data-grid-filters-wrap input[name='stock_id[to]']"/>
         <element name="name" type="input" selector=".admin__data-grid-filters-wrap input[name='name']"/>
         <element name="noRecords" type="text" selector=".data-grid-tr-no-data"/>
+    </section>
+    <section name="AdminManageStockGridBody">
+        <element name="dataRows" type="input" selector=".data-row"/>
+        <element name="stockSelectedCheckbox" type="checkbox" selector="#idscheck{{id}}" parameterized="true"/>
     </section>
 </sections>

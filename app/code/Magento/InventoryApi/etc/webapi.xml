@@ -88,7 +88,7 @@
             <resource ref="Magento_InventoryApi::stock_source_link"/>
         </resources>
     </route>
-    <route url="/V1/inventory/stock-source-links" method="DELETE">
+    <route url="/V1/inventory/stock-source-links-delete" method="POST">
         <service class="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::stock_source_link"/>
@@ -107,7 +107,7 @@
             <resource ref="Magento_InventoryApi::source"/>
         </resources>
     </route>
-    <route url="/V1/inventory/source-items" method="DELETE">
+    <route url="/V1/inventory/source-items-delete" method="POST">
         <service class="Magento\InventoryApi\Api\SourceItemsDeleteInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::source"/>
