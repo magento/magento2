@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Model\IsProductAssignedToStockInterface;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -49,24 +50,32 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     private $isProductAssignedToStock;
 
     /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
      * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory
      * @param StockItemRepositoryInterface $legacyStockItemRepository
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      * @param StockItemConfigurationFactory $stockItemConfigurationFactory
      * @param IsProductAssignedToStockInterface $isProductAssignedToStock
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory,
         StockItemRepositoryInterface $legacyStockItemRepository,
         GetProductIdsBySkusInterface $getProductIdsBySkus,
         StockItemConfigurationFactory $stockItemConfigurationFactory,
-        IsProductAssignedToStockInterface $isProductAssignedToStock
+        IsProductAssignedToStockInterface $isProductAssignedToStock,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->legacyStockItemCriteriaFactory = $legacyStockItemCriteriaFactory;
         $this->legacyStockItemRepository = $legacyStockItemRepository;
         $this->getProductIdsBySkus = $getProductIdsBySkus;
         $this->stockItemConfigurationFactory = $stockItemConfigurationFactory;
         $this->isProductAssignedToStock = $isProductAssignedToStock;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -74,7 +83,8 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
      */
     public function execute(string $sku, int $stockId)
     {
-        if (false === $this->isProductAssignedToStock->execute($sku, $stockId)) {
+        if ($this->defaultStockProvider->getId() !== $stockId
+            && false === $this->isProductAssignedToStock->execute($sku, $stockId)) {
             throw new NoSuchEntityException(
                 __('The requested sku is not assigned to given stock.')
             );
