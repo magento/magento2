@@ -13,7 +13,7 @@
             <features value="Multi-Source Inventory"/>
             <stories value="Add Configurable Product"/>
             <title value="Create a Configurable Product with a drop down attribute"/>
-            <description value="You should be able to create a Configurable Product that is assigned to a New Source with a drop down attribute."/>
+            <description value="You should be able to create a Configurable Product that is assigned to the Default Source with a drop down attribute."/>
             <testCaseId value="745"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
