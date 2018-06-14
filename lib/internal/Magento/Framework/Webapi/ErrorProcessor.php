@@ -199,7 +199,7 @@ class ErrorProcessor
      */
     protected function _critical(\Exception $exception)
     {
-        $reportId = uniqid("webapi-");
+        $reportId = uniqid("webapi-", true);
         $message = "Report ID: {$reportId}; Message: {$exception->getMessage()}";
         $code = $exception->getCode();
         $exception = new \Exception($message, $code, $exception);

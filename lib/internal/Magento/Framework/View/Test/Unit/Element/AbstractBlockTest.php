@@ -145,7 +145,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     public function testGetVar()
     {
         $config = $this->createPartialMock(View::class, ['getVarValue']);
-        $module = uniqid();
+        $module = uniqid('', true);
 
         $config->expects($this->any())
             ->method('getVarValue')

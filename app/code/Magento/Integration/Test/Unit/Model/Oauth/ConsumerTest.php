@@ -110,8 +110,8 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->validDataArray = [
-            'key' => md5(uniqid()),
-            'secret' => md5(uniqid()),
+            'key' => md5(uniqid('', true)),
+            'secret' => md5(uniqid('', true)),
             'callback_url' => 'http://example.com/callback',
             'rejected_callback_url' => 'http://example.com/rejectedCallback'
         ];

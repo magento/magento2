@@ -479,7 +479,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 ->getMock();
             $productMock->expects($this->once())->method('load');
             $productMock->expects($this->atLeastOnce())->method('getId')->willReturn($i);
-            $productMock->expects($this->atLeastOnce())->method('getSku')->willReturn($i . uniqid());
+            $productMock->expects($this->atLeastOnce())->method('getSku')->willReturn($i . uniqid('', true));
             $productMocks[] = $productMock;
         }
 

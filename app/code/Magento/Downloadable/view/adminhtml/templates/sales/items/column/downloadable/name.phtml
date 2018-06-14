@@ -24,7 +24,7 @@
             <?php else: ?>
                 <?= $block->truncateString($_option['value'], 55, '', $_remainder) ?>
                 <?php if ($_remainder):?>
-                    ... <span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid() ?>"><?= /* @escapeNotVerified */ $_remainder ?></span>
+                    ... <span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid('', true) ?>"><?= /* @escapeNotVerified */ $_remainder ?></span>
                     <script>
 require(['prototype'], function(){
 

@@ -172,8 +172,8 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateGetHasElement()
     {
-        $data = [uniqid() => uniqid()];
-        $elementId = uniqid('id');
+        $data = [uniqid('', true) => uniqid('', true)];
+        $elementId = uniqid('id', true);
         $this->assertFalse($this->_structure->hasElement($elementId));
         $this->assertFalse($this->_structure->getElement($elementId));
 
@@ -188,7 +188,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateElementException()
     {
-        $elementId = uniqid('id');
+        $elementId = uniqid('id', true);
         $this->_structure->createElement($elementId, []);
         $this->_structure->createElement($elementId, []);
     }
@@ -219,7 +219,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->_populateSampleStructure();
         $this->assertFalse($this->_structure->getAttribute('two', 'non-existing'));
         $this->assertEquals('bar', $this->_structure->getAttribute('two', 'foo'));
-        $value = uniqid();
+        $value = uniqid('', true);
         $this->_structure->setAttribute('two', 'non-existing', $value)->setAttribute('two', 'foo', $value);
         $this->assertEquals($value, $this->_structure->getAttribute('two', 'non-existing'));
         $this->assertEquals($value, $this->_structure->getAttribute('two', 'foo'));

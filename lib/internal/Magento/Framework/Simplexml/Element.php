@@ -475,7 +475,7 @@ class Element extends \SimpleXMLElement
      */
     public function unsetSelf()
     {
-        $uniqueId = uniqid();
+        $uniqueId = uniqid('', true);
         $this['_unique_id'] = $uniqueId;
         $children = $this->getParent()->xpath('*');
         for ($i = count($children); $i > 0; $i--) {
