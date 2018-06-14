@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
-use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;

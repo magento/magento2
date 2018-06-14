@@ -88,11 +88,6 @@ abstract class AbstractAction
     private $dimensionCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer
-     */
-    private $configReader;
-
-    /**
      * @var TableMaintainer
      */
     private $tableMaintainer;
@@ -109,7 +104,6 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice|null $tierPriceIndexResource
      * @param DimensionProviderFactory|null $dimensionCollectionFactory
      * @param TableMaintainer|null $tableMaintainer
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $configReader
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -125,8 +119,7 @@ abstract class AbstractAction
         DefaultPrice $defaultIndexerResource,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice $tierPriceIndexResource = null,
         \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionCollectionFactory = null,
-        \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer = null,
-        \Magento\Framework\App\Config\ScopeConfigInterface $configReader = null
+        \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer = null
     ) {
         $this->_config = $config;
         $this->_storeManager = $storeManager;
@@ -142,9 +135,6 @@ abstract class AbstractAction
         );
         $this->dimensionCollectionFactory = $dimensionCollectionFactory ?? ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory::class
-        );
-        $this->configReader = $configReader ?? ObjectManager::getInstance()->get(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
         );
         $this->tableMaintainer = $tableMaintainer ?? ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer::class
@@ -169,7 +159,7 @@ abstract class AbstractAction
      */
     protected function _syncData(array $processIds = [])
     {
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
+        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode();
 
         // for backward compatibility split data from old idx table on dimension tables
         foreach ($dimensionsProviders as $dimensions) {
@@ -374,7 +364,7 @@ abstract class AbstractAction
         foreach ($productsTypes as $productType => $entityIds) {
             $indexer = $this->_getIndexer($productType);
             if ($indexer instanceof DimensionalIndexerInterface) {
-                $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
+                $dimensionsProviders = $this->dimensionCollectionFactory->createByMode();
                 foreach ($dimensionsProviders as $dimensions) {
                     $this->tableMaintainer->createMainTmpTable($dimensions);
                     $temporaryTable = $this->tableMaintainer->getMainTmpTable($dimensions);
@@ -404,7 +394,7 @@ abstract class AbstractAction
      */
     private function deleteIndexData(array $entityIds)
     {
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
+        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode();
 
         foreach ($dimensionsProviders as $dimensions) {
             $select = $this->_connection->select()->from(
@@ -450,13 +440,10 @@ abstract class AbstractAction
 
         if ($children) {
             /** @var DimensionProviderInterface $dimensionsProviders */
-            $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
+            $dimensionsProviders = $this->dimensionCollectionFactory->createByMode();
             foreach ($dimensionsProviders as $dimensions) {
                 $select = $this->_connection->select()->from(
-                    $this->getIndexTargetTableByDimension(
-                        $this->getIndexTargetTable(),
-                        $dimensions
-                    )
+                    $this->getIndexTargetTableByDimension($dimensions)
                 )->where(
                     'entity_id IN(?)',
                     $children
@@ -470,29 +457,17 @@ abstract class AbstractAction
     }
 
     /**
-     * Get current price indexer mode
-     *
-     * @return string
-     */
-    private function getCurrentMode()
-    {
-        return $this->configReader->getValue(
-            ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE
-        ) ?: ModeSwitcher::INPUT_KEY_NONE;
-    }
-
-    /**
      * Retrieve index table by dimension that will be used for write operations.
      *
      * This method is used during both partial and full reindex to identify the table.
      *
-     * @param string $indexTargetTable
      * @param \Magento\Framework\Search\Request\Dimension[] $dimensions
      *
      * @return string
      */
-    private function getIndexTargetTableByDimension(string $indexTargetTable, array $dimensions)
+    private function getIndexTargetTableByDimension(array $dimensions)
     {
+        $indexTargetTable = $this->getIndexTargetTable();
         if ($indexTargetTable === self::getIndexTargetTable()) {
             $indexTargetTable = $this->tableMaintainer->getMainTable($dimensions);
         }

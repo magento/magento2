@@ -11,7 +11,6 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
-use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
@@ -51,7 +50,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory
      */
-    private $dimensionCollectionFactory;
+    private $dimensionProviderFactory;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer
@@ -120,7 +119,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
         );
-        $this->dimensionCollectionFactory = $dimensionCollectionFactory ?: ObjectManager::getInstance()->get(
+        $this->dimensionProviderFactory = $dimensionCollectionFactory ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory::class
         );
         $this->dimensionTableMaintainer = $dimensionTableMaintainer ?: ObjectManager::getInstance()->get(
@@ -186,18 +185,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     }
 
     /**
-     * Get current price indexer mode
-     *
-     * @return string
-     */
-    private function getCurrentMode()
-    {
-        return $this->configReader->getValue(
-            ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE
-        ) ?: ModeSwitcher::INPUT_KEY_NONE;
-    }
-
-    /**
      * Truncate main replica table
      *
      * @return void
@@ -217,7 +204,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private function truncateReplicaTablesByDimensions()
     {
         /** @var DimensionProviderInterface $dimensionsProviders */
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
+        $dimensionsProviders = $this->dimensionProviderFactory->createByMode();
         foreach ($dimensionsProviders as $dimension) {
             $dimensionTable = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
             $this->_defaultIndexerResource->getConnection()->truncateTable($dimensionTable);
@@ -236,7 +223,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private function reindexProductTypeWithDimensions(DimensionalIndexerInterface $priceIndexer, string $typeId)
     {
         /** @var DimensionProviderInterface $dimensionsProviders */
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
+        $dimensionsProviders = $this->dimensionProviderFactory->createByMode();
 
         foreach ($dimensionsProviders as $dimensions) {
             $this->reindexByBatches($priceIndexer, $dimensions, $typeId);
@@ -305,11 +292,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $this->dimensionTableMaintainer->createMainTmpTable($dimensions);
             $temporaryTable = $this->dimensionTableMaintainer->getMainTmpTable($dimensions);
             $this->_emptyTable($temporaryTable);
-
-            // TODO: will be handled in separate task
-            // if ($priceIndexer->getIsComposite()) {
-            //    $this->_copyRelationIndexData($entityIds);
-            // }
 
             $priceIndexer->executeByDimension($dimensions, \SplFixedArray::fromArray($entityIds, false));
 
@@ -432,8 +414,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      */
     private function switchTables()
     {
-        /** @var DimensionProviderInterface $dimensionsProviders */
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode($this->getCurrentMode());
+        $dimensionsProviders = $this->dimensionProviderFactory->createByMode();
 
         // Switch dimension tables
         $mainTablesByDimension = [];
@@ -454,8 +435,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     }
 
     /**
-     * Move data from replica table to replica tables (by dimensions)
-     * Data from old price indexer mechanism moves to data with new indexer mechanism by dimensions
+     * Move data from old price indexer mechanism to new indexer mechanism by dimensions.
+     * Used only for backward compatibility
      *
      * @param array $dimensions
      *
@@ -463,32 +444,33 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      */
     private function moveDataFromReplicaTableToReplicaTables(array $dimensions)
     {
+        if (!$dimensions) {
+            return ;
+        }
         //TODO: need to update logic for run this move only when replica table is not empty
         $select = $this->dimensionTableMaintainer->getConnection()->select()->from(
             $this->dimensionTableMaintainer->getMainReplicaTable([])
         );
 
-        if ($this->getCurrentMode() !== ModeSwitcher::INPUT_KEY_NONE) {
-            $replicaTablesByDimension = $this->dimensionTableMaintainer->getMainReplicaTable($dimensions);
+        $replicaTablesByDimension = $this->dimensionTableMaintainer->getMainReplicaTable($dimensions);
 
-            foreach ($dimensions as $dimension) {
-                if ($dimension->getName() === WebsiteDataProvider::DIMENSION_NAME) {
-                    $select->where('website_id = ?', $dimension->getValue());
-                }
-                if ($dimension->getName() === CustomerGroupDataProvider::DIMENSION_NAME) {
-                    $select->where('customer_group_id = ?', $dimension->getValue());
-                }
+        foreach ($dimensions as $dimension) {
+            if ($dimension->getName() === WebsiteDataProvider::DIMENSION_NAME) {
+                $select->where('website_id = ?', $dimension->getValue());
             }
-
-            $this->dimensionTableMaintainer->getConnection()->query(
-                $this->dimensionTableMaintainer->getConnection()->insertFromSelect(
-                    $select,
-                    $replicaTablesByDimension,
-                    [],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
-                )
-            );
+            if ($dimension->getName() === CustomerGroupDataProvider::DIMENSION_NAME) {
+                $select->where('customer_group_id = ?', $dimension->getValue());
+            }
         }
+
+        $this->dimensionTableMaintainer->getConnection()->query(
+            $this->dimensionTableMaintainer->getConnection()->insertFromSelect(
+                $select,
+                $replicaTablesByDimension,
+                [],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+            )
+        );
     }
 
     /**

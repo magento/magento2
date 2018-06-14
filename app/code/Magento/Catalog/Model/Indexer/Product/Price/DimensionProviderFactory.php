@@ -34,8 +34,21 @@ class DimensionProviderFactory
      */
     private $modesConfiguration;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @param \Magento\Framework\Indexer\MultiDimensionProviderInterfaceFactory $multiDimensionProviderFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param array $dimensionProviders
+     * @param array $modes
+     * @param array $modesConfiguration
+     */
     public function __construct(
         \Magento\Framework\Indexer\MultiDimensionProviderInterfaceFactory $multiDimensionProviderFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         array $dimensionProviders,
         array $modes,
         array $modesConfiguration
@@ -44,16 +57,21 @@ class DimensionProviderFactory
         $this->dimensionProviders = $dimensionProviders;
         $this->modes = $modes;
         $this->modesConfiguration = $modesConfiguration;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
      * Create MultiDimensionProviderInterface for specified "dimension mode" - which dimensions indexer use for sharding
      *
-     * @param string $dimensionsMode
+     * @param string|null $dimensionsMode
      * @return MultiDimensionProviderInterface
      */
-    public function createByMode(string $dimensionsMode): MultiDimensionProviderInterface
+    public function createByMode(string $dimensionsMode = null): MultiDimensionProviderInterface
     {
+        if (null === $dimensionsMode) {
+            $dimensionsMode = $this->scopeConfig->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE)
+                ?: ModeSwitcher::INPUT_KEY_NONE;
+        }
         if (!in_array($dimensionsMode, $this->modes)) {
             throw new \InvalidArgumentException(
                 sprintf('Undefined dimension mode "%s".', $dimensionsMode)
