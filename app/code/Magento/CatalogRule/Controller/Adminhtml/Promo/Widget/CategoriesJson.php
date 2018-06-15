@@ -33,7 +33,7 @@ class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Wid
     /**
      * Initialize category object in registry
      *
-     * @return Category|Boolean
+     * @return Category|bool
      */
     protected function _initCategory()
     {
