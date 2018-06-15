@@ -7,6 +7,7 @@
 namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Checkout\Test\Constraint\AssertGrandTotalOrderReview;
+use Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -31,6 +32,13 @@ class PlaceOrderStep implements TestStepInterface
      * @var AssertGrandTotalOrderReview
      */
     private $assertGrandTotalOrderReview;
+
+    /**
+     * Assert that order success message is correct.
+     *
+     * @var AssertOrderSuccessPlacedMessage
+     */
+    private $assertOrderSuccessPlacedMessage;
 
     /**
      * One page checkout success page.
@@ -70,6 +78,7 @@ class PlaceOrderStep implements TestStepInterface
     /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
+     * @param AssertOrderSuccessPlacedMessage $assertOrderSuccessPlacedMessage
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param FixtureFactory $fixtureFactory
      * @param array $products
@@ -79,6 +88,7 @@ class PlaceOrderStep implements TestStepInterface
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         AssertGrandTotalOrderReview $assertGrandTotalOrderReview,
+        AssertOrderSuccessPlacedMessage $assertOrderSuccessPlacedMessage,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         FixtureFactory $fixtureFactory,
         array $products = [],
@@ -87,6 +97,7 @@ class PlaceOrderStep implements TestStepInterface
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertGrandTotalOrderReview = $assertGrandTotalOrderReview;
+        $this->assertOrderSuccessPlacedMessage = $assertOrderSuccessPlacedMessage;
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->fixtureFactory = $fixtureFactory;
         $this->products = $products;
@@ -105,6 +116,7 @@ class PlaceOrderStep implements TestStepInterface
             $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->prices['grandTotal']);
         }
         $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
+        $this->assertOrderSuccessPlacedMessage->processAssert($this->checkoutOnepageSuccess);
         $orderId = $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         $data = [
             'id' => $orderId,
