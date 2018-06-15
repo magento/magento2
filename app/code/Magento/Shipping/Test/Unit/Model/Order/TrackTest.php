@@ -9,6 +9,7 @@ class TrackTest extends \PHPUnit\Framework\TestCase
 {
     public function testLookup()
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $carrier = $this->createPartialMock(
@@ -26,10 +27,16 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         $shipmentRepository = $this->createPartialMock(\Magento\Sales\Model\Order\ShipmentRepository::class, ['get']);
         $shipmentRepository->expects($this->any())->method('get')->willReturn($shipment);
 
+        $zendValidatorUri = $objectManager->getObject(\Zend\Validator\Uri::class);
+
         /** @var \Magento\Shipping\Model\Order\Track $model */
         $model = $helper->getObject(
             \Magento\Shipping\Model\Order\Track::class,
-            ['carrierFactory' => $carrierFactory, 'shipmentRepository' => $shipmentRepository]
+            [
+                'carrierFactory' => $carrierFactory,
+                'shipmentRepository' => $shipmentRepository,
+                'zendValidatorUri' => $zendValidatorUri
+            ]
         );
         $model->setParentId(1);
         $this->assertEquals('trackingInfo', $model->getNumberDetail());

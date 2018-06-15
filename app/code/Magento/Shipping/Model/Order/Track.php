@@ -7,6 +7,7 @@
 namespace Magento\Shipping\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Zend\Validator\Uri;
 
 /**
  * @method int getParentId()
@@ -35,6 +36,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
+     * @param \Zend\Validator\Uri $zendValidatorUri
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -49,6 +51,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
+        \Zend\Validator\Uri $zendValidatorUri,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -60,6 +63,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
             $customAttributeFactory,
             $storeManager,
             $shipmentRepository,
+            $zendValidatorUri,
             $resource,
             $resourceCollection,
             $data
