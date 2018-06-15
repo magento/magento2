@@ -38,11 +38,11 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
                 ->setOrder($txn->getOrder())
                 ->importTransactionInfo($txn);
             $txn->save();
-            $this->messageManager->addSuccess(__('The transaction details have been updated.'));
+            $this->messageManager->addSuccessMessage(__('The transaction details have been updated.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t update the transaction details.'));
+            $this->messageManager->addErrorMessage(__('We can\'t update the transaction details.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
 

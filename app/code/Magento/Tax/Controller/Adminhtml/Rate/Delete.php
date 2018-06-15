@@ -24,17 +24,17 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
             try {
                 $this->_taxRateRepository->deleteById($rateId);
 
-                $this->messageManager->addSuccess(__('You deleted the tax rate.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the tax rate.'));
                 return $resultRedirect->setPath("*/*/");
             } catch (NoSuchEntityException $e) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('We can\'t delete this rate because of an incorrect rate ID.')
                 );
                 return $resultRedirect->setPath("tax/*/");
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong deleting this rate.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong deleting this rate.'));
             }
 
             if ($this->getRequest()->getServer('HTTP_REFERER')) {

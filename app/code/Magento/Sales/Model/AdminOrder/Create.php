@@ -1073,7 +1073,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             try {
                 $this->addProduct($productId, $config);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 return $e;
             }

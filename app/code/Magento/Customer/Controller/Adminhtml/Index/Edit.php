@@ -42,7 +42,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
                     //do nothing
                 }
             } catch (NoSuchEntityException $e) {
-                $this->messageManager->addException($e, __('Something went wrong while editing the customer.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while editing the customer.'));
                 $resultRedirect = $this->resultRedirectFactory->create();
                 $resultRedirect->setPath('customer/*/index');
                 return $resultRedirect;

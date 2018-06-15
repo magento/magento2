@@ -23,9 +23,9 @@ class StockAll extends UnsubscribeController
                         ->getStore()
                         ->getWebsiteId()
                 );
-            $this->messageManager->addSuccess(__('You will no longer receive stock alerts.'));
+            $this->messageManager->addSuccessMessage(__('You will no longer receive stock alerts.'));
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
+            $this->messageManager->addExceptionMessage($e, __('Unable to update the alert subscription.'));
         }
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

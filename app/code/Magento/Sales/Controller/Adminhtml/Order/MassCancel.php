@@ -48,13 +48,13 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
         $countNonCancelOrder = $collection->count() - $countCancelOrder;
 
         if ($countNonCancelOrder && $countCancelOrder) {
-            $this->messageManager->addError(__('%1 order(s) cannot be canceled.', $countNonCancelOrder));
+            $this->messageManager->addErrorMessage(__('%1 order(s) cannot be canceled.', $countNonCancelOrder));
         } elseif ($countNonCancelOrder) {
-            $this->messageManager->addError(__('You cannot cancel the order(s).'));
+            $this->messageManager->addErrorMessage(__('You cannot cancel the order(s).'));
         }
 
         if ($countCancelOrder) {
-            $this->messageManager->addSuccess(__('We canceled %1 order(s).', $countCancelOrder));
+            $this->messageManager->addSuccessMessage(__('We canceled %1 order(s).', $countCancelOrder));
         }
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath($this->getComponentRefererUrl());

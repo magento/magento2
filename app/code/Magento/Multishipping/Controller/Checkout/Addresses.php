@@ -28,7 +28,7 @@ class Addresses extends \Magento\Multishipping\Controller\Checkout
         $this->_getState()->setActiveStep(State::STEP_SELECT_ADDRESSES);
         if (!$this->_getCheckout()->validateMinimumAmount()) {
             $message = $this->_getCheckout()->getMinimumAmountDescription();
-            $this->messageManager->addNotice($message);
+            $this->messageManager->addNoticeMessage($message);
         }
         $this->_view->loadLayout();
         $this->_view->renderLayout();

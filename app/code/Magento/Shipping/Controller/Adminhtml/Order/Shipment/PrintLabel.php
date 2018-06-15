@@ -74,7 +74,7 @@ class PrintLabel extends \Magento\Backend\App\Action
                     $pdf = new \Zend_Pdf();
                     $page = $this->labelGenerator->createPdfPageFromImageString($labelContent);
                     if (!$page) {
-                        $this->messageManager->addError(
+                        $this->messageManager->addErrorMessage(
                             __(
                                 'We don\'t recognize or support the file extension in this shipment: %1.',
                                 $shipment->getIncrementId()
@@ -93,10 +93,10 @@ class PrintLabel extends \Magento\Backend\App\Action
                 );
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-            $this->messageManager->addError(__('An error occurred while creating shipping label.'));
+            $this->messageManager->addErrorMessage(__('An error occurred while creating shipping label.'));
         }
         $this->_redirect(
             'adminhtml/order_shipment/view',
