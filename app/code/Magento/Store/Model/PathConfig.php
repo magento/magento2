@@ -9,8 +9,10 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
 {
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     private $scopeConfig;
+
     /** @var \Magento\Framework\Url\SecurityInfoInterface */
     private $urlSecurityInfo;
+
     /** @var StoreManagerInterface */
     private $storeManager;
 
@@ -24,7 +26,6 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
         \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         StoreManagerInterface $storeManager
     ) {
-
         $this->scopeConfig = $scopeConfig;
         $this->urlSecurityInfo = $urlSecurityInfo;
         $this->storeManager = $storeManager;
@@ -76,6 +77,8 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
      */
     public function getDefaultPath()
     {
-        return $this->scopeConfig->getValue('web/default/front', ScopeInterface::SCOPE_STORE);
+        $store = $this->storeManager->getStore();
+        $value = $this->scopeConfig->getValue('web/default/front', ScopeInterface::SCOPE_STORE, $store);
+        return $value;
     }
 }
