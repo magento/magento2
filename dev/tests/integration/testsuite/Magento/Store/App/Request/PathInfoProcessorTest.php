@@ -31,6 +31,9 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = Bootstrap::getObjectManager()->create(\Magento\Framework\App\RequestInterface::class);
+        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
+        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $info = $this->pathProcessor->process($request, $pathInfo);
         $this->assertEquals($pathInfo, $info);
     }
@@ -58,6 +61,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, false, ScopeInterface::SCOPE_STORE, $store->getCode());
         $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
         $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
@@ -79,6 +83,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, true, ScopeInterface::SCOPE_STORE, $store->getCode());
         $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
         $this->assertEquals('/m/c/a', $this->pathProcessor->process($request, $pathInfo));
@@ -102,6 +107,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, true, ScopeInterface::SCOPE_STORE, $store->getCode());
         $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
         $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
@@ -126,12 +132,12 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, false, ScopeInterface::SCOPE_STORE, $store->getCode());
         $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
         $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
         $this->assertEquals('noroute', $request->getActionName());
     }
-
 
     /**
      * @covers \Magento\Store\App\Request\PathInfoProcessor::process
@@ -151,9 +157,28 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
         $config->setValue(Store::XML_PATH_STORE_IN_URL, false, ScopeInterface::SCOPE_STORE, $store->getCode());
         $pathInfo = sprintf('/%s/m/c/a', 'admin');
         $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
+        $this->assertEquals(null, $request->getActionName());
+    }
+
+    /**
+     * @covers \Magento\Store\App\Request\PathInfoProcessor::process
+     */
+    public function testProcessValidStoreCodeWhenUrlConfigIsDisabled()
+    {
+        /** @var \Magento\Framework\App\RequestInterface $request */
+        $request = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\App\RequestInterface::class,
+            ['directFrontNames' => ['someFrontName' => true]]
+        );
+
+        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
+        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->setValue(Store::XML_PATH_STORE_IN_URL, false);
+        $pathInfo = sprintf('/%s/m/c/a', 'whatever');
         $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
         $this->assertEquals(null, $request->getActionName());
     }

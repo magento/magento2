@@ -48,7 +48,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     protected $scopeCode;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var \Magento\Framework\App\Request\Http
      */
     protected $request;
 
@@ -65,7 +65,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Store\Model\StoresData $storesData
      * @param \Magento\Store\App\Request\StorePathInfoValidator $storePathInfoValidator
      * @param string|null $runMode
@@ -74,7 +74,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     public function __construct(
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
         \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager,
-        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\App\Request\Http $request,
         \Magento\Store\App\Request\StorePathInfoValidator $storePathInfoValidator,
         \Magento\Store\Model\StoresData $storesData,
         $runMode = ScopeInterface::SCOPE_STORE,
@@ -96,12 +96,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     {
         list($stores, $defaultStoreId) = $this->getStoresData();
 
-        $pathInfo = $this->storePathInfoValidator->getPathInfo($this->request);
-
-        $storeCode = $this->storePathInfoValidator->getValidStoreCode(
-            $this->request,
-            $pathInfo
-        );
+        $storeCode = $this->storePathInfoValidator->getValidStoreCode($this->request);
 
         if (!$storeCode) {
             $storeCode = $this->request->getParam(

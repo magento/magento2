@@ -11,7 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 
 /**
- * Processes the path and looks for the store in the url and removes it and modifies the request accordingly.
+ * Gets the store from the path if valid
  */
 class StorePathInfoValidator
 {
@@ -48,36 +48,8 @@ class StorePathInfoValidator
     }
 
     /**
-     * Get store code from path info in request
-     *
-     * @param \Magento\Framework\App\Request\Http $request
-     * @param string $pathInfo
-     * @return string|null
-     */
-    public function getStoreFrontCodeFromPathInfo(
-        \Magento\Framework\App\Request\Http $request,
-        string $pathInfo
-    ) : ?string {
-        if (!empty($pathInfo)) {
-            return $this->getValidStoreCode($request, $pathInfo);
-        }
-        return null;
-    }
-
-    /**
-     * Get path info from request
-     *
-     * @param \Magento\Framework\App\Request\Http $request
-     * @return string
-     */
-    public function getPathInfo(
-        \Magento\Framework\App\Request\Http $request
-    ) : string {
-        return $this->pathInfo->getPathInfo($request->getRequestUri(), $request->getBaseUrl());
-    }
-
-    /**
-     * Get store code if rules apply and validate it if config value is enabled and if not return no route
+     * Get store code from pathinfo validate if config value. If pathinfo is empty the try to calculate from request.
+     * This method also sets request to no route if store doesn't have url enabled but store in url is enabled globally.
      *
      * @param \Magento\Framework\App\Request\Http $request
      * @param string $pathInfo
@@ -85,13 +57,20 @@ class StorePathInfoValidator
      */
     public function getValidStoreCode(
         \Magento\Framework\App\Request\Http $request,
-        string $pathInfo
+        string $pathInfo = ''
     ) : ?string {
+        if (empty($pathInfo)) {
+            $pathInfo = $this->pathInfo->getPathInfo(
+                $request->getRequestUri(),
+                $request->getBaseUrl()
+            );
+        }
         $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
         $storeCode = current($pathParts);
         if (!$request->isDirectAccessFrontendName($storeCode)
             && !empty($storeCode)
             && $storeCode != Store::ADMIN_CODE
+            && (bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)
         ) {
             try {
                 /** @var \Magento\Store\Api\Data\StoreInterface $store */

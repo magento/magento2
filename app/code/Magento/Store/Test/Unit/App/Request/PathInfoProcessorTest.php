@@ -69,7 +69,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testProcessIfStoreExistsAndIsNotDirectAccessToFrontName()
     {
-        $this->configMock->expects($this->once())->method('getValue')->willReturn(true);
+        $this->configMock->expects($this->exactly(2))->method('getValue')->willReturn(true);
 
         $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeRepositoryMock->expects(
@@ -138,7 +138,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testProcessIfStoreCodeIsNotExist()
     {
-        $this->configMock->expects($this->never())->method('getValue')->willReturn(true);
+        $this->configMock->expects($this->once())->method('getValue')->willReturn(true);
 
         $this->storeRepositoryMock->expects($this->once())->method('getActiveStoreByCode')->with('storeCode')
             ->willThrowException(new NoSuchEntityException());
@@ -151,7 +151,9 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testProcessIfStoreUrlNotEnabled()
     {
-        $this->configMock->expects($this->once())->method('getValue')->willReturn(false);
+        $this->configMock->expects($this->at(0))->method('getValue')->willReturn(true);
+
+        $this->configMock->expects($this->at(1))->method('getValue')->willReturn(false);
 
         $this->storeRepositoryMock->expects($this->once())->method('getActiveStoreByCode')->willReturn(1);
 
