@@ -15,10 +15,10 @@ use Magento\Framework\DataObject\Copy as CopyService;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory as AddressFactory;
-use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as RegionFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory as CustomerFactory;
 use Magento\Quote\Api\Data\AddressInterfaceFactory as QuoteAddressFactory;
+use Magento\Sales\Model\Order\Address as OrderAddress;
 
 /**
  * Extract customer data from an order.
@@ -88,8 +88,9 @@ class OrderCustomerExtractor
     }
 
     /**
-     * @param int $orderId
+     * Extract customer data from order.
      *
+     * @param int $orderId
      * @return CustomerInterface
      */
     public function extract(int $orderId): CustomerInterface
@@ -109,23 +110,48 @@ class OrderCustomerExtractor
             []
         );
         $addresses = $order->getAddresses();
+        $customerAddresses = [];
+        // Filter duplicates in order addresses
         foreach ($addresses as $address) {
-            $addressData = $this->objectCopyService->copyFieldsetToTarget(
-                'order_address',
-                'to_customer_address',
-                $address,
-                []
-            );
+            $this->addAddress($customerAddresses, $address);
+        }
+        // Add filtered addresses to customer data
+        foreach ($customerAddresses as $addressItem) {
+            $customerData['addresses'][] = $addressItem['address'];
+        }
+
+        return $this->customerFactory->create(['data' => $customerData]);
+    }
+
+    /**
+     * Add address to list filtering duplicates.
+     *
+     * @param array $customerAddresses
+     * @param OrderAddress $address
+     * @return void
+     */
+    private function addAddress(
+        array &$customerAddresses,
+        OrderAddress $address
+    ) {
+        $addressData = $this->objectCopyService->copyFieldsetToTarget(
+            'order_address',
+            'to_customer_address',
+            $address,
+            []
+        );
+
+        $foundAddress = null;
+        foreach ($customerAddresses as $customerAddressItem) {
+            if ($this->isAddressesAreEqual($customerAddressItem['addressData'], $addressData)) {
+                $foundAddress = $customerAddressItem['address'];
+                break;
+            }
+        }
+
+        if (empty($foundAddress)) {
             /** @var AddressInterface $customerAddress */
             $customerAddress = $this->addressFactory->create(['data' => $addressData]);
-            switch ($address->getAddressType()) {
-                case QuoteAddress::ADDRESS_TYPE_BILLING:
-                    $customerAddress->setIsDefaultBilling(true);
-                    break;
-                case QuoteAddress::ADDRESS_TYPE_SHIPPING:
-                    $customerAddress->setIsDefaultShipping(true);
-                    break;
-            }
 
             if (is_string($address->getRegion())) {
                 /** @var RegionInterface $region */
@@ -135,9 +161,33 @@ class OrderCustomerExtractor
                 $region->setRegionId($address->getRegionId());
                 $customerAddress->setRegion($region);
             }
-            $customerData['addresses'][] = $customerAddress;
+
+            $customerAddresses[] = [
+                'addressData' => $addressData,
+                'address' => $customerAddress,
+            ];
+            $foundAddress = $customerAddress;
         }
 
-        return $this->customerFactory->create(['data' => $customerData]);
+        switch ($address->getAddressType()) {
+            case OrderAddress::TYPE_BILLING:
+                $foundAddress->setIsDefaultBilling(true);
+                break;
+            case OrderAddress::TYPE_SHIPPING:
+                $foundAddress->setIsDefaultShipping(true);
+                break;
+        }
+    }
+
+    /**
+     * Checks if addresses are equal.
+     *
+     * @param array $addressData1
+     * @param array $addressData2
+     * @return bool
+     */
+    private function isAddressesAreEqual(array $addressData1, array $addressData2)
+    {
+        return $addressData1 == $addressData2;
     }
 }
