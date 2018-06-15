@@ -11,6 +11,8 @@
     <section name="AdminCategorySEOSection">
         <element name="SectionHeader" type="button" selector="div[data-index='search_engine_optimization']" timeout="30"/>
         <element name="UrlKeyInput" type="input" selector="input[name='url_key']"/>
+        <element name="UrlKeyDefaultValueCheckbox" type="button" selector="input[name='use_default[url_key]']"/>
+        <element name="UrlKeyRedirectCheckbox" type="button" selector="[data-index='url_key_create_redirect'] input[type='checkbox']"/>
         <element name="MetaTitleInput" type="input" selector="input[name='meta_title']"/>
         <element name="MetaKeywordsInput" type="textarea" selector="textarea[name='meta_keywords']"/>
         <element name="MetaDescriptionInput" type="textarea" selector="textarea[name='meta_description']"/>

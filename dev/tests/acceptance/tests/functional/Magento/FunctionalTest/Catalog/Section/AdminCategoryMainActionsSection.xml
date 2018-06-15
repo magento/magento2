@@ -11,5 +11,8 @@
     <section name="AdminCategoryMainActionsSection">
         <element name="SaveButton" type="button" selector=".page-actions-inner #save" timeout="30"/>
         <element name="DeleteButton" type="button" selector=".page-actions-inner #delete" timeout="30"/>
+        <element name="CategoryStoreViewDropdownToggle" type="button" selector="#store-change-button"/>
+        <element name="CategoryStoreViewOption" type="button" selector="//div[contains(@class, 'store-switcher')]//a[normalize-space()='{{store}}']" parameterized="true"/>
+        <element name="CategoryStoreViewModalAccept" type="button" selector=".modal-popup.confirm._show .action-accept"/>
     </section>
 </sections>
