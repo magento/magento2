@@ -13,6 +13,10 @@
         <data key="name_lwr" unique="suffix">simplecategory</data>
         <data key="is_active">true</data>
     </entity>
+    <entity name="ApiCategory" type="category">
+        <data key="name" unique="suffix">ApiCategory</data>
+        <data key="is_active">true</data>
+    </entity>
     <entity name="SimpleSubCategory" type="category">
         <data key="name" unique="suffix">SimpleSubCategory</data>
         <data key="name_lwr" unique="suffix">simplesubcategory</data>
