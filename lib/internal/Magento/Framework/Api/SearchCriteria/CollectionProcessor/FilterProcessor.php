@@ -72,6 +72,15 @@ class FilterProcessor implements CollectionProcessorInterface
             if (!$isApplied) {
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $fields[] = $this->getFieldMapping($filter->getField());
+
+                if ($condition === 'fulltext') {
+                    // NOTE: This is not a fulltext search, but the best way to search something when
+                    // a SearchCriteria with "fulltext" condition is provided over a MySQL table
+                    // (see https://github.com/magento-engcom/msi/issues/1221)
+                    $condition = 'like';
+                    $filter->setValue('%' . $filter->getValue() . '%');
+                }
+
                 $conditions[] = [$condition => $filter->getValue()];
             }
         }
