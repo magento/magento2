@@ -22,7 +22,7 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
 
         $template = $this->_initTemplate('id');
         if (!$template->getId() && $id) {
-            $this->messageManager->addError(__('This email template no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This email template no longer exists.'));
             $this->_redirect('adminhtml/*/');
             return;
         }
@@ -55,7 +55,7 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
 
             $template->save();
             $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData(false);
-            $this->messageManager->addSuccess(__('You saved the email template.'));
+            $this->messageManager->addSuccessMessage(__('You saved the email template.'));
             $this->_redirect('adminhtml/*');
         } catch (\Exception $e) {
             $this->_objectManager->get(
@@ -64,7 +64,7 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
                 'email_template_form_data',
                 $request->getParams()
             );
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_forward('new');
         }
     }

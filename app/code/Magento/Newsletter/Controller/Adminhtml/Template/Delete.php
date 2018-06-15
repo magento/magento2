@@ -23,12 +23,12 @@ class Delete extends \Magento\Newsletter\Controller\Adminhtml\Template
         if ($template->getId()) {
             try {
                 $template->delete();
-                $this->messageManager->addSuccess(__('The newsletter template has been deleted.'));
+                $this->messageManager->addSuccessMessage(__('The newsletter template has been deleted.'));
                 $this->_getSession()->setFormData(false);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('We can\'t delete this template right now.'));
+                $this->messageManager->addExceptionMessage($e, __('We can\'t delete this template right now.'));
             }
         }
         $this->_redirect('*/template');

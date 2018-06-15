@@ -255,7 +255,7 @@ class AfterAddressSaveObserver implements ObserverInterface
                 : (string)__('You will not be charged tax.');
         }
 
-        $this->messageManager->addSuccess(implode(' ', $message));
+        $this->messageManager->addSuccessMessage(implode(' ', $message));
 
         return $this;
     }
@@ -280,7 +280,7 @@ class AfterAddressSaveObserver implements ObserverInterface
             $message[] = (string)__('You will be charged tax.');
         }
 
-        $this->messageManager->addError(implode(' ', $message));
+        $this->messageManager->addErrorMessage(implode(' ', $message));
 
         return $this;
     }
@@ -307,7 +307,7 @@ class AfterAddressSaveObserver implements ObserverInterface
         $email = $this->scopeConfig->getValue('trans_email/ident_support/email', ScopeInterface::SCOPE_STORE);
         $message[] = (string)__('If you believe this is an error, please contact us at %1', $email);
 
-        $this->messageManager->addError(implode(' ', $message));
+        $this->messageManager->addErrorMessage(implode(' ', $message));
 
         return $this;
     }

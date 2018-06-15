@@ -49,7 +49,7 @@ class Post extends ProductController
 
                 $review->aggregate();
 
-                $this->messageManager->addSuccess(__('You saved the review.'));
+                $this->messageManager->addSuccessMessage(__('You saved the review.'));
                 if ($this->getRequest()->getParam('ret') == 'pending') {
                     $resultRedirect->setPath('review/*/pending');
                 } else {
@@ -57,9 +57,9 @@ class Post extends ProductController
                 }
                 return $resultRedirect;
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving this review.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving this review.'));
             }
         }
         $resultRedirect->setPath('review/*/');

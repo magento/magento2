@@ -88,9 +88,9 @@ class Price extends AddController
                         ->getWebsiteId()
                 );
             $model->save();
-            $this->messageManager->addSuccess(__('You saved the alert subscription.'));
+            $this->messageManager->addSuccessMessage(__('You saved the alert subscription.'));
         } catch (NoSuchEntityException $noEntityException) {
-            $this->messageManager->addError(__('There are not enough parameters.'));
+            $this->messageManager->addErrorMessage(__('There are not enough parameters.'));
             if ($this->isInternal($backUrl)) {
                 $resultRedirect->setUrl($backUrl);
             } else {
@@ -98,7 +98,7 @@ class Price extends AddController
             }
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t update the alert subscription right now.'));
         }
         $resultRedirect->setUrl($this->_redirect->getRedirectUrl());
         return $resultRedirect;

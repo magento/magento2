@@ -105,7 +105,7 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
             );
         }
 
-        $this->messageManager->addError(__('There are no shipping labels related to selected orders.'));
+        $this->messageManager->addErrorMessage(__('There are no shipping labels related to selected orders.'));
         return $this->resultRedirectFactory->create()->setPath('sales/order/');
     }
 }

@@ -18,7 +18,7 @@ class Index extends \Magento\Integration\Controller\Adminhtml\Integration
         $unsecureIntegrationsCount = $this->_integrationCollection->addUnsecureUrlsFilter()->getSize();
         if ($unsecureIntegrationsCount > 0) {
             // @codingStandardsIgnoreStart
-            $this->messageManager->addNotice(__('Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information')
+            $this->messageManager->addNoticeMessage(__('Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information')
             // @codingStandardsIgnoreEnd
             );
         }

@@ -89,7 +89,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
 
         try {
             if (!$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('Please agree to all Terms and Conditions before placing the order.')
                 );
                 $this->_redirect('*/*/billing');
@@ -119,7 +119,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
         } catch (PaymentException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {
-                $this->messageManager->addError($message);
+                $this->messageManager->addErrorMessage($message);
             }
             $this->_redirect('*/*/billing');
         } catch (\Magento\Checkout\Exception $e) {
@@ -131,7 +131,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
                 'multi-shipping'
             );
             $this->_getCheckout()->getCheckoutSession()->clearQuote();
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_redirect('*/cart');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_objectManager->get(
@@ -141,7 +141,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
                 $e->getMessage(),
                 'multi-shipping'
             );
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_redirect('*/*/billing');
         } catch (\Exception $e) {
             $this->logger->critical($e);
@@ -156,7 +156,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             } catch (\Exception $e) {
                 $this->logger->error($e->getMessage());
             }
-            $this->messageManager->addError(__('Order place error'));
+            $this->messageManager->addErrorMessage(__('Order place error'));
             $this->_redirect('*/*/billing');
         }
     }
