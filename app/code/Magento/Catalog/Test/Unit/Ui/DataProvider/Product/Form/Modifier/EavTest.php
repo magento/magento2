@@ -20,6 +20,7 @@ use Magento\Eav\Model\Entity\Attribute\Group;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Eav\Model\Entity\Type as EntityType;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -87,6 +88,11 @@ class EavTest extends AbstractModifierTest
      * @var EntityType|\PHPUnit_Framework_MockObject_MockObject
      */
     private $entityTypeMock;
+
+    /**
+     * @var AttributeCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeCollectionFactoryMock;
 
     /**
      * @var AttributeCollection|\PHPUnit_Framework_MockObject_MockObject
@@ -226,6 +232,10 @@ class EavTest extends AbstractModifierTest
         $this->entityTypeMock = $this->getMockBuilder(EntityType::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->attributeCollectionFactoryMock = $this->getMockBuilder(AttributeCollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->attributeCollectionMock = $this->getMockBuilder(AttributeCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -332,7 +342,7 @@ class EavTest extends AbstractModifierTest
         $this->eavAttributeMock->expects($this->any())
             ->method('load')
             ->willReturnSelf();
-        
+
         $this->eav =$this->getModel();
         $this->objectManager->setBackwardCompatibleProperty(
             $this->eav,
@@ -361,7 +371,8 @@ class EavTest extends AbstractModifierTest
             'attributeRepository' => $this->attributeRepositoryMock,
             'arrayManager' => $this->arrayManagerMock,
             'eavAttributeFactory' => $this->eavAttributeFactoryMock,
-            '_eventManager' => $this->eventManagerMock
+            '_eventManager' => $this->eventManagerMock,
+            'attributeCollectionFactory' => $this->attributeCollectionFactoryMock
         ]);
     }
 
@@ -374,6 +385,16 @@ class EavTest extends AbstractModifierTest
                 ]
             ]
         ];
+
+        $this->attributeCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->attributeCollectionMock);
+
+        $this->attributeCollectionMock->expects($this->any())
+            ->method('getItems')
+            ->willReturn([
+                $this->eavAttributeMock
+            ]);
 
         $this->locatorMock->expects($this->any())
             ->method('getProduct')
