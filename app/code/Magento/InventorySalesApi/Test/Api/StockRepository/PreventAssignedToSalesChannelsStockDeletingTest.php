@@ -22,7 +22,7 @@ class PreventAssignedToSalesChannelsStockDeletingTest extends WebapiAbstract
         $stockId = 10;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/inventory/stock/' . $stockId,
+                'resourcePath' => '/V1/inventory/stocks/' . $stockId,
                 'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
