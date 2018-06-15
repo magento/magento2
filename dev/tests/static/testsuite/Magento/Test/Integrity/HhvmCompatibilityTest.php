@@ -47,6 +47,24 @@ class HhvmCompatibilityTest extends \PHPUnit\Framework\TestCase
         'serialize_precision',
     ];
 
+    /**
+     * Whitelist of variables allowed in files.
+     *
+     * @var array
+     */
+    private $whitelistVarsInFiles = [
+        'max_input_vars' => [
+            'integration/testsuite/Magento/Swatches/Controller/Adminhtml/Product/AttributeTest.php',
+            'integration/testsuite/Magento/Catalog/Controller/Adminhtml/Product/AttributeTest.php',
+        ],
+    ];
+
+    /**
+     * Test allowed directives.
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function testAllowedIniGetSetDirectives()
     {
         $deniedDirectives = [];
@@ -55,7 +73,19 @@ class HhvmCompatibilityTest extends \PHPUnit\Framework\TestCase
             if ($fileDirectives) {
                 $fileDeniedDirectives = array_diff($fileDirectives, $this->allowedDirectives);
                 if ($fileDeniedDirectives) {
-                    $deniedDirectives[$file] = array_unique($fileDeniedDirectives);
+                    $deniedDirectivesInFile = array_unique($fileDeniedDirectives);
+                    foreach ($deniedDirectivesInFile as $key => $deniedDirective) {
+                        if (isset($this->whitelistVarsInFiles[$deniedDirective])) {
+                            foreach ($this->whitelistVarsInFiles[$deniedDirective] as $whitelistFile) {
+                                if (strpos($file, $whitelistFile) !== false) {
+                                    unset($deniedDirectivesInFile[$key]);
+                                }
+                            }
+                        }
+                    }
+                    if ($deniedDirectivesInFile) {
+                        $deniedDirectives[$file] = $deniedDirectivesInFile;
+                    }
                 }
             }
         }
