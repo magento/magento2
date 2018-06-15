@@ -14,6 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test \Magento\Tax\Model\Sales\Total\Quote\Subtotal
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoDbIsolation disabled
  */
 class SubtotalTest extends \PHPUnit\Framework\TestCase
 {

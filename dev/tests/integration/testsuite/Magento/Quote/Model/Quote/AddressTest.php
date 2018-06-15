@@ -326,7 +326,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture default_store carriers/flatrate/price 5
      * @magentoConfigFixture fixture_second_store_store carriers/flatrate/price 10
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @dataProvider requestShippingRatesDataProvider
      */
     public function testRequestShippingRates($storeCode, $expectedRate)

@@ -94,7 +94,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoDataFixture Magento/AdvancedPricingImportExport/_files/product_with_second_website.php

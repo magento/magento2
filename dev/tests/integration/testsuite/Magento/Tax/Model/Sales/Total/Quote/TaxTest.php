@@ -227,7 +227,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      * @param array $configData
      * @param array $quoteData
      * @param array $expectedResults
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @dataProvider taxDataProvider
      * @return void
