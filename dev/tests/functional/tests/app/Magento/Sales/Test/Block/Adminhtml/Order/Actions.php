@@ -138,6 +138,16 @@ class Actions extends Block
     protected $confirmModal = '.confirm._show[data-role=modal]';
 
     /**
+     * Is shipment can be created.
+     *
+     * @return bool
+     */
+    public function canShip()
+    {
+        return $this->_rootElement->find($this->ship)->isVisible();
+    }
+
+    /**
      * Ship order.
      *
      * @return void
