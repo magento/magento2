@@ -13,7 +13,11 @@ namespace Magento\Framework\App\Router;
  */
 class Base implements \Magento\Framework\App\RouterInterface
 {
+    /**
+     * No route constant used for request
+     */
     const NO_ROUTE = 'noroute';
+
     /**
      * @var \Magento\Framework\App\ActionFactory
      */
