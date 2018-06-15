@@ -27,4 +27,10 @@
     <entity name="ProductAttributeOptionGetter" type="ProductAttributeOption">
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
     </entity>
+    <entity name="productAttributeOption" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">customOption</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">0</data>
+    </entity>
 </entities>
