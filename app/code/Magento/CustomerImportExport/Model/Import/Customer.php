@@ -8,6 +8,7 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\Import\AbstractSource;
 
 /**
  * Customer entity import
@@ -346,6 +347,40 @@ class Customer extends AbstractCustomer
     }
 
     /**
+     * Prepare customers data for existing customers checks to perform mass validation/import efficiently.
+     *
+     * @param array|AbstractSource $rows
+     *
+     * @return void
+     */
+    public function prepareCustomerData($rows): void
+    {
+        $customersPresent = [];
+        foreach ($rows as $rowData) {
+            $email = $rowData[static::COLUMN_EMAIL] ?? null;
+            $websiteId = isset($rowData[static::COLUMN_WEBSITE])
+                ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
+            if ($email && $websiteId !== false) {
+                $customersPresent[] = [
+                    'email' => $email,
+                    'website_id' => $websiteId,
+                ];
+            }
+        }
+        $this->getCustomerStorage()->prepareCustomers($customersPresent);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        $this->prepareCustomerData($this->getSource());
+
+        return parent::validateData();
+    }
+
+    /**
      * Prepare customer data for update
      *
      * @param array $rowData
@@ -378,19 +413,11 @@ class Customer extends AbstractCustomer
             $this->_newCustomers[$emailInLowercase][$rowData[self::COLUMN_WEBSITE]] = $entityId;
         }
 
-        $entityRow = [
-            'group_id' => empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
-            'store_id' => empty($rowData[self::COLUMN_STORE]) ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]],
-            'created_at' => $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
-            'updated_at' => $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
-            'entity_id' => $entityId,
-        ];
-
         // password change/set
         if (isset($rowData['password']) && strlen($rowData['password'])) {
             $rowData['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
         }
-
+        $entityRow = ['entity_id' => $entityId];
         // attribute values
         foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
             $attributeParameters = $this->_attributes[$attributeCode];
@@ -429,12 +456,21 @@ class Customer extends AbstractCustomer
 
         if ($newCustomer) {
             // create
+            $entityRow['group_id'] = empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'];
+            $entityRow['store_id'] = empty($rowData[self::COLUMN_STORE])
+                ? \Magento\Store\Model\Store::DEFAULT_STORE_ID : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+            $entityRow['created_at'] = $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
             $entityRow['email'] = $emailInLowercase;
             $entityRow['is_active'] = 1;
             $entitiesToCreate[] = $entityRow;
         } else {
             // edit
+            $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            if (!empty($rowData[self::COLUMN_STORE])) {
+                $entityRow['store_id'] = $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+            }
             $entitiesToUpdate[] = $entityRow;
         }
 
@@ -455,6 +491,7 @@ class Customer extends AbstractCustomer
     protected function _importData()
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            $this->prepareCustomerData($bunch);
             $entitiesToCreate = [];
             $entitiesToUpdate = [];
             $entitiesToDelete = [];

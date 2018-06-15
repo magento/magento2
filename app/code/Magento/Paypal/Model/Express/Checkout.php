@@ -809,7 +809,9 @@ class Checkout
             case \Magento\Sales\Model\Order::STATE_PROCESSING:
             case \Magento\Sales\Model\Order::STATE_COMPLETE:
             case \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW:
-                $this->orderSender->send($order);
+                if (!$order->getEmailSent()) {
+                    $this->orderSender->send($order);
+                }
                 $this->_checkoutSession->start();
                 break;
             default:
@@ -897,7 +899,12 @@ class Checkout
     {
         // Exported data is more priority if we came from Express Checkout button
         $isButton = (bool)$this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
-        if (!$isButton) {
+
+        // Since country is required field for billing and shipping address,
+        // we consider the address information to be empty if country is empty.
+        $isEmptyAddress = ($address->getCountryId() === null);
+
+        if (!$isButton && !$isEmptyAddress) {
             return;
         }
 

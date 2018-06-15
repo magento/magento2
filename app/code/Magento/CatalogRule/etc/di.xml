@@ -149,4 +149,12 @@
             <argument name="customConditionProvider" xsi:type="object">CatalogRuleCustomConditionProvider</argument>
         </arguments>
     </type>
+    <preference for="Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface" type="Magento\CatalogRule\Model\Indexer\IndexerTableSwapper" />
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="catalogRulePriceModifier" xsi:type="object">Magento\CatalogRule\Model\Indexer\ProductPriceIndexModifier</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

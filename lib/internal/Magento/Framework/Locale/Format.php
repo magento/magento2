@@ -99,7 +99,10 @@ class Format implements \Magento\Framework\Locale\FormatInterface
             $currency = $this->_scopeResolver->getScope()->getCurrentCurrency();
         }
 
-        $formatter = new \NumberFormatter($localeCode, \NumberFormatter::CURRENCY);
+        $formatter = new \NumberFormatter(
+            $localeCode . '@currency=' . $currency->getCode(),
+            \NumberFormatter::CURRENCY
+        );
         $format = $formatter->getPattern();
         $decimalSymbol = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
         $groupSymbol = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);

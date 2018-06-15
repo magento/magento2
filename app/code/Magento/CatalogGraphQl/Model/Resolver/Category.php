@@ -110,7 +110,7 @@ class Category implements ResolverInterface
                         CategoryInterface::class
                     );
                     $categories[$item->getId()] = $this->customAttributesFlattener
-                        ->flaternize($categories[$item->getId()]);
+                        ->flatten($categories[$item->getId()]);
                     $categories[$item->getId()]['product_count'] = $item->getProductCount();
                 }
             }
