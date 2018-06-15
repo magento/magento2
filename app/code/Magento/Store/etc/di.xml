@@ -25,6 +25,7 @@
     <preference for="Magento\Framework\App\ScopeFallbackResolverInterface" type="Magento\Store\Model\ScopeFallbackResolver"/>
     <preference for="Magento\Framework\App\ScopeTreeProviderInterface" type="Magento\Store\Model\ScopeTreeProvider"/>
     <preference for="Magento\Framework\App\ScopeValidatorInterface" type="Magento\Store\Model\ScopeValidator"/>
+    <preference for="Magento\Store\Model\StoreSwitcherInterface" type="Magento\Store\Model\StoreSwitcher" />
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="genericHeaderPlugin" type="Magento\Framework\App\Response\HeaderManager"/>
     </type>
@@ -414,6 +415,15 @@
         <arguments>
             <argument name="interpreters" xsi:type="array">
                 <item name="serviceUrl" xsi:type="object">Magento\Store\Model\Argument\Interpreter\ServiceUrl</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoreSwitcher">
+        <arguments>
+            <argument name="storeSwitchers" xsi:type="array">
+                <item name="cleanTargetUrl" xsi:type="object">Magento\Store\Model\StoreSwitcher\CleanTargetUrl</item>
+                <item name="manageStoreCookie" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManageStoreCookie</item>
+                <item name="managePrivateContent" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManagePrivateContent</item>
             </argument>
         </arguments>
     </type>

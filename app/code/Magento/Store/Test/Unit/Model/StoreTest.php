@@ -438,26 +438,26 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             [
                 true,
                 'http://test/url',
-                'http://test/url?SID=sid&amp;___store=scope_code',
+                'http://test/url?SID=sid&___store=scope_code',
                 false
             ],
             [
                 true,
                 'http://test/url?SID=sid1&___store=scope',
-                'http://test/url?SID=sid&amp;___store=scope_code',
+                'http://test/url?SID=sid&___store=scope_code',
                 false
             ],
             [
                 false,
                 'https://test/url',
-                'https://test/url?SID=sid&amp;___store=scope_code',
+                'https://test/url?SID=sid&___store=scope_code',
                 false
             ],
             [
                 true,
                 'http://test/u/u.2?__store=scope_code',
                 'http://test/u/u.2?'
-                . 'SID=sid&amp;___store=scope_code&amp;___from_store=old-store',
+                . 'SID=sid&___store=scope_code&___from_store=old-store',
                 'old-store'
             ]
         ];
