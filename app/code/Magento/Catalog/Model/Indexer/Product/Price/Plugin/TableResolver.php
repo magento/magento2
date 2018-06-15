@@ -78,7 +78,7 @@ class TableResolver
      *
      * @param ResourceConnection $subject
      * @param string $result
-     * @param string|string[] $modelEntity
+     * @param string|string[] $tableName
      * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -86,9 +86,13 @@ class TableResolver
     public function afterGetTableName(
         ResourceConnection $subject,
         string $result,
-        $modelEntity
+        $tableName
     ) {
-        if (!is_array($modelEntity) && $modelEntity === 'catalog_product_index_price') {
+        if (
+            !is_array($tableName)
+            && $tableName === 'catalog_product_index_price'
+            && $this->dimensionModeConfiguration->getCurrentMode() !== DimensionModeConfiguration::DIMENSION_NONE
+        ) {
             return $this->priceTableResolver->resolve('catalog_product_index_price', $this->getDimensions());
         }
 

@@ -1097,6 +1097,7 @@
             <argument name="context" xsi:type="object">
                 Magento\Framework\App\Http\Context\Proxy
             </argument>
+            <!-- Unccomment after fix issue with Proxy generation -->
             <!--<argument name="dimensionModeConfiguration" xsi:type="object">-->
                 <!--Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration\Proxy-->
             <!--</argument>-->

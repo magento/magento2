@@ -64,7 +64,7 @@ class DimensionModeConfiguration
      * @param string|null $mode
      * @return string[]
      */
-    public function getDimensionConfiguration(string $mode = null)
+    public function getDimensionConfiguration(string $mode = null): array
     {
         if ($mode && !isset($this->modesMapping[$mode])) {
             throw new \InvalidArgumentException(
@@ -77,7 +77,7 @@ class DimensionModeConfiguration
     /**
      * @return string
      */
-    private function getCurrentMode(): string
+    public function getCurrentMode(): string
     {
         if (null === $this->currentMode) {
             $this->currentMode = $this->scopeConfig->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE)
