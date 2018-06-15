@@ -238,6 +238,7 @@ class Tabs extends \Magento\Backend\Block\Widget
         $this->_tabs = $this->reorderTabs();
         
         if ($this->_activeTab === null) {
+            /** @var  $tab */
             foreach ($this->_tabs as $tab) {
                 $this->_activeTab = $tab->getId();
                 break;
@@ -266,8 +267,10 @@ class Tabs extends \Magento\Backend\Block\Widget
         $position  = 100;
     
         /**
-         * @var string                                         $key
-         * @var \Magento\Backend\Block\Widget\Tab\TabInterface $tab
+         * Set the initial positions for each tab.
+         *
+         * @var string       $key
+         * @var TabInterface $tab
          */
         foreach ($this->_tabs as $key => $tab) {
             $tab->setPosition($position);
@@ -280,6 +283,12 @@ class Tabs extends \Magento\Backend\Block\Widget
         
         $positionFactor = 1;
         
+        /**
+         * Rearrange the positions by using the after tag for each tab.
+         *
+         * @var integer      $position
+         * @var TabInterface $tab
+         */
         foreach ($orderByPosition as $position => $tab) {
             if (!$tab->getAfter() || !in_array($tab->getAfter(), array_keys($orderByIdentity))) {
                 $positionFactor = 1;
