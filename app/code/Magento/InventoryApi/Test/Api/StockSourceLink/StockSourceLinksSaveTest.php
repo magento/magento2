@@ -67,10 +67,12 @@ class StockSourceLinksSaveTest extends WebapiAbstract
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-1',
                 StockSourceLinkInterface::STOCK_ID => 10,
+                StockSourceLinkInterface::PRIORITY => 1,
             ],
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-2',
                 StockSourceLinkInterface::STOCK_ID => 10,
+                StockSourceLinkInterface::PRIORITY => 2,
             ],
         ];
 
@@ -78,11 +80,11 @@ class StockSourceLinksSaveTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?'
                     . http_build_query(['links' => $links]),
-                'httpMethod' => Request::HTTP_METHOD_DELETE,
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME_DELETE,
-                'operation' => self::SERVICE_NAME_DELETE . 'Execute',
+                'service' => self::SERVICE_NAME_SAVE,
+                'operation' => self::SERVICE_NAME_SAVE . 'Execute',
             ],
         ];
 

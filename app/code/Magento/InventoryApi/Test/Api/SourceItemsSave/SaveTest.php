@@ -68,21 +68,25 @@ class SaveTest extends WebapiAbstract
             [
                 SourceItemInterface::SOURCE_CODE => 'eu-1',
                 SourceItemInterface::SKU => 'SKU-1',
+                SourceItemInterface::QUANTITY => 5.5,
+                SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
             ],
             [
                 SourceItemInterface::SOURCE_CODE => 'eu-2',
                 SourceItemInterface::SKU => 'SKU-1',
+                SourceItemInterface::QUANTITY => 3,
+                SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
             ],
         ];
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?'
                     . http_build_query(['sourceItems' => $sourceItems]),
-                'httpMethod' => Request::HTTP_METHOD_DELETE,
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME_DELETE,
-                'operation' => self::SERVICE_NAME_DELETE . 'Execute',
+                'service' => self::SERVICE_NAME_SAVE,
+                'operation' => self::SERVICE_NAME_SAVE . 'Execute',
             ],
         ];
         (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
