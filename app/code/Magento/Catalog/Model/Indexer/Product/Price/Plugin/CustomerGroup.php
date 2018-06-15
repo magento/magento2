@@ -120,7 +120,7 @@ class CustomerGroup
     {
         $currentDimensions = $this->dimensionModeConfiguration->getDimensionConfiguration();
         // do not return dimensions if Customer Group dimension is not present in configuration
-        if (!in_array( CustomerGroupDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
+        if (!in_array(CustomerGroupDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
             return [];
         }
         $customerGroupDimension = $this->dimensionFactory->create(
@@ -129,7 +129,7 @@ class CustomerGroup
         );
 
         $dimensions = [];
-        if (in_array( WebsiteDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
+        if (in_array(WebsiteDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
             foreach ($this->websiteDataProvider as $websiteDimension) {
                 $dimensions[] = [
                     $customerGroupDimension,

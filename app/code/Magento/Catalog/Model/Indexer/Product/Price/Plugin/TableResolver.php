@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
@@ -51,7 +50,6 @@ class TableResolver
     private $dimensionModeConfiguration;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
      * @param IndexScopeResolverInterface $priceTableResolver
      * @param StoreManagerInterface $storeManager
      * @param Context $context
@@ -59,7 +57,6 @@ class TableResolver
      * @param DimensionModeConfiguration $dimensionModeConfiguration
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
         IndexScopeResolverInterface $priceTableResolver,
         StoreManagerInterface $storeManager,
         Context $context,

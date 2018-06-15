@@ -153,7 +153,8 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
         $modeOptions[] = new InputArgument(
             self::INPUT_KEY_MODE,
             InputArgument::REQUIRED,
-            'Indexer dimensions mode ['. DimensionModeConfiguration::DIMENSION_NONE . '|' . DimensionModeConfiguration::DIMENSION_WEBSITE
+            'Indexer dimensions mode ['. DimensionModeConfiguration::DIMENSION_NONE
+            . '|' . DimensionModeConfiguration::DIMENSION_WEBSITE
             . '|' . DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP
             . '|' . DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP .']'
         );

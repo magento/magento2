@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 use Magento\Framework\Indexer\Dimension;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
 class PriceTableResolver implements IndexScopeResolverInterface
@@ -24,11 +23,10 @@ class PriceTableResolver implements IndexScopeResolverInterface
     private $dimensionModeConfiguration;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
      * @param IndexScopeResolver $indexScopeResolver
+     * @param DimensionModeConfiguration $dimensionModeConfiguration
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
         IndexScopeResolver $indexScopeResolver,
         DimensionModeConfiguration $dimensionModeConfiguration
     ) {

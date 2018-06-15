@@ -104,10 +104,22 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
         return [
             [DimensionModeConfiguration::DIMENSION_NONE, DimensionModeConfiguration::DIMENSION_WEBSITE],
             [DimensionModeConfiguration::DIMENSION_WEBSITE, DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP],
-            [DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP, DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP],
-            [DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP, DimensionModeConfiguration::DIMENSION_NONE],
-            [DimensionModeConfiguration::DIMENSION_NONE, DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP],
-            [DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP, DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP],
+            [
+                DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP,
+                DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP
+            ],
+            [
+                DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP,
+                DimensionModeConfiguration::DIMENSION_NONE
+            ],
+            [
+                DimensionModeConfiguration::DIMENSION_NONE,
+                DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP
+            ],
+            [
+                DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP,
+                DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP
+            ],
             [DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP, DimensionModeConfiguration::DIMENSION_WEBSITE],
             [DimensionModeConfiguration::DIMENSION_WEBSITE, DimensionModeConfiguration::DIMENSION_NONE],
         ];

@@ -107,7 +107,7 @@ class Website
     {
         $currentDimensions = $this->dimensionModeConfiguration->getDimensionConfiguration();
         // do not return dimensions if Website dimension is not present in configuration
-        if (!in_array( WebsiteDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
+        if (!in_array(WebsiteDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
             return [];
         }
         $websiteDimension = $this->dimensionFactory->create(
@@ -116,7 +116,7 @@ class Website
         );
 
         $dimensions = [];
-        if (in_array( CustomerGroupDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
+        if (in_array(CustomerGroupDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
             foreach ($this->customerGroupDataProvider as $customerGroupDimension) {
                 $dimensions[] = [
                     $customerGroupDimension,
