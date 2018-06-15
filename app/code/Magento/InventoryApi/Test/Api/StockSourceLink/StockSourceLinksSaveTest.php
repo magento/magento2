@@ -83,8 +83,8 @@ class StockSourceLinksSaveTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME_SAVE,
-                'operation' => self::SERVICE_NAME_SAVE . 'Execute',
+                'service' => self::SERVICE_NAME_DELETE,
+                'operation' => self::SERVICE_NAME_DELETE . 'Execute',
             ],
         ];
 
