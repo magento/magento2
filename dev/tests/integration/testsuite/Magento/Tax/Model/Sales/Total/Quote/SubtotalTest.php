@@ -14,9 +14,8 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test \Magento\Tax\Model\Sales\Total\Quote\Subtotal
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @magentoDbIsolation disabled
  */
-class SubtotalTest extends \PHPUnit\Framework\TestCase
+class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * Object Manager
@@ -29,6 +28,19 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     private $productRepository;
+
+    public static function setUpBeforeClass()
+    {
+        $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
 
     protected function setUp()
     {
@@ -47,6 +59,7 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php
@@ -165,6 +178,7 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php
