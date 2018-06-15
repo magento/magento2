@@ -112,7 +112,7 @@ class Cart extends \Magento\Framework\App\Action\Action
         } catch (ProductException $e) {
             $this->messageManager->addError(__('This product(s) is out of stock.'));
         } catch (LocalizedException $e) {
-            $this->messageManager->addNotice($e->getMessage());
+            $this->messageManager->addNoticeMessage($e->getMessage());
             $redirectUrl = $item->getProductUrl();
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t add the item to the cart right now.'));

@@ -77,7 +77,7 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
 
         $noticeMsg = implode(',', $noticeMsgArray);
         if (!empty($noticeMsgArray)) {
-            $this->messageManager->addNotice(
+            $this->messageManager->addNoticeMessage(
                 __(
                     __('The following invalid values cannot be saved: %values', ['values' => $noticeMsg])
                 )

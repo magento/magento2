@@ -59,7 +59,7 @@ abstract class Reorder extends Action\Action
                 $cart->addOrderItem($item);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 if ($this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getUseNotice(true)) {
-                    $this->messageManager->addNotice($e->getMessage());
+                    $this->messageManager->addNoticeMessage($e->getMessage());
                 } else {
                     $this->messageManager->addErrorMessage($e->getMessage());
                 }

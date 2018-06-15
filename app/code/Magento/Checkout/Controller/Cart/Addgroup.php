@@ -27,7 +27,7 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
                     $this->addOrderItem($item);
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     if ($this->_checkoutSession->getUseNotice(true)) {
-                        $this->messageManager->addNotice($e->getMessage());
+                        $this->messageManager->addNoticeMessage($e->getMessage());
                     } else {
                         $this->messageManager->addErrorMessage($e->getMessage());
                     }

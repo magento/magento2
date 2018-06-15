@@ -70,7 +70,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
-                $this->messageManager->addNotice($e->getMessage());
+                $this->messageManager->addNoticeMessage($e->getMessage());
             } else {
                 $messages = array_unique(explode("\n", $e->getMessage()));
                 foreach ($messages as $message) {

@@ -132,7 +132,7 @@ class Add extends \Magento\Checkout\Controller\Cart
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
-                $this->messageManager->addNotice(
+                $this->messageManager->addNoticeMessage(
                     $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($e->getMessage())
                 );
             } else {

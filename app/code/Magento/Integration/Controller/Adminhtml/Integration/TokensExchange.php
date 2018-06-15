@@ -27,7 +27,7 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
             "Integration '%1' has been sent for activation.",
             $integrationName
         );
-        $this->messageManager->addNotice($msg);
+        $this->messageManager->addNoticeMessage($msg);
     }
 
     /**

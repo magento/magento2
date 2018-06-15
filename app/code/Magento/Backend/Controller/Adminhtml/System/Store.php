@@ -125,7 +125,7 @@ abstract class Store extends Action
      */
     protected function _addDeletionNotice($typeTitle)
     {
-        $this->messageManager->addNotice(
+        $this->messageManager->addNoticeMessage(
             __(
                 'Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.)'
                 . ', but the %1 will not be able to be restored. It is suggested that you create a database backup '
