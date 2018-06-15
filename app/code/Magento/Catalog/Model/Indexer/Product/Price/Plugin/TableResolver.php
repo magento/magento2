@@ -85,8 +85,7 @@ class TableResolver
         string $result,
         $tableName
     ) {
-        if (
-            !is_array($tableName)
+        if (!is_array($tableName)
             && $tableName === 'catalog_product_index_price'
             && $this->dimensionModeConfiguration->getCurrentMode() !== DimensionModeConfiguration::DIMENSION_NONE
         ) {

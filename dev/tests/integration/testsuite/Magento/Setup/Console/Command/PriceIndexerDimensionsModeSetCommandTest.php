@@ -159,7 +159,8 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
     {
         $this->commandTester->execute(
             [
-                PriceIndexerDimensionsModeSetCommand::INPUT_KEY_MODE => DimensionModeConfiguration::DIMENSION_NONE . '_not_valid'
+                PriceIndexerDimensionsModeSetCommand::INPUT_KEY_MODE => DimensionModeConfiguration::DIMENSION_NONE .
+                    '_not_valid'
             ]
         );
     }
