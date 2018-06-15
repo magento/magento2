@@ -21,6 +21,27 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="ApiSimpleProduct" type="product">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleProductUpdateDescription" type="product2">
+        <requiredEntity type="custom_attribute">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute">ApiProductShortDescription</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleProductUpdateName" type="product">
+        <data key="name" unique="suffix">Updated Api Simple Product</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+    </entity>
     <entity name="SimpleProduct" type="product">
         <data key="sku" unique="suffix">SimpleProduct</data>
         <data key="type_id">simple</data>
@@ -111,5 +132,19 @@
         <data key="weight">0</data>
         <data key="status">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithNewFromDate" type="product">
+        <data key="sku" unique="suffix">SimpleProduct</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">125.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">1000</data>
+        <data key="urlKey" unique="suffix">simpleproduct</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductNewsFromDate</requiredEntity>
     </entity>
 </entities>
