@@ -411,7 +411,7 @@ class DiCompileCommand extends Command
         $setupPath       = $this->directoryList->getPath(DirectoryList::ROOT) . '/' . DirectoryList::SETUP;
         $setupPublicPath = $this->directoryList->getPath(DirectoryList::PUB) . '/' . DirectoryList::SETUP;
         
-        if (!file_exists($setupPublicPath)) {
+        if (file_exists($setupPublicPath)) {
             $output->writeln('<info>Setup folder already exists in public.</info>');
             return;
         }
