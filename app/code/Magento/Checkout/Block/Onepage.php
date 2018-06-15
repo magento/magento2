@@ -38,7 +38,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
     protected $layoutProcessors;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var \Magento\Framework\Serialize\Serializer\JsonHexTag
      */
     private $serializer;
 
@@ -48,7 +48,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param \Magento\Framework\Serialize\Serializer\JsonHexTag|null $serializer
      * @throws \RuntimeException
      */
     public function __construct(
@@ -57,7 +57,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\JsonHexTag $serializer = null
     ) {
         parent::__construct($context, $data);
         $this->formKey = $formKey;
@@ -66,7 +66,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
         $this->configProvider = $configProvider;
         $this->layoutProcessors = $layoutProcessors;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+            ->get(\Magento\Framework\Serialize\Serializer\JsonHexTag::class);
     }
 
     /**
@@ -78,7 +78,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
             $this->jsLayout = $processor->process($this->jsLayout);
         }
 
-        return json_encode($this->jsLayout, JSON_HEX_TAG);
+        return $this->serializer->serialize($this->jsLayout);
     }
 
     /**
@@ -120,6 +120,6 @@ class Onepage extends \Magento\Framework\View\Element\Template
      */
     public function getSerializedCheckoutConfig()
     {
-        return json_encode($this->getCheckoutConfig(), JSON_HEX_TAG);
+        return  $this->serializer->serialize($this->getCheckoutConfig());
     }
 }
