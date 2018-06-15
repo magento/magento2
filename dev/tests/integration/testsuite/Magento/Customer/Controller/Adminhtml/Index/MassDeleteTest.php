@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Backend\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\Constraint\Constraint;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -36,6 +36,19 @@ class MassDeleteTest extends AbstractBackendController
     {
         parent::setUp();
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
+    }
+
+    protected function tearDown()
+    {
+        /**
+         * Unset customer data
+         */
+        Bootstrap::getObjectManager()->get(Session::class)->setCustomerData(null);
+
+        /**
+         * Unset messages
+         */
+        Bootstrap::getObjectManager()->get(Session::class)->getMessages(true);
     }
 
     /**
@@ -65,22 +78,18 @@ class MassDeleteTest extends AbstractBackendController
      */
     public function testSuccessMassDeleteAction(array $emails, Constraint $constraint, string $messageType)
     {
-        try {
-            $ids = [];
-            foreach ($emails as $email) {
-                /** @var CustomerInterface $customer */
-                $customer = $this->customerRepository->get($email);
-                $ids[] = $customer->getId();
-            }
-
-            $this->massDeleteAssertions(
-                $ids,
-                $constraint,
-                $messageType
-            );
-        } catch (LocalizedException $e) {
-            self::fail($e->getMessage());
+        $ids = [];
+        foreach ($emails as $email) {
+            /** @var CustomerInterface $customer */
+            $customer = $this->customerRepository->get($email);
+            $ids[] = $customer->getId();
         }
+
+        $this->massDeleteAssertions(
+            $ids,
+            $constraint,
+            $messageType
+        );
     }
 
     /**
@@ -151,18 +160,5 @@ class MassDeleteTest extends AbstractBackendController
                 'messageType' => MessageInterface::TYPE_SUCCESS,
             ],
         ];
-    }
-
-    protected function tearDown()
-    {
-        /**
-         * Unset customer data
-         */
-        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->setCustomerData(null);
-
-        /**
-         * Unset messages
-         */
-        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getMessages(true);
     }
 }

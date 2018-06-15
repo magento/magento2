@@ -21,7 +21,7 @@ $customerRepository = $objectManager->create(CustomerRepositoryInterface::class)
 /** @var CustomerInterfaceFactory $customerFactory */
 $customerFactory = $objectManager->get(CustomerInterfaceFactory::class);
 
-for ($i=1; $i<=5; $i++) {
+for ($i = 1; $i <= 5; $i++) {
     /** @var CustomerInterface $customer */
     $customer = $customerFactory->create();
     $customer->setFirstname('John')

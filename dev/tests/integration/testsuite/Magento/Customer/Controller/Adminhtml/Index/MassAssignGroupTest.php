@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Backend\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
@@ -42,12 +42,12 @@ class MassAssignGroupTest extends AbstractBackendController
         /**
          * Unset customer data
          */
-        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->setCustomerData(null);
+        Bootstrap::getObjectManager()->get(Session::class)->setCustomerData(null);
 
         /**
          * Unset messages
          */
-        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getMessages(true);
+        Bootstrap::getObjectManager()->get(Session::class)->getMessages(true);
     }
 
     /**
@@ -59,30 +59,26 @@ class MassAssignGroupTest extends AbstractBackendController
     public function testMassAssignGroupAction()
     {
         $customerEmail = 'customer1@example.com';
-        try {
-            /** @var CustomerInterface $customer */
-            $customer = $this->customerRepository->get($customerEmail);
-            $this->assertEquals(1, $customer->getGroupId());
+        /** @var CustomerInterface $customer */
+        $customer = $this->customerRepository->get($customerEmail);
+        $this->assertEquals(1, $customer->getGroupId());
 
-            $params = [
-                'group' => 0,
-                'namespace' => 'customer_listing',
-                'selected' => [$customer->getId()]
-            ];
+        $params = [
+            'group' => 0,
+            'namespace' => 'customer_listing',
+            'selected' => [$customer->getId()]
+        ];
 
-            $this->getRequest()->setParams($params);
-            $this->dispatch('backend/customer/index/massAssignGroup');
-            $this->assertSessionMessages(
-                self::equalTo(['A total of 1 record(s) were updated.']),
-                MessageInterface::TYPE_SUCCESS
-            );
-            $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
+        $this->getRequest()->setParams($params);
+        $this->dispatch('backend/customer/index/massAssignGroup');
+        $this->assertSessionMessages(
+            self::equalTo(['A total of 1 record(s) were updated.']),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
 
-            $customer = $this->customerRepository->get($customerEmail);
-            $this->assertEquals(0, $customer->getGroupId());
-        } catch (LocalizedException $e) {
-            self::fail($e->getMessage());
-        }
+        $customer = $this->customerRepository->get($customerEmail);
+        $this->assertEquals(0, $customer->getGroupId());
     }
 
     /**
@@ -96,13 +92,9 @@ class MassAssignGroupTest extends AbstractBackendController
         $ids = [];
         for ($i = 1; $i <= 5; $i++) {
             /** @var CustomerInterface $customer */
-            try {
-                $customer = $this->customerRepository->get('customer'.$i.'@example.com');
-                $this->assertEquals(1, $customer->getGroupId());
-                $ids[] = $customer->getId();
-            } catch (\Exception $e) {
-                self::fail($e->getMessage());
-            }
+            $customer = $this->customerRepository->get('customer' . $i . '@example.com');
+            $this->assertEquals(1, $customer->getGroupId());
+            $ids[] = $customer->getId();
         }
 
         $params = [
@@ -119,13 +111,9 @@ class MassAssignGroupTest extends AbstractBackendController
         );
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
         for ($i = 1; $i < 5; $i++) {
-            try {
-                /** @var CustomerInterface $customer */
-                $customer = $this->customerRepository->get('customer'.$i.'@example.com');
-                $this->assertEquals(0, $customer->getGroupId());
-            } catch (\Exception $e) {
-                self::fail($e->getMessage());
-            }
+            /** @var CustomerInterface $customer */
+            $customer = $this->customerRepository->get('customer' . $i . '@example.com');
+            $this->assertEquals(0, $customer->getGroupId());
         }
     }
 

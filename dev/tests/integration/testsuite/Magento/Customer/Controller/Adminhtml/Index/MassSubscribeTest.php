@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Backend\Model\Session;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
@@ -31,12 +32,12 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         /**
          * Unset customer data
          */
-        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->setCustomerData(null);
+        Bootstrap::getObjectManager()->get(Session::class)->setCustomerData(null);
 
         /**
          * Unset messages
          */
-        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getMessages(true);
+        Bootstrap::getObjectManager()->get(Session::class)->getMessages(true);
     }
 
     /**
@@ -62,14 +63,10 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
                 ->getSubscriberStatus()
         );
 
-        try {
-            /** @var CustomerInterface $customer1 */
-            $customer1 = $customerRepository->get('customer1@example.com');
-            /** @var CustomerInterface $customer2 */
-            $customer2 = $customerRepository->get('customer2@example.com');
-        } catch (\Exception $e) {
-            self::fail($e->getMessage());
-        }
+        /** @var CustomerInterface $customer1 */
+        $customer1 = $customerRepository->get('customer1@example.com');
+        /** @var CustomerInterface $customer2 */
+        $customer2 = $customerRepository->get('customer2@example.com');
 
         $params = [
             'selected' => [
