@@ -83,6 +83,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
                     'arguments' => [
                         'data' => [
                             'config' => [
+                                'componentType' => 'columns',
                                 'editorConfig' => [
                                     'enabled' => false
                                 ]
