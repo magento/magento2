@@ -217,7 +217,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         $block = $this->getToolbarFromLayout();
 
         if (!$block) {
-            $block = $this->getLayout()->createBlock($this->_defaultToolbarBlock, uniqid(microtime()));
+            $block = $this->getLayout()->createBlock($this->_defaultToolbarBlock, uniqid(microtime(), true));
         }
 
         return $block;

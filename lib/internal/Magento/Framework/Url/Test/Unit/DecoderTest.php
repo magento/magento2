@@ -21,7 +21,7 @@ class DecoderTest extends \PHPUnit\Framework\TestCase
         $decoder = new Decoder($urlBuilderMock);
         $encoder = new Encoder();
 
-        $data = uniqid();
+        $data = uniqid('', true);
         $result = $encoder->encode($data);
         $urlBuilderMock->expects($this->once())
             ->method('sessionUrlVar')

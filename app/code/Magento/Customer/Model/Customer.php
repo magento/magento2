@@ -801,7 +801,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function getRandomConfirmationKey()
     {
-        return md5(uniqid());
+        return md5(uniqid('', true));
     }
 
     /**

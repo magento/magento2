@@ -50,7 +50,7 @@ abstract class AbstractAdapter
     ) {
         $this->_directoryHandle = $filesystem->getDirectoryWrite($destinationDirectoryCode);
         if (!$destination) {
-            $destination = uniqid('importexport_');
+            $destination = uniqid('importexport_', true);
             $this->_directoryHandle->touch($destination);
         }
         if (!is_string($destination)) {

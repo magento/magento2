@@ -250,7 +250,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
         $fetched = 0;
         $listing = $this->_filterReportsList($connection->rawls());
         foreach ($listing as $filename => $attributes) {
-            $localCsv = 'PayPal_STL_' . uniqid(\Magento\Framework\Math\Random::getRandomNumber()) . time() . '.csv';
+            $localCsv = 'PayPal_STL_' . uniqid(\Magento\Framework\Math\Random::getRandomNumber(), true) . time() . '.csv';
             if ($connection->read($filename, $this->_tmpDirectory->getAbsolutePath($localCsv))) {
                 if (!$this->_tmpDirectory->isWritable($localCsv)) {
                     throw new \Magento\Framework\Exception\LocalizedException(

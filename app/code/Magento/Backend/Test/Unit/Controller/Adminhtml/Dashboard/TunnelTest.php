@@ -46,7 +46,7 @@ class TunnelTest extends \PHPUnit\Framework\TestCase
 
     public function testTunnelAction()
     {
-        $fixture = uniqid();
+        $fixture = uniqid('', true);
         $this->_request->expects($this->at(0))
             ->method('getParam')
             ->with('ga')
@@ -113,7 +113,7 @@ class TunnelTest extends \PHPUnit\Framework\TestCase
 
     public function testTunnelAction503()
     {
-        $fixture = uniqid();
+        $fixture = uniqid('', true);
         $this->_request->expects($this->at(0))
             ->method('getParam')
             ->with('ga')

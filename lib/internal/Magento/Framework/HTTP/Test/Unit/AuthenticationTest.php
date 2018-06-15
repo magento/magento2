@@ -80,7 +80,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
                 'httpResponse' => $response
             ]
         );
-        $realm = uniqid();
+        $realm = uniqid('', true);
         $authentication->setAuthenticationFailed($realm);
         $headers = $response->getHeaders();
 

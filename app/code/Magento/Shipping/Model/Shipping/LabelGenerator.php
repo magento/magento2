@@ -180,7 +180,7 @@ class LabelGenerator
 
         imageinterlace($image, 0);
         $tmpFileName = $directory->getAbsolutePath(
-            'shipping_labels_' . uniqid(\Magento\Framework\Math\Random::getRandomNumber()) . time() . '.png'
+            'shipping_labels_' . uniqid(\Magento\Framework\Math\Random::getRandomNumber(), true) . time() . '.png'
         );
         imagepng($image, $tmpFileName);
         $pdfImage = \Zend_Pdf_Image::imageWithPath($tmpFileName);

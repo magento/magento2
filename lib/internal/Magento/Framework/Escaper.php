@@ -64,7 +64,7 @@ class Escaper
                     );
                     $allowedTags = array_diff($allowedTags, $this->notAllowedTags);
                 }
-                $wrapperElementId = uniqid();
+                $wrapperElementId = uniqid('', true);
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
                 set_error_handler(
                     function ($errorNumber, $errorString) {
