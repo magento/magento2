@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
+
 class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -18,11 +20,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeConfig;
-
-    /**
      * @var \Magento\Framework\Indexer\DimensionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $dimensionFactory;
@@ -32,14 +29,14 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
      */
     protected $tableMaintainer;
 
+    /**
+     * @var DimensionModeConfiguration|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dimensionModeConfiguration;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->scopeConfig = $this->createPartialMock(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            ['getValue', 'isSetFlag']
-        );
 
         $this->dimensionFactory = $this->createPartialMock(
             \Magento\Framework\Indexer\DimensionFactory::class,
@@ -51,12 +48,17 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ['dropTablesForDimensions', 'createTablesForDimensions']
         );
 
+        $this->dimensionModeConfiguration = $this->createPartialMock(
+            DimensionModeConfiguration::class,
+            ['getDimensionConfiguration']
+        );
+
         $this->model = $this->objectManager->getObject(
             \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website::class,
             [
-                'configReader' => $this->scopeConfig,
                 'dimensionFactory' => $this->dimensionFactory,
                 'tableMaintainer' => $this->tableMaintainer,
+                'dimensionModeConfiguration' => $this->dimensionModeConfiguration,
             ]
         );
     }
@@ -65,14 +67,15 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     {
         $dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
 
-        $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(
-            \Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_WEBSITE
-        );
         $this->dimensionFactory->expects($this->once())->method('create')->willReturn(
             $dimensionMock
         );
         $this->tableMaintainer->expects($this->once())->method('dropTablesForDimensions')->with(
             [$dimensionMock]
+        );
+
+        $this->dimensionModeConfiguration->expects($this->once())->method('getDimensionConfiguration')->willReturn(
+            [\Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider::DIMENSION_NAME]
         );
 
         $subjectMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
@@ -88,18 +91,78 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testAfterDeleteOnModeWithoutWebsiteDimension()
+    {
+        $dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
+
+        $this->dimensionFactory->expects($this->never())->method('create')->willReturn(
+            $dimensionMock
+        );
+        $this->tableMaintainer->expects($this->never())->method('dropTablesForDimensions')->with(
+            [$dimensionMock]
+        );
+
+        $this->dimensionModeConfiguration->expects($this->once())->method('getDimensionConfiguration')->willReturn(
+            []
+        );
+
+        $subjectMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
+        $objectResourceMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
+        $websiteMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
+        $websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->assertEquals(
+            $objectResourceMock,
+            $this->model->afterDelete($subjectMock, $objectResourceMock, $websiteMock)
+        );
+    }
+
     public function testAfterSave()
     {
         $dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
 
-        $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(
-            \Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::INPUT_KEY_WEBSITE
-        );
         $this->dimensionFactory->expects($this->once())->method('create')->willReturn(
             $dimensionMock
         );
         $this->tableMaintainer->expects($this->once())->method('createTablesForDimensions')->with(
             [$dimensionMock]
+        );
+
+        $this->dimensionModeConfiguration->expects($this->once())->method('getDimensionConfiguration')->willReturn(
+            [\Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider::DIMENSION_NAME]
+        );
+
+        $subjectMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
+        $objectResourceMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
+        $websiteMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
+        $websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $websiteMock->expects($this->once())
+            ->method('isObjectNew')
+            ->willReturn(true);
+
+        $this->assertEquals(
+            $objectResourceMock,
+            $this->model->afterSave($subjectMock, $objectResourceMock, $websiteMock)
+        );
+    }
+
+    public function testAfterSaveOnModeWithoutWebsiteDimension()
+    {
+        $dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
+
+        $this->dimensionFactory->expects($this->never())->method('create')->willReturn(
+            $dimensionMock
+        );
+        $this->tableMaintainer->expects($this->never())->method('createTablesForDimensions')->with(
+            [$dimensionMock]
+        );
+
+        $this->dimensionModeConfiguration->expects($this->once())->method('getDimensionConfiguration')->willReturn(
+            []
         );
 
         $subjectMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);

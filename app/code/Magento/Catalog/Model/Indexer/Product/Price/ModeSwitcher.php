@@ -16,25 +16,7 @@ use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
  */
 class ModeSwitcher
 {
-    const INPUT_KEY_NONE = 'none';
-    const INPUT_KEY_WEBSITE = 'website';
-    const INPUT_KEY_CUSTOMER_GROUP = 'customer_group';
-    const INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP = 'website_and_customer_group';
     const XML_PATH_PRICE_DIMENSIONS_MODE = 'indexer/catalog_product_price/dimensions_mode';
-
-    /**
-     * ScopeConfigInterface
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $configReader;
-
-    /**
-     * ConfigInterface
-     *
-     * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface
-     */
-    private $configWriter;
 
     /**
      * TableMaintainer
@@ -42,27 +24,6 @@ class ModeSwitcher
      * @var \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer
      */
     private $tableMaintainer;
-
-    /**
-     * WebsiteRepositoryInterface
-     *
-     * @var \Magento\Store\Api\WebsiteRepositoryInterface
-     */
-    private $websiteRepository;
-
-    /**
-     * GroupRepositoryInterface
-     *
-     * @var \Magento\Customer\Api\GroupRepositoryInterface
-     */
-    private $customerGroupRepository;
-
-    /**
-     * SearchCriteriaBuilder
-     *
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
 
     /**
      * DimensionCollectionFactory
@@ -77,29 +38,14 @@ class ModeSwitcher
     private $dimensionsArray;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $configReader
-     * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $configWriter
      * @param \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer
-     * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
-     * @param \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionProviderFactory
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $configReader,
-        \Magento\Framework\App\Config\ConfigResource\ConfigInterface $configWriter,
         \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer,
-        \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
-        \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionProviderFactory
     ) {
-        $this->configReader = $configReader;
-        $this->configWriter = $configWriter;
         $this->tableMaintainer = $tableMaintainer;
-        $this->websiteRepository = $websiteRepository;
-        $this->customerGroupRepository = $customerGroupRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->dimensionProviderFactory = $dimensionProviderFactory;
     }
 

@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\ObjectManagerInterface;
@@ -101,14 +102,26 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
     public function modesDataProvider()
     {
         return [
-            [ModeSwitcher::INPUT_KEY_NONE, ModeSwitcher::INPUT_KEY_WEBSITE],
-            [ModeSwitcher::INPUT_KEY_WEBSITE, ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP],
-            [ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP, ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP],
-            [ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP, ModeSwitcher::INPUT_KEY_NONE],
-            [ModeSwitcher::INPUT_KEY_NONE, ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP],
-            [ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP, ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP],
-            [ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP, ModeSwitcher::INPUT_KEY_WEBSITE],
-            [ModeSwitcher::INPUT_KEY_WEBSITE, ModeSwitcher::INPUT_KEY_NONE],
+            [DimensionModeConfiguration::DIMENSION_NONE, DimensionModeConfiguration::DIMENSION_WEBSITE],
+            [DimensionModeConfiguration::DIMENSION_WEBSITE, DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP],
+            [
+                DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP,
+                DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP
+            ],
+            [
+                DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP,
+                DimensionModeConfiguration::DIMENSION_NONE
+            ],
+            [
+                DimensionModeConfiguration::DIMENSION_NONE,
+                DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP
+            ],
+            [
+                DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP,
+                DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP
+            ],
+            [DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP, DimensionModeConfiguration::DIMENSION_WEBSITE],
+            [DimensionModeConfiguration::DIMENSION_WEBSITE, DimensionModeConfiguration::DIMENSION_NONE],
         ];
     }
 
@@ -120,7 +133,7 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
     {
         $this->commandTester->execute(
             [
-                PriceIndexerDimensionsModeSetCommand::INPUT_KEY_MODE => ModeSwitcher::INPUT_KEY_NONE
+                PriceIndexerDimensionsModeSetCommand::INPUT_KEY_MODE => DimensionModeConfiguration::DIMENSION_NONE
             ]
         );
         $expectedOutput = 'Dimensions mode for indexer Product Price has not been changed';
@@ -146,7 +159,8 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
     {
         $this->commandTester->execute(
             [
-                PriceIndexerDimensionsModeSetCommand::INPUT_KEY_MODE => ModeSwitcher::INPUT_KEY_NONE . '_not_valid'
+                PriceIndexerDimensionsModeSetCommand::INPUT_KEY_MODE => DimensionModeConfiguration::DIMENSION_NONE .
+                    '_not_valid'
             ]
         );
     }

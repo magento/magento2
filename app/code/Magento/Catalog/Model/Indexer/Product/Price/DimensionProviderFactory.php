@@ -5,94 +5,70 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
+use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Framework\Indexer\MultiDimensionProviderInterface;
 
 class DimensionProviderFactory
 {
-    /**
-     *
-     */
-    const EMPTY_CONFIGURATION = '-';
-
     /**
      * @var \Magento\Framework\Indexer\MultiDimensionProviderFactory
      */
     private $multiDimensionProviderFactory;
 
     /**
-     * @var array
+     * @var DimensionProviderInterface[]
      */
     private $dimensionProviders;
 
     /**
-     * @var array
+     * @var DimensionModeConfiguration
      */
-    private $modes;
+    private $dimensionModeConfiguration;
 
     /**
-     * @var array
+     * @param \Magento\Framework\Indexer\MultiDimensionProviderInterfaceFactory $multiDimensionProviderFactory
+     * @param DimensionModeConfiguration $dimensionModeConfiguration
+     * @param array $dimensionProviders
      */
-    private $modesConfiguration;
-
     public function __construct(
         \Magento\Framework\Indexer\MultiDimensionProviderInterfaceFactory $multiDimensionProviderFactory,
-        array $dimensionProviders,
-        array $modes,
-        array $modesConfiguration
+        DimensionModeConfiguration $dimensionModeConfiguration,
+        array $dimensionProviders
     ) {
         $this->multiDimensionProviderFactory = $multiDimensionProviderFactory;
         $this->dimensionProviders = $dimensionProviders;
-        $this->modes = $modes;
-        $this->modesConfiguration = $modesConfiguration;
+        $this->dimensionModeConfiguration = $dimensionModeConfiguration;
     }
 
     /**
      * Create MultiDimensionProviderInterface for specified "dimension mode" - which dimensions indexer use for sharding
      *
-     * @param string $dimensionsMode
+     * @param string|null $dimensionsMode
      * @return MultiDimensionProviderInterface
      */
-    public function createByMode(string $dimensionsMode): MultiDimensionProviderInterface
+    public function createByMode(string $dimensionsMode = null): MultiDimensionProviderInterface
     {
-        if (!in_array($dimensionsMode, $this->modes)) {
-            throw new \InvalidArgumentException(
-                sprintf('Undefined dimension mode "%s".', $dimensionsMode)
-            );
+        $dimensionConfiguration = $this->dimensionModeConfiguration->getDimensionConfiguration($dimensionsMode);
+        $dimensionProvidersMap = [];
+        foreach ($this->dimensionProviders as $dimensionProvider) {
+            // TODO: fix hac by getDimensionName?
+            $dimensionProvidersMap[$dimensionProvider::DIMENSION_NAME] = $dimensionProvider;
         }
 
-        $modeConfigurationKey = array_search($dimensionsMode, $this->modes, true);
-        if (!array_key_exists($modeConfigurationKey, $this->modesConfiguration)) {
-            throw new \InvalidArgumentException(
-                sprintf('Missing configuration for mode "%s".', $dimensionsMode)
-            );
+        $providers = [];
+        foreach ($dimensionConfiguration as $dimensionName) {
+            if (!isset($dimensionProvidersMap[$dimensionName])) {
+                throw new \InvalidArgumentException(
+                    sprintf('Missing data provider for Dimension with name "%s".', $dimensionName)
+                );
+            }
+            $providers[] = clone $dimensionProvidersMap[$dimensionName];
         }
 
         return $this->multiDimensionProviderFactory->create(
             [
-                'dimensionProviders' => $this->getDataProviders($modeConfigurationKey)
+                'dimensionProviders' => $providers
             ]
         );
-    }
-
-    private function getDataProviders($modeConfigurationKey): array
-    {
-        $modeConfiguration = $this->modesConfiguration[$modeConfigurationKey];
-        $providers = [];
-
-        if ($modeConfiguration === self::EMPTY_CONFIGURATION) {
-            return $providers;
-        }
-
-        foreach ($modeConfiguration as $modeDataProviderName) {
-            if (!array_key_exists($modeDataProviderName, $this->dimensionProviders)) {
-                throw new \InvalidArgumentException(
-                    sprintf('Missing data provider "%s".', $modeDataProviderName)
-                );
-            }
-
-            $providers[] = clone $this->dimensionProviders[$modeDataProviderName];
-        }
-
-        return $providers;
     }
 }

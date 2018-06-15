@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Console\Command;
 
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -106,7 +107,7 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
         try {
             $currentMode = $input->getArgument(self::INPUT_KEY_MODE);
             $previousMode = $this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?:
-                ModeSwitcher::INPUT_KEY_NONE;
+                DimensionModeConfiguration::DIMENSION_NONE;
 
             if ($previousMode !== $currentMode) {
                 //Create new tables and move data
@@ -152,9 +153,10 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
         $modeOptions[] = new InputArgument(
             self::INPUT_KEY_MODE,
             InputArgument::REQUIRED,
-            'Indexer dimensions mode ['. ModeSwitcher::INPUT_KEY_NONE . '|' . ModeSwitcher::INPUT_KEY_WEBSITE
-            . '|' . ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP
-            . '|' . ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP .']'
+            'Indexer dimensions mode ['. DimensionModeConfiguration::DIMENSION_NONE
+            . '|' . DimensionModeConfiguration::DIMENSION_WEBSITE
+            . '|' . DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP
+            . '|' . DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP .']'
         );
         return $modeOptions;
     }
@@ -170,10 +172,10 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
         $errors = [];
 
         $acceptedModeValues = ' Accepted values for ' . self::INPUT_KEY_MODE . ' are \''
-            . ModeSwitcher::INPUT_KEY_NONE . '\', \''
-            . ModeSwitcher::INPUT_KEY_WEBSITE . '\', \''
-            . ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP . '\', \''
-            . ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP . '\'';
+            . DimensionModeConfiguration::DIMENSION_NONE . '\', \''
+            . DimensionModeConfiguration::DIMENSION_WEBSITE . '\', \''
+            . DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP . '\', \''
+            . DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP . '\'';
 
         $inputMode = $input->getArgument(self::INPUT_KEY_MODE);
         if (!$inputMode) {
@@ -181,10 +183,10 @@ class PriceIndexerDimensionsModeSetCommand extends AbstractIndexerCommand
         } elseif (!in_array(
             $inputMode,
             [
-                ModeSwitcher::INPUT_KEY_NONE,
-                ModeSwitcher::INPUT_KEY_WEBSITE,
-                ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP,
-                ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP
+                DimensionModeConfiguration::DIMENSION_NONE,
+                DimensionModeConfiguration::DIMENSION_WEBSITE,
+                DimensionModeConfiguration::DIMENSION_CUSTOMER_GROUP,
+                DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP
             ]
         )) {
             $errors[] = $acceptedModeValues;

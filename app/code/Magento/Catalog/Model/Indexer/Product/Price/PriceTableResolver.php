@@ -6,34 +6,32 @@
 
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
+use Magento\Framework\Indexer\Dimension;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
 class PriceTableResolver implements IndexScopeResolverInterface
 {
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
     /**
      * @var IndexScopeResolver
      */
     private $indexScopeResolver;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
+     * @var DimensionModeConfiguration
+     */
+    private $dimensionModeConfiguration;
+
+    /**
      * @param IndexScopeResolver $indexScopeResolver
+     * @param DimensionModeConfiguration $dimensionModeConfiguration
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        IndexScopeResolver $indexScopeResolver
+        IndexScopeResolver $indexScopeResolver,
+        DimensionModeConfiguration $dimensionModeConfiguration
     ) {
-        $this->scopeConfig = $scopeConfig;
         $this->indexScopeResolver = $indexScopeResolver;
+        $this->dimensionModeConfiguration = $dimensionModeConfiguration;
     }
 
     /**
@@ -44,42 +42,30 @@ class PriceTableResolver implements IndexScopeResolverInterface
      */
     public function resolve($index, array $dimensions)
     {
-        if ($index == 'catalog_product_index_price') {
-            $dimensions = $this->getMixDimensions($dimensions);
+        if ($index === 'catalog_product_index_price') {
+            $dimensions = $this->filterDimensions($dimensions);
         }
         return $this->indexScopeResolver->resolve($index, $dimensions);
     }
 
-    private function getMixDimensions($dimensions): array
+    /**
+     * @param Dimension[] $dimensions
+     * @return array
+     * @throws \Exception
+     */
+    private function filterDimensions($dimensions): array
     {
         $existDimensions = [];
+        $currentDimensions = $this->dimensionModeConfiguration->getDimensionConfiguration();
         foreach ($dimensions as $dimension) {
             if ((string)$dimension->getValue() === '') {
                 throw new \Exception(sprintf('Dimension value of "%s" can not be empty', $dimension->getName()));
             }
-            $existDimensions[$dimension->getName()] = $dimension;
+            if (in_array($dimension->getName(), $currentDimensions, true)) {
+                $existDimensions[] = $dimension;
+            }
         }
 
-        switch ($this->scopeConfig->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE)) {
-            case ModeSwitcher::INPUT_KEY_WEBSITE:
-                $return = [
-                    $existDimensions[WebsiteDataProvider::DIMENSION_NAME]
-                ];
-                break;
-            case ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP:
-                $return = [
-                    $existDimensions[CustomerGroupDataProvider::DIMENSION_NAME]
-                ];
-                break;
-            case ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP:
-                $return = [
-                    $existDimensions[WebsiteDataProvider::DIMENSION_NAME],
-                    $existDimensions[CustomerGroupDataProvider::DIMENSION_NAME]
-                ];
-                break;
-            default:
-                $return = [];
-        }
-        return $return;
+        return $existDimensions;
     }
 }

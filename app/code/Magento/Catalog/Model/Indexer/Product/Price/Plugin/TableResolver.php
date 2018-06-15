@@ -7,10 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
-use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Framework\App\Http\Context;
@@ -21,15 +19,11 @@ use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
 /**
- * Class that replace catalog_product_index_price table name on the table name segmented per dimension
+ * Replace catalog_product_index_price table name on the table name segmented per dimension.
+ * Used only for backward compatibility
  */
 class TableResolver
 {
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
     /**
      * @var IndexScopeResolverInterface
      */
@@ -51,78 +45,79 @@ class TableResolver
     private $dimensionFactory;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
+     * @var DimensionModeConfiguration
+     */
+    private $dimensionModeConfiguration;
+
+    /**
      * @param IndexScopeResolverInterface $priceTableResolver
      * @param StoreManagerInterface $storeManager
      * @param Context $context
      * @param DimensionFactory $dimensionFactory
+     * @param DimensionModeConfiguration $dimensionModeConfiguration
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
         IndexScopeResolverInterface $priceTableResolver,
         StoreManagerInterface $storeManager,
         Context $context,
-        DimensionFactory $dimensionFactory
+        DimensionFactory $dimensionFactory,
+        DimensionModeConfiguration $dimensionModeConfiguration
     ) {
-        $this->scopeConfig = $scopeConfig;
         $this->priceTableResolver = $priceTableResolver;
         $this->storeManager = $storeManager;
         $this->httpContext = $context;
         $this->dimensionFactory = $dimensionFactory;
+        $this->dimensionModeConfiguration = $dimensionModeConfiguration;
     }
 
     /**
-     * replacing catalog_product_index_price table name on the table name segmented per dimension
+     * Replacing catalog_product_index_price table name on the table name segmented per dimension
+     *
      * @param ResourceConnection $subject
      * @param string $result
-     * @param string|string[] $modelEntity
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param string|string[] $tableName
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetTableName(
         ResourceConnection $subject,
         string $result,
-        $modelEntity
+        $tableName
     ) {
-        if (!is_array($modelEntity)
-            && $modelEntity === 'catalog_product_index_price'
-            && $this->getMode() !== ModeSwitcher::INPUT_KEY_NONE
+        if (!is_array($tableName)
+            && $tableName === 'catalog_product_index_price'
+            && $this->dimensionModeConfiguration->getCurrentMode() !== DimensionModeConfiguration::DIMENSION_NONE
         ) {
             return $this->priceTableResolver->resolve('catalog_product_index_price', $this->getDimensions());
         }
+
         return $result;
     }
 
-    private function getMode(): string
-    {
-        return $this->scopeConfig->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE);
-    }
-
+    /**
+     * @return Dimension[]
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function getDimensions(): array
     {
-        switch ($this->getMode()) {
-            case ModeSwitcher::INPUT_KEY_WEBSITE:
-                $return = [
-                    $this->createDimensionFromWebsite()
-                ];
-                break;
-            case ModeSwitcher::INPUT_KEY_CUSTOMER_GROUP:
-                $return = [
-                    $this->createDimensionFromCustomerGroup()
-                ];
-                break;
-            case ModeSwitcher::INPUT_KEY_WEBSITE_AND_CUSTOMER_GROUP:
-                $return = [
-                    $this->createDimensionFromWebsite(),
-                    $this->createDimensionFromCustomerGroup()
-                ];
-                break;
-            default:
-                $return = [];
+        $dimensions = [];
+        foreach ($this->dimensionModeConfiguration->getDimensionConfiguration() as $dimensionName) {
+            if ($dimensionName === WebsiteDataProvider::DIMENSION_NAME) {
+                $dimensions[] = $this->createDimensionFromWebsite();
+            }
+            if ($dimensionName === CustomerGroupDataProvider::DIMENSION_NAME) {
+                $dimensions[] = $this->createDimensionFromCustomerGroup();
+            }
         }
-        return $return;
+
+        return $dimensions;
     }
 
+    /**
+     * @return Dimension
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function createDimensionFromWebsite(): Dimension
     {
         $storeKey = $this->httpContext->getValue(StoreManagerInterface::CONTEXT_STORE);
@@ -132,6 +127,9 @@ class TableResolver
         );
     }
 
+    /**
+     * @return Dimension
+     */
     private function createDimensionFromCustomerGroup(): Dimension
     {
         return $this->dimensionFactory->create(
