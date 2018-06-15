@@ -55,6 +55,7 @@ class Builder
      * @param Registry $registry
      * @param WysiwygModel\Config $wysiwygConfig
      * @param StoreFactory|null $storeFactory
+     * @param ProductRepositoryInterface|null $productRepository
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -84,7 +85,7 @@ class Builder
     public function build(RequestInterface $request)
     {
         $productId = (int) $request->getParam('id');
-        $storeId = (int) $request->getParam('store', 0);
+        $storeId = $request->getParam('store', 0);
         $attributeSetId = (int) $request->getParam('set');
         $typeId = $request->getParam('type');
 
