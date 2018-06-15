@@ -48,7 +48,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function _initConfig(array $files = null)
     {
         if (null === $files) {
-            $files = glob(__DIR__ . '/_files/validation/positive/*/validation.xml');
+            $files = glob(__DIR__ . '/_files/validation/positive/*/validation.xml', GLOB_NOSORT);
         }
         $configFiles = [];
         foreach ($files as $path) {
