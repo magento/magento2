@@ -40,6 +40,7 @@ define([
             showFallbackReset: false,
             additionalClasses: {},
             isUseDefault: '',
+            serviceDisabled: false,
             valueUpdate: false, // ko binding valueUpdate
 
             switcherConfig: {
@@ -97,7 +98,7 @@ define([
             this._super();
 
             this.observe('error disabled focused preview visible value warn notice isDifferedFromDefault')
-                .observe('isUseDefault')
+                .observe('isUseDefault serviceDisabled')
                 .observe({
                     'required': !!rules['required-entry']
                 });
