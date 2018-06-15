@@ -180,5 +180,4 @@ class SkuTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product\Copier::class
         );
     }
-
 }

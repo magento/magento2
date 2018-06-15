@@ -90,7 +90,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                     'Duplicated %attribute found: %value',
                     [
                         'attribute' => $attributeCode,
-                        'value' => $attributeValue,
+                        'value' => $attributeValue
                     ]
                 )
             );
@@ -134,9 +134,8 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         if (true === $object->getIsDuplicate()) {
             $this->_generateUniqueSku($object);
-        } else {
-            $this->checkUniqueSku($object);
         }
+        $this->checkUniqueSku($object);
 
         return parent::beforeSave($object);
     }
