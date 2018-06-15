@@ -42,7 +42,7 @@ class LogoutAll extends \Magento\Backend\App\Action
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __("We couldn't logout because of an error."));
+            $this->messageManager->addExceptionMessage($e, __("We couldn't logout because of an error."));
         }
         $this->_redirect('*/*/activity');
     }

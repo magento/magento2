@@ -95,7 +95,7 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
             } catch (InvalidTransitionException $e) {
                 $this->messageManager->addSuccess(__('This email does not require confirmation.'));
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Wrong email.'));
+                $this->messageManager->addExceptionMessage($e, __('Wrong email.'));
                 $resultRedirect->setPath('*/*/*', ['email' => $email, '_secure' => true]);
                 return $resultRedirect;
             }

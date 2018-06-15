@@ -163,7 +163,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                 $integration = $this->_integrationService->update($integrationData);
             }
             if (!$this->getRequest()->isXmlHttpRequest()) {
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __(
                         'The integration \'%1\' has been saved.',
                         $this->escaper->escapeHtml($integration->getName())

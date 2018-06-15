@@ -27,7 +27,7 @@ class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
             "The integration '%1' has been activated.",
             $integrationName
         );
-        $this->messageManager->addSuccess($successMsg);
+        $this->messageManager->addSuccessMessage($successMsg);
     }
 
     /**

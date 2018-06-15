@@ -230,7 +230,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
             $this->inlineTranslation->resume();
 
             $this->_eventManager->dispatch('wishlist_share', ['wishlist' => $wishlist]);
-            $this->messageManager->addSuccess(__('Your wish list has been shared.'));
+            $this->messageManager->addSuccessMessage(__('Your wish list has been shared.'));
             $resultRedirect->setPath('*/*', ['wishlist_id' => $wishlist->getId()]);
             return $resultRedirect;
         } catch (\Exception $e) {

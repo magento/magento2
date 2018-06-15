@@ -23,7 +23,7 @@ class Delete extends TermController
                 $model = $this->_objectManager->create(\Magento\Search\Model\Query::class);
                 $model->setId($id);
                 $model->delete();
-                $this->messageManager->addSuccess(__('You deleted the search.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the search.'));
                 $resultRedirect->setPath('search/*/');
                 return $resultRedirect;
             } catch (\Exception $e) {

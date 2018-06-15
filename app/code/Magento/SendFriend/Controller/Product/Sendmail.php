@@ -109,7 +109,7 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Some emails were not sent.'));
+            $this->messageManager->addExceptionMessage($e, __('Some emails were not sent.'));
         }
 
         // save form data

@@ -32,7 +32,7 @@ class MarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notific
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __("We couldn't mark the notification as Read because of an error.")
                 );

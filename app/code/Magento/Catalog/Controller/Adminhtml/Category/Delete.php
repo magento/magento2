@@ -44,7 +44,7 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
                 $this->_eventManager->dispatch('catalog_controller_category_delete', ['category' => $category]);
                 $this->_auth->getAuthStorage()->setDeletedPath($category->getPath());
                 $this->categoryRepository->delete($category);
-                $this->messageManager->addSuccess(__('You deleted the category.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the category.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);

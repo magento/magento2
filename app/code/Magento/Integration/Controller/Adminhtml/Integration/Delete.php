@@ -43,7 +43,7 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration
                         $this->_oauthService->deleteConsumer($integrationData[Info::DATA_CONSUMER_ID]);
                     }
                     $this->_registry->register(self::REGISTRY_KEY_CURRENT_INTEGRATION, $integrationData);
-                    $this->messageManager->addSuccess(
+                    $this->messageManager->addSuccessMessage(
                         __(
                             "The integration '%1' has been deleted.",
                             $this->escaper->escapeHtml($integrationData[Info::DATA_NAME])

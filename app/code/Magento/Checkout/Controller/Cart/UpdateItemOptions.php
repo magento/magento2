@@ -74,7 +74,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
             } else {
                 $messages = array_unique(explode("\n", $e->getMessage()));
                 foreach ($messages as $message) {
-                    $this->messageManager->addError($message);
+                    $this->messageManager->addErrorMessage($message);
                 }
             }
 
@@ -86,7 +86,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                 return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl($cartUrl));
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t update the item right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t update the item right now.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->_goBack();
         }

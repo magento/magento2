@@ -84,7 +84,7 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
             ->create()
             ->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$shipmentsCollection->getSize()) {
-            $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
+            $this->messageManager->addErrorMessage(__('There are no printable documents related to selected orders.'));
             return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
         return $this->fileFactory->create(

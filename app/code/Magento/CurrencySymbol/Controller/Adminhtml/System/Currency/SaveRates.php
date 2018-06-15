@@ -26,7 +26,7 @@ class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Curr
                         )->getNumber($value));
                         $data[$currencyCode][$currencyTo] = $value;
                         if ($value == 0) {
-                            $this->messageManager->addWarning(
+                            $this->messageManager->addWarningMessage(
                                 __('Please correct the input data for "%1 => %2" rate.', $currencyCode, $currencyTo)
                             );
                         }

@@ -26,7 +26,7 @@ class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
                     }
                 } else {
                     $model->save();
-                    $this->messageManager->addSuccess(__('You saved the condition.'));
+                    $this->messageManager->addSuccessMessage(__('You saved the condition.'));
                     $this->_redirect('checkout/*/');
                     return;
                 }

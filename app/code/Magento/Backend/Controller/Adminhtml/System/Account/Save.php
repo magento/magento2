@@ -82,7 +82,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             } else {
                 $user->save();
                 $user->sendNotificationEmailsIfRequired();
-                $this->messageManager->addSuccess(__('You saved the account.'));
+                $this->messageManager->addSuccessMessage(__('You saved the account.'));
             }
         } catch (UserLockedException $e) {
             $this->_auth->logout();

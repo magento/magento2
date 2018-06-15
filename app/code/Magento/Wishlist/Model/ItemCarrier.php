@@ -202,7 +202,7 @@ class ItemCarrier
                 $products[] = '"' . $product->getName() . '"';
             }
 
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('%1 product(s) have been added to shopping cart: %2.', count($addedProducts), join(', ', $products))
             );
 

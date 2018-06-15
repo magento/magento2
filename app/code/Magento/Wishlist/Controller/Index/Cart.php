@@ -183,7 +183,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
                     'You added %1 to your shopping cart.',
                     $this->escaper->escapeHtml($item->getProduct()->getName())
                 );
-                $this->messageManager->addSuccess($message);
+                $this->messageManager->addSuccessMessage($message);
             }
 
             if ($this->cartHelper->getShouldRedirectToCart()) {
@@ -200,7 +200,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
             $this->messageManager->addNotice($e->getMessage());
             $redirectUrl = $configureUrl;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t add the item to the cart right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t add the item to the cart right now.'));
         }
 
         $this->helper->calculate();

@@ -33,7 +33,7 @@ class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
         );
         try {
             $widgetInstance->save();
-            $this->messageManager->addSuccess(__('The widget instance has been saved.'));
+            $this->messageManager->addSuccessMessage(__('The widget instance has been saved.'));
             if ($this->getRequest()->getParam('back', false)) {
                 $this->_redirect(
                     'adminhtml/*/edit',

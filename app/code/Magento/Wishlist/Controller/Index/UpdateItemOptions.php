@@ -114,7 +114,7 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
             $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
 
             $message = __('%1 has been updated in your Wish List.', $product->getName());
-            $this->messageManager->addSuccess($message);
+            $this->messageManager->addSuccessMessage($message);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {

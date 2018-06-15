@@ -25,7 +25,7 @@ class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statist
             foreach ($collectionsNames as $collectionName) {
                 $this->_objectManager->create($collectionName)->aggregate($date);
             }
-            $this->messageManager->addSuccess(__('Recent statistics have been updated.'));
+            $this->messageManager->addSuccessMessage(__('Recent statistics have been updated.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {

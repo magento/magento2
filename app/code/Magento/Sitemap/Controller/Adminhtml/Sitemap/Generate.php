@@ -25,13 +25,13 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             try {
                 $sitemap->generateXml();
 
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __('The sitemap "%1" has been generated.', $sitemap->getSitemapFilename())
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('We can\'t generate the sitemap right now.'));
+                $this->messageManager->addExceptionMessage($e, __('We can\'t generate the sitemap right now.'));
             }
         } else {
             $this->messageManager->addError(__('We can\'t find a sitemap to generate.'));

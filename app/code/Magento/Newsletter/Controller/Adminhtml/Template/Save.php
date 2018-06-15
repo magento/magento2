@@ -62,7 +62,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
 
             $template->save();
 
-            $this->messageManager->addSuccess(__('The newsletter template has been saved.'));
+            $this->messageManager->addSuccessMessage(__('The newsletter template has been saved.'));
             $this->_getSession()->setFormData(false);
             $this->_getSession()->unsPreviewData();
             $this->_redirect('*/template');
@@ -71,7 +71,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
             $this->messageManager->addError(nl2br($e->getMessage()));
             $this->_getSession()->setData('newsletter_template_form_data', $this->getRequest()->getParams());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong while saving this template.'));
+            $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving this template.'));
             $this->_getSession()->setData('newsletter_template_form_data', $this->getRequest()->getParams());
         }
 

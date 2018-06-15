@@ -35,12 +35,12 @@ class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store
 
         try {
             $model->delete();
-            $this->messageManager->addSuccess(__('You deleted the store.'));
+            $this->messageManager->addSuccessMessage(__('You deleted the store.'));
             return $redirectResult->setPath('adminhtml/*/');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to delete the store. Please try again later.'));
+            $this->messageManager->addExceptionMessage($e, __('Unable to delete the store. Please try again later.'));
         }
         return $redirectResult->setPath('adminhtml/*/editGroup', ['group_id' => $itemId]);
     }

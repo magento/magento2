@@ -60,7 +60,7 @@ class Delete extends \Magento\Backend\App\Action
                 /** @var \Magento\Search\Model\SynonymGroup $synGroupModel */
                 $synGroupModel = $this->synGroupRepository->get($id);
                 $this->synGroupRepository->delete($synGroupModel);
-                $this->messageManager->addSuccess(__('The synonym group has been deleted.'));
+                $this->messageManager->addSuccessMessage(__('The synonym group has been deleted.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->logger->error($e);

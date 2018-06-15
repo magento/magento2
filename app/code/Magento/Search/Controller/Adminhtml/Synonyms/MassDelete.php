@@ -82,7 +82,7 @@ class MassDelete extends \Magento\Backend\App\Action
                 );
             }
 
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('A total of %1 synonym group(s) have been deleted.', $deletedItems)
             );
         }

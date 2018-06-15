@@ -103,7 +103,7 @@ class Cart extends \Magento\Framework\App\Action\Action
                     'You added %1 to your shopping cart.',
                     $this->escaper->escapeHtml($item->getProduct()->getName())
                 );
-                $this->messageManager->addSuccess($message);
+                $this->messageManager->addSuccessMessage($message);
             }
 
             if ($this->cartHelper->getShouldRedirectToCart()) {
@@ -115,7 +115,7 @@ class Cart extends \Magento\Framework\App\Action\Action
             $this->messageManager->addNotice($e->getMessage());
             $redirectUrl = $item->getProductUrl();
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t add the item to the cart right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t add the item to the cart right now.'));
         }
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

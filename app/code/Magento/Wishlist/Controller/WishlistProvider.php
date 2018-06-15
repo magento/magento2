@@ -88,7 +88,7 @@ class WishlistProvider implements WishlistProviderInterface
             $this->messageManager->addError($e->getMessage());
             return false;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t create the Wish List right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t create the Wish List right now.'));
             return false;
         }
         $this->wishlist = $wishlist;

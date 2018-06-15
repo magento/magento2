@@ -46,7 +46,7 @@ class Overview extends \Magento\Multishipping\Controller\Checkout
             $this->_redirect('*/*/billing');
         } catch (\Exception $e) {
             $this->_objectManager->get(LoggerInterface::class)->critical($e);
-            $this->messageManager->addException($e, __('We cannot open the overview page.'));
+            $this->messageManager->addExceptionMessage($e, __('We cannot open the overview page.'));
             $this->_redirect('*/*/billing');
         }
     }

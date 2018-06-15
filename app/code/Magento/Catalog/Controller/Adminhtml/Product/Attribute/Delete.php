@@ -27,7 +27,7 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
             try {
                 $model->delete();
-                $this->messageManager->addSuccess(__('You deleted the product attribute.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the product attribute.'));
                 return $resultRedirect->setPath('catalog/*/');
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());

@@ -19,7 +19,7 @@ class Delete extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
         if ($widgetInstance) {
             try {
                 $widgetInstance->delete();
-                $this->messageManager->addSuccess(__('The widget instance has been deleted.'));
+                $this->messageManager->addSuccessMessage(__('The widget instance has been deleted.'));
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             }

@@ -94,7 +94,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
             $this->_validateMassStatus($productIds, $status);
             $this->_objectManager->get(\Magento\Catalog\Model\Product\Action::class)
                 ->updateAttributes($productIds, ['status' => $status], $storeId);
-            $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
+            $this->messageManager->addSuccessMessage(__('A total of %1 record(s) have been updated.', count($productIds)));
             $this->_productPriceIndexerProcessor->reindexList($productIds);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

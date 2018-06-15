@@ -103,12 +103,12 @@ abstract class Store extends Action
                 ->setType('db')
                 ->setPath($filesystem->getDirectoryRead(DirectoryList::VAR_DIR)->getAbsolutePath('backups'));
             $backupDb->createBackup($backup);
-            $this->messageManager->addSuccess(__('The database was backed up.'));
+            $this->messageManager->addSuccessMessage(__('The database was backed up.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             return false;
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __('We can\'t create a backup right now. Please try again later.')
             );
