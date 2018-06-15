@@ -9,7 +9,7 @@
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateStock" dataType="stock" type="create"
-               auth="adminOauth" url="/V1/inventory/stock" method="POST">
+               auth="adminOauth" url="/V1/inventory/stocks" method="POST">
         <contentType>application/json</contentType>
         <object dataType="stock" key="stock">
             <field key="stock_id">integer</field>
@@ -25,7 +25,7 @@
         </object>
     </operation>
     <operation name="DeleteStock" dataType="stock" type="delete"
-               auth="adminOauth" url="/V1/inventory/stock/{return}" method="DELETE">
+               auth="adminOauth" url="/V1/inventory/stocks/{return}" method="DELETE">
         <contentType>application/json</contentType>
     </operation>
 </operations>
