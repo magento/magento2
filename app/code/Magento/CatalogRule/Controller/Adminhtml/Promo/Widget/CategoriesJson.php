@@ -8,7 +8,6 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Widget;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Model\Category;
-use Magento\Customer\Model\Attribute\Data\Boolean;
 use Magento\Framework\Registry;
 
 class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget
