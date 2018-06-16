@@ -68,17 +68,21 @@ class SaveTest extends WebapiAbstract
             [
                 SourceItemInterface::SOURCE_CODE => 'eu-1',
                 SourceItemInterface::SKU => 'SKU-1',
+                SourceItemInterface::QUANTITY => 5.5,
+                SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
             ],
             [
                 SourceItemInterface::SOURCE_CODE => 'eu-2',
                 SourceItemInterface::SKU => 'SKU-1',
+                SourceItemInterface::QUANTITY => 3,
+                SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
             ],
         ];
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?'
                     . http_build_query(['sourceItems' => $sourceItems]),
-                'httpMethod' => Request::HTTP_METHOD_DELETE,
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME_DELETE,
@@ -98,7 +102,17 @@ class SaveTest extends WebapiAbstract
     {
         $requestData = [
             'searchCriteria' => [
-                SearchCriteria::FILTER_GROUPS => [],
+                SearchCriteria::FILTER_GROUPS => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => SourceItemInterface::SKU,
+                                'value' => 'SKU-1',
+                                'condition_type' => 'eq',
+                            ],
+                        ],
+                    ],
+                ],
                 SearchCriteria::PAGE_SIZE => 10
             ],
         ];
