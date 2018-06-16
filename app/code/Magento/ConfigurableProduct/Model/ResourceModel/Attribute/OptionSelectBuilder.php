@@ -7,6 +7,7 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Attribute;
 
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttributeResource;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\DB\Select;
 
@@ -30,13 +31,24 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
     private $attributeOptionProvider;
 
     /**
+     * Eav Attribute Resource Model.
+     *
+     * @var EavAttributeResource
+     */
+    private $eavAttributeResource;
+
+    /**
      * @param Attribute $attributeResource
      * @param OptionProvider $attributeOptionProvider
      */
-    public function __construct(Attribute $attributeResource, OptionProvider $attributeOptionProvider)
-    {
+    public function __construct(
+        Attribute $attributeResource,
+        OptionProvider $attributeOptionProvider,
+        EavAttributeResource $eavAttributeResource
+    ) {
         $this->attributeResource = $attributeResource;
         $this->attributeOptionProvider = $attributeOptionProvider;
+        $this->eavAttributeResource = $eavAttributeResource;
     }
 
     /**
@@ -91,12 +103,6 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                 ]
             ),
             []
-        )->joinInner(
-            ['attribute_option' => $this->attributeResource->getTable('eav_attribute_option')],
-            'attribute_option.option_id = entity_value.value',
-            []
-        )->order(
-            'attribute_option.sort_order ASC'
         )->where(
             'super_attribute.product_id = ?',
             $productId
@@ -104,6 +110,16 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
             'attribute.attribute_id = ?',
             $superAttribute->getAttributeId()
         );
+
+        if (is_a($superAttribute->getSourceModel(), $this->eavAttributeResource->_getDefaultSourceModel(), true)) {
+            $select->joinInner(
+                ['attribute_option' => $this->attributeResource->getTable('eav_attribute_option')],
+                'attribute_option.option_id = entity_value.value and attribute_option.attribute_id = attribute.attribute_id',
+                []
+            )->order(
+            'attribute_option.sort_order ASC'
+            );
+        }
 
         if (!$superAttribute->getSourceModel()) {
             $select->columns(

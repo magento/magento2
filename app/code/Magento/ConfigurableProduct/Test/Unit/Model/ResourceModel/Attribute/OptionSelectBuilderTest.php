@@ -7,12 +7,14 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Attribute;
 
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttributeResource;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use \Magento\Eav\Model\Entity\Attribute\Source\Table as DefaultSourceTable;
 
 /**
  * Class OptionSelectBuilderTest
@@ -38,6 +40,11 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
      * @var OptionProvider|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeOptionProviderMock;
+
+    /**
+     * @var EavAttributeResource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eavAttributeResourceMock;
 
     /**
      * @var Select|\PHPUnit_Framework_MockObject_MockObject
@@ -86,6 +93,15 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->eavAttributeResourceMock = $this->getMockBuilder(EavAttributeResource::class)
+            ->setMethods(['_getDefaultSourceModel'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->eavAttributeResourceMock->expects($this->once())
+            ->method('_getDefaultSourceModel')
+            ->willReturn(DefaultSourceTable::class);
+
         $this->abstractAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->setMethods(['getBackendTable', 'getAttributeId', 'getSourceModel'])
             ->disableOriginalConstructor()
@@ -99,8 +115,9 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
         $this->model = $this->objectManagerHelper->getObject(
             OptionSelectBuilder::class,
             [
-                'attributeResource' => $this->attributeResourceMock,
+                'attributeResource'       => $this->attributeResourceMock,
                 'attributeOptionProvider' => $this->attributeOptionProviderMock,
+                'eavAttributeResource'    => $this->eavAttributeResourceMock
             ]
         );
     }
@@ -112,12 +129,11 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $this->select->expects($this->exactly(1))->method('from')->willReturnSelf();
         $this->select->expects($this->exactly(1))->method('columns')->willReturnSelf();
-        $this->select->expects($this->exactly(6))->method('joinInner')->willReturnSelf();
+        $this->select->expects($this->exactly(5))->method('joinInner')->willReturnSelf();
         $this->select->expects($this->exactly(3))->method('joinLeft')->willReturnSelf();
-        $this->select->expects($this->exactly(1))->method('order')->willReturnSelf();
         $this->select->expects($this->exactly(2))->method('where')->willReturnSelf();
 
-        $this->attributeResourceMock->expects($this->exactly(9))
+        $this->attributeResourceMock->expects($this->exactly(8))
             ->method('getTable')
             ->will(
                 $this->returnValueMap(
@@ -150,9 +166,9 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test for method getSelect with backend table
+     * Test for method getSelect with default source model
      */
-    public function testGetSelectWithBackendModel()
+    public function testGetSelectWithDefaultSourceModel()
     {
         $this->select->expects($this->exactly(1))->method('from')->willReturnSelf();
         $this->select->expects($this->exactly(0))->method('columns')->willReturnSelf();
@@ -172,7 +188,6 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
                         ['eav_attribute', 'eav_attribute value'],
                         ['catalog_product_entity', 'catalog_product_entity value'],
                         ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value'],
-                        ['eav_attribute_option', 'eav_attribute_option value']
                     ]
                 )
             );
@@ -185,7 +200,51 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn('getMainTable value');
         $this->abstractAttributeMock->expects($this->atLeastOnce())
             ->method('getSourceModel')
-            ->willReturn('source model value');
+            ->willReturn(DefaultSourceTable::class);
+
+        $this->scope->expects($this->any())->method('getId')->willReturn(123);
+
+        $this->assertEquals(
+            $this->select,
+            $this->model->getSelect($this->abstractAttributeMock, 4, $this->scope)
+        );
+    }
+
+    /**
+     * Test for method getSelect with a custom source model
+     */
+    public function testGetSelectWithCustomSourceModel()
+    {
+        $this->select->expects($this->exactly(1))->method('from')->willReturnSelf();
+        $this->select->expects($this->exactly(0))->method('columns')->willReturnSelf();
+        $this->select->expects($this->exactly(5))->method('joinInner')->willReturnSelf();
+        $this->select->expects($this->exactly(1))->method('joinLeft')->willReturnSelf();
+        $this->select->expects($this->exactly(2))->method('where')->willReturnSelf();
+
+        $this->attributeResourceMock->expects($this->exactly(6))
+            ->method('getTable')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
+                        ['catalog_product_entity', 'catalog_product_entity value'],
+                        ['catalog_product_super_link', 'catalog_product_super_link value'],
+                        ['eav_attribute', 'eav_attribute value'],
+                        ['catalog_product_entity', 'catalog_product_entity value'],
+                        ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value'],
+                    ]
+                )
+            );
+
+        $this->abstractAttributeMock->expects($this->atLeastOnce())
+            ->method('getAttributeId')
+            ->willReturn('getAttributeId value');
+        $this->abstractAttributeMock->expects($this->atLeastOnce())
+            ->method('getBackendTable')
+            ->willReturn('getMainTable value');
+        $this->abstractAttributeMock->expects($this->atLeastOnce())
+            ->method('getSourceModel')
+            ->willReturn('custom source model value');
 
         $this->scope->expects($this->any())->method('getId')->willReturn(123);
 
