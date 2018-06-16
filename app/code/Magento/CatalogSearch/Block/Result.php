@@ -12,6 +12,7 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Search\Model\QueryFactory;
+use Magento\Catalog\Model\Config;
 
 /**
  * Product search result block
@@ -48,10 +49,16 @@ class Result extends Template
     private $queryFactory;
 
     /**
+     * @var Config
+     */
+    protected $catalogConfig;
+
+    /**
      * @param Context $context
      * @param LayerResolver $layerResolver
      * @param Data $catalogSearchData
      * @param QueryFactory $queryFactory
+     * @param Config $catalogConfig
      * @param array $data
      */
     public function __construct(
@@ -59,11 +66,13 @@ class Result extends Template
         LayerResolver $layerResolver,
         Data $catalogSearchData,
         QueryFactory $queryFactory,
+        Config $catalogConfig,
         array $data = []
     ) {
         $this->catalogLayer = $layerResolver->get();
         $this->catalogSearchData = $catalogSearchData;
         $this->queryFactory = $queryFactory;
+        $this->catalogConfig = $catalogConfig;
         parent::__construct($context, $data);
     }
 
@@ -143,7 +152,7 @@ class Result extends Template
         )->setDefaultDirection(
             'desc'
         )->setDefaultSortBy(
-            'relevance'
+            $this->catalogConfig->getSearchProductListDefaultSortBy($category->getStoreId())
         );
 
         return $this;
