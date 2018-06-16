@@ -28,20 +28,20 @@ class MassAssignSessionStorage
     }
 
     /**
-     * Set product ids
+     * Set product SKUs
      * @param array $productIds
      */
-    public function setProductIds(array $productIds): void
+    public function setProductsSkus(array $productIds): void
     {
-        $this->session->setProductIds($productIds);
+        $this->session->setProductSkus($productIds);
     }
 
     /**
-     * Get selected product ids
+     * Get selected product SKUs
      * @return array
      */
-    public function getProductIds(): array
+    public function getProductsSkus(): array
     {
-        return $this->session->getProductIds();
+        return $this->session->getProductSkus();
     }
 }

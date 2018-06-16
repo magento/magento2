@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\InventoryMassSourceAssignAdminUi\Controller\Adminhtml\Source;
 
 use Magento\Backend\App\Action;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryMassSourceAssignAdminUi\Model\MassAssignSessionStorage;
-use Magento\Ui\Component\MassAction\Filter;
+use Magento\InventoryMassSourceAssignApi\Api\MassAssignInterface;
 
-class MassAssign extends Action
+class MassAssignPost extends Action
 {
     /**
      * @see _isAllowed()
@@ -21,38 +21,30 @@ class MassAssign extends Action
     const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
-     * @var Filter
-     */
-    private $filter;
-
-    /**
      * @var MassAssignSessionStorage
      */
     private $massAssignSessionStorage;
 
     /**
-     * @var CollectionFactory
+     * @var MassAssignInterface
      */
-    private $collectionFactory;
+    private $massAssign;
 
     /**
      * @param Action\Context $context
-     * @param CollectionFactory $collectionFactory
-     * @param Filter $filter
+     * @param MassAssignInterface $massAssign
      * @param MassAssignSessionStorage $massAssignSessionStorage
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         Action\Context $context,
-        CollectionFactory $collectionFactory,
-        Filter $filter,
+        MassAssignInterface $massAssign,
         MassAssignSessionStorage $massAssignSessionStorage
     ) {
         parent::__construct($context);
 
-        $this->filter = $filter;
         $this->massAssignSessionStorage = $massAssignSessionStorage;
-        $this->collectionFactory = $collectionFactory;
+        $this->massAssign = $massAssign;
     }
 
     /**
@@ -60,19 +52,19 @@ class MassAssign extends Action
      */
     public function execute()
     {
+        $sourceCodes = $this->getRequest()->getParam('sources', []);
+        $skus = $this->massAssignSessionStorage->getProductsSkus();
+
         try {
-            $collection = $this->filter->getCollection($this->collectionFactory->create());
-        } catch (\Exception $e) {
+            $count = $this->massAssign->execute($skus, $sourceCodes);
+            $this->messageManager->addSuccessMessage(__('Bulk operation was successful: %count assignments.', [
+                'count' => $count,
+            ]));
+        } catch (ValidationException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-            $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-            return $redirect->setPath('catalog/product/index');
         }
 
-        $this->massAssignSessionStorage->setProductsSkus($collection->getColumnValues('sku'));
-
-        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->getConfig()->getTitle()->prepend(__('Mass products source assignment'));
-
-        return $resultPage;
+        $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $result->setPath('catalog/product/index');
     }
 }

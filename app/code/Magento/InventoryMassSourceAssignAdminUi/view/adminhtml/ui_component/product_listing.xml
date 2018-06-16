@@ -18,7 +18,18 @@
                     </confirm>
                     <url path="inventorymass/source/massAssign"/>
                     <type>save</type>
-                    <label translate="true">Assign to source</label>
+                    <label translate="true">Assign Inventory Source</label>
+                </settings>
+            </action>
+            <action name="unassign_from_source">
+                <settings>
+                    <confirm>
+                        <title translate="true">Unassign Inventory Source</title>
+                        <message translate="true">Are you sure you want to unassign selected items from inventory sources?</message>
+                    </confirm>
+                    <url path="inventorymass/source/massAssign"/>
+                    <type>save</type>
+                    <label translate="true">Unassign from Inventory Source</label>
                 </settings>
             </action>
         </massaction>
