@@ -55,12 +55,23 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     private $defaultStockProvider;
 
     /**
+     * @var IsSourceItemManagementAllowedForSku
+     */
+    private $isSourceItemManagementAllowedForSku;
+
+    /**
+     * @var StockItemInterface[]
+     */
+    protected $stockItemConfigurations = [];
+
+    /**
      * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory
      * @param StockItemRepositoryInterface $legacyStockItemRepository
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      * @param StockItemConfigurationFactory $stockItemConfigurationFactory
      * @param IsProductAssignedToStockInterface $isProductAssignedToStock
      * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param IsSourceItemManagementAllowedForSku $isSourceItemManagementAllowedForSku
      */
     public function __construct(
         StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory,
@@ -68,7 +79,8 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
         GetProductIdsBySkusInterface $getProductIdsBySkus,
         StockItemConfigurationFactory $stockItemConfigurationFactory,
         IsProductAssignedToStockInterface $isProductAssignedToStock,
-        DefaultStockProviderInterface $defaultStockProvider
+        DefaultStockProviderInterface $defaultStockProvider,
+        IsSourceItemManagementAllowedForSku $isSourceItemManagementAllowedForSku
     ) {
         $this->legacyStockItemCriteriaFactory = $legacyStockItemCriteriaFactory;
         $this->legacyStockItemRepository = $legacyStockItemRepository;
@@ -76,6 +88,7 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
         $this->stockItemConfigurationFactory = $stockItemConfigurationFactory;
         $this->isProductAssignedToStock = $isProductAssignedToStock;
         $this->defaultStockProvider = $defaultStockProvider;
+        $this->isSourceItemManagementAllowedForSku = $isSourceItemManagementAllowedForSku;
     }
 
     /**
@@ -83,18 +96,23 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
      */
     public function execute(string $sku, int $stockId)
     {
-        if ($this->defaultStockProvider->getId() !== $stockId
-            && false === $this->isProductAssignedToStock->execute($sku, $stockId)) {
-            throw new NoSuchEntityException(
-                __('The requested sku is not assigned to given stock.')
+        if (empty($this->stockItemConfigurations[$sku . "_" . $stockId])) {
+            if ($this->defaultStockProvider->getId() !== $stockId
+                && $this->isSourceItemManagementAllowedForSku->execute($sku) === true
+                && false === $this->isProductAssignedToStock->execute($sku, $stockId)) {
+                throw new NoSuchEntityException(
+                    __('The requested sku is not assigned to given stock.')
+                );
+            }
+
+            $this->stockItemConfigurations[$sku . "_" . $stockId] = $this->stockItemConfigurationFactory->create(
+                [
+                    'stockItem' => $this->getLegacyStockItem($sku),
+                ]
             );
         }
 
-        return $this->stockItemConfigurationFactory->create(
-            [
-                'stockItem' => $this->getLegacyStockItem($sku),
-            ]
-        );
+        return $this->stockItemConfigurations[$sku . "_" . $stockId];
     }
 
     /**
