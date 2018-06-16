@@ -369,6 +369,20 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test-class', $this->model->getElementAttribute('body', 'class'));
     }
 
+    public function testGetMetaAssetUrlWithUrlInContent()
+    {
+        $this->assetRepo->expects($this->never())->method('getUrl');
+        $this->assertEquals('http://test.com/image.png', $this->model->getMetaAssetUrl('http://test.com/image.png'));
+    }
+
+    public function testGetMetaAssetUrlWithoutUrlInContent()
+    {
+        $this->assetRepo->expects($this->once())->method('getUrl')->with('image.png')->will(
+            $this->returnValue('http://test.com/image.png')
+        );
+        $this->assertEquals('http://test.com/image.png', $this->model->getMetaAssetUrl('image.png'));
+    }
+
     /**
      * @param string $elementType
      * @param string $attribute
