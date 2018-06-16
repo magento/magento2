@@ -10,7 +10,6 @@ namespace Magento\InventoryMassSourceAssign\Test\Integration;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryMassSourceAssign\Model\SourceItemsBuilder;
 use Magento\InventoryMassSourceAssignApi\Api\MassAssignInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -32,16 +31,10 @@ class MassAssignTest extends TestCase
      */
     private $sourceItemRepository;
 
-    /**
-     * @var SourceItemsBuilder
-     */
-    private $sourceItemsBuilder;
-
     public function setUp()
     {
         parent::setUp();
         $this->massAssign = Bootstrap::getObjectManager()->get(MassAssignInterface::class);
-        $this->sourceItemsBuilder = Bootstrap::getObjectManager()->get(SourceItemsBuilder::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
     }

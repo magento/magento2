@@ -9,12 +9,23 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventoryMassSourceAssignApi\Api\MassAssignInterface"
                 type="Magento\InventoryMassSourceAssign\Model\MassAssign"/>
+    <preference for="Magento\InventoryMassSourceAssignApi\Api\MassUnassignInterface"
+                type="Magento\InventoryMassSourceAssign\Model\MassUnassign"/>
 
     <type name="Magento\InventoryMassSourceAssignApi\Model\MassAssignValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
                 <item name="sources"
                       xsi:type="object">Magento\InventoryMassSourceAssign\Model\Assign\Validator\SourcesValidator</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\InventoryMassSourceAssignApi\Model\MassUnassignValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sources"
+                      xsi:type="object">Magento\InventoryMassSourceAssign\Model\Unassign\Validator\SourcesValidator</item>
             </argument>
         </arguments>
     </type>

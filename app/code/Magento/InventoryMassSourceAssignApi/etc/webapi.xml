@@ -13,4 +13,10 @@
             <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
+    <route url="/V1/inventory/mass-product-source-unassign" method="POST">
+        <service class="Magento\InventoryMassSourceAssignApi\Api\MassUnassignInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Catalog::products"/>
+        </resources>
+    </route>
 </routes>

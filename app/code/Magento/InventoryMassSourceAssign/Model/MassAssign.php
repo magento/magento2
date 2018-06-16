@@ -23,11 +23,6 @@ class MassAssign implements MassAssignInterface
     private $assignValidator;
 
     /**
-     * @var SourceItemsBuilder
-     */
-    private $sourceItemsBuilder;
-
-    /**
      * @var MassAssignResource
      */
     private $massAssignResource;
@@ -35,17 +30,14 @@ class MassAssign implements MassAssignInterface
     /**
      * MassProductSourceAssign constructor.
      * @param MassAssignValidatorInterface $assignValidator
-     * @param SourceItemsBuilder $sourceItemsBuilder
      * @param MassAssignResource $massAssignResource
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         MassAssignValidatorInterface $assignValidator,
-        SourceItemsBuilder $sourceItemsBuilder,
         MassAssignResource $massAssignResource
     ) {
         $this->assignValidator = $assignValidator;
-        $this->sourceItemsBuilder = $sourceItemsBuilder;
         $this->massAssignResource = $massAssignResource;
     }
 
@@ -59,9 +51,7 @@ class MassAssign implements MassAssignInterface
             throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
 
-        $sourceItems = $this->sourceItemsBuilder->create($skus, $sourceCodes);
-
         // TODO: Trigger reindex?
-        return $this->massAssignResource->execute($sourceItems);
+        return $this->massAssignResource->execute($skus, $sourceCodes);
     }
 }

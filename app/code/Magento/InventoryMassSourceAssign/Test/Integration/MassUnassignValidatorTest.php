@@ -7,21 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\InventoryMassSourceAssign\Test\Integration;
 
-use Magento\InventoryMassSourceAssignApi\Model\MassAssignValidatorInterface;
+use Magento\InventoryMassSourceAssignApi\Model\MassUnassignValidatorInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class MassAssignValidatorTest extends TestCase
+class MassUnassignValidatorTest extends TestCase
 {
     /**
-     * @var MassAssignValidatorInterface
+     * @var MassUnassignValidatorInterface
      */
-    private $massAssignValidator;
+    private $massUnassignValidator;
 
     public function setUp()
     {
         parent::setUp();
-        $this->massAssignValidator = Bootstrap::getObjectManager()->get(MassAssignValidatorInterface::class);
+        $this->massUnassignValidator = Bootstrap::getObjectManager()->get(MassUnassignValidatorInterface::class);
     }
 
     /**
@@ -32,7 +32,7 @@ class MassAssignValidatorTest extends TestCase
         $skus = ['SKU-1', 'SKU-2'];
         $sources = ['non-existing-source1', 'non-existing-source2'];
 
-        $validationResult = $this->massAssignValidator->validate($skus, $sources);
+        $validationResult = $this->massUnassignValidator->validate($skus, $sources);
 
         self::assertFalse(
             $validationResult->isValid(),

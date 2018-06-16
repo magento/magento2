@@ -5,19 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryMassSourceAssign\Model\Assign\Validator;
+namespace Magento\InventoryMassSourceAssign\Model\Unassign\Validator;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryMassSourceAssignApi\Model\MassAssignValidatorInterface;
+use Magento\InventoryMassSourceAssignApi\Model\MassUnassignValidatorInterface;
 
 /**
  * Check if sources exist
  * Do not perform any source/product cross check
  */
-class SourcesValidator implements MassAssignValidatorInterface
+class SourcesValidator implements MassUnassignValidatorInterface
 {
     /**
      * @var ValidationResultFactory

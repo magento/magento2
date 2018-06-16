@@ -9,4 +9,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventoryMassSourceAssignApi\Model\MassAssignValidatorInterface"
                 type="Magento\InventoryMassSourceAssignApi\Model\MassAssignValidatorChain" />
+    <preference for="Magento\InventoryMassSourceAssignApi\Model\MassUnassignValidatorInterface"
+                type="Magento\InventoryMassSourceAssignApi\Model\MassUnassignValidatorChain" />
 </config>
