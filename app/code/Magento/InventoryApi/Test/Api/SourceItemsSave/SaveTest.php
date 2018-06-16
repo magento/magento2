@@ -50,8 +50,8 @@ class SaveTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME_DELETE,
-                'operation' => self::SERVICE_NAME_DELETE . 'Execute',
+                'service' => self::SERVICE_NAME_SAVE,
+                'operation' => self::SERVICE_NAME_SAVE . 'Execute',
             ],
         ];
         $this->_webApiCall($serviceInfo, ['sourceItems' => $sourceItems]);
@@ -85,8 +85,8 @@ class SaveTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME_SAVE,
-                'operation' => self::SERVICE_NAME_SAVE . 'Execute',
+                'service' => self::SERVICE_NAME_DELETE,
+                'operation' => self::SERVICE_NAME_DELETE . 'Execute',
             ],
         ];
         (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
@@ -102,7 +102,17 @@ class SaveTest extends WebapiAbstract
     {
         $requestData = [
             'searchCriteria' => [
-                SearchCriteria::FILTER_GROUPS => [],
+                SearchCriteria::FILTER_GROUPS => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => SourceItemInterface::SKU,
+                                'value' => 'SKU-1',
+                                'condition_type' => 'eq',
+                            ],
+                        ],
+                    ],
+                ],
                 SearchCriteria::PAGE_SIZE => 10
             ],
         ];
