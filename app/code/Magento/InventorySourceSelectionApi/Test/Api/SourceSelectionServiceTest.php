@@ -41,6 +41,8 @@ class SourceSelectionServiceTest extends WebapiAbstract
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     *
+     * @magentoDbIsolation disabled
      */
     public function testSourceSelectionService()
     {
