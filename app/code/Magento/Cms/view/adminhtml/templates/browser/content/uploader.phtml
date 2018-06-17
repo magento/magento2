@@ -101,8 +101,8 @@ require([
             maxFileSize: <?php /* @escapeNotVerified */ echo $block->getFileSizeService()->getMaxFileSize() ?> * 10
         }, {
             action: 'resize',
-            maxWidth: <?php /* @escapeNotVerified */ echo \Magento\Framework\File\Uploader::MAX_IMAGE_WIDTH ?> ,
-            maxHeight: <?php /* @escapeNotVerified */ echo \Magento\Framework\File\Uploader::MAX_IMAGE_HEIGHT ?>
+            maxWidth: <?php /* @escapeNotVerified */ echo $block->getImageConfigService()->getMaxWidth() ?> ,
+            maxHeight: <?php /* @escapeNotVerified */ echo $block->getImageConfigService()->getMaxHeight() ?>
         }, {
             action: 'save'
         }]

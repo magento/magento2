@@ -30,6 +30,20 @@
                     <label>Environment Update Time</label>
                 </field>
             </group>
+            <group id="media_configuration" translate="label" type="text" sortOrder="1000" showInDefault="1"
+                   showInWebsite="1" showInStore="1">
+                <label>Images Configuration</label>
+                <field id="max_width" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0"
+                       showInStore="0" canRestore="1">
+                    <label>Max width</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
+                </field>
+                <field id="max_height" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="0"
+                       showInStore="0" canRestore="1">
+                    <label>Max height</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
+                </field>
+            </group>
         </section>
     </system>
 </config>
