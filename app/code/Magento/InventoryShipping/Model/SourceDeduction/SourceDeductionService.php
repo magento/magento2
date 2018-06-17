@@ -82,7 +82,7 @@ class SourceDeductionService implements SourceDeductionServiceInterface
      */
     public function execute(SourceDeductionRequestInterface $sourceDeductionRequest): void
     {
-        $sourceItemToSave = [];
+        $itemsToSell = $sourceItems = [];
         $sourceCode = $sourceDeductionRequest->getSourceCode();
         $salesChannel = $sourceDeductionRequest->getSalesChannel();
 
@@ -90,7 +90,6 @@ class SourceDeductionService implements SourceDeductionServiceInterface
             $salesChannel->getType(),
             $salesChannel->getCode()
         )->getStockId();
-        $itemsToSell = [];
         foreach ($sourceDeductionRequest->getItems() as $item) {
             $itemSku = $item->getSku();
             $qty = $item->getQty();
@@ -113,7 +112,7 @@ class SourceDeductionService implements SourceDeductionServiceInterface
             $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute($sourceCode, $itemSku);
             if (($sourceItem->getQuantity() - $qty) >= 0) {
                 $sourceItem->setQuantity($sourceItem->getQuantity() - $qty);
-                $sourceItemToSave[] = $sourceItem;
+                $sourceItems[] = $sourceItem;
                 $itemsToSell[] = $this->itemsToSellFactory->create([
                     'sku' => $itemSku,
                     'qty' => (float)$qty
@@ -124,10 +123,13 @@ class SourceDeductionService implements SourceDeductionServiceInterface
                 );
             }
         }
-        $this->sourceItemsSave->execute($sourceItemToSave);
 
-        $salesEvent = $sourceDeductionRequest->getSalesEvent();
+        if (!empty($sourceItems)) {
+            $this->sourceItemsSave->execute($sourceItems);
 
-        $this->placeReservationsForSalesEvent->execute($itemsToSell, $salesChannel, $salesEvent);
+            $salesEvent = $sourceDeductionRequest->getSalesEvent();
+
+            $this->placeReservationsForSalesEvent->execute($itemsToSell, $salesChannel, $salesEvent);
+        }
     }
 }

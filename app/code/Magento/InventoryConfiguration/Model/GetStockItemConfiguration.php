@@ -12,7 +12,6 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Model\IsProductAssignedToStockInterface;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
@@ -118,7 +117,6 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     /**
      * @param string $sku
      * @return StockItemInterface
-     * @throws LocalizedException
      */
     private function getLegacyStockItem(string $sku): StockItemInterface
     {
