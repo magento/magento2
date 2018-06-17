@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Model\Indexer\MultiDimensional;
+namespace Magento\Customer\Model\Indexer;
 
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory as CustomerGroupCollectionFactory;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 
-class CustomerGroupDataProvider implements DimensionProviderInterface
+class CustomerGroupDimensionProvider implements DimensionProviderInterface
 {
     /**
      * Name for customer group dimension for multidimensional indexer
@@ -47,15 +47,12 @@ class CustomerGroupDataProvider implements DimensionProviderInterface
     }
 
     /**
-     * @return \SplFixedArray
+     * @return array
      */
-    private function getCustomerGroups()
+    private function getCustomerGroups(): array
     {
         if ($this->customerGroupsDataIterator === null) {
-            $this->customerGroupsDataIterator = \SplFixedArray::fromArray(
-                $this->collectionFactory->create()->getAllIds(),
-                false
-            );
+            $this->customerGroupsDataIterator = $this->collectionFactory->create()->getAllIds();
         }
 
         return $this->customerGroupsDataIterator;

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Store\Model\Indexer\MultiDimensional;
+namespace Magento\Store\Model\Indexer;
 
 use Magento\Framework\Indexer\Dimension;
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteCollectionFactory;
@@ -12,7 +12,7 @@ use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Store\Model\Store;
 
-class WebsiteDataProvider implements DimensionProviderInterface
+class WebsiteDimensionProvider implements DimensionProviderInterface
 {
     /**
      * Name for website dimension for multidimensional indexer
@@ -56,17 +56,14 @@ class WebsiteDataProvider implements DimensionProviderInterface
     }
 
     /**
-     * @return \SplFixedArray
+     * @return array
      */
-    private function getWebsites()
+    private function getWebsites(): array
     {
         if ($this->websitesDataIterator === null) {
-            $this->websitesDataIterator = \SplFixedArray::fromArray(
-                $this->collectionFactory->create()
-                    ->addFieldToFilter('code', ['neq' => Store::ADMIN_CODE])
-                    ->getAllIds(),
-                false
-            );
+            $this->websitesDataIterator = $this->collectionFactory->create()
+                ->addFieldToFilter('code', ['neq' => Store::ADMIN_CODE])
+                ->getAllIds();
         }
 
         return $this->websitesDataIterator;

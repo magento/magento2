@@ -11,8 +11,8 @@ use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Context as CustomerContext;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * Catalog Layer Price Filter resource model
@@ -409,11 +409,11 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'catalog_product_index_price',
             [
                 $this->dimensionFactory->create(
-                    WebsiteDataProvider::DIMENSION_NAME,
+                    WebsiteDimensionProvider::DIMENSION_NAME,
                     (string)$this->storeManager->getStore($storeKey)->getWebsiteId()
                 ),
                 $this->dimensionFactory->create(
-                    CustomerGroupDataProvider::DIMENSION_NAME,
+                    CustomerGroupDimensionProvider::DIMENSION_NAME,
                     (string)$this->httpContext->getValue(CustomerContext::CONTEXT_GROUP)
                 )
             ]

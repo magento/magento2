@@ -6,11 +6,10 @@
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
-use Magento\Framework\Indexer\DimensionProviderInterface;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * Abstract action reindex class
@@ -166,10 +165,10 @@ abstract class AbstractAction
             );
 
             foreach ($dimensions as $dimension) {
-                if ($dimension->getName() === WebsiteDataProvider::DIMENSION_NAME) {
+                if ($dimension->getName() === WebsiteDimensionProvider::DIMENSION_NAME) {
                     $insertSelect->where('ip_tmp.website_id = ?', $dimension->getValue());
                 }
-                if ($dimension->getName() === CustomerGroupDataProvider::DIMENSION_NAME) {
+                if ($dimension->getName() === CustomerGroupDimensionProvider::DIMENSION_NAME) {
                     $insertSelect->where('ip_tmp.customer_group_id = ?', $dimension->getValue());
                 }
             }

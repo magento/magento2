@@ -75,7 +75,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->dimensionModeConfiguration->expects($this->once())->method('getDimensionConfiguration')->willReturn(
-            [\Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider::DIMENSION_NAME]
+            [\Magento\Store\Model\Indexer\WebsiteDimensionProvider::DIMENSION_NAME]
         );
 
         $subjectMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
@@ -131,7 +131,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->dimensionModeConfiguration->expects($this->once())->method('getDimensionConfiguration')->willReturn(
-            [\Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider::DIMENSION_NAME]
+            [\Magento\Store\Model\Indexer\WebsiteDimensionProvider::DIMENSION_NAME]
         );
 
         $subjectMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);

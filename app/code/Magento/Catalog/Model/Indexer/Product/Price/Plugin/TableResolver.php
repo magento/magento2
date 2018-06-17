@@ -15,8 +15,8 @@ use Magento\Framework\App\Http\Context;
 use Magento\Framework\Indexer\Dimension;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Context as CustomerContext;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * Replace catalog_product_index_price table name on the table name segmented per dimension.
@@ -103,10 +103,10 @@ class TableResolver
     {
         $dimensions = [];
         foreach ($this->dimensionModeConfiguration->getDimensionConfiguration() as $dimensionName) {
-            if ($dimensionName === WebsiteDataProvider::DIMENSION_NAME) {
+            if ($dimensionName === WebsiteDimensionProvider::DIMENSION_NAME) {
                 $dimensions[] = $this->createDimensionFromWebsite();
             }
-            if ($dimensionName === CustomerGroupDataProvider::DIMENSION_NAME) {
+            if ($dimensionName === CustomerGroupDimensionProvider::DIMENSION_NAME) {
                 $dimensions[] = $this->createDimensionFromCustomerGroup();
             }
         }
@@ -122,7 +122,7 @@ class TableResolver
     {
         $storeKey = $this->httpContext->getValue(StoreManagerInterface::CONTEXT_STORE);
         return $this->dimensionFactory->create(
-            WebsiteDataProvider::DIMENSION_NAME,
+            WebsiteDimensionProvider::DIMENSION_NAME,
             (string)$this->storeManager->getStore($storeKey)->getWebsiteId()
         );
     }
@@ -133,7 +133,7 @@ class TableResolver
     private function createDimensionFromCustomerGroup(): Dimension
     {
         return $this->dimensionFactory->create(
-            CustomerGroupDataProvider::DIMENSION_NAME,
+            CustomerGroupDimensionProvider::DIMENSION_NAME,
             (string)$this->httpContext->getValue(CustomerContext::CONTEXT_GROUP)
         );
     }

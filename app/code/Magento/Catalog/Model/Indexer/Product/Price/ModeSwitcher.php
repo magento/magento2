@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 
 /**
  * Class to prepare new tables for new indexer mode
@@ -146,10 +146,10 @@ class ModeSwitcher
         $select = $this->tableMaintainer->getConnection()->select()->from($oldTable);
 
         foreach ($dimensions as $dimension) {
-            if ($dimension->getName() === WebsiteDataProvider::DIMENSION_NAME) {
+            if ($dimension->getName() === WebsiteDimensionProvider::DIMENSION_NAME) {
                 $select->where('website_id = ?', $dimension->getValue());
             }
-            if ($dimension->getName() === CustomerGroupDataProvider::DIMENSION_NAME) {
+            if ($dimension->getName() === CustomerGroupDimensionProvider::DIMENSION_NAME) {
                 $select->where('customer_group_id = ?', $dimension->getValue());
             }
         }

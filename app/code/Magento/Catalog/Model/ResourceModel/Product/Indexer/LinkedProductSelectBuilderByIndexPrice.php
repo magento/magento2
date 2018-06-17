@@ -7,12 +7,12 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 use Magento\Framework\Indexer\DimensionFactory;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
 class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuilderInterface
@@ -105,9 +105,9 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
             )->joinInner(
                 [
                     't' => $this->priceTableResolver->resolve('catalog_product_index_price', [
-                        $this->dimensionFactory->create(WebsiteDataProvider::DIMENSION_NAME, (string)$websiteId),
+                        $this->dimensionFactory->create(WebsiteDimensionProvider::DIMENSION_NAME, (string)$websiteId),
                         $this->dimensionFactory->create(
-                            CustomerGroupDataProvider::DIMENSION_NAME,
+                            CustomerGroupDimensionProvider::DIMENSION_NAME,
                             (string)$customerGroupId
                         ),
                     ])

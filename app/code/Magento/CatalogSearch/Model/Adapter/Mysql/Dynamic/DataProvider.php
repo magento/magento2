@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic;
 
 use Magento\Catalog\Model\Layer\Filter\Price\Range;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -18,7 +18,7 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\StoreManager;
 use \Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
@@ -132,8 +132,14 @@ class DataProvider implements DataProviderInterface
         $tableName = $this->priceTableResolver->resolve(
             'catalog_product_index_price',
             [
-                $this->dimensionFactory->create(WebsiteDataProvider::DIMENSION_NAME, (string)$websiteId),
-                $this->dimensionFactory->create(CustomerGroupDataProvider::DIMENSION_NAME, (string)$customerGroupId),
+                $this->dimensionFactory->create(
+                    WebsiteDimensionProvider::DIMENSION_NAME,
+                    (string)$websiteId
+                ),
+                $this->dimensionFactory->create(
+                    CustomerGroupDimensionProvider::DIMENSION_NAME,
+                    (string)$customerGroupId
+                ),
             ]
         );
         /** @var Table $table */

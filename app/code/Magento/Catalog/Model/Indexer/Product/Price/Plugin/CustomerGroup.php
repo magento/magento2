@@ -12,8 +12,8 @@ use Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Framework\Indexer\Dimension;
 use Magento\Framework\Indexer\DimensionFactory;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 class CustomerGroup
 {
@@ -40,29 +40,29 @@ class CustomerGroup
     private $dimensionModeConfiguration;
 
     /**
-     * @var WebsiteDataProvider
+     * @var WebsiteDimensionProvider
      */
-    private $websiteDataProvider;
+    private $websiteDimensionProvider;
 
     /**
      * @param UpdateIndexInterface $updateIndex
      * @param TableMaintainer $tableMaintainer
      * @param DimensionFactory $dimensionFactory
      * @param DimensionModeConfiguration $dimensionModeConfiguration
-     * @param WebsiteDataProvider $websiteDataProvider
+     * @param WebsiteDimensionProvider $websiteDimensionProvider
      */
     public function __construct(
         UpdateIndexInterface $updateIndex,
         TableMaintainer $tableMaintainer,
         DimensionFactory $dimensionFactory,
         DimensionModeConfiguration $dimensionModeConfiguration,
-        WebsiteDataProvider $websiteDataProvider
+        WebsiteDimensionProvider $websiteDimensionProvider
     ) {
         $this->updateIndex = $updateIndex;
         $this->tableMaintainer = $tableMaintainer;
         $this->dimensionFactory = $dimensionFactory;
         $this->dimensionModeConfiguration = $dimensionModeConfiguration;
-        $this->websiteDataProvider = $websiteDataProvider;
+        $this->websiteDimensionProvider = $websiteDimensionProvider;
     }
 
     /**
@@ -120,17 +120,17 @@ class CustomerGroup
     {
         $currentDimensions = $this->dimensionModeConfiguration->getDimensionConfiguration();
         // do not return dimensions if Customer Group dimension is not present in configuration
-        if (!in_array(CustomerGroupDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
+        if (!in_array(CustomerGroupDimensionProvider::DIMENSION_NAME, $currentDimensions, true)) {
             return [];
         }
         $customerGroupDimension = $this->dimensionFactory->create(
-            CustomerGroupDataProvider::DIMENSION_NAME,
+            CustomerGroupDimensionProvider::DIMENSION_NAME,
             $groupId
         );
 
         $dimensions = [];
-        if (in_array(WebsiteDataProvider::DIMENSION_NAME, $currentDimensions, true)) {
-            foreach ($this->websiteDataProvider as $websiteDimension) {
+        if (in_array(WebsiteDimensionProvider::DIMENSION_NAME, $currentDimensions, true)) {
+            foreach ($this->websiteDimensionProvider as $websiteDimension) {
                 $dimensions[] = [
                     $customerGroupDimension,
                     $websiteDimension

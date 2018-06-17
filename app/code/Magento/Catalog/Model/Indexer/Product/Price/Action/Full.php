@@ -11,8 +11,8 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * Class Full reindex action
@@ -438,10 +438,10 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         $replicaTablesByDimension = $this->dimensionTableMaintainer->getMainReplicaTable($dimensions);
 
         foreach ($dimensions as $dimension) {
-            if ($dimension->getName() === WebsiteDataProvider::DIMENSION_NAME) {
+            if ($dimension->getName() === WebsiteDimensionProvider::DIMENSION_NAME) {
                 $select->where('website_id = ?', $dimension->getValue());
             }
-            if ($dimension->getName() === CustomerGroupDataProvider::DIMENSION_NAME) {
+            if ($dimension->getName() === CustomerGroupDimensionProvider::DIMENSION_NAME) {
                 $select->where('customer_group_id = ?', $dimension->getValue());
             }
         }

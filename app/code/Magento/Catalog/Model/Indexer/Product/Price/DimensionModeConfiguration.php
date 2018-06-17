@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 
 class DimensionModeConfiguration
 {
@@ -30,14 +30,14 @@ class DimensionModeConfiguration
         self::DIMENSION_NONE => [
         ],
         self::DIMENSION_WEBSITE => [
-            WebsiteDataProvider::DIMENSION_NAME
+            WebsiteDimensionProvider::DIMENSION_NAME
         ],
         self::DIMENSION_CUSTOMER_GROUP => [
-            CustomerGroupDataProvider::DIMENSION_NAME
+            CustomerGroupDimensionProvider::DIMENSION_NAME
         ],
         self::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP => [
-            WebsiteDataProvider::DIMENSION_NAME,
-            CustomerGroupDataProvider::DIMENSION_NAME
+            WebsiteDimensionProvider::DIMENSION_NAME,
+            CustomerGroupDimensionProvider::DIMENSION_NAME
         ],
     ];
     /**

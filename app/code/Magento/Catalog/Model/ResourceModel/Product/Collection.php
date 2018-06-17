@@ -14,12 +14,12 @@ use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Framework\Indexer\DimensionFactory;
@@ -1925,11 +1925,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                     'catalog_product_index_price',
                     [
                         $this->dimensionFactory->create(
-                            CustomerGroupDataProvider::DIMENSION_NAME,
+                            CustomerGroupDimensionProvider::DIMENSION_NAME,
                             (string)$filters['customer_group_id']
                         ),
                         $this->dimensionFactory->create(
-                            WebsiteDataProvider::DIMENSION_NAME,
+                            WebsiteDimensionProvider::DIMENSION_NAME,
                             (string)$filters['website_id']
                         )
                     ]

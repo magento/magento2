@@ -8,18 +8,16 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider;
 
 use Magento\CatalogInventory\Model\Configuration as CatalogInventoryConfiguration;
 use Magento\CatalogInventory\Model\Stock;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * Attribute query builder
@@ -129,8 +127,14 @@ class QueryBuilder
         $tableName = $this->priceTableResolver->resolve(
             'catalog_product_index_price',
             [
-                $this->dimensionFactory->create(WebsiteDataProvider::DIMENSION_NAME, (string)$websiteId),
-                $this->dimensionFactory->create(CustomerGroupDataProvider::DIMENSION_NAME, (string)$customerGroupId),
+                $this->dimensionFactory->create(
+                    WebsiteDimensionProvider::DIMENSION_NAME,
+                    (string)$websiteId
+                ),
+                $this->dimensionFactory->create(
+                    CustomerGroupDimensionProvider::DIMENSION_NAME,
+                    (string)$customerGroupId
+                ),
             ]
         );
         $select->from(['main_table' => $tableName], null)

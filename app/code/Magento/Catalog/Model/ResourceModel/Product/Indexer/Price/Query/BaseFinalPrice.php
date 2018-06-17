@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\ColumnValueExpression;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Indexer\Dimension;
-use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * Prepare base select for Product Price index limited by specified dimensions: website and customer group
@@ -52,8 +52,8 @@ class BaseFinalPrice
      * @var array
      */
     private $dimensionToFieldMapper = [
-        WebsiteDataProvider::DIMENSION_NAME => 'pw.website_id',
-        CustomerGroupDataProvider::DIMENSION_NAME => 'cg.customer_group_id',
+        WebsiteDimensionProvider::DIMENSION_NAME => 'pw.website_id',
+        CustomerGroupDimensionProvider::DIMENSION_NAME => 'cg.customer_group_id',
     ];
 
     /**
@@ -110,11 +110,11 @@ class BaseFinalPrice
             ['entity_id']
         )->joinInner(
             ['cg' => $this->getTable('customer_group')],
-            array_key_exists(CustomerGroupDataProvider::DIMENSION_NAME, $dimensions)
+            array_key_exists(CustomerGroupDimensionProvider::DIMENSION_NAME, $dimensions)
                 ? sprintf(
                     '%s = %s',
-                    $this->dimensionToFieldMapper[CustomerGroupDataProvider::DIMENSION_NAME],
-                    $dimensions[CustomerGroupDataProvider::DIMENSION_NAME]->getValue()
+                    $this->dimensionToFieldMapper[CustomerGroupDimensionProvider::DIMENSION_NAME],
+                    $dimensions[CustomerGroupDimensionProvider::DIMENSION_NAME]->getValue()
                 ) : '',
             ['customer_group_id']
         )->joinInner(
