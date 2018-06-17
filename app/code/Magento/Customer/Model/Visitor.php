@@ -158,6 +158,10 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
         $this->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
 
+        // prevent saving Visitor for safe methods, e.g. GET request
+        if ($this->getRequest()->isSafeMethod()) {
+            return $this;
+        }
         if (!$this->getId()) {
             $this->setSessionId($this->session->getSessionId());
             $this->save();
@@ -177,7 +181,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function saveByRequest($observer)
     {
-        if ($this->skipRequestLogging || $this->isModuleIgnored($observer)) {
+        // prevent saving Visitor for safe methods, e.g. GET request
+        if ($this->skipRequestLogging || $this->getRequest()->isSafeMethod() || $this->isModuleIgnored($observer)) {
             return $this;
         }
 
@@ -321,15 +326,15 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * If the request wasn't injected because of the backward compatible optional constructor dependency,
      * create a new request instance.
      *
-     * @return \Magento\Framework\App\RequestInterface|\Magento\Framework\App\Request\Http
+     * @return \Magento\Framework\App\RequestSafetyInterface|\Magento\Framework\App\Request\Http
      */
     private function getRequest()
     {
-        if (null === $this->request) {
-            $this->request = \Magento\Framework\App\ObjectManager::getInstance()->create(
+        if (null === $this->requestSafety) {
+            $this->requestSafety = \Magento\Framework\App\ObjectManager::getInstance()->create(
                 \Magento\Framework\App\RequestInterface::class
             );
         }
-        return $this->request;
+        return $this->requestSafety;
     }
 }

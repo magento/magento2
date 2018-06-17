@@ -108,7 +108,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
                 'session' => $this->session,
                 'resource' => $this->resource,
                 'ignores' => ['test_route_name' => true],
-                'request' => $this->request,
+                'requestSafety' => $this->request,
             ]
         );
         $this->request->method('getRouteName')->willReturn('test_route_name');
