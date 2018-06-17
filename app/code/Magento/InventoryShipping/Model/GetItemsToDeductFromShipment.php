@@ -60,11 +60,10 @@ class GetItemsToDeductFromShipment
         foreach ($shipment->getAllItems() as $shipmentItem) {
             $orderItem = $shipmentItem->getOrderItem();
             if ($orderItem->getHasChildren()) {
-                if ($orderItem->isDummy(true)) {
-                    return [];
-                }
-                foreach ($this->processComplexItem($shipmentItem) as $item) {
-                    $itemsToShip[] = $item;
+                if (!$orderItem->isDummy(true)) {
+                    foreach ($this->processComplexItem($shipmentItem) as $item) {
+                        $itemsToShip[] = $item;
+                    }
                 }
             } else {
                 $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(
