@@ -1076,7 +1076,7 @@
             <argument name="nativeAttributeConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\NativeAttributeCondition</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory">
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory">
         <arguments>
             <argument name="dimensionProviders" xsi:type="array">
                 <item name="websites" xsi:type="object">Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider</item>

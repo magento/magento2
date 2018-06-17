@@ -71,7 +71,7 @@ class TableResolver
     }
 
     /**
-     * Replacing catalog_product_index_price table name on the table name segmented per dimension
+     * Replacing catalog_product_index_price table name on the table name segmented per dimension.
      *
      * @param ResourceConnection $subject
      * @param string $result
@@ -87,7 +87,7 @@ class TableResolver
     ) {
         if (!is_array($tableName)
             && $tableName === 'catalog_product_index_price'
-            && $this->dimensionModeConfiguration->getCurrentMode() !== DimensionModeConfiguration::DIMENSION_NONE
+            && $this->dimensionModeConfiguration->getDimensionConfiguration()
         ) {
             return $this->priceTableResolver->resolve('catalog_product_index_price', $this->getDimensions());
         }

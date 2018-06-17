@@ -59,7 +59,8 @@ class DimensionModeConfiguration
     }
 
     /**
-     * Get names of dimensions which used for current mode
+     * Get names of dimensions which used for provided mode.
+     * By default return dimensions for current enabled mode
      *
      * @param string|null $mode
      * @return string[]
@@ -77,7 +78,7 @@ class DimensionModeConfiguration
     /**
      * @return string
      */
-    public function getCurrentMode(): string
+    private function getCurrentMode(): string
     {
         if (null === $this->currentMode) {
             $this->currentMode = $this->scopeConfig->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE)

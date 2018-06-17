@@ -6,7 +6,10 @@
 
 namespace Magento\Framework\Indexer;
 
-class MultiDimensionProvider implements MultiDimensionProviderInterface
+/**
+ * Multiply dimensions from provided DimensionProviderInterface
+ */
+class MultiDimensionProvider implements \IteratorAggregate
 {
     /**
      * @var array
@@ -24,11 +27,6 @@ class MultiDimensionProvider implements MultiDimensionProviderInterface
     private $dimensionsProvidersCount = 0;
 
     /**
-     * @var int
-     */
-    private $dimensionsCount;
-
-    /**
      * @param DimensionProviderInterface[] $dimensionProviders
      */
     public function __construct(array $dimensionProviders = [])
@@ -36,45 +34,39 @@ class MultiDimensionProvider implements MultiDimensionProviderInterface
         foreach ($dimensionProviders as $dimensionDataProvider) {
             $this->addDimensionDataProvider($dimensionDataProvider);
         }
+        foreach ($this->dimensionsDataProviders as $dimensionDataProvider) {
+            $this->dimensionsIterators[] = $dimensionDataProvider->getIterator();
+        }
     }
 
+    /**
+     * @return \Traversable|Dimension[][]
+     */
     public function getIterator(): \Traversable
     {
-        $this->initDataIterators();
-        $dimensionsCount = $this->count();
-
-        for ($i = 0; $i < $dimensionsCount; $i++) {
-            yield $this->getCurrentDimension();
-            $this->setNextDimension();
-        }
-        if (!$dimensionsCount) {
+        if (!$this->dimensionsIterators) {
             yield [];
-        }
-    }
-
-    public function count(): int
-    {
-        if ($this->dimensionsCount === null) {
-            $counts = [];
-
-            foreach ($this->dimensionsDataProviders as $dimensionsDataProvider) {
-                $counts[] = count($dimensionsDataProvider);
+        } else {
+            while (true) {
+                $dimensions = $this->getCurrentDimension();
+                if (!$dimensions) {
+                    break;
+                }
+                yield $dimensions;
+                $this->setNextDimension();
             }
-
-            $this->dimensionsCount = count($counts) === 0 ? 0 : array_product($counts);
         }
-
-        return $this->dimensionsCount;
     }
 
     private function getCurrentDimension(): array
     {
         $dimensions = [];
-
         foreach ($this->dimensionsIterators as $dimensionIterator) {
+            if (!$dimensionIterator->valid()) {
+                return [];
+            }
             /** @var Dimension $dimension */
             $dimension = $dimensionIterator->current();
-
             $dimensions[$dimension->getName()] = $dimension;
         }
 
@@ -97,13 +89,5 @@ class MultiDimensionProvider implements MultiDimensionProviderInterface
     {
         $this->dimensionsDataProviders[] = $dimensionDataProvider;
         $this->dimensionsProvidersCount++;
-    }
-
-    private function initDataIterators()
-    {
-        $this->dimensionsIterators = [];
-        foreach ($this->dimensionsDataProviders as $dimensionDataProvider) {
-            $this->dimensionsIterators[] = $dimensionDataProvider->getIterator();
-        }
     }
 }

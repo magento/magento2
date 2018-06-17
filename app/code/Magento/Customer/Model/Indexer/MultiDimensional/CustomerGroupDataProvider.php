@@ -46,11 +46,6 @@ class CustomerGroupDataProvider implements DimensionProviderInterface
         }
     }
 
-    public function count(): int
-    {
-        return $this->getCustomerGroups()->count();
-    }
-
     /**
      * @return \SplFixedArray
      */

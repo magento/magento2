@@ -28,9 +28,9 @@ class ModeSwitcher
     /**
      * DimensionCollectionFactory
      *
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory
      */
-    private $dimensionProviderFactory;
+    private $dimensionCollectionFactory;
 
     /**
      * @var array|null
@@ -39,14 +39,14 @@ class ModeSwitcher
 
     /**
      * @param \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer
-     * @param \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionProviderFactory
+     * @param \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory
      */
     public function __construct(
         \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer,
-        \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionProviderFactory
+        \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory
     ) {
         $this->tableMaintainer = $tableMaintainer;
-        $this->dimensionProviderFactory = $dimensionProviderFactory;
+        $this->dimensionCollectionFactory = $dimensionCollectionFactory;
     }
 
     /**
@@ -121,13 +121,13 @@ class ModeSwitcher
      *
      * @return array
      */
-    private function getDimensionsArray(string $mode): \Magento\Framework\Indexer\MultiDimensionProviderInterface
+    private function getDimensionsArray(string $mode): \Magento\Framework\Indexer\MultiDimensionProvider
     {
         if (isset($this->dimensionsArray[$mode])) {
             return $this->dimensionsArray[$mode];
         }
 
-        $this->dimensionsArray[$mode] = $this->dimensionProviderFactory->createByMode($mode);
+        $this->dimensionsArray[$mode] = $this->dimensionCollectionFactory->create($mode);
 
         return $this->dimensionsArray[$mode];
     }

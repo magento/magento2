@@ -11,7 +11,6 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
-use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Customer\Model\Indexer\MultiDimensional\CustomerGroupDataProvider;
 use Magento\Store\Model\Indexer\MultiDimensional\WebsiteDataProvider;
 
@@ -48,19 +47,14 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private $productMetaDataCached;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory
      */
-    private $dimensionProviderFactory;
+    private $dimensionCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer
      */
     private $dimensionTableMaintainer;
-
-    /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer
-     */
-    private $configReader;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -75,8 +69,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator|null $batchSizeCalculator
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     * @param \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory|null $dimensionCollectionFactory
      * @param \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer|null $dimensionTableMaintainer
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $configReader
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -93,9 +87,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator $batchSizeCalculator = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
-        \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionCollectionFactory = null,
-        \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $dimensionTableMaintainer = null,
-        \Magento\Framework\App\Config\ScopeConfigInterface $configReader = null
+        \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory = null,
+        \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $dimensionTableMaintainer = null
     ) {
         parent::__construct(
             $config,
@@ -119,14 +112,11 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
         );
-        $this->dimensionProviderFactory = $dimensionCollectionFactory ?: ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory::class
+        $this->dimensionCollectionFactory = $dimensionCollectionFactory ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory::class
         );
         $this->dimensionTableMaintainer = $dimensionTableMaintainer ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer::class
-        );
-        $this->configReader = $configReader ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
         );
     }
 
@@ -203,9 +193,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      */
     private function truncateReplicaTablesByDimensions()
     {
-        /** @var DimensionProviderInterface $dimensionsProviders */
-        $dimensionsProviders = $this->dimensionProviderFactory->createByMode();
-        foreach ($dimensionsProviders as $dimension) {
+        foreach ($this->dimensionCollectionFactory->create() as $dimension) {
             $dimensionTable = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
             $this->_defaultIndexerResource->getConnection()->truncateTable($dimensionTable);
         }
@@ -222,10 +210,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      */
     private function reindexProductTypeWithDimensions(DimensionalIndexerInterface $priceIndexer, string $typeId)
     {
-        /** @var DimensionProviderInterface $dimensionsProviders */
-        $dimensionsProviders = $this->dimensionProviderFactory->createByMode();
-
-        foreach ($dimensionsProviders as $dimensions) {
+        foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
             $this->reindexByBatches($priceIndexer, $dimensions, $typeId);
         }
     }
@@ -414,12 +399,10 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      */
     private function switchTables()
     {
-        $dimensionsProviders = $this->dimensionProviderFactory->createByMode();
-
         // Switch dimension tables
         $mainTablesByDimension = [];
 
-        foreach ($dimensionsProviders as $dimensions) {
+        foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
             $mainTablesByDimension[] = $this->dimensionTableMaintainer->getMainTable($dimensions);
 
             //Move data from indexers with old realisation

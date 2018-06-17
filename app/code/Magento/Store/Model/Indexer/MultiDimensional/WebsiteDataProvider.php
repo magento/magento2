@@ -55,11 +55,6 @@ class WebsiteDataProvider implements DimensionProviderInterface
         }
     }
 
-    public function count(): int
-    {
-        return $this->getWebsites()->count();
-    }
-
     /**
      * @return \SplFixedArray
      */

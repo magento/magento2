@@ -10,7 +10,7 @@ namespace Magento\Framework\Indexer;
 /**
  * Provide a list of dimensions
  */
-interface DimensionProviderInterface extends \IteratorAggregate, \Countable
+interface DimensionProviderInterface extends \IteratorAggregate
 {
     /**
      * Get Dimension Iterator. Returns yielded value of \Magento\Framework\Indexer\Dimension

@@ -83,7 +83,7 @@ abstract class AbstractAction
     private $tierPriceIndexResource;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory
      */
     private $dimensionCollectionFactory;
 
@@ -102,7 +102,7 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory
      * @param DefaultPrice $defaultIndexerResource
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice|null $tierPriceIndexResource
-     * @param DimensionProviderFactory|null $dimensionCollectionFactory
+     * @param DimensionCollectionFactory|null $dimensionCollectionFactory
      * @param TableMaintainer|null $tableMaintainer
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -118,7 +118,7 @@ abstract class AbstractAction
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory,
         DefaultPrice $defaultIndexerResource,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice $tierPriceIndexResource = null,
-        \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory $dimensionCollectionFactory = null,
+        \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory = null,
         \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer = null
     ) {
         $this->_config = $config;
@@ -134,7 +134,7 @@ abstract class AbstractAction
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice::class
         );
         $this->dimensionCollectionFactory = $dimensionCollectionFactory ?? ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\Indexer\Product\Price\DimensionProviderFactory::class
+            \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory::class
         );
         $this->tableMaintainer = $tableMaintainer ?? ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer::class
@@ -159,10 +159,8 @@ abstract class AbstractAction
      */
     protected function _syncData(array $processIds = [])
     {
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode();
-
         // for backward compatibility split data from old idx table on dimension tables
-        foreach ($dimensionsProviders as $dimensions) {
+        foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
             $insertSelect = $this->_connection->select()->from(
                 ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()]
             );
@@ -364,8 +362,7 @@ abstract class AbstractAction
         foreach ($productsTypes as $productType => $entityIds) {
             $indexer = $this->_getIndexer($productType);
             if ($indexer instanceof DimensionalIndexerInterface) {
-                $dimensionsProviders = $this->dimensionCollectionFactory->createByMode();
-                foreach ($dimensionsProviders as $dimensions) {
+                foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
                     $this->tableMaintainer->createMainTmpTable($dimensions);
                     $temporaryTable = $this->tableMaintainer->getMainTmpTable($dimensions);
                     $this->_emptyTable($temporaryTable);
@@ -394,9 +391,7 @@ abstract class AbstractAction
      */
     private function deleteIndexData(array $entityIds)
     {
-        $dimensionsProviders = $this->dimensionCollectionFactory->createByMode();
-
-        foreach ($dimensionsProviders as $dimensions) {
+        foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
             $select = $this->_connection->select()->from(
                 ['index_price' => $this->tableMaintainer->getMainTable($dimensions)],
                 null
@@ -439,9 +434,7 @@ abstract class AbstractAction
         $children = $this->_connection->fetchCol($select);
 
         if ($children) {
-            /** @var DimensionProviderInterface $dimensionsProviders */
-            $dimensionsProviders = $this->dimensionCollectionFactory->createByMode();
-            foreach ($dimensionsProviders as $dimensions) {
+            foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
                 $select = $this->_connection->select()->from(
                     $this->getIndexTargetTableByDimension($dimensions)
                 )->where(

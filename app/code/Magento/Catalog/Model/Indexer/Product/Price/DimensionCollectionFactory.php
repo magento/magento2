@@ -6,9 +6,9 @@
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 use Magento\Framework\Indexer\DimensionProviderInterface;
-use Magento\Framework\Indexer\MultiDimensionProviderInterface;
+use Magento\Framework\Indexer\MultiDimensionProvider;
 
-class DimensionProviderFactory
+class DimensionCollectionFactory
 {
     /**
      * @var \Magento\Framework\Indexer\MultiDimensionProviderFactory
@@ -26,12 +26,12 @@ class DimensionProviderFactory
     private $dimensionModeConfiguration;
 
     /**
-     * @param \Magento\Framework\Indexer\MultiDimensionProviderInterfaceFactory $multiDimensionProviderFactory
+     * @param \Magento\Framework\Indexer\MultiDimensionProviderFactory $multiDimensionProviderFactory
      * @param DimensionModeConfiguration $dimensionModeConfiguration
      * @param array $dimensionProviders
      */
     public function __construct(
-        \Magento\Framework\Indexer\MultiDimensionProviderInterfaceFactory $multiDimensionProviderFactory,
+        \Magento\Framework\Indexer\MultiDimensionProviderFactory $multiDimensionProviderFactory,
         DimensionModeConfiguration $dimensionModeConfiguration,
         array $dimensionProviders
     ) {
@@ -41,12 +41,12 @@ class DimensionProviderFactory
     }
 
     /**
-     * Create MultiDimensionProviderInterface for specified "dimension mode" - which dimensions indexer use for sharding
+     * Create MultiDimensionProvider for specified "dimension mode" - which dimensions indexer use for sharding
      *
      * @param string|null $dimensionsMode
-     * @return MultiDimensionProviderInterface
+     * @return MultiDimensionProvider
      */
-    public function createByMode(string $dimensionsMode = null): MultiDimensionProviderInterface
+    public function create(string $dimensionsMode = null): MultiDimensionProvider
     {
         $dimensionConfiguration = $this->dimensionModeConfiguration->getDimensionConfiguration($dimensionsMode);
         $dimensionProvidersMap = [];
