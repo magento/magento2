@@ -3,6 +3,7 @@
 namespace Magento\CatalogInventory\Helper;
 
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class GetProductIsQtyDecimalService
@@ -31,8 +32,12 @@ class ProductStockIsQtyDecimal
      */
     public function execute($productId)
     {
-        $productStock = $this->stockItemRepository->get($productId);
+        try {
+            $productStock = $this->stockItemRepository->get($productId);
 
-        return (bool) $productStock->getIsQtyDecimal();
+            return (bool) $productStock->getIsQtyDecimal();
+        } catch (NoSuchEntityException $e) {
+            return false;
+        }
     }
 }

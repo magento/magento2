@@ -28,7 +28,7 @@ define([
         /**
          * Change input value type when "Enable Qty Increments" is "No"
          */
-        changeValueType: function(value) {
+        changeValueType: function (value) {
             var isEnableQtyIncrements = value === 1;
 
             if (!isEnableQtyIncrements) {

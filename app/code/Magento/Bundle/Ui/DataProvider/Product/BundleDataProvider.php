@@ -17,7 +17,6 @@ class BundleDataProvider extends ProductDataProvider
      */
     protected $dataHelper;
 
-
     /**
      * @var StockItemRepositoryInterface
      */
@@ -85,6 +84,9 @@ class BundleDataProvider extends ProductDataProvider
         $items = $this->getCollection()->toArray();
         
         foreach ($items as $index => $item) {
+            if (!is_array($item) || !array_key_exists('entity_id', $item)) {
+                continue;
+            }
             $items[$index]['selection_qty_is_integer'] = !$this->isProductQtyDecimal($item['entity_id']);
         }
 

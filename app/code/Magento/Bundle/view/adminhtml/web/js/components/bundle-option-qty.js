@@ -38,9 +38,9 @@ define([
         /**
          * Update field validation rules
          *
-         * @param value
+         * @param {Boolean} value
          */
-        validateDigits: function(value) {
+        validateDigits: function (value) {
             this.isInteger = value;
             this.validation['validate-digits'] = this.isInteger;
         }
