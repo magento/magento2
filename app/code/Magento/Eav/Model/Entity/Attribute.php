@@ -253,6 +253,16 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             );
         }
 
+        /**
+         * Check attribute_code for allowed characters
+         */
+        if (isset($this->_data['attribute_code'])
+            && !preg_match('/^[a-z]+[a-z0-9_]+$/', $this->_data['attribute_code'])) {
+            throw new LocalizedException(
+                __('Please use only letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.')
+            );
+        }
+
         $defaultValue = $this->getDefaultValue();
         $hasDefaultValue = (string)$defaultValue != '';
 
