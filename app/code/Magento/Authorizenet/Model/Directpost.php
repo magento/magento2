@@ -820,11 +820,14 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     {
         try {
             $response = $this->getResponse();
-            if (
-                $voidPayment && $response->getXTransId() && strtoupper($response->getXType())
-                == self::REQUEST_TYPE_AUTH_ONLY
+            if ($voidPayment
+                && $response->getXTransId()
+                && strtoupper($response->getXType()) == self::REQUEST_TYPE_AUTH_ONLY
             ) {
-                $order->getPayment()->setTransactionId(null)->setParentTransactionId($response->getXTransId())->void();
+                $order->getPayment()
+                      ->setTransactionId(null)
+                      ->setParentTransactionId($response->getXTransId())
+                      ->void($response);
             }
             $order->registerCancellation($message)->save();
         } catch (\Exception $e) {
