@@ -10,6 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\NewFolder class.
+ *
+ * @magentoAppArea adminhtml
  */
 class NewFolderTest extends \PHPUnit\Framework\TestCase
 {
