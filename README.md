@@ -18,6 +18,8 @@ Contributions can take the form of new components or features, changes to existi
 
 To learn about how to make a contribution, click [here][1].
 
+Some fix
+
 To learn about issues, click [here][2]. To open an issue, click [here][3].
 
 To suggest documentation improvements, click [here][4].
