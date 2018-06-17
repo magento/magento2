@@ -303,8 +303,8 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      * Get number of seconds to wait before completely failing to break the lock
      * @return int
      */
-//    public function getFailAfter()
-//    {
-//        return self::DEFAULT_FAIL_AFTER;
-//    }
+    public function getFailAfter()
+    {
+        return self::DEFAULT_FAIL_AFTER;
+    }
 }
