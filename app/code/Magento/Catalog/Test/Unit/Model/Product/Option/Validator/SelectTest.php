@@ -69,6 +69,9 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->validator->isValid($this->valueMock));
     }
 
+    /**
+     * @return array
+     */
     public function isValidSuccessDataProvider()
     {
         return [
@@ -154,6 +157,9 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($messages, $this->validator->getMessages());
     }
 
+    /**
+     * @return array
+     */
     public function isValidateWithInvalidDataDataProvider()
     {
         return [
