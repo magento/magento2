@@ -42,13 +42,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'admin/emails/forgot_email_template';
 
-    const XML_PATH_NEW_USER_EMAIL_TEMPLATE = 'admin/emails/new_user_notification_template';
-
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
     const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
-
-    const DEPLOYMENT_CONFIG_ADMIN_EMAIL = 'user_admin_email';
 
     /** @deprecated */
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
@@ -486,22 +482,21 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     private function sendNewUserNotificationEmail()
     {
         $toEmails = [];
+
         $generalEmail = $this->_config->getValue(
             'trans_email/ident_general/email'
         );
         if ($generalEmail) {
             $toEmails[] = $generalEmail;
         }
-        $adminEmail = $this->deploymentConfig->get(
-            static::DEPLOYMENT_CONFIG_ADMIN_EMAIL
-        );
-        if ($adminEmail) {
+
+        if ($adminEmail = $this->deploymentConfig->get('user_admin_email')) {
             $toEmails[] = $adminEmail;
         }
 
         foreach ($toEmails as $toEmail) {
             $this->sendNotification(
-                self::XML_PATH_NEW_USER_EMAIL_TEMPLATE,
+                'admin/emails/new_user_notification_template',
                 [
                     'user'  => $this,
                     'store' => $this->_storeManager->getStore(
