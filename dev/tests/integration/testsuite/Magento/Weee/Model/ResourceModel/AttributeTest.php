@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\ResourceModel;
+namespace Magento\Weee\Model\ResourceModel;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Eav\Model\Entity\Attribute as EavAttribute;
