@@ -10,6 +10,9 @@ use Magento\Framework\Indexer\Dimension;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
+/**
+ * Class return price table name based on dimension
+ */
 class PriceTableResolver implements IndexScopeResolverInterface
 {
     /**
