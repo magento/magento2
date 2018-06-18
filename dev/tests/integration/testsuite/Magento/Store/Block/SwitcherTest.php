@@ -5,6 +5,11 @@
  */
 namespace Magento\Store\Block;
 
+use Magento\Framework\App\ActionInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Url\DecoderInterface;
+use Magento\Framework\App\ScopeInterface;
+
 /**
  * Integration tests for \Magento\Store\Block\Switcher block.
  */
@@ -16,17 +21,23 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
     private $_objectManager;
 
     /**
+     * @var DecoderInterface
+     */
+    private $decoder;
+
+    /**
      * Set up.
      *
      * @return void
      */
     protected function setUp()
     {
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->_objectManager = Bootstrap::getObjectManager();
+        $this->decoder = Bootstrap::getObjectManager()->create(DecoderInterface::class);
     }
 
     /**
-     * Test that GetTargetStorePostData() method return correct store URL.
+     * Test that GetTargetStorePostData() method returns correct data.
      *
      * @magentoDataFixture Magento/Store/_files/store.php
      * @return void
@@ -39,8 +50,16 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->_objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
         $store = $storeRepository->get($storeCode);
+
         $result = json_decode($block->getTargetStorePostData($store), true);
-        
-        $this->assertContains($storeCode, $result['action']);
+        $url = parse_url($this->decoder->decode($result['data'][ActionInterface::PARAM_NAME_URL_ENCODED]));
+        $storeParsedQuery = [];
+        if (isset($url['query'])) {
+            parse_str($url['query'], $storeParsedQuery);
+        }
+
+        $this->assertSame($storeCode, $result['data']['___store']);
+        $this->assertSame($storeCode, $storeParsedQuery['___store']);
+        $this->assertSame(ScopeInterface::SCOPE_DEFAULT, $result['data']['___from_store']);
     }
 }
