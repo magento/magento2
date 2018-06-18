@@ -52,6 +52,6 @@
         <element name="productOptionDropDownTitle" type="text" selector="//label[contains(.,'{{var1}}')]" parameterized="true"/>
         <element name="productOptionDropDownOptionTitle" type="text" selector="//label[contains(.,'{{var1}}')]/../div[@class='control']//select//option[contains(.,'{{var2}}')]" parameterized="true"/>
 
-        <element name="productSwatchText" type="text" selector="//div[@class='swatch-option text' and contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="productSwatchText" type="text" selector="//div[@class='swatch-option text' and contains(text(),'{{swatchOptionText}}')]" parameterized="true"/>
     </section>
 </sections>
