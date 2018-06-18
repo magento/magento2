@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\ResourceModel\Entity\Type;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
