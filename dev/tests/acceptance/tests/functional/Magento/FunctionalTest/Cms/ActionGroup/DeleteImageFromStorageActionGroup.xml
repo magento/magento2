@@ -11,6 +11,7 @@
         <arguments>
             <argument name="Image"/>
         </arguments>
+        <waitForElementVisible selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="waitForInitialImages"/>
         <grabMultiple selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="initialImages"/>
         <click selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="selectImage"/>
         <waitForElementVisible selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="waitForDeleteBtn"/>
