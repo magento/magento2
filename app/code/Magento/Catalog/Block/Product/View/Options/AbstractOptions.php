@@ -178,7 +178,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
      * Returns price converted to current currency rate
      *
      * @param float $price
-     * @return float
+     * @return float|string
      */
     public function getCurrencyPrice($price)
     {
