@@ -305,14 +305,16 @@ class DefaultStock extends AbstractIndexer implements StockInterface
                 'stock_status' => (int)$row['status'],
             ];
             if ($i % 1000 == 0) {
+                $this->deleteOldRecords(array_column($data, 'product_id'));
                 $this->_updateIndexTable($data);
                 $data = [];
             }
         }
 
-        $this->deleteOldRecords($entityIds);
-        $this->_updateIndexTable($data);
-
+        if (is_array($data) && !empty($data)) {
+            $this->deleteOldRecords(array_column($data, 'product_id'));
+            $this->_updateIndexTable($data);
+        }
         return $this;
     }
 
