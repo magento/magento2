@@ -150,40 +150,4 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         return $connection->fetchAll($select);
     }
-
-    /**
-     * Test to delete entity attribute with type "Fixed Product Tax".
-     *
-     * @magentoDataFixture Magento/Catalog/_files/fixed_product_attribute.php
-     * @return void
-     */
-    public function testDeleteEntityFixedTax()
-    {
-        /* @var EavAttribute $attribute */
-        $attribute = $this->objectManager->get(EavAttribute::class);
-        $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'fixed_product_attribute');
-
-        $entityEavAttributeRow = $this->getEavEntityAttributeRow(
-            $attribute->getEntityTypeId(),
-            4,
-            $attribute->getId()
-        );
-        $this->assertNotEmpty(
-            $entityEavAttributeRow['entity_attribute_id'],
-            'The record is absent in table `eav_entity_attribute` for `fixed_product_attribute`'
-        );
-
-        $attribute->setData('entity_attribute_id', $entityEavAttributeRow['entity_attribute_id']);
-        $this->model->deleteEntity($attribute);
-
-        $entityEavAttributeRow = $this->getEavEntityAttributeRow(
-            $attribute->getEntityTypeId(),
-            4,
-            $attribute->getId()
-        );
-        $this->assertEmpty(
-            $entityEavAttributeRow,
-            'The record is not remove from table `eav_entity_attribute` for `fixed_product_attribute`'
-        );
-    }
 }
