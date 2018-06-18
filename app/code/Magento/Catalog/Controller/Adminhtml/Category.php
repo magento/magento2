@@ -105,7 +105,6 @@ abstract class Category extends \Magento\Backend\App\Action
         return $storeId ?: (int)$this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID);
     }
 
-
     /**
      * Build response for ajax request
      *
