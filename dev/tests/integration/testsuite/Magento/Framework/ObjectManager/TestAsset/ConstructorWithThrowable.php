@@ -1,12 +1,10 @@
 <?php
 /**
- * @author Atwix Team
- * @copyright Copyright (c) 2018 Atwix (https://www.atwix.com/)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\ObjectManager\TestAsset;
-
 
 class ConstructorWithThrowable extends \Magento\Framework\ObjectManager\TestAsset\ConstructorOneArgument
 {
