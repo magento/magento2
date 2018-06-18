@@ -15,5 +15,6 @@
         <element name="imageFile" type="text" selector="//*[@id='media_gallery_content']//img[contains(@src, '{{url}}')]" parameterized="true"/>
         <element name="removeImageButton" type="button" selector=".action-remove"/>
         <element name="modalOkBtn" type="button" selector="button.action-primary.action-accept"/>
+        <element name="uploadProgressBar" type="text" selector=".uploader .file-row"/>
     </section>
 </sections>
