@@ -812,32 +812,6 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
-     * Return index table name depends in indexation mode: main price index table for partial reindex
-     *  and replica table for full reindex
-     *
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function getIndexTableForCompositeProducts()
-    {
-        // TODO: temporary fix, move to composite products
-        return $this->isPartial
-            ? $this->getMainTable()
-            : $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable());
-    }
-
-    private $isPartial = true;
-
-    /**
-     * @param bool $isPartial
-     * TODO: fix dirty hac
-     */
-    public function setIsPartial(bool $isPartial)
-    {
-        $this->isPartial = $isPartial;
-    }
-
-    /**
      * @return bool
      */
     protected function hasEntity()

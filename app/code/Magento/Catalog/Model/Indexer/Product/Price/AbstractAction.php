@@ -410,7 +410,6 @@ abstract class AbstractAction
      * which do not work by dimensions.
      * For indexers, which support dimensions all composite products read data directly from main price indexer table
      * or replica table for partial or full reindex correspondingly.
-     * @see \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice::getIndexTableForCompositeProducts
      */
     protected function _copyRelationIndexData($parentIds, $excludeIds = null)
     {

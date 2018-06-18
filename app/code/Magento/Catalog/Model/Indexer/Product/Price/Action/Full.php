@@ -142,8 +142,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                     continue;
                 }
 
-                //TODO: fix dirty hac
-                $priceIndexer->setIsPartial(false);
                 $priceIndexer->getTableStrategy()->setUseIdxTable(false);
 
                 //Old price reindex mechanism

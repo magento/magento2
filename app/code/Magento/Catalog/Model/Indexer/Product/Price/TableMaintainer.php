@@ -40,7 +40,7 @@ class TableMaintainer
     /**
      * Catalog tmp category index table name
      */
-    private $tmpTableSuffix = '_temp'; //TODO: align with \Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy::TEMP_SUFFIX
+    private $tmpTableSuffix = '_temp';
 
     /**
      * Catalog tmp category index table name

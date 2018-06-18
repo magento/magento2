@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\Expression;
 
 /**
  * Allows to join product attribute to Select. Used for build price index for specified dimension
@@ -26,11 +27,6 @@ class JoinAttributeProcessor
     private $metadataPool;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var \Magento\Framework\App\ResourceConnection
      */
     private $resource;
@@ -41,13 +37,10 @@ class JoinAttributeProcessor
     private $connectionName;
 
     /**
-     * JoinProcessor constructor.
-     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Catalog\Helper\Data $dataHelper
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $connectionName
      */
     public function __construct(
@@ -59,21 +52,19 @@ class JoinAttributeProcessor
     ) {
         $this->eavConfig = $eavConfig;
         $this->metadataPool = $metadataPool;
-        $this->storeManager = $storeManager;
         $this->resource = $resource;
         $this->connectionName = $connectionName;
     }
 
     /**
      * @param Select $select
-     * @param int $websiteId
      * @param string $attributeCode
      * @param string|null $attributeValue
      * @return \Zend_Db_Expr
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_Db_Select_Exception
      */
-    public function process(Select $select, $attributeCode, $attributeValue = null)
+    public function process(Select $select, $attributeCode, $attributeValue = null): \Zend_Db_Expr
     {
         $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
         $attributeId = $attribute->getAttributeId();
@@ -83,7 +74,6 @@ class JoinAttributeProcessor
         $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
         if ($attribute->isScopeGlobal()) {
-            //TODO: refactor global join - move outside if statement
             $alias = 'ta_' . $attributeCode;
             $select->{$joinType}(
                 [$alias => $attributeTable],
@@ -91,7 +81,7 @@ class JoinAttributeProcessor
                 " AND {$alias}.store_id = 0",
                 []
             );
-            $whereExpression = new \Zend_Db_Expr("{$alias}.value");
+            $whereExpression = new Expression("{$alias}.value");
         } else {
             $dAlias = 'tad_' . $attributeCode;
             $sAlias = 'tas_' . $attributeCode;

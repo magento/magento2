@@ -63,15 +63,7 @@ class SimpleProductPrice implements DimensionalIndexerInterface
     }
 
     /**
-     * Execute indexer by specified dimension.
-     * Accept array of dimensions DTO that represent indexer dimension
-     *
-     * @param \Magento\Framework\Indexer\Dimension[] $dimensions
-     * @param \Traversable|null $entityIds
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Zend_Db_Select_Exception
+     * {@inheritdoc}
      */
     public function executeByDimension(array $dimensions, \Traversable $entityIds = null)
     {
