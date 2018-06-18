@@ -17,6 +17,8 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-194"/>
             <group value="Catalog"/>
+            <!-- Skip because of MAGETWO-92780 -->
+            <group value="skip"/>
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="attribute"/>
@@ -63,14 +65,14 @@
         <actionGroup ref="SaveAttributeSet" stepKey="SaveAttributeSet"/>
         <!-- Go to create new product page -->
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
+        <waitForPageLoad stepKey="wait2"/>
         <!-- Assert attribute not present in product creation -->
         <dontSeeElement selector="{{AdminProductFormSection.attributeLabel($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="seeLabel"/>
         <!-- Assert removed attribute not presence in storefront product additional information -->
         <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage2"/>
-        <waitForPageLoad stepKey="wait2"/>
-        <!-- Skip because of MAGETWO-92780 -->
-        <!--actionGroup ref="checkAttributeNotInMoreInformationTab" stepKey="checkAttributeNotInMoreInformationTab">
+        <waitForPageLoad stepKey="wait3"/>
+        <actionGroup ref="checkAttributeNotInMoreInformationTab" stepKey="checkAttributeNotInMoreInformationTab">
             <argument name="attributeLabel" value="$$attribute.attribute[frontend_labels][0][label]$$"/>
-        </actionGroup-->
+        </actionGroup>
     </test>
 </tests>
