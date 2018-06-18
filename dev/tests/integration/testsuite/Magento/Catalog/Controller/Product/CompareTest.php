@@ -64,7 +64,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = $this->productRepository->get('simple_product_2');
         $this->dispatch('catalog/product_compare/index/items/' . $product->getEntityId());
 
-        $this->assertRedirect($this->equalTo('http://localhost/index.php/catalog/product_compare/index/'));
+        $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/catalog/product_compare/index/'));
 
         $this->_assertCompareListEquals([$product->getEntityId()]);
     }
