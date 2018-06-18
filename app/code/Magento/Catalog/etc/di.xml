@@ -1079,12 +1079,10 @@
     <type name="Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory">
         <arguments>
             <argument name="dimensionProviders" xsi:type="array">
-                <item name="websites" xsi:type="object">
-                    Magento\Store\Model\Indexer\WebsiteDimensionProvider
-                </item>
-                <item name="customer_groups" xsi:type="object">
-                    Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider
-                </item>
+                <!-- @see \Magento\Store\Model\Indexer\WebsiteDimensionProvider::DIMENSION_NAME -->
+                <item name="ws" xsi:type="object">Magento\Store\Model\Indexer\WebsiteDimensionProvider</item>
+                <!-- @see \Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider::DIMENSION_NAME -->
+                <item name="cg" xsi:type="object">Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider</item>
             </argument>
         </arguments>
     </type>

@@ -42,7 +42,6 @@ class IndexScopeResolver implements IndexScopeResolverInterface
      */
     public function resolve($index, array $dimensions)
     {
-        $mainPart = [$index];
         $tableNameParts = [];
         foreach ($dimensions as $dimension) {
             switch ($dimension->getName()) {
@@ -54,8 +53,9 @@ class IndexScopeResolver implements IndexScopeResolverInterface
             }
         }
         ksort($tableNameParts);
-        $result = array_merge($mainPart, $tableNameParts);
-        return $this->resource->getTableName(implode('_', $result));
+        array_unshift($tableNameParts, $index);
+
+        return $this->resource->getTableName(implode('_', $tableNameParts));
     }
 
     /**

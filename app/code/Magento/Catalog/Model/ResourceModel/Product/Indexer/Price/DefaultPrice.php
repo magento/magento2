@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 
 /**
@@ -67,11 +66,6 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     private $priceModifiers = [];
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
-     */
-    private $activeTableSwitcher;
-
-    /**
      * DefaultPrice constructor.
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -91,8 +85,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Framework\Module\Manager $moduleManager,
         $connectionName = null,
         IndexTableStructureFactory $indexTableStructureFactory = null,
-        array $priceModifiers = [],
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
+        array $priceModifiers = []
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
@@ -109,9 +102,6 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
 
             $this->priceModifiers[] = $priceModifier;
         }
-        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
-        );
     }
 
     /**
@@ -832,7 +822,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         return $this->hasEntity;
     }
 
-    protected function getTotalTierPriceExpression(\Zend_Db_Expr $priceExpression)
+    /**
+     * @param \Zend_Db_Expr $priceExpression
+     * @return \Zend_Db_Expr
+     */
+    private function getTotalTierPriceExpression(\Zend_Db_Expr $priceExpression)
     {
         $maxUnsignedBigint = '~0';
 

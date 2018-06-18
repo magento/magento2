@@ -54,7 +54,6 @@ class SimpleProductPrice implements DimensionalIndexerInterface
         $productType = \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
         array $priceModifiers = []
     ) {
-
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
@@ -67,7 +66,6 @@ class SimpleProductPrice implements DimensionalIndexerInterface
      */
     public function executeByDimension(array $dimensions, \Traversable $entityIds = null)
     {
-        // TODO: hot fix for rows reindex
         $this->tableMaintainer->createMainTmpTable($dimensions);
 
         $temporaryPriceTable = $this->indexTableStructureFactory->create([

@@ -208,9 +208,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
         if ($this->isPriceGlobal()) {
             $optPriceType = 'otpd.price_type';
             $optPriceValue = 'otpd.price';
-        }
-
-        if (!$this->isPriceGlobal()) {
+        } else {
             $select->joinLeft(
                 ['otps' => $this->getTable('catalog_product_option_type_price')],
                 'otps.option_type_id = otpd.option_type_id AND otpd.store_id = cwd.default_store_id',
@@ -307,9 +305,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
         if ($this->isPriceGlobal()) {
             $optPriceType = 'opd.price_type';
             $optPriceValue = 'opd.price';
-        }
-
-        if (!$this->isPriceGlobal()) {
+        } else {
             $select->joinLeft(
                 ['ops' => $this->getTable('catalog_product_option_price')],
                 'ops.option_id = opd.option_id AND ops.store_id = cwd.default_store_id',

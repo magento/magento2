@@ -41,7 +41,8 @@ class DimensionCollectionFactory
     }
 
     /**
-     * Create MultiDimensionProvider for specified "dimension mode" - which dimensions indexer use for sharding
+     * Create MultiDimensionProvider for specified "dimension mode".
+     * By default return multiplication of dimensions by current set mode
      *
      * @param string|null $dimensionsMode
      * @return MultiDimensionProvider
@@ -49,20 +50,15 @@ class DimensionCollectionFactory
     public function create(string $dimensionsMode = null): MultiDimensionProvider
     {
         $dimensionConfiguration = $this->dimensionModeConfiguration->getDimensionConfiguration($dimensionsMode);
-        $dimensionProvidersMap = [];
-        foreach ($this->dimensionProviders as $dimensionProvider) {
-            // TODO: fix hac by getDimensionName?
-            $dimensionProvidersMap[$dimensionProvider::DIMENSION_NAME] = $dimensionProvider;
-        }
 
         $providers = [];
         foreach ($dimensionConfiguration as $dimensionName) {
-            if (!isset($dimensionProvidersMap[$dimensionName])) {
-                throw new \InvalidArgumentException(
-                    sprintf('Missing data provider for Dimension with name "%s".', $dimensionName)
+            if (!isset($this->dimensionProviders[$dimensionName])) {
+                throw new \LogicException(
+                    'Dimension Provider is missing. Cannot handle unknown dimension: ' . $dimensionName
                 );
             }
-            $providers[] = clone $dimensionProvidersMap[$dimensionName];
+            $providers[] = clone $this->dimensionProviders[$dimensionName];
         }
 
         return $this->multiDimensionProviderFactory->create(
