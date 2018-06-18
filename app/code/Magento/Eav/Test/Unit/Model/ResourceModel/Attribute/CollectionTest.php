@@ -174,6 +174,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->model->getSelectCountSql()->assemble();
     }
 
+    /**
+     * @return array
+     */
     public function initSelectDataProvider()
     {
         return [

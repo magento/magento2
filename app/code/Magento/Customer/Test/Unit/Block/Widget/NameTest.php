@@ -159,6 +159,9 @@ class NameTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->_block->{$method}());
     }
 
+    /**
+     * @return array
+     */
     public function methodDataProvider()
     {
         return [

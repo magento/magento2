@@ -378,6 +378,9 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->subscriber, $this->subscriber->received($queue));
     }
 
+    /**
+     * @return $this
+     */
     protected function sendEmailCheck()
     {
         $storeModel = $this->getMockBuilder(\Magento\Store\Model\Store::class)
