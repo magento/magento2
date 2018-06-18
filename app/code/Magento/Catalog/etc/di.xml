@@ -1120,6 +1120,7 @@
     <type name="Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer">
         <arguments>
             <argument name="connectionName" xsi:type="string">indexer</argument>
+            <argument name="tableResolver" xsi:type="object">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\SimpleProductPrice">

@@ -42,18 +42,20 @@ class IndexScopeResolver implements IndexScopeResolverInterface
      */
     public function resolve($index, array $dimensions)
     {
-        $tableNameParts = [$index];
+        $mainPart = [$index];
+        $tableNameParts = [];
         foreach ($dimensions as $dimension) {
             switch ($dimension->getName()) {
                 case 'scope':
-                    $tableNameParts[] = $dimension->getName() . $this->getScopeId($dimension);
+                    $tableNameParts[$dimension->getName()] = $dimension->getName() . $this->getScopeId($dimension);
                     break;
                 default:
-                    $tableNameParts[] = $dimension->getName() . $dimension->getValue();
+                    $tableNameParts[$dimension->getName()] = $dimension->getName() . $dimension->getValue();
             }
         }
-
-        return $this->resource->getTableName(implode('_', $tableNameParts));
+        ksort($tableNameParts);
+        $result = array_merge($mainPart, $tableNameParts);
+        return $this->resource->getTableName(implode('_', $result));
     }
 
     /**
