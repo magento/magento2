@@ -5,8 +5,15 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+use Magento\Framework\Exception\RuntimeException;
+
 class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
+    /**#@+
+     * Test class with throwable error
+     */
+    const TEST_CLASS_WITH_THROWABLE = \Magento\Framework\ObjectManager\TestAsset\ConstructorWithThrowable::class;
+
     /**#@+
      * Test classes for basic instantiation
      */
@@ -136,6 +143,19 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
             foreach ($properties as $propertyName => $propertyClass) {
                 $this->assertAttributeInstanceOf($propertyClass, $propertyName, $testObject);
             }
+        }
+    }
+
+    /**
+     * Test create instance with throwable error
+     */
+    public function testNewInstanceWithThrowableError()
+    {
+        try {
+            $testObject = self::$_objectManager->create(self::TEST_CLASS_WITH_THROWABLE);
+            $this->fail('No instance for class with throwable error should be created');
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(RuntimeException::class, $e);
         }
     }
 }
