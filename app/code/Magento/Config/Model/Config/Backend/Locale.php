@@ -78,6 +78,10 @@ class Locale extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
+        if (empty($this->getValue())) {
+            return parent::afterSave();
+        }
+
         /** @var $collection \Magento\Config\Model\ResourceModel\Config\Data\Collection */
         $collection = $this->_configsFactory->create();
         $collection->addPathFilter('currency/options');
