@@ -41,4 +41,23 @@
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
         <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="dontSeeCategoryInTree"/>
     </actionGroup>
+    <!--Actions to switch store view in category edit page-->
+    <actionGroup name="switchCategoryStoreView">
+        <arguments>
+            <argument name="Store"/>
+            <argument name="CatName"/>
+        </arguments>
+        <amOnPage url="{{AdminCategoryPage.page}}" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(CatName)}}" stepKey="navigateToCreatedCategory" />
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSpinner"/>
+        <scrollToTopOfPage stepKey="scrollToToggle"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}" stepKey="openStoreViewDropDown"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption(Store)}}" stepKey="selectStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSpinner2"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}" stepKey="selectStoreViewAccept"/>
+        <waitForPageLoad stepKey="waitForStoreViewChangeLoad"/>
+    </actionGroup>
 </actionGroups>
