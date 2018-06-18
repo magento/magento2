@@ -9,4 +9,11 @@
     <preference for="Magento\UrlRewrite\Model\StorageInterface" type="Magento\UrlRewrite\Model\Storage\DbStorage"/>
     <preference for="Magento\UrlRewrite\Model\UrlFinderInterface" type="Magento\UrlRewrite\Model\Storage\DbStorage"/>
     <preference for="Magento\UrlRewrite\Model\UrlPersistInterface" type="Magento\UrlRewrite\Model\Storage\DbStorage"/>
+    <type name="Magento\Store\Model\StoreSwitcher">
+        <arguments>
+            <argument name="storeSwitchers" xsi:type="array">
+                <item name="rewriteUrl" xsi:type="object">Magento\UrlRewrite\Model\StoreSwitcher\RewriteUrl</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
