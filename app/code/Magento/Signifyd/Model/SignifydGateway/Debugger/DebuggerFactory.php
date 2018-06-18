@@ -44,11 +44,12 @@ class DebuggerFactory
     /**
      * Create debugger instance
      *
+     * @param int|null $storeId
      * @return DebuggerInterface
      */
-    public function create()
+    public function create($storeId = null): DebuggerInterface
     {
-        if (!$this->config->isDebugModeEnabled()) {
+        if (!$this->config->isDebugModeEnabled($storeId)) {
             return $this->objectManager->get(BlackHole::class);
         }
 
