@@ -41,7 +41,7 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultJson->setData([
                 'id' => $categoryId,
                 'path' => $category->getPath(),
-                'parentid' => $category->getParentID(),
+                'parentId' => $category->getParentID(),
             ]);
         }
     }

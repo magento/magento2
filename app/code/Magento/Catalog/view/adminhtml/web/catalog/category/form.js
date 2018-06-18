@@ -46,7 +46,7 @@ define([
                 } else {
                     $(this.options.categoryIdSelector).val(data.id).change();
                     $(this.options.categoryPathSelector).val(data.path).change();
-                    $(this.options.categoryParentSelector).val(data.parentid).change();
+                    $(this.options.categoryParentSelector).val(data.parentId).change();
                 }
             }
         };
