@@ -12,6 +12,7 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
 /**
  * Class return price table name based on dimension
+ * use only on the frontend area
  */
 class PriceTableResolver implements IndexScopeResolverInterface
 {
@@ -62,7 +63,7 @@ class PriceTableResolver implements IndexScopeResolverInterface
         $currentDimensions = $this->dimensionModeConfiguration->getDimensionConfiguration();
         foreach ($dimensions as $dimension) {
             if ((string)$dimension->getValue() === '') {
-                throw new \Exception(sprintf('Dimension value of "%s" can not be empty', $dimension->getName()));
+                throw new \InvalidArgumentException(sprintf('Dimension value of "%s" can not be empty', $dimension->getName()));
             }
             if (in_array($dimension->getName(), $currentDimensions, true)) {
                 $existDimensions[] = $dimension;
