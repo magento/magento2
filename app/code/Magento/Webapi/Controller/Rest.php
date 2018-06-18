@@ -250,7 +250,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         return $this->_response;
     }
 
-
     /**
      * Check if current request is schema request.
      *
