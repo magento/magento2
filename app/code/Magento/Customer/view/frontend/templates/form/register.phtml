@@ -142,6 +142,7 @@
                        class="input-text"
                        data-password-min-length="<?= $block->escapeHtmlAttr($block->getMinimumPasswordLength()) ?>"
                        data-password-min-character-sets="<?= $block->escapeHtmlAttr($block->getRequiredCharacterClassesNumber()) ?>"
+                       data-mage-init='{"mage/trim-input":{}}'
                        data-validate="{required:true, 'validate-customer-password':true}"
                        autocomplete="off">
                 <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
