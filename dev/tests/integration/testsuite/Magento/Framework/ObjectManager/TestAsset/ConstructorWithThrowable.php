@@ -10,7 +10,7 @@ class ConstructorWithThrowable extends \Magento\Framework\ObjectManager\TestAsse
 {
     public function __construct(Basic $one)
     {
-        // Call parent constructor without parameters to generate TypeError
+        // Call parent constructor without parameters to generate error
         parent::__construct();
     }
 }
