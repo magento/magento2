@@ -156,6 +156,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param \Magento\Framework\App\AreaList $areaList
      * @param FieldsFilter $fieldsFilter
      * @param ParamsOverrider $paramsOverrider
+     * @param ServiceOutputProcessor $serviceOutputProcessor
+     * @param Generator $swaggerGenerator ,
      * @param StoreManagerInterface $storeManager
      *
      * TODO: Consider removal of warning suppression
@@ -194,6 +196,32 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->swaggerGenerator = $swaggerGenerator;
         $this->storeManager = $storeManager;
         $this->requestProcessorPool = $this->_objectManager->get(RequestProcessorPool::class);
+    }
+
+    /**
+     * Get deployment config
+     *
+     * @return DeploymentConfig
+     */
+    private function getDeploymentConfig()
+    {
+        if (!$this->deploymentConfig instanceof \Magento\Framework\App\DeploymentConfig) {
+            $this->deploymentConfig = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
+    }
+
+    /**
+     * Set deployment config
+     *
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @return void
+     * @deprecated 100.1.0
+     */
+    public function setDeploymentConfig(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
+    {
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -238,7 +266,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @return Route
      * @deprecated 100.1.0
-     * @see Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
+     * @see \Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
      */
     protected function getCurrentRoute()
     {
@@ -268,32 +296,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     }
 
     /**
-     * Validate request
-     *
-     * @throws AuthorizationException
-     * @throws \Magento\Framework\Webapi\Exception
-     * @return void
-     * @deprecated 100.1.0
-     * @see Magento\Webapi\Controller\Rest\RequestValidator::validate
-     */
-    protected function validateRequest()
-    {
-        $this->checkPermissions();
-        if ($this->getCurrentRoute()->isSecure() && !$this->_request->isSecure()) {
-            throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
-        }
-        if ($this->storeManager->getStore()->getCode() === Store::ADMIN_CODE
-            && strtoupper($this->_request->getMethod()) === RestRequest::HTTP_METHOD_GET
-        ) {
-            throw new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
-        }
-    }
-
-    /**
      * Execute schema request
      *
      * @return void
-     * @deprecated 100.1.0
      */
     protected function processSchemaRequest()
     {
@@ -314,7 +319,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * Execute API request
      *
      * @return void
-     * @deprecated 100.1.0
      * @throws AuthorizationException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Webapi\Exception
@@ -346,18 +350,40 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     }
 
     /**
-     * Get deployment config
+     * Validate request
      *
-     * @return DeploymentConfig
+     * @throws AuthorizationException
+     * @throws \Magento\Framework\Webapi\Exception
+     * @return void
      * @deprecated 100.1.0
+     * @see \Magento\Webapi\Controller\Rest\RequestValidator::validate
      */
-    private function getDeploymentConfig()
+    protected function validateRequest()
     {
-        if (!$this->deploymentConfig instanceof \Magento\Framework\App\DeploymentConfig) {
-            $this->deploymentConfig = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\App\DeploymentConfig::class);
+        $this->checkPermissions();
+        if ($this->getCurrentRoute()->isSecure() && !$this->_request->isSecure()) {
+            throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
         }
-        return $this->deploymentConfig;
+        if ($this->storeManager->getStore()->getCode() === Store::ADMIN_CODE
+            && strtoupper($this->_request->getMethod()) === RestRequest::HTTP_METHOD_GET
+        ) {
+            throw new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
+        }
     }
 
+    /**
+     * The getter function to get InputParamsResolver object
+     *
+     * @return \Magento\Webapi\Controller\Rest\InputParamsResolver
+     *
+     * @deprecated 100.1.0
+     */
+    private function getInputParamsResolver()
+    {
+        if ($this->inputParamsResolver === null) {
+            $this->inputParamsResolver = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Webapi\Controller\Rest\InputParamsResolver::class);
+        }
+        return $this->inputParamsResolver;
+    }
 }
