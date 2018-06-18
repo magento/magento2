@@ -84,11 +84,11 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
     public function getCodeDataProvider()
     {
         return [
-            ['avsZip' => null, 'avsStreet' => null, 'expected' => 'U'],
-            ['avsZip' => null, 'avsStreet' => 'M', 'expected' => 'U'],
-            ['avsZip' => 'M', 'avsStreet' => null, 'expected' => 'U'],
-            ['avsZip' => 'M', 'avsStreet' => 'Unknown', 'expected' => 'U'],
-            ['avsZip' => 'I', 'avsStreet' => 'A', 'expected' => 'U'],
+            ['avsZip' => null, 'avsStreet' => null, 'expected' => ''],
+            ['avsZip' => null, 'avsStreet' => 'M', 'expected' => ''],
+            ['avsZip' => 'M', 'avsStreet' => null, 'expected' => ''],
+            ['avsZip' => 'M', 'avsStreet' => 'Unknown', 'expected' => ''],
+            ['avsZip' => 'I', 'avsStreet' => 'A', 'expected' => ''],
             ['avsZip' => 'M', 'avsStreet' => 'M', 'expected' => 'Y'],
             ['avsZip' => 'N', 'avsStreet' => 'M', 'expected' => 'A'],
             ['avsZip' => 'M', 'avsStreet' => 'N', 'expected' => 'Z'],
