@@ -46,6 +46,7 @@ class ControllerRest
      * @param Rest $subject
      * @param RequestInterface $request
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDispatch(Rest $subject, RequestInterface $request)
     {
