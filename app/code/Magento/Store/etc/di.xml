@@ -425,4 +425,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Store\Model\StoreSwitcher">
+        <arguments>
+            <argument name="storeSwitchers" xsi:type="array">
+                <item name="cleanTargetUrl" xsi:type="object">Magento\Store\Model\StoreSwitcher\CleanTargetUrl</item>
+                <item name="manageStoreCookie" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManageStoreCookie</item>
+                <item name="managePrivateContent" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManagePrivateContent</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
