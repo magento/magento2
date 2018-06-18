@@ -154,12 +154,13 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductUrlKey</requiredEntity>
     </entity>
-    <entity name="ImageUpload" type="uploadImage">
+    <entity name="ProductImage" type="uploadImage">
         <data key="title" unique="suffix">Image1</data>
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
         <data key="file">magento-logo.png</data>
+        <data key="fileName">magento-logo</data>
     </entity>
     <entity name="MagentoLogo" type="image">
         <data key="title" unique="suffix">MagentoLogo</data>
@@ -280,6 +281,18 @@
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductNewsFromDate</requiredEntity>
+    </entity>
+    <entity name="SimpleProductNameWithDoubleQuote" type="product">
+        <data key="name" unique="prefix">Double Quote"</data>
+        <data key="sku" unique="prefix">doubleQuote</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="price">10.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">1000</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
     <entity name="GetProduct" type="product">
         <var key="sku" entityKey="sku" entityType="product"/>
