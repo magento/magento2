@@ -50,6 +50,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->processor->getIndexer()->setScheduled(true);
         $this->assertTrue($this->processor->getIndexer()->isScheduled());
+
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
@@ -81,7 +82,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $product = reset($items);
         $this->assertCount(2, $items);
         $this->assertEquals(15, $product->getPrice());
-        $this->processor->getIndexer()->reindexList([1]);
 
         $this->processor->getIndexer()->setScheduled(false);
     }
