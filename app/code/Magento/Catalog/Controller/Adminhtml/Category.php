@@ -45,7 +45,7 @@ abstract class Category extends \Magento\Backend\App\Action
      * @param bool $getRootInstead
      * @return \Magento\Catalog\Model\Category|false
      */
-    protected function _initCategory($getRootInstead = false)
+    protected function _initCategory(bool $getRootInstead = false)
     {
         $categoryId = $this->resolveCategoryId();
         $storeId = $this->resolveStoreId();
@@ -98,7 +98,7 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return int
      */
-    private function resolveStoreId() : int
+    private function resolveStoreId(): int
     {
         $storeId = (int)$this->getRequest()->getParam('store', false);
 
@@ -115,8 +115,10 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @deprecated 101.0.0
      */
-    protected function ajaxRequestResponse($category, $resultPage)
-    {
+    protected function ajaxRequestResponse(
+        \Magento\Catalog\Model\Category $category,
+        \Magento\Backend\Model\View\Result\Page $resultPage
+    ): \Magento\Framework\Controller\Result\Json {
         // prepare breadcrumbs of selected category, if any
         $breadcrumbsPath = $category->getPath();
         if (empty($breadcrumbsPath)) {
@@ -164,7 +166,7 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return array
      */
-    protected function dateTimePreprocessing($category, $postData)
+    protected function dateTimePreprocessing(\Magento\Catalog\Model\Category $category, array $postData): array
     {
         $dateFieldFilters = [];
         $attributes = $category->getAttributes();
