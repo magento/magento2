@@ -16,5 +16,20 @@
         <element name="removeImageButton" type="button" selector=".action-remove"/>
         <element name="modalOkBtn" type="button" selector="button.action-primary.action-accept"/>
         <element name="uploadProgressBar" type="text" selector=".uploader .file-row"/>
+
+        <element name="nthProductImage" type="button" selector="#media_gallery_content > div:nth-child({{var}}) img.product-image" parameterized="true"/>
+        <element name="nthRemoveImageBtn" type="button" selector="#media_gallery_content > div:nth-child({{var}}) button.action-remove" parameterized="true"/>
+
+        <element name="altText" type="textarea" selector="textarea[data-role='image-description']"/>
+
+        <element name="roleBase" type="button" selector="div.field-image-role ul li:nth-of-type(1) label"/>
+        <element name="roleSmall" type="button" selector="div.field-image-role ul li:nth-of-type(2) label"/>
+        <element name="roleThumbnail" type="button" selector="div.field-image-role ul li:nth-of-type(3) label"/>
+        <element name="roleSwatch" type="button" selector="div.field-image-role ul li:nth-of-type(4) label"/>
+
+        <element name="isBaseSelected" type="button" selector="div.field-image-role ul li.selected:nth-of-type(1)"/>
+        <element name="isSmallSelected" type="button" selector="div.field-image-role ul li.selected:nth-of-type(2)"/>
+        <element name="isThumbnailSelected" type="button" selector="div.field-image-role ul li.selected:nth-of-type(3)"/>
+        <element name="isSwatchSelected" type="button" selector="div.field-image-role ul li.selected:nth-of-type(4)"/>
     </section>
 </sections>

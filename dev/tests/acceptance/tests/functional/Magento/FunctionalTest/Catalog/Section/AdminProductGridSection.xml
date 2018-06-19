@@ -16,6 +16,7 @@
         <element name="productGridRows" type="text" selector="table.data-grid tr.data-row"/>
         <element name="firstProductRow" type="text" selector="table.data-grid tr.data-row:first-of-type"/>
         <element name="productThumbnail" type="text" selector="table.data-grid tr:nth-child({{row}}) td.data-grid-thumbnail-cell > img" parameterized="true"/>
+        <element name="productThumbnailBySrc" type="text" selector="img.admin__control-thumbnail[src*='{{pattern}}']" parameterized="true"/>
         <element name="productGridCell" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
         <element name="productGridHeaderCell" type="text" selector="//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]" parameterized="true"/>
         <element name="multicheckDropdown" type="button" selector="div[data-role='grid-wrapper'] th.data-grid-multicheck-cell button.action-multicheck-toggle"/>
