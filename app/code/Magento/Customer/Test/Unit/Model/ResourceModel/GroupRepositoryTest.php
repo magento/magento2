@@ -37,6 +37,11 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $group;
+    
+    /**
+     * @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $factoryCreatedGroup;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Group|\PHPUnit_Framework_MockObject_MockObject
@@ -153,6 +158,12 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
             'group',
             false
         );
+        $this->factoryCreatedGroup = $this->getMockForAbstractClass(
+            \Magento\Customer\Api\Data\GroupInterface::class,
+            [],
+            'group',
+            false
+        );
 
         $this->groupResourceModel = $this->createMock(\Magento\Customer\Model\ResourceModel\Group::class);
     }
@@ -162,16 +173,20 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $groupId = 0;
 
         $taxClass = $this->getMockForAbstractClass(\Magento\Tax\Api\Data\TaxClassInterface::class, [], '', false);
+        $groupExtensionAttributes = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\GroupExtensionInterface::class);
 
-        $this->group->expects($this->once())
+        $this->group->expects($this->atLeastOnce())
             ->method('getCode')
             ->willReturn('Code');
         $this->group->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($groupId);
-        $this->group->expects($this->once())
+        $this->group->expects($this->atLeastOnce())
             ->method('getTaxClassId')
             ->willReturn(17);
+        $this->group->expects($this->atLeastOnce())
+            ->method('getExtensionAttributes')
+            ->willReturn($groupExtensionAttributes);
 
         $this->groupModel->expects($this->atLeastOnce())
             ->method('getId')
@@ -185,22 +200,34 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->groupModel->expects($this->atLeastOnce())
             ->method('getTaxClassName')
             ->willReturn('Tax class name');
-        $this->group->expects($this->once())
+        
+        
+        $this->factoryCreatedGroup->expects($this->once())
             ->method('setId')
             ->with($groupId)
             ->willReturnSelf();
-        $this->group->expects($this->once())
+        $this->factoryCreatedGroup->expects($this->once())
             ->method('setCode')
             ->with('Code')
             ->willReturnSelf();
-        $this->group->expects($this->once())
+        $this->factoryCreatedGroup->expects($this->once())
             ->method('setTaxClassId')
             ->with(234)
             ->willReturnSelf();
-        $this->group->expects($this->once())
+        $this->factoryCreatedGroup->expects($this->once())
             ->method('setTaxClassName')
             ->with('Tax class name')
             ->willReturnSelf();
+        $this->factoryCreatedGroup->expects($this->once())
+            ->method('setExtensionAttributes')
+            ->with($groupExtensionAttributes)
+            ->willReturnSelf();
+        $this->factoryCreatedGroup->expects($this->atLeastOnce())
+            ->method('getCode')
+            ->willReturn('Code');
+        $this->factoryCreatedGroup->expects($this->atLeastOnce())
+            ->method('getTaxClassId')
+            ->willReturn(17);
 
         $this->taxClassRepository->expects($this->once())
             ->method('get')
@@ -229,9 +256,12 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($groupId);
         $this->groupDataFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->group);
+            ->willReturn($this->factoryCreatedGroup);
 
-        $this->assertSame($this->group, $this->model->save($this->group));
+        $updatedGroup = $this->model->save($this->group);
+
+        $this->assertSame($this->group->getCode(), $updatedGroup->getCode());
+        $this->assertSame($this->group->getTaxClassId(), $updatedGroup->getTaxClassId());
     }
 
     /**
