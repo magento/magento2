@@ -5,6 +5,8 @@
 <h2>Welcome</h2>
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting-edge, feature-rich eCommerce solution that gets results.
 
+sss
+
 ## Magento system requirements
 [Magento system requirements](http://devdocs.magento.com/guides/v2.2/install-gde/system-requirements2.html)
 
@@ -17,6 +19,8 @@ To install Magento, see either:
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
 
 To learn about how to make a contribution, click [here][1].
+
+Some fix
 
 To learn about issues, click [here][2]. To open an issue, click [here][3].
 
