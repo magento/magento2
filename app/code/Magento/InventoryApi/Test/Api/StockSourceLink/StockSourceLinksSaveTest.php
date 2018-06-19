@@ -18,7 +18,7 @@ class StockSourceLinksSaveTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/stock-source-link';
+    const RESOURCE_PATH = '/V1/inventory/stock-source-links';
     const SERVICE_NAME_SAVE = 'inventoryApiStockSourceLinksSaveV1';
     const SERVICE_NAME_DELETE = 'inventoryApiStockSourceLinksDeleteV1';
     const SERVICE_NAME_GET_LIST = 'inventoryApiGetStockSourceLinksV1';
@@ -67,10 +67,12 @@ class StockSourceLinksSaveTest extends WebapiAbstract
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-1',
                 StockSourceLinkInterface::STOCK_ID => 10,
+                StockSourceLinkInterface::PRIORITY => 1,
             ],
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-2',
                 StockSourceLinkInterface::STOCK_ID => 10,
+                StockSourceLinkInterface::PRIORITY => 2,
             ],
         ];
 
@@ -78,7 +80,7 @@ class StockSourceLinksSaveTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?'
                     . http_build_query(['links' => $links]),
-                'httpMethod' => Request::HTTP_METHOD_DELETE,
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME_DELETE,
