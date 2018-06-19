@@ -16,4 +16,38 @@
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
+
+    <!--Navigate to create product page from product grid page-->
+    <actionGroup name="goToCreateProductPage">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
+        <waitForElementVisible selector="{{AdminProductGridActionSection.addTypeProduct(product.type_id)}}" stepKey="waitForAddProductDropdown" time="30"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct(product.type_id)}}" stepKey="clickAddProductType"/>
+        <waitForPageLoad stepKey="waitForCreateProductPageLoad"/>
+        <seeInCurrentUrl url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, product.type_id)}}" stepKey="seeNewProductUrl"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeNewProductTitle"/>
+    </actionGroup>
+
+    <!--Delete a product by filtering grid and using delete action-->
+    <actionGroup name="deleteProductUsingProductGrid">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <!--TODO use other action group for filtering grid when MQE-539 is implemented -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadInitial"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{product.sku}}"  stepKey="seeProductSkuInGrid"/>
+        <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
+        <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+    </actionGroup>
 </actionGroups>
