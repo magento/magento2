@@ -52,7 +52,8 @@ class CustomerGroupDimensionProvider implements DimensionProviderInterface
     private function getCustomerGroups(): array
     {
         if ($this->customerGroupsDataIterator === null) {
-            $this->customerGroupsDataIterator = $this->collectionFactory->create()->getAllIds();
+            $customerGroups = $this->collectionFactory->create()->getAllIds();
+            $this->customerGroupsDataIterator = is_array($customerGroups) ? $customerGroups : [];
         }
 
         return $this->customerGroupsDataIterator;

@@ -61,9 +61,10 @@ class WebsiteDimensionProvider implements DimensionProviderInterface
     private function getWebsites(): array
     {
         if ($this->websitesDataIterator === null) {
-            $this->websitesDataIterator = $this->collectionFactory->create()
+            $websites = $this->collectionFactory->create()
                 ->addFieldToFilter('code', ['neq' => Store::ADMIN_CODE])
                 ->getAllIds();
+            $this->websitesDataIterator = is_array($websites) ? $websites : [];
         }
 
         return $this->websitesDataIterator;
