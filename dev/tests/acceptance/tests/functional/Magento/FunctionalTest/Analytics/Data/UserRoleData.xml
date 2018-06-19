@@ -168,20 +168,4 @@
             <item>Magento_Backend::global_search</item>
         </array>
     </entity>
-    <entity name="adminCatalogProductRole" type="user_role">
-        <data key="rolename" unique="suffix">restrictedRole</data>
-        <data key="current_password">123123q</data>
-        <data key="gws_is_all">0</data>
-        <array key="gws_websites">
-        <item>1</item>
-        </array>
-        <array key="resource">
-            <item>Magento_Catalog::catalog</item>
-            <item>Magento_Catalog::catalog_inventory</item>
-            <item>Magento_Catalog::products</item>
-            <item>Magento_PricePermissions::read_product_price</item>
-            <item>Magento_PricePermissions::edit_product_price</item>
-            <item>Magento_PricePermissions::edit_product_status</item>
-        </array>
-    </entity>
 </entities>
