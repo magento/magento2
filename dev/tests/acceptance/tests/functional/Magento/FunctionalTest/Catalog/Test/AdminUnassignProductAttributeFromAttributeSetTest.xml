@@ -67,7 +67,7 @@
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
         <waitForPageLoad stepKey="wait2"/>
         <!-- Assert attribute not present in product creation -->
-        <dontSeeElement selector="{{AdminProductFormSection.attributeLabel($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="seeLabel"/>
+        <dontSeeElement selector="{{AdminProductFormSection.attributeLabelByText($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="seeLabel"/>
         <!-- Assert removed attribute not presence in storefront product additional information -->
         <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage2"/>
         <waitForPageLoad stepKey="wait3"/>

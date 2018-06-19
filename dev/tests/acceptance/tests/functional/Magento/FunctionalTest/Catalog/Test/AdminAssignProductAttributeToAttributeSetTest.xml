@@ -52,6 +52,6 @@
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <!-- Assert attribute can be used in product creation -->
-        <seeElement selector="{{AdminProductFormSection.attributeLabel($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="seeLabel"/>
+        <seeElement selector="{{AdminProductFormSection.attributeLabelByText($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="seeLabel"/>
     </test>
 </tests>
