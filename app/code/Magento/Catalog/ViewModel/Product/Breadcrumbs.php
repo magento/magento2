@@ -9,6 +9,7 @@ use Magento\Catalog\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
@@ -33,22 +34,29 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
      * @var Json
      */
     private $json;
+    /**
+     * @var Escaper
+     */
+    private $escaper;
 
     /**
      * @param Data $catalogData
      * @param ScopeConfigInterface $scopeConfig
      * @param Json $json
+     * @param Escaper $escaper
      */
     public function __construct(
         Data $catalogData,
         ScopeConfigInterface $scopeConfig,
-        Json $json = null
+        Json $json = null,
+        Escaper $escaper = null
     ) {
         parent::__construct();
 
         $this->catalogData = $catalogData;
         $this->scopeConfig = $scopeConfig;
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
     }
 
     /**
@@ -98,9 +106,9 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     {
         return $this->json->serialize([
             'breadcrumbs' => [
-                'categoryUrlSuffix' => $this->getCategoryUrlSuffix(),
+                'categoryUrlSuffix' => $this->escaper->escapeHtml($this->getCategoryUrlSuffix()),
                 'userCategoryPathInUrl' => (int)$this->isCategoryUsedInProductUrl(),
-                'product' => $this->getProductName()
+                'product' => $this->escaper->escapeHtml($this->getProductName())
             ]
         ]);
     }
