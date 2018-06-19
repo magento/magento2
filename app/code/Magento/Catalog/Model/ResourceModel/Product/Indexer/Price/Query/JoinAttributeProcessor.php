@@ -39,14 +39,12 @@ class JoinAttributeProcessor
     /**
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResourceConnection $resource,
         $connectionName = 'indexer'
     ) {
