@@ -59,11 +59,6 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     private $isSourceItemManagementAllowedForSku;
 
     /**
-     * @var StockItemInterface[]
-     */
-    protected $stockItemConfigurations = [];
-
-    /**
      * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory
      * @param StockItemRepositoryInterface $legacyStockItemRepository
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
@@ -95,23 +90,19 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
      */
     public function execute(string $sku, int $stockId)
     {
-        if (empty($this->stockItemConfigurations[$sku . "_" . $stockId])) {
-            if ($this->defaultStockProvider->getId() !== $stockId
-                && $this->isSourceItemManagementAllowedForSku->execute($sku) === true
-                && false === $this->isProductAssignedToStock->execute($sku, $stockId)) {
-                throw new NoSuchEntityException(
-                    __('The requested sku is not assigned to given stock.')
-                );
-            }
-
-            $this->stockItemConfigurations[$sku . "_" . $stockId] = $this->stockItemConfigurationFactory->create(
-                [
-                    'stockItem' => $this->getLegacyStockItem($sku),
-                ]
+        if ($this->defaultStockProvider->getId() !== $stockId
+            && $this->isSourceItemManagementAllowedForSku->execute($sku) === true
+            && false === $this->isProductAssignedToStock->execute($sku, $stockId)) {
+            throw new NoSuchEntityException(
+                __('The requested sku is not assigned to given stock.')
             );
         }
 
-        return $this->stockItemConfigurations[$sku . "_" . $stockId];
+        return $this->stockItemConfigurationFactory->create(
+            [
+                'stockItem' => $this->getLegacyStockItem($sku),
+            ]
+        );
     }
 
     /**
