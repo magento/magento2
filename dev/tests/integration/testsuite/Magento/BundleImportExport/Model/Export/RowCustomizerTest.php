@@ -20,6 +20,9 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -30,8 +33,10 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
+     *
+     * @return void
      */
-    public function testPrepareData()
+    public function testPrepareData(): void
     {
         $parsedAdditionalAttributes = 'text_attribute=!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/'
             . ',text_attribute2=,';
@@ -55,5 +60,57 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('sku=simple,', $result['bundle_values']);
         $this->assertEquals([], $this->model->addData([], $ids['simple']));
         $this->assertEquals($parsedAdditionalAttributes, $result['additional_attributes']);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDataFixture Magento/Bundle/_files/product.php
+     * @magentoDbIsolation disabled
+     *
+     * @return void
+     */
+    public function testPrepareDataWithDifferentStoreValues(): void
+    {
+        $storeCode = 'default';
+        $expectedNames = [
+            'name' => 'Bundle Product Items',
+            'name_' . $storeCode => 'Bundle Product Items_' . $storeCode,
+        ];
+        $parsedAdditionalAttributes = 'text_attribute=!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/'
+            . ',text_attribute2=,';
+        $allAdditionalAttributes = $parsedAdditionalAttributes . ',weight_type=0,price_type=1';
+        $collection = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
+        $store->load($storeCode, 'code');
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get('bundle-product', 1, $store->getId());
+
+        $extension = $product->getExtensionAttributes();
+        $options = $extension->getBundleProductOptions();
+
+        foreach ($options as $productOption) {
+            $productOption->setTitle($productOption->getTitle() . '_' . $store->getCode());
+        }
+        $extension->setBundleProductOptions($options);
+        $product->setExtensionAttributes($extension);
+        $productRepository->save($product);
+        $this->model->prepareData($collection, [$product->getId()]);
+        $result = $this->model->addData(['additional_attributes' => $allAdditionalAttributes], $product->getId());
+        $bundleValues = array_map(
+            function ($input) {
+                $data = explode('=', $input);
+
+                return [$data[0] => $data[1]];
+            },
+            explode(',', $result['bundle_values'])
+        );
+        $actualNames = [
+            'name' => array_column($bundleValues, 'name')[0],
+            'name' . '_' . $store->getCode() => array_column($bundleValues, 'name' . '_' . $store->getCode())[0],
+        ];
+
+        self::assertSame($expectedNames, $actualNames);
     }
 }
