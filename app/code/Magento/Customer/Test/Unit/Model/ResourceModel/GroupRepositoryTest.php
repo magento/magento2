@@ -173,7 +173,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $groupId = 0;
 
         $taxClass = $this->getMockForAbstractClass(\Magento\Tax\Api\Data\TaxClassInterface::class, [], '', false);
-        $groupExtensionAttributes = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\GroupExtensionInterface::class);
+        $extensionAttributes = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\GroupExtensionInterface::class);
 
         $this->group->expects($this->atLeastOnce())
             ->method('getCode')
@@ -186,7 +186,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn(17);
         $this->group->expects($this->atLeastOnce())
             ->method('getExtensionAttributes')
-            ->willReturn($groupExtensionAttributes);
+            ->willReturn($extensionAttributes);
 
         $this->groupModel->expects($this->atLeastOnce())
             ->method('getId')
@@ -220,7 +220,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->factoryCreatedGroup->expects($this->once())
             ->method('setExtensionAttributes')
-            ->with($groupExtensionAttributes)
+            ->with($extensionAttributes)
             ->willReturnSelf();
         $this->factoryCreatedGroup->expects($this->atLeastOnce())
             ->method('getCode')
