@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Logger\Handler;
 
-use Magento\Framework\Logger\Monolog;
 use Monolog\Handler\SyslogHandler;
 use Monolog\Logger;
 
@@ -24,11 +23,6 @@ class Syslog extends SyslogHandler
      */
     public function __construct(string $ident)
     {
-        $monolog = new Monolog('default');
-        $monolog->pushHandler(
-            new SyslogHandler('My log')
-        );
-
         parent::__construct($ident, self::FACILITY, self::LEVEL);
     }
 }
