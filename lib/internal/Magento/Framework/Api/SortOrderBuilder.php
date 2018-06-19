@@ -10,6 +10,9 @@ namespace Magento\Framework\Api;
 /**
  * Builder for sort order data object.
  * @method SortOrder create()
+ *
+ * @api
+ * @since 100.0.2
  */
 class SortOrderBuilder extends AbstractSimpleObjectBuilder
 {
