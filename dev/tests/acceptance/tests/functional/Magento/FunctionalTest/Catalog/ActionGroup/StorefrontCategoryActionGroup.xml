@@ -32,12 +32,4 @@
         <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
         <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
     </actionGroup>
-
-    <!-- Check simple product not on the category page -->
-    <actionGroup name="StorefrontCheckSimpleProductNotInCategory">
-        <arguments>
-            <argument name="product"/>
-        </arguments>
-        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="assertProductName"/>
-    </actionGroup>
 </actionGroups>
