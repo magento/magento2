@@ -8,11 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 
-use \Magento\Framework\Controller\Result\JsonFactory;
-use \Magento\Catalog\Controller\Adminhtml\Category\RefreshPath;
-use \Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Catalog\Controller\Adminhtml\Category\RefreshPath;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Test for class RefreshPath.
+ */
 class RefreshPathTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -108,5 +111,37 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
             ->willReturn($result);
 
         $this->assertEquals($result, $refreshPath->execute());
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteWithoutCategoryId()
+    {
+        $requestMock = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
+
+        $refreshPath = $this->getMockBuilder(RefreshPath::class)
+            ->setMethods(['getRequest', 'create'])
+            ->setConstructorArgs([
+                $this->contextMock,
+                $this->resultJsonFactoryMock,
+            ])->getMock();
+
+        $refreshPath->expects($this->any())->method('getRequest')->willReturn($requestMock);
+        $requestMock->expects($this->any())->method('getParam')->with('id')->willReturn(null);
+
+        $objectManagerMock = $this->getMockBuilder(ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->setObjectProperty($refreshPath, '_objectManager', $objectManagerMock);
+
+        $objectManagerMock->expects($this->never())
+            ->method('create')
+            ->with(\Magento\Catalog\Model\Category::class)
+            ->willReturnSelf();
+
+        $refreshPath->execute();
     }
 }
