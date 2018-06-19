@@ -85,7 +85,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 
         $role = $this->_initRole('role_id');
         if (!$role->getId() && $rid) {
-            $this->messageManager->addError(__('This role no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This role no longer exists.'));
             return $resultRedirect->setPath('adminhtml/*/');
         }
 
@@ -109,7 +109,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             foreach ($roleUsers as $nRuid) {
                 $this->_addUserToRole($nRuid, $role->getId());
             }
-            $this->messageManager->addSuccess(__('You saved the role.'));
+            $this->messageManager->addSuccessMessage(__('You saved the role.'));
         } catch (UserLockedException $e) {
             $this->_auth->logout();
             $this->getSecurityCookie()->setLogoutReasonCookie(
@@ -117,12 +117,12 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             );
             return $resultRedirect->setPath('*');
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
-            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+            $this->messageManager->addErrorMessage(__('You have entered an invalid password for current user.'));
             return $this->saveDataToSessionAndRedirect($role, $this->getRequest()->getPostValue(), $resultRedirect);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('An error occurred while saving this role.'));
+            $this->messageManager->addErrorMessage(__('An error occurred while saving this role.'));
         }
 
         return $resultRedirect->setPath('*/*/');

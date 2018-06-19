@@ -75,12 +75,12 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
         $passwordConfirmation = (string)$this->getRequest()->getPost('password_confirmation');
 
         if ($password !== $passwordConfirmation) {
-            $this->messageManager->addError(__("New Password and Confirm New Password values didn't match."));
+            $this->messageManager->addErrorMessage(__("New Password and Confirm New Password values didn't match."));
             $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
             return $resultRedirect;
         }
         if (iconv_strlen($password) <= 0) {
-            $this->messageManager->addError(__('Please enter a new password.'));
+            $this->messageManager->addErrorMessage(__('Please enter a new password.'));
             $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
             return $resultRedirect;
         }
@@ -91,16 +91,16 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
             $this->accountManagement->resetPassword($customerEmail, $resetPasswordToken, $password);
             $this->session->unsRpToken();
             $this->session->unsRpCustomerId();
-            $this->messageManager->addSuccess(__('You updated your password.'));
+            $this->messageManager->addSuccessMessage(__('You updated your password.'));
             $resultRedirect->setPath('*/*/login');
             return $resultRedirect;
         } catch (InputException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             foreach ($e->getErrors() as $error) {
-                $this->messageManager->addError($error->getMessage());
+                $this->messageManager->addErrorMessage($error->getMessage());
             }
         } catch (\Exception $exception) {
-            $this->messageManager->addError(__('Something went wrong while saving the new password.'));
+            $this->messageManager->addErrorMessage(__('Something went wrong while saving the new password.'));
         }
         $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
         return $resultRedirect;

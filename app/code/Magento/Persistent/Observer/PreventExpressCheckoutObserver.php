@@ -81,7 +81,7 @@ class PreventExpressCheckoutObserver implements ObserverInterface
             return;
         }
 
-        $this->messageManager->addNotice(__('To check out, please sign in using your email address.'));
+        $this->messageManager->addNoticeMessage(__('To check out, please sign in using your email address.'));
         $customerBeforeAuthUrl = $this->_url->getUrl('persistent/index/expressCheckout');
 
         $this->_expressRedirectHelper->redirectLogin($controllerAction, $customerBeforeAuthUrl);

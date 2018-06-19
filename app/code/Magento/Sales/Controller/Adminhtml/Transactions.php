@@ -82,7 +82,7 @@ abstract class Transactions extends \Magento\Backend\App\Action
         );
 
         if (!$txn->getId()) {
-            $this->messageManager->addError(__('Please correct the transaction ID and try again.'));
+            $this->messageManager->addErrorMessage(__('Please correct the transaction ID and try again.'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         }
