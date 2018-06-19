@@ -109,85 +109,45 @@ class OrderCustomerExtractor
             $order->getBillingAddress(),
             []
         );
-        $addresses = $order->getAddresses();
+
+        $processedAddressData = [];
         $customerAddresses = [];
-        // Filter duplicates in order addresses
-        foreach ($addresses as $address) {
-            $this->addAddress($customerAddresses, $address);
+        foreach ($order->getAddresses() as $orderAddress) {
+            $addressData = $this->objectCopyService
+                ->copyFieldsetToTarget('order_address', 'to_customer_address', $orderAddress, []);
+
+            $index = array_search($addressData, $processedAddressData);
+            if ($index === false) {
+                // create new customer address only if it is unique
+                $customerAddress = $this->addressFactory->create(['data' => $addressData]);
+                $customerAddress->setIsDefaultBilling(false);
+                $customerAddress->setIsDefaultBilling(false);
+                if (is_string($orderAddress->getRegion())) {
+                    /** @var RegionInterface $region */
+                    $region = $this->regionFactory->create();
+                    $region->setRegion($orderAddress->getRegion());
+                    $region->setRegionCode($orderAddress->getRegionCode());
+                    $region->setRegionId($orderAddress->getRegionId());
+                    $customerAddress->setRegion($region);
+                }
+
+                $processedAddressData[] = $addressData;
+                $customerAddresses[] = $customerAddress;
+                $index = count($processedAddressData) - 1;
+            }
+
+            $customerAddress = $customerAddresses[$index];
+            // make sure that address type flags from equal addresses are stored in one resulted address
+            if ($orderAddress->getAddressType() == OrderAddress::TYPE_BILLING) {
+                $customerAddress->setIsDefaultBilling(true);
+            }
+            if ($orderAddress->getAddressType() == OrderAddress::TYPE_SHIPPING) {
+                $customerAddress->setIsDefaultShipping(true);
+            }
         }
-        // Add filtered addresses to customer data
-        foreach ($customerAddresses as $addressItem) {
-            $customerData['addresses'][] = $addressItem['address'];
-        }
+
+        $customerData['addresses'] = $customerAddresses;
 
         return $this->customerFactory->create(['data' => $customerData]);
-    }
-
-    /**
-     * Add address to list filtering duplicates.
-     *
-     * @param array $customerAddresses
-     * @param OrderAddress $address
-     * @return void
-     */
-    private function addAddress(
-        array &$customerAddresses,
-        OrderAddress $address
-    ) {
-        $addressData = $this->objectCopyService->copyFieldsetToTarget(
-            'order_address',
-            'to_customer_address',
-            $address,
-            []
-        );
-
-        $foundAddress = null;
-        foreach ($customerAddresses as $customerAddressItem) {
-            if ($this->isAddressesAreEqual($customerAddressItem['addressData'], $addressData)) {
-                $foundAddress = $customerAddressItem['address'];
-                break;
-            }
-        }
-
-        if (empty($foundAddress)) {
-            /** @var AddressInterface $customerAddress */
-            $customerAddress = $this->addressFactory->create(['data' => $addressData]);
-
-            if (is_string($address->getRegion())) {
-                /** @var RegionInterface $region */
-                $region = $this->regionFactory->create();
-                $region->setRegion($address->getRegion());
-                $region->setRegionCode($address->getRegionCode());
-                $region->setRegionId($address->getRegionId());
-                $customerAddress->setRegion($region);
-            }
-
-            $customerAddresses[] = [
-                'addressData' => $addressData,
-                'address' => $customerAddress,
-            ];
-            $foundAddress = $customerAddress;
-        }
-
-        switch ($address->getAddressType()) {
-            case OrderAddress::TYPE_BILLING:
-                $foundAddress->setIsDefaultBilling(true);
-                break;
-            case OrderAddress::TYPE_SHIPPING:
-                $foundAddress->setIsDefaultShipping(true);
-                break;
-        }
-    }
-
-    /**
-     * Checks if addresses are equal.
-     *
-     * @param array $addressData1
-     * @param array $addressData2
-     * @return bool
-     */
-    private function isAddressesAreEqual(array $addressData1, array $addressData2)
-    {
-        return $addressData1 == $addressData2;
     }
 }
