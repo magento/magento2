@@ -252,7 +252,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
         $file = $this->_getCurrentFile();
 
         if (is_dir($file)) {
-            $dirFiles = scandir($file);
+            $dirFiles = scandir($file, SCANDIR_SORT_NONE);
 
             if (false === $dirFiles) {
                 throw new \Magento\Framework\Exception\LocalizedException(
