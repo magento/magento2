@@ -70,7 +70,7 @@ define([
         am = Number(Math.round(Math.abs(amount - i) + 'e+' + precision) + ('e-' + precision));
         r = (j ? i.substr(0, j) + groupSymbol : '') +
             i.substr(j).replace(re, '$1' + groupSymbol) +
-            (precision ? decimalSymbol + am.toFixed(2).replace(/-/, 0).slice(2) : '');
+            (precision ? decimalSymbol + am.toFixed(precision).replace(/-/, 0).slice(2) : '');
 
         return pattern.replace('%s', r).replace(/^\s\s*/, '').replace(/\s\s*$/, '');
     }

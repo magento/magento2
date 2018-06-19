@@ -51,7 +51,7 @@ define([
             this.autoComplete = $(this.options.destinationSelector);
             this.searchForm = $(this.options.formSelector);
             this.submitBtn = this.searchForm.find(this.options.submitBtn)[0];
-            this.searchLabel = $(this.options.searchLabel);
+            this.searchLabel = this.searchForm.find(this.options.searchLabel);
             this.isExpandable = this.options.isExpandable;
 
             _.bindAll(this, '_onKeyDown', '_onPropertyChange', '_onSubmit');

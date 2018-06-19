@@ -18,7 +18,7 @@ class Dashboard extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'dashboard/index.phtml';
+    protected $_template = 'Magento_Backend::dashboard/index.phtml';
 
     /**
      * @return void
