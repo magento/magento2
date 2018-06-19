@@ -519,7 +519,20 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         //Now because ID is set we can get some
         $category->setId(42);
-        
+
         $this->assertNotEmpty($category->getIdentities());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetIdentitiesWithAffectedCategories()
+    {
+        $category = $this->getCategoryModel();
+        $expectedIdentities = ['cat_c_1', 'cat_c_2', 'cat_c_3', 'cat_c_p_1'];
+        $category->setId(1);
+        $category->setAffectedCategoryIds([1,2,3]);
+
+        $this->assertEquals($expectedIdentities, $category->getIdentities());
     }
 }

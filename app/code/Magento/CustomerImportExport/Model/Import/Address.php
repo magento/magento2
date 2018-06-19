@@ -10,6 +10,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Store\Model\Store;
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Address\Storage as AddressStorage;
 
 /**
  * Customer address import
@@ -84,20 +85,6 @@ class Address extends AbstractCustomer
      * @var string[]
      */
     protected $_permanentAttributes = [self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID];
-
-    /**
-     * Existing addresses
-     *
-     * Example Array: [customer ID] => array(
-     *     address ID 1,
-     *     address ID 2,
-     *     ...
-     *     address ID N
-     * )
-     *
-     * @var array
-     */
-    protected $_addresses = [];
 
     /**
      * Attributes with index (not label) value
@@ -181,9 +168,7 @@ class Address extends AbstractCustomer
     protected $_attributeCollection;
 
     /**
-     * Collection of existent addresses
-     *
-     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
+     * @deprecated
      */
     protected $_addressCollection;
 
@@ -241,6 +226,11 @@ class Address extends AbstractCustomer
     protected $postcodeValidator;
 
     /**
+     * @deprecated
+     */
+    protected $_addresses = [];
+
+    /**
      * @var Sources\CountryWithWebsites
      */
     private $countryWithWebsites;
@@ -251,6 +241,11 @@ class Address extends AbstractCustomer
      * @var array[][] With path as <attributeCode> => <websiteID> => options[].
      */
     private $optionsByWebsite = [];
+
+    /**
+     * @var AddressStorage
+     */
+    private $addressStorage;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -272,6 +267,7 @@ class Address extends AbstractCustomer
      * @param \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator
      * @param array $data
      * @param Sources\CountryWithWebsites|null $countryWithWebsites
+     * @param AddressStorage|null $addressStorage
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -295,7 +291,8 @@ class Address extends AbstractCustomer
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator,
         array $data = [],
-        Sources\CountryWithWebsites $countryWithWebsites = null
+        Sources\CountryWithWebsites $countryWithWebsites = null,
+        AddressStorage $addressStorage = null
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
@@ -347,9 +344,11 @@ class Address extends AbstractCustomer
             self::ERROR_DUPLICATE_PK,
             __('We found another row with this email, website and address ID combination.')
         );
+        $this->addressStorage = $addressStorage
+            ?: ObjectManager::getInstance()->get(AddressStorage::class);
 
         $this->_initAttributes();
-        $this->_initAddresses()->_initCountryRegions();
+        $this->_initCountryRegions();
     }
 
     /**
@@ -408,6 +407,27 @@ class Address extends AbstractCustomer
     }
 
     /**
+     * @return $this
+     *
+     * @deprecated
+     */
+    protected function _initAddresses()
+    {
+        /** @var $address \Magento\Customer\Model\Address */
+        foreach ($this->_addressCollection as $address) {
+            $customerId = $address->getParentId();
+            if (!isset($this->_addresses[$customerId])) {
+                $this->_addresses[$customerId] = [];
+            }
+            $addressId = $address->getId();
+            if (!in_array($addressId, $this->_addresses[$customerId])) {
+                $this->_addresses[$customerId][] = $addressId;
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Customer entity getter
      *
      * @return \Magento\Customer\Model\Customer
@@ -437,27 +457,6 @@ class Address extends AbstractCustomer
     }
 
     /**
-     * Initialize existent addresses data
-     *
-     * @return $this
-     */
-    protected function _initAddresses()
-    {
-        /** @var $address \Magento\Customer\Model\Address */
-        foreach ($this->_addressCollection as $address) {
-            $customerId = $address->getParentId();
-            if (!isset($this->_addresses[$customerId])) {
-                $this->_addresses[$customerId] = [];
-            }
-            $addressId = $address->getId();
-            if (!in_array($addressId, $this->_addresses[$customerId])) {
-                $this->_addresses[$customerId][] = $addressId;
-            }
-        }
-        return $this;
-    }
-
-    /**
      * Initialize country regions hash for clever recognition
      *
      * @return $this
@@ -477,6 +476,57 @@ class Address extends AbstractCustomer
     }
 
     /**
+     * Pre-loading customers for existing customers checks in order
+     * to perform mass validation/import efficiently.
+     * Also loading existing addresses for requested customers.
+     *
+     * @param array $rows Each row must contain data from columns email
+     * and website code.
+     *
+     * @return void
+     */
+    public function prepareCustomerData($rows)
+    {
+        $customersPresent = [];
+        foreach ($rows as $rowData) {
+            $email = isset($rowData[static::COLUMN_EMAIL])
+                ? $rowData[static::COLUMN_EMAIL] : null;
+            $websiteId = isset($rowData[static::COLUMN_WEBSITE])
+                ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
+            if ($email && $websiteId !== false) {
+                $customersPresent[] = [
+                    'email' => $email,
+                    'website_id' => $websiteId
+                ];
+            }
+        }
+        $this->getCustomerStorage()->prepareCustomers($customersPresent);
+
+        $ids = [];
+        foreach ($customersPresent as $customerData) {
+            $id = $this->getCustomerStorage()->getCustomerId(
+                $customerData['email'],
+                $customerData['website_id']
+            );
+            if ($id) {
+                $ids[] = $id;
+            }
+        }
+
+        $this->addressStorage->prepareAddresses($ids);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        $this->prepareCustomerData($this->getSource());
+
+        return parent::validateData();
+    }
+
+    /**
      * Import data rows
      *
      * @abstract
@@ -485,6 +535,16 @@ class Address extends AbstractCustomer
      */
     protected function _importData()
     {
+        //Preparing data for mass validation/import.
+        $rows = [];
+        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            $rows = array_merge($rows, $bunch);
+        }
+        $this->prepareCustomerData($rows);
+        unset($bunch, $rows);
+        $this->_dataSourceModel->getIterator()->rewind();
+
+        //Importing
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $newRows = [];
             $updateRows = [];
@@ -569,12 +629,11 @@ class Address extends AbstractCustomer
         $defaults = [];
         $newAddress = true;
         // get address id
-        if (isset(
-            $this->_addresses[$customerId]
-        ) && in_array(
-            $rowData[self::COLUMN_ADDRESS_ID],
-            $this->_addresses[$customerId]
-        )
+        if ($rowData[self::COLUMN_ADDRESS_ID]
+            && $this->addressStorage->doesExist(
+                $rowData[self::COLUMN_ADDRESS_ID],
+                (string)$customerId
+            )
         ) {
             $newAddress = false;
             $addressId = $rowData[self::COLUMN_ADDRESS_ID];
@@ -824,12 +883,11 @@ class Address extends AbstractCustomer
                                 $rowNumber,
                                 $multiSeparator
                             );
-                        } elseif ($attributeParams['is_required'] && (!isset(
-                            $this->_addresses[$customerId]
-                        ) || !in_array(
-                            $addressId,
-                            $this->_addresses[$customerId]
-                        ))
+                        } elseif ($attributeParams['is_required']
+                            && !$this->addressStorage->doesExist(
+                                (string)$addressId,
+                                (string)$customerId
+                            )
                         ) {
                             $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                         }
@@ -884,7 +942,10 @@ class Address extends AbstractCustomer
             } else {
                 if (!strlen($addressId)) {
                     $this->addRowError(self::ERROR_ADDRESS_ID_IS_EMPTY, $rowNumber);
-                } elseif (!in_array($addressId, $this->_addresses[$customerId])) {
+                } elseif (!$this->addressStorage->doesExist(
+                    $addressId,
+                    (string)$customerId
+                )) {
                     $this->addRowError(self::ERROR_ADDRESS_NOT_FOUND, $rowNumber);
                 }
             }
@@ -900,7 +961,10 @@ class Address extends AbstractCustomer
      */
     protected function _checkRowDuplicate($customerId, $addressId)
     {
-        if (isset($this->_addresses[$customerId]) && in_array($addressId, $this->_addresses[$customerId])) {
+        if ($this->addressStorage->doesExist(
+            (string)$addressId,
+            (string)$customerId
+        )) {
             if (!isset($this->_importedRowPks[$customerId][$addressId])) {
                 $this->_importedRowPks[$customerId][$addressId] = true;
                 return false;

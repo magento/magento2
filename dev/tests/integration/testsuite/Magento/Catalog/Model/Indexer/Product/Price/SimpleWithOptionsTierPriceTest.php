@@ -3,13 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Indexer\Product\Price;
+
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Api\ScopedProductTierPriceManagementInterface;
+use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Pricing\Price\TierPrice;
+use Magento\Customer\Model\Group;
 
 class SimpleWithOptionsTierPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
 
@@ -19,55 +26,52 @@ class SimpleWithOptionsTierPriceTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var CollectionFactory
      */
     private $productCollectionFactory;
 
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        $this->productCollectionFactory = $this->objectManager->create(
-            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
-        );
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->productCollectionFactory = $this->objectManager->create(CollectionFactory::class);
     }
 
     /**
-     * @magentoDbIsolation enabled
-     * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/category_product.php
      */
     public function testTierPrice()
     {
-        $tierPriceValue = 20.00;
+        $tierPriceValue = 9.00;
 
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productRepository->get('simple');
-
-        /** @var \Magento\Catalog\Api\ScopedProductTierPriceManagementInterface $tierPriceManagement */
-        $tierPriceManagement = $this->objectManager->create(
-            \Magento\Catalog\Api\ScopedProductTierPriceManagementInterface::class
-        );
-
-        /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
-        $tierPrice = $this->objectManager->create(\Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class)
+        $tierPrice = $this->objectManager->create(ProductTierPriceInterfaceFactory::class)
             ->create();
-
-        $tierPrice->setCustomerGroupId(\Magento\Customer\Model\Group::CUST_GROUP_ALL);
+        $tierPrice->setCustomerGroupId(Group::CUST_GROUP_ALL);
         $tierPrice->setQty(1.00);
         $tierPrice->setValue($tierPriceValue);
+        $tierPriceManagement = $this->objectManager->create(ScopedProductTierPriceManagementInterface::class);
+        $tierPriceManagement->add('simple333', $tierPrice);
 
-        $tierPriceManagement->add($product->getSku(), $tierPrice);
-
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $this->productCollectionFactory->create();
-        $productCollection->addIdFilter([$product->getId()]);
+        $productCollection->addIdFilter(333);
         $productCollection->addPriceData();
         $productCollection->load();
-        $indexPriceInfo = $productCollection->getFirstItem();
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $productCollection->getFirstItem();
+        $tierPrice = $product->getPriceInfo()
+            ->getPrice(TierPrice::PRICE_CODE)
+            ->getValue();
 
-        $tierPriceModel = $indexPriceInfo->getPriceInfo()
-            ->getPrice(\Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE);
+        $this->assertEquals($tierPriceValue, $tierPrice);
 
-        $this->assertEquals($tierPriceValue, $tierPriceModel->getValue());
+        $tierPrice = $product->getTierPrice(1);
+        $this->assertEquals($tierPriceValue, $tierPrice);
+
+        $tierPrices = $product->getData('tier_price');
+        $this->assertEquals($tierPriceValue, $tierPrices[0]['price']);
+
+        $minPrice = $product->getData('min_price');
+        $this->assertEquals($tierPriceValue, $minPrice);
     }
 }

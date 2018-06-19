@@ -59,7 +59,7 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
-        <amOnPage url="{{OrdersPage.url}}" stepKey="onOrdersPage"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onAdminOrdersPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
         <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
         <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearch"/>

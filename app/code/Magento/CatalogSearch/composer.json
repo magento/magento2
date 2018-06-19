@@ -12,11 +12,12 @@
         "magento/module-eav": "101.0.*",
         "magento/module-backend": "100.2.*",
         "magento/module-theme": "100.2.*",
+        "magento/module-ui": "101.0.*",
         "magento/module-catalog-inventory": "100.2.*",
         "magento/framework": "101.0.*"
     },
     "type": "magento2-module",
-    "version": "100.2.2",
+    "version": "100.2.3",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

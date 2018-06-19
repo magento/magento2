@@ -60,7 +60,12 @@ class HeadTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testProcess()
+    /**
+     * @param array $assets
+     *
+     * @dataProvider testProcessAssetDataProvider
+     */
+    public function testProcess($assets)
     {
         $generatorContextMock = $this->createMock(Context::class);
         $this->title->expects($this->any())->method('set')->with()->will($this->returnSelf());
@@ -75,39 +80,19 @@ class HeadTest extends \PHPUnit\Framework\TestCase
             ->with('customcss/render/css')
             ->willReturn('http://magento.dev/customcss/render/css');
 
-        $assets = [
-            'remoteCss' => [
-                'src' => 'file-url-css',
-                'src_type' => 'url',
-                'content_type' => 'css',
-                'media' => 'all',
-            ],
-            'remoteLink' => [
-                'src' => 'file-url-link',
-                'src_type' => 'url',
-                'media' => 'all',
-            ],
-            'controllerCss' => [
-                'src' => 'customcss/render/css',
-                'src_type' => 'controller',
-                'content_type' => 'css',
-                'media' => 'all',
-            ],
-            'name' => [
-                'src' => 'file-path',
-                'ie_condition' => 'lt IE 7',
-                'content_type' => 'css',
-                'media' => 'print',
-            ],
-        ];
-
         $this->pageConfigMock->expects($this->at(0))
             ->method('addRemotePageAsset')
             ->with('file-url-css', 'css', ['attributes' => ['media' => 'all']]);
         $this->pageConfigMock->expects($this->at(1))
             ->method('addRemotePageAsset')
-            ->with('file-url-link', Head::VIRTUAL_CONTENT_TYPE_LINK, ['attributes' => ['media' => 'all']]);
+            ->with('file-url-css-last', 'css', ['attributes' => ['media' => 'all' ] , 'order' => 30]);
         $this->pageConfigMock->expects($this->at(2))
+            ->method('addRemotePageAsset')
+            ->with('file-url-css-first', 'css', ['attributes' => ['media' => 'all'] , 'order' => 10]);
+        $this->pageConfigMock->expects($this->at(3))
+            ->method('addRemotePageAsset')
+            ->with('file-url-link', Head::VIRTUAL_CONTENT_TYPE_LINK, ['attributes' => ['media' => 'all']]);
+        $this->pageConfigMock->expects($this->at(4))
             ->method('addRemotePageAsset')
             ->with('http://magento.dev/customcss/render/css', 'css', ['attributes' => ['media' => 'all']]);
         $this->pageConfigMock->expects($this->once())
@@ -153,5 +138,52 @@ class HeadTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->headGenerator->process($readerContextMock, $generatorContextMock);
         $this->assertEquals($this->headGenerator, $result);
+    }
+
+    public function testProcessAssetDataProvider()
+    {
+        return [
+            [
+                'assets' => [
+                    'remoteCss' => [
+                    'src' => 'file-url-css',
+                    'src_type' => 'url',
+                    'content_type' => 'css',
+                    'media' => 'all',
+                    ],
+                    'remoteCssOrderedLast' => [
+                        'src' => 'file-url-css-last',
+                        'src_type' => 'url',
+                        'content_type' => 'css',
+                        'media' => 'all',
+                        'order' => 30,
+                    ],
+                    'remoteCssOrderedFirst' => [
+                        'src' => 'file-url-css-first',
+                        'src_type' => 'url',
+                        'content_type' => 'css',
+                        'media' => 'all',
+                        'order' => 10,
+                    ],
+                    'remoteLink' => [
+                        'src' => 'file-url-link',
+                        'src_type' => 'url',
+                        'media' => 'all',
+                    ],
+                    'controllerCss' => [
+                        'src' => 'customcss/render/css',
+                        'src_type' => 'controller',
+                        'content_type' => 'css',
+                        'media' => 'all',
+                    ],
+                    'name' => [
+                        'src' => 'file-path',
+                        'ie_condition' => 'lt IE 7',
+                        'content_type' => 'css',
+                        'media' => 'print',
+                    ],
+                ],
+            ],
+        ];
     }
 }

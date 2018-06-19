@@ -18,6 +18,7 @@
         <click stepKey="clickSearchButton" selector="{{AdminStoresGridSection.searchButton}}"/>
         <see stepKey="verifyThatCorrectStoreGroupFound" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="{{storeGroupName}}"/>
         <click stepKey="clickEditExistingStoreRow" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
         <click stepKey="clickDeleteStoreGroupButtonOnEditStorePage" selector="{{AdminStoresMainActionsSection.deleteButton}}"/>
         <selectOption stepKey="setCreateDbBackupToNo" selector="{{AdminStoresDeleteStoreGroupSection.createDbBackup}}" userInput="No"/>
         <click stepKey="clickDeleteStoreGroupButtonOnDeleteStorePage" selector="{{AdminStoresDeleteStoreGroupSection.deleteStoreGroupButton}}"/>

@@ -86,6 +86,7 @@ class SecureTokenTest extends TestCase
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payflowpro.php
      * @magentoDataFixture Magento/Paypal/Fixtures/default_payment_configuration.php
+     * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
     public function testRequestToken()
@@ -100,6 +101,7 @@ class SecureTokenTest extends TestCase
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payflowpro.php
      * @magentoDataFixture Magento/Paypal/Fixtures/store_payment_configuration.php
+     * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
     public function testRequestTokenWithStoreConfiguration()
@@ -115,6 +117,7 @@ class SecureTokenTest extends TestCase
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payflowpro.php
      * @magentoDataFixture Magento/Paypal/Fixtures/website_payment_configuration.php
+     * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
     public function testRequestTokenWithWebsiteConfiguration()

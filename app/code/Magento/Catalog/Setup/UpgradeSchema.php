@@ -138,6 +138,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->addGeneralIndexOnGalleryValueTable($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.2.5', '<')) {
+            $this->enableSegmentation($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -765,6 +769,34 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     [$linkField, 'value_id', 'store_id']
                 );
             }
+        }
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function enableSegmentation(SchemaSetupInterface $setup)
+    {
+        $storeSelect = $setup->getConnection()->select()->from($setup->getTable('store'))->where('store_id > 0');
+        foreach ($setup->getConnection()->fetchAll($storeSelect) as $store) {
+            $indexTable = $setup->getTable('catalog_category_product_index') .
+                '_' .
+                \Magento\Store\Model\Store::ENTITY .
+                $store['store_id'];
+
+            $setup->getConnection()->createTable(
+                $setup->getConnection()->createTableByDdl(
+                    $setup->getTable('catalog_category_product_index'),
+                    $indexTable
+                )
+            );
+            $setup->getConnection()->createTable(
+                $setup->getConnection()->createTableByDdl(
+                    $setup->getTable('catalog_category_product_index'),
+                    $indexTable . '_replica'
+                )
+            );
         }
     }
 }

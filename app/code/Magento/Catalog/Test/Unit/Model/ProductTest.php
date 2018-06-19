@@ -206,6 +206,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $cacheInterfaceMock;
 
     /**
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eavConfig;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -364,6 +369,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->mediaConfig = $this->createMock(\Magento\Catalog\Model\Product\Media\Config::class);
+        $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $this->extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem'])
@@ -401,7 +407,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 'catalogProductMediaConfig' => $this->mediaConfig,
                 '_filesystem' => $this->filesystemMock,
                 '_collectionFactory' => $this->collectionFactoryMock,
-                'data' => ['id' => 1]
+                'data' => ['id' => 1],
+                'eavConfig' => $this->eavConfig
             ]
         );
     }
@@ -1269,18 +1276,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $priceCode = 'price';
         $colorAttributeCode = 'color';
-        $interfaceAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $interfaceAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($priceCode);
-        $colorAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $colorAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($colorAttributeCode);
-        $customAttributesMetadata = [$interfaceAttribute, $colorAttribute];
+        $customAttributesMetadata = [$priceCode => 'attribute1', $colorAttributeCode => 'attribute2'];
 
-        $this->metadataServiceMock->expects($this->once())
-            ->method('getCustomAttributesMetadata')
+        $this->metadataServiceMock->expects($this->never())->method('getCustomAttributesMetadata');
+        $this->eavConfig->expects($this->once())
+            ->method('getEntityAttributes')
             ->willReturn($customAttributesMetadata);
         $this->model->setData($priceCode, 10);
 
@@ -1288,20 +1288,20 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $this->model->getCustomAttributes());
 
         //Set the color attribute;
-        $this->model->setData($colorAttributeCode, "red");
+        $this->model->setData($colorAttributeCode, 'red');
         $attributeValue = new \Magento\Framework\Api\AttributeValue();
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
         $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
-        $this->assertEquals("red", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+        $this->assertEquals('red', $this->model->getCustomAttribute($colorAttributeCode)->getValue());
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->model->setCustomAttribute($colorAttributeCode, "blue");
+        $this->model->setCustomAttribute($colorAttributeCode, 'blue');
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
         $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
-        $this->assertEquals("blue", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+        $this->assertEquals('blue', $this->model->getCustomAttribute($colorAttributeCode)->getValue());
     }
 
     /**

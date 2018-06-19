@@ -395,6 +395,9 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      */
     protected function _updateFreeMethodQuote($request)
     {
+        if (!$request->getFreeShipping()) {
+            return;
+        }
         if ($request->getFreeMethodWeight() == $request->getPackageWeight() || !$request->hasFreeMethodWeight()) {
             return;
         }
@@ -436,6 +439,12 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
                     }
                 }
             }
+        } else {
+            /**
+             * if we can apply free shipping for all order we should force price
+             * to $0.00 for shipping with out sending second request to carrier
+             */
+            $price = 0;
         }
 
         /**
