@@ -26,4 +26,12 @@
         <data key="value">test product attribute</data>
         <data key="attribute_code">test_product_attribute</data>
     </entity>
+    <entity name="ApiProductDescription" type="custom_attribute">
+        <data key="attribute_code">description</data>
+        <data key="value" unique="suffix">API Product Description</data>
+    </entity>
+    <entity name="ApiProductShortDescription" type="custom_attribute">
+        <data key="attribute_code">short_description</data>
+        <data key="value" unique="suffix">API Product Short Description</data>
+    </entity>
 </entities>

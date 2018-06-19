@@ -727,6 +727,9 @@ XMLRequest;
         if ($this->getConfigFlag('negotiated_active')) {
             $xmlParams .= "<RateInformation><NegotiatedRatesIndicator/></RateInformation>";
         }
+        if ($this->getConfigFlag('include_taxes')) {
+            $xmlParams .= "<TaxInformationIndicator/>";
+        }
 
         $xmlParams .= <<<XMLRequest
   </Shipment>
@@ -795,6 +798,8 @@ XMLRequest;
      * @param mixed $xmlResponse
      * @return Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     protected function _parseXmlResponse($xmlResponse)
     {
@@ -821,17 +826,45 @@ XMLRequest;
                 foreach ($arr as $shipElement) {
                     $code = (string)$shipElement->Service->Code;
                     if (in_array($code, $allowedMethods)) {
+                        //The location of tax information is in a different place depending on whether we are using negotiated rates or not
                         if ($negotiatedActive) {
-                            $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
+                            $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates/NetSummaryCharges/TotalChargesWithTaxes");
+                            $includeTaxesActive = $this->getConfigFlag(
+                                    'include_taxes'
+                                ) && !empty($includeTaxesArr);
+                            if ($includeTaxesActive) {
+                                $cost = $shipElement->NegotiatedRates->NetSummaryCharges->TotalChargesWithTaxes->MonetaryValue;
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->NegotiatedRates->NetSummaryCharges->TotalChargesWithTaxes->CurrencyCode
+                                );
+                            }
+                            else {
+                                $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;                            
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->CurrencyCode
+                                );
+                            }
                         } else {
-                            $cost = $shipElement->TotalCharges->MonetaryValue;
+                            $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/TotalChargesWithTaxes");
+                            $includeTaxesActive = $this->getConfigFlag(
+                                    'include_taxes'
+                                ) && !empty($includeTaxesArr);                              
+                            if ($includeTaxesActive) {
+                                $cost = $shipElement->TotalChargesWithTaxes->MonetaryValue;
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->TotalChargesWithTaxes->CurrencyCode
+                                );
+                            }
+                            else {
+                                $cost = $shipElement->TotalCharges->MonetaryValue;                            
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->TotalCharges->CurrencyCode
+                                );
+                            }
                         }
 
                         //convert price with Origin country currency code to base currency code
                         $successConversion = true;
-                        $responseCurrencyCode = $this->mapCurrencyCode(
-                            (string)$shipElement->TotalCharges->CurrencyCode
-                        );
                         if ($responseCurrencyCode) {
                             if (in_array($responseCurrencyCode, $allowedCurrencies)) {
                                 $cost = (double)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);

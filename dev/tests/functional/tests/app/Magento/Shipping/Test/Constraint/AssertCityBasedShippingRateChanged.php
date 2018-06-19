@@ -30,11 +30,11 @@ class AssertCityBasedShippingRateChanged extends AbstractConstraint
                 'Shipping rate has not been changed.'
             );
         }
-        $shippingAvaialability = $isShippingAvailable ? 'avaiable' : 'unavailable';
+        $shippingAvailability = $isShippingAvailable ? 'avaiable' : 'unavailable';
         \PHPUnit_Framework_Assert::assertEquals(
             $isShippingAvailable,
             $checkoutOnepage->getShippingMethodBlock()->isShippingMethodAvaiable($shippingMethod),
-            "Shipping rates for {$shippingMethod['shipping_service']} should be $shippingAvaialability."
+            "Shipping rates for {$shippingMethod['shipping_service']} should be $shippingAvailability."
         );
     }
 

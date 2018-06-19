@@ -412,4 +412,7 @@
             <argument name="sessionManager" xsi:type="object">Magento\Framework\Session\SessionManagerInterface\Proxy</argument>
         </arguments>
     </type>
+    <preference
+            for="Magento\Customer\Api\AccountDelegationInterface"
+            type="Magento\Customer\Model\Delegation\AccountDelegation" />
 </config>

@@ -341,7 +341,7 @@ class Price
             }
         }
 
-        return $prices ? $prices : [];
+        return $prices ?: [];
     }
 
     /**

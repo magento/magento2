@@ -62,17 +62,16 @@
 //  Common
 //  _____________________________________________
 
+.page-wrapper {
+    .ie9 & {
+        .lib-css(background-color, @page__background-color);
+        min-height: 0;
+    }
+}
+
 & when (@media-common = true) {
     body {
         .lib-css(background-color, @page__background-color);
-    }
-
-    //  ToDo UI: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
-    .page-wrapper {
-        .ie9 & {
-            .lib-css(background-color, @page__background-color);
-            min-height: 0;
-        }
     }
 
     //
@@ -262,6 +261,7 @@
     .copyright {
         .lib-css(background-color, @copyright__background-color);
         .lib-css(color, @color-white);
+        box-sizing: border-box;
         display: block;
         padding: @indent__s;
         text-align: center;
@@ -313,13 +313,14 @@
     //
     //  Widgets
     //  ---------------------------------------------
-
+    //  @codingStandardsIgnoreStart caused by bug in CodeSniffer implementation
     .sidebar {
         .widget.block:not(:last-child),
         .widget:not(:last-child) {
             margin-bottom: @indent__xl;
         }
     }
+    //  @codingStandardsIgnoreEnd
 
     .widget {
         clear: both;
@@ -333,7 +334,9 @@
         .widget.block {
             .lib-css(margin, @indent__base 0);
         }
-        .links .widget.block { margin: 0; }
+        .links .widget.block {
+            margin: 0;
+        }
     }
 
     .no-display:extend(.abs-no-display all) {
@@ -414,6 +417,12 @@
                 }
             }
         }
+    }
+    .page-footer,
+    .copyright {
+        bottom: 0;
+        position: absolute;
+        width: 100%;
     }
 }
 
@@ -528,6 +537,7 @@
 
         .header.links {
             min-width: 175px;
+            z-index: 1000;
         }
 
         &.active {

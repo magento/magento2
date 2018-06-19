@@ -7,6 +7,7 @@ namespace Magento\Catalog\Controller\Product;
 
 /**
  * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
+ * @magentoDbIsolation disabled
  */
 class ViewTest extends \Magento\TestFramework\TestCase\AbstractController
 {

@@ -8,7 +8,7 @@
         "AFL-3.0"
     ],
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "php": "~7.0.13|~7.1.0",
         "ext-spl": "*",
         "ext-dom": "*",
         "ext-simplexml": "*",
@@ -23,7 +23,7 @@
         "ext-bcmath": "*",
         "symfony/process": "~2.1",
         "colinmollenhour/php-redis-session-abstract": "1.3.4",
-        "composer/composer": "1.4.1",
+        "composer/composer": "^1.4",
         "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
         "symfony/console": "~2.3, !=2.7.0",

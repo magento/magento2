@@ -4182,7 +4182,7 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="210217247">You added ${product_name} to your shopping cart.</stringProp>
+          <stringProp name="210217247">You added ${product_name} to your <a href="${base_path}checkout/cart/">shopping cart</a>.</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -4548,7 +4548,7 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="210217247">You added ${product_name} to your shopping cart.</stringProp>
+          <stringProp name="210217247">You added ${product_name} to your <a href="${base_path}checkout/cart/">shopping cart</a>.</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -6063,7 +6063,7 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="210217247">You added ${product_name} to your shopping cart.</stringProp>
+          <stringProp name="210217247">You added ${product_name} to your <a href="${base_path}checkout/cart/">shopping cart</a>.</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -6429,7 +6429,7 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="210217247">You added ${product_name} to your shopping cart.</stringProp>
+          <stringProp name="210217247">You added ${product_name} to your <a href="${base_path}checkout/cart/">shopping cart</a>.</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -7369,7 +7369,7 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="210217247">You added ${product_name} to your shopping cart.</stringProp>
+          <stringProp name="210217247">You added ${product_name} to your <a href="${base_path}checkout/cart/">shopping cart</a>.</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -7735,7 +7735,7 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="210217247">You added ${product_name} to your shopping cart.</stringProp>
+          <stringProp name="210217247">You added ${product_name} to your <a href="${base_path}checkout/cart/">shopping cart</a>.</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -9181,7 +9181,7 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="210217247">You added ${product_name} to your shopping cart.</stringProp>
+          <stringProp name="210217247">You added ${product_name} to your <a href="${base_path}checkout/cart/">shopping cart</a>.</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -9547,7 +9547,7 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="210217247">You added ${product_name} to your shopping cart.</stringProp>
+          <stringProp name="210217247">You added ${product_name} to your <a href="${base_path}checkout/cart/">shopping cart</a>.</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>

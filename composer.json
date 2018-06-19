@@ -2,13 +2,13 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Open Source)",
     "type": "project",
-    "version": "2.2.4",
+    "version": "2.2.6-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "php": "~7.0.13|~7.1.0",
         "zendframework/zend-stdlib": "^2.7.7",
         "zendframework/zend-code": "~3.1.0",
         "zendframework/zend-server": "^2.6.1",
@@ -70,7 +70,6 @@
         "ext-zip": "*",
         "ext-pdo_mysql": "*",
         "ext-soap": "*",
-        "sjparkinson/static-review": "~4.1",
         "ramsey/uuid": "~3.7.3"
     },
     "require-dev": {

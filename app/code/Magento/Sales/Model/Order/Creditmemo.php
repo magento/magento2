@@ -425,23 +425,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function canVoid()
     {
         return false;
-        $canVoid = false;
-        if ($this->getState() == self::STATE_REFUNDED) {
-            $canVoid = $this->getCanVoidFlag();
-            /**
-             * If we not retrieve negative answer from payment yet
-             */
-            if ($canVoid === null) {
-                $canVoid = $this->getOrder()->getPayment()->canVoid();
-                if ($canVoid === false) {
-                    $this->setCanVoidFlag(false);
-                    $this->_saveBeforeDestruct = true;
-                }
-            } else {
-                $canVoid = (bool)$canVoid;
-            }
-        }
-        return $canVoid;
     }
 
     /**

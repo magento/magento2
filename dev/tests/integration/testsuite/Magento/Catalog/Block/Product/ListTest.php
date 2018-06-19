@@ -10,6 +10,7 @@ namespace Magento\Catalog\Block\Product;
  *
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  * @magentoAppArea frontend
+ * @magentoDbIsolation disabled
  */
 class ListTest extends \PHPUnit\Framework\TestCase
 {

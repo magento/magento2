@@ -1114,7 +1114,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
         } catch (\Exception $e) {
-            $this->printLogQuery(true, true, $query);
+            $this->printLogQuery(false, true, $query);
             throw $e;
         }
 

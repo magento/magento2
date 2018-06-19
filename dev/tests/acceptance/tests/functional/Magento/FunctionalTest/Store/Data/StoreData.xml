@@ -16,4 +16,22 @@
         <data key="store_type">group</data>
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
+    <entity name="customStoreEN" type="store">
+        <data key="name">EN</data>
+        <data key="code">en</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">group</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="customStoreFR" type="store">
+        <data key="name">FR</data>
+        <data key="code">fr</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">group</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
 </entities>

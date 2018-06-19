@@ -5,7 +5,6 @@
  */
 namespace Magento\Payment\Model\Method;
 
-use Magento\Payment\Gateway\ConfigInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -24,17 +23,17 @@ class Logger
     protected $logger;
 
     /**
-     * @var ConfigInterface
+     * @var \Magento\Payment\Gateway\ConfigInterface
      */
     private $config;
 
     /**
      * @param LoggerInterface $logger
-     * @param ConfigInterface $config
+     * @param \Magento\Payment\Gateway\ConfigInterface $config
      */
     public function __construct(
         LoggerInterface $logger,
-        ConfigInterface $config = null
+        \Magento\Payment\Gateway\ConfigInterface $config = null
     ) {
         $this->logger = $logger;
         $this->config = $config;

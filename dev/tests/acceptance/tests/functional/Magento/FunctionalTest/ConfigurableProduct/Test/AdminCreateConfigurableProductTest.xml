@@ -18,7 +18,6 @@
             <testCaseId value="MAGETWO-26041"/>
             <group value="configurable"/>
             <group value="product"/>
-            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
@@ -46,6 +45,7 @@
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
         <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{_defaultCategory.name}}]" stepKey="searchAndSelectCategory"/>
+        <selectOption userInput="{{_defaultProduct.visibility}}" selector="{{AdminProductFormSection.visibility}}" stepKey="fillVisibility"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
 
