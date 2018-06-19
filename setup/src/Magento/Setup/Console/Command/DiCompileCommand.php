@@ -22,6 +22,7 @@ use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Magento\Framework\Console\Cli;
+use Symfony\Component\Process\Process;
 
 /**
  * Command to run compile in single-tenant mode
@@ -136,6 +137,8 @@ class DiCompileCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->generateSetupFolderInPublic($output);
+        
         $errors = $this->checkEnvironment();
         if ($errors) {
             foreach ($errors as $line) {
@@ -400,4 +403,29 @@ class DiCompileCommand extends Command
 
         return $operations;
     }
+    
+    private function generateSetupFolderInPublic(OutputInterface $output)
+    {
+        $output->writeln('<info>Generating symlink for setup.</info>');
+        
+        $setupPath       = $this->directoryList->getPath(DirectoryList::ROOT) . '/' . DirectoryList::SETUP;
+        $setupPublicPath = $this->directoryList->getPath(DirectoryList::PUB) . '/' . DirectoryList::SETUP;
+        
+        if (file_exists($setupPublicPath)) {
+            $output->writeln('<info>Setup folder already exists in public.</info>');
+            return;
+        }
+        
+        $process = new Process('ln -s ' . $setupPath . ' ' . $setupPublicPath);
+            
+        $process->run();
+        if (!$process->isSuccessful()) {
+            $output->writeln('<error>' . trim($process->getErrorOutput()) . '</error>');
+            $output->writeln('<error>Failed to generate the symlink for setup.</error>');
+            return;
+        }
+            
+        $output->writeln('<info>Generated symlink for setup in public.</info>');
+    }
+
 }
