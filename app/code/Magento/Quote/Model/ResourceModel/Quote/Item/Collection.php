@@ -95,7 +95,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      */
     public function getStoreId()
     {
-        return (int)$this->_quote->getStoreId();
+        return (int)$this->_productCollectionFactory->create()->getStoreId();
     }
 
     /**
