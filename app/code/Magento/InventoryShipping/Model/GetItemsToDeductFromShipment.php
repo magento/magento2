@@ -88,7 +88,7 @@ class GetItemsToDeductFromShipment
     {
         $processingItems = $groupedItems = [];
         foreach ($shipmentItems as $shipmentItem) {
-            if (empty($groupedItems[$shipmentItem->getSku()])) {
+            if (empty($processingItems[$shipmentItem->getSku()])) {
                 $processingItems[$shipmentItem->getSku()] = $shipmentItem->getQty();
             } else {
                 $processingItems[$shipmentItem->getSku()] += $shipmentItem->getQty();
