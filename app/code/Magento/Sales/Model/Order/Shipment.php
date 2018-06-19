@@ -6,7 +6,10 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Sales\Api\Data\ShipmentCommentInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
+use Magento\Sales\Api\ShipmentCommentRepositoryInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 
@@ -45,6 +48,11 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     const XML_PATH_STORE_ZIP = 'shipping/origin/postcode';
 
     const XML_PATH_STORE_COUNTRY_ID = 'shipping/origin/country_id';
+
+    /**
+     * Additional field to store comments collection separately
+     */
+    const COMMENTS_COLLECTION = 'comments_collection';
 
     /**
      * Order entity type
@@ -94,6 +102,16 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     protected $orderRepository;
 
     /**
+     * @var ShipmentCommentRepositoryInterface
+     */
+    protected $shipmentCommentRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection|null
      */
     private $tracksCollection = null;
@@ -108,6 +126,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * @param Shipment\CommentFactory $commentFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory $commentCollectionFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param ShipmentCommentRepositoryInterface $shipmentCommentRepository
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -123,6 +143,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         \Magento\Sales\Model\Order\Shipment\CommentFactory $commentFactory,
         \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory $commentCollectionFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        ShipmentCommentRepositoryInterface $shipmentCommentRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -131,6 +153,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         $this->_trackCollectionFactory = $trackCollectionFactory;
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->shipmentCommentRepository = $shipmentCommentRepository;
         $this->orderRepository = $orderRepository;
         parent::__construct(
             $context,
@@ -435,19 +459,28 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      */
     public function getCommentsCollection($reload = false)
     {
-        if (!$this->hasData(ShipmentInterface::COMMENTS) || $reload) {
+        if (!$this->hasData(self::COMMENTS_COLLECTION) || $reload) {
             $comments = $this->_commentCollectionFactory->create()
                 ->setShipmentFilter($this->getId())
                 ->setCreatedAtOrder();
-            $this->setComments($comments);
+            $this->setCommentsCollection($comments);
 
             if ($this->getId()) {
-                foreach ($this->getComments() as $comment) {
+                foreach ($this->getCommentsCollection() as $comment) {
                     $comment->setShipment($this);
                 }
             }
         }
-        return $this->getComments();
+        return $this->getData(self::COMMENTS_COLLECTION);
+    }
+
+    /**
+     * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection $comments
+     * @return $this
+     */
+    public function setCommentsCollection($comments)
+    {
+        return $this->setData(self::COMMENTS_COLLECTION, $comments);
     }
 
     /**
@@ -713,14 +746,15 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         }
 
         if ($this->getData(ShipmentInterface::COMMENTS) == null) {
-            $collection = $this->_commentCollectionFactory->create()
-                ->setShipmentFilter($this->getId());
+            $searchCriteria = $this->searchCriteriaBuilder
+                ->addFilter(ShipmentCommentInterface::PARENT_ID, $this->getId())
+                ->create();
 
-            foreach ($collection as $item) {
-                $item->setShipment($this);
-            }
-            $this->setData(ShipmentInterface::COMMENTS, $collection->getItems());
+            $searchResult = $this->shipmentCommentRepository->getList($searchCriteria);
+
+            $this->setData(ShipmentInterface::COMMENTS, $searchResult->getItems());
         }
+
         return $this->getData(ShipmentInterface::COMMENTS);
     }
 
