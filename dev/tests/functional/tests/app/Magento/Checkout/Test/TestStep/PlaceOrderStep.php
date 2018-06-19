@@ -116,8 +116,8 @@ class PlaceOrderStep implements TestStepInterface
             $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->prices['grandTotal']);
         }
         $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
-        $this->assertOrderSuccessPlacedMessage->processAssert($this->checkoutOnepageSuccess);
         $orderId = $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
+        $this->assertOrderSuccessPlacedMessage->processAssert($this->checkoutOnepageSuccess);
         $data = [
             'id' => $orderId,
             'entity_id' => ['products' => $this->products]
