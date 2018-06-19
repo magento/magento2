@@ -12,7 +12,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\ColumnValueExpression;
 
 /**
- * Class for adding catalog rule prices to price index table.
+ * Class for modify custom option price.
  */
 class CustomOptionPriceModifier implements PriceModifierInterface
 {

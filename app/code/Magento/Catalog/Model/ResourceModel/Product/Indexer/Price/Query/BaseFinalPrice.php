@@ -215,7 +215,7 @@ class BaseFinalPrice
             ]
         );
 
-        $select->where(sprintf("e.type_id = '%s'", $productType));
+        $select->where("e.type_id = ?", $productType);
 
         if ($entityIds !== null) {
             if (count($entityIds) > 1) {
@@ -241,6 +241,12 @@ class BaseFinalPrice
         return $select;
     }
 
+    /**
+     * Get total tier price expression
+     *
+     * @param \Zend_Db_Expr $priceExpression
+     * @return \Zend_Db_Expr
+     */
     private function getTotalTierPriceExpression(\Zend_Db_Expr $priceExpression)
     {
         $maxUnsignedBigint = '~0';
@@ -277,6 +283,13 @@ class BaseFinalPrice
         );
     }
 
+    /**
+     * Get tier price expression for table
+     *
+     * @param $tableAlias
+     * @param \Zend_Db_Expr $priceExpression
+     * @return \Zend_Db_Expr
+     */
     private function getTierPriceExpressionForTable($tableAlias, \Zend_Db_Expr $priceExpression): \Zend_Db_Expr
     {
         return $this->getConnection()->getCheckSql(
@@ -291,6 +304,8 @@ class BaseFinalPrice
     }
 
     /**
+     * Get connection
+     *
      * return \Magento\Framework\DB\Adapter\AdapterInterface
      * @throws \DomainException
      */
@@ -304,6 +319,8 @@ class BaseFinalPrice
     }
 
     /**
+     * Get table
+     *
      * @param string $tableName
      * @return string
      */

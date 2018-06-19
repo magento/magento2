@@ -1882,7 +1882,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     {
         $filters = $this->_productLimitationFilters;
         if (!$filters->isUsingPriceIndex() ||
+            !isset($filters['website_id']) ||
             (string)$filters['website_id'] === '' ||
+            !isset($filters['customer_group_id']) ||
             (string)$filters['customer_group_id'] === ''
         ) {
             return $this;
