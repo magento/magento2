@@ -35,10 +35,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
      */
     public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo) : string
     {
-        if ($this->storePathInfoValidator->getValidStoreCode($request, $pathInfo)) {
-            $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
-            $pathInfo = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
-        }
-        return $pathInfo;
+        $trimmedPathInfo = $this->storePathInfoValidator->trimValidStoreFromPathInfo($request, $pathInfo);
+        return $trimmedPathInfo ? : $pathInfo;
     }
 }

@@ -48,7 +48,28 @@ class StorePathInfoValidator
     }
 
     /**
-     * Get store code from pathinfo validate if config value. If pathinfo is empty the try to calculate from request.
+     * Find the store in the path info if valid and trim it from the path info
+     *
+     * @param \Magento\Framework\App\Request\Http $request
+     * @param string $pathInfo
+     * @return string
+     */
+    public function trimValidStoreFromPathInfo(
+        \Magento\Framework\App\Request\Http $request,
+        string $pathInfo
+    ) : ?string {
+        $storeCode = $this->getValidStoreCode($request, $pathInfo);
+        if ($storeCode) {
+            $pathParts = $this->splitPathInfo($pathInfo);
+            if (count($pathParts) > 1) {
+                return '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get store code from path info validate if config value. If pathinfo is empty the try to calculate from request.
      * This method also sets request to no route if store doesn't have url enabled but store in url is enabled globally.
      *
      * @param \Magento\Framework\App\Request\Http $request
@@ -65,8 +86,7 @@ class StorePathInfoValidator
                 $request->getBaseUrl()
             );
         }
-        $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
-        $storeCode = current($pathParts);
+        $storeCode = current($this->splitPathInfo($pathInfo));
         if (!$request->isDirectAccessFrontendName($storeCode)
             && !empty($storeCode)
             && $storeCode != Store::ADMIN_CODE
@@ -91,5 +111,14 @@ class StorePathInfoValidator
             }
         }
         return null;
+    }
+
+    /**
+     * @param string $pathInfo
+     * @return array
+     */
+    private function splitPathInfo(string $pathInfo) : array
+    {
+        return explode('/', ltrim($pathInfo, '/'), 2);
     }
 }
