@@ -27,4 +27,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Http">
+        <plugin name="framework-http-newrelic" type="Magento\NewRelicReporting\Plugin\HttpPlugin"/>
+    </type>
+    <type name="Magento\Framework\App\State">
+        <plugin name="framework-state-newrelic" type="Magento\NewRelicReporting\Plugin\StatePlugin"/>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="newrelicreporting_deploy_marker" xsi:type="object">Magento\NewRelicReporting\Console\Command\DeployMarker</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

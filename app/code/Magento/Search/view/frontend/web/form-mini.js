@@ -55,7 +55,7 @@ define([
             this.autoComplete = $(this.options.destinationSelector);
             this.searchForm = $(this.options.formSelector);
             this.submitBtn = this.searchForm.find(this.options.submitBtn)[0];
-            this.searchLabel = $(this.options.searchLabel);
+            this.searchLabel = this.searchForm.find(this.options.searchLabel);
             this.isExpandable = this.options.isExpandable;
 
             _.bindAll(this, '_onKeyDown', '_onPropertyChange', '_onSubmit');
@@ -98,14 +98,16 @@ define([
                 }, this), 250);
             }, this));
 
-            this.element.trigger('blur');
+            if (this.element.get(0) === document.activeElement) {
+                this.setActiveState(true);
+            }
 
             this.element.on('focus', this.setActiveState.bind(this, true));
             this.element.on('keydown', this._onKeyDown);
             this.element.on('input propertychange', this._onPropertyChange);
 
-            this.searchForm.on('submit', $.proxy(function () {
-                this._onSubmit();
+            this.searchForm.on('submit', $.proxy(function (e) {
+                this._onSubmit(e);
                 this._updateAriaHasPopup(false);
             }, this));
         },
@@ -204,13 +206,17 @@ define([
 
             switch (keyCode) {
                 case $.ui.keyCode.HOME:
-                    this._getFirstVisibleElement().addClass(this.options.selectClass);
-                    this.responseList.selected = this._getFirstVisibleElement();
+                    if (this._getFirstVisibleElement()) {
+                        this._getFirstVisibleElement().addClass(this.options.selectClass);
+                        this.responseList.selected = this._getFirstVisibleElement();
+                    }
                     break;
 
                 case $.ui.keyCode.END:
-                    this._getLastElement().addClass(this.options.selectClass);
-                    this.responseList.selected = this._getLastElement();
+                    if (this._getLastElement()) {
+                        this._getLastElement().addClass(this.options.selectClass);
+                        this.responseList.selected = this._getLastElement();
+                    }
                     break;
 
                 case $.ui.keyCode.ESCAPE:
@@ -220,6 +226,7 @@ define([
 
                 case $.ui.keyCode.ENTER:
                     this.searchForm.trigger('submit');
+                    e.preventDefault();
                     break;
 
                 case $.ui.keyCode.DOWN:

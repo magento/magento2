@@ -62,7 +62,7 @@ Checkout,Checkout
 Error!,Error!
 "DB exception","DB exception"
 Message,Message
-"<a href=""%1"" onclick=""this.target='_blank'"" class=""print"">Print receipt</a>","<a href=""%1"" onclick=""this.target='_blank'"" class=""print"">Print receipt</a>"
+"Print receipt","Print receipt"
 "Apply Discount Code","Apply Discount Code"
 "Enter discount code","Enter discount code"
 "Apply Discount","Apply Discount"
@@ -177,3 +177,4 @@ Payment,Payment
 "We received your order!","We received your order!"
 "Thank you for your purchase!","Thank you for your purchase!"
 "optional", "optional"
+"Something went wrong while saving the page. Please refresh the page and try again.","Something went wrong while saving the page. Please refresh the page and try again."

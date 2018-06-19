@@ -535,8 +535,8 @@ class Store extends AbstractExtensibleModel implements
     public function getConfig($path)
     {
         $data = $this->_config->getValue($path, ScopeInterface::SCOPE_STORE, $this->getCode());
-        if (!$data) {
-            $data = $this->_config->getValue($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        if ($data === null) {
+            $data = $this->_config->getValue($path);
         }
         return $data === false ? null : $data;
     }
@@ -1128,7 +1128,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Retrieve current url for store
      *
-     * @param bool|string $fromStore
+     * @param bool $fromStore
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -1136,7 +1136,14 @@ class Store extends AbstractExtensibleModel implements
     public function getCurrentUrl($fromStore = true)
     {
         $sidQueryParam = $this->_sidResolver->getSessionIdQueryParam($this->_getSession());
-        $requestString = $this->_url->escape(ltrim($this->_request->getRequestString(), '/'));
+        /** @var string $requestString Request path without query parameters */
+        $requestString = $this->_url->escape(
+            preg_replace(
+                '/\?.*?$/',
+                '',
+                ltrim($this->_request->getRequestString(), '/')
+            )
+        );
 
         $storeUrl = $this->getUrl('', ['_secure' => $this->_storeManager->getStore()->isCurrentlySecure()]);
 
@@ -1188,7 +1195,7 @@ class Store extends AbstractExtensibleModel implements
             . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
             . $storeParsedUrl['path']
             . $requestStringPath
-            . ($currentUrlQueryParams ? '?' . http_build_query($currentUrlQueryParams, '', '&amp;') : '');
+            . ($currentUrlQueryParams ? '?' . http_build_query($currentUrlQueryParams) : '');
 
         return $currentUrl;
     }

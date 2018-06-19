@@ -10,12 +10,20 @@ namespace Magento\Customer\Controller;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Account\Redirect;
+use Magento\Customer\Model\Session;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\Http;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Request;
+use Magento\TestFramework\Response;
+use Zend\Stdlib\Parameters;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -30,9 +38,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected function login($customerId)
     {
-        /** @var \Magento\Customer\Model\Session $session */
+        /** @var Session $session */
         $session = Bootstrap::getObjectManager()
-            ->get(\Magento\Customer\Model\Session::class);
+            ->get(Session::class);
         $session->loginById($customerId);
     }
 
@@ -130,8 +138,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertFalse((bool)preg_match('/' . $token . '/m', $text));
         $this->assertRedirect($this->stringContains('customer/account/createpassword'));
 
-        /** @var \Magento\Customer\Model\Session $customer */
-        $session = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Session::class);
+        /** @var Session $customer */
+        $session = Bootstrap::getObjectManager()->get(Session::class);
         $this->assertEquals($token, $session->getRpToken());
         $this->assertEquals($customer->getId(), $session->getRpCustomerId());
         $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
@@ -151,8 +159,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer->changeResetPasswordLinkToken($token);
         $customer->save();
 
-        /** @var \Magento\Customer\Model\Session $customer */
-        $session = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Session::class);
+        /** @var Session $customer */
+        $session = Bootstrap::getObjectManager()->get(Session::class);
         $session->setRpToken($token);
         $session->setRpCustomerId($customer->getId());
 
@@ -510,7 +518,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('customer/account/editPost');
 
-        $this->assertRedirect($this->stringEndsWith('customer/account/'));
+        $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
             $this->equalTo(['You saved the account information.']),
             MessageInterface::TYPE_SUCCESS
@@ -555,7 +563,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('customer/account/editPost');
 
-        $this->assertRedirect($this->stringEndsWith('customer/account/'));
+        $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
             $this->equalTo(['You saved the account information.']),
             MessageInterface::TYPE_SUCCESS
@@ -586,7 +594,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('customer/account/editPost');
 
-        $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
+        $this->assertRedirect($this->stringContains('customer/account/edit/'));
         $this->assertSessionMessages(
             $this->equalTo(['"Email" is not a valid email address.']),
             MessageInterface::TYPE_ERROR
@@ -615,7 +623,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('customer/account/editPost');
 
-        $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
+        $this->assertRedirect($this->stringContains('customer/account/edit/'));
         // Not sure if its the most secure message. Not changing the behavior for now in the new AccountManagement APIs.
         $this->assertSessionMessages(
             $this->equalTo(['The password doesn\'t match this account.']),
@@ -645,11 +653,55 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('customer/account/editPost');
 
-        $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
+        $this->assertRedirect($this->stringContains('customer/account/edit/'));
         $this->assertSessionMessages(
             $this->equalTo(['Password confirmation doesn\'t match entered password.']),
             MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * Test redirect customer to account dashboard after logging in.
+     *
+     * @param bool|null $redirectDashboard
+     * @param string $redirectUrl
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @dataProvider loginPostRedirectDataProvider
+     */
+    public function testLoginPostRedirect($redirectDashboard, string $redirectUrl)
+    {
+        if (isset($redirectDashboard)) {
+            $this->_objectManager->get(ScopeConfigInterface::class)->setValue('customer/startup/redirect_dashboard', $redirectDashboard);
+        }
+
+        $this->_objectManager->get(Redirect::class)->setRedirectCookie('test');
+
+        $configValue = $this->_objectManager->create(Value::class);
+        $configValue->load('web/unsecure/base_url', 'path');
+        $baseUrl = $configValue->getValue() ?: 'http://localhost/';
+
+        $request = $this->prepareRequest();
+        $app = $this->_objectManager->create(Http::class, ['_request' => $request]);
+        $response = $app->launch();
+
+        $this->assertResponseRedirect($response, $baseUrl . $redirectUrl);
+        $this->assertTrue($this->_objectManager->get(Session::class)->isLoggedIn());
+    }
+
+    /**
+     * Data provider for testLoginPostRedirect.
+     *
+     * @return array
+     */
+    public function loginPostRedirectDataProvider()
+    {
+        return [
+            [null, 'index.php/'],
+            [0, 'index.php/'],
+            [1, 'index.php/customer/account/'],
+        ];
     }
 
     /**
@@ -716,5 +768,41 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer = array_pop($customers);
 
         return $customer;
+    }
+
+    /**
+     * Prepare request for customer login.
+     *
+     * @return Request
+     */
+    private function prepareRequest()
+    {
+        $post = new Parameters([
+            'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
+            'login' => [
+                'username' => 'customer@example.com',
+                'password' => 'password'
+            ]
+        ]);
+        $request = $this->getRequest();
+        $formKey = $this->_objectManager->get(FormKey::class);
+        $request->setParam('form_key', $formKey->getFormKey());
+        $request->setMethod(Request::METHOD_POST);
+        $request->setRequestUri('customer/account/loginPost/');
+        $request->setPost($post);
+        return $request;
+    }
+
+    /**
+     * Assert response is redirect.
+     *
+     * @param Response $response
+     * @param string $redirectUrl
+     * @return void
+     */
+    private function assertResponseRedirect(Response $response, string $redirectUrl)
+    {
+        $this->assertTrue($response->isRedirect());
+        $this->assertSame($redirectUrl, $response->getHeader('Location')->getUri());
     }
 }

@@ -5,6 +5,8 @@
  */
 namespace Magento\Contact\Controller;
 
+use Zend\Http\Request;
+
 /**
  * Contact index controller test
  */
@@ -19,12 +21,13 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             'hideit' => '',
         ];
         $this->getRequest()->setPostValue($params);
+        $this->getRequest()->setMethod(Request::METHOD_POST);
 
         $this->dispatch('contact/index/post');
         $this->assertRedirect($this->stringContains('contact/index'));
         $this->assertSessionMessages(
             $this->contains(
-                "Thanks for contacting us with your comments and questions. We'll respond to you very soon."
+                "Thanks for contacting us with your comments and questions. We&#039;ll respond to you very soon."
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
@@ -38,6 +41,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testInvalidPostAction($params, $expectedMessage)
     {
         $this->getRequest()->setPostValue($params);
+        $this->getRequest()->setMethod(Request::METHOD_POST);
 
         $this->dispatch('contact/index/post');
         $this->assertRedirect($this->stringContains('contact/index'));

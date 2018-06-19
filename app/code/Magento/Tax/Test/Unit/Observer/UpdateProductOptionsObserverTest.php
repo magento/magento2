@@ -3,10 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Tax\Test\Unit\Observer;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
 {
@@ -25,7 +24,7 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
         $displayPriceExcludingTax
     ) {
 
-        $frameworkObject= new \Magento\Framework\DataObject();
+        $frameworkObject = new \Magento\Framework\DataObject();
         $frameworkObject->setAdditionalOptions([]);
 
         $product=$this->createMock(\Magento\Catalog\Model\Product::class);
@@ -64,18 +63,18 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getEvent')
             ->will($this->returnValue($eventObject));
 
-         $objectManager = new ObjectManager($this);
-         $taxObserverObject = $objectManager->getObject(
-             \Magento\Tax\Observer\UpdateProductOptionsObserver::class,
-             [
-                 'taxData' => $taxData,
-                 'registry' => $registry,
-             ]
-         );
+        $objectManager = new ObjectManager($this);
+        $taxObserverObject = $objectManager->getObject(
+            \Magento\Tax\Observer\UpdateProductOptionsObserver::class,
+            [
+                'taxData' => $taxData,
+                'registry' => $registry,
+            ]
+        );
 
-         $taxObserverObject->execute($observerObject);
+        $taxObserverObject->execute($observerObject);
 
-         $this->assertEquals($expected, $frameworkObject->getAdditionalOptions());
+        $this->assertEquals($expected, $frameworkObject->getAdditionalOptions());
     }
 
     /**

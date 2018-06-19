@@ -66,7 +66,7 @@ class ProductItem extends CatalogProductItem
     private function clickOnSwatch($optionId)
     {
         $selector = sprintf($this->swatchSelector, $optionId);
-        $this->_rootElement->find($selector, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($selector)->click();
     }
 
     /**

@@ -114,20 +114,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->driverMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Filesystem\DriverInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getRealPath']
-        );
-        $this->driverMock->expects($this->any())->method('getRealPath')->will($this->returnArgument(0));
+        $this->driverMock = $this->getMockBuilder(\Magento\Framework\Filesystem\DriverInterface::class)
+            ->setMethods(['getRealPathSafety'])
+            ->getMockForAbstractClass();
 
         $this->directoryMock = $this->createPartialMock(
             \Magento\Framework\Filesystem\Directory\Write::class,
-            ['delete', 'getDriver', 'create']
+            ['delete', 'getDriver', 'create', 'getRelativePath', 'isExist']
         );
         $this->directoryMock->expects(
             $this->any()
@@ -151,7 +144,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->adapterFactoryMock = $this->createMock(\Magento\Framework\Image\AdapterFactory::class);
         $this->imageHelperMock = $this->createPartialMock(
             \Magento\Cms\Helper\Wysiwyg\Images::class,
-            ['getStorageRoot']
+            ['getStorageRoot', 'getCurrentPath']
         );
         $this->imageHelperMock->expects(
             $this->any()
@@ -182,7 +175,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->uploaderFactoryMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionMock = $this->createMock(\Magento\Backend\Model\Session::class);
+        $this->sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
+            ->setMethods(['getCurrentPath'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->backendUrlMock = $this->createMock(\Magento\Backend\Model\Url::class);
 
         $this->coreFileStorageMock = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
@@ -240,6 +236,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Exception\LocalizedException::class,
             sprintf('Directory %s is not under storage root path.', self::INVALID_DIRECTORY_OVER_ROOT)
         );
+        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
     }
 
@@ -252,6 +249,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Exception\LocalizedException::class,
             sprintf('We can\'t delete root directory %s right now.', self::STORAGE_ROOT_DIR)
         );
+        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::STORAGE_ROOT_DIR);
     }
 

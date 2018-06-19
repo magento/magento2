@@ -9,6 +9,9 @@
  */
 namespace Magento\Catalog\Controller;
 
+use Magento\Framework\App\ActionInterface;
+use Magento\TestFramework\ObjectManager;
+
 /**
  * @magentoAppIsolation enabled
  */
@@ -25,7 +28,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
     public function assert404NotFound()
     {
         parent::assert404NotFound();
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        /** @var $objectManager ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->assertNull($objectManager->get(\Magento\Framework\Registry::class)->registry('current_product'));
     }
@@ -49,7 +52,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testViewAction()
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        /** @var $objectManager ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /**
          * @var $repository \Magento\Catalog\Model\ProductRepository
@@ -100,7 +103,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testViewActionConfigurable()
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        /** @var $objectManager ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /**
          * @var $repository \Magento\Catalog\Model\ProductRepository
@@ -136,7 +139,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testGalleryAction()
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        /** @var $objectManager ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /**
          * @var $repository \Magento\Catalog\Model\ProductRepository
@@ -185,5 +188,28 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('catalog/product/image/');
 
         $this->assert404NotFound();
+    }
+
+    /**
+     * Test changing Store View on Product page.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/enable_using_store_codes.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
+     */
+    public function testChangeStoreView()
+    {
+        /** @var $objectManager ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var $repository \Magento\Catalog\Model\ProductRepository */
+        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $repository->get('simple');
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setPostValue([ActionInterface::PARAM_NAME_URL_ENCODED => 1]);
+        $this->dispatch(sprintf('fixturestore/catalog/product/view/id/%s?___from_store=default', $product->getId()));
+        $html = $this->getResponse()->getBody();
+        $this->assertContains('<span>Fixture Store</span>', $html);
     }
 }

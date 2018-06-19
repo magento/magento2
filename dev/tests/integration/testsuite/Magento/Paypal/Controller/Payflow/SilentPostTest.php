@@ -8,8 +8,8 @@ namespace Magento\Paypal\Controller\Payflow;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Logger\Monolog;
+use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflowlink;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -116,7 +116,7 @@ class SilentPostTest extends AbstractController
             ->getMock();
         $this->_objectManager->addSharedInstance($logger, Monolog::class);
 
-        $exception = new LocalizedException(__('Response message from PayPal gateway'));
+        $exception = new CommandException(__('Response message from PayPal gateway'));
         $logger->expects(self::once())
             ->method('critical')
             ->with(self::equalTo($exception));

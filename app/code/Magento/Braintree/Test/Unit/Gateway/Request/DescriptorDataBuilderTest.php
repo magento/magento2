@@ -6,12 +6,12 @@
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
 use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Request\DescriptorDataBuilder;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-/**
- * Class DescriptorDataBuilderTest
- */
 class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -31,22 +31,25 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getDynamicDescriptors'])
             ->getMock();
 
-        $this->builder = new DescriptorDataBuilder($this->config);
+        $this->builder = new DescriptorDataBuilder($this->config, new SubjectReader());
     }
 
     /**
-     * @covers \Magento\Braintree\Gateway\Request\DescriptorDataBuilder::build
      * @param array $descriptors
      * @param array $expected
      * @dataProvider buildDataProvider
      */
     public function testBuild(array $descriptors, array $expected)
     {
-        $this->config->expects(static::once())
-            ->method('getDynamicDescriptors')
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $order = $this->createMock(OrderAdapterInterface::class);
+        $paymentDO->method('getOrder')
+            ->willReturn($order);
+
+        $this->config->method('getDynamicDescriptors')
             ->willReturn($descriptors);
 
-        $actual = $this->builder->build([]);
+        $actual = $this->builder->build(['payment' => $paymentDO]);
         static::assertEquals($expected, $actual);
     }
 

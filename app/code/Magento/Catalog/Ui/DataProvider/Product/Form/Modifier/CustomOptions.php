@@ -348,7 +348,8 @@ class CustomOptions extends AbstractModifier
                                 'sortOrder' => 20,
                                 'actions' => [
                                     [
-                                        'targetName' => 'ns = ${ $.ns }, index = ' . static::GRID_OPTIONS_NAME,
+                                        'targetName' => '${ $.ns }.${ $.ns }.' . static::GROUP_CUSTOM_OPTIONS_NAME
+                                            . '.' . static::GRID_OPTIONS_NAME,
                                         'actionName' => 'processingAddChild',
                                     ]
                                 ]
@@ -1045,6 +1046,7 @@ class CustomOptions extends AbstractModifier
                 'data' => [
                     'config' => [
                         'label' => __('Compatible File Extensions'),
+                        'notice' => __('Enter separated extensions, like: png, jpg, gif.'),
                         'componentType' => Field::NAME,
                         'formElement' => Input::NAME,
                         'dataScope' => static::FIELD_FILE_EXTENSION_NAME,

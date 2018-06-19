@@ -305,9 +305,21 @@ define([
          */
         initialize: function () {
             this._super()
-                .initOldCode();
+                .initOldCode()
+                .on('value', this.onChangeColor.bind(this));
 
             return this;
+        },
+
+        /**
+         * Handler function that execute when color changes.
+         *
+         * @param {String} data - color
+         */
+        onChangeColor: function (data) {
+            if (!data) {
+                jQuery('.' + this.elementName).parent().removeClass('unavailable');
+            }
         },
 
         /**
@@ -316,7 +328,7 @@ define([
          * @returns {Object} Chainable.
          */
         initOldCode: function () {
-            jQuery.async('.' + this.elementName, function (elem) {
+            jQuery.async('.' + this.elementName, this.name, function (elem) {
                 oldCode(this.value(), elem.parentElement, this.uploadUrl, this.elementName);
             }.bind(this));
 
@@ -336,9 +348,15 @@ define([
             this.elementName = this.prefixElementName + recordId;
 
             this.inputName = prefixName + '[' + this.elementName + ']';
-            this.dataScope = 'data.' + this.prefixName + '.' + this.elementName;
+            this.exportDataLink = 'data.' + this.prefixName + '.' + this.elementName;
+            this.exports.value = this.provider + ':' + this.exportDataLink;
+        },
 
-            this.links.value = this.provider + ':' + this.dataScope;
+        /** @inheritdoc */
+        destroy: function () {
+            this._super();
+
+            this.source.remove(this.exportDataLink);
         },
 
         /**

@@ -5,7 +5,9 @@
  */
 namespace Magento\Sales\Model\Order\Email;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Mail\Template\TransportBuilderByStore;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
 use Magento\Sales\Model\Order\Email\Container\Template;
 
@@ -27,18 +29,28 @@ class SenderBuilder
     protected $transportBuilder;
 
     /**
+     * @var TransportBuilderByStore
+     */
+    private $transportBuilderByStore;
+
+    /**
      * @param Template $templateContainer
      * @param IdentityInterface $identityContainer
      * @param TransportBuilder $transportBuilder
+     * @param TransportBuilderByStore $transportBuilderByStore
      */
     public function __construct(
         Template $templateContainer,
         IdentityInterface $identityContainer,
-        TransportBuilder $transportBuilder
+        TransportBuilder $transportBuilder,
+        TransportBuilderByStore $transportBuilderByStore = null
     ) {
         $this->templateContainer = $templateContainer;
         $this->identityContainer = $identityContainer;
         $this->transportBuilder = $transportBuilder;
+        $this->transportBuilderByStore = $transportBuilderByStore ?: ObjectManager::getInstance()->get(
+            TransportBuilderByStore::class
+        );
     }
 
     /**
@@ -98,6 +110,9 @@ class SenderBuilder
         $this->transportBuilder->setTemplateIdentifier($this->templateContainer->getTemplateId());
         $this->transportBuilder->setTemplateOptions($this->templateContainer->getTemplateOptions());
         $this->transportBuilder->setTemplateVars($this->templateContainer->getTemplateVars());
-        $this->transportBuilder->setFrom($this->identityContainer->getEmailIdentity());
+        $this->transportBuilderByStore->setFromByStore(
+            $this->identityContainer->getEmailIdentity(),
+            $this->identityContainer->getStore()->getId()
+        );
     }
 }

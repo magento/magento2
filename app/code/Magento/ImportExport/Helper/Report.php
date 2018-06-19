@@ -124,6 +124,10 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function getFilePath($filename)
     {
+        if (preg_match('/\.\.(\\\|\/)/', $filename)) {
+            throw new \InvalidArgumentException('Filename has not permitted symbols in it');
+        }
+
         return $this->varDirectory->getRelativePath(Import::IMPORT_HISTORY_DIR . $filename);
     }
 

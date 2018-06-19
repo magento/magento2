@@ -61,7 +61,7 @@ class RouteConfigFilesTest extends \PHPUnit\Framework\TestCase
             $files = array_merge($files, glob($mask));
         }
         $mergedConfig = new \Magento\Framework\Config\Dom(
-            '<config></config>',
+            '<config><router/></config>',
             $this->validationStateMock,
             $this->_idAttributes
         );

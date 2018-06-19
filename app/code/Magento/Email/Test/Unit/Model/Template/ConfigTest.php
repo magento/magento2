@@ -273,6 +273,19 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Template file 'one.html' is not found
+     */
+    public function testGetTemplateFilenameWrongFileName()
+    {
+        $this->viewFileSystem->expects($this->once())->method('getEmailTemplateFileName')
+            ->with('one.html', $this->designParams, 'Fixture_ModuleOne')
+            ->willReturn(false);
+
+        $this->model->getTemplateFilename('template_one', $this->designParams);
+    }
+
+    /**
      * @param string $getterMethod
      * @param $argument
      * @dataProvider getterMethodUnknownTemplateDataProvider
@@ -311,7 +324,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         array $fixtureFields = [],
         $argument = null
     ) {
-        $this->expectException('UnexpectedValueException', $expectedException);
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage($expectedException);
         $dataStorage = $this->createPartialMock(\Magento\Email\Model\Template\Config\Data::class, ['get']);
         $dataStorage->expects(
             $this->atLeastOnce()

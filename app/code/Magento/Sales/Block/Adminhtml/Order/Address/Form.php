@@ -135,4 +135,20 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
     {
         return $this->_getAddress()->getData();
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function processCountryOptions(
+        \Magento\Framework\Data\Form\Element\AbstractElement $countryElement,
+        $storeId = null
+    ) {
+        /** @var \Magento\Sales\Model\Order\Address $address */
+        $address = $this->_coreRegistry->registry('order_address');
+        if ($address !== null) {
+            $storeId = $address->getOrder()->getStoreId();
+        }
+
+        parent::processCountryOptions($countryElement, $storeId);
+    }
 }

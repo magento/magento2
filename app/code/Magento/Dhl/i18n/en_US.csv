@@ -23,14 +23,12 @@ Europack,Europack
 "Express 10:30","Express 10:30"
 "Domestic economy select","Domestic economy select"
 "Economy select","Economy select"
-"Break bulk economy","Break bulk economy"
 "Domestic express","Domestic express"
 Others,Others
 "Globalmail business","Globalmail business"
 "Same day","Same day"
 "Express 12:00","Express 12:00"
 "Express envelope","Express envelope"
-"Customer services","Customer services"
 Jetline,Jetline
 "Freight worldwide","Freight worldwide"
 "Jumbo box","Jumbo box"
@@ -81,3 +79,5 @@ Size,Size
 "Show Method if Not Applicable","Show Method if Not Applicable"
 "Sort Order","Sort Order"
 Debug,Debug
+"Domestic express 9:00","Domestic express 9:00"
+"Domestic express 12:00","Domestic express 12:00"

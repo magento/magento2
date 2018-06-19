@@ -412,17 +412,24 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     protected function resolveItems(QuoteEntity $quote)
     {
-        $quoteItems = [];
-        foreach ($quote->getAllItems() as $quoteItem) {
-            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $quoteItem */
-            $quoteItems[$quoteItem->getId()] = $quoteItem;
-        }
         $orderItems = [];
-        foreach ($quoteItems as $quoteItem) {
-            $parentItem = (isset($orderItems[$quoteItem->getParentItemId()])) ?
-                $orderItems[$quoteItem->getParentItemId()] : null;
-            $orderItems[$quoteItem->getId()] =
-                $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item' => $parentItem]);
+        foreach ($quote->getAllItems() as $quoteItem) {
+            $itemId = $quoteItem->getId();
+
+            if (!empty($orderItems[$itemId])) {
+                continue;
+            }
+
+            $parentItemId = $quoteItem->getParentItemId();
+            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $parentItem */
+            if ($parentItemId && !isset($orderItems[$parentItemId])) {
+                $orderItems[$parentItemId] = $this->quoteItemToOrderItem->convert(
+                    $quoteItem->getParentItem(),
+                    ['parent_item' => null]
+                );
+            }
+            $parentItem = isset($orderItems[$parentItemId]) ? $orderItems[$parentItemId] : null;
+            $orderItems[$itemId] = $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item' => $parentItem]);
         }
         return array_values($orderItems);
     }
@@ -468,6 +475,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     'email' => $quote->getCustomerEmail()
                 ]
             );
+            $shippingAddress->setData('quote_address_id', $quote->getShippingAddress()->getId());
             $addresses[] = $shippingAddress;
             $order->setShippingAddress($shippingAddress);
             $order->setShippingMethod($quote->getShippingAddress()->getShippingMethod());
@@ -479,6 +487,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 'email' => $quote->getCustomerEmail()
             ]
         );
+        $billingAddress->setData('quote_address_id', $quote->getBillingAddress()->getId());
         $addresses[] = $billingAddress;
         $order->setBillingAddress($billingAddress);
         $order->setAddresses($addresses);

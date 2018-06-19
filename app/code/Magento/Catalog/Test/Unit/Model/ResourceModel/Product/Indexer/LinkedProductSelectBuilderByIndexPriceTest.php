@@ -84,7 +84,7 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
         $select->expects($this->any())->method('from')->willReturnSelf();
         $select->expects($this->any())->method('joinInner')->willReturnSelf();
         $select->expects($this->any())->method('where')->willReturnSelf();
-        $select->expects($this->once())->method('order')->willReturnSelf();
+        $select->expects($this->exactly(2))->method('order')->willReturnSelf();
         $select->expects($this->once())->method('limit')->willReturnSelf();
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadata);

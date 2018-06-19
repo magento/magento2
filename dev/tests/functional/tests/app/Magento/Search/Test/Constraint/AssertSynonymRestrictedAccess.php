@@ -18,7 +18,7 @@ class AssertSynonymRestrictedAccess extends AbstractConstraint
     /**
      * Access denied text.
      */
-    const ACCESS_DENIED_TEXT = 'Access denied';
+    const ACCESS_DENIED_TEXT = 'Sorry, you need permissions to view this content.';
 
     /**
      * Assert that access to synonym group index page is restricted.

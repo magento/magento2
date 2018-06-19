@@ -19,6 +19,8 @@ use Magento\Framework\View\Asset\LocalInterface;
  */
 class Image implements LocalInterface
 {
+    private $sourceContentType;
+
     /**
      * @var string
      */
@@ -67,6 +69,12 @@ class Image implements LocalInterface
         $filePath,
         array $miscParams = []
     ) {
+        if (array_key_exists('image_type', $miscParams)) {
+            $this->sourceContentType = $miscParams['image_type'];
+            unset($miscParams['image_type']);
+        } else {
+            $this->sourceContentType = $this->contentType;
+        }
         $this->mediaConfig = $mediaConfig;
         $this->context = $context;
         $this->filePath = $filePath;
@@ -129,7 +137,7 @@ class Image implements LocalInterface
      */
     public function getSourceContentType()
     {
-        return $this->contentType;
+        return $this->sourceContentType;
     }
 
     /**

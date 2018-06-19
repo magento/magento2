@@ -323,6 +323,9 @@
     <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
     </type>
+    <type name="Magento\PageCache\Observer\FlushFormKey">
+        <plugin name="customerFlushFormKey" type="Magento\Customer\Model\Plugin\CustomerFlushFormKey"/>
+    </type>
     <type name="Magento\Customer\Model\Customer\NotificationStorage">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Customer\Model\Cache\Type\Notification</argument>
@@ -337,9 +340,9 @@
     <virtualType name="Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
-                <item name="code" xsi:type="string">customer_group_code</item>
-                <item name="id" xsi:type="string">customer_group_id</item>
-                <item name="tax_class_name" xsi:type="string">class_name</item>
+                <item name="code" xsi:type="string">main_table.customer_group_code</item>
+                <item name="id" xsi:type="string">main_table.customer_group_id</item>
+                <item name="tax_class_name" xsi:type="string">tax_class_table.class_name</item>
             </argument>
         </arguments>
     </virtualType>
@@ -347,9 +350,9 @@
     <virtualType name="Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupSortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor">
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
-                <item name="code" xsi:type="string">customer_group_code</item>
-                <item name="id" xsi:type="string">customer_group_id</item>
-                <item name="tax_class_name" xsi:type="string">class_name</item>
+                <item name="code" xsi:type="string">main_table.customer_group_code</item>
+                <item name="id" xsi:type="string">main_table.customer_group_id</item>
+                <item name="tax_class_name" xsi:type="string">tax_class_table.class_name</item>
             </argument>
             <argument name="defaultOrders" xsi:type="array">
                 <item name="id" xsi:type="string">ASC</item>
@@ -404,4 +407,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\AccountManagement">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Framework\Session\SessionManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <preference
+            for="Magento\Customer\Api\AccountDelegationInterface"
+            type="Magento\Customer\Model\Delegation\AccountDelegation" />
 </config>

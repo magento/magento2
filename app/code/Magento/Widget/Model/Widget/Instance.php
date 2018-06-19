@@ -22,6 +22,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method int getThemeId()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
@@ -34,7 +35,12 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     const PRODUCT_LAYOUT_HANDLE = 'catalog_product_view';
 
-    const SINGLE_PRODUCT_LAYOUT_HANLDE = 'catalog_product_view_id_{{ID}}';
+    /**
+     * @deprecated see self::SINGLE_PRODUCT_LAYOUT_HANDLE
+     */
+    const SINGLE_PRODUCT_LAYOUT_HANLDE = self::SINGLE_PRODUCT_LAYOUT_HANDLE;
+    
+    const SINGLE_PRODUCT_LAYOUT_HANDLE = 'catalog_product_view_id_{{ID}}';
 
     const PRODUCT_TYPE_LAYOUT_HANDLE = 'catalog_product_view_type_{{TYPE}}';
 
@@ -90,6 +96,16 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @var string[]
      */
     protected $_relatedCacheTypes;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Type
+     */
+    protected $_productType;
+
+    /**
+     * @var \Magento\Widget\Model\Config\Reader
+     */
+    protected $_reader;
 
     /**
      * @var \Magento\Framework\Escaper
@@ -188,12 +204,12 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         $this->_specificEntitiesLayoutHandles = [
             'anchor_categories' => self::SINGLE_CATEGORY_LAYOUT_HANDLE,
             'notanchor_categories' => self::SINGLE_CATEGORY_LAYOUT_HANDLE,
-            'all_products' => self::SINGLE_PRODUCT_LAYOUT_HANLDE,
+            'all_products' => self::SINGLE_PRODUCT_LAYOUT_HANDLE,
         ];
         foreach (array_keys($this->_productType->getTypes()) as $typeId) {
             $layoutHandle = str_replace('{{TYPE}}', $typeId, self::PRODUCT_TYPE_LAYOUT_HANDLE);
             $this->_layoutHandles[$typeId . '_products'] = $layoutHandle;
-            $this->_specificEntitiesLayoutHandles[$typeId . '_products'] = self::SINGLE_PRODUCT_LAYOUT_HANLDE;
+            $this->_specificEntitiesLayoutHandles[$typeId . '_products'] = self::SINGLE_PRODUCT_LAYOUT_HANDLE;
         }
     }
 

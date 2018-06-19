@@ -24,6 +24,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
      */
     const INPUT_KEY_IP = 'ip';
     const INPUT_KEY_NONE = 'none';
+    const INPUT_KEY_ADD = 'add';
 
     /**
      * @var MaintenanceMode
@@ -69,6 +70,12 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
                 InputOption::VALUE_NONE,
                 'Clear allowed IP addresses'
             ),
+            new InputOption(
+                self::INPUT_KEY_ADD,
+                null,
+                InputOption::VALUE_NONE,
+                'Add the IP address to existing list'
+            ),
         ];
         $this->setName('maintenance:allow-ips')
             ->setDescription('Sets maintenance mode exempt IPs')
@@ -91,9 +98,12 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
             }
 
             if (!empty($addresses)) {
+                if ($input->getOption(self::INPUT_KEY_ADD)) {
+                    $addresses = array_unique(array_merge($this->maintenanceMode->getAddressInfo(), $addresses));
+                }
                 $this->maintenanceMode->setAddresses(implode(',', $addresses));
                 $output->writeln(
-                    '<info>Set exempt IP-addresses: ' . implode(', ', $this->maintenanceMode->getAddressInfo()) .
+                    '<info>Set exempt IP-addresses: ' . implode(' ', $this->maintenanceMode->getAddressInfo()) .
                     '</info>'
                 );
             }
@@ -101,6 +111,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
             $this->maintenanceMode->setAddresses('');
             $output->writeln('<info>Set exempt IP-addresses: none</info>');
         }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

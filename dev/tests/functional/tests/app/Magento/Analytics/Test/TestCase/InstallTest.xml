@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Install\Test\TestCase\InstallTest" summary="[Web Setup][Auto] Install CE Magento via Web Interface">
+        <variation name="InstallTestVariation" summary="Magento analytics opt-in by default" ticketId="MAGETWO-80760">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist"/>
+            <constraint name="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled"/>
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" prev="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist" />
+        </variation>
+    </testCase>
+</config>

@@ -259,7 +259,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['selectedShippingMethod'] = $this->getSelectedShippingMethod();
         $output['storeCode'] = $this->getStoreCode();
         $output['isGuestCheckoutAllowed'] = $this->isGuestCheckoutAllowed();
-        $output['isCustomerLoginRequired'] = $this->isCustomerLoginRequired();
         $output['registerUrl'] = $this->getRegisterUrl();
         $output['checkoutUrl'] = $this->getCheckoutUrl();
         $output['defaultSuccessPageUrl'] = $this->getDefaultSuccessPageUrl();
@@ -511,17 +510,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private function isCustomerLoggedIn()
     {
         return (bool)$this->httpContext->getValue(CustomerContext::CONTEXT_AUTH);
-    }
-
-    /**
-     * Check if customer must be logged in to proceed with checkout
-     *
-     * @return bool
-     * @codeCoverageIgnore
-     */
-    private function isCustomerLoginRequired()
-    {
-        return $this->checkoutHelper->isCustomerMustBeLogged();
     }
 
     /**

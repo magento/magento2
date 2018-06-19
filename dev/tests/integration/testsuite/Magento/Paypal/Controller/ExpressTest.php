@@ -142,6 +142,8 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
      * Test return action with configurable product.
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_express_configurable.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      */
     public function testReturnAction()
     {

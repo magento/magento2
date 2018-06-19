@@ -26,7 +26,7 @@ class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
         $connectionMock->expects($this->once())->method('beginTransaction')->will($this->returnValue($uniqid));
         $this->assertSame(0, $connectionMock->getTransactionLevel());
         $this->assertEquals($uniqid, $connectionMock->beginTransparentTransaction());
-        $this->assertSame(-1, $connectionMock->getTransactionLevel());
+        $this->assertSame(0, $connectionMock->getTransactionLevel());
     }
 
     /**

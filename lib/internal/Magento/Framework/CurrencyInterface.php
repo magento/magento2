@@ -240,7 +240,7 @@ interface CurrencyInterface
      * Returns the set service class
      *
      * @return \Zend_Currency_CurrencyInterface
-     * @deprecated
+     * @deprecated 101.0.1
      * @see \Magento\Directory\Model\Currency\Import\ImportInterface
      */
     public function getService();
@@ -250,7 +250,7 @@ interface CurrencyInterface
      *
      * @param string|\Zend_Currency_CurrencyInterface $service Service class
      * @return \Zend_Currency_CurrencyInterface
-     * @deprecated
+     * @deprecated 101.0.1
      * @see \Magento\Directory\Model\Currency\Import\ImportInterface
      */
     public function setService($service);
