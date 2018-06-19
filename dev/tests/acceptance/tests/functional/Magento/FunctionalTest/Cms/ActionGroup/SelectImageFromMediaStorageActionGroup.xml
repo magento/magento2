@@ -37,12 +37,12 @@
     </actionGroup>
     <actionGroup name="attachImage">
         <arguments>
-            <argument name="Image" defaultValue=""/>
+            <argument name="Image"/>
         </arguments>
-        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{Image.value}}" stepKey="uploadImage1"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading6" />
-        <waitForElementVisible  selector="{{MediaGallerySection.image(Image.value)}}" stepKey="waitForUploadImage1" />
-        <seeElement selector="{{MediaGallerySection.imageSelected(Image.value)}}" stepKey="seeImageSelected" />
+        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{Image.value}}" stepKey="uploadImage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForElementVisible  selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="waitForUploadImage"/>
     </actionGroup>
     <actionGroup name="deleteImage">
         <see selector="{{MediaGallerySection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn"/>
@@ -53,8 +53,9 @@
         <dontSeeElement selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="dontSeeImage" />
     </actionGroup>
     <actionGroup name="saveImage">
-        <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickInsertBtn" />
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickInsertBtn"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
     <actionGroup name="fillOutUploadImagePopup">
         <waitForElementVisible selector="{{MediaGallerySection.OkBtn}}" stepKey="waitForOkBtn" />
