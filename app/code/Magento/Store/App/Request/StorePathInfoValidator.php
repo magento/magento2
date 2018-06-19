@@ -69,8 +69,7 @@ class StorePathInfoValidator
     }
 
     /**
-     * Get store code from path info validate if config value. If pathinfo is empty the try to calculate from request.
-     * This method also sets request to no route if store doesn't have url enabled but store in url is enabled globally.
+     * Get store code from path info validate if config value. If path info is empty the try to calculate from request.
      *
      * @param \Magento\Framework\App\Request\Http $request
      * @param string $pathInfo
@@ -103,11 +102,8 @@ class StorePathInfoValidator
                 \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeCode
-            )
-            ) {
+            )) {
                 return $storeCode;
-            } else {
-                $request->setActionName(\Magento\Framework\App\Router\Base::NO_ROUTE);
             }
         }
         return null;
