@@ -103,6 +103,8 @@ class TableMaintainer
      * @param string $newTableName
      *
      * @return void
+     *
+     * @throws \Zend_Db_Exception
      */
     private function createTable(string $mainTableName, string $newTableName)
     {
@@ -175,6 +177,8 @@ class TableMaintainer
      * @param Dimension[] $dimensions
      *
      * @return void
+     *
+     * @throws \Zend_Db_Exception
      */
     public function createTablesForDimensions(array $dimensions)
     {
@@ -260,12 +264,12 @@ class TableMaintainer
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getMainTmpTable(array $dimensions)
     {
         if (!isset($this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)])) {
-            throw new \Exception('Temporary table does not exist');
+            throw new \Magento\Framework\Exception\NoSuchEntityException('Temporary table does not exist');
         }
         return $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)];
     }

@@ -183,6 +183,9 @@ abstract class AbstractAction
      * Prepare website current dates table
      *
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _prepareWebsiteDateTable()
     {
@@ -258,6 +261,8 @@ abstract class AbstractAction
      * Retrieve price indexers per product type
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface[]
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getTypeIndexers()
     {
@@ -292,7 +297,9 @@ abstract class AbstractAction
      *
      * @param string $productTypeId
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface
+     *
      * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getIndexer($productTypeId)
     {
@@ -344,6 +351,10 @@ abstract class AbstractAction
      *
      * @param array $changedIds
      * @return array Affected ids
+     *
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _reindexRows($changedIds = [])
     {
