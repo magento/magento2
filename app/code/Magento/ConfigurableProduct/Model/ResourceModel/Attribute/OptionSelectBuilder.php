@@ -43,11 +43,11 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
      */
     public function __construct(
         Attribute $attributeResource,
-        OptionProvider $attributeOptionProvider,
+        OptionProvider $optionProvider,
         EavAttributeResource $eavAttributeResource
     ) {
         $this->attributeResource = $attributeResource;
-        $this->attributeOptionProvider = $attributeOptionProvider;
+        $this->attributeOptionProvider = $optionProvider;
         $this->eavAttributeResource = $eavAttributeResource;
     }
 
@@ -117,7 +117,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                 'attribute_option.option_id = entity_value.value and attribute_option.attribute_id = attribute.attribute_id',
                 []
             )->order(
-            'attribute_option.sort_order ASC'
+                'attribute_option.sort_order ASC'
             );
         }
 
