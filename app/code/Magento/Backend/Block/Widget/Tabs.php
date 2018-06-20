@@ -238,7 +238,7 @@ class Tabs extends \Magento\Backend\Block\Widget
         $this->_tabs = $this->reorderTabs();
         
         if ($this->_activeTab === null) {
-            /** @var  $tab */
+            /** @var TabInterface $tab */
             foreach ($this->_tabs as $tab) {
                 $this->_activeTab = $tab->getId();
                 break;
@@ -309,7 +309,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     
         $ordered = [];
         
-        /** @var  $tab */
+        /** @var TabInterface $tab */
         foreach ($orderByPosition as $tab) {
             $ordered[$tab->getId()] = $tab;
         }
