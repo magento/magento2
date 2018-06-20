@@ -9,7 +9,7 @@
     <default>
         <system>
             <media_configuration>
-                <max_width>3200</max_width>
+                <max_width>1920</max_width>
                 <max_height>1200</max_height>
             </media_configuration>
         </system>
