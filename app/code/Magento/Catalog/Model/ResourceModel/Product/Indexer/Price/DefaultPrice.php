@@ -307,7 +307,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $query = $select->insertFromSelect($finalPriceTable->getTableName(), [], false);
         $this->getConnection()->query($query);
 
-        $this->applyDiscountPrices($finalPriceTable);
+        $this->modifyPriceIndex($finalPriceTable);
 
         return $this;
     }
@@ -512,12 +512,12 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
-     * Apply discount prices to final price index table.
+     * Modify data in price index table.
      *
      * @param IndexTableStructure $finalPriceTable
      * @return void
      */
-    private function applyDiscountPrices(IndexTableStructure $finalPriceTable)
+    private function modifyPriceIndex(IndexTableStructure $finalPriceTable)
     {
         foreach ($this->priceModifiers as $priceModifier) {
             $priceModifier->modifyPrice($finalPriceTable);
