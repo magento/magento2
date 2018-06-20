@@ -331,7 +331,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             $thisdataarray = $serie;
             if ($this->_encoding == "s") {
                 // SIMPLE ENCODING
-                for ($j = 0; $j < sizeof($thisdataarray); $j++) {
+                for ($j = 0, $jMax = sizeof($thisdataarray); $j < $jMax; $j++) {
                     $currentvalue = $thisdataarray[$j];
                     if (is_numeric($currentvalue)) {
                         $ylocation = round(
@@ -344,7 +344,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                 }
             } else {
                 // EXTENDED ENCODING
-                for ($j = 0; $j < sizeof($thisdataarray); $j++) {
+                for ($j = 0, $jMax = sizeof($thisdataarray); $j < $jMax; $j++) {
                     $currentvalue = $thisdataarray[$j];
                     if (is_numeric($currentvalue)) {
                         if ($yrange) {

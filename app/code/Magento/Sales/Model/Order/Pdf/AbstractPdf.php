@@ -186,7 +186,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         );
 
         $characters = [];
-        for ($i = 0; $i < strlen($drawingString); $i++) {
+        for ($i = 0, $iMax = strlen($drawingString); $i < $iMax; $i++) {
             $characters[] = ord($drawingString[$i++]) << 8 | ord($drawingString[$i]);
         }
         $glyphs = $font->glyphNumbersForCharacters($characters);

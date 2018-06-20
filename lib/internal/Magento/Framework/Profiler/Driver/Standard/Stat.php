@@ -200,7 +200,7 @@ class Stat
 
         $prevTimerId = $timerIds[0];
         $result = [$prevTimerId];
-        for ($i = 1; $i < count($timerIds); $i++) {
+        for ($i = 1, $iMax = count($timerIds); $i < $iMax; $i++) {
             $timerId = $timerIds[$i];
             /* Skip already added timer */
             if (!$timerId) {
@@ -209,7 +209,7 @@ class Stat
             /* Loop over all timers that need to be closed under previous timer */
             while (strpos($timerId, $prevTimerId . Profiler::NESTING_SEPARATOR) !== 0) {
                 /* Add to result all timers nested in the previous timer */
-                for ($j = $i + 1; $j < count($timerIds); $j++) {
+                for ($j = $i + 1, $jMax = count($timerIds); $j < $jMax; $j++) {
                     if (strpos($timerIds[$j], $prevTimerId . Profiler::NESTING_SEPARATOR) === 0) {
                         $result[] = $timerIds[$j];
                         /* Mark timer as already added */

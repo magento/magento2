@@ -297,7 +297,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         $cardNumber = strrev($ccNumber);
         $numSum = 0;
 
-        for ($i = 0; $i < strlen($cardNumber); $i++) {
+        for ($i = 0, $iMax = strlen($cardNumber); $i < $iMax; $i++) {
             $currentNum = substr($cardNumber, $i, 1);
 
             /**

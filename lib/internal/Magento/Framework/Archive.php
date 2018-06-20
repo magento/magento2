@@ -96,7 +96,7 @@ class Archive
     {
         $archivers = $this->_getArchivers($destination);
         $interimSource = '';
-        for ($i = 0; $i < count($archivers); $i++) {
+        for ($i = 0, $iMax = count($archivers); $i < $iMax; $i++) {
             if ($i == count($archivers) - 1) {
                 $packed = $destination;
             } else {
