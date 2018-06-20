@@ -155,12 +155,11 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
             ->setId($groupModel->getId())
             ->setCode($groupModel->getCode())
             ->setTaxClassId($groupModel->getTaxClassId())
-            ->setTaxClassName($groupModel->getTaxClassName());
-        
+            ->setTaxClassName($groupModel->getTaxClassName());      
         if ($group->getExtensionAttributes()) {
             $groupDataObject->setExtensionAttributes($group->getExtensionAttributes());
         }
-        
+                
         return $groupDataObject;
     }
 
