@@ -33,6 +33,7 @@ use Psr\Log\LoggerInterface;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
+ * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -278,9 +279,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @dataProvider getBehaviorDataProvider
      * @param string $importFile
      * @param string $sku
+     * @param int $expectedOptionsQty
      * @magentoAppIsolation enabled
      */
-    public function testSaveCustomOptions($importFile, $sku)
+    public function testSaveCustomOptions($importFile, $sku, $expectedOptionsQty)
     {
         $pathToFile = __DIR__ . '/_files/' . $importFile;
         $importModel = $this->createImportModel($pathToFile);
@@ -313,6 +315,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         // assert of options data
         $this->assertCount(count($expectedData['data']), $actualData['data']);
         $this->assertCount(count($expectedData['values']), $actualData['values']);
+        $this->assertCount($expectedOptionsQty, $actualData['options']);
         foreach ($expectedData['options'] as $expectedId => $expectedOption) {
             $elementExist = false;
             // find value in actual options and values
@@ -343,6 +346,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testSaveCustomOptionsWithMultipleStoreViews()
     {
@@ -416,12 +420,19 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     {
         return [
             'Append behavior with existing product' => [
-                '$importFile' => 'product_with_custom_options.csv',
-                '$sku' => 'simple',
+                'importFile' => 'product_with_custom_options.csv',
+                'sku' => 'simple',
+                'expectedOptionsQty' => 6
+            ],
+            'Append behavior with existing product and without options in import file' => [
+                'importFile' => 'product_without_custom_options.csv',
+                'sku' => 'simple',
+                'expectedOptionsQty' => 0
             ],
             'Append behavior with new product' => [
-                '$importFile' => 'product_with_custom_options_new.csv',
-                '$sku' => 'simple_new',
+                'importFile' => 'product_with_custom_options_new.csv',
+                'sku' => 'simple_new',
+                'expectedOptionsQty' => 4
             ]
         ];
     }
@@ -572,6 +583,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 break;
             }
         }
+        if (!empty($productData['data'][$storeRowId]['custom_options'])) {
             foreach (explode('|', $productData['data'][$storeRowId]['custom_options']) as $optionData) {
                 $option = array_values(
                     array_map(
@@ -593,7 +605,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                         $expectedData[$expectedOptionId] = [];
                         foreach ($this->_assertOptions as $assertKey => $assertFieldName) {
                             if (array_key_exists($assertFieldName, $option)
-                            && !(($assertFieldName == 'price' || $assertFieldName == 'sku')
+                                && !(($assertFieldName == 'price' || $assertFieldName == 'sku')
                                     && in_array($option['type'], $this->specificTypes))
                             ) {
                                 $expectedData[$expectedOptionId][$assertKey] = $option[$assertFieldName];
@@ -611,6 +623,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                     $expectedValues[$expectedOptionId][] = $optionValue;
                 }
             }
+        }
         return [
             'id' => $expectedOptionId,
             'options' => $expectedOptions,
@@ -1010,7 +1023,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testProductsWithMultipleStores()
@@ -1202,7 +1215,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
@@ -1277,7 +1290,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/category_duplicates.php
      */
@@ -1419,6 +1432,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      */
     public function testValidateUrlKeysMultipleStores()
     {
@@ -1514,6 +1528,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testExistingProductWithUrlKeys()
@@ -1553,6 +1568,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testImportWithoutUrlKeys()
@@ -1630,7 +1646,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testProductWithMultipleStoresInDifferentBunches()
@@ -1679,10 +1695,36 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             },
             $productCollection->getItems()
         );
+        sort($products);
+        $result = array_values($actualProductSkus);
+        sort($result);
         $this->assertEquals(
             $products,
-            array_values($actualProductSkus)
+            $result
         );
+
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        $productSkuList = ['simple1', 'simple2', 'simple3'];
+        foreach ($productSkuList as $sku) {
+            try {
+                $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                    ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+                $product = $productRepository->get($sku, true);
+                if ($product->getId()) {
+                    $productRepository->delete($product);
+                }
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                //Product already removed
+            }
+        }
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
     }
 
     /**

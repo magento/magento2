@@ -10,6 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Quote\Model\Quote;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -135,13 +136,19 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        /** @var Quote $quote */
+        $quote = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
+
         if ($billingAddress) {
             $billingAddress->setEmail($email);
-            $this->billingAddressManagement->assign($cartId, $billingAddress);
+            $quote->removeAddress($quote->getBillingAddress()->getId());
+            $quote->setBillingAddress($billingAddress);
+            $quote->setDataChanges(true);
         } else {
-            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-            $this->cartRepository->getActive($quoteIdMask->getQuoteId())->getBillingAddress()->setEmail($email);
+            $quote->getBillingAddress()->setEmail($email);
         }
+        $this->limitShippingCarrier($quote);
 
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
         return true;
@@ -168,5 +175,23 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             $this->logger = \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
         }
         return $this->logger;
+    }
+
+    /**
+     * Limits shipping rates request by carrier from shipping address.
+     *
+     * @param Quote $quote
+     *
+     * @return void
+     * @see \Magento\Shipping\Model\Shipping::collectRates
+     */
+    private function limitShippingCarrier(Quote $quote)
+    {
+        $shippingAddress = $quote->getShippingAddress();
+        if ($shippingAddress && $shippingAddress->getShippingMethod()) {
+            $shippingDataArray = explode('_', $shippingAddress->getShippingMethod());
+            $shippingCarrier = array_shift($shippingDataArray);
+            $shippingAddress->setLimitCarrier($shippingCarrier);
+        }
     }
 }

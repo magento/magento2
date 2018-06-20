@@ -53,6 +53,7 @@ class SourceTest extends \PHPUnit\Framework\TestCase
      * Test reindex for configurable product with both disabled and enabled variations.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testReindexEntitiesForConfigurableProduct()
     {
@@ -113,6 +114,7 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     * @magentoDbIsolation disabled
      */
     public function testReindexMultiselectAttribute()
     {

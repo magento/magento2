@@ -7,6 +7,7 @@ namespace Magento\Framework\Setup\Test\Unit;
 
 use \Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
 
 class FilePermissionsTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,6 +27,11 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
     private $directoryListMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|State
+     */
+    private $stateMock;
+
+    /**
      * @var FilePermissions
      */
     private $filePermissions;
@@ -34,6 +40,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
     {
         $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->stateMock = $this->createMock(State::class);
 
         $this->filesystemMock
             ->expects($this->any())
@@ -43,13 +50,21 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
 
         $this->filePermissions = new FilePermissions(
             $this->filesystemMock,
-            $this->directoryListMock
+            $this->directoryListMock,
+            $this->stateMock
         );
     }
 
-    public function testGetInstallationWritableDirectories()
+    /**
+     * @param string $mageMode
+     * @dataProvider modeDataProvider
+     */
+    public function testGetInstallationWritableDirectories($mageMode)
     {
         $this->setUpDirectoryListInstallation();
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn($mageMode);
 
         $expected = [
             BP . '/app/etc',
@@ -57,6 +72,23 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             BP . '/pub/media',
             BP . '/pub/static',
             BP . '/generated'
+        ];
+
+        $this->assertEquals($expected, $this->filePermissions->getInstallationWritableDirectories());
+    }
+
+    public function testGetInstallationWritableDirectoriesInProduction()
+    {
+        $this->setUpDirectoryListInstallationInProduction();
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+
+        $expected = [
+            BP . '/app/etc',
+            BP . '/var',
+            BP . '/pub/media',
+            BP . '/pub/static'
         ];
 
         $this->assertEquals($expected, $this->filePermissions->getInstallationWritableDirectories());
@@ -134,19 +166,49 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $mageMode
+     * @dataProvider modeDataProvider
      * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritableDirectoriesForInstallation
      * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritablePathsForInstallation
      */
-    public function testGetMissingWritableDirectoriesAndPathsForInstallation()
+    public function testGetMissingWritableDirectoriesAndPathsForInstallation($mageMode)
     {
         $this->setUpDirectoryListInstallation();
         $this->setUpDirectoryWriteInstallation();
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn($mageMode);
 
         $expected = [
             BP . '/var',
             BP . '/pub/media',
             BP . '/pub/static',
             BP . '/generated'
+        ];
+
+        $this->assertEquals(
+            $expected,
+            array_values($this->filePermissions->getMissingWritableDirectoriesForInstallation())
+        );
+
+        $this->assertEquals(
+            $expected,
+            array_values($this->filePermissions->getMissingWritablePathsForInstallation())
+        );
+    }
+
+    public function testGetMissingWritableDirectoriesAndPathsForInstallationInProduction()
+    {
+        $this->setUpDirectoryListInstallationInProduction();
+        $this->setUpDirectoryWriteInstallation();
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+
+        $expected = [
+            BP . '/var',
+            BP . '/pub/media',
+            BP . '/pub/static'
         ];
 
         $this->assertEquals(
@@ -213,6 +275,16 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
 
     public function setUpDirectoryListInstallation()
     {
+        $this->setUpDirectoryListInstallationInProduction();
+        $this->directoryListMock
+            ->expects($this->at(4))
+            ->method('getPath')
+            ->with(DirectoryList::GENERATED)
+            ->will($this->returnValue(BP . '/generated'));
+    }
+
+    public function setUpDirectoryListInstallationInProduction()
+    {
         $this->directoryListMock
             ->expects($this->at(0))
             ->method('getPath')
@@ -233,11 +305,6 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             ->method('getPath')
             ->with(DirectoryList::STATIC_VIEW)
             ->will($this->returnValue(BP . '/pub/static'));
-        $this->directoryListMock
-            ->expects($this->at(4))
-            ->method('getPath')
-            ->with(DirectoryList::GENERATED)
-            ->will($this->returnValue(BP . '/generated'));
     }
 
     public function setUpDirectoryWriteInstallation()
@@ -293,5 +360,16 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(10))
             ->method('isWritable')
             ->will($this->returnValue(false));
+    }
+
+    /**
+     * @return array
+     */
+    public function modeDataProvider()
+    {
+        return [
+            [State::MODE_DEFAULT],
+            [State::MODE_DEVELOPER],
+        ];
     }
 }

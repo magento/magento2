@@ -5,7 +5,10 @@
  */
 namespace Magento\Signifyd\Test\Unit\Model\SignifydGateway;
 
-use \PHPUnit\Framework\TestCase as TestCase;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Signifyd\Api\CaseRepositoryInterface;
+use Magento\Signifyd\Api\Data\CaseInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
@@ -30,6 +33,16 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
      */
     private $gateway;
 
+    /**
+     * @var OrderRepositoryInterface|MockObject
+     */
+    private $orderRepository;
+
+    /**
+     * @var CaseRepositoryInterface|MockObject
+     */
+    private $caseRepository;
+
     public function setUp()
     {
         $this->createCaseBuilder = $this->getMockBuilder(CreateCaseBuilderInterface::class)
@@ -39,16 +52,27 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->orderRepository = $this->getMockBuilder(OrderRepositoryInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->caseRepository= $this->getMockBuilder(CaseRepositoryInterface::class)
+            ->getMockForAbstractClass();
+
         $this->gateway = new Gateway(
             $this->createCaseBuilder,
-            $this->apiClient
+            $this->apiClient,
+            $this->orderRepository,
+            $this->caseRepository
         );
     }
 
     public function testCreateCaseForSpecifiedOrder()
     {
         $dummyOrderId = 1;
+        $dummyStoreId = 2;
         $dummySignifydInvestigationId = 42;
+
+        $this->withOrderEntity($dummyOrderId, $dummyStoreId);
         $this->apiClient
             ->method('makeApiCall')
             ->willReturn([
@@ -68,7 +92,10 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testCreateCaseCallsValidApiMethod()
     {
         $dummyOrderId = 1;
+        $dummyStoreId = 2;
         $dummySignifydInvestigationId = 42;
+
+        $this->withOrderEntity($dummyOrderId, $dummyStoreId);
         $this->createCaseBuilder
             ->method('build')
             ->willReturn([]);
@@ -79,7 +106,8 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ->with(
                 $this->equalTo('/cases'),
                 $this->equalTo('POST'),
-                $this->isType('array')
+                $this->isType('array'),
+                $this->equalTo($dummyStoreId)
             )
             ->willReturn([
                 'investigationId' => $dummySignifydInvestigationId
@@ -92,7 +120,10 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testCreateCaseNormalFlow()
     {
         $dummyOrderId = 1;
+        $dummyStoreId = 2;
         $dummySignifydInvestigationId = 42;
+
+        $this->withOrderEntity($dummyOrderId, $dummyStoreId);
         $this->createCaseBuilder
             ->method('build')
             ->willReturn([]);
@@ -113,7 +144,10 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testCreateCaseWithFailedApiCall()
     {
         $dummyOrderId = 1;
+        $dummyStoreId = 2;
         $apiCallFailureMessage = 'Api call failed';
+
+        $this->withOrderEntity($dummyOrderId, $dummyStoreId);
         $this->createCaseBuilder
             ->method('build')
             ->willReturn([]);
@@ -131,6 +165,9 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testCreateCaseWithMissedResponseRequiredData()
     {
         $dummyOrderId = 1;
+        $dummyStoreId = 2;
+
+        $this->withOrderEntity($dummyOrderId, $dummyStoreId);
         $this->createCaseBuilder
             ->method('build')
             ->willReturn([]);
@@ -147,7 +184,10 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testCreateCaseWithAdditionalResponseData()
     {
         $dummyOrderId = 1;
+        $dummyStoreId = 2;
         $dummySignifydInvestigationId = 42;
+
+        $this->withOrderEntity($dummyOrderId, $dummyStoreId);
         $this->createCaseBuilder
             ->method('build')
             ->willReturn([]);
@@ -169,8 +209,10 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testSubmitCaseForGuaranteeCallsValidApiMethod()
     {
         $dummySygnifydCaseId = 42;
+        $dummyStoreId = 1;
         $dummyDisposition = 'APPROVED';
 
+        $this->withCaseEntity($dummySygnifydCaseId, $dummyStoreId);
         $this->apiClient
             ->expects($this->atLeastOnce())
             ->method('makeApiCall')
@@ -179,7 +221,8 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo('POST'),
                 $this->equalTo([
                     'caseId' => $dummySygnifydCaseId
-                ])
+                ]),
+                $this->equalTo($dummyStoreId)
             )->willReturn([
                 'disposition' => $dummyDisposition
             ]);
@@ -191,8 +234,10 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testSubmitCaseForGuaranteeWithFailedApiCall()
     {
         $dummySygnifydCaseId = 42;
+        $dummyStoreId = 1;
         $apiCallFailureMessage = 'Api call failed';
 
+        $this->withCaseEntity($dummySygnifydCaseId, $dummyStoreId);
         $this->apiClient
             ->method('makeApiCall')
             ->willThrowException(new ApiCallException($apiCallFailureMessage));
@@ -208,10 +253,12 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testSubmitCaseForGuaranteeReturnsDisposition()
     {
         $dummySygnifydCaseId = 42;
+        $dummyStoreId = 1;
         $dummyDisposition = 'APPROVED';
         $dummyGuaranteeId = 123;
         $dummyRereviewCount = 0;
 
+        $this->withCaseEntity($dummySygnifydCaseId, $dummyStoreId);
         $this->apiClient
             ->method('makeApiCall')
             ->willReturn([
@@ -231,9 +278,11 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testSubmitCaseForGuaranteeWithMissedDisposition()
     {
         $dummySygnifydCaseId = 42;
+        $dummyStoreId = 1;
         $dummyGuaranteeId = 123;
         $dummyRereviewCount = 0;
 
+        $this->withCaseEntity($dummySygnifydCaseId, $dummyStoreId);
         $this->apiClient
             ->method('makeApiCall')
             ->willReturn([
@@ -248,8 +297,10 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testSubmitCaseForGuaranteeWithUnexpectedDisposition()
     {
         $dummySygnifydCaseId = 42;
+        $dummyStoreId = 1;
         $dummyUnexpectedDisposition = 'UNEXPECTED';
 
+        $this->withCaseEntity($dummySygnifydCaseId, $dummyStoreId);
         $this->apiClient
             ->method('makeApiCall')
             ->willReturn([
@@ -267,7 +318,9 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testSubmitCaseForGuaranteeWithExpectedDisposition($dummyExpectedDisposition)
     {
         $dummySygnifydCaseId = 42;
+        $dummyStoreId = 1;
 
+        $this->withCaseEntity($dummySygnifydCaseId, $dummyStoreId);
         $this->apiClient
             ->method('makeApiCall')
             ->willReturn([
@@ -294,11 +347,20 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testCancelGuarantee()
     {
         $caseId = 123;
+        $dummyStoreId = 1;
 
+        $this->withCaseEntity($caseId, $dummyStoreId);
         $this->apiClient->expects(self::once())
             ->method('makeApiCall')
-            ->with('/cases/' . $caseId . '/guarantee', 'PUT', ['guaranteeDisposition' => Gateway::GUARANTEE_CANCELED])
-            ->willReturn(['disposition' => Gateway::GUARANTEE_CANCELED]);
+            ->with(
+                '/cases/' . $caseId . '/guarantee',
+                'PUT',
+                ['guaranteeDisposition' => Gateway::GUARANTEE_CANCELED],
+                $dummyStoreId
+            )
+            ->willReturn(
+                ['disposition' => Gateway::GUARANTEE_CANCELED]
+            );
 
         $result = $this->gateway->cancelGuarantee($caseId);
         self::assertEquals(Gateway::GUARANTEE_CANCELED, $result);
@@ -314,10 +376,17 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testCancelGuaranteeWithUnexpectedDisposition()
     {
         $caseId = 123;
+        $dummyStoreId = 1;
 
+        $this->withCaseEntity($caseId, $dummyStoreId);
         $this->apiClient->expects(self::once())
             ->method('makeApiCall')
-            ->with('/cases/' . $caseId . '/guarantee', 'PUT', ['guaranteeDisposition' => Gateway::GUARANTEE_CANCELED])
+            ->with(
+                '/cases/' . $caseId . '/guarantee',
+                'PUT',
+                ['guaranteeDisposition' => Gateway::GUARANTEE_CANCELED],
+                $dummyStoreId
+            )
             ->willReturn(['disposition' => Gateway::GUARANTEE_DECLINED]);
 
         $result = $this->gateway->cancelGuarantee($caseId);
@@ -334,5 +403,47 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             'IN_REVIEW' => ['IN_REVIEW'],
             'UNREQUESTED' => ['UNREQUESTED'],
         ];
+    }
+
+    /**
+     * Specifies order entity mock execution.
+     *
+     * @param int $orderId
+     * @param int $storeId
+     * @return void
+     */
+    private function withOrderEntity($orderId, $storeId)
+    {
+        $orderEntity = $this->getMockBuilder(OrderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderEntity->method('getStoreId')
+            ->willReturn($storeId);
+        $this->orderRepository->method('get')
+            ->with($orderId)
+            ->willReturn($orderEntity);
+    }
+
+    /**
+     * Specifies case entity mock execution.
+     *
+     * @param int $caseId
+     * @param int $storeId
+     * @return void
+     */
+    private function withCaseEntity($caseId, $storeId)
+    {
+        $orderId = 1;
+
+        $caseEntity = $this->getMockBuilder(CaseInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $caseEntity->method('getOrderId')
+            ->willReturn($orderId);
+        $this->caseRepository->method('getByCaseId')
+            ->with($caseId)
+            ->willReturn($caseEntity);
+
+        $this->withOrderEntity($orderId, $storeId);
     }
 }

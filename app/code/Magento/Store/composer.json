@@ -14,7 +14,7 @@
         "magento/module-deploy": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.2",
+    "version": "100.2.3",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

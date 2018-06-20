@@ -133,6 +133,7 @@ class GenerateFixturesCommand extends Command
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

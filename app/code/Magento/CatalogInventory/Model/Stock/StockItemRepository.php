@@ -10,7 +10,7 @@ use Magento\CatalogInventory\Api\Data\StockItemCollectionInterfaceFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Api\StockItemRepositoryInterface as StockItemRepositoryInterface;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as StockItemResource;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;

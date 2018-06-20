@@ -52,6 +52,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product.php
+     * @magentoDbIsolation disabled
      */
     public function testInitFromOrderShippingAddressSameAsBillingWhenEmpty()
     {
@@ -70,7 +71,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product_with_additional_options.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testInitFromOrderAndCreateOrderFromQuoteWithAdditionalOptions()
@@ -132,6 +133,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product.php
      * @magentoDataFixture Magento/Sales/_files/order_shipping_address_same_as_billing.php
+     * @magentoDbIsolation disabled
      */
     public function testInitFromOrderShippingAddressSameAsBillingWhenSame()
     {
@@ -163,6 +165,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product.php
      * @magentoDataFixture Magento/Sales/_files/order_shipping_address_different_to_billing.php
+     * @magentoDbIsolation disabled
      */
     public function testInitFromOrderShippingAddressSameAsBillingWhenDifferent()
     {
@@ -180,6 +183,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Sales/_files/order_paid_with_payflowpro.php
+     * @magentoDbIsolation disabled
      */
     public function testInitFromOrderCcInformationDeleted()
     {
@@ -204,6 +208,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Sales/_files/order.php
+     * @magentoDbIsolation disabled
      */
     public function testInitFromOrderWithEmptyPaymentDetails()
     {
@@ -244,7 +249,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      */
     public function testGetCustomerWishlist()
     {
@@ -322,8 +326,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testSetBillingAddressValidationErrors()
     {
@@ -361,7 +364,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testCreateOrderNewCustomerDifferentAddresses()
@@ -409,7 +411,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_decimal_qty.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testCreateOrderNewCustomer()
@@ -450,7 +452,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * Tests order creation with new customer after failed first place order action.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @dataProvider createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider
      * @param string $customerEmailFirstAttempt
@@ -537,7 +539,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testCreateOrderExistingCustomerDifferentAddresses()
@@ -590,7 +592,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testCreateOrderExistingCustomer()
@@ -628,6 +630,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testGetCustomerCartExistingCart()
     {
@@ -655,6 +658,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testMoveQuoteItemToCart()
     {
@@ -679,7 +683,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testGetCustomerCartNewCart()

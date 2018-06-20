@@ -7,7 +7,7 @@
 //  Magento_ReleaseNotification Modal on dashboard
 //  ---------------------------------------------
 
-.release-notification-modal, .analytics-subscription-modal, .instant-purchase-modal, .email-marketing-modal {
+.release-notification-modal, .trusted-payments-modal, .flexible-payments-modal, .tax-automation-modal {
   -webkit-transition: visibility 0s .5s, opacity .5s ease;
   transition: visibility 0s .5s, opacity .5s ease;
 
@@ -74,24 +74,25 @@
   right: 4rem;
 }
 
-.analytics-highlight {
-  background: url("Magento_ReleaseNotification::images/analytics-icon.svg") no-repeat;
+.trusted-payments-highlight {
+  background: url("Magento_ReleaseNotification::images/trusted-payments-icon.svg") no-repeat;
   background-size: 65px 58px;
 }
 
-.email-marketing-highlight {
-  background: url("Magento_ReleaseNotification::images/email-marketing-icon.svg") no-repeat;
-  background-size: 65px 53.37px;
+.flexible-payments-highlight {
+  background: url("Magento_ReleaseNotification::images/flexible-payments-icon.svg") no-repeat;
+  background-size: 65px 58px;
 }
 
-.instant-purchase-highlight {
-  background: url("Magento_ReleaseNotification::images/instant-purchase-icon.svg") no-repeat;
-  background-size: 65px 59px;
+.tax-automation-highlight {
+  background: url("Magento_ReleaseNotification::images/tax-automation-icon.svg") no-repeat;
+  background-size: 65px 58px;
 }
 
-.analytics-highlight, .email-marketing-highlight, .instant-purchase-highlight {
+.trusted-payments-highlight, .flexible-payments-highlight, .tax-automation-highlight {
   padding: 0 0 2rem 8.5rem;
   margin-left: 1rem;
+  
 
   h3 {
     margin: 0;
@@ -104,26 +105,27 @@
   }
 }
 
-.analytics-subscription-modal {
+.trusted-payments-modal {
   h1:first-of-type {
-    background: url("Magento_ReleaseNotification::images/analytics-icon.svg") no-repeat;
-    background-size: 55px 49.08px;
+    background: url("Magento_ReleaseNotification::images/trusted-payments-icon.svg") no-repeat;
+    background-size: 55px 49px;
     padding: 1.5rem 0 2rem 7rem;
   }
 }
 
-.email-marketing-modal {
+.flexible-payments-modal {
   h1:first-of-type {
-    background: url("Magento_ReleaseNotification::images/email-marketing-icon.svg") no-repeat;
-    background-size: 55px 49.92px;
+    background: url("Magento_ReleaseNotification::images/flexible-payments-icon.svg") no-repeat;
+    background-size: 55px 49px;
     padding: 1.5rem 0 2rem 7rem;
   }
 }
 
-.instant-purchase-modal {
+.tax-automation-modal {
   h1:first-of-type {
-    background: url("Magento_ReleaseNotification::images/instant-purchase-icon.svg") no-repeat;
-    background-size: 55px 46px;
+    background: url("Magento_ReleaseNotification::images/tax-automation-icon.svg") no-repeat;
+    background-size: 55px 49px;
     padding: 1.5rem 0 2rem 7rem;
   }
 }
+
