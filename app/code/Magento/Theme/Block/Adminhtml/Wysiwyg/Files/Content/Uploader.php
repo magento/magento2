@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
 
 /**
@@ -29,17 +31,19 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
+     * @param \Magento\Framework\Image\Adapter\ConfigInterface $imageConfig
      * @param \Magento\Theme\Helper\Storage $storageHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
+        \Magento\Framework\Image\Adapter\ConfigInterface $imageConfig,
         \Magento\Theme\Helper\Storage $storageHelper,
         array $data = []
     ) {
         $this->_storageHelper = $storageHelper;
-        parent::__construct($context, $fileSize, $data);
+        parent::__construct($context, $fileSize, $imageConfig, $data);
     }
 
     /**

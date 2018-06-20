@@ -133,16 +133,6 @@ class Uploader
     const TMP_NAME_EMPTY = 666;
 
     /**
-     * Max Image Width resolution in pixels. For image resizing on client side
-     */
-    const MAX_IMAGE_WIDTH = 1920;
-
-    /**
-     * Max Image Height resolution in pixels. For image resizing on client side
-     */
-    const MAX_IMAGE_HEIGHT = 1200;
-
-    /**
      * Resulting of uploaded file
      *
      * @var array|bool      Array with file info keys: path, file. Result is

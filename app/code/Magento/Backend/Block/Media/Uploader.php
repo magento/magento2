@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Block\Media;
 
 use Magento\Framework\App\ObjectManager;
@@ -31,6 +33,11 @@ class Uploader extends \Magento\Backend\Block\Widget
     protected $_fileSizeService;
 
     /**
+    * @var \Magento\Framework\Image\Adapter\ConfigInterface
+    */
+    protected $imageConfig;
+
+    /**
      * @var Json
      */
     private $jsonEncoder;
@@ -44,11 +51,13 @@ class Uploader extends \Magento\Backend\Block\Widget
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
+        \Magento\Framework\Image\Adapter\ConfigInterface $imageConfig,
         array $data = [],
         Json $jsonEncoder = null
     ) {
         $this->_fileSizeService = $fileSize;
         $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
+        $this->imageConfig = $imageConfig;
         parent::__construct($context, $data);
     }
 
@@ -88,6 +97,16 @@ class Uploader extends \Magento\Backend\Block\Widget
     public function getFileSizeService()
     {
         return $this->_fileSizeService;
+    }
+
+    /**
+    * Get image config
+    *
+    * @return \Magento\Framework\Image\Adapter\ConfigInterface
+    */
+    public function getImageConfigService()
+    {
+        return $this->imageConfig;
     }
 
     /**
