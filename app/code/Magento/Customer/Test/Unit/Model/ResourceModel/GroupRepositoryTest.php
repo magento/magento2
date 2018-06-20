@@ -37,7 +37,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $group;
-    
+
     /**
      * @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -173,7 +173,9 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $groupId = 0;
 
         $taxClass = $this->getMockForAbstractClass(\Magento\Tax\Api\Data\TaxClassInterface::class, [], '', false);
-        $extensionAttributes = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\GroupExtensionInterface::class);
+        $extensionAttributes = $this->getMockForAbstractClass(
+            \Magento\Customer\Api\Data\GroupExtensionInterface::class
+        );
 
         $this->group->expects($this->atLeastOnce())
             ->method('getCode')
