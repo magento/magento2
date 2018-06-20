@@ -6,8 +6,6 @@
 
 namespace Magento\Customer\Model;
 
-use Magento\Framework\Indexer\StateInterface;
-
 /**
  * Class Visitor
  * @package Magento\Customer\Model
@@ -68,6 +66,11 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     protected $indexerRegistry;
 
     /**
+     * @var \Magento\Framework\App\RequestSafetyInterface
+     */
+    private $requestSafety;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Session\SessionManagerInterface $session
@@ -80,6 +83,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * @param array $ignoredUserAgents
      * @param array $ignores
      * @param array $data
+     * @param \Magento\Framework\App\RequestSafetyInterface|null $requestSafety
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -95,7 +99,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
         array $ignores = [],
-        array $data = []
+        array $data = [],
+        \Magento\Framework\App\RequestSafetyInterface $requestSafety = null
     ) {
         $this->session = $session;
         $this->httpHeader = $httpHeader;
@@ -105,6 +110,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         $this->scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
         $this->indexerRegistry = $indexerRegistry;
+        $this->requestSafety = $requestSafety;
     }
 
     /**
@@ -312,11 +318,9 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function getOnlineInterval()
     {
-        $configValue = intval(
-            $this->scopeConfig->getValue(
-                static::XML_PATH_ONLINE_INTERVAL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
+        $configValue = (int) $this->scopeConfig->getValue(
+            static::XML_PATH_ONLINE_INTERVAL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return $configValue ?: static::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
@@ -332,7 +336,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     {
         if (null === $this->requestSafety) {
             $this->requestSafety = \Magento\Framework\App\ObjectManager::getInstance()->create(
-                \Magento\Framework\App\RequestInterface::class
+                \Magento\Framework\App\RequestSafetyInterface::class
             );
         }
         return $this->requestSafety;
