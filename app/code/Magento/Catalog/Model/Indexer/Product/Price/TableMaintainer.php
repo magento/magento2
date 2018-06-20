@@ -271,7 +271,8 @@ class TableMaintainer
         $cacheKey = $this->getArrayKeyForTmpTable($dimensions);
         if (!isset($this->mainTmpTable[$cacheKey])) {
             throw new \LogicException(
-                sprintf('Temporary table for provided dimensions "%s" does not exist', $cacheKey));
+                sprintf('Temporary table for provided dimensions "%s" does not exist', $cacheKey)
+            );
         }
         return $this->mainTmpTable[$cacheKey];
     }
