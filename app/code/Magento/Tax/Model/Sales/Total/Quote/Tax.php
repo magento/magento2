@@ -152,12 +152,23 @@ class Tax extends CommonTaxCollector
         $total->setBaseTotalAmount('subtotal', 0);
         $total->setTotalAmount('tax', 0);
         $total->setBaseTotalAmount('tax', 0);
+        $total->setTotalAmount('shipping', 0);
+        $total->setBaseTotalAmount('shipping', 0);
         $total->setTotalAmount('discount_tax_compensation', 0);
         $total->setBaseTotalAmount('discount_tax_compensation', 0);
         $total->setTotalAmount('shipping_discount_tax_compensation', 0);
         $total->setBaseTotalAmount('shipping_discount_tax_compensation', 0);
         $total->setSubtotalInclTax(0);
         $total->setBaseSubtotalInclTax(0);
+        $total->setShippingInclTax(0);
+        $total->setBaseShippingInclTax(0);
+        $total->setShippingTaxAmount(0);
+        $total->setBaseShippingTaxAmount(0);
+        $total->setShippingAmountForDiscount(0);
+        $total->setBaseShippingAmountForDiscount(0);
+        $total->setBaseShippingAmountForDiscount(0);
+        $total->setTotalAmount('extra_tax', 0);
+        $total->setBaseTotalAmount('extra_tax', 0);
     }
 
     /**

@@ -9,7 +9,8 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontAddMultipleStoreProductsToWishlistTest">
         <annotations>
-            <title value="Add products to wishlist from different stores"/>
+            <features value="Wishlist"/>
+            <title value="Customer should be able to add products to wishlist from different stores"/>
             <description value="All products added to wishlist should be visible on any store. Even if product visibility was set to 'Not Visible Individually' for this store"/>
             <group value="wishlist"/>
         </annotations>

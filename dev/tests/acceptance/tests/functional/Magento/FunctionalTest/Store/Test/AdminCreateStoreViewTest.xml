@@ -9,8 +9,10 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
         <test name="AdminCreateStoreViewTest">
             <annotations>
-                <title value="Create a store view in admin"/>
-                <description value="Create a store view in admin"/>
+                <features value="Store"/>
+                <stories value="Create a store view in admin"/>
+                <title value="Admin should be able to create a store view"/>
+                <description value="Admin should be able to create a store view"/>
                 <group value="storeView"/>
             </annotations>
             <before>

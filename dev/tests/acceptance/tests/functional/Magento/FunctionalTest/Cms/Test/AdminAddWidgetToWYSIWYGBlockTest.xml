@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAddWidgetToWYSIWYGBlockTest">
         <annotations>
-            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <features value="Cms"/>
             <stories value="MAGETWO-42156-Apply new WYSIWYG in Block"/>
             <group value="Cms"/>
             <title value="Admin should be able to add widget to WYSIWYG content of Block"/>
