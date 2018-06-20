@@ -77,14 +77,14 @@
     <!--Upload image for product-->
     <actionGroup name="addProductImage">
         <arguments>
-            <argument name="image" defaultValue="ImageUpload"/>
+            <argument name="image" defaultValue="ProductImage"/>
         </arguments>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
         <waitForPageLoad time="30" stepKey="waitForPageRefresh"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.imageUploadButton}}" stepKey="seeImageSectionIsReady"/>
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="{{image.file}}" stepKey="uploadFile"/>
-        <waitForAjaxLoad time="30" stepKey="waitForAjaxUpload"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.uploadProgressBar}}" stepKey="waitForUpload"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="waitForThumbnail"/>
     </actionGroup>
 
     <!--Remove image for product-->
