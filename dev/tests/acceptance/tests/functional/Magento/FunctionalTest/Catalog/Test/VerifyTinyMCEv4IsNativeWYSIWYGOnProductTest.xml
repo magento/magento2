@@ -9,11 +9,11 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="VerifyTinyMCEv4IsNativeWYSIWYGOnProductTest">
         <annotations>
-            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <features value="Catalog"/>
             <stories value="MAGETWO-72114-TinyMCE v4.6 as a native WYSIWYG editor"/>
             <group value="Catalog"/>
-            <title value="Admin see TinyMCEv4.6 is native WYSIWYG on Product Page"/>
-            <description value="Admin should be able to switch between 2 version of Tinymce in the admin back-end."/>
+            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Product Page"/>
+            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Product Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-81819"/>
         </annotations>
