@@ -166,6 +166,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->imageFactoryMock->expects($this->any())->method('create')->willReturn($image);
         $this->generateImageConfig();
         $image->expects($this->any())->method('resize')->will($this->returnSelf());
+        $image->expects($this->atLeastOnce())->method('backgroundColor')->with([255, 255, 255])->willReturnSelf();
         $this->mediaHelperObject->generateSwatchVariations('/e/a/earth.png');
     }
 

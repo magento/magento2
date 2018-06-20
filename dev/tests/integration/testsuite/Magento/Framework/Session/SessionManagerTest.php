@@ -9,6 +9,8 @@ namespace {
 }
 
 namespace Magento\Framework\Session {
+
+    use Magento\Framework\App\State;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -59,6 +61,16 @@ namespace Magento\Framework\Session {
          */
         protected $objectManager;
 
+        /**
+         * @var \Magento\Framework\App\RequestInterface
+         */
+        private $request;
+
+        /**
+         * @var State|\PHPUnit_Framework_MockObject_MockObject
+         */
+        private $appState;
+
         protected function setUp()
         {
             $this->sessionName = 'frontEndSession';
@@ -68,8 +80,18 @@ namespace Magento\Framework\Session {
 
             $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-            /** @var \Magento\Framework\Session\SidResolverInterface $sidResolver */
-            $this->_sidResolver = $this->objectManager->get(\Magento\Framework\Session\SidResolverInterface::class);
+            $this->appState = $this->getMockBuilder(State::class)
+                ->setMethods(['getAreaCode'])
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            /** @var \Magento\Framework\Session\SidResolver $sidResolver */
+            $this->_sidResolver = $this->objectManager->create(
+                \Magento\Framework\Session\SidResolver::class,
+                [
+                    'appState' => $this->appState
+                ]
+            );
 
             $this->request = $this->objectManager->get(\Magento\Framework\App\RequestInterface::class);
 
@@ -144,6 +166,9 @@ namespace Magento\Framework\Session {
         public function testSetSessionId()
         {
             $sessionId = $this->_model->getSessionId();
+            $this->appState->expects($this->atLeastOnce())
+                ->method('getAreaCode')
+                ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
             $this->_model->setSessionId($this->_sidResolver->getSid($this->_model));
             $this->assertEquals($sessionId, $this->_model->getSessionId());
 
@@ -156,6 +181,9 @@ namespace Magento\Framework\Session {
          */
         public function testSetSessionIdFromParam()
         {
+            $this->appState->expects($this->atLeastOnce())
+                ->method('getAreaCode')
+                ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
             $this->assertNotEquals('test_id', $this->_model->getSessionId());
             $this->request->getQuery()->set($this->_sidResolver->getSessionIdQueryParam($this->_model), 'test-id');
             $this->_model->setSessionId($this->_sidResolver->getSid($this->_model));

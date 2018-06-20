@@ -10,7 +10,10 @@
 namespace Magento\Store\Block;
 
 use Magento\Directory\Helper\Data;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Group;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
 
 /**
  * @api
@@ -29,19 +32,27 @@ class Switcher extends \Magento\Framework\View\Element\Template
     protected $_postDataHelper;
 
     /**
+     * @var UrlHelper
+     */
+    private $urlHelper;
+
+    /**
      * Constructs
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
+     * @param UrlHelper $urlHelper
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
-        array $data = []
+        array $data = [],
+        UrlHelper $urlHelper = null
     ) {
         $this->_postDataHelper = $postDataHelper;
         parent::__construct($context, $data);
+        $this->urlHelper = $urlHelper ?: ObjectManager::getInstance()->get(UrlHelper::class);
     }
 
     /**
@@ -220,12 +231,20 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * @param \Magento\Store\Model\Store $store
      * @param array $data
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getTargetStorePostData(\Magento\Store\Model\Store $store, $data = [])
     {
         $data[\Magento\Store\Api\StoreResolverInterface::PARAM_NAME] = $store->getCode();
+        $data['___from_store'] = $this->_storeManager->getStore()->getCode();
+
+        $urlOnTargetStore = $store->getCurrentUrl(false);
+        $data[ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl($urlOnTargetStore);
+
+        $url = $this->getUrl('stores/store/redirect');
+
         return $this->_postDataHelper->getPostData(
-            $store->getCurrentUrl(false),
+            $url,
             $data
         );
     }

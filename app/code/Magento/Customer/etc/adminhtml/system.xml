@@ -198,7 +198,8 @@
                 <field id="street_lines" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Number of Lines in a Street Address</label>
                     <backend_model>Magento\Customer\Model\Config\Backend\Address\Street</backend_model>
-                    <comment>Leave empty for default (2). Valid range: 1-4</comment>
+                    <comment>Valid range: 1-4</comment>
+                    <validate>required-entry validate-digits validate-digits-range digits-range-1-4</validate>
                 </field>
                 <field id="prefix_show" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Prefix</label>
@@ -209,7 +210,7 @@
                 <field id="prefix_options" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Prefix Dropdown Options</label>
                     <comment>
-                        <![CDATA[Semicolon (;) separated values.<br/>Put semicolon in the beginning for empty first option.<br/>Leave empty for open text field.]]>
+                        <![CDATA[Semicolon (;) separated values.<br/>Leave empty for open text field.]]>
                     </comment>
                 </field>
                 <field id="middlename_show" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -227,7 +228,7 @@
                 <field id="suffix_options" translate="label comment" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Suffix Dropdown Options</label>
                     <comment>
-                        <![CDATA[Semicolon (;) separated values.<br/>Put semicolon in the beginning for empty first option.<br/>Leave empty for open text field.]]>
+                        <![CDATA[Semicolon (;) separated values.<br/>Leave empty for open text field.]]>
                     </comment>
                 </field>
                 <field id="dob_show" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">

@@ -7,10 +7,10 @@ namespace Magento\Cms\Model\ResourceModel;
 
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Store\Model\Store;
@@ -183,10 +183,10 @@ class Block extends AbstractDb
         $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
         $linkField = $entityMetadata->getLinkField();
 
-        if ($this->_storeManager->hasSingleStore()) {
+        if ($this->_storeManager->isSingleStoreMode()) {
             $stores = [Store::DEFAULT_STORE_ID];
         } else {
-            $stores = (array)$object->getData('stores');
+            $stores = (array)$object->getData('store_id');
         }
 
         $select = $this->getConnection()->select()
@@ -230,7 +230,7 @@ class Block extends AbstractDb
                 'cbs.' . $linkField . ' = cb.' . $linkField,
                 []
             )
-            ->where('cb.' . $entityMetadata->getIdentifierField()  . ' = :block_id');
+            ->where('cb.' . $entityMetadata->getIdentifierField() . ' = :block_id');
 
         return $connection->fetchCol($select, ['block_id' => (int)$id]);
     }

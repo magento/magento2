@@ -317,7 +317,7 @@ class Adapter implements MethodInterface
      */
     public function isActive($storeId = null)
     {
-        return $this->getConfiguredValue('active', $storeId);
+        return (bool)$this->getConfiguredValue('active', $storeId);
     }
 
     /**

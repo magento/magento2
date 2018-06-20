@@ -225,6 +225,7 @@
     </type>
     <type name="Magento\Store\Model\ResourceModel\Website">
         <plugin name="priceIndexerOnWebsiteDelete" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
+        <plugin name="categoryProductWebsiteAfterDelete" type="\Magento\Catalog\Model\Indexer\Category\Product\Plugin\Website"/>
     </type>
     <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
@@ -356,6 +357,7 @@
                 <item name="base_price" xsi:type="string">Magento\Catalog\Pricing\Price\BasePrice</item>
                 <item name="custom_option_price" xsi:type="string">Magento\Catalog\Pricing\Price\CustomOptionPrice</item>
                 <item name="configured_price" xsi:type="string">Magento\Catalog\Pricing\Price\ConfiguredPrice</item>
+                <item name="configured_regular_price" xsi:type="string">Magento\Catalog\Pricing\Price\ConfiguredRegularPrice</item>
             </argument>
         </arguments>
     </virtualType>
@@ -809,6 +811,9 @@
             <argument name="attributePersistor" xsi:type="object">Magento\Catalog\Model\ResourceModel\AttributePersistor</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Eav\Model\ResourceModel\ReadSnapshot">
+        <plugin name="catalogReadSnapshot" type="Magento\Catalog\Plugin\Model\ResourceModel\ReadSnapshotPlugin" />
+    </type>
     <type name="Magento\Framework\EntityManager\Operation\AttributePool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">
@@ -854,6 +859,7 @@
             <argument name="customFilters" xsi:type="array">
                 <item name="category_id" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductCategoryFilter</item>
                 <item name="store" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductStoreFilter</item>
+                <item name="store_id" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductStoreFilter</item>
                 <item name="website_id" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductWebsiteFilter</item>
             </argument>
         </arguments>
@@ -1055,6 +1061,17 @@
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
         <arguments>
             <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">indexer</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\Factory">
+        <arguments>
+            <argument name="eavAttributeConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\EavAttributeCondition</argument>
+            <argument name="nativeAttributeConditionBuilder" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\NativeAttributeCondition</argument>
         </arguments>
     </type>
 </config>

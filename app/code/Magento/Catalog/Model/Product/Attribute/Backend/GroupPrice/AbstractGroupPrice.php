@@ -91,7 +91,7 @@ abstract class AbstractGroupPrice extends Price
      */
     protected function _getWebsiteCurrencyRates()
     {
-        if (is_null($this->_rates)) {
+        if ($this->_rates === null) {
             $this->_rates = [];
             $baseCurrency = $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,

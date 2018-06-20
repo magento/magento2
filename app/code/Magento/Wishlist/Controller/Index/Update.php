@@ -83,8 +83,6 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
                 )->defaultCommentString()
                 ) {
                     $description = '';
-                } elseif (!strlen($description)) {
-                    $description = $item->getDescription();
                 }
 
                 $qty = null;

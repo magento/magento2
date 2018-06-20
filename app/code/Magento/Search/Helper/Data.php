@@ -124,7 +124,7 @@ class Data extends AbstractHelper
     {
         return $this->_getUrl(
             'search/ajax/suggest',
-            ['_secure' => $this->storeManager->getStore()->isCurrentlySecure()]
+            ['_secure' => $this->_getRequest()->isSecure()]
         );
     }
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="PriceRuleConditionsSection">
+        <element name="conditionsTab" type="text" selector="//div[@data-index='conditions']//span[contains(.,'Conditions')][1]"/>
+        <element name="createNewRule" type="text" selector="span.rule-param.rule-param-new-child" />
+        <element name="rulesDropdown" type="text" selector="select[data-form-part='sales_rule_form'][data-ui-id='newchild-0-select-rule-conditions-1-new-child']"/>
+        <element name="addProductAttributesButton" type="text" selector="//*[@id='conditions__1--1__children']/li/span/a" />
+        <element name="productAttributesDropdown" type="select" selector="//select[@id='conditions__1--1__new_child']" />
+        <element name="changeCategoriesButton" type="text" selector="//*[@id='conditions__1--1__children']/li[1]/span[2]/a" />
+        <element name="categoriesChooser" type="text" selector="//*[@id='conditions__1--1__children']/li[1]/span[2]/span/label/a" />
+        <element name="treeRoot" type="text" selector=".x-tree-root-ct.x-tree-lines" />
+        <element name="lastTreeNode" type="text" selector=".x-tree-root-ct.x-tree-lines > div > li > ul > li:last-child div img.x-tree-elbow-end-plus" />
+        <element name="subcategory4level" type="text" selector=".x-tree-root-ct.x-tree-lines > div > li > ul > li > ul > li > ul > li > ul > li > div img.x-tree-elbow-end-plus" />
+    </section>
+</sections>

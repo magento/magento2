@@ -33,20 +33,26 @@ class ConfigsApplyFixtureTest extends \PHPUnit\Framework\TestCase
         $cacheMock = $this->createMock(\Magento\Framework\App\Cache::class);
 
         $valueMock = $this->createMock(\Magento\Framework\App\Config::class);
+        $configMock = $this->createMock(\Magento\Config\App\Config\Type\System::class);
 
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
-        $objectManagerMock->expects($this->once())
+        $objectManagerMock
             ->method('get')
-            ->will($this->returnValue($cacheMock));
+            ->willReturnMap([
+                [\Magento\Framework\App\CacheInterface::class, $cacheMock],
+                [\Magento\Config\App\Config\Type\System::class, $configMock]
+            ]);
 
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')
             ->will($this->returnValue(['config' => $valueMock]));
         $this->fixtureModelMock
-            ->expects($this->once())
             ->method('getObjectManager')
             ->will($this->returnValue($objectManagerMock));
+
+        $cacheMock->method('clean');
+        $configMock->method('clean');
 
         $this->model->execute();
     }

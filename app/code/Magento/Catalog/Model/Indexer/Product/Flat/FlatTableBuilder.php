@@ -179,6 +179,11 @@ class FlatTableBuilder
 
             $columnComment = isset($fieldProp['comment']) ? $fieldProp['comment'] : $fieldName;
 
+            if ($fieldName == 'created_at') {
+                $columnDefinition['nullable'] = true;
+                $columnDefinition['default'] = null;
+            }
+
             $table->addColumn($fieldName, $fieldProp['type'], $columnLength, $columnDefinition, $columnComment);
         }
 

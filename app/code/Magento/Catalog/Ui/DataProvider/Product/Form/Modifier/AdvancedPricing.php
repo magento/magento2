@@ -7,14 +7,15 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
-use Magento\Directory\Helper\Data;
-use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
+use Magento\Directory\Helper\Data;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form\Element\DataType\Number;
 use Magento\Ui\Component\Form\Element\DataType\Price;
@@ -23,7 +24,6 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Select;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Modal;
-use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class AdvancedPricing
@@ -500,7 +500,8 @@ class AdvancedPricing extends AbstractModifier
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
-                                            'validate-digits' => true,
+                                            'validate-digits' => false,
+                                            'validate-number' => true,
                                         ],
                                     ],
                                 ],
@@ -622,7 +623,7 @@ class AdvancedPricing extends AbstractModifier
             'componentType' => Modal::NAME,
             'dataScope' => '',
             'provider' => 'product_form.product_form_data_source',
-            'onCancel' => 'actionDone',
+            'onCancel' => 'closeModal',
             'options' => [
                 'title' => __('Advanced Pricing'),
                 'buttons' => [

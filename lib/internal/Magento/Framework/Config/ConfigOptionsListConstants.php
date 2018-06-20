@@ -38,6 +38,12 @@ class ConfigOptionsListConstants
     const CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE = 'db_logger/include_stacktrace';
     /**#@-*/
 
+    /**
+     * Parameter for disabling/enabling static content deployment on demand in production mode
+     * Can contains 0/1 value
+     */
+    const CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION = 'static_content_on_demand_in_production';
+
     /**#@+
      * Input keys for the options
      */

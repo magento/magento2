@@ -112,6 +112,7 @@ class DeployStaticContent
             $deployRjsConfig = $this->objectManager->create(DeployRequireJsConfig::class, [
                 'logger' => $this->logger
             ]);
+            /** @var DeployTranslationsDictionary $deployI18n */
             $deployI18n = $this->objectManager->create(DeployTranslationsDictionary::class, [
                 'logger' => $this->logger
             ]);

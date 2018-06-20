@@ -25,14 +25,11 @@
             </tr>
         </thead>
         <?php foreach ($_items as $_item): ?>
-            <?php
-                if ($_item->getParentItem()) {
-                    continue;
-                }
-            ?>
-            <tbody>
-                <?= $block->getItemHtml($_item) ?>
-            </tbody>
+            <?php if (!$_item->getParentItem()) : ?>
+                <tbody>
+                    <?= $block->getItemHtml($_item) ?>
+                </tbody>
+            <?php endif; ?>
         <?php endforeach; ?>
         <tfoot class="order-totals">
             <?= $block->getChildHtml('order_totals') ?>

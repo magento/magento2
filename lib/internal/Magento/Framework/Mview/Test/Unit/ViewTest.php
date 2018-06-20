@@ -263,7 +263,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
-        $defaultBatchSize = 1000;
 
         $this->stateMock->expects($this->any())
             ->method('getViewId')
@@ -297,7 +296,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             'getList'
         )->with(
             $lastVersionId,
-            $lastVersionId + $defaultBatchSize
+            $currentVersionId
         )->will(
             $this->returnValue($listId)
         );
@@ -327,7 +326,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
-        $defaultBatchSize = 1000;
 
         $this->stateMock->expects($this->any())
             ->method('getViewId')
@@ -360,7 +358,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             'getList'
         )->with(
             $lastVersionId,
-            $lastVersionId + $defaultBatchSize
+            $currentVersionId
         )->will(
             $this->returnValue($listId)
         );

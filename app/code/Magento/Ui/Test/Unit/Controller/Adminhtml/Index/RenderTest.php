@@ -9,6 +9,7 @@ use Magento\Ui\Controller\Adminhtml\Index\Render;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
+ * Test for Magento\Ui\Controller\Adminhtml\Index\Render
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RenderTest extends \PHPUnit\Framework\TestCase
@@ -89,6 +90,9 @@ class RenderTest extends \PHPUnit\Framework\TestCase
      */
     private $loggerMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
@@ -175,88 +179,61 @@ class RenderTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteAjaxRequestException()
     {
-        $name = 'test-name';
+        $namespace = 'test-name';
         $renderedData = '<html>data</html>';
 
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
-            ->with('namespace')
-            ->willReturn($name);
-        $this->requestMock->expects($this->any())
-            ->method('getParams')
-            ->willReturn([]);
+        $this->prepareComponent($namespace, $renderedData);
         $this->responseMock->expects($this->once())
             ->method('appendBody')
             ->willThrowException(new \Exception('exception'));
-
         $jsonResultMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->setMethods(['setData'])
             ->getMock();
-
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($jsonResultMock);
-
         $jsonResultMock->expects($this->once())
             ->method('setData')
             ->willReturnSelf();
-
         $this->loggerMock->expects($this->once())
             ->method('critical')
             ->willReturnSelf();
 
-        $this->dataProviderMock->expects($this->once())
-            ->method('getConfigData')
-            ->willReturn([]);
+        $this->render->executeAjaxRequest();
+    }
 
-        $this->uiComponentMock->expects($this->once())
-            ->method('render')
-            ->willReturn($renderedData);
-        $this->uiComponentMock->expects($this->once())
-            ->method('getChildComponents')
-            ->willReturn([]);
-        $this->uiComponentMock->expects($this->once())
-            ->method('getContext')
-            ->willReturn($this->uiComponentContextMock);
-        $this->uiFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->uiComponentMock);
+    public function testExecuteAjaxJsonRequest()
+    {
+        $namespace = 'test-name';
+        $renderedData = '{"data": "test"}';
+        $acceptType = 'json';
+
+        $this->prepareComponent($namespace, $renderedData, $acceptType);
+        $this->responseMock->expects($this->any())
+            ->method('appendBody')
+            ->with($renderedData);
+        $this->responseMock->expects($this->once())
+            ->method('setHeader')
+            ->with('Content-Type', 'application/json')
+            ->willReturnSelf();
 
         $this->render->executeAjaxRequest();
     }
 
     public function testExecuteAjaxRequest()
     {
-        $name = 'test-name';
+        $namespace = 'test-name';
         $renderedData = '<html>data</html>';
 
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
-            ->with('namespace')
-            ->willReturn($name);
-        $this->requestMock->expects($this->any())
-            ->method('getParams')
-            ->willReturn([]);
-        $this->responseMock->expects($this->once())
+        $this->prepareComponent($namespace, $renderedData);
+        $this->responseMock->expects($this->any())
             ->method('appendBody')
             ->with($renderedData);
-        $this->dataProviderMock->expects($this->once())
-            ->method('getConfigData')
-            ->willReturn([]);
-
-        $this->uiComponentMock->expects($this->once())
-            ->method('render')
-            ->willReturn($renderedData);
-        $this->uiComponentMock->expects($this->once())
-            ->method('getChildComponents')
-            ->willReturn([]);
-        $this->uiComponentMock->expects($this->once())
-            ->method('getContext')
-            ->willReturn($this->uiComponentContextMock);
-        $this->uiFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->uiComponentMock);
+        $this->responseMock->expects($this->never())
+            ->method('setHeader')
+            ->with('Content-type', 'application/json')
+            ->willReturnSelf();
 
         $this->render->executeAjaxRequest();
     }
@@ -279,6 +256,13 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())
             ->method('getParams')
             ->willReturn([]);
+        if ($isAllowed === false) {
+            $this->requestMock->expects($this->once())
+                ->method('isAjax')
+                ->willReturn(true);
+        }
+        $this->responseMock->expects($this->never())
+            ->method('setRedirect');
         $this->responseMock->expects($this->any())
             ->method('appendBody')
             ->with($renderedData);
@@ -298,9 +282,12 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->uiComponentMock->expects($this->any())
             ->method('getChildComponents')
             ->willReturn([]);
-        $this->uiComponentMock->expects($this->once())
+        $this->uiComponentMock->expects($this->any())
             ->method('getContext')
             ->willReturn($this->uiComponentContextMock);
+        $this->uiComponentContextMock->expects($this->any())
+            ->method('getAcceptType')
+            ->willReturn('html');
         $this->uiFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->uiComponentMock);
@@ -329,5 +316,42 @@ class RenderTest extends \PHPUnit\Framework\TestCase
                 'authCallCount' => 0
             ],
         ];
+    }
+
+    /**
+     * Prepare component mock.
+     *
+     * @param string $namespace
+     * @param string $renderedData
+     * @param string $acceptType
+     * @return void
+     */
+    private function prepareComponent($namespace, $renderedData, $acceptType = 'html')
+    {
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->with('namespace')
+            ->willReturn($namespace);
+        $this->requestMock->expects($this->any())
+            ->method('getParams')
+            ->willReturn([]);
+        $this->dataProviderMock->expects($this->once())
+            ->method('getConfigData')
+            ->willReturn([]);
+        $this->uiComponentMock->expects($this->once())
+            ->method('render')
+            ->willReturn($renderedData);
+        $this->uiComponentMock->expects($this->once())
+            ->method('getChildComponents')
+            ->willReturn([]);
+        $this->uiComponentMock->expects($this->exactly(2))
+            ->method('getContext')
+            ->willReturn($this->uiComponentContextMock);
+        $this->uiComponentContextMock->expects($this->once())
+            ->method('getAcceptType')
+            ->willReturn($acceptType);
+        $this->uiFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->uiComponentMock);
     }
 }

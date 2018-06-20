@@ -69,4 +69,4 @@ $productRepository->save($product);
 
 /** @var CategoryLinkManagementInterface $linkManagement */
 $linkManagement = $objectManager->get(CategoryLinkManagementInterface::class);
-$linkManagement->assignProductToCategories($product->getSku(), [$category->getEntityId()]);
+$linkManagement->assignProductToCategories($product->getSku(), [Category::TREE_ROOT_ID, $category->getEntityId()]);

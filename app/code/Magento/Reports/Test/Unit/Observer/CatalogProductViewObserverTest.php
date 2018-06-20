@@ -61,6 +61,11 @@ class CatalogProductViewObserverTest extends \PHPUnit\Framework\TestCase
     protected $productIndexFactoryMock;
 
     /**
+     * @var \Magento\Reports\Model\ReportStatus|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $reportStatusMock;
+
+    /**
      * {@inheritDoc}
      */
     protected function setUp()
@@ -127,6 +132,11 @@ class CatalogProductViewObserverTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['save'])
             ->getMock();
 
+        $this->reportStatusMock = $this->getMockBuilder(\Magento\Reports\Model\ReportStatus::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isReportEnabled'])
+            ->getMock();
+
         $this->observer = $objectManager->getObject(
             \Magento\Reports\Observer\CatalogProductViewObserver::class,
             [
@@ -134,7 +144,8 @@ class CatalogProductViewObserverTest extends \PHPUnit\Framework\TestCase
                 'productIndxFactory' => $this->productIndexFactoryMock,
                 'customerSession' => $this->customerSessionMock,
                 'customerVisitor' => $this->customerVisitorMock,
-                'eventSaver' => $this->eventSaverMock
+                'eventSaver' => $this->eventSaverMock,
+                'reportStatus' => $this->reportStatusMock
             ]
         );
     }
@@ -161,6 +172,7 @@ class CatalogProductViewObserverTest extends \PHPUnit\Framework\TestCase
             'store_id' => $storeId,
         ];
 
+        $this->reportStatusMock->expects($this->once())->method('isReportEnabled')->willReturn(true);
         $this->storeMock->expects($this->any())->method('getId')->willReturn($storeId);
 
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn(true);
@@ -197,6 +209,7 @@ class CatalogProductViewObserverTest extends \PHPUnit\Framework\TestCase
             'store_id' => $storeId,
         ];
 
+        $this->reportStatusMock->expects($this->once())->method('isReportEnabled')->willReturn(true);
         $this->storeMock->expects($this->any())->method('getId')->willReturn($storeId);
 
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn(false);

@@ -10,7 +10,8 @@ define([
     'ko',
     'underscore',
     'sidebar',
-    'mage/translate'
+    'mage/translate',
+    'mage/dropdown'
 ], function (Component, customerData, $, ko, _) {
     'use strict';
 
@@ -93,16 +94,16 @@ define([
                 this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
                 this.update(updatedCart);
+
+                if (cartData()['website_id'] !== window.checkout.websiteId) {
+                    customerData.reload(['cart'], false);
+                }
                 initSidebar();
             }, this);
             $('[data-block="minicart"]').on('contentLoading', function () {
                 addToCartCalls++;
                 self.isLoading(true);
             });
-
-            if (cartData()['website_id'] !== window.checkout.websiteId) {
-                customerData.reload(['cart'], false);
-            }
 
             return this._super();
         },
