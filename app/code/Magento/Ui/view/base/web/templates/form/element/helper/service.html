@@ -11,6 +11,7 @@
                 id: $data.uid + '_default',
                 name: 'use_default[' + $data.index + ']',
            "
-           ko-checked="isUseDefault">
+           ko-checked="isUseDefault"
+           ko-disabled="$data.serviceDisabled">
     <label translate="'Use Default Value'" attr="for: $data.uid + '_default'" class="admin__field-label"></label>
 </div>

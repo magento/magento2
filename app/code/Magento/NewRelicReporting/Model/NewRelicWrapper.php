@@ -42,6 +42,19 @@ class NewRelicWrapper
     }
 
     /**
+     * Wrapper for 'newrelic_set_appname'
+     *
+     * @param string $appName
+     * @return void
+     */
+    public function setAppName(string $appName)
+    {
+        if (extension_loaded('newrelic')) {
+            newrelic_set_appname($appName);
+        }
+    }
+
+    /**
      * Checks whether newrelic-php5 agent is installed
      *
      * @return bool
