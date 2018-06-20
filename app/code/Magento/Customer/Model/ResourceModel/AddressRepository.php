@@ -363,7 +363,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param \Magento\Customer\Model\Address $customerAddressModel
      * @return array
      */
-    private function getWebsiteAllowedCountries(\Magento\Customer\Model\Address $customerAddressModel): array
+    private function getWebsiteAllowedCountries(\Magento\Customer\Model\Address $customerAddressModel)
     {
         $websiteId = null;
 
