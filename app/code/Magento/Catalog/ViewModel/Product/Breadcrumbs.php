@@ -104,12 +104,12 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
      */
     public function getJsonConfiguration()
     {
-        return $this->json->serialize([
+        return $this->escaper->escapeHtml($this->json->serialize([
             'breadcrumbs' => [
                 'categoryUrlSuffix' => $this->escaper->escapeHtml($this->getCategoryUrlSuffix()),
                 'userCategoryPathInUrl' => (int)$this->isCategoryUsedInProductUrl(),
-                'product' => $this->escaper->escapeHtml($this->getProductName())
+                'product' => $this->getProductName()
             ]
-        ]);
+        ]));
     }
 }
