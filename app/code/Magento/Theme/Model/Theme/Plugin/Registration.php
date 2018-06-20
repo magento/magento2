@@ -5,8 +5,7 @@
  */
 namespace Magento\Theme\Model\Theme\Plugin;
 
-use Magento\Backend\App\AbstractAction;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ActionInterface;
 use Magento\Theme\Model\Theme\Registration as ThemeRegistration;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
@@ -69,15 +68,13 @@ class Registration
     /**
      * Add new theme from filesystem and update existing
      *
-     * @param AbstractAction $subject
-     * @param RequestInterface $request
+     * @param ActionInterface $subject
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(
-        AbstractAction $subject,
-        RequestInterface $request
+    public function beforeExecute(
+        ActionInterface $subject
     ) {
         try {
             if ($this->appState->getMode() != AppState::MODE_PRODUCTION) {

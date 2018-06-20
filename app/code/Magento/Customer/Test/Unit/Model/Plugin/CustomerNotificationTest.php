@@ -5,12 +5,12 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Plugin;
 
-use Magento\Backend\App\AbstractAction;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\Plugin\CustomerNotification;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
@@ -34,8 +34,11 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
     /** @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $request;
 
-    /** @var AbstractAction|\PHPUnit_Framework_MockObject_MockObject */
-    private $abstractAction;
+    /** @var ActionInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $actionInterfaceMock;
+    
+    /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $logger;
 
     /** @var CustomerNotification */
     private $plugin;
@@ -45,22 +48,15 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->notificationStorage = $this->getMockBuilder(NotificationStorage::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
-        $this->abstractAction = $this->getMockBuilder(AbstractAction::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->session = $this->createMock(Session::class);
+        $this->notificationStorage = $this->createMock(NotificationStorage::class);
+        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
+        $this->actionInterfaceMock = $this->createMock(ActionInterface::class);
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['isPost'])
             ->getMockForAbstractClass();
-        $this->appState = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->appState = $this->createMock(State::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->appState->method('getAreaCode')->willReturn(Area::AREA_FRONTEND);
         $this->request->method('isPost')->willReturn(true);
@@ -75,15 +71,16 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
             $this->notificationStorage,
             $this->appState,
             $this->customerRepository,
-            $this->logger
+            $this->logger,
+            $this->request
         );
     }
 
-    public function testBeforeDispatch()
+    public function testBeforeExecute()
     {
         $customerGroupId =1;
 
-        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerMock = $this->createMock(CustomerInterface::class);
         $customerMock->method('getGroupId')->willReturn($customerGroupId);
         $this->customerRepository->expects($this->once())
             ->method('getById')
@@ -96,7 +93,7 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('remove')
             ->with(NotificationStorage::UPDATE_CUSTOMER_SESSION, self::$customerId);
 
-        $this->plugin->beforeDispatch($this->abstractAction, $this->request);
+        $this->plugin->beforeExecute($this->actionInterfaceMock);
     }
 
     public function testBeforeDispatchWithNoCustomerFound()
@@ -107,6 +104,6 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
         $this->logger->expects($this->once())
             ->method('error');
 
-        $this->plugin->beforeDispatch($this->abstractAction, $this->request);
+        $this->plugin->beforeExecute($this->actionInterfaceMock);
     }
 }

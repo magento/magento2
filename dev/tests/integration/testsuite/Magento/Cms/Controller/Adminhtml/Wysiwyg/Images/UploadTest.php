@@ -10,6 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload class.
+ *
+ * @magentoAppArea adminhtml
  */
 class UploadTest extends \PHPUnit\Framework\TestCase
 {

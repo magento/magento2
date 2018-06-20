@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Action\Plugin;
 
 use Magento\Framework\Message\MessageInterface;
@@ -35,15 +36,12 @@ class Design
      * Initialize design
      *
      * @param \Magento\Framework\App\ActionInterface $subject
-     * @param \Magento\Framework\App\RequestInterface $request
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(
-        \Magento\Framework\App\ActionInterface $subject,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
+    public function beforeExecute(\Magento\Framework\App\ActionInterface $subject)
+    {
         try {
             $this->_designLoader->load();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {

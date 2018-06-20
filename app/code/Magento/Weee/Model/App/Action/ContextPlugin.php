@@ -92,17 +92,14 @@ class ContextPlugin
 
     /**
      * @param \Magento\Framework\App\ActionInterface $subject
-     * @param \Magento\Framework\App\RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function beforeDispatch(
-        \Magento\Framework\App\ActionInterface $subject,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
+    public function beforeExecute(\Magento\Framework\App\ActionInterface $subject)
+    {
         if (!$this->weeeHelper->isEnabled() ||
             !$this->customerSession->isLoggedIn() ||
             !$this->moduleManager->isEnabled('Magento_PageCache') ||

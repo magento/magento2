@@ -167,7 +167,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         $this->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
 
         // prevent saving Visitor for safe methods, e.g. GET request
-        if ($this->requestSafety->isSafeMethod()) {
+        if ($this->getRequest()->isSafeMethod()) {
             return $this;
         }
         if (!$this->getId()) {
@@ -190,7 +190,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     public function saveByRequest($observer)
     {
         // prevent saving Visitor for safe methods, e.g. GET request
-        if ($this->skipRequestLogging || $this->requestSafety->isSafeMethod() || $this->isModuleIgnored($observer)) {
+        if ($this->skipRequestLogging || $this->getRequest()->isSafeMethod() || $this->isModuleIgnored($observer)) {
             return $this;
         }
 
@@ -213,7 +213,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     public function isModuleIgnored($observer)
     {
         if (is_array($this->ignores) && $observer) {
-            $curModule = $observer->getEvent()->getControllerAction()->getRequest()->getRouteName();
+            $curModule = $this->getRequest()->getRouteName();
             if (isset($this->ignores[$curModule])) {
                 return true;
             }
@@ -327,5 +327,22 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
             )
         );
         return $configValue ?: static::DEFAULT_ONLINE_MINUTES_INTERVAL;
+    }
+
+    /**
+     * Return the shared request.
+     * If the request wasn't injected because of the backward compatible optional constructor dependency,
+     * create a new request instance.
+     *
+     * @return \Magento\Framework\App\RequestSafetyInterface|\Magento\Framework\App\Request\Http
+     */
+    private function getRequest()
+    {
+        if (null === $this->requestSafety) {
+            $this->request = \Magento\Framework\App\ObjectManager::getInstance()->create(
+                \Magento\Framework\App\RequestInterface::class
+            );
+        }
+        return $this->requestSafety;
     }
 }

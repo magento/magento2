@@ -24,19 +24,14 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Framework\App\Http\Context $httpContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $httpContextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Action\Action|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $requestMock;
 
     /**
      * Set up
@@ -46,17 +41,13 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->httpContextMock = $this->createMock(\Magento\Framework\App\Http\Context::class);
         $this->subjectMock = $this->createMock(\Magento\Framework\App\Action\Action::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->plugin = new \Magento\Customer\Model\App\Action\ContextPlugin(
             $this->customerSessionMock,
             $this->httpContextMock
         );
     }
 
-    /**
-     * Test aroundDispatch
-     */
-    public function testBeforeDispatch()
+    public function testBeforeExecute()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerGroupId')
@@ -74,6 +65,6 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             );
-        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
+        $this->plugin->beforeExecute($this->subjectMock);
     }
 }
