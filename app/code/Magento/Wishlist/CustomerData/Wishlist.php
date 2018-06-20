@@ -147,6 +147,14 @@ class Wishlist implements SectionSourceInterface
      */
     protected function getImageData($product)
     {
+        /*Set variant product if it is configurable product.
+        It will show variant product image in sidebar instead of configurable product image.*/
+        $simpleOption = $product->getCustomOption('simple_product');
+        if ($simpleOption !== null) {
+            $optionProduct = $simpleOption->getProduct();
+            $product = $optionProduct;
+        }
+
         /** @var \Magento\Catalog\Helper\Image $helper */
         $helper = $this->imageHelperFactory->create()
             ->init($product, 'wishlist_sidebar_block');
