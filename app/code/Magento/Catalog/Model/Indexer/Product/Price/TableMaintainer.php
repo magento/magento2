@@ -264,13 +264,15 @@ class TableMaintainer
      *
      * @return string
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \LogicException
      */
-    public function getMainTmpTable(array $dimensions)
+    public function getMainTmpTable(array $dimensions): string
     {
-        if (!isset($this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)])) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException('Temporary table does not exist');
+        $cacheKey = $this->getArrayKeyForTmpTable($dimensions);
+        if (!isset($this->mainTmpTable[$cacheKey])) {
+            throw new \LogicException(
+                sprintf('Temporary table for provided dimensions "%s" does not exist', $cacheKey));
         }
-        return $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)];
+        return $this->mainTmpTable[$cacheKey];
     }
 }

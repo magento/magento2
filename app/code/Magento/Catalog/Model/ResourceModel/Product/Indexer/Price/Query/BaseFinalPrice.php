@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\ColumnValueExpression;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Indexer\Dimension;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
@@ -94,7 +93,7 @@ class BaseFinalPrice
      * @param string $productType
      * @param array $entityIds
      * @return Select
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws \LogicException
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_Db_Select_Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -163,8 +162,8 @@ class BaseFinalPrice
 
         foreach ($dimensions as $dimension) {
             if (!isset($this->dimensionToFieldMapper[$dimension->getName()])) {
-                throw new InputException(
-                    __('Provided dimension %1 is not valid for Price indexer', $dimension->getName())
+                throw new \LogicException(
+                    'Provided dimension is not valid for Price indexer: ' . $dimension->getName()
                 );
             }
             $select->where($this->dimensionToFieldMapper[$dimension->getName()] . ' = ?', $dimension->getValue());
