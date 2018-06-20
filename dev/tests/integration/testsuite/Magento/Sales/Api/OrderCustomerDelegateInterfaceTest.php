@@ -182,14 +182,15 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/order_different_addresses.php
+     * @return void
      */
-    public function testDelegateNewDifferentAddresses()
+    public function testDelegateNewDifferentAddresses(): void
     {
         $orderAutoincrementId = '100000001';
         /** @var Order $orderModel */
         $orderModel = $this->orderFactory->create();
         $orderModel->loadByIncrementId($orderAutoincrementId);
-        $orderId = $orderModel->getId();
+        $orderId = (int)$orderModel->getId();
         unset($orderModel);
 
         $this->delegate->delegateNew($orderId);
