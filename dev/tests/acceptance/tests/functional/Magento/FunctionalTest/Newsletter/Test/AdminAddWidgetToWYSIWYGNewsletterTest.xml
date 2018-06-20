@@ -9,11 +9,11 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAddWidgetToWYSIWYGNewsletterTest">
         <annotations>
-            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <features value="Newsletter"/>
             <stories value="MAGETWO-47309-Apply new WYSIWYG in Newsletter"/>
             <group value="Newsletter"/>
-            <title value="You should be able to add widget to WYSIWYG Editor of Newsletter"/>
-            <description value="You should be able to add widget to WYSIWYG Editor Newsletter"/>
+            <title value="Admin should be able to add widget to WYSIWYG Editor of Newsletter"/>
+            <description value="Admin should be able to add widget to WYSIWYG Editor Newsletter"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84682"/>
         </annotations>
