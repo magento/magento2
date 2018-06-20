@@ -13,7 +13,6 @@
         <section name="AdminProductFormActionSection"/>
         <section name="AdminProductSEOSection"/>
         <section name="AdminProductImagesSection"/>
-        <section name="AdminAddProductsToOptionPanel"/>
         <section name="AdminProductMessagesSection"/>
         <section name="AdminMessagesSection"/>
         <section name="AdminProductCustomizableOptionsSection" />
