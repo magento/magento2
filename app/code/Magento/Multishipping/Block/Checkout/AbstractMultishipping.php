@@ -5,7 +5,7 @@
  */
 
 /**
- * Multishipping checkout base abstract block
+ * Mustishipping checkout base abstract block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
