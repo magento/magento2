@@ -231,6 +231,17 @@ class Quote extends AbstractDb
     }
 
     /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return Quote
+     * @deprecated
+     * @see subtractProductFromQuotes
+     */
+    public function substractProductFromQuotes($product)
+    {
+        return $this->subtractProductFromQuotes($product);
+    }
+
+    /**
      * Subtract product from all quotes quantities
      *
      * @param \Magento\Catalog\Model\Product $product

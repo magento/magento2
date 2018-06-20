@@ -19,14 +19,17 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * @var Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     private $quoteMock;
+
     /**
      * @var Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sequenceManagerMock;
+
     /**
      * @var SequenceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sequenceMock;
+
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote
      */
