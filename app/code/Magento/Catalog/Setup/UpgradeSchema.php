@@ -142,7 +142,24 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->enableSegmentation($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.2.6', '<')) {
+            $this->modifySkuColumn($setup);
+        }
+
         $setup->endSetup();
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     */
+    private function modifySkuColumn(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->addIndex(
+            $setup->getTable('catalog_product_entity'),
+            $setup->getIdxName('catalog_product_entity', ['sku']),
+            ['sku'],
+            \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        );
     }
 
     /**
