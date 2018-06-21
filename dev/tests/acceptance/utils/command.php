@@ -6,10 +6,15 @@
 
 if (isset($_POST['command'])) {
     $command = urldecode($_POST['command']);
+    if (array_key_exists("arguments", $_POST)) {
+        $arguments = urldecode($_POST['arguments']);
+    } else {
+        $arguments = null;
+    }
     $php = PHP_BINARY ?: (PHP_BINDIR ? PHP_BINDIR . '/php' : 'php');
     $valid = validateCommand($command);
     if ($valid) {
-        exec(escapeCommand($php . ' -f ../../../../bin/magento ' . $command) . " 2>&1", $output, $exitCode);
+        exec(escapeCommand($php . ' -f ../../../../bin/magento ' . $command) . " $arguments" . " 2>&1", $output, $exitCode);
         if ($exitCode == 0) {
             http_response_code(202);
         } else {
