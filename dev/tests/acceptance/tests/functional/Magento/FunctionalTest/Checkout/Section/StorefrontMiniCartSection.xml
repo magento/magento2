@@ -22,5 +22,6 @@
         <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout" timeout="30"/>
         <element name="viewAndEditCart" type="button" selector=".action.viewcart" timeout="30"/>
         <element name="miniCartItemsText" type="text" selector=".minicart-items"/>
+        <element name="deleteMiniCartItem" type="button" selector=".action.delete" timeout="30"/>
     </section>
 </sections>
