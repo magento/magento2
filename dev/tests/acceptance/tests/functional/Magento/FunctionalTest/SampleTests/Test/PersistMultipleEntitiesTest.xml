@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="PersistMultipleEntitiesTest">
         <annotations>
+            <features value="SampleTests"/>
             <group value="skip"/>
         </annotations>
         <before>

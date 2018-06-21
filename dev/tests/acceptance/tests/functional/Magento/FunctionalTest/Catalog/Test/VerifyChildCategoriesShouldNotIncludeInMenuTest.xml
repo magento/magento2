@@ -10,9 +10,9 @@
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="VerifyChildCategoriesShouldNotIncludeInMenuTest">
         <annotations>
-            <features value="Test child categories should not include in menu"/>
-            <title value="Test child categories should not include in menu."/>
-            <description value="Test child categories should not include in menu."/>
+            <features value="Catalog"/>
+            <title value="Customer should not see categories that are not included in the menu"/>
+            <description value="Customer should not see categories that are not included in the menu"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-72238"/>
             <group value="category"/>

@@ -10,10 +10,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreateDuplicatedCmsBlockTest">
         <annotations>
-            <features value="[CMS] Drag Drop, Preview and Access to the Options of the Content Blocks MAGETWO-83848"/>
+            <features value="Cms"/>
             <stories value="CMS Block Duplication and Reset Removal MAGETWO-88797"/>
-            <title value="Create a duplicated CMS Block"/>
-            <description value="You should be able to duplicate a CMS Block via the Admin."/>
+            <title value="Admin should be able to duplicate a CMS block"/>
+            <description value="Admin should be able to duplicate a CMS block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-89185"/>
             <group value="Cms"/>

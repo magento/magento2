@@ -9,11 +9,11 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="VerifyTinyMCEv4IsNativeWYSIWYGOnNewsletterTest">
         <annotations>
-            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <features value="Newsletter"/>
             <stories value="MAGETWO-47309-Apply new WYSIWYG in Newsletter"/>
             <group value="Newsletter"/>
-            <title value="Admin see TinyMCEv4.6 is native WYSIWYG on Newsletter"/>
-            <description value="Admin see TinyMCEv4.6 is native WYSIWYG on Newsletter"/>
+            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Newsletter"/>
+            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Newsletter"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84683"/>
         </annotations>
