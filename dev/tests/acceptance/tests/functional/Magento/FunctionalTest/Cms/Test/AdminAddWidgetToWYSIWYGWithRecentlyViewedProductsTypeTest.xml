@@ -10,11 +10,11 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAddWidgetToWYSIWYGWithRecentlyViewedProductsTypeTest">
         <annotations>
-            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <features value="Cms"/>
             <stories value="MAGETWO-42156-Widgets in WYSIWYG"/>
             <group value="Cms"/>
-            <title value="Create CMS Page With Widget Type: Recently Viewed Products"/>
-            <description value="Create CMS Page With Widget Type: Recently Viewed Products"/>
+            <title value="Admin should be able to create a CMS page with widget type: Recently Viewed Products"/>
+            <description value="Admin should be able to create a CMS page with widget type: Recently Viewed Products"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-83789"/>
         </annotations>
