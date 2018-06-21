@@ -106,4 +106,39 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ]
         ];
     }
+
+    public function testGetFrontendLabels()
+    {
+        $attributeId = 1;
+        $storeLabels = ['test_attribute_store1'];
+        $frontendLabelFactory = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory::class)
+            ->setMethods(['create'])
+            ->getMock();
+        $resource = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class)
+            ->setMethods(['getStoreLabelsByAttributeId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $arguments = [
+            '_resource' => $resource,
+            'frontendLabelFactory' => $frontendLabelFactory,
+        ];
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_model = $objectManager->getObject(\Magento\Eav\Model\Entity\Attribute::class, $arguments);
+        $this->_model->setAttributeId($attributeId);
+
+        $resource->expects($this->once())
+            ->method('getStoreLabelsByAttributeId')
+            ->with($attributeId)
+            ->willReturn($storeLabels);
+        $frontendLabel = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\FrontendLabel::class)
+            ->setMethods(['setStoreId', 'setLabel'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $frontendLabelFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($frontendLabel);
+        $expectedFrontendLabel[] = $frontendLabel;
+
+        $this->assertEquals($expectedFrontendLabel, $this->_model->getFrontendLabels());
+    }
 }

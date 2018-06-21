@@ -120,6 +120,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $dataObjectHelper;
 
     /**
+     * @var FrontendLabelFactory
+     */
+    private $frontendLabelFactory;
+
+    /**
      * Serializer Instance.
      *
      * @var Json
@@ -157,6 +162,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param FrontendLabelFactory|null $frontendLabelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
      */
@@ -175,7 +181,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        FrontendLabelFactory $frontendLabelFactory = null
     ) {
         parent::__construct(
             $context,
@@ -194,6 +201,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->optionDataFactory = $optionDataFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->frontendLabelFactory = $frontendLabelFactory
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(FrontendLabelFactory::class);
     }
 
     /**
@@ -1220,6 +1229,20 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getFrontendLabels()
     {
+       if ($this->getData(self::FRONTEND_LABELS) == null){
+            $attributeId = $this->getAttributeId();
+            $storeLabels = $this->_getResource()->getStoreLabelsByAttributeId($attributeId);
+
+            $resultFrontedLabels = [];
+            foreach ($storeLabels as $i => $label) {
+                $frontendLabel = $this->frontendLabelFactory->create();
+                $frontendLabel->setStoreId($i);
+                $frontendLabel->setLabel($label);
+                array_push($resultFrontedLabels, $frontendLabel);
+            }
+            $this->setData(self::FRONTEND_LABELS, $resultFrontedLabels);
+
+        }
         return $this->_getData(self::FRONTEND_LABELS);
     }
 

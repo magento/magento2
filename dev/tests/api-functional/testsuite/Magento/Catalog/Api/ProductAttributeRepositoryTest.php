@@ -99,7 +99,8 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             "is_filterable_in_search" => true,
         ];
 
-        $this->assertEquals('front_lbl', $attribute['default_frontend_label']);
+        $this->assertEquals('default_label', $attribute['default_frontend_label']);
+        $this->assertEquals('front_lbl_store1', $attribute['frontend_labels'][0]['label']);
         foreach ($expectedData as $key => $value) {
             $this->assertEquals($value, $attribute[$key]);
         }
@@ -144,9 +145,12 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
                 'attribute_code' => $attributeCode,
                 'entity_type_id' => 4,
                 'is_used_in_grid' => true,
+                //Update existing
                 'default_frontend_label' => 'default_label_new',
                 'frontend_labels' => [
-                    ['store_id' => 1, 'label' => 'front_lbl_new'],
+                    //Update existing
+                    ['store_id' => 0, 'label' => 'front_lbl_store0_new'],
+                    ['store_id' => 1, 'label' => 'front_lbl_store1_new'],
                 ],
                 "options" => [
                     //Update existing
@@ -188,6 +192,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $this->assertEquals(true, $result['is_used_in_grid']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
         $this->assertEquals('default_label_new', $result['default_frontend_label']);
+        $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
         //New option set as default
         $this->assertEquals($result['options'][3]['value'], $result['default_value']);
         $this->assertEquals("Default Blue Updated", $result['options'][1]['label']);
@@ -313,11 +318,10 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             'attribute' => [
                 'attribute_code' => $attributeCode,
                 'entity_type_id' => '4',
+                "default_frontend_label" => 'default_label',
                 'frontend_labels' => [
-                    [
-                        'store_id' => 0,
-                        'label' => 'front_lbl'
-                    ],
+                    ['store_id' => 0, 'label' => 'front_lbl_store0'],
+                    ['store_id' => 1, 'label' => 'front_lbl_store1'],
                 ],
                 'is_required' => true,
                 "default_value" => "",

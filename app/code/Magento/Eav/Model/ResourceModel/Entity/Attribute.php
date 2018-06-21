@@ -169,6 +169,27 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _beforeSave(AbstractModel $object)
     {
         $frontendLabel = $object->getFrontendLabel();
+        $frontendLabels = $object->getFrontendLabels();
+        if (is_array($frontendLabels)
+            && !empty($frontendLabels)
+            && $frontendLabels[0] instanceof \Magento\Eav\Model\Entity\Attribute\FrontendLabel) {
+            $resultLabel = [];
+            foreach ($frontendLabels as $label) {
+                $resultLabel[$label->getStoreId()] = $label->getLabel();
+            }
+            $object->setStoreLabels($resultLabel);
+            $isDefaultLabel = ($frontendLabel !== null && $frontendLabel != '');
+            $isStoreZeroLabel = (
+                isset($resultLabel[0])
+                && $resultLabel[0] !== null
+                && $resultLabel[0] != '');
+            if (!$isDefaultLabel & !$isStoreZeroLabel) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('The storefront label is not defined.'));
+            }
+            if (!$isDefaultLabel & $isStoreZeroLabel) {
+                $object->setFrontendLabel($frontendLabel[0]);
+            }
+        }
         if (is_array($frontendLabel)) {
             if (!isset($frontendLabel[0]) || $frontendLabel[0] === null || $frontendLabel[0] == '') {
                 throw new \Magento\Framework\Exception\LocalizedException(__('The storefront label is not defined.'));
