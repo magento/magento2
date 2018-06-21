@@ -148,16 +148,19 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductNewsFromDate</requiredEntity>
     </entity>
-    <entity name="SimpleProductNameWithDoubleQuote" type="product">
-        <data key="name" unique="prefix">Double Quote"</data>
-        <data key="sku" unique="prefix">doubleQuote</data>
+    <entity name="SimpleProductWithImage" type="product">
+        <data key="sku" unique="suffix">SimpleProduct</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
-        <data key="price">10.00</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">125.00</data>
         <data key="visibility">4</data>
         <data key="status">1</data>
         <data key="quantity">1000</data>
+        <data key="urlKey" unique="suffix">simple-product-with-image</data>
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="media_gallery_entries">ProductAttributeMediaGalleryEntryMagentoLogo</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
 </entities>
