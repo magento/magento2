@@ -8,11 +8,10 @@ declare(strict_types=1);
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Captcha\Model\ResourceModel\LogFactory;
 use Magento\Captcha\Model\ResourceModel\Log;
-use Magento\Captcha\Observer\ResetAttemptForFrontendObserverTest;
 
 $objectManager = Bootstrap::getObjectManager();
 $logFactory = $objectManager->get(LogFactory::class);
 
 /** @var Log $captchaLog */
 $captchaLog = $logFactory->create();
-$captchaLog->deleteUserAttempts(ResetAttemptForFrontendObserverTest::USER_EMAIL);
+$captchaLog->deleteUserAttempts('mageuser@dummy.com');
