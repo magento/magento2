@@ -45,7 +45,7 @@ class Builder
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    private $productRepository;
 
     /**
      * Constructor
