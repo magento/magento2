@@ -35,11 +35,12 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      */
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
-        if (empty($strategyModifiers)) {
-            $this->markTestSkipped('Unskip after fixing https://github.com/magento-engcom/msi/issues/1398');
-        }
         $this->prepareFixture($strategyModifiers, 'bundle_product');
         $bundleProduct = $this->productRepository->get('bundle_product', false, null, true);
+
+        if (empty($bundleProduct->getOptions())) {
+            $this->markTestSkipped('Unskip after fixing https://github.com/magento-engcom/msi/issues/1398');
+        }
 
         /** @var \Magento\Framework\Pricing\PriceInfo\Base $priceInfo */
         $priceInfo = $bundleProduct->getPriceInfo();
