@@ -34,7 +34,7 @@ class ScopeCodeResolver
      * Resolve scope code
      *
      * @param string $scopeType
-     * @param string $scopeCode
+     * @param string|null $scopeCode
      * @return string
      */
     public function resolve($scopeType, $scopeCode)
@@ -47,6 +47,9 @@ class ScopeCodeResolver
         ) {
             $scopeResolver = $this->scopeResolverPool->get($scopeType);
             $resolverScopeCode = $scopeResolver->getScope($scopeCode);
+            if ($scopeCode === null) {
+                $scopeCode = $resolverScopeCode->getCode();
+            }
         } else {
             $resolverScopeCode = $scopeCode;
         }
