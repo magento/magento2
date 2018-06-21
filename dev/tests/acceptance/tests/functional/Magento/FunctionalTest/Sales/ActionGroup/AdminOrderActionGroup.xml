@@ -134,4 +134,14 @@
         </arguments>
         <see selector="{{AdminOrderItemsOrderedSection.productSkuColumn}}" userInput="{{product.sku}}" stepKey="seeSkuInItemsOrdered"/>
     </actionGroup>
+
+    <!--Cancel order that is in pending status-->
+    <actionGroup name="cancelPendingOrder">
+        <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder"/>
+        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForCancelConfirmation"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to cancel this order?" stepKey="seeConfirmationMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeOrderStatusCanceled"/>
+    </actionGroup>
 </actionGroups>
