@@ -10,11 +10,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontPersistedCustomerLoginTest">
         <annotations>
-
-            <features value="Persisted customer can login from storefront."/>
-            <stories value="Persisted customer can login from storefront."/>
-            <title value="Persisted customer can login from storefront."/>
-            <description value="Persisted customer can login from storefront."/>
+            <features value="Customer"/>
+            <stories value="Login"/>
+            <title value="Persisted customer should be able to login from storefront"/>
+            <description value="Persisted customer should be able to login from storefront"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-72103"/>
             <group value="customer"/>

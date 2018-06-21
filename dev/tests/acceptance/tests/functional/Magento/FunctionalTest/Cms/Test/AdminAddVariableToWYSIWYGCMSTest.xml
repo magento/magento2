@@ -9,10 +9,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAddVariableToWYSIWYGCMSTest">
         <annotations>
-            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <features value="Cms"/>
             <stories value="MAGETWO-42158-Variable with WYSIWYG "/>
-            <title value="Insert default Magento variable into content of WYSIWYG on CMS Pages"/>
-            <description value="Insert default Magento variable into content of WYSIWYG on CMS Pages"/>
+            <title value="Admin should be able to insert the default Magento variable into content of WYSIWYG on CMS Pages"/>
+            <description value="Admin should be able to insert the default Magento variable into content of WYSIWYG on CMS Pages"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-83504"/>
         </annotations>

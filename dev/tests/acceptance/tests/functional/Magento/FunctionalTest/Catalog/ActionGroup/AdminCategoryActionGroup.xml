@@ -57,7 +57,7 @@
     <!--Upload image for category -->
     <actionGroup name="addCategoryImage">
         <arguments>
-            <argument name="image" defaultValue="ImageUpload"/>
+            <argument name="image" defaultValue="ProductImage"/>
         </arguments>
         <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
@@ -81,12 +81,24 @@
 
     <actionGroup name="checkCategoryImageInAdmin">
         <arguments>
-            <argument name="image" defaultValue="ImageUpload"/>
+            <argument name="image" defaultValue="ProductImage"/>
         </arguments>
         <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{AdminCategoryContentSection.uploadButton}}" stepKey="seeImageSectionIsReady"/>
         <see selector="{{AdminCategoryContentSection.imageFileName}}" userInput="{{image.file}}" stepKey="seeImage"/>
+    </actionGroup>
+
+    <!-- Action to navigate to Media Gallery. Used in tests to cleanup uploaded images -->
+    <actionGroup name="navigateToMediaGallery">
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnAdminCategoryPage"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.sectionHeader}}" stepKey="waitForContentSection"/>
+        <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.selectFromGalleryButton}}" stepKey="waitForSelectFromGalleryButton"/>
+        <click selector="{{AdminCategoryContentSection.selectFromGalleryButton}}" stepKey="clickSelectFromGalleryButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
 
     <!--Actions to check if a category exists on StoreFront-->
@@ -188,6 +200,26 @@
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
         <seeInCurrentUrl url="{{AdminCategoryPage.url}}add" stepKey="seeBackOnCreateCategoryPage"/>
         <see selector="{{AdminCategoryBasicFieldSection.FieldError('uid')}}" userInput="This is a required field." stepKey="seeErrorMessage"/>
+    </actionGroup>
+
+
+    <actionGroup name="switchCategoryStoreView">
+        <arguments>
+            <argument name="Store"/>
+            <argument name="CatName"/>
+        </arguments>
+        <amOnPage url="{{AdminCategoryPage.page}}" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(CatName)}}" stepKey="navigateToCreatedCategory" />
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSpinner"/>
+        <scrollToTopOfPage stepKey="scrollToToggle"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}" stepKey="openStoreViewDropDown"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption(Store)}}" stepKey="selectStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSpinner2"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}" stepKey="selectStoreViewAccept"/>
+        <waitForPageLoad stepKey="waitForStoreViewChangeLoad"/>
     </actionGroup>
 
     <actionGroup name="navigateToCreatedCategory">
