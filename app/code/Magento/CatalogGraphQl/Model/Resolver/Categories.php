@@ -20,15 +20,10 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
- * Category field resolver, used for GraphQL request processing.
+ * Resolver for category objects the product is assigned to.
  */
-class Category implements ResolverInterface
+class Categories implements ResolverInterface
 {
-    /**
-     * Product category ids
-     */
-    const PRODUCT_CATEGORY_IDS_KEY = 'category_ids';
-
     /**
      * @var Collection
      */
@@ -89,10 +84,13 @@ class Category implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
     {
-        $this->categoryIds = array_merge($this->categoryIds, $value[self::PRODUCT_CATEGORY_IDS_KEY]);
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $value['model'];
+        $categoryIds = $product->getCategoryIds();
+        $this->categoryIds = array_merge($this->categoryIds, $categoryIds);
         $that = $this;
 
-        return $this->valueFactory->create(function () use ($that, $value, $info) {
+        return $this->valueFactory->create(function () use ($that, $categoryIds, $info) {
             $categories = [];
             if (empty($that->categoryIds)) {
                 return [];
@@ -104,7 +102,7 @@ class Category implements ResolverInterface
             }
             /** @var CategoryInterface | \Magento\Catalog\Model\Category $item */
             foreach ($this->collection as $item) {
-                if (in_array($item->getId(), $value[$that::PRODUCT_CATEGORY_IDS_KEY])) {
+                if (in_array($item->getId(), $categoryIds)) {
                     $categories[$item->getId()] = $this->dataObjectProcessor->buildOutputDataArray(
                         $item,
                         CategoryInterface::class

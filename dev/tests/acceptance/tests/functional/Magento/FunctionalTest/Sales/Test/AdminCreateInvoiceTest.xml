@@ -10,10 +10,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreateInvoiceTest">
         <annotations>
-            <features value="Invoice Creation"/>
+            <features value="Sales"/>
             <stories value="Create an Invoice via the Admin"/>
-            <title value="Create Invoice"/>
-            <description value="Should be able to create an invoice via the admin."/>
+            <title value="Admin should be able to create an invoice"/>
+            <description value="Admin should be able to create an invoice"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-72096"/>
             <group value="sales"/>
