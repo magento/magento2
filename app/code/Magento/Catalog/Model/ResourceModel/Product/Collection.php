@@ -1060,14 +1060,15 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $select = clone $this->getSelect();
         $attribute = $this->getEntity()->getAttribute($attribute);
 
-        $aiField = $this->getConnection()->getAutoIncrementField($this->getMainTable());
+        $fieldMainTable = $this->getConnection()->getAutoIncrementField($this->getMainTable());
+        $fieldJoinTable = $attribute->getEntity()->getLinkField();
         $select->reset()
             ->from(
                 ['cpe' => $this->getMainTable()],
                 ['entity_id']
             )->join(
                 ['cpa' => $attribute->getBackend()->getTable()],
-                'cpe.' . $aiField . ' = cpa.' . $aiField,
+                'cpe.' . $fieldMainTable . ' = cpa.' . $fieldJoinTable,
                 ['store_id', 'value']
             )->where('attribute_id = ?', (int)$attribute->getId());
 
