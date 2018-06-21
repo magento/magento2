@@ -26,5 +26,6 @@
         <element name="table" type="text" selector="#container > div > div.admin__data-grid-wrap > table"/>
         <element name="firstRow" type="button" selector="tr.data-row:nth-of-type(1)"/>
         <element name="productGridCheckboxOnRow" type="checkbox" selector="//*[@id='container']//tr[{{row}}]/td[1]//input" parameterized="true"/>
+        <element name="productGridNameProduct" type="input" selector="//tbody//tr//td//div[contains(., '{{var1}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>
