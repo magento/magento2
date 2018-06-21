@@ -10,7 +10,6 @@ namespace Magento\InventoryApi\Test\Api\StockRepository;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class ValidationTest extends WebapiAbstract
@@ -172,122 +171,6 @@ class ValidationTest extends WebapiAbstract
                             'message' => '"%field" can not be empty.',
                             'parameters' => [
                                 'field' => StockInterface::NAME,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @param array $salesChannels
-     * @param array $expectedErrorData
-     * @dataProvider dataProviderSalesChannelsAssignment
-     */
-    public function testFailedValidationSalesChannelsAssignment(array $salesChannels, array $expectedErrorData)
-    {
-        $stockId = 1;
-        $data = [
-            StockInterface::STOCK_ID => $stockId,
-            StockInterface::NAME => 'Default Stock',
-            'extension_attributes' => [
-                'sales_channels' => $salesChannels
-            ]
-        ];
-
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $stockId,
-                'httpMethod' => Request::HTTP_METHOD_PUT,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'Save',
-            ],
-        ];
-        $this->webApiCall($serviceInfo, $data, $expectedErrorData);
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderSalesChannelsAssignment(): array
-    {
-        return [
-            'not_given_' . SalesChannelInterface::TYPE => [
-                [
-                    [
-                        SalesChannelInterface::CODE => 'base'
-                    ],
-                ],
-                [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => '"%field" can not be empty.',
-                            'parameters' => [
-                                'field' => SalesChannelInterface::TYPE,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'empty_' . SalesChannelInterface::TYPE => [
-                [
-                    [
-                        SalesChannelInterface::TYPE => '',
-                        SalesChannelInterface::CODE => 'base'
-                    ],
-                ],
-                [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => '"%field" can not be empty.',
-                            'parameters' => [
-                                'field' => SalesChannelInterface::TYPE,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'not_given_' . SalesChannelInterface::CODE => [
-                [
-                    [
-                        SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                        SalesChannelInterface::CODE => 'base'
-                    ],
-                    [
-                        SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                    ],
-                ],
-                [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => '"%field" can not be empty.',
-                            'parameters' => [
-                                'field' => SalesChannelInterface::CODE,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'empty_' . SalesChannelInterface::CODE => [
-                [
-                    [
-                        SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                        SalesChannelInterface::CODE => ''
-                    ],
-                ],
-                [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => '"%field" can not be empty.',
-                            'parameters' => [
-                                'field' => SalesChannelInterface::CODE,
                             ],
                         ],
                     ],
