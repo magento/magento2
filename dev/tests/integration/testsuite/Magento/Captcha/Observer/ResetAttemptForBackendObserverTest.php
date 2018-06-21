@@ -34,15 +34,16 @@ class ResetAttemptForBackendObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Captcha/_files/failed_logins_backend.php
      */
-    public function testBackendLoginActionWithInvalidCaptchaReturnsError()
+    public function testLoginAttemptsRemovedAfterSuccessfulLogin()
     {
+        $login = 'mageadmin';
         $userFactory = $this->objectManager->get(UserFactory::class);
         $captchaLogFactory = $this->objectManager->get(LogFactory::class);
         $eventManager = $this->objectManager->get(ManagerInterface::class);
 
         /** @var User $user */
         $user = $userFactory->create();
-        $user->setUserName('mageadmin');
+        $user->setUserName($login);
 
         $eventManager->dispatch(
             'backend_auth_user_login_success',
@@ -54,6 +55,6 @@ class ResetAttemptForBackendObserverTest extends \PHPUnit\Framework\TestCase
          */
         $captchaLog = $captchaLogFactory->create();
 
-        self::assertEquals(0, $captchaLog->countAttemptsByUserLogin('mageadmin'));
+        self::assertEquals(0, $captchaLog->countAttemptsByUserLogin($login));
     }
 }
