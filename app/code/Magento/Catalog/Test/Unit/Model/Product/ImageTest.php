@@ -5,10 +5,12 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use Magento\Catalog\Model\Product\Image\ParamsBuilder;
+use Magento\Catalog\Model\View\Asset\Image\ContextFactory;
 use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -81,6 +83,11 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     private $cacheManager;
 
+    /**
+     * @var ParamsBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $paramsBuilder;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -141,6 +148,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                     return json_decode($value, true);
                 }
             );
+        $this->paramsBuilder = $this->getMockBuilder(ParamsBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->image = $objectManager->getObject(
             \Magento\Catalog\Model\Product\Image::class,
@@ -153,15 +163,14 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'imageFactory' => $this->factory,
                 'viewAssetImageFactory' => $this->viewAssetImageFactory,
                 'viewAssetPlaceholderFactory' => $this->viewAssetPlaceholderFactory,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'paramsBuilder' => $this->paramsBuilder
             ]
         );
 
-        // Settings for backward compatible property
-        $objectManagerHelper = new ObjectManagerHelper($this);
         $this->imageAsset = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
             ->getMockForAbstractClass();
-        $objectManagerHelper->setBackwardCompatibleProperty(
+        $objectManager->setBackwardCompatibleProperty(
             $this->image,
             'imageAsset',
             $this->imageAsset
@@ -213,6 +222,21 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
     public function testSetGetBaseFile()
     {
+        $miscParams = [
+            'image_type' => null,
+            'image_height' => null,
+            'image_width' => null,
+            'keep_aspect_ratio' => 'proportional',
+            'keep_frame' => 'frame',
+            'keep_transparency' => 'transparency',
+            'constrain_only' => 'doconstrainonly',
+            'background' => 'ffffff',
+            'angle' => null,
+            'quality' => 80,
+        ];
+        $this->paramsBuilder->expects(self::once())
+            ->method('build')
+            ->willReturn($miscParams);
         $this->mediaDirectory->expects($this->any())->method('isFile')->will($this->returnValue(true));
         $this->mediaDirectory->expects($this->any())->method('isExist')->will($this->returnValue(true));
         $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/somefile.png';
@@ -222,18 +246,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with(
                 [
-                    'miscParams' => [
-                        'image_type' => null,
-                        'image_height' => null,
-                        'image_width' => null,
-                        'keep_aspect_ratio' => 'proportional',
-                        'keep_frame' => 'frame',
-                        'keep_transparency' => 'transparency',
-                        'constrain_only' => 'doconstrainonly',
-                        'background' => 'ffffff',
-                        'angle' => null,
-                        'quality' => 80,
-                    ],
+                    'miscParams' => $miscParams,
                     'filePath' => '/somefile.png',
                 ]
             )
@@ -243,6 +256,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->imageAsset->expects($this->any())->method('getSourceFile')->willReturn('catalog/product/somefile.png');
         $this->image->setBaseFile('/somefile.png');
         $this->assertEquals('catalog/product/somefile.png', $this->image->getBaseFile());
+        $this->assertEquals(
+            null,
+            $this->image->getNewFile()
+        );
     }
 
     public function testSetBaseNoSelectionFile()

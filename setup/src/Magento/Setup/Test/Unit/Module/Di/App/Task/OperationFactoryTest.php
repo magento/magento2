@@ -54,8 +54,8 @@ class OperationFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreateException()
     {
         $notRegisteredOperation = 'coffee';
-        $this->expectException(
-            \Magento\Setup\Module\Di\App\Task\OperationException::class,
+        $this->expectException(\Magento\Setup\Module\Di\App\Task\OperationException::class);
+        $this->expectExceptionMessage(
             sprintf('Unrecognized operation "%s"', $notRegisteredOperation),
             OperationException::UNAVAILABLE_OPERATION
         );

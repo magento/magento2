@@ -29,7 +29,7 @@
     },
     "suggest": {
         "magento/module-cookie": "*",
-        "magento/module-customer-sample-data": "Sample Data version:100.3.*"
+        "magento/module-customer-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

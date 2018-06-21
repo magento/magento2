@@ -10,8 +10,13 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCategoryBasicFieldSection">
         <element name="IncludeInMenu" type="checkbox" selector="input[name='include_in_menu']"/>
+        <element name="includeInMenuLabel" type="text" selector="input[name='include_in_menu']+label"/>
+        <element name="includeInMenuUseDefault" type="checkbox" selector="input[name='use_default[include_in_menu]']"/>
         <element name="EnableCategory" type="checkbox" selector="input[name='is_active']"/>
+        <element name="enableCategoryLabel" type="text" selector="input[name='is_active']+label"/>
+        <element name="enableUseDefault" type="checkbox" selector="input[name='use_default[is_active]']"/>
         <element name="CategoryNameInput" type="input" selector="input[name='name']"/>
+        <element name="categoryNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
         <element name="ContentTab" type="input" selector="input[name='name']"/>
         <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
     </section>

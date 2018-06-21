@@ -97,7 +97,7 @@ return [
                 ],
             ],
             'name' => 'reference_table',
-            'resource' => 'sales',
+            'resource' => 'default',
         ],
         'auto_increment_test' => [
             'column' => [

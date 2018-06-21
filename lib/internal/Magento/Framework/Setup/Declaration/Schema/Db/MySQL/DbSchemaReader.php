@@ -18,6 +18,11 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
 class DbSchemaReader implements DbSchemaReaderInterface
 {
     /**
+     * Table type in information_schema.TABLES which allows to identify only tables and ignore views
+     */
+    const MYSQL_TABLE_TYPE = 'BASE TABLE';
+
+    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
@@ -46,9 +51,28 @@ class DbSchemaReader implements DbSchemaReaderInterface
      */
     public function getTableOptions($tableName, $resource)
     {
-        $sql = sprintf('SHOW TABLE STATUS WHERE `Name` = "%s"', $tableName);
         $adapter = $this->resourceConnection->getConnection($resource);
-        return $adapter->fetchRow($sql);
+        $dbName = $this->resourceConnection->getSchemaName($resource);
+        $stmt = $adapter->select()
+            ->from(
+                ['i_tables' => 'information_schema.TABLES'],
+                [
+                    'engine' => 'ENGINE',
+                    'comment' => 'TABLE_COMMENT',
+                    'collation' => 'TABLE_COLLATION'
+                ]
+            )
+            ->joinInner(
+                ['charset_applicability' => 'information_schema.COLLATION_CHARACTER_SET_APPLICABILITY'],
+                'i_tables.table_collation = charset_applicability.collation_name',
+                [
+                    'charset' => 'charset_applicability.CHARACTER_SET_NAME'
+                ]
+            )
+            ->where('TABLE_SCHEMA = ?', $dbName)
+            ->where('TABLE_NAME = ?', $tableName);
+
+        return $adapter->fetchRow($stmt);
     }
 
     /**
@@ -190,8 +214,15 @@ class DbSchemaReader implements DbSchemaReaderInterface
      */
     public function readTables($resource)
     {
-        return $this->resourceConnection
-            ->getConnection($resource)
-            ->getTables();
+        $adapter = $this->resourceConnection->getConnection($resource);
+        $dbName = $this->resourceConnection->getSchemaName($resource);
+        $stmt = $adapter->select()
+            ->from(
+                ['information_schema.TABLES'],
+                ['TABLE_NAME']
+            )
+            ->where('TABLE_SCHEMA = ?', $dbName)
+            ->where('TABLE_TYPE = ?', self::MYSQL_TABLE_TYPE);
+        return $adapter->fetchCol($stmt);
     }
 }

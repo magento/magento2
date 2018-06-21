@@ -146,6 +146,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     private $itemProcessor;
 
     /**
+     * @var \Magento\Sales\Model\OrderIncrementIdChecker|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderIncrementIdChecker;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -256,6 +261,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
             ['create']
         );
+        $this->orderIncrementIdChecker = $this->createMock(\Magento\Sales\Model\OrderIncrementIdChecker::class);
         $this->quote = (new ObjectManager($this))
             ->getObject(
                 \Magento\Quote\Model\Quote::class,
@@ -280,9 +286,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
                     'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
                     'customerDataFactory' => $this->customerDataFactoryMock,
                     'itemProcessor' => $this->itemProcessor,
+                    'orderIncrementIdChecker' => $this->orderIncrementIdChecker,
                     'data' => [
-                        'reserved_order_id' => 1000001
-                    ]
+                        'reserved_order_id' => 1000001,
+                    ],
                 ]
             );
     }
@@ -1222,28 +1229,32 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test to verify if existing reserved_order_id in use
+     * Test to verify if existing reserved_order_id in use.
      *
      * @param bool $isReservedOrderIdExist
      * @param int $reservedOrderId
+     * @return void
      * @dataProvider reservedOrderIdDataProvider
      */
-    public function testReserveOrderId($isReservedOrderIdExist, $reservedOrderId)
+    public function testReserveOrderId(bool $isReservedOrderIdExist, int $reservedOrderId): void
     {
-        $this->resourceMock
+        $this->orderIncrementIdChecker
             ->expects($this->once())
-            ->method('isOrderIncrementIdUsed')
+            ->method('isIncrementIdUsed')
             ->with(1000001)->willReturn($isReservedOrderIdExist);
         $this->resourceMock->expects($this->any())->method('getReservedOrderId')->willReturn($reservedOrderId);
         $this->quote->reserveOrderId();
         $this->assertEquals($reservedOrderId, $this->quote->getReservedOrderId());
     }
 
-    public function reservedOrderIdDataProvider()
+    /**
+     * @return array
+     */
+    public function reservedOrderIdDataProvider(): array
     {
         return [
             'id_already_in_use' => [true, 100002],
-            'id_not_in_use' => [false, 1000001]
+            'id_not_in_use' => [false, 1000001],
         ];
     }
 }

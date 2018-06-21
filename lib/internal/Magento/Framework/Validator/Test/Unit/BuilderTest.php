@@ -413,10 +413,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateValidatorInvalidInstance()
     {
-        $this->expectException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Constraint class "StdClass" must implement \Magento\Framework\Validator\ValidatorInterface'
         );
+        
         $builder = $this->_objectManager->getObject(
             \Magento\Framework\Validator\Builder::class,
             [

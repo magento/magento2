@@ -23,7 +23,7 @@
         "magento/module-bundle": "*",
         "magento/module-cookie": "*",
         "magento/module-grouped-product": "*",
-        "magento/module-wishlist-sample-data": "Sample Data version:100.3.*"
+        "magento/module-wishlist-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

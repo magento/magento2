@@ -14,7 +14,7 @@
         <data key="is_active">true</data>
     </entity>
     <entity name="ApiCategory" type="category">
-        <data key="name" unique="suffix">Api Category</data>
+        <data key="name" unique="suffix">ApiCategory</data>
         <data key="is_active">true</data>
     </entity>
     <entity name="SimpleSubCategory" type="category">

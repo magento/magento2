@@ -25,7 +25,7 @@
             <argument name="link" defaultValue="downloadableLinkWithMaxDownloads"/>
         </arguments>
         <click selector="{{AdminProductDownloadableSection.linksAddLinkButton}}" stepKey="clickLinkAddLinkButton"/>
-        <waitForElementVisible selector="{{AdminProductDownloadableSection.addLinkPriceInput('0')}}" stepKey="waitForDownloadableLinkPriceInput"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField userInput="{{link.title}}" selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" stepKey="fillDownloadableLinkTitle"/>
         <fillField userInput="{{link.price}}" selector="{{AdminProductDownloadableSection.addLinkPriceInput('0')}}" stepKey="fillDownloadableLinkPrice"/>
         <selectOption userInput="{{link.file_type}}" selector="{{AdminProductDownloadableSection.addLinkFileTypeSelector('0')}}" stepKey="selectDownloadableLinkFileType"/>
@@ -42,7 +42,7 @@
             <argument name="link" defaultValue="downloadableLink"/>
         </arguments>
         <click selector="{{AdminProductDownloadableSection.linksAddLinkButton}}" stepKey="clickLinkAddLinkButton"/>
-        <waitForElementVisible selector="{{AdminProductDownloadableSection.addLinkPriceInput('1')}}" stepKey="waitForDownloadableLinkPriceInput"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField userInput="{{link.title}}" selector="{{AdminProductDownloadableSection.addLinkTitleInput('1')}}" stepKey="fillDownloadableLinkTitle"/>
         <fillField userInput="{{link.price}}" selector="{{AdminProductDownloadableSection.addLinkPriceInput('1')}}" stepKey="fillDownloadableLinkPrice"/>
         <selectOption userInput="{{link.file_type}}" selector="{{AdminProductDownloadableSection.addLinkFileTypeSelector('1')}}" stepKey="selectDownloadableLinkFileType"/>
@@ -59,7 +59,7 @@
             <argument name="sample" defaultValue="downloadableSampleFile"/>
         </arguments>
         <click selector="{{AdminProductDownloadableSection.samplesAddLinkButton}}" stepKey="clickSampleAddLinkButton"/>
-        <waitForElementVisible selector="{{AdminProductDownloadableSection.addSampleTitleInput('0')}}" stepKey="waitForDownloadableSampleRow"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField userInput="{{sample.title}}" selector="{{AdminProductDownloadableSection.addSampleTitleInput('0')}}" stepKey="fillDownloadableSampleTitle"/>
         <selectOption userInput="{{sample.file_type}}" selector="{{AdminProductDownloadableSection.addSampleFileTypeSelector('0')}}" stepKey="selectDownloadableSampleFileType"/>
         <attachFile userInput="{{sample.file}}" selector="{{AdminProductDownloadableSection.addSampleFileUploadFile('0')}}" stepKey="selectDownloadableSampleUpload"/>
@@ -72,7 +72,7 @@
             <argument name="sample" defaultValue="downloadableSampleUrl"/>
         </arguments>
         <click selector="{{AdminProductDownloadableSection.samplesAddLinkButton}}" stepKey="clickSampleAddLinkButton2"/>
-        <waitForElementVisible selector="{{AdminProductDownloadableSection.addSampleTitleInput('1')}}" stepKey="waitForDownloadableSampleRow"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField userInput="{{sample.title}}" selector="{{AdminProductDownloadableSection.addSampleTitleInput('1')}}" stepKey="fillDownloadableSampleTitle"/>
         <selectOption userInput="{{sample.file_type}}" selector="{{AdminProductDownloadableSection.addSampleFileTypeSelector('1')}}" stepKey="selectDownloadableSampleFileType"/>
         <fillField userInput="{{sample.file}}" selector="{{AdminProductDownloadableSection.addSampleFileUrlInput('1')}}" stepKey="fillDownloadableSampleFileUrl"/>

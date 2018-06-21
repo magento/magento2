@@ -167,7 +167,9 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             intval($this->getRequest()->getParam($this->getData('page_var_name'), 1)),
             $this->getProductsPerPage(),
             $conditions,
-            $this->json->serialize($this->getRequest()->getParams())
+            $this->json->serialize($this->getRequest()->getParams()),
+            $this->getTemplate(),
+            $this->getTitle()
         ];
     }
 

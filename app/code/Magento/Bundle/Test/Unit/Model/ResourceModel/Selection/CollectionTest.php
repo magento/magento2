@@ -111,17 +111,46 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testAddQuantityFilter()
     {
-        $tableName = 'cataloginventory_stock_status';
-        $this->entity->expects($this->once())
+        $statusTableName = 'cataloginventory_stock_status';
+        $itemTableName = 'cataloginventory_stock_item';
+        $this->entity->expects($this->exactly(2))
             ->method('getTable')
-            ->willReturn($tableName);
-        $this->select->expects($this->once())
+            ->willReturnMap([
+                ['cataloginventory_stock_item', $itemTableName],
+                ['cataloginventory_stock_status', $statusTableName],
+            ]);
+        $this->select->expects($this->exactly(2))
             ->method('joinInner')
-            ->with(
-                ['stock' => $tableName],
-                'selection.product_id = stock.product_id',
-                []
+            ->withConsecutive(
+                [
+                    ['stock' => $statusTableName],
+                    'selection.product_id = stock.product_id',
+                    [],
+                ],
+                [
+                    ['stock_item' => $itemTableName],
+                    'selection.product_id = stock_item.product_id',
+                    [],
+                ]
             )->willReturnSelf();
+        $this->select
+            ->expects($this->exactly(2))
+            ->method('where')
+            ->withConsecutive(
+                [
+                    '('
+                    . 'selection.selection_can_change_qty > 0'
+                    . ' or '
+                    . 'selection.selection_qty <= stock.qty'
+                    . ' or '
+                    .'stock_item.manage_stock = 0'
+                    . ')',
+                ],
+                [
+                    'stock.stock_status = 1',
+                ]
+            )->willReturnSelf();
+
         $this->assertEquals($this->model, $this->model->addQuantityFilter());
     }
 }

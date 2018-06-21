@@ -12,8 +12,6 @@ class ExtensionAttributesFactoryTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
-        $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/_files/Magento/Wonderland'));
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -36,7 +34,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateThrowExceptionIfInterfaceNotOverridden()
     {
-        $this->factory->create(\Magento\Wonderland\Model\Data\FakeExtensibleOne::class);
+        $this->factory->create(\Magento\TestModuleExtensionAttributes\Model\Data\FakeExtensibleOne::class);
     }
 
     /**
@@ -44,21 +42,21 @@ class ExtensionAttributesFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateThrowExceptionIfReturnIsIncorrect()
     {
-        $this->factory->create(\Magento\Wonderland\Model\Data\FakeExtensibleTwo::class);
+        $this->factory->create(\Magento\TestModuleExtensionAttributes\Model\Data\FakeExtensibleTwo::class);
     }
 
     public function testCreate()
     {
         $this->assertInstanceOf(
-            \Magento\Wonderland\Api\Data\FakeRegionExtension::class,
-            $this->factory->create(\Magento\Wonderland\Model\Data\FakeRegion::class)
+            \Magento\TestModuleExtensionAttributes\Api\Data\FakeRegionExtension::class,
+            $this->factory->create(\Magento\TestModuleExtensionAttributes\Model\Data\FakeRegion::class)
         );
     }
 
     public function testCreateWithLogicException()
     {
-        $this->expectException(
-            'LogicException',
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage(
             "Class 'Magento\\Framework\\Api\\ExtensionAttributesFactoryTest' must implement an interface, "
             . "which extends from 'Magento\\Framework\\Api\\ExtensibleDataInterface'"
         );

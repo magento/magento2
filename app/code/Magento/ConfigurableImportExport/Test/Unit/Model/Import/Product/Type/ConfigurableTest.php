@@ -560,15 +560,56 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             '_type' => 'configurable',
             '_product_websites' => 'website_1',
         ];
+        // Checking that variations' field names are case-insensitive with this
+        // product.
+        $caseInsensitiveSKU = 'configurableskuI22CaseInsensitive';
+        $caseInsensitiveProduct = [
+            'sku' => $caseInsensitiveSKU,
+            'store_view_code' => null,
+            'attribute_set_code' => 'Default',
+            'product_type' => 'configurable',
+            'name' => 'Configurable Product 21',
+            'product_websites' => 'website_1',
+            'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
+            'configurable_variations' => 'SKU=testconf2-attr2val1-testattr3v1,'
+                . 'testattr2=attr2val1,'
+                . 'testattr3=testattr3v1,'
+                . 'display=1|sku=testconf2-attr2val1-testattr3v2,'
+                . 'testattr2=attr2val1,'
+                . 'testattr3=testattr3v2,'
+                . 'display=0',
+            '_store' => null,
+            '_attribute_set' => 'Default',
+            '_type' => 'configurable',
+            '_product_websites' => 'website_1',
+        ];
         $bunch[] = $badProduct;
+        $bunch[] = $caseInsensitiveProduct;
         // Set _attributes to avoid error in Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType.
         $this->setPropertyValue($this->configurable, '_attributes', [
             $badProduct[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET] => [],
         ]);
+        // Avoiding errors about attributes not being super
+        $this->setPropertyValue(
+            $this->configurable,
+            '_superAttributes',
+            [
+                'testattr2' => ['options' => ['attr2val1' => 1]],
+                'testattr3' => [
+                    'options' => [
+                        'testattr3v2' => 1,
+                        'testattr3v1' => 1,
+                    ],
+                ],
+            ]
+        );
 
         foreach ($bunch as $rowData) {
             $result = $this->configurable->isRowValid($rowData, 0, !isset($this->_oldSku[$rowData['sku']]));
             $this->assertNotNull($result);
+            if ($rowData['sku'] === $caseInsensitiveSKU) {
+                $this->assertTrue($result);
+            }
         }
     }
 

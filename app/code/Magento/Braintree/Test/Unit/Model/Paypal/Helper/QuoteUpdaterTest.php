@@ -13,6 +13,7 @@ use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
+use Magento\Quote\Api\Data\CartExtensionInterface;
 
 /**
  * Class QuoteUpdaterTest
@@ -281,7 +282,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
      */
     private function getQuoteMock()
     {
-        return $this->getMockBuilder(Quote::class)
+        $quoteMock = $this->getMockBuilder(Quote::class)
             ->setMethods(
                 [
                     'getIsVirtual',
@@ -291,9 +292,21 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
                     'collectTotals',
                     'getShippingAddress',
                     'getBillingAddress',
+                    'getExtensionAttributes'
                 ]
             )->disableOriginalConstructor()
             ->getMock();
+
+        $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
+            ->setMethods(['setShippingAssignments'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $quoteMock->expects(self::any())
+            ->method('getExtensionAttributes')
+            ->willReturn($cartExtensionMock);
+
+        return $quoteMock;
     }
 
     /**

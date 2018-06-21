@@ -25,7 +25,7 @@
         "magento/module-ui": "*"
     },
     "suggest": {
-        "magento/module-downloadable-sample-data": "Sample Data version:100.3.*"
+        "magento/module-downloadable-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

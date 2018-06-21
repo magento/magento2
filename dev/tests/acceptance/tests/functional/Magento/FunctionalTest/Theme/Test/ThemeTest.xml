@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="ThemeTest">
+        <annotations>
+            <features value="Theme Test"/>
+            <title value="Magento Rush theme should not be available in Themes grid"/>
+            <description value="Magento Rush theme should not be available in Themes grid"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-91409"/>
+            <group value="theme"/>
+        </annotations>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <!--Login to Admin Area-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <!--Navigate to Themes page-->
+        <amOnPage url="{{ThemesPageIndex.url}}" stepKey="navigateToThemesIndexPage" />
+        <waitForPageLoad stepKey="wait1"/>
+        <dontSee selector="{{AdminThemeSection.gridCell('Magento Rush')}}" stepKey="dontSeeRushThemeInTitleColumn"/>
+        <seeNumberOfElements selector="{{AdminThemeSection.rowsInColumn('theme_path')}}" userInput="2" stepKey="see2RowsOnTheGrid"/>
+    </test>
+</tests>

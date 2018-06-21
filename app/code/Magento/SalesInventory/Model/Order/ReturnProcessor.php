@@ -10,6 +10,8 @@ use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Class ReturnProcessor
+ *
+ * @api
  */
 class ReturnProcessor
 {

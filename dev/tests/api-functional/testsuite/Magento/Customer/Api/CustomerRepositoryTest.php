@@ -217,10 +217,8 @@ class CustomerRepositoryTest extends WebapiAbstract
         $this->assertTrue($response);
 
         //Verify if the customer is deleted
-        $this->expectException(
-            \Magento\Framework\Exception\NoSuchEntityException::class,
-            sprintf("No such entity with customerId = %s", $customerData[Customer::ID])
-        );
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage(sprintf("No such entity with customerId = %s", $customerData[Customer::ID]));
         $this->_getCustomerData($customerData[Customer::ID]);
     }
 

@@ -356,7 +356,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Get post parameters
      *
      * @param Product $product
-     * @return string
+     * @return array
      */
     public function getAddToCartPostParams(Product $product)
     {

@@ -89,6 +89,13 @@ define([
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Checkout/js/model/cart/totals-processor/default', function () {
 
         it('estimateTotals if data was cached', function () {

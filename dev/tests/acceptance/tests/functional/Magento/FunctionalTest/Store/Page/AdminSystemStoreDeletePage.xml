@@ -6,7 +6,7 @@
   */
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="AdminSystemStoreDeletePage" url="system_store/deleteStore" module="Store" area="admin">
+    <page name="AdminSystemStoreDeletePage" url="system_store/deleteStore" module="Magento_Store" area="admin">
         <section name="AdminStoreBackupOptionsSection"/>
     </page>
 </pages>

@@ -9,10 +9,10 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontDeletePersistedWishlistTest">
         <annotations>
-            <features value="Delete a persist wishlist for a customer"/>
+            <features value="Wishlist"/>
             <stories value="Delete a persist wishlist for a customer"/>
-            <title value="Delete a persist wishlist for a customer"/>
-            <description value="Delete a persist wishlist for a customer"/>
+            <title value="Customer should be able to delete a persistent wishlist"/>
+            <description value="Customer should be able to delete a persistent wishlist"/>
             <group value="wishlist"/>
         </annotations>
         <before>

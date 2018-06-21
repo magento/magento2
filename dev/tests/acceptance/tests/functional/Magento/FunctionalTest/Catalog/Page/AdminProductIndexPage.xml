@@ -5,7 +5,6 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminProductIndexPage" url="catalog/product/index" area="admin" module="Magento_Catalog">
@@ -14,5 +13,6 @@
         <section name="AdminProductGridPaginationSection"/>
         <section name="AdminProductGridSection" />
         <section name="AdminMessagesSection" />
+        <section name="AdminProductFiltersSection" />
     </page>
 </pages>

@@ -13,6 +13,7 @@
             <argument name="adminUser" defaultValue="_ENV"/>
         </arguments>
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
+        <waitForPageLoad stepKey="waitForAdminLoginPageLoad"/>
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{adminUser.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
         <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{adminUser.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
         <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>

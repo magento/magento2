@@ -13,5 +13,11 @@
         <element name="shippingMethod" type="text" selector="//*[@id='cart-totals']//tr[@class='totals shipping excl']//th//span[@class='value']"/>
         <element name="shipping" type="text" selector="//*[@id='cart-totals']//tr[@class='totals shipping excl']//td//span[@class='price']"/>
         <element name="total" type="text" selector="//*[@id='cart-totals']//tr[@class='grand totals']//td//span[@class='price']"/>
+        <element name="proceedToCheckout" type="button" selector=".action.primary.checkout span" timeout="30"/>
+        <element name="discountAmount" type="text" selector="td[data-th='Discount']"/>
+        <element name="shippingHeading" type="button" selector="#block-shipping-heading"/>
+        <element name="postcode" type="input" selector="input[name='postcode']"/>
+        <element name="stateProvince" type="select" selector="select[name='region_id']"/>
+        <element name="country" type="select" selector="select[name='country_id']"/>
     </section>
 </sections>

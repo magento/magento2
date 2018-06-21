@@ -10,10 +10,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminLoginTest">
         <annotations>
-            <features value="Admin Login"/>
+            <features value="Backend"/>
             <stories value="Login on the Admin Login page"/>
-            <title value="You should be able to log into the Magento Admin backend."/>
-            <description value="You should be able to log into the Magento Admin backend."/>
+            <title value="Admin should be able to log into the Magento Admin backend"/>
+            <description value="Admin should be able to log into the Magento Admin backend"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-71572"/>
             <group value="example"/>

@@ -571,7 +571,6 @@
                     <settings>
                         <scopeLabel>[GLOBAL]</scopeLabel>
                         <validation>
-                            <rule name="validate-digits" xsi:type="boolean">true</rule>
                             <rule name="validate-number" xsi:type="boolean">true</rule>
                         </validation>
                         <label translate="true">Qty Increments</label>

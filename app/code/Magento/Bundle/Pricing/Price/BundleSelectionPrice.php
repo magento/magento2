@@ -93,7 +93,7 @@ class BundleSelectionPrice extends AbstractPrice
     }
 
     /**
-     * Get the price value for one of selection product
+     * Get the price value for one of selection product.
      *
      * @return bool|float
      */
@@ -103,7 +103,10 @@ class BundleSelectionPrice extends AbstractPrice
             return $this->value;
         }
         $product = $this->selection;
-        $bundleSelectionKey = 'bundle-selection-value-' . $product->getSelectionId();
+        $bundleSelectionKey = 'bundle-selection-'
+            . ($this->useRegularPrice ? 'regular-' : '')
+            . 'value-'
+            . $product->getSelectionId();
         if ($product->hasData($bundleSelectionKey)) {
             return $product->getData($bundleSelectionKey);
         }
@@ -140,6 +143,7 @@ class BundleSelectionPrice extends AbstractPrice
         }
         $this->value = $this->priceCurrency->round($value);
         $product->setData($bundleSelectionKey, $this->value);
+
         return $this->value;
     }
 
@@ -151,7 +155,10 @@ class BundleSelectionPrice extends AbstractPrice
     public function getAmount()
     {
         $product = $this->selection;
-        $bundleSelectionKey = 'bundle-selection-amount-' . $product->getSelectionId();
+        $bundleSelectionKey = 'bundle-selection'
+            . ($this->useRegularPrice ? 'regular-' : '')
+            . '-amount-'
+            . $product->getSelectionId();
         if ($product->hasData($bundleSelectionKey)) {
             return $product->getData($bundleSelectionKey);
         }
@@ -168,6 +175,7 @@ class BundleSelectionPrice extends AbstractPrice
             );
             $product->setData($bundleSelectionKey, $this->amount[$value]);
         }
+
         return $this->amount[$value];
     }
 

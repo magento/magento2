@@ -10,6 +10,10 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 
 /**
  * @api
@@ -30,21 +34,29 @@ class Index extends AbstractDb
     protected $metadataPool;
 
     /**
+     * @var TableResolver
+     */
+    private $tableResolver;
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param MetadataPool $metadataPool
      * @param null $connectionName
+     * @param TableResolver|null $tableResolver
      */
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
         MetadataPool $metadataPool,
-        $connectionName = null
+        $connectionName = null,
+        TableResolver $tableResolver = null
     ) {
         parent::__construct($context, $connectionName);
         $this->storeManager = $storeManager;
         $this->metadataPool = $metadataPool;
+        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
     }
 
     /**
@@ -116,8 +128,17 @@ class Index extends AbstractDb
     {
         $connection = $this->getConnection();
 
+        $catalogCategoryProductDimension = new Dimension(\Magento\Store\Model\Store::ENTITY, $storeId);
+
+        $catalogCategoryProductTableName = $this->tableResolver->resolve(
+            AbstractAction::MAIN_INDEX_TABLE,
+            [
+                $catalogCategoryProductDimension
+            ]
+        );
+
         $select = $connection->select()->from(
-            [$this->getTable('catalog_category_product_index')],
+            [$catalogCategoryProductTableName],
             ['category_id', 'product_id', 'position', 'store_id']
         )->where(
             'store_id = ?',

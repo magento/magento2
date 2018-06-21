@@ -314,8 +314,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $sku = $fixtureProduct[ProductInterface::SKU];
         $this->saveProduct($fixtureProduct);
-        $this->expectException(
-            'Exception',
+        $this->expectException('Exception');
+        $this->expectExceptionMessage(
             "The product that was requested doesn't exist. Verify the product and try again."
         );
 

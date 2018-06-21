@@ -97,9 +97,8 @@ class PatchRegistry implements \IteratorAggregate
             return $this->patches[$patchName];
         }
 
-        $patch = $patchName;
-        $this->patches[$patchName] = $patch;
-        return $patch;
+        $this->patches[$patchName] = $patchName;
+        return $patchName;
     }
 
     /**

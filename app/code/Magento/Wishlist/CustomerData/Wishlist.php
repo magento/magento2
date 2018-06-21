@@ -144,7 +144,7 @@ class Wishlist implements SectionSourceInterface
      * Retrieve product image data
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Block\Product\Image
+     * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getImageData($product)
@@ -153,9 +153,7 @@ class Wishlist implements SectionSourceInterface
         $helper = $this->imageHelperFactory->create()
             ->init($product, 'wishlist_sidebar_block');
 
-        $template = $helper->getFrame()
-            ? 'Magento_Catalog/product/image'
-            : 'Magento_Catalog/product/image_with_borders';
+        $template = 'Magento_Catalog/product/image_with_borders';
 
         try {
             $imagesize = $helper->getResizedImageInfo();

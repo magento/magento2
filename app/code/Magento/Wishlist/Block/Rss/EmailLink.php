@@ -24,7 +24,7 @@ class EmailLink extends Link
     protected $_template = 'rss/email.phtml';
 
     /**
-     * @return string
+     * @return array
      */
     protected function getLinkParams()
     {

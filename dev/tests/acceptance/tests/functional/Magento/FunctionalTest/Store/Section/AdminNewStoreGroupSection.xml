@@ -7,8 +7,9 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminNewStoreGroupSection">
+        <element name="storeGrpWebsiteDropdown" type="select" selector="#group_website_id"/>
         <element name="storeGrpNameTextField" type="input" selector="#group_name"/>
         <element name="storeGrpCodeTextField" type="input" selector="#group_code"/>
-        <element name="storeRootCategoryDropdown" type="button" selector="#group_root_category_id"/>
+        <element name="storeRootCategoryDropdown" type="select" selector="#group_root_category_id"/>
     </section>
 </sections>

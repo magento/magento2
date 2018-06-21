@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="StorefrontFooterSection">
+        <element name="switchStoreButton" type="button" selector="#switcher-store-trigger"/>
+        <element name="storeLink" type="button" selector="//ul[@class='dropdown switcher-dropdown']//a[contains(text(),'{{var1}}')]" parameterized="true" timeout="30"/>
+    </section>
+</sections>

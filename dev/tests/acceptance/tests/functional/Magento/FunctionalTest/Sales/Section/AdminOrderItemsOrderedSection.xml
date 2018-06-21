@@ -22,6 +22,7 @@
         <element name="itemTotal" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-total .price" parameterized="true"/>
 
         <element name="productNameColumn" type="text" selector=".edit-order-table .col-product .product-title"/>
+        <element name="productNameOptions" type="text" selector=".edit-order-table .col-product .item-options"/>
         <element name="productSkuColumn" type="text" selector=".edit-order-table .col-product .product-sku-block"/>
         <element name="statusColumn" type="text" selector=".edit-order-table .col-status"/>
         <element name="originalPriceColumn" type="text" selector=".edit-order-table .col-original-price .price"/>

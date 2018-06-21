@@ -9,12 +9,14 @@ namespace Magento\Framework\Setup\Declaration\Schema\Operations;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\DDLTriggerInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\DefinitionAggregator;
+use Magento\Framework\Setup\Declaration\Schema\Db\Statement;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\ElementHistory;
+use Magento\Framework\Setup\Declaration\Schema\ElementHistoryFactory;
 use Magento\Framework\Setup\Declaration\Schema\OperationInterface;
 
 /**
@@ -40,23 +42,37 @@ class CreateTable implements OperationInterface
     /**
      * @var DDLTriggerInterface[]
      */
+    private $columnTriggers;
+
+    /**
+     * @var DDLTriggerInterface[]
+     */
     private $triggers;
 
     /**
-     * Constructor.
-     *
+     * @var ElementHistoryFactory
+     */
+    private $elementHistoryFactory;
+
+    /**
      * @param DbSchemaWriterInterface $dbSchemaWriter
      * @param DefinitionAggregator $definitionAggregator
+     * @param ElementHistoryFactory $elementHistoryFactory
+     * @param array $columnTriggers
      * @param array $triggers
      */
     public function __construct(
         DbSchemaWriterInterface $dbSchemaWriter,
         DefinitionAggregator $definitionAggregator,
+        ElementHistoryFactory $elementHistoryFactory,
+        array $columnTriggers = [],
         array $triggers = []
     ) {
         $this->dbSchemaWriter = $dbSchemaWriter;
         $this->definitionAggregator = $definitionAggregator;
+        $this->columnTriggers = $columnTriggers;
         $this->triggers = $triggers;
+        $this->elementHistoryFactory = $elementHistoryFactory;
     }
 
     /**
@@ -73,6 +89,52 @@ class CreateTable implements OperationInterface
     public function isOperationDestructive()
     {
         return false;
+    }
+
+    /**
+     * Setup callbacks for newely created columns
+     *
+     * @param array $columns
+     * @param Statement $createTableStatement
+     * @return void
+     */
+    private function setupColumnTriggers(array $columns, Statement $createTableStatement)
+    {
+        foreach ($columns as $column) {
+            foreach ($this->columnTriggers as $trigger) {
+                if ($trigger->isApplicable((string) $column->getOnCreate())) {
+                    $elementHistory = $this->elementHistoryFactory->create([
+                        'new' => $column,
+                        'old' => $column
+                    ]);
+                    $createTableStatement->addTrigger(
+                        $trigger->getCallback($elementHistory)
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * Setup triggers for entire table
+     *
+     * @param Table $table
+     * @param Statement $createTableStatement
+     * @return void
+     */
+    private function setupTableTriggers(Table $table, Statement $createTableStatement)
+    {
+        foreach ($this->triggers as $trigger) {
+            if ($trigger->isApplicable((string) $table->getOnCreate())) {
+                $elementHistory = $this->elementHistoryFactory->create([
+                    'new' => $table,
+                    'old' => $table
+                ]);
+                $createTableStatement->addTrigger(
+                    $trigger->getCallback($elementHistory)
+                );
+            }
+        }
     }
 
     /**
@@ -102,21 +164,13 @@ class CreateTable implements OperationInterface
         $createTableStatement = $this->dbSchemaWriter
             ->createTable(
                 $table->getName(),
-                $table->getResource(),
+                $elementHistory->getNew()->getResource(),
                 $definition,
-                ['engine' => $table->getEngine(), 'comment' => $table->getComment()]
+                $table->getDiffSensitiveParams()
             );
 
-        //Setup triggers for all column for table.
-        foreach ($table->getColumns() as $column) {
-            foreach ($this->triggers as $trigger) {
-                if ($trigger->isApplicable($column->getOnCreate())) {
-                    $createTableStatement->addTrigger(
-                        $trigger->getCallback($column)
-                    );
-                }
-            }
-        }
+        $this->setupTableTriggers($table, $createTableStatement);
+        $this->setupColumnTriggers($table->getColumns(), $createTableStatement);
 
         return [$createTableStatement];
     }

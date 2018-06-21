@@ -43,6 +43,11 @@ class SchemaBuilder
     private $sharding;
 
     /**
+     * @var array
+     */
+    private $tables;
+
+    /**
      * Constructor.
      *
      * @param ElementFactory          $elementFactory
@@ -64,8 +69,6 @@ class SchemaBuilder
      */
     public function build(Schema $schema)
     {
-        $tables = [];
-
         foreach ($this->sharding->getResources() as $resource) {
             foreach ($this->dbSchemaReader->readTables($resource) as $tableName) {
                 $columns = [];
@@ -85,8 +88,10 @@ class SchemaBuilder
                     [
                         'name' => $tableName,
                         'resource' => $resource,
-                        'engine' => strtolower($tableOptions['Engine']),
-                        'comment' => $tableOptions['Comment'] === '' ? null : $tableOptions['Comment']
+                        'engine' => strtolower($tableOptions['engine']),
+                        'comment' => $tableOptions['comment'] === '' ? null : $tableOptions['comment'],
+                        'charset' => $tableOptions['charset'],
+                        'collation' => $tableOptions['collation']
                     ]
                 );
 
@@ -115,12 +120,11 @@ class SchemaBuilder
 
                 $table->addIndexes($indexes);
                 $table->addConstraints($constraints);
-                $tables[$table->getName()] = $table;
-                $schema->addTable($table);
+                $this->tables[$table->getName()] = $table;
             }
         }
 
-        $this->processReferenceKeys($tables);
+        $this->processReferenceKeys($this->tables, $schema);
         return $schema;
     }
 
@@ -128,31 +132,39 @@ class SchemaBuilder
      * Process references for all tables. Schema validation required.
      *
      * @param  Table[] $tables
-     * @return Table[]
+     * @param Schema $schema
      */
-    private function processReferenceKeys(array $tables)
+    private function processReferenceKeys(array $tables, Schema $schema)
     {
         foreach ($tables as $table) {
             $tableName = $table->getName();
+            if ($schema->getTableByName($tableName) instanceof Table) {
+                continue;
+            }
             $referencesData = $this->dbSchemaReader->readReferences($tableName, $table->getResource());
             $references = [];
 
             foreach ($referencesData as $referenceData) {
                 //Prepare reference data
-                $referenceData['table'] = $tables[$tableName];
-                $referenceData['column'] = $tables[$tableName]->getColumnByName($referenceData['column']);
-                $referenceData['referenceTable'] = $tables[$referenceData['referenceTable']];
+                $referenceData['table'] = $table;
+                $referenceTableName = $referenceData['referenceTable'];
+                $referenceData['column'] = $table->getColumnByName($referenceData['column']);
+                $referenceData['referenceTable'] = $this->tables[$referenceTableName];
                 $referenceData['referenceColumn'] = $referenceData['referenceTable']->getColumnByName(
                     $referenceData['referenceColumn']
                 );
 
                 $references[$referenceData['name']] = $this->elementFactory->create('foreign', $referenceData);
+                //We need to instantiate tables in order of references tree
+                if (isset($tables[$referenceTableName]) && $referenceTableName !== $tableName) {
+                    $this->processReferenceKeys([$referenceTableName => $tables[$referenceTableName]], $schema);
+                    unset($tables[$referenceTableName]);
+                }
             }
 
-            $tables[$tableName]->addConstraints($references);
+            $table->addConstraints($references);
+            $schema->addTable($table);
         }
-
-        return $tables;
     }
 
     /**

@@ -8,12 +8,14 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Model\Product\Option\Type\Date" type="Magento\Catalog\Model\Webapi\Product\Option\Type\Date" />
-
     <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
         <arguments>
             <argument name="instancesByType" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Catalog\Helper\Product\Configuration</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\App\ResourceConnection">
+        <plugin name="get_catalog_category_product_index_table_name" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\TableResolver"/>
     </type>
 </config>

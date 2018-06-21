@@ -29,6 +29,18 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
+    <!--Filter the product grid by the SKU string -->
+    <actionGroup name="filterProductGridBySku2">
+        <arguments>
+            <argument name="sku" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
+    </actionGroup>
+
     <!--Filter the product grid by the Name field-->
     <actionGroup name="filterProductGridByName">
         <arguments>
@@ -37,6 +49,15 @@
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{product.name}}" stepKey="fillProductNameFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
+    </actionGroup>
+
+    <!--Filter the product grid by new from date filter-->
+    <actionGroup name="filterProductGridBySetNewFromDate">
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.newFromDateFilter}}" userInput="05/16/2018" stepKey="fillSetAsNewProductFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
@@ -82,6 +103,17 @@
         <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearch"/>
     </actionGroup>
 
+    <!--Search product grid with keyword search-->
+    <!-- Argument type: string (see more in MQE-965) -->
+    <actionGroup name="searchProductGridByKeyword2">
+        <arguments>
+            <argument name="keyword" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="{{keyword}}" stepKey="fillKeywordSearchField"/>
+        <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearch"/>
+    </actionGroup>
+
     <!--Filter product grid by name, sku, and type; and see expected product-->
     <actionGroup name="viewProductInAdminGrid">
         <arguments>
@@ -121,4 +153,45 @@
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
     </actionGroup>
 
+    <!--Delete a product by filtering grid and using delete action-->
+    <actionGroup name="deleteProductBySku">
+        <arguments>
+            <argument name="sku" type="string"/>
+        </arguments>
+        <!--TODO use other action group for filtering grid when MQE-539 is implemented -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadInitial"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{sku}}"  stepKey="seeProductSkuInGrid"/>
+        <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
+        <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+    </actionGroup>
+
+    <!--Open product for edit by clicking row X and column Y in product grid-->
+    <actionGroup name="openProducForEditByClickingRowXColumnYInProductGrid">
+        <arguments>
+            <argument name="X" type="string" defaultValue="1"/>
+            <argument name="Y" type="string" defaultValue="2"/>
+        </arguments>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton(X, Y)}}" stepKey="openProductForEdit"/>
+    </actionGroup>
+
+    <!-- Sort products by ID descending -->
+    <actionGroup name="sortProductsByIdDescending">
+        <conditionalClick selector="{{AdminProductGridTableHeaderSection.id('ascend')}}" dependentSelector="{{AdminProductGridTableHeaderSection.id('descend')}}" visible="false" stepKey="sortById"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Sort products by ID ascending -->
+    <actionGroup name="sortProductsByIdAscending">
+        <conditionalClick selector="{{AdminProductGridTableHeaderSection.id('descend')}}" dependentSelector="{{AdminProductGridTableHeaderSection.id('ascend')}}" visible="false" stepKey="sortById"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
 </actionGroups>

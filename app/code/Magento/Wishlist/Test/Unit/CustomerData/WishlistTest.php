@@ -93,7 +93,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             'items' => [
                 [
                     'image' => [
-                        'template' => 'Magento_Catalog/product/image',
+                        'template' => 'Magento_Catalog/product/image_with_borders',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,
@@ -278,7 +278,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             'items' => [
                 [
                     'image' => [
-                        'template' => 'Magento_Catalog/product/image',
+                        'template' => 'Magento_Catalog/product/image_with_borders',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,
@@ -296,7 +296,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
                 ],
                 [
                     'image' => [
-                        'template' => 'Magento_Catalog/product/image',
+                        'template' => 'Magento_Catalog/product/image_with_borders',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,

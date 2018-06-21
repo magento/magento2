@@ -8,8 +8,9 @@
 <!-- Test XML Example -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="MinimumFieldsTest">
+    <test name="MinimumTest">
         <annotations>
+            <features value="SampleTests"/>
             <title value="Minimum Test"/>
             <description value="Minimum Test"/>
             <group value="example"/>

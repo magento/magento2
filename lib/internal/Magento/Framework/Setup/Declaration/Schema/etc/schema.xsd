@@ -59,12 +59,15 @@
         <xs:attribute name="resource" type="resourceType" />
         <xs:attribute name="engine" type="engineType" />
         <xs:attribute name="comment" type="xs:string" />
+        <xs:attribute name="collation" type="xs:string" />
+        <xs:attribute name="charset" type="xs:string" />
+        <xs:attribute name="onCreate" type="xs:string" />
     </xs:complexType>
 
     <xs:simpleType name="resourceType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="default" />
-            <xs:enumeration value="quote" />
+            <xs:enumeration value="checkout" />
             <xs:enumeration value="sales" />
         </xs:restriction>
     </xs:simpleType>
