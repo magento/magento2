@@ -20,7 +20,7 @@
                         <label>Access list</label>
                         <comment>IPs access list separated with \',\' that can purge Varnish configuration for config file generation.
                             If field is empty default value localhost will be saved.</comment>
-                        <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
+                        <backend_model>Magento\PageCache\Model\System\Config\Backend\AccessList</backend_model>
                         <depends>
                             <field id="caching_application">1</field>
                         </depends>
