@@ -493,6 +493,9 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         };
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getCountryAttrMock()
     {
         $countryByWebsiteMock = $this->getMockBuilder(CountryWithWebsites::class)

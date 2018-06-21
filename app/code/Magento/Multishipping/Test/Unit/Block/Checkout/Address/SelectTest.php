@@ -115,6 +115,9 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $this->block->isAddressDefaultShipping($this->addressMock));
     }
 
+    /**
+     * @return array
+     */
     public function isDefaultAddressDataProvider()
     {
         return [

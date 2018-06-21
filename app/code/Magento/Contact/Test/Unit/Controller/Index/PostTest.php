@@ -144,6 +144,9 @@ class PostTest extends \PHPUnit\Framework\TestCase
         $this->controller->execute();
     }
 
+    /**
+     * @return array
+     */
     public function postDataProvider()
     {
         return [
