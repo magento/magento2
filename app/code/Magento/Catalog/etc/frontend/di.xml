@@ -100,4 +100,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\ResourceConnection">
+        <plugin name="get_catalog_category_product_index_table_name" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\TableResolver"/>
+    </type>
 </config>

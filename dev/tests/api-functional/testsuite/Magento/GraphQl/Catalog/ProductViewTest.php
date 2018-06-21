@@ -44,17 +44,11 @@ class ProductViewTest extends GraphQlAbstract
             attribute_set_id
             country_of_manufacture
             created_at
-            custom_design
-            custom_design_from
-            custom_design_to
-            custom_layout
-            custom_layout_update
             description
             gift_message_available
             id
             categories {
                name
-               is_active
                url_path
                available_sort_by
                level
@@ -157,7 +151,6 @@ class ProductViewTest extends GraphQlAbstract
                   }
               }
             }
-            page_layout
             price {
               minimalPrice {
                 amount {
@@ -218,7 +211,6 @@ class ProductViewTest extends GraphQlAbstract
             special_price
             special_to_date
             swatch_image
-            tax_class_id
             thumbnail
             thumbnail_label
             tier_price
@@ -234,7 +226,8 @@ class ProductViewTest extends GraphQlAbstract
             updated_at
             url_key
             url_path
-            website_ids
+            canonical_url
+            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }
@@ -269,6 +262,8 @@ QUERY;
         $this->assertEavAttributes($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
         $this->assertTierPrices($product, $response['products']['items'][0]);
+        $this->assertArrayHasKey('websites', $response['products']['items'][0]);
+        $this->assertWebsites($product, $response['products']['items'][0]['websites']);
         self::assertEquals(
             'Movable Position 2',
             $responseObject->getData('products/items/0/categories/1/name')
@@ -276,6 +271,11 @@ QUERY;
         self::assertEquals(
             'Filter category',
             $responseObject->getData('products/items/0/categories/2/name')
+        );
+        $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
+        self::assertEquals(
+            $storeManager->getStore()->getBaseUrl() . 'simple-product.html',
+            $responseObject->getData('products/items/0/canonical_url')
         );
     }
 
@@ -294,18 +294,12 @@ QUERY;
     {
         items{
             attribute_set_id
-            category_ids
             categories
             {
                 id
             }
             country_of_manufacture
             created_at
-            custom_design
-            custom_design_from
-            custom_design_to
-            custom_layout
-            custom_layout_update
             description
             gift_message_available
             id
@@ -405,7 +399,6 @@ QUERY;
                   }
               }
             }
-            page_layout
             price {
               minimalPrice {
                 amount {
@@ -466,7 +459,6 @@ QUERY;
             special_price
             special_to_date
             swatch_image
-            tax_class_id
             thumbnail
             thumbnail_label
             tier_price
@@ -482,7 +474,7 @@ QUERY;
             updated_at
             url_key
             url_path
-            website_ids
+            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }
@@ -503,6 +495,8 @@ QUERY;
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
+        $this->assertArrayHasKey('websites', $response['products']['items'][0]);
+        $this->assertWebsites($product, $response['products']['items'][0]['websites']);
     }
 
     /**
@@ -878,6 +872,26 @@ QUERY;
      * @param ProductInterface $product
      * @param array $actualResponse
      */
+    private function assertWebsites($product, $actualResponse)
+    {
+        $assertionMap = [
+            [
+                'id' => current($product->getExtensionAttributes()->getWebsiteIds()),
+                'name' => 'Main Website',
+                'code' => 'base',
+                'sort_order' => 0,
+                'default_group_id' => '1',
+                'is_default' => true,
+            ]
+        ];
+
+        $this->assertEquals($actualResponse, $assertionMap);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $actualResponse
+     */
     private function assertProductLinks($product, $actualResponse)
     {
         /** @var ProductLinkInterface $productLinks */
@@ -906,7 +920,6 @@ QUERY;
             'meta_keyword',
             'meta_title',
             'short_description',
-            'tax_class_id',
             'country_of_manufacture',
             'gift_message_available',
             'news_from_date',

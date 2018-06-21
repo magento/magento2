@@ -11,17 +11,19 @@ use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class BundleProductViewTest extends GraphQlAbstract
 {
     const KEY_PRICE_TYPE_FIXED = 'FIXED';
+    const KEY_PRICE_TYPE_DYNAMIC = 'DYNAMIC';
 
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
      */
-    public function testAllFielsBundleProducts()
+    public function testAllFieldsBundleProducts()
     {
         $productSku = 'bundle-product';
         $query
@@ -38,7 +40,6 @@ class BundleProductViewTest extends GraphQlAbstract
            ... on PhysicalProductInterface {
              weight
            }
-           category_ids 
            ... on BundleProduct {
            dynamic_sku
             dynamic_price
@@ -105,6 +106,105 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_with_not_visible_children.php
+     */
+    public function testBundleProdutWithNotVisibleChildren()
+    {
+        $productSku = 'bundle-product-1';
+        $query
+            = <<<QUERY
+{
+   products(filter: {sku: {eq: "{$productSku}"}})
+   {
+       items{
+           sku
+           type_id
+           id
+           name
+           attribute_set_id
+           ... on PhysicalProductInterface {
+             weight
+           }
+           ... on BundleProduct {
+           dynamic_sku
+            dynamic_price
+            dynamic_weight
+            price_view
+            ship_bundle_items
+            items {
+              option_id
+              title
+              required
+              type
+              position
+              sku              
+              options {
+                id
+                qty
+                position
+                is_default
+                price
+                price_type
+                can_change_quantity
+                label
+                product {
+                  id
+                  name
+                  sku
+                  type_id
+                   }
+                }
+            }
+           }
+       }
+   }   
+}
+QUERY;
+
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
+        $config->saveConfig(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            0,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+        ObjectManager::getInstance()->get(\Magento\Framework\App\Cache::class)
+            ->clean(\Magento\Framework\App\Config::CACHE_TAG);
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty(
+            $response['products']['items'],
+            "Precondition failed: 'items' must not be empty"
+        );
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        $bundleProduct = $productRepository->get($productSku, false, null, true);
+        $bundleProduct->setId(
+            $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
+        if ((bool)$bundleProduct->getShipmentType()) {
+            $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
+        } else {
+            $this->assertEquals('TOGETHER', $response['products']['items'][0]['ship_bundle_items']);
+        }
+        if ((bool)$bundleProduct->getPriceView()) {
+            $this->assertEquals('AS_LOW_AS', $response['products']['items'][0]['price_view']);
+        } else {
+            $this->assertEquals('PRICE_RANGE', $response['products']['items'][0]['price_view']);
+        }
+        $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
+
+        $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
+        $this->assertNotEmpty(
+            $response['products']['items'][0]['items'],
+            "Precondition failed: 'items' must not be empty"
+        );
+    }
+
+    /**
      * @param ProductInterface $product
      * @param array $actualResponse
      */
@@ -140,6 +240,7 @@ QUERY;
         $optionList = ObjectManager::getInstance()->get(\Magento\Bundle\Model\Product\OptionList::class);
         $options = $optionList->getItems($product);
         $option = $options[0];
+        /** @var \Magento\Bundle\Api\Data\LinkInterface $bundleProductLinks */
         $bundleProductLinks = $option->getProductLinks();
         $bundleProductLink = $bundleProductLinks[0];
         $childProductSku = $bundleProductLink->getSku();
@@ -168,7 +269,6 @@ QUERY;
                 'qty' => (int)$bundleProductLink->getQty(),
                 'position' => $bundleProductLink->getPosition(),
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
-                'price' =>  $bundleProductLink->getPrice(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
                 'can_change_quantity' => $bundleProductLink->getCanChangeQuantity(),
                 'label' => $childProduct->getName()
@@ -227,7 +327,6 @@ QUERY;
            ... on PhysicalProductInterface {
              weight
            }
-           category_ids
            price {
              minimalPrice {
                amount {
@@ -332,7 +431,6 @@ QUERY;
            ... on PhysicalProductInterface {
              weight
            }
-           category_ids
 
            ... on BundleProduct {
            dynamic_sku

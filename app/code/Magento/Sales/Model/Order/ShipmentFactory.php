@@ -5,13 +5,13 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Factory class for @see \Magento\Sales\Api\Data\ShipmentInterface
+ *
+ * @api
  */
 class ShipmentFactory
 {

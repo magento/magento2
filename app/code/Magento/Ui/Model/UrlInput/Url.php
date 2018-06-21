@@ -15,7 +15,7 @@ class Url implements ConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return [
             'label' => __('URL'),

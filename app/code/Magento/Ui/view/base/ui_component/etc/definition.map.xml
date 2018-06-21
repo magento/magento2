@@ -103,6 +103,16 @@
             </argument>
         </schema>
     </component>
+    <component name="colorPicker" include="abstractSettings">
+        <schema name="current">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="colorPickerMode" type="string" xsi:type="xpath">settings/colorPickerMode</item>
+                    <item name="colorFormat" type="string" xsi:type="xpath">settings/colorFormat</item>
+                </item>
+            </argument>
+        </schema>
+    </component>
     <component name="column" include="uiElementSettings">
         <schema name="current">
             <argument name="data" xsi:type="array">
@@ -287,6 +297,12 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="formElement" type="string" xsi:type="xpath">@formElement</item>
+                    <item name="colorPickerMode" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/colorPickerMode
+                    </item>
+                    <item name="colorFormat" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/colorFormat
+                    </item>
                     <item name="wysiwyg" type="boolean" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/wysiwyg
                     </item>

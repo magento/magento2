@@ -87,7 +87,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
         $factory = new Factory($this->objectManager, []);
 
-        $this->expectException('LogicException', 'No materialization strategy is supported');
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('No materialization strategy is supported');
         $factory->create($asset);
     }
 

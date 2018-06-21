@@ -133,7 +133,7 @@ class Fulltext implements
                 array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
             );
             $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
-            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $entityIds));
+            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
         }
     }
 

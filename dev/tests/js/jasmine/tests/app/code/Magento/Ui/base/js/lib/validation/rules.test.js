@@ -40,4 +40,44 @@ define([
             });
         });
     });
+
+    describe('validate-color', function () {
+        it('Should accept empty value', function () {
+            expect(rules['validate-color'].handler('', null)).toEqual(true);
+        });
+
+        it('Should not accept invalid value', function () {
+            expect(rules['validate-color'].handler('#FF')).toEqual(false);
+            expect(rules['validate-color'].handler('#GGG')).toEqual(false);
+        });
+
+        it('Should accept hex value', function () {
+            expect(rules['validate-color'].handler('#FFF')).toEqual(true);
+            expect(rules['validate-color'].handler('#FFFFFF')).toEqual(true);
+            expect(rules['validate-color'].handler('FFFFFF')).toEqual(true);
+            expect(rules['validate-color'].handler('FFF')).toEqual(true);
+        });
+
+        it('Should accept English color value', function () {
+            expect(rules['validate-color'].handler('red')).toEqual(true);
+            expect(rules['validate-color'].handler('BLuE')).toEqual(true);
+            expect(rules['validate-color'].handler(' GReEn     ')).toEqual(true);
+        });
+
+        it('Should accept rgb(a) value', function () {
+            expect(rules['validate-color'].handler('rgb(128, 128, 10)')).toEqual(true);
+            expect(rules['validate-color'].handler('rgb(255, 0, 57, 0.4)')).toEqual(true);
+        });
+
+        it('Should accept hsl(a) value', function () {
+            expect(rules['validate-color'].handler('hsl(0, 100, 50)')).toEqual(true);
+            expect(rules['validate-color'].handler('hsl(40, 75%, 25%)')).toEqual(true);
+            expect(rules['validate-color'].handler('hsl(50, 25, 50, 50)')).toEqual(true);
+        });
+
+        it('Should accept hsv value', function () {
+            expect(rules['validate-color'].handler('hsv(0, 100, 100)')).toEqual(true);
+            expect(rules['validate-color'].handler('hsv(25, 25%, 65%)')).toEqual(true);
+        });
+    });
 });

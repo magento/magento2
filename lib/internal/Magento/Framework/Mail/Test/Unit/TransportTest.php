@@ -10,7 +10,7 @@ class TransportTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers \Magento\Framework\Mail\Transport::sendMessage
      * @expectedException \Magento\Framework\Exception\MailException
-     * @expectedExceptionMessage Invalid email; contains no "To" header
+     * @expectedExceptionMessage Invalid email; contains no at least one of "To", "Cc", and "Bcc" header
      */
     public function testSendMessageBrokenMessage()
     {

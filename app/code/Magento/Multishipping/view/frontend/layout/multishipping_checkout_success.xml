@@ -12,11 +12,15 @@
     <body>
         <referenceBlock name="page.main.title">
             <action method="setPageTitle">
-                <argument translate="true" name="title" xsi:type="string">We received your order!</argument>
+                <argument translate="true" name="title" xsi:type="string">Thank you for your purchase!</argument>
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Multishipping\Block\Checkout\Success" name="checkout_success" template="Magento_Multishipping::checkout/success.phtml" cacheable="false"/>
+            <block class="Magento\Multishipping\Block\Checkout\Success" name="checkout_success" template="Magento_Multishipping::checkout/success.phtml" cacheable="false">
+                <arguments>
+                    <argument name="checkout_data" xsi:type="object">Magento\Multishipping\Block\DataProviders\Success</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

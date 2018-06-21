@@ -7,8 +7,6 @@
  */
 namespace Magento\Framework\Validator;
 
-use Zend_Config;
-
 class EmailAddress extends \Zend_Validate_EmailAddress implements \Magento\Framework\Validator\ValidatorInterface
 {
     /**
@@ -21,7 +19,7 @@ class EmailAddress extends \Zend_Validate_EmailAddress implements \Magento\Frame
      * 'mx'       => If MX check should be enabled, boolean
      * 'deep'     => If a deep MX check should be done, boolean
      *
-     * @param array|string|Zend_Config $options OPTIONAL
+     * @inheritdoc
      */
     public function __construct($options = [])
     {

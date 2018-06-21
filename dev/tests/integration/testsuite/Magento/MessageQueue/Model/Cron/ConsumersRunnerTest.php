@@ -19,6 +19,7 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
  * Tests the different cases of consumers running by ConsumersRunner
  *
  * {@inheritdoc}
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 {
@@ -104,7 +105,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
                 $command = str_replace('bin/magento', 'dev/tests/integration/bin/magento', $command);
                 $command = $params . ' ' . $command;
 
-                return exec("{$command} > /dev/null &");
+                return exec("{$command} >/dev/null &");
             });
     }
 

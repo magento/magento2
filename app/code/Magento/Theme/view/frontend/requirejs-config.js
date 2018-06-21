@@ -27,7 +27,8 @@ var config = {
             'menu':                   'mage/menu',
             'popupWindow':            'mage/popup-window',
             'validation':             'mage/validation/validation',
-            'welcome':                'Magento_Theme/js/view/welcome'
+            'welcome':                'Magento_Theme/js/view/welcome',
+            'breadcrumbs':            'Magento_Theme/js/view/breadcrumbs'
         }
     },
     paths: {
@@ -38,5 +39,12 @@ var config = {
         'mage/common',
         'mage/dataPost',
         'mage/bootstrap'
-    ]
+    ],
+    config: {
+        mixins: {
+            'Magento_Theme/js/view/breadcrumbs': {
+                'Magento_Theme/js/view/add-home-breadcrumb': true
+            }
+        }
+    }
 };

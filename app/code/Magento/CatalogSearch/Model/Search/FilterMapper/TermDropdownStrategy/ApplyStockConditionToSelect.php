@@ -9,6 +9,7 @@ namespace Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\CatalogInventory\Model\Stock\Status;
 
 /**
  * Apply stock condition to select.
@@ -43,7 +44,12 @@ class ApplyStockConditionToSelect
     ) {
         $select->joinInner(
             [$stockAlias => $this->resourceConnection->getTableName('cataloginventory_stock_status')],
-            sprintf('%2$s.product_id = %1$s.source_id', $alias, $stockAlias),
+            sprintf(
+                '%2$s.product_id = %1$s.source_id AND %2$s.stock_status = %3$d',
+                $alias,
+                $stockAlias,
+                Status::STATUS_IN_STOCK
+            ),
             []
         );
     }

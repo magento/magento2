@@ -32,7 +32,7 @@ interface SevenInterface extends \Magento\Framework\Code\Generator\CodeGenerator
      * @param array $data
      * @return TestThree
      */
-    public static function testMethod1(array &$data = array());
+    public static function testMethod1(array &$data = []);
 
     /**
      * Method short description

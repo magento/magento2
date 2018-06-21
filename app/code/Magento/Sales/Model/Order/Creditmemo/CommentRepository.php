@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Creditmemo;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Api\CreditmemoCommentRepositoryInterface;
@@ -14,7 +15,13 @@ use Magento\Sales\Api\Data\CreditmemoCommentInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory;
 use Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterfaceFactory;
 use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CommentRepository implements CreditmemoCommentRepositoryInterface
 {
     /**
@@ -38,21 +45,47 @@ class CommentRepository implements CreditmemoCommentRepositoryInterface
     private $collectionProcessor;
 
     /**
+     * @var CreditmemoCommentSender
+     */
+    private $creditmemoCommentSender;
+
+    /**
+     * @var CreditmemoRepositoryInterface
+     */
+    private $creditmemoRepository;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param CreditmemoCommentResourceInterface $commentResource
      * @param CreditmemoCommentInterfaceFactory $commentFactory
      * @param CreditmemoCommentSearchResultInterfaceFactory $searchResultFactory
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param CreditmemoCommentSender|null $creditmemoCommentSender
+     * @param CreditmemoRepositoryInterface|null $creditmemoRepository
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         CreditmemoCommentResourceInterface $commentResource,
         CreditmemoCommentInterfaceFactory $commentFactory,
         CreditmemoCommentSearchResultInterfaceFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor
+        CollectionProcessorInterface $collectionProcessor,
+        CreditmemoCommentSender $creditmemoCommentSender = null,
+        CreditmemoRepositoryInterface $creditmemoRepository = null,
+        LoggerInterface $logger = null
     ) {
         $this->commentResource = $commentResource;
         $this->commentFactory = $commentFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
+        $this->creditmemoCommentSender = $creditmemoCommentSender
+            ?: ObjectManager::getInstance()->get(CreditmemoCommentSender::class);
+        $this->creditmemoRepository = $creditmemoRepository
+            ?: ObjectManager::getInstance()->get(CreditmemoRepositoryInterface::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -97,8 +130,16 @@ class CommentRepository implements CreditmemoCommentRepositoryInterface
         try {
             $this->commentResource->save($entity);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save the comment.'), $e);
+            throw new CouldNotSaveException(__('Could not save the creditmemo comment.'), $e);
         }
+
+        try {
+            $creditmemo = $this->creditmemoRepository->get($entity->getParentId());
+            $this->creditmemoCommentSender->send($creditmemo, $entity->getIsCustomerNotified(), $entity->getComment());
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+        }
+
         return $entity;
     }
 }

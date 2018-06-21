@@ -62,7 +62,8 @@ class NamedParamsTest extends \PHPUnit\Framework\TestCase
      */
     public function testEvaluateWrongParam($input, $expectedExceptionMessage)
     {
-        $this->expectException('\InvalidArgumentException', $expectedExceptionMessage);
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage($expectedExceptionMessage);
         $this->_model->evaluate($input);
     }
 

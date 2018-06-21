@@ -23,8 +23,8 @@ class HandlerCompositeTest extends \PHPUnit\Framework\TestCase
 
     public function testConstructorException()
     {
-        $this->expectException(
-            'LogicException',
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage(
             'Type mismatch. Expected type: HandlerInterface. Actual: string, Code: weird_handler'
         );
 

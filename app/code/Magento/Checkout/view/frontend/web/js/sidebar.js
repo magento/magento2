@@ -108,6 +108,13 @@ define([
             /**
              * @param {jQuery.Event} event
              */
+            events['change ' + this.options.item.qty] = function (event) {
+                self._showItemButton($(event.target));
+            };
+
+            /**
+             * @param {jQuery.Event} event
+             */
             events['click ' + this.options.item.button] = function (event) {
                 event.stopPropagation();
                 self._updateItemQty($(event.currentTarget));
@@ -213,6 +220,7 @@ define([
          */
         _updateItemQtyAfter: function (elem) {
             this._hideItemButton(elem);
+            $(document).trigger('ajax:updateItemQty');
         },
 
         /**

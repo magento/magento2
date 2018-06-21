@@ -9,6 +9,7 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Sales\Api\OrderManagementInterface;
 
 class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
@@ -16,16 +17,29 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
      * Authorization level of a basic admin session
      */
     const ADMIN_RESOURCE = 'Magento_Sales::cancel';
+    
+    /**
+     * @var OrderManagementInterface
+     */
+    private $orderManagement;
 
     /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
+     * @param OrderManagementInterface|null $orderManagement
      */
-    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
-    {
+    public function __construct(
+        Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+        OrderManagementInterface $orderManagement = null
+    ) {
         parent::__construct($context, $filter);
         $this->collectionFactory = $collectionFactory;
+        $this->orderManagement = $orderManagement ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Sales\Api\OrderManagementInterface::class
+        );
     }
 
     /**
@@ -38,11 +52,10 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
     {
         $countCancelOrder = 0;
         foreach ($collection->getItems() as $order) {
-            if (!$order->canCancel()) {
+            $isCanceled = $this->orderManagement->cancel($order->getEntityId());
+            if ($isCanceled === false) {
                 continue;
             }
-            $order->cancel();
-            $order->save();
             $countCancelOrder++;
         }
         $countNonCancelOrder = $collection->count() - $countCancelOrder;

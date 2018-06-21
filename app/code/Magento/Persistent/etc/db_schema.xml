@@ -37,7 +37,7 @@
             <column name="updated_at"/>
         </index>
     </table>
-    <table name="quote" resource="quote" comment="Sales Flat Quote">
+    <table name="quote" resource="checkout" comment="Sales Flat Quote">
         <column xsi:type="smallint" name="is_persistent" padding="5" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Is Quote Persistent"/>
     </table>

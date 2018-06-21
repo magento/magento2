@@ -61,8 +61,8 @@ class CompositeValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidReaderInstance()
     {
-        $this->expectException(
-            '\LogicException',
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage(
             'Validator [stdClass] does not implements ' .
             'Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface'
         );

@@ -626,9 +626,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     ): string {
         if ($allGroups !== 0) {
             return ImportAdvancedPricing::VALUE_ALL_GROUPS;
-        } else {
-            return $this->_groupRepository->getById($groupId)->getCode();
         }
+        return $this->_groupRepository->getById($groupId)->getCode();
     }
 
     /**

@@ -12,12 +12,34 @@
         <arguments>
             <argument name="product"/>
         </arguments>
-        <!-- Go to storefront product page, assert product visibility -->
+        <!-- Go to storefront product page, assert product name, sku and price -->
         <amOnPage url="{{product.urlKey}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <seeInTitle userInput="{{product.name}}" stepKey="assertProductNameTitle"/>
         <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{product.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+        <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+    </actionGroup>
+    <actionGroup name="AssertProductNameAndSkuInStorefrontProductPage">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <!-- Go to storefront product page, assert product name and sku -->
+        <amOnPage url="{{product.urlKey}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <seeInTitle userInput="{{product.name}}" stepKey="assertProductNameTitle"/>
+        <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+    </actionGroup>
+    <actionGroup name="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <!-- Go to storefront product page, assert product name and sku -->
+        <amOnPage url="{{product.custom_attributes[url_key]}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <seeInTitle userInput="{{product.name}}" stepKey="assertProductNameTitle"/>
+        <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
     </actionGroup>
 </actionGroups>

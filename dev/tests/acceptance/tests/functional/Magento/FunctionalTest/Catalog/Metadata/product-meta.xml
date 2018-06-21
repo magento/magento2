@@ -14,7 +14,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>
@@ -40,7 +40,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>
@@ -60,7 +60,10 @@
         </object>
         <field key="saveOptions">boolean</field>
     </operation>
-    <operation name="deleteProduct" dataType="product" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
+    <operation name="DeleteProduct" dataType="product" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+    <operation name="GetProduct" dataType="product" type="get" auth="adminOauth" url="/V1/products/{sku}" method="GET">
         <contentType>application/json</contentType>
     </operation>
     <operation name="CreateProduct2" dataType="product2" type="create" auth="adminOauth" url="/V1/products" method="POST">
@@ -69,7 +72,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>
@@ -95,7 +98,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>
@@ -115,7 +118,43 @@
         </object>
         <field key="saveOptions">boolean</field>
     </operation>
-    <operation name="deleteProduct2" dataType="product2" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
+    <operation name="DeleteProduct2" dataType="product2" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+    <operation name="GetProduct2" dataType="product2" type="get" auth="adminOauth" url="/V1/products/{sku}" method="GET">
+        <contentType>application/json</contentType>
+    </operation>
+    <!-- Data type product3 is to work around MQE-1035 -->
+    <operation name="CreateProduct3" dataType="product3" type="create" auth="adminOauth" url="/V1/products" method="POST">
+        <contentType>application/json</contentType>
+        <object dataType="product3" key="product">
+            <field key="sku">string</field>
+            <field key="name">string</field>
+            <field key="attribute_set_id">integer</field>
+            <field key="price">number</field>
+            <field key="status">integer</field>
+            <field key="visibility">integer</field>
+            <field key="type_id">string</field>
+            <field key="created_at">string</field>
+            <field key="updated_at">string</field>
+            <field key="weight">integer</field>
+            <field key="extension_attributes">product_extension_attribute</field>
+            <array key="product_links">
+                <value>product_link</value>
+            </array>
+            <array key="custom_attributes">
+                <value>custom_attribute_array</value>
+            </array>
+            <array key="options">
+                <value>product_option</value>
+            </array>
+        </object>
+    </operation>
+    <!-- Data type product3 is to work around MQE-1035 -->
+    <operation name="DeleteProduct3" dataType="product3" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+    <operation name="GetProduct3" dataType="product3" type="get" auth="adminOauth" url="/V1/products/{sku}" method="GET">
         <contentType>application/json</contentType>
     </operation>
 </operations>

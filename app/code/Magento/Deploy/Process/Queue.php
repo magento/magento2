@@ -187,15 +187,44 @@ class Queue
     {
         /** @var Package $package */
         $package = $packageJob['package'];
+        $dependenciesNotFinished = false;
         if ($package->getParent() && $package->getParent() !== $package) {
             foreach ($packageJob['dependencies'] as $dependencyName => $dependency) {
                 if (!$this->isDeployed($dependency)) {
-                    $this->assertAndExecute($dependencyName, $packages, $packages[$dependencyName]);
+                    //If it's not present in $packages then it's already
+                    //in progress so just waiting...
+                    if (!array_key_exists($dependencyName, $packages)) {
+                        $dependenciesNotFinished = true;
+                    } else {
+                        $this->assertAndExecute(
+                            $dependencyName,
+                            $packages,
+                            $packages[$dependencyName]
+                        );
+                    }
                 }
             }
         }
-        if (!$this->isDeployed($package)
-            && ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses))) {
+        $this->executePackage($package, $name, $packages, $dependenciesNotFinished);
+    }
+
+    /**
+     * @param Package $package
+     * @param string $name
+     * @param array $packages
+     * @param bool $dependenciesNotFinished
+     * @return void
+     */
+    private function executePackage(
+        Package $package,
+        string $name,
+        array &$packages,
+        bool $dependenciesNotFinished
+    ) {
+        if (!$dependenciesNotFinished
+            && !$this->isDeployed($package)
+            && ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses))
+        ) {
             unset($packages[$name]);
             $this->execute($package);
         }

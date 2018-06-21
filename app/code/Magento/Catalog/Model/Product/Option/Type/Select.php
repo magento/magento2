@@ -71,7 +71,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         }
         if (!$this->_isSingleSelection()) {
             $valuesCollection = $option->getOptionValuesByOptionId($value, $this->getProduct()->getStoreId())->load();
-            if ($valuesCollection->count() != count($value)) {
+            $valueCount = is_array($value) ? count($value) : 1;
+            if ($valuesCollection->count() != $valueCount) {
                 $this->setIsValid(false);
                 throw new LocalizedException(
                     __(
@@ -230,7 +231,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             foreach (explode(',', $optionValue) as $value) {
                 $_result = $option->getValueById($value);
                 if ($_result) {
-                    $result += $this->_getChargableOptionPrice(
+                    $result += $this->_getChargeableOptionPrice(
                         $_result->getPrice(),
                         $_result->getPriceType() == 'percent',
                         $basePrice
@@ -245,7 +246,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } elseif ($this->_isSingleSelection()) {
             $_result = $option->getValueById($optionValue);
             if ($_result) {
-                $result = $this->_getChargableOptionPrice(
+                $result = $this->_getChargeableOptionPrice(
                     $_result->getPrice(),
                     $_result->getPriceType() == 'percent',
                     $basePrice

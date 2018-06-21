@@ -221,7 +221,7 @@ class DataProvider
         $lastProductId,
         $batch
     ) {
-        $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
+        $websiteId = (int)$this->storeManager->getStore($storeId)->getWebsiteId();
         $lastProductId = (int) $lastProductId;
 
         $select = $this->connection->select()
@@ -490,9 +490,9 @@ class DataProvider
     public function getProductChildIds($productId, $typeId)
     {
         $typeInstance = $this->getProductTypeInstance($typeId);
-        $relation = $typeInstance->isComposite(
-            $this->getProductEmulator($typeId)
-        ) ? $typeInstance->getRelationInfo() : false;
+        $relation = $typeInstance->isComposite($this->getProductEmulator($typeId))
+            ? $typeInstance->getRelationInfo()
+            : false;
 
         if ($relation && $relation->getTable() && $relation->getParentFieldName() && $relation->getChildFieldName()) {
             $select = $this->connection->select()->from(

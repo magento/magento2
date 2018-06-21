@@ -4234,5 +4234,7 @@ return [
         'Magento\Elasticsearch\Test\Unit\Model\SearchAdapter\ConnectionManagerTest',
         'Magento\Elasticsearch\Test\Unit\SearchAdapter\ConnectionManagerTest'
     ],
-    ['Zend_Feed', 'Zend\Feed']
+    ['Zend_Feed', 'Zend\Feed'],
+    ['Zend_Uri', 'Zend\Uri\Uri'],
+    ['Zend_Mime', 'Magento\Framework\HTTP\Mime'],
 ];

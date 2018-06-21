@@ -39,9 +39,16 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetConfigCssUrls()
     {
         $config = $this->model->getConfig();
-        $publicPathPattern = 'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/mage/%s';
+        $publicPathPattern = 'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/%s';
         $tinyMce4Config = $config->getData('tinymce4');
-        $this->assertStringMatchesFormat($publicPathPattern, $tinyMce4Config['content_css']);
+        $contentCss = $tinyMce4Config['content_css'];
+        if (is_array($contentCss)) {
+            foreach ($contentCss as $url) {
+                $this->assertStringMatchesFormat($publicPathPattern, $url);
+            }
+        } else {
+            $this->assertStringMatchesFormat($publicPathPattern, $contentCss);
+        }
     }
 
     /**

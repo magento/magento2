@@ -47,7 +47,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PASSWORD => 'password',
             ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST => 'virtual host',
             ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
-
+            ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS => '{"ssl_option":"test"}',
         ];
 
         $this->objectManager = new ObjectManager($this);
@@ -113,7 +113,14 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
                 ConfigOptionsList::CONFIG_PATH_QUEUE_AMQP_SSL,
                 'Amqp SSL',
                 ConfigOptionsList::DEFAULT_AMQP_SSL
-            )
+            ),
+            new TextConfigOption(
+                ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS,
+                TextConfigOption::FRONTEND_WIZARD_TEXTAREA,
+                ConfigOptionsList::CONFIG_PATH_QUEUE_AMQP_SSL_OPTIONS,
+                'Amqp SSL Options (JSON)',
+                ConfigOptionsList::DEFAULT_AMQP_SSL
+            ),
         ];
         $this->assertEquals($expectedOptions, $this->model->getOptions());
     }
@@ -167,6 +174,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PASSWORD => 'password',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST => 'virtual host',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS => '{"ssl_option":"test"}',
                 ],
                 ['queue' =>
                     ['amqp' =>
@@ -177,6 +185,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
                             'password' => 'password',
                             'virtualhost' => 'virtual host',
                             'ssl' => 'ssl',
+                            'ssl_options' => ['ssl_option' => 'test'],
                          ]
                     ]
                 ],
@@ -189,6 +198,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PASSWORD => 'password',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST => 'virtual host',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS => '{"ssl_option":"test"}',
                 ],
                 ['queue' =>
                     ['amqp' =>
@@ -199,6 +209,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
                             'password' => 'password',
                             'virtualhost' => 'virtual host',
                             'ssl' => 'ssl',
+                            'ssl_options' => ['ssl_option' => 'test'],
                          ]
                     ]
                 ],

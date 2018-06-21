@@ -5,6 +5,8 @@
  */
 
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\ShipmentFactory;
+use Magento\TestFramework\Helper\Bootstrap;
 
 require 'order.php';
 
@@ -15,28 +17,24 @@ require 'order.php';
 $shipments = [
     [
         'increment_id' => '100000001',
-        'order_id' => $order->getId(),
         'shipping_address_id' => 1,
         'shipment_status' => \Magento\Sales\Model\Order\Shipment::STATUS_NEW,
         'store_id' => 1,
     ],
     [
         'increment_id' => '100000002',
-        'order_id' => $order->getId(),
         'shipping_address_id' => 3,
         'shipment_status' => \Magento\Sales\Model\Order\Shipment::STATUS_NEW,
         'store_id' => 1,
     ],
     [
         'increment_id' => '100000003',
-        'order_id' => $order->getId(),
         'shipping_address_id' => 3,
-        'status' => \Magento\Sales\Model\Order\Shipment::STATUS_NEW,
+        'shipment_status' => \Magento\Sales\Model\Order\Shipment::STATUS_NEW,
         'store_id' => 1,
     ],
     [
         'increment_id' => '100000004',
-        'order_id' => $order->getId(),
         'shipping_address_id' => 4,
         'shipment_status' => 'closed',
         'store_id' => 1,
@@ -45,16 +43,15 @@ $shipments = [
 
 /** @var array $shipmentData */
 foreach ($shipments as $shipmentData) {
-    /** @var $shipment \Magento\Sales\Model\Order\Shipment */
-    $shipment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-        \Magento\Sales\Model\Order\Shipment::class
-    );
-    /** @var \Magento\Sales\Model\Order\Shipment\Item $shipmentItem */
-    $shipmentItem = $objectManager->create(\Magento\Sales\Model\Order\Shipment\Item::class);
-    $shipmentItem->setParentId($order->getId());
-    $shipmentItem->setOrderItem($orderItem);
-    $shipment
-        ->setData($shipmentData)
-        ->addItem($shipmentItem)
-        ->save();
+    $items = [];
+    foreach ($order->getItems() as $orderItem) {
+        $items[$orderItem->getId()] = $orderItem->getQtyOrdered();
+    }
+    /** @var \Magento\Sales\Model\Order\Shipment $shipment */
+    $shipment = Bootstrap::getObjectManager()->get(ShipmentFactory::class)->create($order, $items);
+    $shipment->setIncrementId($shipmentData['increment_id']);
+    $shipment->setShippingAddressId($shipmentData['shipping_address_id']);
+    $shipment->setShipmentStatus($shipmentData['shipment_status']);
+    $shipment->setStoreId($shipmentData['store_id']);
+    $shipment->save();
 }

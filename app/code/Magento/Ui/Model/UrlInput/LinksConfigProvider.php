@@ -41,7 +41,7 @@ class LinksConfigProvider implements ConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         $config = [];
         foreach ($this->linksConfiguration as $linkName => $className) {
@@ -56,19 +56,8 @@ class LinksConfigProvider implements ConfigInterface
      * @param string $instance
      * @return ConfigInterface
      */
-    private function createConfigProvider($instance)
+    private function createConfigProvider($instance): ConfigInterface
     {
-        if (!is_subclass_of(
-            $instance,
-            ConfigInterface::class
-        )
-        ) {
-            throw new \InvalidArgumentException(
-                $instance .
-                ' does not implement ' .
-                ConfigInterface::class
-            );
-        }
         return $this->objectManager->create($instance);
     }
 }

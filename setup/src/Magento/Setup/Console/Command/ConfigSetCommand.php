@@ -12,6 +12,7 @@ use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\ConfigModel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 class ConfigSetCommand extends AbstractSetupCommand
 {
@@ -81,11 +82,11 @@ class ConfigSetCommand extends AbstractSetupCommand
 
             $currentValue = $this->deploymentConfig->get($option->getConfigPath());
             if (($currentValue !== null) && ($inputOptions[$option->getName()] !== null)) {
-                $dialog = $this->getHelperSet()->get('dialog');
-                if (!$dialog->askConfirmation(
-                    $output,
+                $dialog = $this->getHelperSet()->get('question');
+                $question = new Question(
                     '<question>Overwrite the existing configuration for ' . $option->getName() . '?[Y/n]</question>'
-                )) {
+                );
+                if (strtolower($dialog->ask($input, $output, $question)) !== 'y') {
                     $inputOptions[$option->getName()] = null;
                 }
             }

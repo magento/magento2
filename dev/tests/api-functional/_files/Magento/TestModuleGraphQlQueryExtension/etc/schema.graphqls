@@ -2,5 +2,5 @@
 # See COPYING.txt for license details.
 
 type Item {
-    integer_list: [Int]
+    integer_list: [Int] @resolver(class: "Magento\\TestModuleGraphQlQueryExtension\\Model\\Resolver\\IntegerList")
 }

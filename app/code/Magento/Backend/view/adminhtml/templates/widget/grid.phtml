@@ -19,7 +19,7 @@
  *
  */
 /* @var $block \Magento\Backend\Block\Widget\Grid */
-$numColumns = sizeof($block->getColumns());
+$numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
 ?>
 <?php if ($block->getCollection()): ?>
 

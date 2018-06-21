@@ -5,13 +5,27 @@
  */
 namespace Magento\Amqp\Setup;
 
-use PhpAmqpLib\Connection\AMQPStreamConnection;
+use Magento\Framework\Amqp\Connection\Factory as ConnectionFactory;
+use Magento\Framework\Amqp\Connection\FactoryOptions;
 
 /**
  * Class ConnectionValidator - validates Amqp related settings
  */
 class ConnectionValidator
 {
+    /**
+     * @var ConnectionFactory
+     */
+    private $connectionFactory;
+
+    /**
+     * @param ConnectionFactory $connectionFactory
+     */
+    public function __construct(ConnectionFactory $connectionFactory)
+    {
+        $this->connectionFactory = $connectionFactory;
+    }
+
     /**
      * Checks Amqp Connection
      *
@@ -20,18 +34,33 @@ class ConnectionValidator
      * @param string $user
      * @param string $password
      * @param string $virtualHost
+     * @param bool $ssl
+     * @param string[]|null $sslOptions
      * @return bool true if the connection succeeded, false otherwise
      */
-    public function isConnectionValid($host, $port, $user, $password = '', $virtualHost = '')
-    {
+    public function isConnectionValid(
+        $host,
+        $port,
+        $user,
+        $password = '',
+        $virtualHost = '',
+        bool $ssl = false,
+        array $sslOptions = null
+    ) {
         try {
-            $connection = new AMQPStreamConnection(
-                $host,
-                $port,
-                $user,
-                $password,
-                $virtualHost
-            );
+            $options = new FactoryOptions();
+            $options->setHost($host);
+            $options->setPort($port);
+            $options->setUsername($user);
+            $options->setPassword($password);
+            $options->setVirtualHost($virtualHost);
+            $options->setSslEnabled($ssl);
+
+            if ($sslOptions) {
+                $options->setSslOptions($sslOptions);
+            }
+
+            $connection = $this->connectionFactory->create($options);
 
             $connection->close();
         } catch (\Exception $e) {

@@ -133,8 +133,8 @@
                 <item name="vault_capture" xsi:type="string">BraintreeVaultCaptureCommand</item>
                 <item name="void" xsi:type="string">BraintreeVoidCommand</item>
                 <item name="refund" xsi:type="string">BraintreeRefundCommand</item>
-                <item name="cancel" xsi:type="string">BraintreeVoidCommand</item>
-                <item name="deny_payment" xsi:type="string">BraintreeVoidCommand</item>
+                <item name="cancel" xsi:type="string">Magento\Braintree\Gateway\CancelCommand</item>
+                <item name="deny_payment" xsi:type="string">Magento\Braintree\Gateway\CancelCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -150,7 +150,7 @@
                 <item name="vault_capture" xsi:type="string">BraintreeVaultCaptureCommand</item>
                 <item name="void" xsi:type="string">BraintreeVoidCommand</item>
                 <item name="refund" xsi:type="string">BraintreeRefundCommand</item>
-                <item name="cancel" xsi:type="string">BraintreeVoidCommand</item>
+                <item name="cancel" xsi:type="string">Magento\Braintree\Gateway\CancelCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -193,6 +193,23 @@
         </arguments>
     </type>
 
+    <virtualType name="Magento\Braintree\Gateway\ErrorMapper\VirtualConfigReader" type="Magento\Payment\Gateway\ErrorMapper\VirtualConfigReader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">braintree_error_mapping.xml</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Braintree\Gateway\ErrorMapper\VirtualMappingData" type="Magento\Payment\Gateway\ErrorMapper\MappingData">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Braintree\Gateway\ErrorMapper\VirtualConfigReader</argument>
+            <argument name="cacheId" xsi:type="string">braintree_error_mapper</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Braintree\Gateway\ErrorMapper\VirtualErrorMessageMapper" type="Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapper">
+        <arguments>
+            <argument name="messageMapping" xsi:type="object">Magento\Braintree\Gateway\ErrorMapper\VirtualMappingData</argument>
+        </arguments>
+    </virtualType>
+
     <!-- Braintree commands  -->
     <virtualType name="BraintreeAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
@@ -201,6 +218,7 @@
             <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSale</argument>
             <argument name="handler" xsi:type="object">BraintreeAuthorizationHandler</argument>
             <argument name="validator" xsi:type="object">Magento\Braintree\Gateway\Validator\ResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Magento\Braintree\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
     <virtualType name="BraintreeAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
@@ -240,6 +258,7 @@
             <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSubmitForSettlement</argument>
             <argument name="handler" xsi:type="object">Magento\Braintree\Gateway\Response\TransactionIdHandler</argument>
             <argument name="validator" xsi:type="object">Magento\Braintree\Gateway\Validator\ResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Magento\Braintree\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
     <virtualType name="BraintreeCaptureRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
@@ -258,6 +277,7 @@
             <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSale</argument>
             <argument name="handler" xsi:type="object">BraintreeVaultResponseHandler</argument>
             <argument name="validator" xsi:type="object">Magento\Braintree\Gateway\Validator\ResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Magento\Braintree\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
     <virtualType name="BraintreeVaultAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
@@ -296,6 +316,7 @@
             <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSale</argument>
             <argument name="handler" xsi:type="object">Magento\Braintree\Gateway\Response\TransactionIdHandler</argument>
             <argument name="validator" xsi:type="object">Magento\Braintree\Gateway\Validator\ResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Magento\Braintree\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
     <virtualType name="BraintreeVaultCaptureRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
@@ -426,7 +447,7 @@
     <!-- PayPal value handlers infrastructure -->
     <type name="Magento\Braintree\Gateway\Response\PayPal\VaultDetailsHandler">
         <arguments>
-            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\AccountPaymentTokenFactory</argument>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Api\Data\PaymentTokenFactoryInterface</argument>
         </arguments>
     </type>
     <virtualType name="BraintreePayPalValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
@@ -484,6 +505,14 @@
         </arguments>
     </virtualType>
     <!-- END Void Command -->
+    <!-- Cancel Command -->
+    <virtualType name="Magento\Braintree\Gateway\CancelCommand" type="BraintreeVoidCommand">
+        <arguments>
+            <argument name="handler" xsi:type="object">Magento\Braintree\Gateway\Response\CancelDetailsHandler</argument>
+            <argument name="validator" xsi:type="object">Magento\Braintree\Gateway\Validator\CancelResponseValidator</argument>
+        </arguments>
+    </virtualType>
+    <!-- END Cancel Command -->
 
     <!-- Refund Command -->
     <virtualType name="BraintreeRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">

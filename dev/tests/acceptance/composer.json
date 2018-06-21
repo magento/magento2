@@ -16,14 +16,8 @@
         }
     ],
     "require": {
-        "allure-framework/allure-codeception": "~1.2.6",
-        "codeception/codeception": "~2.3.4",
-        "consolidation/robo": "^1.0.0",
-        "symfony/process": ">=2.7 <3.4",
-        "henrikbjorn/lurker": "^1.2",
-        "magento/magento2-functional-testing-framework": "~2.1.1",
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0",
-        "vlucas/phpdotenv": "~2.4"
+        "php": "~7.1.3||~7.2.0",
+        "magento/magento2-functional-testing-framework": "~2.2.0"
     },
     "autoload": {
         "psr-4": {
