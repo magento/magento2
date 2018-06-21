@@ -10,6 +10,7 @@
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
+        "magento/module-bundle": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-checkout": "*",
         "magento/module-config": "*",
@@ -32,7 +33,7 @@
         "magento/module-wishlist": "*"
     },
     "suggest": {
-        "magento/module-sales-sample-data": "Sample Data version:100.3.*"
+        "magento/module-sales-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

@@ -9,7 +9,7 @@
         "magento/framework": "*"
     },
     "suggest": {
-        "magento/sample-data-media": "Sample Data version:100.3.*"
+        "magento/sample-data-media": "*"
     },
     "type": "magento2-module",
     "license": [

@@ -111,10 +111,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
             ->method('fetchRow')
             ->will($this->returnValue([]));
 
-        $this->expectException(
-            'Exception',
-            "Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id."
-        );
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id.");
         $this->model->setViewId('viewIdtest');
         $this->model->getVersion();
     }
@@ -125,7 +123,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockIsTableExists($changelogTableName, false);
         $this->mockGetTableName();
 
-        $this->expectException('Exception', "Table {$changelogTableName} does not exist");
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->getVersion();
     }
@@ -136,7 +135,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockIsTableExists($changelogTableName, false);
         $this->mockGetTableName();
 
-        $this->expectException('Exception', "Table {$changelogTableName} does not exist");
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->drop();
     }
@@ -227,7 +227,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockIsTableExists($changelogTableName, false);
         $this->mockGetTableName();
 
-        $this->expectException('Exception', "Table {$changelogTableName} does not exist");
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->getList(mt_rand(1, 200), mt_rand(201, 400));
     }
@@ -238,7 +239,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockIsTableExists($changelogTableName, false);
         $this->mockGetTableName();
 
-        $this->expectException('Exception', "Table {$changelogTableName} does not exist");
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->clear(mt_rand(1, 200));
     }

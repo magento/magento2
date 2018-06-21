@@ -25,7 +25,7 @@
     <actionGroup name="StorefrontAddProductToCartActionGroup">
         <arguments>
             <argument name="product"/>
-            <argument name="productCount"/>
+            <argument name="productCount" type="string"/>
         </arguments>
         <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart" />
         <!-- @TODO: Use general message selector after MQE-694 is fixed -->

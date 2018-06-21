@@ -223,14 +223,10 @@ class SchemaBuilder
     {
         if (!$schema->getTableByName($tableData['name'])) {
             $resource = $this->getStructuralElementResource($tableData);
-            $tableParams = [
-                'name' => $tableData['name'],
-                'resource' => $resource,
-                'engine' => $tableData['engine'] ?? null,
-                'comment' => $tableData['comment'] ?? null
-            ];
+            $tableData['resource'] = $resource;
+            $tableData['comment'] = $tableData['comment'] ?? null;
             /** @var Table $table */
-            $table = $this->elementFactory->create('table', $tableParams);
+            $table = $this->elementFactory->create('table', $tableData);
             $columns = $this->processColumns($tableData, $resource, $table);
             $table->addColumns($columns);
             //Add indexes to table

@@ -12,12 +12,12 @@
             <features value="End to End scenarios"/>
             <stories value="B2C admin - MAGETWO-75412"/>
             <group value="e2e"/>
-            <!--Skipped; see MAGETWO-88963-->
-            <group value="skip"/>
             <title value="Pass End to End B2C Admin scenario"/>
             <description value="Admin creates products, creates and manages categories, creates promotions, creates an order, processes an order, processes a return, uses admin grids"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-87014"/>
+            <!-- Skipped, see: https://jira.corp.magento.com/browse/MQE-891 -->
+            <group value="skip"/>
         </annotations>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
@@ -39,7 +39,7 @@
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <actionGroup ref="addProductImage" stepKey="addImageForProductSimple">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ProductImage"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackToGridSimple"/>

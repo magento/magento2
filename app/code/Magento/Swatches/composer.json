@@ -19,7 +19,7 @@
     },
     "suggest": {
         "magento/module-layered-navigation": "*",
-        "magento/module-swatches-sample-data": "Sample Data version:100.3.*"
+        "magento/module-swatches-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

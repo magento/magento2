@@ -23,8 +23,8 @@
         "magento/module-webapi": "*",
         "magento/module-sales": "*",
         "magento/module-product-video": "*",
-        "magento/module-configurable-sample-data": "Sample Data version:100.3.*",
-        "magento/module-product-links-sample-data": "Sample Data version:100.3.*"
+        "magento/module-configurable-sample-data": "*",
+        "magento/module-product-links-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

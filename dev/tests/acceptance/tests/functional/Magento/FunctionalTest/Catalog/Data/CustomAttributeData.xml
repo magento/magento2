@@ -5,7 +5,6 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="CustomAttributeCategoryUrlKey" type="custom_attribute">
@@ -31,5 +30,9 @@
     <entity name="ApiProductShortDescription" type="custom_attribute">
         <data key="attribute_code">short_description</data>
         <data key="value" unique="suffix">API Product Short Description</data>
+    </entity>
+    <entity name="ApiProductNewsFromDate" type="custom_attribute">
+        <data key="attribute_code">news_from_date</data>
+        <data key="value">2018-05-17 00:00:00</data>
     </entity>
 </entities>

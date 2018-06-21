@@ -40,7 +40,6 @@ class BundleProductViewTest extends GraphQlAbstract
            ... on PhysicalProductInterface {
              weight
            }
-           category_ids 
            ... on BundleProduct {
            dynamic_sku
             dynamic_price
@@ -126,7 +125,6 @@ QUERY;
            ... on PhysicalProductInterface {
              weight
            }
-           category_ids 
            ... on BundleProduct {
            dynamic_sku
             dynamic_price
@@ -329,7 +327,6 @@ QUERY;
            ... on PhysicalProductInterface {
              weight
            }
-           category_ids
            price {
              minimalPrice {
                amount {
@@ -434,7 +431,6 @@ QUERY;
            ... on PhysicalProductInterface {
              weight
            }
-           category_ids
 
            ... on BundleProduct {
            dynamic_sku

@@ -55,7 +55,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
      */
     public function testEvaluateWrongDiscriminator($input, $expectedExceptionMessage)
     {
-        $this->expectException('\InvalidArgumentException', $expectedExceptionMessage);
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage($expectedExceptionMessage);
         $this->_model->evaluate($input);
     }
 

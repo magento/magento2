@@ -97,7 +97,10 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithDisabledModule()
     {
-        $this->withActiveSignifydIntegration(false);
+        $orderId = 1;
+        $storeId = 2;
+        $this->withActiveSignifydIntegration(false, $storeId);
+        $this->withOrderEntity($orderId, $storeId);
 
         $this->creationService->expects(self::never())
             ->method('createForOrder');
@@ -113,7 +116,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithoutOrder()
     {
         $this->withActiveSignifydIntegration(true);
-        $this->withOrderEntity(null);
+        $this->withOrderEntity(null, null);
 
         $this->creationService->expects(self::never())
             ->method('createForOrder');
@@ -129,8 +132,9 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithOfflinePayment()
     {
         $orderId = 1;
-        $this->withActiveSignifydIntegration(true);
-        $this->withOrderEntity($orderId);
+        $storeId = 2;
+        $this->withActiveSignifydIntegration(true, $storeId);
+        $this->withOrderEntity($orderId, $storeId);
         $this->withAvailablePaymentMethod(false);
 
         $this->creationService->expects(self::never())
@@ -147,10 +151,11 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithFailedCaseCreation()
     {
         $orderId = 1;
+        $storeId = 2;
         $exceptionMessage = __('Case with the same order id already exists.');
 
-        $this->withActiveSignifydIntegration(true);
-        $this->withOrderEntity($orderId);
+        $this->withActiveSignifydIntegration(true, $storeId);
+        $this->withOrderEntity($orderId, $storeId);
         $this->withAvailablePaymentMethod(true);
 
         $this->creationService->method('createForOrder')
@@ -172,9 +177,10 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $orderId = 1;
+        $storeId = 2;
 
-        $this->withActiveSignifydIntegration(true);
-        $this->withOrderEntity($orderId);
+        $this->withActiveSignifydIntegration(true, $storeId);
+        $this->withOrderEntity($orderId, $storeId);
         $this->withAvailablePaymentMethod(true);
 
         $this->creationService
@@ -190,10 +196,11 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     /**
      * Specifies order entity mock execution.
      *
-     * @param int $orderId
+     * @param int|null $orderId
+     * @param int|null $storeId
      * @return void
      */
-    private function withOrderEntity($orderId)
+    private function withOrderEntity($orderId, $storeId): void
     {
         $this->orderEntity = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
@@ -201,6 +208,8 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 
         $this->orderEntity->method('getEntityId')
             ->willReturn($orderId);
+        $this->orderEntity->method('getStoreId')
+            ->willReturn($storeId);
 
         $this->observer->method('getEvent')
             ->willReturn($this->event);
@@ -214,11 +223,13 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
      * Specifies config mock execution.
      *
      * @param bool $isActive
+     * @param int|null $storeId
      * @return void
      */
-    private function withActiveSignifydIntegration($isActive)
+    private function withActiveSignifydIntegration(bool $isActive, $storeId = null): void
     {
         $this->config->method('isActive')
+            ->with($storeId)
             ->willReturn($isActive);
     }
 

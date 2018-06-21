@@ -126,6 +126,11 @@ class TableDiff
         ElementInterface $generatedTable,
         Diff $diff
     ) {
+        if ($declaredTable->getResource() !== $generatedTable->getResource()) {
+            $this->diffManager->registerRecreation($declaredTable, $generatedTable, $diff);
+            return $diff;
+        }
+
         if ($this->diffManager->shouldBeModified($declaredTable, $generatedTable)) {
             $this->diffManager->registerTableModification($declaredTable, $generatedTable, $diff);
         }

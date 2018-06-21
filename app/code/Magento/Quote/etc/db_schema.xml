@@ -7,7 +7,7 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="quote" resource="quote" engine="innodb" comment="Sales Flat Quote">
+    <table name="quote" resource="checkout" engine="innodb" comment="Sales Flat Quote">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Entity Id"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
@@ -61,7 +61,7 @@
                 identity="false" default="1" comment="Customer Note Notify"/>
         <column xsi:type="smallint" name="customer_is_guest" padding="5" unsigned="true" nullable="true"
                 identity="false" default="0" comment="Customer Is Guest"/>
-        <column xsi:type="varchar" name="remote_ip" nullable="true" length="32" comment="Remote Ip"/>
+        <column xsi:type="varchar" name="remote_ip" nullable="true" length="45" comment="Remote Ip"/>
         <column xsi:type="varchar" name="applied_rule_ids" nullable="true" length="255" comment="Applied Rule Ids"/>
         <column xsi:type="varchar" name="reserved_order_id" nullable="true" length="64" comment="Reserved Order Id"/>
         <column xsi:type="varchar" name="password_hash" nullable="true" length="255" comment="Password Hash"/>
@@ -101,7 +101,7 @@
             <column name="store_id"/>
         </index>
     </table>
-    <table name="quote_address" resource="quote" engine="innodb" comment="Sales Flat Quote Address">
+    <table name="quote_address" resource="checkout" engine="innodb" comment="Sales Flat Quote Address">
         <column xsi:type="int" name="address_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Address Id"/>
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"
@@ -211,7 +211,7 @@
             <column name="quote_id"/>
         </index>
     </table>
-    <table name="quote_item" resource="quote" engine="innodb" comment="Sales Flat Quote Item">
+    <table name="quote_item" resource="checkout" engine="innodb" comment="Sales Flat Quote Item">
         <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Item Id"/>
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"
@@ -311,7 +311,7 @@
             <column name="store_id"/>
         </index>
     </table>
-    <table name="quote_address_item" resource="quote" engine="innodb" comment="Sales Flat Quote Address Item">
+    <table name="quote_address_item" resource="checkout" engine="innodb" comment="Sales Flat Quote Address Item">
         <column xsi:type="int" name="address_item_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Address Item Id"/>
         <column xsi:type="int" name="parent_item_id" padding="10" unsigned="true" nullable="true" identity="false"
@@ -404,7 +404,7 @@
             <column name="quote_item_id"/>
         </index>
     </table>
-    <table name="quote_item_option" resource="quote" engine="innodb" comment="Sales Flat Quote Item Option">
+    <table name="quote_item_option" resource="checkout" engine="innodb" comment="Sales Flat Quote Item Option">
         <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Option Id"/>
         <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="false" identity="false"
@@ -422,7 +422,7 @@
             <column name="item_id"/>
         </index>
     </table>
-    <table name="quote_payment" resource="quote" engine="innodb" comment="Sales Flat Quote Payment">
+    <table name="quote_payment" resource="checkout" engine="innodb" comment="Sales Flat Quote Payment">
         <column xsi:type="int" name="payment_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Payment Id"/>
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"
@@ -458,7 +458,7 @@
             <column name="quote_id"/>
         </index>
     </table>
-    <table name="quote_shipping_rate" resource="quote" engine="innodb" comment="Sales Flat Quote Shipping Rate">
+    <table name="quote_shipping_rate" resource="checkout" engine="innodb" comment="Sales Flat Quote Shipping Rate">
         <column xsi:type="int" name="rate_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Rate Id"/>
         <column xsi:type="int" name="address_id" padding="10" unsigned="true" nullable="false" identity="false"
@@ -486,7 +486,7 @@
             <column name="address_id"/>
         </index>
     </table>
-    <table name="quote_id_mask" resource="quote" engine="innodb" comment="Quote ID and masked ID mapping">
+    <table name="quote_id_mask" resource="checkout" engine="innodb" comment="Quote ID and masked ID mapping">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Entity Id"/>
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"

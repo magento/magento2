@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Setup\Declaration\Schema;
 
+use Magento\Framework\Setup\Declaration\Schema\Db\Statement;
+
 /**
  * Schema operation interface.
  */
@@ -34,7 +36,7 @@ interface OperationInterface
      * Apply change of any type.
      *
      * @param  ElementHistory $elementHistory
-     * @return array
+     * @return Statement[]
      */
     public function doOperation(ElementHistory $elementHistory);
 }

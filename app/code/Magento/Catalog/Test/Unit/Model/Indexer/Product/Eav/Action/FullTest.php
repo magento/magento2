@@ -48,7 +48,8 @@ class FullTest extends \PHPUnit\Framework\TestCase
             $tableSwitcherMock
         );
 
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage($exceptionMessage);
 
         $model->execute();
     }

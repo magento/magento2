@@ -12,14 +12,17 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
  *
  * @magentoAppArea graphql
  * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+ * @magentoDbIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
+class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
 {
     const CONTENT_TYPE = 'application/json';
 
@@ -34,6 +37,19 @@ class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
 
     /** @var MetadataPool */
     private $metadataPool;
+
+    public static function setUpBeforeClass()
+    {
+        $db = Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
 
     protected function setUp() : void
     {
@@ -152,5 +168,13 @@ QUERY;
                 }
             }
         }
+    }
+
+    /**
+     * teardown
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 }

@@ -45,15 +45,15 @@
         <column xsi:type="smallint" name="free_shipping" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Free Shipping"/>
     </table>
-    <table name="quote_address" resource="quote" comment="Sales Flat Quote Address">
+    <table name="quote_address" resource="checkout" comment="Sales Flat Quote Address">
         <column xsi:type="smallint" name="free_shipping" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Free Shipping"/>
     </table>
-    <table name="quote_item" resource="quote" comment="Sales Flat Quote Item">
+    <table name="quote_item" resource="checkout" comment="Sales Flat Quote Item">
         <column xsi:type="smallint" name="free_shipping" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Free Shipping"/>
     </table>
-    <table name="quote_address_item" resource="quote" comment="Sales Flat Quote Address Item">
+    <table name="quote_address_item" resource="checkout" comment="Sales Flat Quote Address Item">
         <column xsi:type="int" name="free_shipping" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Free Shipping"/>
     </table>

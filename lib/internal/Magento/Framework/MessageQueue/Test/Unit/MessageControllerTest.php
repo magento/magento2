@@ -50,10 +50,8 @@ class MessageControllerTest extends \PHPUnit\Framework\TestCase
     {
         $properties = [];
         $consumerName = '';
-        $this->expectException(
-            \Magento\Framework\Exception\NotFoundException::class,
-            "Property 'message_id' not found in properties."
-        );
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectExceptionMessage("Property 'message_id' not found in properties.");
         $this->lockFactory->expects($this->once())->method('create');
         $envelope = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
             ->disableArgumentCloning()->getMock();

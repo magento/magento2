@@ -8,9 +8,9 @@
 <!-- Test XML Example -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AssertTest">
+    <test name="AssertsTest">
         <annotations>
-            <features value="Test Asserts"/>
+            <features value="SampleTests"/>
             <group value="skip"/>
         </annotations>
 

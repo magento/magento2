@@ -11,6 +11,8 @@
  */
 namespace Magento\ProductVideo\Block\Product\View;
 
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
+
 /**
  * @api
  * @since 100.0.2
@@ -28,7 +30,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\ProductVideo\Helper\Media $mediaHelper
      * @param array $data
-     * @param \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory
+     * @param \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface|null $imagesConfigFactory
      * @param array $galleryImagesConfig
      */
     public function __construct(

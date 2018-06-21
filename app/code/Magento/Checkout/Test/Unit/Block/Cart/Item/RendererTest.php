@@ -5,6 +5,8 @@
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart\Item;
 
+use Magento\Catalog\Block\Product\Image;
+use Magento\Catalog\Model\Product;
 use Magento\Checkout\Block\Cart\Item\Renderer;
 use Magento\Quote\Model\Quote\Item;
 
@@ -64,13 +66,13 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize product.
      *
-     * @return \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _initProduct()
     {
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['getName', '__wakeup', 'getIdentities']
         );
         $product->expects($this->any())->method('getName')->will($this->returnValue('Parent Product'));
@@ -106,7 +108,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testGetProductPriceHtml()
     {
         $priceHtml = 'some price html';
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -193,34 +195,17 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $imageId = 'test_image_id';
         $attributes = [];
+        $product = $this->createMock(Product::class);
+        $imageMock = $this->createMock(Image::class);
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $imageMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->imageBuilder->expects($this->once())
-            ->method('setProduct')
-            ->with($productMock)
-            ->willReturnSelf();
-        $this->imageBuilder->expects($this->once())
-            ->method('setImageId')
-            ->with($imageId)
-            ->willReturnSelf();
-        $this->imageBuilder->expects($this->once())
-            ->method('setAttributes')
-            ->with($attributes)
-            ->willReturnSelf();
-        $this->imageBuilder->expects($this->once())
+        $this->imageBuilder->expects(self::once())
             ->method('create')
+            ->with($product, $imageId, $attributes)
             ->willReturn($imageMock);
 
-        $this->assertInstanceOf(
-            \Magento\Catalog\Block\Product\Image::class,
-            $this->_renderer->getImage($productMock, $imageId, $attributes)
+        static::assertInstanceOf(
+            Image::class,
+            $this->_renderer->getImage($product, $imageId, $attributes)
         );
     }
 }

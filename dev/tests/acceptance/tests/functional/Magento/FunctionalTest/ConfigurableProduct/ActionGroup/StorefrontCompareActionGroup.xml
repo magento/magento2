@@ -16,7 +16,7 @@
         </arguments>
         <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName(product.name)}}" stepKey="assertProductName"/>
         <see userInput="${{optionProduct.price}}.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>
-        <see userInput="{{product.sku}}" selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName('SKU', product.name)}}" stepKey="assertProductPrice"/>
+        <see userInput="{{product.sku}}" selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName('SKU', product.name)}}" stepKey="assertProductSku"/>
         <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
         <seeElement selector="{{StorefrontProductCompareMainSection.ProductAddToCartByName(product.name)}}" stepKey="assertProductAddToCart"/>
     </actionGroup>

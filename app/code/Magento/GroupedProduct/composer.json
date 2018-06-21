@@ -21,7 +21,7 @@
         "magento/module-ui": "*"
     },
     "suggest": {
-        "magento/module-grouped-product-sample-data": "Sample Data version:100.3.*"
+        "magento/module-grouped-product-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

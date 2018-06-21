@@ -181,7 +181,7 @@ namespace Magento\Framework\Session {
             $model->setCookieLifetime('foobar_bogus');
             $this->assertEquals($preVal, $model->getCookieLifetime());
         }
-
+      
         public function testSettingInvalidCookieLifetime2()
         {
             $model = $this->getModel();

@@ -5,18 +5,24 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
+        <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
+        <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input"/>
+        <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
+        <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
+        <element name="enableProductLabel" type="checkbox" selector="input[name='product[status]']+label"/>
+        <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
-        <element name="productWeight" type="input" selector=".admin__field[data-index=weight] input"/>
+        <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
         <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']"/>
         <element name="productWeight" type="input" selector=".admin__field[data-index=weight] input"/>
+        <element name="productWeightSelect" type="select" selector="select[name='product[product_has_weight]']"/>
         <element name="contentTab" type="button" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Content']"/>
         <element name="fieldError" type="text" selector="//input[@name='product[{{fieldName}}]']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
         <element name="priceFieldError" type="text" selector="//input[@name='product[price]']/parent::div/parent::div/label[@class='admin__field-error']"/>
@@ -28,6 +34,15 @@
         <element name="frontendInput" type="select" selector="select[name = 'frontend_input']"/>
         <element name="productFormTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]" parameterized="true"/>
         <element name="productFormTabState" type="text" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]/parent::*/parent::*[@data-state-collapsible='{{state}}']" parameterized="true"/>
+        <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
+        <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
+        <element name="divByDataIndex" type="input" selector="div[data-index='{{var}}']" parameterized="true"/>
+        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+    </section>
+    <section name="ProductInWebsitesSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
+        <!--<element name="websites" type="checkbox" selector="input[name='product[website_ids][{{var1}}]']" parameterized="true"/>-->
+        <element name="website" type="checkbox" selector="//label[contains(text(), '{{var1}}')]/parent::div//input[@type='checkbox']" parameterized="true"/>
     </section>
     <section name="ProductDesignSection">
         <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
@@ -44,7 +59,6 @@
         <element name="v4" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 4.3.6']" />
         <element name="v3" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 3.6(Deprecated)']" />
         <element name="TinymceDescription3" type ="button" selector="//span[text()='Description']" />
-        <element name="Tinymce3MSG" type="button" selector=".admin__field-error"/>
         <element name="SaveConfig" type ="button" selector="#save" />
         <element name="v4" type="button" selector="#category_form_description_v4"/>
         <element name="WYSIWYGBtn" type="button" selector=".//button[@class='action-default scalable action-wysiwyg']"/>
@@ -102,6 +116,8 @@
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
         <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
         <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
+        <element name="WysiwygArrow" type="button" selector="#d3lzaXd5Zw-- > .jstree-icon" />
+        <element name="checkIfWysiwygArrowExpand" type="button" selector="//li[@id='d3lzaXd5Zw--' and contains(@class,'jstree-closed')]" />
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
     </section>
     <section name="ProductShortDescriptionWYSIWYGToolbarSection">
@@ -139,5 +155,9 @@
         <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
         <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
+    </section>
+    <section name="AdminProductFormAdvancedPricingSection">
+        <element name="specialPrice" type="input" selector="input[name='product[special_price]']"/>
+        <element name="doneButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-primary"/>
     </section>
 </sections>

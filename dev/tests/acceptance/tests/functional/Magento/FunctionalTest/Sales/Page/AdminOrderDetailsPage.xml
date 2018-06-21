@@ -21,5 +21,6 @@
         <section name="AdminOrderCreditMemosTabSection"/>
         <section name="AdminOrderShipmentsTabSection"/>
         <section name="AdminOrderCommentsTabSection"/>
+        <section name="AdminOrderTotalSection"/>
     </page>
 </pages>

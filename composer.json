@@ -27,6 +27,7 @@
         "ext-spl": "*",
         "ext-xsl": "*",
         "ext-zip": "*",
+        "ext-bcmath": "*",
         "lib-libxml": "*",
         "braintree/braintree_php": "3.28.0",
         "colinmollenhour/cache-backend-file": "~1.4.1",
@@ -68,7 +69,7 @@
         "zendframework/zend-log": "^2.9.1",
         "zendframework/zend-mail": "^2.9.0",
         "zendframework/zend-modulemanager": "^2.7",
-        "zendframework/zend-mvc": "~2.6.3",
+        "zendframework/zend-mvc": "~2.7.0",
         "zendframework/zend-serializer": "^2.7.2",
         "zendframework/zend-server": "^2.6.1",
         "zendframework/zend-servicemanager": "^2.7.8",
@@ -232,7 +233,6 @@
         "magento/theme-adminhtml-backend": "*",
         "magento/theme-frontend-blank": "*",
         "magento/theme-frontend-luma": "*",
-        "magento/theme-frontend-rush": "*",
         "magento/language-de_de": "*",
         "magento/language-en_us": "*",
         "magento/language-es_es": "*",
@@ -274,7 +274,8 @@
         "psr-4": {
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
             "Magento\\Setup\\": "setup/src/Magento/Setup/",
-            "Magento\\": "app/code/Magento/"
+            "Magento\\": "app/code/Magento/",
+            "Zend\\Mvc\\Controller\\": "setup/src/Zend/Mvc/Controller/"
         },
         "psr-0": {
             "": [

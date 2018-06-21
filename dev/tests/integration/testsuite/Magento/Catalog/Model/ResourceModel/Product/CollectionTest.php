@@ -44,6 +44,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testAddPriceDataOnSchedule()
     {
@@ -88,6 +89,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testAddPriceDataOnSave()
     {

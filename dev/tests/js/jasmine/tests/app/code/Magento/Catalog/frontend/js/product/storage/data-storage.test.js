@@ -44,6 +44,13 @@ define([
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Catalog/js/product/storage/data-storage', function () {
         describe('"initCustomerDataInvalidateListener" method', function () {
             it('check returned value', function () {

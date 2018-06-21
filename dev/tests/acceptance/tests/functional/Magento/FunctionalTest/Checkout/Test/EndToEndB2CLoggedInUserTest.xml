@@ -35,8 +35,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartGrabSimpleProduct1PageImageSrc" stepKey="cartAssertSimpleProduct1PageImageNotDefault" after="cartGrabSimpleProduct1PageImageSrc"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddProduct1ToCart" after="cartAssertSimpleProduct1PageImageNotDefault">
             <argument name="product" value="$$createSimpleProduct1$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.one"/>
+            <argument name="productCount" value="1"/>
         </actionGroup>
 
         <!-- Add Simple Product 2 to cart -->

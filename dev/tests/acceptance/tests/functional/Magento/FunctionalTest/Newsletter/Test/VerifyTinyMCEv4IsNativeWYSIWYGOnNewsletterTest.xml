@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="VerifyTinyMCEv4IsNativeWYSIWYGOnNewsletterTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="MAGETWO-47309-Apply new WYSIWYG in Newsletter"/>
+            <group value="Newsletter"/>
+            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Newsletter"/>
+            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Newsletter"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-84683"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+        </before>
+        <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillTemplateName" />
+        <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
+        <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
+        <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
+        <conditionalClick selector="#toggletext" dependentSelector=".mce-tinymce" visible="false" stepKey="clickBtnIfTinyMCEHidden"/>
+        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE4"/>
+        <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
+        <executeJS function="tinyMCE.get('text').setContent('Hello World From Newsletter Template!');" stepKey="executeJSFillContent"/>
+        <click selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn2" />
+        <waitForElementVisible selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
+        <see selector="{{NewsletterWYSIWYGSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="assertInf17"/>
+        <see selector="{{NewsletterWYSIWYGSection.InsertWidgetBtn}}" userInput="Insert Widget..." stepKey="assertInfo18"/>
+        <see selector="{{NewsletterWYSIWYGSection.InsertVariableBtn}}" userInput="Insert Variable..." stepKey="assertInfo19"/>
+        <!--Go to Storefront-->
+        <click selector="{{BasicFieldNewsletterSection.save}}" stepKey="clickSavePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad3" />
+        <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview" />
+        <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
+        <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe" />
+        <waitForText userInput="Hello World From Newsletter Template!" stepKey="waitForPageLoad2"/>
+        <see userInput="Hello World From Newsletter Template!" stepKey="seeContent" />
+        <closeTab stepKey="closeTab"/>
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

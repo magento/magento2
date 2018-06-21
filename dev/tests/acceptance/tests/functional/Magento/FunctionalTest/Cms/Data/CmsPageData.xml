@@ -14,6 +14,12 @@
         <data key="content">Sample page content. Yada yada yada.</data>
         <data key="identifier" unique="suffix">test-page-</data>
     </entity>
+    <entity name="_newDefaultCmsPage" type="cms_page">
+        <data key="title" unique="suffix">Test CMS Page</data>
+        <data key="content_heading">Test Content Heading</data>
+        <data key="content">Sample page content. Yada yada yada.</data>
+        <data key="identifier" unique="suffix">test-page-</data>
+    </entity>
     <entity name="_duplicatedCMSPage" type="cms_page">
         <data key="title">testpage</data>
         <data key="content_heading">Test Content Heading</data>
@@ -31,8 +37,10 @@
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
+        <data key="file">magento.jpg</data>
         <data key="value">magento.jpg</data>
         <data key="fileName">magento</data>
+        <data key="extension">jpg</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
     </entity>

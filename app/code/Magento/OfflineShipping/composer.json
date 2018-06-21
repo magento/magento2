@@ -19,7 +19,7 @@
     },
     "suggest": {
         "magento/module-checkout": "*",
-        "magento/module-offline-shipping-sample-data": "Sample Data version:100.3.*"
+        "magento/module-offline-shipping-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

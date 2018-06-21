@@ -22,7 +22,7 @@
         "magento/module-store": "*"
     },
     "suggest": {
-        "magento/module-tax-sample-data": "Sample Data version:100.3.*"
+        "magento/module-tax-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

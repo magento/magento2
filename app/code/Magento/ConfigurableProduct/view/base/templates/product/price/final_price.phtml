@@ -19,16 +19,20 @@ $finalPriceModel = $block->getPriceType('final_price');
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
 ?>
+<span class="normal-price">
+    <?php
+    $arguments = [
+        'display_label' => __('As low as'),
+        'price_id' => $block->getPriceId('product-price-' . $idSuffix),
+        'price_type' => 'finalPrice',
+        'include_container' => true,
+        'schema' => $schema,
+    ];
+    /* @noEscape */ echo $block->renderAmount($finalPriceModel->getAmount(), $arguments);
+    ?>
+</span>
+
 <?php if (!$block->isProductList() && $block->hasSpecialPrice()): ?>
-    <span class="special-price">
-        <?php /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), [
-            'display_label'     => __('Special Price'),
-            'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
-            'price_type'        => 'finalPrice',
-            'include_container' => true,
-            'schema' => $schema
-        ]); ?>
-    </span>
     <span class="old-price sly-old-price no-display">
         <?php /* @escapeNotVerified */ echo $block->renderAmount($priceModel->getAmount(), [
             'display_label'     => __('Regular Price'),
@@ -38,13 +42,6 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
             'skip_adjustments'  => true
         ]); ?>
     </span>
-<?php else: ?>
-    <?php /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), [
-        'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
-        'price_type'        => 'finalPrice',
-        'include_container' => true,
-        'schema' => $schema
-    ]); ?>
 <?php endif; ?>
 
 <?php if ($block->showMinimalPrice()): ?>

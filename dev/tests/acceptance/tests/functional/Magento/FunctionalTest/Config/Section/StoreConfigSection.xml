@@ -12,6 +12,6 @@
         <element name="CheckIfTabExpand" type="button" selector="#general_store_information-head:not(.open)"/>
         <element name="StoreInformation" type="button" selector="#general_store_information-head"/>
         <element name="City" type="input" selector="#general_store_information_city"/>
-        <element name="Save" type="button" selector="#save"/>
+        <element name="Save" type="button" selector="#save" timeout="30"/>
     </section>
 </sections>

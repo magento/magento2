@@ -5,11 +5,10 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\EntityManager\EventManager;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -257,7 +256,15 @@ class EavTest extends AbstractModifierTest
         $this->searchResultsMock = $this->getMockBuilder(SearchResultsInterface::class)
             ->getMockForAbstractClass();
         $this->eavAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['load', 'getAttributeGroupCode', 'getApplyTo', 'getFrontendInput', 'getAttributeCode'])
+            ->setMethods([
+                'load',
+                'getAttributeGroupCode',
+                'getApplyTo',
+                'getFrontendInput',
+                'getAttributeCode',
+                'usesSource',
+                'getSource',
+            ])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
@@ -451,64 +458,63 @@ class EavTest extends AbstractModifierTest
     }
 
     /**
-     * @param int $productId
+     * @param int|null $productId
      * @param bool $productRequired
-     * @param string $attrValue
-     * @param string $note
+     * @param string|null $attrValue
      * @param array $expected
+     * @param bool $locked
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      * @dataProvider setupAttributeMetaDataProvider
      */
-    public function testSetupAttributeMetaDefaultAttribute($productId, $productRequired, $attrValue, $note, $expected)
-    {
-        $configPath =  'arguments/data/config';
+    public function testSetupAttributeMetaDefaultAttribute(
+        $productId,
+        bool $productRequired,
+        $attrValue,
+        array $expected,
+        $locked = false
+    ) : void {
+        $configPath = 'arguments/data/config';
         $groupCode = 'product-details';
         $sortOrder = '0';
+        $attributeOptions = [
+            ['value' => 1, 'label' => 'Int label'],
+            ['value' => 1.5, 'label' => 'Float label'],
+            ['value' => true, 'label' => 'Boolean label'],
+            ['value' => 'string', 'label' => 'String label'],
+            ['value' => ['test1', 'test2'], 'label' => 'Array label'],
+        ];
+        $attributeOptionsExpected = [
+            ['value' => '1', 'label' => 'Int label'],
+            ['value' => '1.5', 'label' => 'Float label'],
+            ['value' => '1', 'label' => 'Boolean label'],
+            ['value' => 'string', 'label' => 'String label'],
+            ['value' => ['test1', 'test2'], 'label' => 'Array label'],
+        ];
 
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($productId);
-
-        $this->productAttributeMock->expects($this->any())
-            ->method('getIsRequired')
-            ->willReturn($productRequired);
-
-        $this->productAttributeMock->expects($this->any())
-            ->method('getDefaultValue')
-            ->willReturn('required_value');
-
-        $this->productAttributeMock->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn('code');
-
-        $this->productAttributeMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn('value');
-
-        $this->productAttributeMock->expects($this->any())
-            ->method('getNote')
-            ->willReturn($note);
-
-        $this->productAttributeMock->expects($this->any())
-            ->method('getDefaultFrontendLabel')
-            ->willReturn(new Phrase('mylabel'));
+        $this->productMock->method('getId')->willReturn($productId);
+        $this->productMock->expects($this->any())->method('isLockedAttribute')->willReturn($locked);
+        $this->productAttributeMock->method('getIsRequired')->willReturn($productRequired);
+        $this->productAttributeMock->method('getDefaultValue')->willReturn('required_value');
+        $this->productAttributeMock->method('getAttributeCode')->willReturn('code');
+        $this->productAttributeMock->method('getValue')->willReturn('value');
 
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $attributeMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn($attrValue);
+        $attributeMock->method('getValue')->willReturn($attrValue);
 
-        $this->productMock->expects($this->any())
-            ->method('getCustomAttribute')
-            ->willReturn($attributeMock);
+        $this->productMock->method('getCustomAttribute')->willReturn($attributeMock);
+        $this->eavAttributeMock->method('usesSource')->willReturn(true);
 
-        $this->arrayManagerMock->expects($this->any())
-            ->method('set')
+        $attributeSource = $this->getMockBuilder(SourceInterface::class)->getMockForAbstractClass();
+        $attributeSource->method('getAllOptions')->willReturn($attributeOptions);
+
+        $this->eavAttributeMock->method('getSource')->willReturn($attributeSource);
+
+        $this->arrayManagerMock->method('set')
             ->with(
                 $configPath,
                 [],
@@ -518,14 +524,19 @@ class EavTest extends AbstractModifierTest
 
         $this->arrayManagerMock->expects($this->any())
             ->method('merge')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                $this->callback(
+                    function ($value) use ($attributeOptionsExpected) {
+                        return isset($value['options']) ? $value['options'] === $attributeOptionsExpected : true;
+                    }
+                )
+            )
             ->willReturn($expected);
 
-        $this->arrayManagerMock->expects($this->any())
-            ->method('get')
-            ->willReturn([]);
-
-        $this->arrayManagerMock->expects($this->any())
-            ->method('exists');
+        $this->arrayManagerMock->method('get')->willReturn([]);
+        $this->arrayManagerMock->method('exists')->willReturn(true);
 
         $this->assertEquals(
             $expected,
@@ -535,151 +546,127 @@ class EavTest extends AbstractModifierTest
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setupAttributeMetaDataProvider()
     {
         return [
-            'default_null_prod_not_new_and_required' => $this->defaultNullProdNotNewAndRequired(),
-            'default_null_prod_not_new_and_not_required' => $this->defaultNullProdNotNewAndNotRequired(),
-            'default_null_prod_new_and_not_required' => $this->defaultNullProdNewAndNotRequired(),
-            'default_null_prod_new_and_required' => $this->defaultNullProdNewAndRequired(),
-            'default_null_prod_new_and_required_and_filled_notice' =>
-                $this->defaultNullProdNewAndRequiredAndFilledNotice()
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function defaultNullProdNotNewAndRequired()
-    {
-        return [
-            'productId'       => 1,
-            'productRequired' => true,
-            'attrValue'       => 'val',
-            'note'            => null,
-            'expected'        => [
-                'dataType'    => null,
-                'formElement' => null,
-                'visible'     => null,
-                'required'    => true,
-                'notice'      => null,
-                'default'     => null,
-                'label'       => new Phrase('mylabel'),
-                'code'        => 'code',
-                'source'      => 'product-details',
-                'scopeLabel'  => '',
-                'globalScope' => false,
-                'sortOrder'   => 0
+            'default_null_prod_not_new_and_required' => [
+                'productId' => 1,
+                'productRequired' => true,
+                'attrValue' => 'val',
+                'expected' => [
+                    'dataType' => null,
+                    'formElement' => null,
+                    'visible' => null,
+                    'required' => true,
+                    'notice' => null,
+                    'default' => null,
+                    'label' => new Phrase(null),
+                    'code' => 'code',
+                    'source' => 'product-details',
+                    'scopeLabel' => '',
+                    'globalScope' => false,
+                    'sortOrder' => 0,
+                ],
             ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function defaultNullProdNotNewAndNotRequired()
-    {
-        return [
-            'productId'       => 1,
-            'productRequired' => false,
-            'attrValue'       => 'val',
-            'note'            => null,
-            'expected'        => [
-                'dataType'    => null,
-                'formElement' => null,
-                'visible'     => null,
-                'required'    => false,
-                'notice'      => null,
-                'default'     => null,
-                'label'       => new Phrase('mylabel'),
-                'code'        => 'code',
-                'source'      => 'product-details',
-                'scopeLabel'  => '',
-                'globalScope' => false,
-                'sortOrder'   => 0
+            'default_null_prod_not_new_locked_and_required' => [
+                'productId' => 1,
+                'productRequired' => true,
+                'attrValue' => 'val',
+                'expected' => [
+                    'dataType' => null,
+                    'formElement' => null,
+                    'visible' => null,
+                    'required' => true,
+                    'notice' => null,
+                    'default' => null,
+                    'label' => new Phrase(null),
+                    'code' => 'code',
+                    'source' => 'product-details',
+                    'scopeLabel' => '',
+                    'globalScope' => false,
+                    'sortOrder' => 0,
+                ],
+                'locked' => true,
             ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function defaultNullProdNewAndNotRequired()
-    {
-        return [
-            'productId'       => null,
-            'productRequired' => false,
-            'attrValue'       => null,
-            'note'            => null,
-            'expected'        => [
-                'dataType'    => null,
-                'formElement' => null,
-                'visible'     => null,
-                'required'    => false,
-                'notice'      => null,
-                'default'     => 'required_value',
-                'label'       => new Phrase('mylabel'),
-                'code'        => 'code',
-                'source'      => 'product-details',
-                'scopeLabel'  => '',
-                'globalScope' => false,
-                'sortOrder'   => 0
+            'default_null_prod_not_new_and_not_required' => [
+                'productId' => 1,
+                'productRequired' => false,
+                'attrValue' => 'val',
+                'expected' => [
+                    'dataType' => null,
+                    'formElement' => null,
+                    'visible' => null,
+                    'required' => false,
+                    'notice' => null,
+                    'default' => null,
+                    'label' => new Phrase(null),
+                    'code' => 'code',
+                    'source' => 'product-details',
+                    'scopeLabel' => '',
+                    'globalScope' => false,
+                    'sortOrder' => 0,
+                ],
             ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function defaultNullProdNewAndRequired()
-    {
-        return [
-            'productId'       => null,
-            'productRequired' => false,
-            'attrValue'       => null,
-            'note'            => null,
-            'expected'        => [
-                'dataType'    => null,
-                'formElement' => null,
-                'visible'     => null,
-                'required'    => false,
-                'notice'      => null,
-                'default'     => 'required_value',
-                'label'       => new Phrase('mylabel'),
-                'code'        => 'code',
-                'source'      => 'product-details',
-                'scopeLabel'  => '',
-                'globalScope' => false,
-                'sortOrder'   => 0
+            'default_null_prod_new_and_not_required' => [
+                'productId' => null,
+                'productRequired' => false,
+                'attrValue' => null,
+                'expected' => [
+                    'dataType' => null,
+                    'formElement' => null,
+                    'visible' => null,
+                    'required' => false,
+                    'notice' => null,
+                    'default' => 'required_value',
+                    'label' => new Phrase(null),
+                    'code' => 'code',
+                    'source' => 'product-details',
+                    'scopeLabel' => '',
+                    'globalScope' => false,
+                    'sortOrder' => 0,
+                ],
             ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function defaultNullProdNewAndRequiredAndFilledNotice()
-    {
-        return [
-            'productId'       => null,
-            'productRequired' => false,
-            'attrValue'       => null,
-            'note'            => 'example notice',
-            'expected'        => [
-                'dataType'    => null,
-                'formElement' => null,
-                'visible'     => null,
-                'required'    => false,
-                'notice'      => __('example notice'),
-                'default'     => 'required_value',
-                'label'       => new Phrase('mylabel'),
-                'code'        => 'code',
-                'source'      => 'product-details',
-                'scopeLabel'  => '',
-                'globalScope' => false,
-                'sortOrder'   => 0
+            'default_null_prod_new_locked_and_not_required' => [
+                'productId' => null,
+                'productRequired' => false,
+                'attrValue' => null,
+                'expected' => [
+                    'dataType' => null,
+                    'formElement' => null,
+                    'visible' => null,
+                    'required' => false,
+                    'notice' => null,
+                    'default' => 'required_value',
+                    'label' => new Phrase(null),
+                    'code' => 'code',
+                    'source' => 'product-details',
+                    'scopeLabel' => '',
+                    'globalScope' => false,
+                    'sortOrder' => 0,
+                ],
+                'locked' => true,
             ],
+            'default_null_prod_new_and_required' => [
+                'productId' => null,
+                'productRequired' => false,
+                'attrValue' => null,
+                'expected' => [
+                    'dataType' => null,
+                    'formElement' => null,
+                    'visible' => null,
+                    'required' => false,
+                    'notice' => null,
+                    'default' => 'required_value',
+                    'label' => new Phrase(null),
+                    'code' => 'code',
+                    'source' => 'product-details',
+                    'scopeLabel' => '',
+                    'globalScope' => false,
+                    'sortOrder' => 0,
+                ],
+            ]
         ];
     }
 }

@@ -31,10 +31,8 @@ class ExtendsTest extends \PHPUnit\Framework\TestCase
 
     public function testMapWithBadPath()
     {
-        $this->expectException(
-            'InvalidArgumentException',
-            'Invalid path in extends attribute of config/system/sections/section1 node'
-        );
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid path in extends attribute of config/system/sections/section1 node');
         $sourceData = [
             'config' => [
                 'system' => ['sections' => ['section1' => ['extends' => 'nonExistentSection2']]],

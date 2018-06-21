@@ -18,7 +18,7 @@
         "magento/module-widget": "*"
     },
     "suggest": {
-        "magento/module-cms-sample-data": "Sample Data version:100.3.*"
+        "magento/module-cms-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

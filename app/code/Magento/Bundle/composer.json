@@ -25,7 +25,8 @@
     },
     "suggest": {
         "magento/module-webapi": "*",
-        "magento/module-bundle-sample-data": "Sample Data version:100.3.*"
+        "magento/module-bundle-sample-data": "*",
+        "magento/module-sales-rule": "*"
     },
     "type": "magento2-module",
     "license": [

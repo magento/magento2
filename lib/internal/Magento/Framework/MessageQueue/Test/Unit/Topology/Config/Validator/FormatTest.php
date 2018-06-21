@@ -54,7 +54,8 @@ class FormatTest extends \PHPUnit\Framework\TestCase
             "Missing [autoDelete] field for exchange ex01." . PHP_EOL .
             "Missing [internal] field for exchange ex01." . PHP_EOL .
             "Missing [arguments] field for exchange ex01.";
-        $this->expectException('\LogicException', $expectedMessage);
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage($expectedMessage);
         $configData = [
             'ex01' => [
                 'invalid' => 'format',
@@ -81,7 +82,8 @@ class FormatTest extends \PHPUnit\Framework\TestCase
             "Missing [disabled] field for binding ex01 in exchange config." . PHP_EOL .
             "Missing [topic] field for binding ex01 in exchange config." . PHP_EOL .
             "Missing [arguments] field for binding ex01 in exchange config.";
-        $this->expectException('\LogicException', $expectedMessage);
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage($expectedMessage);
         $configData = [
             'ex01' => [
                 'name' => 'ex01',
@@ -104,7 +106,8 @@ class FormatTest extends \PHPUnit\Framework\TestCase
     public function testValidateInvalidBindingsFormat()
     {
         $expectedMessage = "Invalid bindings format for exchange ex01.";
-        $this->expectException('\LogicException', $expectedMessage);
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage($expectedMessage);
         $configData = [
             'ex01' => [
                 'name' => 'ex01',

@@ -7,10 +7,12 @@ require([
 
     var selectors = {
         qtySelector: '#product_addtocart_form [name="qty"]',
-        productIdSelector: '#product_addtocart_form [name="product"]'
+        productIdSelector: '#product_addtocart_form [name="product"]',
+        itemIdSelector: '#product_addtocart_form [name="item"]'
     },
     cartData = customerData.get('cart'),
     productId = $(selectors.productIdSelector).val(),
+    itemId = $(selectors.itemIdSelector).val(),
     productQty,
     productQtyInput,
 
@@ -40,8 +42,10 @@ require([
             return;
         }
         product = data.items.find(function (item) {
-            return item['product_id'] === productId ||
-                item['item_id'] === productId;
+            if (item['item_id'] === itemId) {
+                return item['product_id'] === productId ||
+                    item['item_id'] === productId;
+            }
         });
 
         if (!product) {
