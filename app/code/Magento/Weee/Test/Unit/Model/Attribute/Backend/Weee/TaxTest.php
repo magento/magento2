@@ -275,10 +275,10 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testGetEntityIdField()
+    public function testGetEntityIdField() : void
     {
         $attributeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax::class)
-            ->setMethods(['getEntityIdField', 'getIdFieldName'])
+            ->setMethods(['getIdFieldName'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -73,7 +73,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     private $entityMetaDataInterfaceMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function setUp()
     {
@@ -123,7 +123,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    private function setObjectProperty($object, string $propertyName, $value)
+    private function setObjectProperty($object, string $propertyName, $value) : void
     {
         $reflectionClass = new \ReflectionClass($object);
         $reflectionProperty = $reflectionClass->getProperty($propertyName);
@@ -134,7 +134,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testDeleteEntity()
+    public function testDeleteEntity() : void
     {
         $entityAttributeId = 196;
         $entityTypeId = 4;
