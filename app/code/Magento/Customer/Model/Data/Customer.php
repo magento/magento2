@@ -98,6 +98,15 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     }
 
     /**
+     * Get is active
+     * @return mixed|null
+     */
+    public function getIsActive()
+    {
+        return $this->_get(self::IS_ACTIVE);
+    }
+
+    /**
      * Get updated at time
      *
      * @return string|null
@@ -332,6 +341,15 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     public function setUpdatedAt($updatedAt)
     {
         return $this->setData(self::UPDATED_AT, $updatedAt);
+    }
+
+    /**
+     * @param $isActive
+     * @return $this
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData(self::IS_ACTIVE, $isActive);
     }
 
     /**

@@ -18,6 +18,7 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     const ID = 'id';
     const CONFIRMATION = 'confirmation';
     const CREATED_AT = 'created_at';
+    const IS_ACTIVE = 'is_active';
     const UPDATED_AT = 'updated_at';
     const CREATED_IN = 'created_in';
     const DOB = 'dob';
