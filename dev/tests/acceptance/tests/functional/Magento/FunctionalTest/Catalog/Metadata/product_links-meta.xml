@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductLinks" dataType="product_links" type="create" auth="adminOauth" url="/V1/products/{sku}/links" method="POST">
+        <contentType>application/json</contentType>
+        <array key="items">
+            <value>product_link</value>
+        </array>
+    </operation>
+    <operation name="UpdateProductLinks" dataType="product_links" type="update" auth="adminOauth" url="/V1/products/{sku}/links" method="PUT">
+        <contentType>application/json</contentType>
+        <field key="entity">product_link</field>
+    </operation>
+</operations>

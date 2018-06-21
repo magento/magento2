@@ -23,6 +23,11 @@ class PaymentTokenFactory implements PaymentTokenFactoryInterface
     private $tokenTypes = [];
 
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * PaymentTokenFactory constructor.
      * @param ObjectManagerInterface $objectManager
      * @param array $tokenTypes

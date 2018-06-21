@@ -116,7 +116,7 @@ class PhpRule implements RuleInterface
     {
         $pattern = '~\b(?<class>(?<module>('
             . implode(
-                '_|',
+                '[_\\\\]|',
                 Files::init()->getNamespaces()
             )
             . '[_\\\\])[a-zA-Z0-9]+)'
