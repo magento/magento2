@@ -54,5 +54,6 @@
         <element name="bundledItems" type="block" selector="[data-index=bundle-items]"/>
         <element name="dynamicPrice" type="button" selector="//div[@data-index='price_type']//div[@data-role='switcher']" timeout="30"/>
         <element name="priceField" type="input" selector="//div[@data-index='price']//input"/>
+        <element name="listedBundleItem" type="text" selector="//tr[@data-repeat-index='0']//div"/>
     </section>
 </sections>
