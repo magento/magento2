@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation;
+use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AggregationTest extends \PHPUnit\Framework\TestCase
@@ -26,7 +27,7 @@ class AggregationTest extends \PHPUnit\Framework\TestCase
     protected $requestInterface;
 
     /**
-     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BucketInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestBucketInterface;
 
@@ -47,7 +48,7 @@ class AggregationTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestBucketInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
+        $this->requestBucketInterface = $this->getMockBuilder(BucketInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -139,28 +140,35 @@ class AggregationTest extends \PHPUnit\Framework\TestCase
             'type' => 'product',
             'body' => [],
         ];
+        $bucketName = 'price_bucket';
 
-        $this->requestInterface->expects($this->any())
+        $this->requestInterface
             ->method('getAggregation')
             ->willReturn([$this->requestBucketInterface]);
 
-        $this->fieldMapper->expects($this->any())
+        $this->fieldMapper
             ->method('getFieldName')
             ->willReturn('price');
 
-        $this->requestBucketInterface->expects($this->any())
+        $this->requestBucketInterface
             ->method('getField')
             ->willReturn('price');
 
-        $this->requestBucketInterface->expects($this->any())
+        $this->requestBucketInterface
             ->method('getType')
-            ->willReturn('termBucket');
+            ->willReturn(BucketInterface::TYPE_TERM);
 
-        $this->requestBucketInterface->expects($this->any())
+        $this->requestBucketInterface
             ->method('getName')
-            ->willReturn('price_bucket');
+            ->willReturn($bucketName);
 
         $result = $this->model->build($this->requestInterface, $query);
+
         $this->assertNotNull($result);
+        $this->assertTrue(
+            isset($result['body']['aggregations'][$bucketName]['terms']['size']),
+            'The size have to be specified since by default, ' .
+            'the terms aggregation will return only the buckets for the top ten terms ordered by the doc_count'
+        );
     }
 }
