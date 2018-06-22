@@ -145,10 +145,11 @@ class InstallCommand extends AbstractSetupCommand
         $installer = $this->installerFactory->create($consoleLogger);
         $installer->install($input->getOptions());
 
-        $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
-        $arrayInput = new ArrayInput([]);
-        $arrayInput->setInteractive($input->isInteractive());
-        $importConfigCommand->run($arrayInput, $output);
+        $configImportCommand = 'bin/magento ' . ConfigImportCommand::COMMAND_NAME;
+        if (!$input->isInteractive()) {
+            $configImportCommand .= ' --no-interaction';
+        }
+        passthru($configImportCommand);
     }
 
     /**
