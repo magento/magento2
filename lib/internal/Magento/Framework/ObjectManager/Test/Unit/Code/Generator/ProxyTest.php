@@ -30,6 +30,7 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
                     $this->ioObjectMock,
                     null,
                     null,
+                    null,
                     $this->createMock(\Magento\Framework\Filesystem\FileResolver::class)
                 ]
             )

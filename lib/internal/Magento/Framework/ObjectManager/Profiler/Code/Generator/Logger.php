@@ -6,12 +6,47 @@
  */
 namespace Magento\Framework\ObjectManager\Profiler\Code\Generator;
 
+use Magento\Framework\Code\Generator\DefinedClasses;
+use Magento\Framework\Code\Generator\Io;
+use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+use Magento\Framework\Code\Generator\Method\ReturnTypeResolver;
+
 class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
      * Entity type
      */
     const ENTITY_TYPE = 'logger';
+
+    /**
+     * Result type resolver.
+     *
+     * @var ReturnTypeResolver
+     */
+    private $returnTypeResolver;
+
+    /**
+     * Logger constructor.
+     *
+     * @param null|string $sourceClassName
+     * @param null|string $resultClassName
+     * @param Io $ioObject
+     * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
+     * @param DefinedClasses $definedClasses
+     * @param ReturnTypeResolver $returnTypeResolver
+     */
+    public function __construct(
+        $sourceClassName = null,
+        $resultClassName = null,
+        Io $ioObject = null,
+        CodeGeneratorInterface $classGenerator = null,
+        DefinedClasses $definedClasses = null,
+        ReturnTypeResolver $returnTypeResolver = null
+    ) {
+        parent::__construct($sourceClassName, $resultClassName, $ioObject, $classGenerator, $definedClasses);
+
+        $this->returnTypeResolver = $returnTypeResolver ?: new ReturnTypeResolver();
+    }
 
     /**
      * @param string $modelClassName
