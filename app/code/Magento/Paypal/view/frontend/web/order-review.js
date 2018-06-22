@@ -108,7 +108,7 @@ define([
         },
 
         /**
-         * trigger change for the update of shippping methods from server
+         * trigger change for the update of shipping methods from server
          */
         _updateOrderHandler: function () {
             $(this.options.shippingSelector).trigger('change');
@@ -297,7 +297,7 @@ define([
                 this._updateOrderSubmit(true);
                 this._toggleButton(this.options.updateOrderSelector, true);
 
-                // form data and callBack updated based on the shippping Form element
+                // form data and callBack updated based on the shipping Form element
                 if (this.isShippingSubmitForm) {
                     formData = $(this.options.shippingSubmitFormSelector).serialize() + '&isAjax=true';
 
