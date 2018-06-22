@@ -6,12 +6,48 @@
 
 namespace Magento\Framework\Interception\Code\Generator;
 
+use Magento\Framework\Code\Generator\DefinedClasses;
+use Magento\Framework\Code\Generator\Io;
+use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+use Magento\Framework\Code\Generator\Method\ReturnTypeResolver;
+
 class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
 {
+
+    /**
+     * Result type resolver.
+     *
+     * @var ReturnTypeResolver
+     */
+    private $returnTypeResolver;
+
     /**
      * Entity type
      */
     const ENTITY_TYPE = 'interceptor';
+
+    /**
+     * Interceptor constructor.
+     *
+     * @param null|string $sourceClassName
+     * @param null|string $resultClassName
+     * @param Io $ioObject
+     * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
+     * @param DefinedClasses $definedClasses
+     * @param ReturnTypeResolver $returnTypeResolver
+     */
+    public function __construct(
+        $sourceClassName = null,
+        $resultClassName = null,
+        Io $ioObject = null,
+        CodeGeneratorInterface $classGenerator = null,
+        DefinedClasses $definedClasses = null,
+        ReturnTypeResolver $returnTypeResolver = null
+    ) {
+        parent::__construct($sourceClassName, $resultClassName, $ioObject, $classGenerator, $definedClasses);
+
+        $this->returnTypeResolver = $returnTypeResolver ?: new ReturnTypeResolver();
+    }
 
     /**
      * @param string $modelClassName
@@ -113,7 +149,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             "} else {\n" .
             "    return \$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
             "}",
-            'returnType' => $method->getReturnType(),
+            'returnType' => $this->returnTypeResolver->getReturnType($method),
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
 

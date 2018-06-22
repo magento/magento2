@@ -7,8 +7,20 @@
  */
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
+use Magento\Framework\Code\Generator\DefinedClasses;
+use Magento\Framework\Code\Generator\Io;
+use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+use Magento\Framework\Code\Generator\Method\ReturnTypeResolver;
+
 class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
 {
+    /**
+     * Result type resolver.
+     *
+     * @var ReturnTypeResolver
+     */
+    private $returnTypeResolver;
+
     /**
      * Entity type
      */
@@ -18,6 +30,28 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      * Marker interface
      */
     const NON_INTERCEPTABLE_INTERFACE = \Magento\Framework\ObjectManager\NoninterceptableInterface::class;
+
+    /**
+     * Interceptor constructor.
+     * @param string $sourceClassName
+     * @param string $resultClassName
+     * @param Io|null $ioObject
+     * @param CodeGeneratorInterface|null $classGenerator
+     * @param DefinedClasses|null $definedClasses
+     * @param ReturnTypeResolver|null $returnTypeResolver
+     */
+    public function __construct(
+        $sourceClassName = null,
+        $resultClassName = null,
+        Io $ioObject = null,
+        CodeGeneratorInterface $classGenerator = null,
+        DefinedClasses $definedClasses = null,
+        ReturnTypeResolver $returnTypeResolver = null
+    ) {
+        parent::__construct($sourceClassName, $resultClassName, $ioObject, $classGenerator, $definedClasses);
+
+        $this->returnTypeResolver = $returnTypeResolver ?: new ReturnTypeResolver();
+    }
 
     /**
      * @param string $modelClassName
@@ -164,6 +198,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             'name' => $method->getName(),
             'parameters' => $parameters,
             'body' => $this->_getMethodBody($method->getName(), $parameterNames),
+            'returnType' => $this->returnTypeResolver->getReturnType($method),
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
 
