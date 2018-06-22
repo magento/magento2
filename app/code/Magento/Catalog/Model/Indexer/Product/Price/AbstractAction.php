@@ -260,11 +260,13 @@ abstract class AbstractAction
     /**
      * Retrieve price indexers per product type
      *
+     * @param bool $fullReindexAction
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface[]
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getTypeIndexers()
+    public function getTypeIndexers($fullReindexAction = false)
     {
         if ($this->_indexers === null) {
             $this->_indexers = [];
@@ -275,7 +277,10 @@ abstract class AbstractAction
                 ) ? $typeInfo['price_indexer'] : get_class($this->_defaultIndexerResource);
 
                 $indexer = $this->_indexerPriceFactory->create(
-                    $modelName
+                    $modelName,
+                    [
+                        'fullReindexAction' => $fullReindexAction
+                    ]
                 );
                 // left setters for backward compatibility
                 if ($indexer instanceof DefaultPrice) {

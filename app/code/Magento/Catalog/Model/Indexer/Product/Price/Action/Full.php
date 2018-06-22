@@ -135,7 +135,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $this->prepareTables();
 
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $indexer */
-            foreach ($this->getTypeIndexers() as $typeId => $priceIndexer) {
+            foreach ($this->getTypeIndexers(true) as $typeId => $priceIndexer) {
                 if ($priceIndexer instanceof DimensionalIndexerInterface) {
                     //New price reindex mechanism
                     $this->reindexProductTypeWithDimensions($priceIndexer, $typeId);
