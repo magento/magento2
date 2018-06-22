@@ -60,10 +60,7 @@ class StorePathInfoValidator
     ) : ?string {
         $storeCode = $this->getValidStoreCode($request, $pathInfo);
         if ($storeCode) {
-            $pathParts = $this->splitPathInfo($pathInfo);
-            if (count($pathParts) > 1) {
-                return '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
-            }
+            return $this->trimStoreCode($pathInfo);
         }
         return null;
     }
@@ -85,7 +82,7 @@ class StorePathInfoValidator
                 $request->getBaseUrl()
             );
         }
-        $storeCode = current($this->splitPathInfo($pathInfo));
+        $storeCode = $this->getStoreCode($pathInfo);
         if (!$request->isDirectAccessFrontendName($storeCode)
             && !empty($storeCode)
             && $storeCode != Store::ADMIN_CODE
@@ -110,11 +107,29 @@ class StorePathInfoValidator
     }
 
     /**
+     * Get store code from path info string
+     *
      * @param string $pathInfo
-     * @return array
+     * @return string
      */
-    private function splitPathInfo(string $pathInfo) : array
+    private function getStoreCode(string $pathInfo) : string
     {
-        return explode('/', ltrim($pathInfo, '/'), 2);
+        $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
+        return current($pathParts);
+    }
+
+    /**
+     * Trim store code from path info string if exists
+     *
+     * @param string $pathInfo
+     * @return string|null
+     */
+    private function trimStoreCode(string $pathInfo) : ?string
+    {
+        $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
+        if (count($pathParts) > 1) {
+            return '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
+        }
+        return null;
     }
 }
