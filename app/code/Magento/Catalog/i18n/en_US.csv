@@ -13,8 +13,8 @@ Position,Position
 Day,Day
 Month,Month
 Year,Year
-"<label class=""label""><span>from</span></label>","<label class=""label""><span>from</span></label>"
-"<label class=""label""><span>to</span></label>","<label class=""label""><span>to</span></label>"
+from,from
+to,to
 [GLOBAL],[GLOBAL]
 [WEBSITE],[WEBSITE]
 "[STORE VIEW]","[STORE VIEW]"
