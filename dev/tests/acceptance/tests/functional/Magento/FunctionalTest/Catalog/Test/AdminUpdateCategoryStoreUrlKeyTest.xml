@@ -15,7 +15,7 @@
             <title value="SEO-friendly URL should update regardless of scope or redirect change."/>
             <description value="SEO-friendly URL should update regardless of scope or redirect change."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-92338"/>
+            <testCaseId value="MAGETWO-92916"/>
             <group value="category"/>
         </annotations>
         <after>
