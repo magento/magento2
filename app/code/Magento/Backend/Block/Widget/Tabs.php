@@ -251,14 +251,15 @@ class Tabs extends \Magento\Backend\Block\Widget
     
     
     /**
+     * Reorder the tabs.
+     *
      * @return array
      */
     private function reorderTabs()
     {
         $orderByIdentity = [];
         $orderByPosition = [];
-        
-        $position  = 100;
+        $position        = 100;
     
         /**
          * Set the initial positions for each tab.
@@ -274,9 +275,21 @@ class Tabs extends \Magento\Backend\Block\Widget
             
             $position += 100;
         }
-        
+
+        return $this->applyTabsCorrectOrder($orderByPosition, $orderByIdentity);
+    }
+
+
+    /**
+     * @param array $orderByPosition
+     * @param array $orderByIdentity
+     *
+     * @return array
+     */
+    private function applyTabsCorrectOrder(array $orderByPosition, array $orderByIdentity)
+    {
         $positionFactor = 1;
-        
+
         /**
          * Rearrange the positions by using the after tag for each tab.
          *
@@ -288,26 +301,39 @@ class Tabs extends \Magento\Backend\Block\Widget
                 $positionFactor = 1;
                 continue;
             }
-            
+
             $grandPosition = $orderByIdentity[$tab->getAfter()]->getPosition();
             $newPosition   = $grandPosition + $positionFactor;
-            
+
             unset($orderByPosition[$position]);
             $orderByPosition[$newPosition] = $tab;
             $tab->setPosition($newPosition);
-    
+
             $positionFactor++;
         }
-        
+
+        return $this->finalTabsSortOrder($orderByPosition);
+    }
+
+
+    /**
+     * Apply the last sort order to tabs.
+     *
+     * @param array $orderByPosition
+     *
+     * @return array
+     */
+    private function finalTabsSortOrder(array $orderByPosition)
+    {
         ksort($orderByPosition);
-    
+
         $ordered = [];
-        
+
         /** @var TabInterface $tab */
         foreach ($orderByPosition as $tab) {
             $ordered[$tab->getId()] = $tab;
         }
-        
+
         return $ordered;
     }
     
