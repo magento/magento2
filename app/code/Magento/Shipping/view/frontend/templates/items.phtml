@@ -47,7 +47,7 @@
             foreach ($tracks as $track): ?>
                 <?php if ($track->isCustom()): ?>
                     <?php if($trackUrl = $track->getValidTrackUrl()): ?><a
-                        href="<?= $trackUrl;?>"
+                        href="<?= $block->escapeHtml($trackUrl);?>"
                         target="_blank"
                         rel="noreferrer nofollow noopener"
                         class="action track"><span><?= $block->escapeHtml($track->getNumber()) ?></span>
