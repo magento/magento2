@@ -31,7 +31,7 @@ define(
 
             /** Show login popup window */
             showModal: function () {
-                $(this.modalWindow).modal('openModal');
+                $(this.modalWindow).modal('openModal').trigger('contentUpdated');
             }
         }
     }
