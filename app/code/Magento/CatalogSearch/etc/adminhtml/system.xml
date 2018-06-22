@@ -32,6 +32,10 @@
                     <comment>Number of popular search terms to be cached for faster response. Use “0” to cache all results after a term is searched for the second time.</comment>
                     <validate>validate-digits</validate>
                 </field>
+                <field id="default_sort_by" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Product Listing Sort by</label>
+                    <source_model>Magento\CatalogSearch\Model\Config\Source\ListSort</source_model>
+                </field>
             </group>
         </section>
     </system>
