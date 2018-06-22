@@ -90,7 +90,8 @@ class SourceDataProvider extends DataProvider
     public function getData()
     {
         $data = parent::getData();
-        if ($this->isFormComponent()) {
+        $isFormComponent = self::SOURCE_FORM_NAME === $this->name;
+        if ($isFormComponent) {
             // It is need for support of several fieldsets.
             // For details see \Magento\Ui\Component\Form::getDataSourceData
             if ($data['totalRecords'] > 0) {
@@ -127,13 +128,5 @@ class SourceDataProvider extends DataProvider
             SourceInterface::SOURCE_CODE
         );
         return $searchResult;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isFormComponent(): bool
-    {
-        return self::SOURCE_FORM_NAME === $this->name;
     }
 }

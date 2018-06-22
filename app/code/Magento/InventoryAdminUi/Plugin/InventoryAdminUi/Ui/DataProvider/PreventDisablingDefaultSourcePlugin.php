@@ -18,6 +18,7 @@ class PreventDisablingDefaultSourcePlugin
      * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
+
     /**
      * @var RequestInterface
      */
@@ -44,11 +45,11 @@ class PreventDisablingDefaultSourcePlugin
         SourceDataProvider $subject,
         $meta
     ): array {
-        if (!$this->isFormComponent($subject) || !$this->isDefaultSource()) {
+        $isFormComponent = SourceDataProvider::SOURCE_FORM_NAME === $subject->getName();
+        if (!$isFormComponent || !$this->isDefaultSource()) {
             return $meta;
         }
 
-        //$result[$defaultSourceCode]['general']['switcher_disabled'] = true;
         $meta['general'] = [
             'children' => [
                 'enabled' => [
@@ -64,15 +65,6 @@ class PreventDisablingDefaultSourcePlugin
         ];
 
         return $meta;
-    }
-
-    /**
-     * @param SourceDataProvider $subject
-     * @return bool
-     */
-    private function isFormComponent(SourceDataProvider $subject): bool
-    {
-        return SourceDataProvider::SOURCE_FORM_NAME === $subject->getName();
     }
 
     /**

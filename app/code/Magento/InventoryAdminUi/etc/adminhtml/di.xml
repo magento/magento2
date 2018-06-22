@@ -26,6 +26,6 @@
         </arguments>
     </virtualType>
     <type name="Magento\InventoryAdminUi\Ui\DataProvider\SourceDataProvider">
-        <plugin name="prevent_disabling_default_source_plugin" type="Magento\InventoryAdminUi\Plugin\InventoryAdminUi\Ui\DataProvider\PreventDisablingDefaultSourcePlugin"/>
+        <plugin name="prevent_disabling_default_source" type="Magento\InventoryAdminUi\Plugin\InventoryAdminUi\Ui\DataProvider\PreventDisablingDefaultSourcePlugin"/>
     </type>
 </config>
