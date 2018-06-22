@@ -35,8 +35,8 @@
 
         <!--Switch to "Default Store View" scope-->
         <actionGroup ref="switchCategoryStoreView" stepKey="SwitchStoreView">
-            <argument name="Store" value="_defaultStore.name"/>
-            <argument name="CatName" value="_defaultCategory.name"/>
+            <argument name="store" value="_defaultStore.name"/>
+            <argument name="catName" value="_defaultCategory.name"/>
         </actionGroup>
         <!--See "Use Default Value" checkboxes-->
         <seeElement selector="{{AdminCategoryBasicFieldSection.enableUseDefault}}" stepKey="seeUseDefaultEnable"/>
@@ -59,8 +59,8 @@
         <!-- Update SEO key to original, uncheck "Create Redirect", confirm in frontend, delete category -->
         <!--Switch to "Default Store View" scope-->
         <actionGroup ref="switchCategoryStoreView" stepKey="SwitchStoreView2">
-            <argument name="Store" value="_defaultStore.name"/>
-            <argument name="CatName" value="_defaultCategory.name"/>
+            <argument name="store" value="_defaultStore.name"/>
+            <argument name="catName" value="_defaultCategory.name"/>
         </actionGroup>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection2"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}" stepKey="enterOriginalURLKey"/>

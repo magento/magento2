@@ -44,10 +44,10 @@
     <!--Actions to switch store view in category edit page-->
     <actionGroup name="switchCategoryStoreView">
         <arguments>
-            <argument name="Store"/>
-            <argument name="CatName"/>
+            <argument name="store"/>
+            <argument name="catName"/>
         </arguments>
-        <amOnPage url="{{AdminCategoryPage.page}}" stepKey="amOnCategoryPage"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(CatName)}}" stepKey="navigateToCreatedCategory" />
         <waitForPageLoad stepKey="waitForPageLoad2"/>
