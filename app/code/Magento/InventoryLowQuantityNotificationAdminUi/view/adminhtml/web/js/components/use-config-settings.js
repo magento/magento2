@@ -38,7 +38,7 @@ define([
             var values = [this.value(), this.default],
                 value;
 
-            values.some(function(v){
+            values.some(function (v) {
                 return v ? value = v : !!v
             });
 
