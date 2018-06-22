@@ -24,6 +24,8 @@
         <element name="attributeCheckboxByIndex" type="input" selector="li.attribute-option:nth-of-type({{var1}}) input" parameterized="true"/>
 
         <element name="applyUniquePricesByAttributeToEachSku" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']"/>
+        <element name="applySinglePriceToAllSkus" type="radio" selector=".admin__field-label[for='apply-single-price-radio']"/>
+        <element name="singlePrice" type="input" selector="#apply-single-price-input"/>
         <element name="selectAttribute" type="select" selector="#select-each-price" timeout="30"/>
         <element name="attribute1" type="input" selector="#apply-single-price-input-0"/>
         <element name="attribute2" type="input" selector="#apply-single-price-input-1"/>

@@ -23,5 +23,6 @@
         <element name="productLink" type="text" selector="a.product-item-link"/>
         <element name="productLinkByHref" type="text" selector="a.product-item-link[href$='{{var1}}.html']" parameterized="true"/>
         <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
+        <element name="categoryImage" type="text" selector=".category-image"/>
     </section>
 </sections>
