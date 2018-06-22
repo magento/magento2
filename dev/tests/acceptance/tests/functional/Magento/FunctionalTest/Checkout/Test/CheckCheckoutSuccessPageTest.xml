@@ -114,8 +114,10 @@
         <!--Check "Print Receipt" button is presented (desktop only)-->
         <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint"/>
         <resizeWindow width="600" height="800" stepKey="resizeWindow"/>
+        <waitForElementNotVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitInvisiblePrint"/>
         <dontSeeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeInvisiblePrint"/>
         <maximizeWindow stepKey="maximizeWindowKey1"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitVisiblePrint"/>cd
         <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint2" />
 
         <!--See print page-->
