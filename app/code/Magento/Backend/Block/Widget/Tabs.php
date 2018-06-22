@@ -234,18 +234,15 @@ class Tabs extends \Magento\Backend\Block\Widget
     {
         $this->_tabs = $this->reorderTabs();
         
-        if ($this->_activeTab === null) {
-            /** @var TabInterface $tab */
-            foreach ($this->_tabs as $tab) {
-                $this->_activeTab = $tab->getId();
-                break;
-            }
-        }
-        
         if ($activeTab = $this->getRequest()->getParam('active_tab')) {
             $this->setActiveTab($activeTab);
         } elseif ($activeTabId = $this->_authSession->getActiveTabId()) {
             $this->_setActiveTab($activeTabId);
+        }
+
+        if ($this->_activeTab === null && !empty($this->_tabs)) {
+            /** @var TabInterface $tab */
+            $this->_activeTab = (reset($this->_tabs))->getId();
         }
         
         $this->assign('tabs', $this->_tabs);
@@ -256,7 +253,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * @return array
      */
-    protected function reorderTabs()
+    private function reorderTabs()
     {
         $orderByIdentity = [];
         $orderByPosition = [];
