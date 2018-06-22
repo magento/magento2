@@ -129,6 +129,9 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function trueFalseDataProvider()
     {
         return [[true], [false]];
