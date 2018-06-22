@@ -13,7 +13,7 @@
 <?php echo $block->getRenameFormHtml(); ?>
 <script type="text/x-magento-init">
     {
-        "#<?= /* @escapeNotVerified */ $block->getRenameFormId() ?>": {
+        "#<?php /* @escapeNotVerified */ echo $block->getRenameFormId(); ?>": {
             "Magento_Tax/js/page/validate": {}
         }
     }
