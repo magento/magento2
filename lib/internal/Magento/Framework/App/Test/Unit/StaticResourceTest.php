@@ -271,7 +271,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     {
         $this->stateMock->expects($this->once())
             ->method('getMode')
-            ->willreturn(State::MODE_DEVELOPER);
+            ->willReturn(State::MODE_DEVELOPER);
         $this->requestMock->expects($this->once())
             ->method('get')
             ->with('resource')

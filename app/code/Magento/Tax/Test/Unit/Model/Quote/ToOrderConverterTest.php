@@ -64,6 +64,9 @@ class ToOrderConverterTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function setupOrderExtensionAttributeMock()
     {
         $orderExtensionAttributeMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderExtensionInterface::class)

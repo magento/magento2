@@ -147,6 +147,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->model->addEntityFilter($entity, $pkValue);
     }
 
+    /**
+     * @return array
+     */
     public function addEntityFilterDataProvider()
     {
         return [
