@@ -11,8 +11,11 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
 
+/**
+ * Class encapsulate logic of work with tables per store in Category Product indexer
+ */
 class TableMaintainer
 {
     /**
@@ -88,6 +91,8 @@ class TableMaintainer
      * @param string $newTableName
      *
      * @return void
+     *
+     * @throws \Zend_Db_Exception
      */
     private function createTable($mainTableName, $newTableName)
     {
@@ -132,6 +137,8 @@ class TableMaintainer
      * @param $storeId
      *
      * @return void
+     *
+     * @throws \Zend_Db_Exception
      */
     public function createTablesForStore(int $storeId)
     {
@@ -202,9 +209,14 @@ class TableMaintainer
      * @param $storeId
      *
      * @return string
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getMainTmpTable(int $storeId)
     {
+        if (!isset($this->mainTmpTable[$storeId])) {
+            throw new \Magento\Framework\Exception\NoSuchEntityException('Temporary table does not exist');
+        }
         return $this->mainTmpTable[$storeId];
     }
 }

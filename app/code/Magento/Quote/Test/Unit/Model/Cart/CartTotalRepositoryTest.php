@@ -163,6 +163,9 @@ class CartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($totalsMock, $this->model->get($cartId));
     }
 
+    /**
+     * @return array
+     */
     public function getDataProvider()
     {
         return [
