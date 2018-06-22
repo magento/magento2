@@ -5,6 +5,7 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\App\Action;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
@@ -28,17 +29,26 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
     protected $formKeyValidator;
 
     /**
+     * @var ProductCollectionFactory
+     */
+    private $productCollectionFactory;
+
+    /**
      * @param Action\Context $context
      * @param WishlistProviderInterface $wishlistProvider
      * @param Validator $formKeyValidator
+     * @param ProductCollectionFactory|null $productCollectionFactory
      */
     public function __construct(
         Action\Context $context,
         WishlistProviderInterface $wishlistProvider,
-        Validator $formKeyValidator
+        Validator $formKeyValidator,
+        ProductCollectionFactory $productCollectionFactory = null
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->formKeyValidator = $formKeyValidator;
+        $this->productCollectionFactory = $productCollectionFactory
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ProductCollectionFactory::class);
         parent::__construct($context);
     }
 
@@ -69,10 +79,15 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
         try {
             $item->delete();
             $wishlist->save();
+            $product = $this->productCollectionFactory
+                ->create()
+                ->addIdFilter($item->getProductId())
+                ->addAttributeToSelect('name')
+                ->getFirstItem();
             $this->messageManager->addComplexSuccessMessage(
                 'removeWishlistItemSuccessMessage',
                 [
-                    'product_name' => $item->getProduct()->getName()
+                    'product_name' => $product->getName()
                 ]
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
