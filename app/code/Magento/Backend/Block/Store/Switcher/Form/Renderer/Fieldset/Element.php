@@ -23,7 +23,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
     /**
      * @var string
      */
-    protected $_template = 'store/switcher/form/renderer/fieldset/element.phtml';
+    protected $_template = 'Magento_Backend::store/switcher/form/renderer/fieldset/element.phtml';
 
     /**
      * Retrieve an element

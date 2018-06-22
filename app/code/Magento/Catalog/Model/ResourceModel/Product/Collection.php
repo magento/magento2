@@ -14,10 +14,15 @@ use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Framework\Indexer\DimensionFactory;
 
 /**
  * Product collection
@@ -273,8 +278,22 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $backend;
 
     /**
+     * @var TableMaintainer
+     */
+    private $tableMaintainer;
+
+    /**
+     * @var PriceTableResolver
+     */
+    private $priceTableResolver;
+
+    /**
+     * @var DimensionFactory
+     */
+    private $dimensionFactory;
+
+    /**
      * Collection constructor
-     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -297,7 +316,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
-     *
+     * @param TableMaintainer|null $tableMaintainer
+     * @param PriceTableResolver|null $priceTableResolver
+     * @param DimensionFactory|null $dimensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -322,7 +343,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         GroupManagementInterface $groupManagement,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        TableMaintainer $tableMaintainer = null,
+        PriceTableResolver $priceTableResolver = null,
+        DimensionFactory $dimensionFactory = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -352,6 +376,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $storeManager,
             $connection
         );
+        $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
+        $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
+        $this->dimensionFactory = $dimensionFactory
+            ?: ObjectManager::getInstance()->get(DimensionFactory::class);
     }
 
     /**
@@ -1192,7 +1220,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             )->distinct(
                 false
             )->join(
-                ['count_table' => $this->getTable('catalog_category_product_index')],
+                ['count_table' => $this->tableMaintainer->getMainTable($this->getStoreId())],
                 'count_table.product_id = e.entity_id',
                 [
                     'count_table.category_id',
@@ -1560,7 +1588,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Add requere tax percent flag for product collection
+     * Add require tax percent flag for product collection
      *
      * @return $this
      */
@@ -1623,7 +1651,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function addFilterByRequiredOptions()
     {
-        $this->addAttributeToFilter('required_options', [['neq' => 1], ['null' => true]], 'left');
+        $this->addAttributeToFilter('required_options', [['neq' => 1]], 'left');
         return $this;
     }
 
@@ -1853,7 +1881,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _productLimitationPrice($joinLeft = false)
     {
         $filters = $this->_productLimitationFilters;
-        if (!$filters->isUsingPriceIndex()) {
+        if (!$filters->isUsingPriceIndex() ||
+            !isset($filters['website_id']) ||
+            (string)$filters['website_id'] === '' ||
+            !isset($filters['customer_group_id']) ||
+            (string)$filters['customer_group_id'] === ''
+        ) {
             return $this;
         }
 
@@ -1888,7 +1921,23 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'max_price',
                 'tier_price',
             ];
-            $tableName = ['price_index' => $this->getTable('catalog_product_index_price')];
+
+            $tableName = [
+                'price_index' => $this->priceTableResolver->resolve(
+                    'catalog_product_index_price',
+                    [
+                        $this->dimensionFactory->create(
+                            CustomerGroupDimensionProvider::DIMENSION_NAME,
+                            (string)$filters['customer_group_id']
+                        ),
+                        $this->dimensionFactory->create(
+                            WebsiteDimensionProvider::DIMENSION_NAME,
+                            (string)$filters['website_id']
+                        )
+                    ]
+                )
+            ];
+
             if ($joinLeft) {
                 $select->joinLeft($tableName, $joinCond, $colls);
             } else {
@@ -1966,7 +2015,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getSelect()->setPart(\Magento\Framework\DB\Select::FROM, $fromPart);
         } else {
             $this->getSelect()->join(
-                ['cat_index' => $this->getTable('catalog_category_product_index')],
+                ['cat_index' => $this->tableMaintainer->getMainTable($this->getStoreId())],
                 $joinCond,
                 ['cat_index_position' => 'position']
             );
@@ -2218,6 +2267,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @since 101.0.1
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addMediaGalleryData()
     {
@@ -2229,34 +2279,36 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
-        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-        $attribute = $this->getAttribute('media_gallery');
-        $select = $this->getMediaGalleryResource()->createBatchBaseSelect(
-            $this->getStoreId(),
-            $attribute->getAttributeId()
-        );
+        $items = $this->getItems();
+        $linkField = $this->getProductEntityMetadata()->getLinkField();
+
+        $select = $this->getMediaGalleryResource()
+            ->createBatchBaseSelect(
+                $this->getStoreId(),
+                $this->getAttribute('media_gallery')->getAttributeId()
+            )->reset(
+                Select::ORDER // we don't care what order is in current scenario
+            )->where(
+                'entity.' . $linkField . ' IN (?)',
+                array_map(
+                    function ($item) use ($linkField) {
+                        return (int) $item->getOrigData($linkField);
+                    },
+                    $items
+                )
+            );
 
         $mediaGalleries = [];
-        $linkField = $this->getProductEntityMetadata()->getLinkField();
-        $items = $this->getItems();
-
-        $select->where(
-            'entity.' . $linkField . ' IN (?)',
-            array_map(
-                function ($item) use ($linkField) {
-                    return $item->getData($linkField);
-                },
-                $items
-            )
-        );
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $mediaGalleries[$row[$linkField]][] = $row;
         }
 
         foreach ($items as $item) {
-            $mediaEntries = isset($mediaGalleries[$item->getData($linkField)]) ?
-                $mediaGalleries[$item->getData($linkField)] : [];
-            $this->getGalleryReadHandler()->addMediaDataToProduct($item, $mediaEntries);
+            $this->getGalleryReadHandler()
+                ->addMediaDataToProduct(
+                    $item,
+                    $mediaGalleries[$item->getOrigData($linkField)] ?? []
+                );
         }
 
         $this->setFlag('media_gallery_added', true);

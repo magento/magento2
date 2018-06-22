@@ -82,7 +82,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
     /**
      * Helper method to find the matching of $pattern to $synonymGroupsToExamine.
      * If matches, the particular array index is returned.
-     * Otherwise false will be returned.
+     * Otherwise null will be returned.
      *
      * @param string $pattern
      * @param array $synonymGroupsToExamine

@@ -113,6 +113,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $_url;
 
     /**
+     * @var ResourceModel\Category
+     */
+    protected $_resource;
+
+    /**
      * URL rewrite model
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
@@ -330,6 +335,16 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             $this->customAttributesCodes = array_diff($this->customAttributesCodes, $this->interfaceAttributes);
         }
         return $this->customAttributesCodes;
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Catalog\Model\ResourceModel\Category
+     * @deprecated because resource models should be used directly
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**
@@ -1137,7 +1152,13 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         $identities = [];
         if ($this->getId()) {
-            $identities[] = self::CACHE_TAG . '_' . $this->getId();
+            if ($this->getAffectedCategoryIds()) {
+                foreach (array_unique($this->getAffectedCategoryIds()) as $affectedCategoryId) {
+                    $identities[] = self::CACHE_TAG . '_' . $affectedCategoryId;
+                }
+            } else {
+                $identities[] = self::CACHE_TAG . '_' . $this->getId();
+            }
 
             if ($this->hasDataChanges() || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)) {
                 $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();

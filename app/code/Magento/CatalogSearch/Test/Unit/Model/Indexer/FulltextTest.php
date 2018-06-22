@@ -54,6 +54,11 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      */
     private $indexSwitcher;
 
+    /**
+     * @var \Magento\Indexer\Model\ProcessManager
+     */
+    private $processManager;
+
     protected function setUp()
     {
         $this->fullAction = $this->getClassMock(\Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class);
@@ -89,6 +94,8 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['switchIndex'])
             ->getMock();
 
+        $this->processManager = new \Magento\Indexer\Model\ProcessManager();
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
             \Magento\CatalogSearch\Model\Indexer\Fulltext::class,
@@ -101,6 +108,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
                 'searchRequestConfig' => $this->searchRequestConfig,
                 'data' => [],
                 'indexSwitcher' => $this->indexSwitcher,
+                'processManager' => $this->processManager,
             ]
         );
     }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!-- Add Product to Cart from the product page and check message and product count in Minicart -->
+    <actionGroup name="StorefrontAddProductToCartActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="productCount" type="string"/>
+        </arguments>
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart" />
+        <!-- @TODO: Use general message selector after MQE-694 is fixed -->
+        <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart(product.name)}}" time="30" stepKey="assertMessage"/>
+        <waitForText userInput="{{productCount}}" selector="{{StorefrontMiniCartSection.quantity}}" time="30" stepKey="assertProductCount"/>
+    </actionGroup>
+</actionGroups>

@@ -38,6 +38,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
      * 4. Set at least 2 options of multiselect attribute to match products for the product list widget
      * 5. Load collection for product list widget and make sure that number of loaded products is correct
      *
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
      */
     public function testCreateCollection()
@@ -75,6 +76,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
     /**
      * Test product list widget can process condition with multiple product sku.
      *
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      */
     public function testCreateCollectionWithMultipleSkuCondition()

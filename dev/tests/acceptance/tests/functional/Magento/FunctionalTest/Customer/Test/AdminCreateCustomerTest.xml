@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-72095"/>
             <group value="customer"/>
             <group value="create"/>
+            <group value="skip"/>
         </annotations>
         <after>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
@@ -25,8 +26,8 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
-        <click selector="{{AdminCustomerMainActionsSection.addNewCustomer}}" stepKey="clickCreateCustomer"/>
-        <waitForElement selector="{{AdminNewCustomerAccountInformationSection.firstName}}" stepKey="wait1"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}" stepKey="clickCreateCustomer"/>
+        <waitForElement selector="{{AdminNewCustomerAccountInformationSection.firstName}}" stepKey="waitInfoTab"/>
         <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminNewCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
         <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminNewCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminNewCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>

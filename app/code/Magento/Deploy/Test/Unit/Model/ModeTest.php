@@ -228,7 +228,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             ->method('getConfigs')
             ->with('developer', 'production')
             ->willReturn([
-                'dev/debug/debug_logging' => ['value' => 0, 'lock' => false]
+                'dev/debug/debug_logging' => 0
             ]);
         $this->emulatedAreaProcessor->expects($this->once())
             ->method('process')
@@ -247,7 +247,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 0,
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                 null,
-                false
+                true
             );
         $this->outputMock->expects($this->once())
             ->method('writeln')

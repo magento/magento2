@@ -30,7 +30,7 @@ class DebuggerFactory
     /**
      * DebuggerFactory constructor.
      *
-     * @param bjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param Config $config
      */
     public function __construct(
@@ -44,11 +44,12 @@ class DebuggerFactory
     /**
      * Create debugger instance
      *
+     * @param int|null $storeId
      * @return DebuggerInterface
      */
-    public function create()
+    public function create($storeId = null)
     {
-        if (!$this->config->isDebugModeEnabled()) {
+        if (!$this->config->isDebugModeEnabled($storeId)) {
             return $this->objectManager->get(BlackHole::class);
         }
 

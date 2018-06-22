@@ -5,11 +5,10 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="AdminNewCustomerPage" url="/customer/index/edit/id" area="admin" module="Customer">
-        <section name="AdminEditCuctomerInformationSection"/>
-        <section name="AdminEditCustomerOrdersSection"/>
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+    <page name="AdminEditCustomerPage" url="/customer/index/edit/id/{{var1}}" area="admin" module="Magento_Customer" parameterized="true">
+        <section name="AdminCustomerAccountInformationSection"/>
+        <section name="AdminCustomerMainActionsSection"/>
     </page>
 </pages>
