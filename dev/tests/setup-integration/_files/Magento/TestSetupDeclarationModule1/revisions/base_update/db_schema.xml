@@ -15,7 +15,7 @@
     </table>
     <table name="test_table" resource="default" comment="Test Table">
         <column xsi:type="smallint" name="smallint" default="0" padding="6" nullable="true" unsigned="false" comment="Smallint"/>
-        <column xsi:type="bigint" name="bigint" default="1" padding="20" nullable="true" unsigned="false" comment="Bigint"/>
+        <column xsi:type="bigint" name="bigint" default="0" padding="20" nullable="true" unsigned="false" comment="Bigint"/>
         <column xsi:type="float" name="float" default="0" scale="0" precision="10" comment="Float"/>
         <column xsi:type="date" name="date" comment="Date"/>
         <column xsi:type="timestamp" name="timestamp" default="CURRENT_TIMESTAMP" on_update="true" comment="Timestamp"/>
