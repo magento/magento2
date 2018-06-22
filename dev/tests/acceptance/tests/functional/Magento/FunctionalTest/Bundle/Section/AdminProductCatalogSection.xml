@@ -24,5 +24,6 @@
         <element name="priceOfFirstRow" type="text" selector="//tr[@data-repeat-index='0']//div[contains(., '{{var1}}')]" parameterized="true"/>
         <element name="AllProductsNotOfBundleType" type="text" selector="//td[5]/div[text() != 'Bundle Product']"/>
         <element name="attributeSetOfFirstRow" type="text" selector="//tr[@data-repeat-index='0']//div[contains(., '{{var1}}')]" parameterized="true"/>
+        <element name="deleteMessage" type="text" selector="//div[contains(text(), 'A total of 1 record(s) have been deleted.')]"/>
     </section>
 </sections>

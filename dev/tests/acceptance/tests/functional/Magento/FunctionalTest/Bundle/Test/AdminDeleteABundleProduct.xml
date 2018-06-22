@@ -76,9 +76,12 @@
         <click selector="//button[@class='action-primary action-accept']" stepKey="ConfirmDelete"/>
         <waitForPageLoad stepKey="loading3"/>
 
+        <!--Locating delete message-->
+        <seeElement selector="{{AdminProductCatalog.deleteMessage}}" stepKey="deleteMessage"/>
+
         <!--Testing deletion of product-->
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
         <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement stepKey="LookingForNameOfProductTwo" selector="{{BundleStorefrontSection.bundleProductName}}"/>
+        <dontSeeElement selector="{{BundleStorefrontSection.bundleProductName}}" stepKey="LookingForNameOfProductTwo"/>
     </test>
 </tests>
