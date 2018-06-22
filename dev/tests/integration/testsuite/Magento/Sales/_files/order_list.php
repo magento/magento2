@@ -8,10 +8,10 @@ use Magento\Sales\Model\Order;
 
 require 'order.php';
 /** @var Order $order */
-/** @var  Order\Payment $payment */
-/** @var  Order\Item $orderItem */
-/** @var  Order\Address $billingAddress */
-/** @var  Order\Address $shippingAddress */
+/** @var Order\Payment $payment */
+/** @var Order\Item $orderItem */
+/** @var Order\Address $billingAddress */
+/** @var Order\Address $shippingAddress */
 $orders = [
     [
         'increment_id' => '100000002',
@@ -58,6 +58,6 @@ foreach ($orders as $orderData) {
         ->setData($orderData)
         ->addItem($orderItem)
         ->setBillingAddress($billingAddress)
-        ->setBillingAddress($shippingAddress)
+        ->setShippingAddress($shippingAddress)
         ->save();
 }
