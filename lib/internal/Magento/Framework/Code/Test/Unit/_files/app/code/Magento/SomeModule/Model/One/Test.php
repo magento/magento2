@@ -13,6 +13,11 @@ class Test
      */
     protected $_proxy;
 
+    /**
+     * Test constructor.
+     *
+     * @param \Magento\SomeModule\Model\Proxy $proxy
+     */
     public function __construct(\Magento\SomeModule\Model\Proxy $proxy)
     {
         $this->_proxy = $proxy;

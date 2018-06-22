@@ -140,6 +140,9 @@ class HeadTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->headGenerator, $result);
     }
 
+    /**
+     * @return array
+     */
     public function testProcessAssetDataProvider()
     {
         return [
