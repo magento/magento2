@@ -28,13 +28,12 @@ class GetSalableQuantityDataBySku
     private $stockRepository;
 
     /**
-     * @var GetStockItemConfigurationInterface
+     * @var GetAssignedStockIdsBySku
      */
     private $getAssignedStockIdsBySku;
 
-
     /**
-     * @var GetStockItemConfiguration
+     * @var GetStockItemConfigurationInterface
      */
     private $getStockItemConfiguration;
 
@@ -69,8 +68,8 @@ class GetSalableQuantityDataBySku
             foreach ($stockIds as $stockId) {
                 $stockId = (int)$stockId;
                 $stock = $this->stockRepository->get($stockId);
-                $manageStockConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
-                $isManageStock = $manageStockConfiguration->isManageStock();
+                $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+                $isManageStock = $stockItemConfiguration->isManageStock();
                 $stockInfo[] = [
                     'stock_name' => $stock->getName(),
                     'qty' => $isManageStock ? $this->getProductSalableQty->execute($sku, $stockId) : null,
