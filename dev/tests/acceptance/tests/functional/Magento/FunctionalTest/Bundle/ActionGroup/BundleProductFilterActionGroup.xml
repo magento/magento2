@@ -10,11 +10,10 @@
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="BundleProductFilter">
         <!--Setting filter-->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToCatalogPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoadFully"/>
-        <click selector="{{AdminProductCatalog.clickOnFilter}}" stepKey="ClickOnFilter"/>
-        <click selector="{{AdminProductCatalog.clickOnTypeDropDown}}" stepKey="ClickOnTypeDropDown"/>
-        <click selector="{{AdminProductCatalog.clickOnBundleOption}}" stepKey="ClickOnBundleOption"/>
-        <click selector="{{AdminProductCatalog.clickOnApplyFilters}}" stepKey="ClickOnApplyFilters"/>
+        <!--Prereq: go to admin product catalog page-->
+        <click selector="{{AdminProductCatalog.filter}}" stepKey="ClickOnFilter"/>
+        <click selector="{{AdminProductCatalog.typeDropDown}}" stepKey="ClickOnTypeDropDown"/>
+        <click selector="{{AdminProductCatalog.bundleOption}}" stepKey="ClickOnBundleOption"/>
+        <click selector="{{AdminProductCatalog.applyFilters}}" stepKey="ClickOnApplyFilters"/>
     </actionGroup>
 </actionGroups>

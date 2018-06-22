@@ -9,6 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CreateBasicBundleProduct">
+        <!--Prereq: Go to bundle product creation page-->
         <!--Product name and SKU-->
         <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillProductSku"/>

@@ -14,5 +14,6 @@
         <element name="addToCartConfigured" type="button" selector="#product-addtocart-button" timeout="30"/>
         <element name="updateCart" type="button" selector="#product-updatecart-button" timeout="30"/>
         <element name="configuredPrice" type="block" selector=".price-configured_price .price"/>
+        <element name="fixedPricing" type="text" selector="//div[@class='price-box price-final_price']//span[@id]//..//span[contains(text(),'{{var1}}')]" parameterized="true"/>
     </section>
 </sections>
