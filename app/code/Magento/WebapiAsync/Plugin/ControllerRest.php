@@ -10,7 +10,6 @@ namespace Magento\WebapiAsync\Plugin;
 
 use Magento\WebapiAsync\Model\ServiceConfig;
 use Magento\Webapi\Controller\PathProcessor;
-use Magento\Webapi\Controller\Rest;
 use Magento\Framework\App\RequestInterface;
 use Magento\WebapiAsync\Model\ServiceConfig\Converter;
 
@@ -41,13 +40,13 @@ class ControllerRest
     }
 
     /**
-     * Check is current rest api route path in route customization config.
-     * If that replaces $request route path by related endpoint,
-     * @param Rest $subject
+     * Apply route customization.
+     * @param \Magento\Webapi\Controller\Rest $subject
      * @param RequestInterface $request
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(Rest $subject, RequestInterface $request)
+    public function beforeDispatch(\Magento\Webapi\Controller\Rest $subject, RequestInterface $request)
     {
         $routeCustomizations = $this->serviceConfig->getServices()[Converter::KEY_ROUTES] ?? [];
         if ($routeCustomizations) {

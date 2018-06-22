@@ -28,6 +28,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
         \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
         \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_DELETE,
+        'PATCH',
     ];
 
     /**
@@ -172,7 +173,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Convert and merge "route" nodes, which represent route customizations
      * @param \DOMDocument $source
      * @return array
-     *
      */
     private function convertRouteCustomizations($source)
     {
