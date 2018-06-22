@@ -18,7 +18,6 @@
         <element name="region" type="select" selector="select[name=region_id]"/>
         <element name="postcode" type="input" selector="input[name=postcode]"/>
         <element name="telephone" type="input" selector="input[name=telephone]"/>
-        <element name="next" type="button" selector="button.button.action.continue.primary"/>
         <element name="firstShippingMethod" type="radio" selector="#checkout-shipping-method-load input[type='radio']"/>
         <element name="selectedShippingAddress" type="text" selector=".shipping-address-item.selected-item"/>
         <element name="newAddressButton" type="button" selector="#checkout-step-shipping button"/>
