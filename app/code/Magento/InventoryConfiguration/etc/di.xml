@@ -13,5 +13,4 @@
     <!-- Product types -->
     <preference for="Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface" type="Magento\InventoryConfiguration\Model\IsSourceItemManagementAllowedForProductType"/>
     <preference for="Magento\InventoryConfigurationApi\Model\GetAllowedProductTypesForSourceItemManagementInterface" type="Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemManagement"/>
-    <preference for="Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface" type="Magento\InventoryConfiguration\Model\IsSourceItemManagementAllowedForSku"/>
 </config>

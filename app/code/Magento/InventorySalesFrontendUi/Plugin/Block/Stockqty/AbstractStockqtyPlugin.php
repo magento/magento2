@@ -13,7 +13,6 @@ use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
 
 class AbstractStockqtyPlugin
@@ -73,12 +72,7 @@ class AbstractStockqtyPlugin
         $sku = $subject->getProduct()->getSku();
         $websiteId = (int)$subject->getProduct()->getStore()->getWebsiteId();
         $stockId = (int)$this->stockByWebsiteId->execute($websiteId)->getStockId();
-        try {
-            $stockItemConfig = $this->getStockItemConfiguration->execute($sku, $stockId);
-        } catch (NoSuchEntityException $e) {
-            // GetStockItemConfiguration throw NoSuchEntityException when SKU is not assigned to Stock
-            return false;
-        }
+        $stockItemConfig = $this->getStockItemConfiguration->execute($sku, $stockId);
 
         return $stockItemConfig->getBackorders() === StockItemConfigurationInterface::BACKORDERS_NO
             && $this->getProductSalableQty->execute($sku, $stockId) <= $stockItemConfig->getStockThresholdQty();

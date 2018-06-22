@@ -7,11 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model;
 
-use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 
-class IsSourceItemManagementAllowedForSku implements IsSourceItemManagementAllowedForSkuInterface
+class IsSourceItemManagementAllowedForSku
 {
     /**
      * @var GetProductTypesBySkusInterface

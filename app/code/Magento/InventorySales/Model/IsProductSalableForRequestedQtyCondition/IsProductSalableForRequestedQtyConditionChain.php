@@ -168,6 +168,8 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
     /**
      * Required conditions
      *
+     * Iterate over required conditions: return error if at least one of them doesn't passed
+     *
      * @param string $sku
      * @param int $stockId
      * @param float $requestedQty
@@ -192,6 +194,8 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
 
     /**
      * Sufficient conditions ordered by priority.
+     *
+     * Iterate over sufficient conditions: return true if one of them is Salable
      *
      * @param string $sku
      * @param int $stockId

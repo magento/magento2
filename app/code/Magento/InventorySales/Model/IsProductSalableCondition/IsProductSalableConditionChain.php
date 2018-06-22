@@ -84,15 +84,10 @@ class IsProductSalableConditionChain implements IsProductSalableInterface
      */
     public function execute(string $sku, int $stockId): bool
     {
-        try {
-            foreach ($this->conditions as $condition) {
-                if ($condition->execute($sku, $stockId) === true) {
-                    return true;
-                }
+        foreach ($this->conditions as $condition) {
+            if ($condition->execute($sku, $stockId) === true) {
+                return true;
             }
-        } catch (NoSuchEntityException $e) {
-            // GetStockItemConfiguration throw NoSuchEntityException when SKU is not assigned to Stock
-            return false;
         }
 
         return false;

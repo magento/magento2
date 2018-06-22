@@ -11,7 +11,6 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Model\ReservationInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -57,15 +56,10 @@ class PreventAppendReservationOnNotManageItemsInStockPlugin
 
         $reservationToAppend = [];
         foreach ($reservations as $reservation) {
-            try {
-                $stockItemConfiguration = $this->getStockItemConfiguration->execute(
-                    $reservation->getSku(),
-                    $reservation->getStockId()
-                );
-            } catch (NoSuchEntityException $e) {
-                // GetStockItemConfiguration throw NoSuchEntityException when SKU is not assigned to Stock
-                continue;
-            }
+            $stockItemConfiguration = $this->getStockItemConfiguration->execute(
+                $reservation->getSku(),
+                $reservation->getStockId()
+            );
 
             if ($stockItemConfiguration->isManageStock()) {
                 $reservationToAppend[] = $reservation;

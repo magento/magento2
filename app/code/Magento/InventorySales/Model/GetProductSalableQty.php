@@ -14,7 +14,6 @@ use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @inheritdoc
@@ -78,13 +77,8 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
             return 0;
         }
 
-        try {
-            $stockItemConfig = $this->getStockItemConfiguration->execute($sku, $stockId);
-            $minQty = $stockItemConfig->getMinQty();
-        } catch (NoSuchEntityException $e) {
-            // GetStockItemConfiguration throw NoSuchEntityException when SKU is not assigned to Stock
-            $minQty = 0;
-        }
+        $stockItemConfig = $this->getStockItemConfiguration->execute($sku, $stockId);
+        $minQty = $stockItemConfig->getMinQty();
 
         $productQtyInStock = $stockItemData[GetStockItemDataInterface::QUANTITY]
             + $this->getReservationsQuantity->execute($sku, $stockId)
