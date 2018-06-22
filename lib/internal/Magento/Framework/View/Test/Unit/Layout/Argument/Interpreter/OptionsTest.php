@@ -72,6 +72,9 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->_model->evaluate($input);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateWrongModelDataProvider()
     {
         return [

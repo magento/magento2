@@ -196,7 +196,7 @@
     </zip>
     <zip countryCode="IL">
         <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+            <code id="pattern_1" active="true" example="6687865">^[0-9]{7}$</code>
         </codes>
     </zip>
     <zip countryCode="IT">

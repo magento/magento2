@@ -100,6 +100,9 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test_product_name', $decodedJson[0]['caption']);
     }
 
+    /**
+     * @param bool $hasLabel
+     */
     private function prepareGetGalleryImagesJsonMocks($hasLabel = true)
     {
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)

@@ -234,19 +234,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $cacheKey = $this->getCacheKey([$editMode, $storeId]);
         $cachedProduct = $this->getProductFromLocalCache($sku, $cacheKey);
         if ($cachedProduct === null || $forceReload) {
-            $product = $this->productFactory->create();
-
             $productId = $this->resourceModel->getIdBySku($sku);
             if (!$productId) {
                 throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
             }
-            if ($editMode) {
-                $product->setData('_edit_mode', true);
-            }
-            if ($storeId !== null) {
-                $product->setData('store_id', $storeId);
-            }
-            $product->load($productId);
+
+            $product = $this->getById($productId, $editMode, $storeId, $forceReload);
+
             $this->cacheProduct($cacheKey, $product);
             $cachedProduct = $product;
         }
