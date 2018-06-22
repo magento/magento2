@@ -167,20 +167,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
         $this->_prepareWebsiteDateTable();
 
-        $this->truncateReplicaTable();
-
-        $this->truncateReplicaTablesByDimensions();
-    }
-
-    /**
-     * Truncate main replica table
-     *
-     * @return void
-     * @throws \Exception
-     */
-    private function truncateReplicaTable()
-    {
-        $this->_defaultIndexerResource->getConnection()->truncateTable($this->getReplicaTable());
+        $this->truncateReplicaTables();
     }
 
     /**
@@ -189,7 +176,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @return void
      * @throws \Exception
      */
-    private function truncateReplicaTablesByDimensions()
+    private function truncateReplicaTables()
     {
         foreach ($this->dimensionCollectionFactory->create() as $dimension) {
             $dimensionTable = $this->dimensionTableMaintainer->getMainReplicaTable($dimension);
