@@ -14,7 +14,7 @@
             <title value="Verify credit memo grand total after shipping discount is applied via Cart Price Rule"/>
             <description value="Verify credit memo grand total after shipping discount is applied via Cart Price Rule"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-91710"/>
+            <testCaseId value="MAGETWO-92924"/>
             <group value="sales"/>
         </annotations>
         <before>
