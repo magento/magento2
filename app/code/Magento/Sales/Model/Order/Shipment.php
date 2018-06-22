@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\ShipmentCommentInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\ShipmentCommentRepositoryInterface;
@@ -104,12 +105,12 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     /**
      * @var ShipmentCommentRepositoryInterface
      */
-    protected $shipmentCommentRepository;
+    private $shipmentCommentRepository;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection|null
@@ -143,8 +144,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         \Magento\Sales\Model\Order\Shipment\CommentFactory $commentFactory,
         \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory $commentCollectionFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        ShipmentCommentRepositoryInterface $shipmentCommentRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ShipmentCommentRepositoryInterface $shipmentCommentRepository = null,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -156,6 +157,10 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->shipmentCommentRepository = $shipmentCommentRepository;
         $this->orderRepository = $orderRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
+            ->get(SearchCriteriaBuilder::class);
+        $this->shipmentCommentRepository = $shipmentCommentRepository ?: ObjectManager::getInstance()
+            ->get(ShipmentCommentRepositoryInterface::class);
         parent::__construct(
             $context,
             $registry,
