@@ -28,6 +28,7 @@
         <data key="type">bundle</data>
         <data key="fixedPrice">10</data>
         <data key="fixedPriceFormatted">$10.00</data>
+        <data key="defaultAttribute">Default</data>
     </entity>
     <entity name="ApiBundleProduct" type="product2">
         <data key="name" unique="suffix">Api Bundle Product</data>

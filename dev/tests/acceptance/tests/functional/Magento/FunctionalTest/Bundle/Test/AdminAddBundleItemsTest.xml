@@ -16,7 +16,7 @@
             <description value="Admin should be able to add/edit bundle items when creating/editing a bundle product"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-223"/>
-            <group value="banana"/>
+            <group value="Bundle"/>
         </annotations>
         <before>
             <!--Creating data-->
