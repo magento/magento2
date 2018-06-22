@@ -202,8 +202,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->groupModel->expects($this->atLeastOnce())
             ->method('getTaxClassName')
             ->willReturn('Tax class name');
-        
-        
+
         $this->factoryCreatedGroup->expects($this->once())
             ->method('setId')
             ->with($groupId)
