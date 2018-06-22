@@ -5,10 +5,14 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+
 /**
  * Product rule condition data model
  *
  * @author Magento Core Team <core@magentocommerce.com>
+ *
+ * @method string getAttribute()
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
@@ -27,19 +31,46 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * Validate Product Rule Condition
-     *
      * @param \Magento\Framework\Model\AbstractModel $model
-     * @return bool
+     *
+     * @return \Magento\Catalog\Api\Data\ProductInterface|\Magento\Catalog\Model\Product
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function validate(\Magento\Framework\Model\AbstractModel $model)
+    protected function getProductToValidate(\Magento\Framework\Model\AbstractModel $model)
     {
-        //@todo reimplement this method when is fixed MAGETWO-5713
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $model->getProduct();
         if (!$product instanceof \Magento\Catalog\Model\Product) {
             $product = $this->productRepository->getById($model->getProductId());
         }
+
+        $attrCode = $this->getAttribute();
+
+        /* Check for attributes which are not available for configurable products */
+        if ($product->getTypeId() == Configurable::TYPE_CODE && !$product->hasData($attrCode)) {
+            /** @var \Magento\Catalog\Api\Data\ProductInterface $childProduct */
+            $childProduct = current($model->getChildren())->getProduct();
+            if ($childProduct->hasData($attrCode)) {
+                $product = $childProduct;
+            }
+        }
+
+        return $product;
+    }
+
+    /**
+     * Validate Product Rule Condition
+     *
+     * @param \Magento\Framework\Model\AbstractModel $model
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function validate(\Magento\Framework\Model\AbstractModel $model)
+    {
+        //@todo reimplement this method when is fixed MAGETWO-5713
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->getProductToValidate($model);
 
         $product->setQuoteItemQty(
             $model->getQty()
@@ -49,9 +80,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $model->getBaseRowTotal()
         );
 
-        $attrCode = $this->getAttribute();
 
-        if ('category_ids' == $attrCode) {
+        if ('category_ids' == $this->getAttribute()) {
             return $this->validateAttribute($this->_getAvailableInCategories($product->getId()));
         }
 
