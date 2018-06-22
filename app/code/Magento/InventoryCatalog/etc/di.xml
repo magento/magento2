@@ -16,6 +16,10 @@
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
     </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="replace_issalable_with_isProductSalable"
+                type="\Magento\InventoryCatalog\Plugin\Catalog\ProductPlugin"/>
+    </type>
     <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
