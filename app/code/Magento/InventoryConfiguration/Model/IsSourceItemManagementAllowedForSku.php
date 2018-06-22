@@ -39,7 +39,13 @@ class IsSourceItemManagementAllowedForSku
      */
     public function execute(string $sku): bool
     {
-        $productType = $this->getProductTypesBySkus->execute([$sku])[$sku];
-        return $this->isSourceItemManagementAllowedForProductType->execute($productType);
+        $productType = $this->getProductTypesBySkus->execute([$sku]);
+        if (isset($productType[$sku])) {
+            $typeId = $productType[$sku];
+        } else {
+            return false;
+        }
+
+        return $this->isSourceItemManagementAllowedForProductType->execute($typeId);
     }
 }
