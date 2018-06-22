@@ -32,6 +32,17 @@ define([
             }
 
             this._super(newChecked);
+        },
+
+        getInitialValue: function () {
+            var values = [this.value(), this.default],
+                value;
+
+            values.some(function(v){
+                return v ? value = v : !!v
+            });
+
+            return this.normalizeData(value);
         }
     });
 });
