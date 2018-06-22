@@ -124,6 +124,9 @@
         <click selector="//button[@class='action-primary action-accept']" stepKey="ConfirmDelete"/>
         <waitForPageLoad stepKey="loading3"/>
 
+        <!--Locating delete message-->
+        <seeElement selector="{{AdminProductCatalog.deleteMessage}}" stepKey="deleteMessage"/>
+
         <!--Clear Cache - resets products according to enabled/disabled view-->
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="ClearPageCaches"/>
 
