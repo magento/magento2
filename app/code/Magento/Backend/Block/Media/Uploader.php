@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Block\Media;
 
+use Magento\Framework\Image\Adapter\ConfigInterface;
+
 /**
  * Adminhtml media library uploader
  * @api
@@ -30,25 +32,26 @@ class Uploader extends \Magento\Backend\Block\Widget
     protected $_fileSizeService;
 
     /**
-     * @var \Magento\Framework\Image\Adapter\ConfigInterface
+     * @var ConfigInterface
      */
-    protected $imageConfig;
+    private $imageConfig;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
-     * @param \Magento\Framework\Image\Adapter\ConfigInterface $imageConfig
+     * @param ConfigInterface $imageConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
-        \Magento\Framework\Image\Adapter\ConfigInterface $imageConfig,
+        ConfigInterface $imageConfig,
         array $data = []
     ) {
+        parent::__construct($context, $data);
+
         $this->_fileSizeService = $fileSize;
         $this->imageConfig = $imageConfig;
-        parent::__construct($context, $data);
     }
 
     /**
@@ -90,13 +93,23 @@ class Uploader extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Get image config
+     * Get Image Upload Maximum Width Config
      *
-     * @return \Magento\Framework\Image\Adapter\ConfigInterface
+     * @return int
      */
-    public function getImageConfigService()
+    public function getUploadImageMaxWidth()
     {
-        return $this->imageConfig;
+        return $this->imageConfig->getMaxWidth();
+    }
+
+    /**
+     * Get Image Upload Maximum Height Config
+     *
+     * @return int
+     */
+    public function getUploadImageMaxHeight()
+    {
+        return $this->imageConfig->getMaxHeight();
     }
 
     /**

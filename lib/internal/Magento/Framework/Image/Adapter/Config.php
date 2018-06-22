@@ -11,9 +11,9 @@ class Config implements \Magento\Framework\Image\Adapter\ConfigInterface
 
     const XML_PATH_IMAGE_ADAPTERS = 'dev/image/adapters';
 
-    const XML_PATH_MAX_WIDTH_IMAGE = 'system/media_configuration/max_width';
+    const XML_PATH_MAX_WIDTH_IMAGE = 'system/upload_configuration/max_width';
 
-    const XML_PATH_MAX_HEIGHT_IMAGE = 'system/media_configuration/max_height';
+    const XML_PATH_MAX_HEIGHT_IMAGE = 'system/upload_configuration/max_height';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -49,7 +49,7 @@ class Config implements \Magento\Framework\Image\Adapter\ConfigInterface
     }
 
     /**
-     * Get Max Image Width resolution in pixels. For image resizing on client side
+     * Get Maximum Image Width resolution in pixels. For image resizing on client side
      *
      * @return int
      */
@@ -59,7 +59,7 @@ class Config implements \Magento\Framework\Image\Adapter\ConfigInterface
     }
 
     /**
-     * Get Max Image Height resolution in pixels. For image resizing on client side
+     * Get Maximum Image Height resolution in pixels. For image resizing on client side
      *
      * @return int
      */
