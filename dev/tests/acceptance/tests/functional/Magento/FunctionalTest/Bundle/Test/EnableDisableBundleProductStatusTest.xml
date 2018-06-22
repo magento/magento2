@@ -16,7 +16,7 @@
             <description value="Admin should be able to change a bundle product status to Enabled/Disabled"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-215"/>
-            <group value="Bundle"/>
+            <group value="banana"/>
         </annotations>
         <before>
             <!--Creating data-->
@@ -78,7 +78,7 @@
         <actionGroup ref="FindProductToEdit" stepKey="FindProductEditPage"/>
         <click stepKey="ClickOnEnableDisableToggle" selector="{{AdminProductFormBundleSection.enableDisableToggle}}"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButtonAgain"/>
-        <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown2"/>
         <waitForPageLoad stepKey="PauseForSave"/>
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
         <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
