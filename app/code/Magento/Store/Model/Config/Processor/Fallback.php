@@ -85,13 +85,8 @@ class Fallback implements PostProcessorInterface
      */
     public function process(array $data)
     {
-        if ($this->deploymentConfig->isDbAvailable()) {//read only from db
-            $this->storeData = $this->storeResource->readAllStores();
-            $this->websiteData = $this->websiteResource->readAllWebsites();
-        } else {
-            $this->storeData = $this->scopes->get('stores');
-            $this->websiteData = $this->scopes->get('websites');
-        }
+        $this->storeData = $this->scopes->get('stores');
+        $this->websiteData = $this->scopes->get('websites');
 
         $defaultConfig = isset($data['default']) ? $data['default'] : [];
         $result = [
