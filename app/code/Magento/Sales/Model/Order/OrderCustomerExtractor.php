@@ -119,7 +119,7 @@ class OrderCustomerExtractor
                 // create new customer address only if it is unique
                 $customerAddress = $this->addressFactory->create(['data' => $addressData]);
                 $customerAddress->setIsDefaultBilling(false);
-                $customerAddress->setIsDefaultBilling(false);
+                $customerAddress->setIsDefaultShipping(false);
                 if (is_string($orderAddress->getRegion())) {
                     /** @var RegionInterface $region */
                     $region = $this->regionFactory->create();
