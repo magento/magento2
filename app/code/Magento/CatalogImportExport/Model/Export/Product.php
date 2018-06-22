@@ -691,7 +691,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * {@inheritdoc}
      */
-    public function _getHeaderColumns()
+    public function getHeaderColumns()
     {
         return $this->_customHeadersMapping($this->rowCustomizer->addHeaderColumns($this->_headerColumns));
     }
@@ -702,7 +702,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param array $customOptionsData
      * @param array $stockItemRows
      * @return void
-     * @deprecated 100.2.0 Logic will be moved to _getHeaderColumns in future release
+     * @deprecated 100.2.0 Logic will be moved to getHeaderColumns in future release
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -842,7 +842,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
             $exportData = $this->getExportData();
             if ($page == 1) {
-                $writer->setHeaderCols($this->_getHeaderColumns());
+                $writer->setHeaderCols($this->getHeaderColumns());
             }
             foreach ($exportData as $dataRow) {
                 $writer->writeRow($this->_customFieldsMapping($dataRow));
