@@ -22,6 +22,8 @@ use Magento\Ui\DataProvider\SearchResultFactory;
  */
 class SourceDataProvider extends DataProvider
 {
+    const SOURCE_FORM_NAME = 'inventory_source_form_data_source';
+
     /**
      * @var SourceRepositoryInterface
      */
@@ -88,25 +90,23 @@ class SourceDataProvider extends DataProvider
     public function getData()
     {
         $data = parent::getData();
-        if ('inventory_source_form_data_source' === $this->name) {
+        if ($this->isFormComponent()) {
             // It is need for support of several fieldsets.
             // For details see \Magento\Ui\Component\Form::getDataSourceData
             if ($data['totalRecords'] > 0) {
                 $sourceCode = $data['items'][0][SourceInterface::SOURCE_CODE];
                 $sourceGeneralData = $data['items'][0];
-                $sourceGeneralData['disable_source_code'] = !empty($sourceGeneralData['source_code']);
                 $dataForSingle[$sourceCode] = [
                     'general' => $sourceGeneralData,
                 ];
-                $data = $dataForSingle;
-            } else {
-                $sessionData = $this->session->getSourceFormData(true);
-                if (null !== $sessionData) {
-                    // For details see \Magento\Ui\Component\Form::getDataSourceData
-                    $data = [
-                        '' => $sessionData,
-                    ];
-                }
+                return $dataForSingle;
+            }
+            $sessionData = $this->session->getSourceFormData(true);
+            if (null !== $sessionData) {
+                // For details see \Magento\Ui\Component\Form::getDataSourceData
+                $data = [
+                    '' => $sessionData,
+                ];
             }
         }
         return $data;
@@ -127,5 +127,13 @@ class SourceDataProvider extends DataProvider
             SourceInterface::SOURCE_CODE
         );
         return $searchResult;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isFormComponent(): bool
+    {
+        return self::SOURCE_FORM_NAME === $this->name;
     }
 }
