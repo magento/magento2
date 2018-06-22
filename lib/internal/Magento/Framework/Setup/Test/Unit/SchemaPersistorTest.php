@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Test\Unit\Setup;
+namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Setup\SchemaListener;
@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Unit test for schema persistor.
  *
- * @package Magento\Framework\Test\Unit\Setup
+ * @package Magento\Framework\Setup\Test\Unit
  */
 class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
 {

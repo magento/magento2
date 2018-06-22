@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Test\Unit\Setup;
+namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\SchemaListenerDefinition\BooleanDefinition;
@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Unit test for schema listener.
  *
- * @package Magento\Framework\Test\Unit\Setup
+ * @package Magento\Framework\Setup\Test\Unit
  */
 class SchemaListenerTest extends \PHPUnit\Framework\TestCase
 {
