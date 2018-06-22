@@ -59,8 +59,8 @@ class Result extends Template
      * @param LayerResolver $layerResolver
      * @param Data $catalogSearchData
      * @param QueryFactory $queryFactory
-     * @param Config $catalogConfig
      * @param array $data
+     * @param Config|null $catalogConfig
      */
     public function __construct(
         Context $context,
