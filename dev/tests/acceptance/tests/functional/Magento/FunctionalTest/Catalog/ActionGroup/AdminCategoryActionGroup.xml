@@ -49,7 +49,7 @@
         </arguments>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(catName)}}" stepKey="navigateToCreatedCategory" />
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(catName)}}" stepKey="navigateToCreatedCategory"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <scrollToTopOfPage stepKey="scrollToToggle"/>
         <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewDropdownToggle}}" stepKey="openStoreViewDropDown"/>
