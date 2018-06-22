@@ -13,7 +13,7 @@ use Magento\Framework\Locale\Resolver;
 use Magento\Framework\View\Page\Config;
 
 /**
- * @covers Magento\Framework\View\Page\Config
+ * @covers \Magento\Framework\View\Page\Config
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
