@@ -16,7 +16,7 @@
             <description value="Admin should be able to change a bundle product status to Enabled/Disabled"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-215"/>
-            <group value="banana"/>
+            <group value="Bundle"/>
         </annotations>
         <before>
             <!--Creating data-->
