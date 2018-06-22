@@ -28,7 +28,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
         \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
         \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_DELETE,
-        'PATCH',
+        \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PATCH
     ];
 
     /**
