@@ -99,6 +99,9 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->store);
     }
 
+    /**
+     * @return array
+     */
     public function addFiltersDataProvider()
     {
         return array_merge(
@@ -269,6 +272,11 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
         return $backend;
     }
 
+    /**
+     * @param string $optionText
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function createSource($optionText = 'optionText')
     {
         $source = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class)
@@ -281,6 +289,9 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
         return $source;
     }
 
+    /**
+     * @return array
+     */
     private function addFiltersPriceDataProvider()
     {
         return [

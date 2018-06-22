@@ -196,7 +196,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
                 $this->_collection->addAttributeToSort(
                     $this->getCurrentOrder(),
                     $this->getCurrentDirection()
-                )->addAttributeToSort('entity_id', $this->getCurrentDirection());
+                );
             } else {
                 $this->_collection->setOrder($this->getCurrentOrder(), $this->getCurrentDirection());
             }
