@@ -1128,6 +1128,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="customOptionPriceModifier" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CustomOptionPriceModifier</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\VirtualProductPrice" type="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\SimpleProductPrice">
         <arguments>
             <argument name="productType" xsi:type="string">virtual</argument>
