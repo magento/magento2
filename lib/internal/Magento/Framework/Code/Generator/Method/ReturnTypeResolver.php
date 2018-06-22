@@ -5,6 +5,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Code\Generator\Method;
 
 class ReturnTypeResolver
@@ -39,13 +41,11 @@ class ReturnTypeResolver
     private function getReturnTypeName(\ReflectionType $returnType, \ReflectionMethod $methodReflection) : string
     {
         if (method_exists($returnType, 'getName')) {
-            $returnTypeName = ($returnType->allowsNull() ? '?' : '') .
+            return ($returnType->allowsNull() ? '?' : '') .
                 $this->expandLiteralType($returnType->getName(), $methodReflection);
-        } else {
-            $returnTypeName = $this->expandLiteralType((string) $returnType, $methodReflection);
         }
 
-        return $returnTypeName;
+        return $this->expandLiteralType((string) $returnType, $methodReflection);
     }
 
     /**
@@ -56,7 +56,7 @@ class ReturnTypeResolver
      *
      * @return string
      */
-    private function expandLiteralType($literalReturnType, \ReflectionMethod $methodReflection)
+    private function expandLiteralType(string $literalReturnType, \ReflectionMethod $methodReflection) : string
     {
         $returnType = $literalReturnType;
 
