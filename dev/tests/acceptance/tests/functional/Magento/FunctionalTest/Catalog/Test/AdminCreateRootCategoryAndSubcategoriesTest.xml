@@ -10,9 +10,9 @@
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreateRootCategoryAndSubcategoriesTest">
         <annotations>
-            <features value="Create Root Category and Subcategory"/>
-            <title value="You should be able to create Root Category and Subcategory."/>
-            <description value="You should be able to create Root Category and Subcategory."/>
+            <features value="Catalog"/>
+            <title value="Admin should be able to create a Root Category and a Subcategory"/>
+            <description value="Admin should be able to create a Root Category and a Subcategory"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-46142"/>
             <group value="category"/>
