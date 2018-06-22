@@ -199,10 +199,14 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
             }
         }
 
+        $returnType = $this->returnTypeResolver->getReturnType($method);
+
         $methodInfo = [
             'name' => $method->getName(),
             'parameters' => $parameters,
-            'body' => $body . "\nreturn \$this->_invoke('{$method->getName()}', \$args);",
+            'body' => $body . ($returnType === "void" ? "\n": "\nreturn ") .
+                "\$this->_invoke('{$method->getName()}', \$args);",
+            'returnType' => $returnType,
             'docblock' => [
                 'shortDescription' => '{@inheritdoc}',
             ],
