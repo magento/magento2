@@ -84,7 +84,7 @@ define([
             parameters = _.isArray(sectionNames) ? {
                 sections: sectionNames.join(',')
             } : [];
-            parameters['update_section_id'] = forceNewSectionTimestamp;
+            parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
 
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function (jqXHR) {
                 throw new Error(jqXHR);
