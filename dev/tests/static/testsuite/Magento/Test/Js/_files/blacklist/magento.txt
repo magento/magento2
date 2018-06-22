@@ -14,3 +14,6 @@ lib/web/mage/adminhtml/varienLoader.js
 lib/web/magnifier/magnifier.js
 lib/web/magnifier/magnify.js
 lib/web/varien/js.js
+
+// MINIFIED FILES
+app/code/**/*.min.js

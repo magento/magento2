@@ -122,7 +122,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
+                    (float) $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
             }
         }
 
@@ -203,7 +203,7 @@ class General extends AbstractModifier
     protected function customizeWeightField(array $meta)
     {
         $weightPath = $this->arrayManager->findPath(ProductAttributeInterface::CODE_WEIGHT, $meta, null, 'children');
-
+        $disabled = $this->arrayManager->get($weightPath . '/arguments/data/config/disabled', $meta);
         if ($weightPath) {
             $meta = $this->arrayManager->merge(
                 $weightPath . static::META_CONFIG_PATH,
@@ -215,7 +215,7 @@ class General extends AbstractModifier
                     ],
                     'additionalClasses' => 'admin__field-small',
                     'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
-                    'imports' => [
+                    'imports' => $disabled ? [] : [
                         'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
                             . '.product_has_weight:value'
                     ]
@@ -255,6 +255,7 @@ class General extends AbstractModifier
                         ],
                     ],
                     'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
+                    'disabled' => $disabled,
                 ]
             );
         }
