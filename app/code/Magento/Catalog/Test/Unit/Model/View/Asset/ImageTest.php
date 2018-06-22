@@ -145,6 +145,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getPathDataProvider()
     {
         return [
