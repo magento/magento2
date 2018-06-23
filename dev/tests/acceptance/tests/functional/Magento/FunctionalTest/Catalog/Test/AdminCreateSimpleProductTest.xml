@@ -10,10 +10,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreateSimpleProductTest">
         <annotations>
-            <features value="Product Creation"/>
+            <features value="Catalog"/>
             <stories value="Create a Simple Product via Admin"/>
-            <title value="You should be able to create a Simple Product in the admin back-end."/>
-            <description value="You should be able to create a Simple Product in the admin back-end."/>
+            <title value="Admin should be able to create a Simple Product"/>
+            <description value="Admin should be able to create a Simple Product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-23414"/>
             <group value="product"/>
@@ -42,10 +42,10 @@
 
     <test name="AdminConfigDefaultProductLayoutFromConfigurationSettingTest">
         <annotations>
-            <features value="[CMS] WYSIWYG update MAGETWO-36659"/>
+            <features value="Catalog"/>
             <stories value="Default layout configuration MAGETWO-88793"/>
-            <title value="Admin are able to config default layout for Product Page from System Configuration"/>
-            <description value="Admin are able to select layout that will be applied by default to Product Page, so that he does not need to change it manually every time he create a page"/>
+            <title value="Admin should be able to configure a default layout for Product Page from System Configuration"/>
+            <description value="Admin should be able to configure a default layout for Product Page from System Configuration"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-89023"/>
             <group value="product"/>
@@ -72,10 +72,10 @@
 
     <test name="AdminCreateSimpleProductZeroPriceTest">
         <annotations>
-            <features value="Product Creation"/>
+            <features value="Catalog"/>
             <stories value="Create a Simple Product via Admin"/>
-            <title value="Should be able to create a product with zero price"/>
-            <description value="Should be able to create a product with zero price"/>
+            <title value="Admin should be able to create a product with zero price"/>
+            <description value="Admin should be able to create a product with zero price"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-89910"/>
             <group value="product"/>
@@ -93,10 +93,10 @@
 
     <test name="AdminCreateSimpleProductNegativePriceTest">
         <annotations>
-            <features value="Product Creation"/>
+            <features value="Catalog"/>
             <stories value="Create a Simple Product via Admin"/>
-            <title value="Should not be able to create a product with a negative price"/>
-            <description value="Should not be able to create a product with a negative price"/>
+            <title value="Admin should not be able to create a product with a negative price"/>
+            <description value="Admin should not be able to create a product with a negative price"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-89912"/>
             <group value="product"/>
