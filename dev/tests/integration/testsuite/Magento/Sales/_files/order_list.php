@@ -10,8 +10,7 @@ require 'order.php';
 /** @var Order $order */
 /** @var Order\Payment $payment */
 /** @var Order\Item $orderItem */
-/** @var Order\Address $billingAddress */
-/** @var Order\Address $shippingAddress */
+/** @var array $addressData Data for creating addresses for the orders. */
 $orders = [
     [
         'increment_id' => '100000002',
@@ -56,9 +55,11 @@ foreach ($orders as $orderData) {
     );
 
     // Reset addresses
+    /** @var Order\Address $billingAddress */
     $billingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);
     $billingAddress->setAddressType('billing');
 
+    /** @var Order\Address $shippingAddress */
     $shippingAddress = clone $billingAddress;
     $shippingAddress->setId(null)->setAddressType('shipping');
 
