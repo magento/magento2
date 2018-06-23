@@ -54,6 +54,14 @@ foreach ($orders as $orderData) {
     $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
         \Magento\Sales\Model\Order::class
     );
+
+    // Reset addresses
+    $billingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);
+    $billingAddress->setAddressType('billing');
+
+    $shippingAddress = clone $billingAddress;
+    $shippingAddress->setId(null)->setAddressType('shipping');
+
     $order
         ->setData($orderData)
         ->addItem($orderItem)
