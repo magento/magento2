@@ -1,16 +1,16 @@
 & when (@media-common = true) {
-  .box-tocart {
-    .action.instant-purchase {
-      &:extend(.abs-button-l all);
-      &:extend(.abs-button-responsive all);
+    .box-tocart {
+        .action.instant-purchase {
+            &:extend(.abs-button-l all);
+            &:extend(.abs-button-responsive all);
 
-      &:not(:last-child) {
-        margin-bottom: 15px;
-      }
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
 
-      vertical-align: top;
+            vertical-align: top;
+        }
     }
-  }
 }
 
 //
@@ -18,11 +18,11 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-  .box-tocart {
-    .action.instant-purchase {
-      margin-bottom: 0;
-      margin-right: 1%;
-      width: 49%;
+    .box-tocart {
+        .action.instant-purchase {
+            margin-bottom: 0;
+            margin-right: 1%;
+            width: 49%;
+        }
     }
-  }
 }
