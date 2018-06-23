@@ -41,6 +41,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 101.0.0
  */
 class Eav extends AbstractModifier
@@ -593,6 +594,7 @@ class Eav extends AbstractModifier
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
         $configPath = ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER);
+        $attributeCode = $attribute->getAttributeCode();
         $meta = $this->arrayManager->set($configPath, [], [
             'dataType' => $attribute->getFrontendInput(),
             'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
@@ -601,7 +603,7 @@ class Eav extends AbstractModifier
             'notice' => $attribute->getNote() === null ? null : __($attribute->getNote()),
             'default' => (!$this->isProductExists()) ? $this->getAttributeDefaultValue($attribute) : null,
             'label' => __($attribute->getDefaultFrontendLabel()),
-            'code' => $attribute->getAttributeCode(),
+            'code' => $attributeCode,
             'source' => $groupCode,
             'scopeLabel' => $this->getScopeLabel($attribute),
             'globalScope' => $this->isScopeGlobal($attribute),
@@ -611,8 +613,9 @@ class Eav extends AbstractModifier
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
+            $options = $attributeModel->getSource()->getAllOptions();
             $meta = $this->arrayManager->merge($configPath, $meta, [
-                'options' => $attributeModel->getSource()->getAllOptions(),
+                'options' => $this->convertOptionsValueToString($options),
             ]);
         }
 
@@ -630,7 +633,9 @@ class Eav extends AbstractModifier
             ]);
         }
 
-        if (in_array($attribute->getAttributeCode(), $this->attributesToDisable)) {
+        $product = $this->locator->getProduct();
+        if (in_array($attributeCode, $this->attributesToDisable)
+            || $product->isLockedAttribute($attributeCode)) {
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'disabled' => true,
             ]);
@@ -681,6 +686,23 @@ class Eav extends AbstractModifier
             $attribute->setDefaultValue($defaultValue);
         }
         return $attribute->getDefaultValue();
+    }
+
+    /**
+     * Convert options value to string.
+     *
+     * @param array $options
+     * @return array
+     */
+    private function convertOptionsValueToString(array $options) : array
+    {
+        array_walk($options, function (&$value) {
+            if (isset($value['value']) && is_scalar($value['value'])) {
+                $value['value'] = (string)$value['value'];
+            }
+        });
+
+        return $options;
     }
 
     /**
