@@ -323,7 +323,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $roleId = 44;
         $methodUserMock->expects($this->once())->method('getUserId')->willReturn($uid);
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
-        $methodUserMock->expects($this->atleastOnce())->method('getRoleId')->willReturn($roleId);
+        $methodUserMock->expects($this->atLeastOnce())->method('getRoleId')->willReturn($roleId);
         $this->dbAdapterMock->expects($this->once())->method('delete');
 
         $this->assertInstanceOf(

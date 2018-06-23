@@ -357,7 +357,7 @@ FAULT_MESSAGE;
 
         $errorsXml = '';
         foreach ($wrappedErrors as $error) {
-            $errorsXml .= $this->_generateErrorNodeXml($error);
+            $errorsXml .= $this->_generateErrorNodeXML($error);
         }
         if (!empty($errorsXml)) {
             $wrappedErrorsNode = self::NODE_DETAIL_WRAPPED_ERRORS;
