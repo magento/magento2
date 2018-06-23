@@ -68,6 +68,9 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf($expectedClass, $this->model->$callMethod());
     }
 
+    /**
+     * @return array
+     */
     public function createPluginsAndRelationsReadableDataProvider()
     {
         return [
@@ -98,6 +101,9 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf($expectedClass, $this->model->$callMethod());
     }
 
+    /**
+     * @return array
+     */
     public function createPluginsAndRelationsNotReadableDataProvider()
     {
         return [

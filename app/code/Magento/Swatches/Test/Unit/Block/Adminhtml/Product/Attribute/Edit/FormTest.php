@@ -20,6 +20,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $block->addValues($values);
     }
 
+    /**
+     * @return array
+     */
     public function dataForAddValues()
     {
         $additionalData = [

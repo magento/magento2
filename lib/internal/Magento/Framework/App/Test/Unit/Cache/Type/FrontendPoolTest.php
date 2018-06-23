@@ -89,6 +89,9 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($accessProxy, $this->_model->get($inputCacheType));
     }
 
+    /**
+     * @return array
+     */
     public function getDataProvider()
     {
         $configData1 = [

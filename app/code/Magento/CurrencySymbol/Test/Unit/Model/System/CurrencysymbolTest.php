@@ -245,6 +245,9 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedSymbol, $currencySymbol);
     }
 
+    /**
+     * @return array
+     */
     public function getCurrencySymbolDataProvider()
     {
         return [

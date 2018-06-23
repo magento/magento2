@@ -130,6 +130,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedStatus, $this->model->getStatusId());
     }
 
+    /**
+     * @return array
+     */
     public function getStatusIdDataProvider()
     {
         return [

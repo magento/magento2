@@ -231,6 +231,9 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedUserId, $this->tokenUserContext->getUserId());
     }
 
+    /**
+     * @return array
+     */
     public function getValidTokenData()
     {
         return [

@@ -849,6 +849,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->queryBool, $mapper->getRootQuery());
     }
 
+    /**
+     * @return array
+     */
     public function getQueryMatchProvider()
     {
         return [
@@ -876,6 +879,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getQueryFilterQueryReferenceProvider()
     {
         return [
@@ -923,6 +929,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getQueryBoolProvider()
     {
         return [

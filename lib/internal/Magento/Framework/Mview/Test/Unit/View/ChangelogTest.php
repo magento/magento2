@@ -262,6 +262,10 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())->method('getTableName')->will($this->returnArgument(0));
     }
 
+    /**
+     * @param $changelogTableName
+     * @param $result
+     */
     protected function mockIsTableExists($changelogTableName, $result)
     {
         $this->connectionMock->expects(

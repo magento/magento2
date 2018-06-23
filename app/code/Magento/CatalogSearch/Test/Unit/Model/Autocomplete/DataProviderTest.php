@@ -107,6 +107,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result[0]->toArray());
     }
 
+    /**
+     * @param array $data
+     */
     private function buildCollection(array $data)
     {
         $collectionData = [];

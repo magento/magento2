@@ -61,6 +61,9 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp($expect, $attributes);
     }
 
+    /**
+     * @return array
+     */
     public function getAttributesHtmlDataProvider()
     {
         return [

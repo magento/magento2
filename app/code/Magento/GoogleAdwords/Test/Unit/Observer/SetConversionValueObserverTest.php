@@ -62,6 +62,9 @@ class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForDisabled()
     {
         return [[false, false], [false, true], [true, false]];
@@ -94,6 +97,9 @@ class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->_model, $this->_model->execute($this->_eventObserverMock));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForOrdersIds()
     {
         return [[[]], ['']];

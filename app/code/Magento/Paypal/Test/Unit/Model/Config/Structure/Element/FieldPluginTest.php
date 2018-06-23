@@ -70,6 +70,9 @@ class FieldPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedConfigPath, $this->model->aroundGetConfigPath($this->subject, $callback));
     }
 
+    /**
+     * @return array
+     */
     public function aroundGetConfigPathDataProvider()
     {
         return [

@@ -197,6 +197,10 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($oauthVerifier, $verifier, 'Checking Oauth Verifier');
     }
 
+    /**
+     * @param $length
+     * @return bool|string
+     */
     private function _generateRandomString($length)
     {
         return substr(

@@ -389,6 +389,9 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
         $this->model->execute($observer);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderAfterAddressSaveDefaultGroup()
     {
         return [
@@ -578,6 +581,9 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
         $this->model->execute($observer);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderAfterAddressSaveNewGroup()
     {
         return [

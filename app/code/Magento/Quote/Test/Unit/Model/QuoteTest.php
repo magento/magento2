@@ -672,6 +672,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals((bool)$expected, (bool)$result);
     }
 
+    /**
+     * @return array
+     */
     public static function dataProviderGetAddress()
     {
         return [
@@ -713,6 +716,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals((bool)$expected, (bool)$result);
     }
 
+    /**
+     * @return array
+     */
     public static function dataProviderGetAddressByCustomer()
     {
         return [
@@ -759,6 +765,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, (bool)$result);
     }
 
+    /**
+     * @return array
+     */
     public static function dataProviderShippingAddress()
     {
         return [

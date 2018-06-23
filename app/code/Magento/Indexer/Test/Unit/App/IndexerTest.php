@@ -60,6 +60,9 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->entryPoint->launch()->getCode());
     }
 
+    /**
+     * @return array
+     */
     public function executeProvider(){
         return [
             'set1' => ['isExist' => true, 'expectsValue' => 1],

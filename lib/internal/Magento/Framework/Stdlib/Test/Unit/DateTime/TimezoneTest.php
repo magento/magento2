@@ -50,6 +50,9 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTimestamp, $date->getTimestamp());
     }
 
+    /**
+     * @return array
+     */
     public function dateDataProvider()
     {
         return [

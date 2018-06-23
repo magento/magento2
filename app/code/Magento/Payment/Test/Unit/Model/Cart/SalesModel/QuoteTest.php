@@ -84,6 +84,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->_model->getAllItems());
     }
 
+    /**
+     * @return array
+     */
     public function getAllItemsDataProvider()
     {
         return [
@@ -135,6 +138,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($getterMethod, $model->{$getterMethod}());
     }
 
+    /**
+     * @return array
+     */
     public function getterDataProvider()
     {
         return [

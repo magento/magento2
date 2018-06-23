@@ -76,6 +76,9 @@ class BundleDataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    /**
+     * @return object
+     */
     protected function getModel()
     {
         return $this->objectManager->getObject(BundleDataProvider::class, [

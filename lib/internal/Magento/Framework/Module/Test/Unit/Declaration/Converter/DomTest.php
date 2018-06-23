@@ -42,6 +42,9 @@ class DomTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function convertWithInvalidDomDataProvider()
     {
         return [

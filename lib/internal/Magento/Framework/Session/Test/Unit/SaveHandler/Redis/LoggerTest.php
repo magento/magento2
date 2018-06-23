@@ -70,6 +70,9 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger->log($message, $logLevel);
     }
 
+    /**
+     * @return array
+     */
     public function logDataProvider()
     {
         return [

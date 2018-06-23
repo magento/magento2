@@ -92,6 +92,9 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->model->getElementHtml();
     }
 
+    /**
+     * @return array
+     */
     public function providerGetElementHtmlDateFormat()
     {
         return [
@@ -100,6 +103,10 @@ class DateTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @param $exactly
+     * @return mixed
+     */
     protected function getFormMock($exactly)
     {
         $functions = ['getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix'];

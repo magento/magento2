@@ -26,6 +26,9 @@ class ReviewTest extends AbstractModifierTest
             ->getMockForAbstractClass();
     }
 
+    /**
+     * @return \Magento\Ui\DataProvider\Modifier\ModifierInterface|object
+     */
     protected function createModel()
     {
         return $this->objectManager->getObject(Review::class, [
