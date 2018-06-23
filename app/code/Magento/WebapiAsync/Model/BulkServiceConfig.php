@@ -75,6 +75,9 @@ class BulkServiceConfig implements \Magento\Webapi\Model\ConfigInterface
         return $this->services;
     }
 
+    /**
+     * @return array
+     */
     private function getBulkServicesConfig()
     {
         $bulkServices = [];
