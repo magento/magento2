@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Block\Order\Email\Items\Order;
 
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
 
 /**
@@ -93,7 +95,7 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
     /**
      * Get the html for item price
      *
-     * @param OrderItem $item
+     * @param OrderItem|InvoiceItem|CreditmemoItem  $item
      * @return string
      */
     public function getItemPrice($item)
