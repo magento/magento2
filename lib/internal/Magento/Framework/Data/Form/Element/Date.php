@@ -90,6 +90,7 @@ class Date extends AbstractElement
 
         try {
             $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
+            $this->getValue();
         } catch (\Exception $e) {
             $this->_value = '';
         }
