@@ -126,7 +126,6 @@ class PrintActionTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $pdfMock->expects($this->once())
             ->method('render');
-        $dateTimeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
 
         $invoiceRepository = $this->getMockBuilder(\Magento\Sales\Api\InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
@@ -143,10 +142,7 @@ class PrintActionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with(\Magento\Sales\Model\Order\Pdf\Invoice::class)
             ->willReturn($pdfMock);
-        $this->objectManagerMock->expects($this->at(2))
-            ->method('get')
-            ->with(\Magento\Framework\Stdlib\DateTime\DateTime::class)
-            ->willReturn($dateTimeMock);
+
 
         $this->assertNull($this->controller->execute());
     }
