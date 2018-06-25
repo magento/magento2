@@ -179,7 +179,7 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
             ->method('addElement')
             ->with('int', 'default', 'table', $definition, 'column')
             ->willReturn($statement);
-        $index = new Index('index', 'index', $column->getTable(), [$column], 'btree');
+        $index = new Index('index', 'index', $column->getTable(), [$column], 'btree', 'index');
         $this->elementFactoryMock->expects(self::once())
             ->method('create')
             ->willReturn($index);
