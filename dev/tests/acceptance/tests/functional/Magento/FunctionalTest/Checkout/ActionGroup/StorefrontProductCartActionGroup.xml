@@ -12,7 +12,7 @@
     <actionGroup name="StorefrontAddCategoryProductToCartActionGroup">
         <arguments>
             <argument name="product"/>
-            <argument name="productCount"/>
+            <argument name="productCount" defaultValue="1" type="string"/>
         </arguments>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
         <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart" />
@@ -65,7 +65,7 @@
     <actionGroup name="StorefrontCheckCartSimpleProductActionGroup">
         <arguments>
             <argument name="product"/>
-            <argument name="productQuantity"/>
+            <argument name="productQuantity" type="string" defaultValue="1"/>
         </arguments>
         <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName(product.name)}}" stepKey="assertProductName"/>
         <see userInput="${{product.price}}.00" selector="{{CheckoutCartProductSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>
@@ -75,10 +75,10 @@
     <!-- Check the Cart -->
     <actionGroup name="StorefrontCheckCartActionGroup">
         <arguments>
-            <argument name="subtotal"/>
-            <argument name="shipping"/>
-            <argument name="shippingMethod"/>
-            <argument name="total"/>
+            <argument name="subtotal" type="string"/>
+            <argument name="shipping" type="string"/>
+            <argument name="shippingMethod" type="string"/>
+            <argument name="total" type="string"/>
         </arguments>
         <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
         <waitForText userInput="${{total}}" selector="{{CheckoutCartSummarySection.total}}" time="30" stepKey="waitForTotal"/>
