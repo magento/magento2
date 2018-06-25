@@ -205,6 +205,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         return $model->setAttribute($this->attribute);
     }
 
+    /**
+     * @return array
+     */
     public function attributeValueDataProvider()
     {
         return [

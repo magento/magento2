@@ -826,7 +826,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
                 $image = $this->imageAsset->getPath();
             }
 
-            $imageProperties = $this->getimagesize($image);
+            $imageProperties = $this->getImageSize($image);
 
             return $imageProperties;
         } finally {

@@ -14,6 +14,8 @@
         </arguments>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductsGridPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminProductFiltersSection.FiltersButton}}" stepKey="openFiltersSectionOnProductsPage"/>
+        <conditionalClick selector="{{AdminProductFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminProductFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
         <see userInput="{{product.name}}" selector="{{AdminProductGridSection.productNameInNameColumn}}" stepKey="seeBundleProductInProductNameColumn"/>
     </actionGroup>
 </actionGroups>
