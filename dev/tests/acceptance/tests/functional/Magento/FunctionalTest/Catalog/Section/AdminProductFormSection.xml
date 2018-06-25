@@ -19,6 +19,10 @@
         <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
     </section>
+    <section name="ProductInWebsitesSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
+        <element name="website" type="checkbox" selector="//label[contains(text(), '{{var1}}')]/parent::div//input[@type='checkbox']" parameterized="true"/>
+    </section>
     <section name="ProductWYSIWYGSection">
         <element name="Switcher" type="button" selector="//select[@id='dropdown-switcher']"/>
         <element name="v4" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 4.3.6']" />
