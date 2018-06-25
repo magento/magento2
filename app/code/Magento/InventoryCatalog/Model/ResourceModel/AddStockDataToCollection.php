@@ -37,17 +37,17 @@ class AddStockDataToCollection
      */
     public function execute(Collection $collection, bool $isFilterInStock, int $stockId)
     {
-        $tableName = $this->stockIndexTableNameResolver->execute($stockId);
+        $stockIndexTableName = $this->stockIndexTableNameResolver->execute($stockId);
 
         $resource = $collection->getResource();
-        $collection->getSelect()->joinInner(
+        $collection->getSelect()->join(
             ['product' => $resource->getTable('catalog_product_entity')],
             sprintf('product.entity_id = %s.entity_id', Collection::MAIN_TABLE_ALIAS),
             []
         );
         $collection->getSelect()
             ->join(
-                ['stock_status_index' => $tableName],
+                ['stock_status_index' => $stockIndexTableName],
                 'product.sku = stock_status_index.' . IndexStructure::SKU,
                 [IndexStructure::IS_SALABLE]
             );
