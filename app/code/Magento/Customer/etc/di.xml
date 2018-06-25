@@ -75,6 +75,13 @@
             <argument name="addressConfig" xsi:type="object">Magento\Customer\Model\Address\Config\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Http\Context">
+        <arguments>
+            <argument name="default" xsi:type="array">
+                <item name="customer_group" xsi:type="const">Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Customer\Model\Config\Share">
         <arguments>
             <argument name="customerResource" xsi:type="object">Magento\Customer\Model\ResourceModel\Customer\Proxy</argument>

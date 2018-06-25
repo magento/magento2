@@ -55,6 +55,9 @@ class StockTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($contentFiltered, $this->_block->getFilteredContent($contentToFilter));
     }
 
+    /**
+     * @return array
+     */
     public function getFilteredContentDataProvider()
     {
         return [
