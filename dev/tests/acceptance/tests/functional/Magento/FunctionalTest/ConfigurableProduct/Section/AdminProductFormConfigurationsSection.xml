@@ -34,7 +34,7 @@
     <section name="AdminConfigurableProductAssignSourcesSlideOut">
         <element name="done" type="button" selector=".product_form_product_form_assign_sources_configurable_modal .action-primary" timeout="5"/>
         <element name="assignSources" type="button" selector="(//button/span[contains(text(), 'Assign Sources')])[2]" timeout="5"/>
-        <element name="quantityPerSource" type="input" selector="input[name='quantity_resolver[dynamicRows][dynamicRows][0][quantity_per_source]']"/>
+        <element name="quantityPerSource" type="input" selector="input[name='quantity_resolver[dynamicRows][dynamicRows][{{var1}}][quantity_per_source]']" parameterized="true"/>
     </section>
     <section name="StorefrontConfigurableProductPage">
         <element name="productAttributeDropDown" type="select" selector="select[id*='attribute']"/>
