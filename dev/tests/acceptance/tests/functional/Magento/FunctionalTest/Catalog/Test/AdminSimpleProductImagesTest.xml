@@ -244,6 +244,16 @@
         <!-- Save the product with all 3 images -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
 
+        <!-- Go to the product page and see the Base image -->
+        <amOnPage url="$$product.name$$.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="wait4"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBase"/>
+
+        <!-- Go to the category page and see the Small image -->
+        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryPage"/>
+        <waitForPageLoad stepKey="wait3"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="seeThumb"/>
+
         <!-- Go to the admin grid and see the Thumbnail image -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex2"/>
         <waitForPageLoad stepKey="wait2"/>
@@ -252,16 +262,6 @@
             <argument name="product" value="$$product$$"/>
         </actionGroup>
         <seeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/adobe-thumb')}}" stepKey="seeBaseInGrid"/>
-
-        <!-- Go to the category page and see the Small image -->
-        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryPage"/>
-        <waitForPageLoad stepKey="wait3"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="seeThumb"/>
-
-        <!-- Go to the product page and see the Base image -->
-        <amOnPage url="$$product.name$$.html" stepKey="goToProductPage"/>
-        <waitForPageLoad stepKey="wait4"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBase"/>
 
         <!-- Go to the product edit page again -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex3"/>
