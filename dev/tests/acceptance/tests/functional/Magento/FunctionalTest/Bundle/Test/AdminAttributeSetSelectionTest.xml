@@ -64,7 +64,6 @@
         <!--Editing Attribute set-->
         <click selector="{{AdminProductCatalog.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="clickAttributeSet2"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <pauseExecution stepKey="pause2"/>
 
         <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet2"/>
         <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{BundleProduct.defaultAttribute}}" stepKey="searchForAttrSet2"/>
