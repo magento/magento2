@@ -99,21 +99,20 @@
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
 
-    <!--Add grouped product option to order -->
-    <actionGroup name="addGroupedProductOptionToOrder">
+    <!--Add bundle product to order -->
+    <actionGroup name="addBundleProductToOrder">
         <arguments>
             <argument name="product"/>
-            <argument name="option"/>
             <argument name="quantity" type="string" defaultValue="1"/>
         </arguments>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
-        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterGrouped"/>
-        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchGrouped"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterBundle"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchBundle"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
-        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectGroupedProduct"/>
-        <waitForElementVisible selector="{{AdminOrderFormGroupedProductSection.optionQty(option.sku)}}" stepKey="waitForGroupedOptionLoad"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectBundleProduct"/>
+        <waitForElementVisible selector="{{AdminOrderFormBundleProductSection.quantity}}" stepKey="waitForBundleOptionLoad"/>
         <wait time="2" stepKey="waitForOptionsToLoad"/>
-        <fillField selector="{{AdminOrderFormGroupedProductSection.optionQty(option.sku)}}" userInput="{{quantity}}" stepKey="fillOptionQuantity"/>
+        <fillField selector="{{AdminOrderFormBundleProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
