@@ -100,7 +100,7 @@ class SuggestQtyPlugin
             $minQty = max($stockItemConfiguration->getMinSaleQty(), $qtyIncrements);
             $divisibleMin = ceil($minQty / $qtyIncrements) * $qtyIncrements;
             $maxQty = min(
-                $this->getProductSalableQty->execute($productSku, $stockId) - $stockItemConfiguration->getMinQty(),
+                $this->getProductSalableQty->execute($productSku, $stockId),
                 $stockItemConfiguration->getMaxSaleQty()
             );
             $divisibleMax = floor($maxQty / $qtyIncrements) * $qtyIncrements;

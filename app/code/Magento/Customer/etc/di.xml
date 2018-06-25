@@ -433,4 +433,7 @@
             </argument>
         </arguments>
     </type>
+    <preference
+            for="Magento\Customer\Api\AccountDelegationInterface"
+            type="Magento\Customer\Model\Delegation\AccountDelegation" />
 </config>
