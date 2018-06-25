@@ -37,8 +37,6 @@
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <fillField selector="{{StorefrontMinicartSection.itemQuantity(product.name)}}" userInput="{{quantity}}" stepKey="setProductQtyToFiftyInMiniCart"/>
         <click selector="{{StorefrontMinicartSection.itemQuantityUpdate(product.name)}}" stepKey="updateQtyInMiniCart"/>
-        <waitForPageLoad stepKey="waitForQuantityUpdate"/>
-        <seeInField userInput="{{quantity}}" selector="{{StorefrontMinicartSection.itemQuantity(product.name)}}" stepKey="seeIsProductQtyUpdated"/>
     </actionGroup>
 
     <!-- Add Product to Cart from the product page and check message and product count in Minicart -->
