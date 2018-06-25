@@ -85,4 +85,19 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertCount($expectedResult, $sendCollection->getItems());
     }
+
+    /**
+     * @inheritdoc
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
+     */
+    protected function tearDown()
+    {
+        /** @var \Magento\Config\Model\Config $defConfig */
+        $defConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Config\Model\Config::class);
+        $defConfig->setScope(\Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        $defConfig->setDataByPath('sales_email/general/async_sending', 0);
+        $defConfig->save();
+    }
 }
