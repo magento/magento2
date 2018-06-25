@@ -165,12 +165,11 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * )
      *
      * @param int $parentId
-     * @param bool $required
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getChildrenIds($parentId, $required = true)
+    public function getChildrenIds($parentId)
     {
         return $this->productLinks->getChildrenIds(
             $parentId,
