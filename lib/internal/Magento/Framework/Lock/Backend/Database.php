@@ -28,6 +28,13 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     /** @var string|false Holds current lock name if set, otherwise false */
     private $currentLock = false;
 
+    /**
+     * Database constructor.
+     *
+     * @param ResourceConnection $resource
+     * @param DeploymentConfig $deploymentConfig
+     * @param string|null $prefix
+     */
     public function __construct(
         ResourceConnection $resource,
         DeploymentConfig $deploymentConfig,
