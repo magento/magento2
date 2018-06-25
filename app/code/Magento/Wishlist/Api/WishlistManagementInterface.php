@@ -9,14 +9,14 @@ interface WishlistManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return \Magento\Wishlist\Api\Data\WishlistInterface
      */
-    public function getWishlistForCustomer($customerId);
+    public function getWishlistByCustomerId($customerId);
 
     /**
      * @param int $customerId
-     * @param int $productId
+     * @param string $sku
      * @throws \Magento\Framework\Exception\StateException
      * @return int
      */
-    public function addWishlistForCustomer($customerId, $productId);
+    public function addWishlistItemByCustomerId($customerId, $sku);
 
 }

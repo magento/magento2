@@ -36,7 +36,7 @@ class WishlistManagement implements WishlistManagementInterface
     /**
      * @inheritdoc
      */
-    public function getWishlistForCustomer($customerId)
+    public function getWishlistByCustomerId($customerId)
     {
         /** @var \Magento\Wishlist\Model\ResourceModel\Wishlist $resourceModel */
         $wishlist = $this->wishlistFactory->create()->loadByCustomerId($customerId, false);
@@ -50,19 +50,22 @@ class WishlistManagement implements WishlistManagementInterface
     /**
      * @inheritdoc
      */
-    public function addWishlistForCustomer($customerId, $productId)
+    public function addWishlistItemByCustomerId($customerId, $sku)
     {
         /** @var Wishlist $wishlist */
         $wishlist = $this->wishlistFactory->create()->loadByCustomerId($customerId, true);
 
-        $product = $this->productRepository->getById($productId);
+        try {
+            $product = $this->productRepository->get($sku);
+        } catch (NoSuchEntityException $e) {
+            throw new StateException(__('No product with sku:' . $sku));
+        }
 
         try {
             $item = $wishlist->addNewItem($product);
             return $item->getId();
-
         } catch (LocalizedException $exception) {
-            throw new StateException(__('Product with id: ' . $productId . ' already attached to wishlist'));
+            throw new StateException(__('Product with id: ' . $product->getId() . ' already attached to wishlist'));
         }
 
     }
