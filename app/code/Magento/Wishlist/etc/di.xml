@@ -9,6 +9,7 @@
     <preference for="Magento\Wishlist\Model\AuthenticationStateInterface" type="Magento\Wishlist\Model\AuthenticationState" />
     <preference for="Magento\Wishlist\Controller\WishlistProviderInterface" type="Magento\Wishlist\Controller\WishlistProvider" />
     <preference for="Magento\Wishlist\Api\WishlistRepositoryInterface" type="Magento\Wishlist\Model\WishlistRepository" />
+    <preference for="Magento\Wishlist\Api\Data\WishlistInterface" type="Magento\Wishlist\Model\Wishlist" />
 
     <type name="Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid">
         <arguments>
