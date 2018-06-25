@@ -34,7 +34,7 @@ class GetDefaultSourceTest extends WebapiAbstract
         $defaultSourceCode = $this->defaultSourceProvider->getCode();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/inventory/source/' . $defaultSourceCode,
+                'resourcePath' => '/V1/inventory/sources/' . $defaultSourceCode,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [

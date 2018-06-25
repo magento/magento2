@@ -99,6 +99,26 @@
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
 
+    <!--Add downloadable product to order -->
+    <actionGroup name="addDownloadableProductToOrder">
+        <arguments>
+            <argument name="product"/>
+            <argument name="link"/>
+            <argument name="quantity" defaultValue="1" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterDownloadable"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchDownloadable"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectDownloadableProduct"/>
+        <waitForElementVisible selector="{{AdminOrderFormDownloadableProductSection.optionSelect(link.title)}}" stepKey="waitForLinkLoad"/>
+        <click selector="{{AdminOrderFormDownloadableProductSection.optionSelect(link.title)}}" stepKey="selectLink"/>
+        <fillField selector="{{AdminOrderFormDownloadableProductSection.quantity}}" userInput="{{quantity}}" stepKey="setQuantity"/>
+        <click selector="{{AdminOrderFormDownloadableProductSection.ok}}" stepKey="confirmConfiguration"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+    </actionGroup>
+
     <!--Fill customer billing address-->
     <actionGroup name="fillOrderCustomerInformation">
         <arguments>

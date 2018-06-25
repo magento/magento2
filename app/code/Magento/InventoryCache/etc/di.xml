@@ -14,8 +14,7 @@
     </type>
     <type name="Magento\InventoryCache\Model\ResourceModel\GetProductIdsByStockIds">
         <arguments>
-            <argument name="productSkuColumn" xsi:type="const">Magento\Catalog\Api\Data\ProductInterface::SKU</argument>
-            <argument name="productInterfaceClassName" xsi:type="string">Magento\Catalog\Api\Data\ProductInterface</argument>
+            <argument name="productTableName" xsi:type="string">catalog_product_entity</argument>
         </arguments>
     </type>
     <type name="Magento\InventoryCache\Model\FlushCacheByProductIds">

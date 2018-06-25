@@ -24,4 +24,12 @@
             </argument>
         </arguments>
     </type>
+    <!-- Return Processor -->
+    <type name="Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsChain">
+        <arguments>
+            <argument name="sourceDeductedItemsSelector" xsi:type="array">
+                <item name="source_deducted_shipping_items" xsi:type="object">Magento\InventoryShipping\Model\ReturnProcessor\GetShippedItemsPerSourceByPriority</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
