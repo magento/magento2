@@ -14,9 +14,9 @@
         <field key="linked_product_sku">string</field>
         <field key="linked_product_type">string</field>
         <field key="position">integer</field>
-        <array key="extension_attributes">
-            <value>product_link_extension_attribute</value>
-        </array>
+        <object key="extension_attributes" dataType="product_link_extension_attribute">
+            <field key="qty">integer</field>
+        </object>
     </operation>
     <operation name="UpdateProductLink" dataType="product_link" type="update">
         <field key="sku">string</field>
@@ -24,8 +24,8 @@
         <field key="linked_product_sku">string</field>
         <field key="linked_product_type">string</field>
         <field key="position">integer</field>
-        <array key="extension_attributes">
-            <value>product_link_extension_attribute</value>
-        </array>
+        <object key="extension_attributes" dataType="product_link_extension_attribute">
+            <field key="qty">integer</field>
+        </object>
     </operation>
 </operations>

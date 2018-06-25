@@ -94,7 +94,7 @@ class SelectBuilder
                 []
             )->joinInner(
                 ['parent_link' => $this->resourceConnection->getTableName('catalog_product_super_link')],
-                'parent_link.product_id = product_entity.' . $linkField,
+                'parent_link.product_id = product_entity.entity_id',
                 []
             )->joinInner(
                 ['parent_product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],

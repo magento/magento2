@@ -11,7 +11,7 @@
     <test name="StorefrontConfigurableProductGridViewTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="Storefront"/>
+            <stories value="View configurable product in a category in storefront"/>
             <title value="customer should see the configurable product in the category grid"/>
             <description value="customer should see the configurable product in the category grid"/>
             <severity value="CRITICAL"/>
@@ -47,7 +47,7 @@
     <test name="StorefrontConfigurableProductListViewTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="Storefront"/>
+            <stories value="View configurable product in a category in storefront"/>
             <title value="customer should see the configurable product in the category list"/>
             <description value="customer should see the configurable product in the category list"/>
             <severity value="CRITICAL"/>
@@ -85,7 +85,7 @@
     <test name="StorefrontConfigurableProductAddToCartTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="Storefront"/>
+            <stories value="View configurable product in a category in storefront"/>
             <title value="customer should be taken to the product details page when clicking add to cart"/>
             <description value="customer should be taken to the product details page when clicking add to cart"/>
             <severity value="CRITICAL"/>

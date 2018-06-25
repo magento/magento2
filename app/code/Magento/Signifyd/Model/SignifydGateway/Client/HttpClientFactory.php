@@ -73,12 +73,13 @@ class HttpClientFactory
      * @param string $url
      * @param string $method
      * @param array $params
+     * @param int|null $storeId
      * @return ZendClient
      */
-    public function create($url, $method, array $params = [])
+    public function create($url, $method, array $params = [], $storeId = null): ZendClient
     {
-        $apiKey = $this->getApiKey();
-        $apiUrl = $this->buildFullApiUrl($url);
+        $apiKey = $this->getApiKey($storeId);
+        $apiUrl = $this->buildFullApiUrl($url, $storeId);
 
         $client = $this->createNewClient();
         $client->setHeaders(
@@ -107,22 +108,24 @@ class HttpClientFactory
      * Signifyd API key for merchant account.
      *
      * @see https://www.signifyd.com/docs/api/#/introduction/authentication
+     * @param int|null $storeId
      * @return string
      */
-    private function getApiKey()
+    private function getApiKey($storeId): string
     {
-        return $this->config->getApiKey();
+        return $this->config->getApiKey($storeId);
     }
 
     /**
      * Full URL for Singifyd API based on relative URL.
      *
      * @param string $url
+     * @param int|null $storeId
      * @return string
      */
-    private function buildFullApiUrl($url)
+    private function buildFullApiUrl($url, $storeId): string
     {
-        $baseApiUrl = $this->getBaseApiUrl();
+        $baseApiUrl = $this->getBaseApiUrl($storeId);
         $fullUrl = $baseApiUrl . self::$urlSeparator . ltrim($url, self::$urlSeparator);
 
         return $fullUrl;
@@ -131,11 +134,12 @@ class HttpClientFactory
     /**
      * Base Sigifyd API URL without trailing slash.
      *
+     * @param int|null $storeId
      * @return string
      */
-    private function getBaseApiUrl()
+    private function getBaseApiUrl($storeId): string
     {
-        $baseApiUrl = $this->config->getApiUrl();
+        $baseApiUrl = $this->config->getApiUrl($storeId);
 
         return rtrim($baseApiUrl, self::$urlSeparator);
     }
