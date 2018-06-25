@@ -19,7 +19,7 @@
 
     <actionGroup name="adminDataGridSelectCustomPerPage">
         <arguments>
-            <argument name="perPage"/>
+            <argument name="perPage" type="string" defaultValue="1"/>
         </arguments>
         <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown"/>
         <click selector="{{AdminDataGridPaginationSection.perPageOption('Custom')}}" stepKey="selectCustomPerPage"/>
