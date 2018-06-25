@@ -146,4 +146,9 @@
         </arguments>
     </type>
     <preference for="Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface" type="Magento\InventorySales\Model\StockByWebsiteIdResolver"/>
+    <type name="Magento\Store\Model\ResourceModel\Website">
+        <plugin name="assign_website_to_default_stock" type="Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website\AssignWebsiteToDefaultStockPlugin"/>
+        <plugin name="delete_website_to_stock_link" type="Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website\DeleteWebsiteToStockLinkPlugin"/>
+        <plugin name="update_sales_channel_website_code" type="Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website\UpdateSalesChannelWebsiteCodePlugin"/>
+    </type>
 </config>

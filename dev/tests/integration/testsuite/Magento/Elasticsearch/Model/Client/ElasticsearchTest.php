@@ -100,7 +100,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
      */
     public function testSearchConfigurableProductBySimpleProductName()
     {
-        $this->assertProductWithSkuFound('configurable', $this->search('Configurable OptionOption'));
+        $this->assertProductWithSkuFound('configurable', $this->search('Configurable Option'));
     }
 
     /**
