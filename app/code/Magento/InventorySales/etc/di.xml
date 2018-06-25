@@ -69,7 +69,7 @@
             </argument>
         </arguments>
     </type>
-    <!-- IsProductSalableForRequestedQtyCondition -->git
+    <!-- IsProductSalableForRequestedQtyCondition -->
     <preference for="Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface" type="IsProductSalableForRequestedQtyConditionChainOnAddToCart"/>
     <!-- IsProductSalableForRequestedQtyConditionOnAddToCart -->
     <virtualType name="IsProductSalableForRequestedQtyConditionChainOnAddToCart" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain">
