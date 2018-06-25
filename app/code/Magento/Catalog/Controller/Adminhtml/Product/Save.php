@@ -216,7 +216,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * Do copying data to stores
      *
-     * If the 'copy_from' field is not specified in the input data, the store fallback mechanism will automatically take the admin store's default value.
+     * If the 'copy_from' field is not specified in the input data,
+     * the store fallback mechanism will automatically take the admin store's default value.
      *
      * @param array $data
      * @param int $productId
