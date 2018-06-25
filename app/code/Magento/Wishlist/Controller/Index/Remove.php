@@ -5,13 +5,13 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\App\Action;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\Product\AttributeValueProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -29,26 +29,26 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
     protected $formKeyValidator;
 
     /**
-     * @var ProductCollectionFactory
+     * @var AttributeValueProvider
      */
-    private $productCollectionFactory;
+    private $attributeValueProvider;
 
     /**
      * @param Action\Context $context
      * @param WishlistProviderInterface $wishlistProvider
      * @param Validator $formKeyValidator
-     * @param ProductCollectionFactory|null $productCollectionFactory
+     * @param AttributeValueProvider|null $attributeValueProvider
      */
     public function __construct(
         Action\Context $context,
         WishlistProviderInterface $wishlistProvider,
         Validator $formKeyValidator,
-        ProductCollectionFactory $productCollectionFactory = null
+        AttributeValueProvider $attributeValueProvider = null
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->formKeyValidator = $formKeyValidator;
-        $this->productCollectionFactory = $productCollectionFactory
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ProductCollectionFactory::class);
+        $this->attributeValueProvider = $attributeValueProvider
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeValueProvider::class);
         parent::__construct($context);
     }
 
@@ -79,15 +79,12 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
         try {
             $item->delete();
             $wishlist->save();
-            $product = $this->productCollectionFactory
-                ->create()
-                ->addIdFilter($item->getProductId())
-                ->addAttributeToSelect('name')
-                ->getFirstItem();
+            $productName = $this->attributeValueProvider
+                ->getRawAttributeValue($item->getProductId(), 'name');
             $this->messageManager->addComplexSuccessMessage(
                 'removeWishlistItemSuccessMessage',
                 [
-                    'product_name' => $product->getName()
+                    'product_name' => $productName,
                 ]
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
