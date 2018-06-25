@@ -38,4 +38,21 @@
         <see userInput="{{rule.store_labels[1][store_label]}}" selector="{{CheckoutCartSummarySection.discountLabel}}" stepKey="assertDiscountLabel" />
         <see userInput="-${{discount}}" selector="{{CheckoutCartSummarySection.discountTotal}}" stepKey="assertDiscountTotal" />
     </actionGroup>
+
+    <actionGroup name="VerifyDiscountAmount">
+        <arguments>
+            <argument name="productUrl" type="string"/>
+            <argument name="quantity" type="string"/>
+            <argument name="expectedDiscount" type="string"/>
+        </arguments>
+        <amOnPage url="{{productUrl}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <waitForPageLoad stepKey="waitForAddToCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
+        <waitForPageLoad stepKey="waitForCartPage"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="{{expectedDiscount}}" stepKey="seeDiscountTotal"/>
+    </actionGroup>
 </actionGroups>

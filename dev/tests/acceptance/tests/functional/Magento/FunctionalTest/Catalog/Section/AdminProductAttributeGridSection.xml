@@ -11,5 +11,9 @@
     <section name="AdminProductAttributeGridSection">
         <element name="AttributeCode" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
         <element name="createNewAttributeBtn" type="button" selector="button[data-index='add_new_attribute_button']"/>
+        <element name="GridFilterFrontEndLabel" type="input" selector="#attributeGrid_filter_frontend_label"/>
+        <element name="Search" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
+        <element name="ResetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
+        <element name="FirstRow" type="button" selector="//*[@id='attributeGrid_table']/tbody/tr[1]"/>
     </section>
 </sections>

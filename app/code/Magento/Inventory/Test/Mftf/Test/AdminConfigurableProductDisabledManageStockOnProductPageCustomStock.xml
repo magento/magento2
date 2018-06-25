@@ -191,7 +191,7 @@
         <click selector="{{AdminProductSourcesSection.advancedInventory}}" stepKey="clickOnAdvancedInventoryForWhiteConfigurableVariation"/>
         <uncheckOption selector="{{AdminAdvancedInventorySection.manageStockUseDefault}}" stepKey="uncheckManageStockSystemValueForWhiteConfigurableVariation"/>
         <selectOption selector="{{AdminAdvancedInventorySection.manageStock}}" userInput="No" stepKey="disableManageStockForWhiteConfigurableVariation"/>
-        <click selector="{{AdminAdvancedInventoryControls.done}}" stepKey="doneWithDisableManageStockForWhiteConfigurableVariation"/>
+        <click selector="{{AdminAdvancedInventoryControlsSection.done}}" stepKey="doneWithDisableManageStockForWhiteConfigurableVariation"/>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseDisableMangeStockForWhiteConfigurableVariation"/>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateBackToAdminProductGridToDisableManageStockForRedConfigurableVariation"/>
@@ -203,7 +203,7 @@
         <click selector="{{AdminProductSourcesSection.advancedInventory}}" stepKey="clickOnAdvancedInventoryForRedConfigurableVariation"/>
         <uncheckOption selector="{{AdminAdvancedInventorySection.manageStockUseDefault}}" stepKey="uncheckManageStockSystemValueForRedConfigurableVariation"/>
         <selectOption selector="{{AdminAdvancedInventorySection.manageStock}}" userInput="No" stepKey="disableManageStockForRedConfigurableVariation"/>
-        <click selector="{{AdminAdvancedInventoryControls.done}}" stepKey="doneWithDisableManageStockForRedConfigurableVariation"/>
+        <click selector="{{AdminAdvancedInventoryControlsSection.done}}" stepKey="doneWithDisableManageStockForRedConfigurableVariation"/>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseDisableMangeStockForRedConfigurableVariation"/>
 
         <comment userInput="Check, configurable product back to category page and has 'In Stock' status on product view page." stepKey="checkConfigurableProductBackOnStorefront"/>

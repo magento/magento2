@@ -54,7 +54,8 @@
     <!-- TODO: Pagination controls -->
     <section name="AdminGridHeaders">
         <element name="title" type="text" selector=".page-title-wrapper h1"/>
-        <element name="headerByName" type="text" selector="//span[@class='data-grid-cell-content' and contains(text(), '{{var1}}')]/parent::*" parameterized="true"/>
+        <element name="headerByName" type="text" selector="//div[@data-role='grid-wrapper']//span[@class='data-grid-cell-content' and contains(text(), '{{var1}}')]/parent::*" parameterized="true"/>
+        <element name="columnsNames" type="text" selector="[data-role='grid-wrapper'] .data-grid-th > span"/>
     </section>
     <section name="AdminGridRow">
         <element name="rowOne" type="text" selector="tr[data-repeat-index='0']"/>
