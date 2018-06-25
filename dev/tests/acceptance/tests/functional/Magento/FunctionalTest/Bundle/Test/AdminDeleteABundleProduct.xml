@@ -77,7 +77,7 @@
         <waitForPageLoad stepKey="loading3"/>
 
         <!--Locating delete message-->
-        <seeElement selector="{{AdminCategoryMessagesSection.deleteMessage}}" stepKey="deleteMessage"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>
 
         <!--Testing deletion of product-->
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>

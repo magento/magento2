@@ -10,6 +10,5 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCategoryMessagesSection">
         <element name="SuccessMessage" type="text" selector=".message-success"/>
-        <element name="deleteMessage" type="text" selector="//div[contains(text(), 'record(s) have been deleted.')]"/>
     </section>
 </sections>
