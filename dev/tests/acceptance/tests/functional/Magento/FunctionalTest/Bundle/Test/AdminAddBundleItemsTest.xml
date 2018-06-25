@@ -97,7 +97,6 @@
         <click selector="{{AdminProductFormBundleSection.addOptions}}" stepKey="clickOnBundleProductToEdit"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItemsToEdit"/>
         <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
-        <pauseExecution stepKey="pause"/>
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('1')}}" stepKey="waitForBundleOptionsToAppear"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('1')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillNewestOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('1')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectNewInputType"/>
