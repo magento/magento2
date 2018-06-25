@@ -18,7 +18,8 @@ class SourceItemsDeleteTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source-item';
+    const RESOURCE_PATH = '/V1/inventory/source-items';
+    const RESOURCE_DELETE_PATH = '/V1/inventory/source-items-delete';
     const SERVICE_NAME = 'inventoryApiSourceItemsDeleteV1';
     /**#@-*/
 
@@ -56,9 +57,9 @@ class SourceItemsDeleteTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '?'
+                'resourcePath' => self::RESOURCE_DELETE_PATH . '?'
                     . http_build_query(['sourceItems' => $sourceItemsForDelete]),
-                'httpMethod' => Request::HTTP_METHOD_DELETE,
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

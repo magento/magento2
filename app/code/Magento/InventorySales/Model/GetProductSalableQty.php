@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model;
 
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
@@ -19,6 +20,11 @@ use Magento\Framework\Exception\InputException;
  */
 class GetProductSalableQty implements GetProductSalableQtyInterface
 {
+    /**
+     * @var GetStockItemConfigurationInterface
+     */
+    private $getStockItemConfiguration;
+
     /**
      * @var GetStockItemDataInterface
      */
@@ -46,11 +52,13 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      */
     public function __construct(
+        GetStockItemConfigurationInterface $getStockItemConfig,
         GetStockItemDataInterface $getStockItemData,
         GetReservationsQuantityInterface $getReservationsQuantity,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         GetProductTypesBySkusInterface $getProductTypesBySkus
     ) {
+        $this->getStockItemConfiguration = $getStockItemConfig;
         $this->getStockItemData = $getStockItemData;
         $this->getReservationsQuantity = $getReservationsQuantity;
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
@@ -64,12 +72,20 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
     {
         $this->validateProductType($sku);
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-
         if (null === $stockItemData || (bool)$stockItemData[GetStockItemDataInterface::IS_SALABLE] === false) {
             return 0;
         }
-        $productQtyInStock = $stockItemData[GetStockItemDataInterface::QUANTITY] +
-            $this->getReservationsQuantity->execute($sku, $stockId);
+
+        $minQty = 0;
+        $stockItemConfig = $this->getStockItemConfiguration->execute($sku, $stockId);
+        if (null !== $stockItemConfig) {
+            $minQty = $stockItemConfig->getMinQty();
+        }
+
+        $productQtyInStock = $stockItemData[GetStockItemDataInterface::QUANTITY]
+            + $this->getReservationsQuantity->execute($sku, $stockId)
+            - $minQty;
+
         return $productQtyInStock;
     }
 

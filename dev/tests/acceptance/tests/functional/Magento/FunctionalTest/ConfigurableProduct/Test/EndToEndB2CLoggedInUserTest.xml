@@ -171,8 +171,7 @@
         <actionGroup ref="StorefrontCheckCartConfigurableProductActionGroup" stepKey="cartAssertCartConfigProduct" after="cartOpenCart2">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct2$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productQuantity" value="CONST.one"/>
+            <argument name="productQuantity" value="1"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{CheckoutCartProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="cartCartGrabConfigProduct2ImageSrc" after="cartAssertCartConfigProduct"/>

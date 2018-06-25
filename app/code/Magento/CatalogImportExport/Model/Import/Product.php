@@ -15,6 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
@@ -725,6 +726,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $mediaProcessor;
 
     /**
+     * @var DateTimeFactory
+     */
+    private $dateTimeFactory;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -767,7 +773,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param ImageTypeProcessor $imageTypeProcessor
      * @param MediaGalleryProcessor $mediaProcessor
      * @param StockItemImporterInterface|null $stockItemImporter
-     *
+     * @param DateTimeFactory $dateTimeFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -812,7 +818,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         CatalogConfig $catalogConfig = null,
         ImageTypeProcessor $imageTypeProcessor = null,
         MediaGalleryProcessor $mediaProcessor = null,
-        StockItemImporterInterface $stockItemImporter = null
+        StockItemImporterInterface $stockItemImporter = null,
+        DateTimeFactory $dateTimeFactory = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -858,16 +865,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $string,
             $errorAggregator
         );
-        $this->_optionEntity = isset(
-            $data['option_entity']
-        ) ? $data['option_entity'] : $optionFactory->create(
-            ['data' => ['product_entity' => $this]]
-        );
+        $this->_optionEntity = $data['option_entity'] ??
+            $optionFactory->create(['data' => ['product_entity' => $this]]);
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus()
             ->initImagesArrayKeys();
         $this->validator->init($this);
+        $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
     }
 
     /**
@@ -2151,40 +2156,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $row = [];
                 $sku = $rowData[self::COL_SKU];
                 if ($this->skuProcessor->getNewSku($sku) !== null) {
-                    $row['product_id'] = $this->skuProcessor->getNewSku($sku)['entity_id'];
+                    $row = $this->formatStockDataForRow($rowData);
                     $productIdsToReindex[] = $row['product_id'];
-
-                    $row['website_id'] = $this->stockConfiguration->getDefaultScopeId();
-                    $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getStockId();
-
-                    $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
-                    $existStockData = $stockItemDo->getData();
-
-                    $row = array_merge(
-                        $this->defaultStockData,
-                        array_intersect_key($existStockData, $this->defaultStockData),
-                        array_intersect_key($rowData, $this->defaultStockData),
-                        $row
-                    );
-                    $row['sku'] = $sku;
-
-                    if ($this->stockConfiguration->isQty(
-                        $this->skuProcessor->getNewSku($sku)['type_id']
-                    )
-                    ) {
-                        $stockItemDo->setData($row);
-                        $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
-                        if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
-                            $row['low_stock_date'] = gmdate(
-                                'Y-m-d H:i:s',
-                                (new \DateTime())->getTimestamp()
-                            );
-                        }
-                        $row['stock_status_changed_auto'] =
-                            (int)!$this->stockStateProvider->verifyStock($stockItemDo);
-                    } else {
-                        $row['qty'] = 0;
-                    }
                 }
 
                 if (!isset($stockData[$sku])) {
@@ -2874,5 +2847,45 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function getExistingSku($sku)
     {
         return $this->_oldSku[strtolower($sku)];
+    }
+
+    /**
+     * Format row data to DB compatible values.
+     *
+     * @param array $rowData
+     * @return array
+     */
+    private function formatStockDataForRow(array $rowData): array
+    {
+        $sku = $rowData[self::COL_SKU];
+        $row['product_id'] = $this->skuProcessor->getNewSku($sku)['entity_id'];
+        $row['website_id'] = $this->stockConfiguration->getDefaultScopeId();
+        $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getStockId();
+
+        $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
+        $existStockData = $stockItemDo->getData();
+
+        $row = array_merge(
+            $this->defaultStockData,
+            array_intersect_key($existStockData, $this->defaultStockData),
+            array_intersect_key($rowData, $this->defaultStockData),
+            $row
+        );
+
+        if ($this->stockConfiguration->isQty($this->skuProcessor->getNewSku($sku)['type_id'])) {
+            $stockItemDo->setData($row);
+            $row['is_in_stock'] = isset($row['is_in_stock']) && $stockItemDo->getBackorders()
+                ? $row['is_in_stock']
+                : $this->stockStateProvider->verifyStock($stockItemDo);
+            if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
+                $date = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
+                $row['low_stock_date'] = $date->format(DateTime::DATETIME_PHP_FORMAT);
+            }
+            $row['stock_status_changed_auto'] = (int)!$this->stockStateProvider->verifyStock($stockItemDo);
+        } else {
+            $row['qty'] = 0;
+        }
+
+        return $row;
     }
 }
