@@ -362,6 +362,32 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+
+    html,
+    body {
+        height: 100%; // Stretch screen area for sticky footer
+        display: inline-grid;
+    }
+
+    header,
+    main,
+    footer {
+        flex-shrink: 0;
+    }
+
+    .page-wrapper {
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-direction(column);
+        align-items: stretch;
+        -webkit-align-items: stretch;
+        min-height: 100%; // Stretch content area for sticky footer
+        .page-main {
+            flex-grow: 1;
+            -webkit-flex-grow: 1;
+        }
+    }
+
+
     .customer-name,
     .customer-welcome + .authorization-link {
         display: none;
@@ -418,12 +444,6 @@
             }
         }
     }
-    .page-footer,
-    .copyright {
-        bottom: 0;
-        position: absolute;
-        width: 100%;
-    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
@@ -441,6 +461,7 @@
     html,
     body {
         height: 100%; // Stretch screen area for sticky footer
+        display: inline-grid;
     }
 
     body {
