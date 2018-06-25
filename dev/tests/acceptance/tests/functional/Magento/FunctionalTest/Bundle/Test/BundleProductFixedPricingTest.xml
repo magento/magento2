@@ -85,7 +85,6 @@
         <!--Storefront-->
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
-        <pauseExecution stepKey="pause"/>
         <seeElement selector="{{StorefrontBundledSection.fixedPricing(BundleProduct.fixedPrice)}}" stepKey="checkingForFixedPrice"/>
     </test>
 </tests>
