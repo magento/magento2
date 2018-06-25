@@ -125,7 +125,6 @@ class Price implements DimensionalIndexerInterface
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
         ]);
-        $this->fillFinalPrice($dimensions, $entityIds, $temporaryPriceTable);
         $this->applyPriceModifiers($temporaryPriceTable);
         $this->applyDownloadableLink($temporaryPriceTable, $dimensions);
     }
@@ -178,14 +177,12 @@ class Price implements DimensionalIndexerInterface
 
     /**
      * Put data into catalog product price indexer Downloadable links price  temp table
-     *
-     * @param string $temporaryOptionsTableName
+     * @param string $temporaryDownloadableTableName
      * @param array $dimensions
-     *
      * @return void
      * @throws \Exception
      */
-    private function fillTemporaryTable(string $temporaryOptionsTableName, array $dimensions)
+    private function fillTemporaryTable(string $temporaryDownloadableTableName, array $dimensions)
     {
         $dlType = $this->getAttribute('links_purchased_separately');
         $ifPrice = $this->getConnection()->getIfNullSql('dlpw.price_id', 'dlpd.price');
@@ -193,7 +190,7 @@ class Price implements DimensionalIndexerInterface
         $linkField = $metadata->getLinkField();
 
         $select = $this->getConnection()->select()->from(
-            ['i' => $this->getMainTable($dimensions)], // $this->_getDefaultFinalPriceTable()
+            ['i' => $this->tableMaintainer->getMainTmpTable($dimensions)],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
             ['dl' => $dlType->getBackend()->getTable()],
@@ -225,32 +222,35 @@ class Price implements DimensionalIndexerInterface
 
         foreach ($dimensions as $dimension) {
             if ($dimension->getName() === WebsiteDimensionProvider::DIMENSION_NAME) {
-                $select->where('website_id = ?', $dimension->getValue());
+                $select->where('`i`.website_id = ?', $dimension->getValue());
             }
             if ($dimension->getName() === CustomerGroupDimensionProvider::DIMENSION_NAME) {
-                $select->where('customer_group_id = ?', $dimension->getValue());
+                $select->where('`i`.customer_group_id = ?', $dimension->getValue());
             }
         }
 
-        $query = $select->insertFromSelect($temporaryOptionsTableName);
+        $query = $select->insertFromSelect($temporaryDownloadableTableName);
         $this->getConnection()->query($query);
     }
 
     /**
      * Update data in the catalog product price indexer temp table
-     *
      * @param string $temporaryPriceTableName
-     * @param string $temporaryOptionsTableName
-     *
+     * @param string $temporaryDownloadableTableName
      * @return void
      */
-    private function updateTemporaryDownloadableTable(string $temporaryPriceTableName, string $temporaryOptionsTableName)
-    {
-        $ifTierPrice = $this->getConnection()->getCheckSql('i.tier_price IS NOT NULL', '(i.tier_price + id.min_price)', 'NULL');
+    private function updateTemporaryDownloadableTable(
+        string $temporaryPriceTableName,
+        string $temporaryDownloadableTableName
+    ) {
+        $ifTierPrice = $this->getConnection()->getCheckSql(
+            'i.tier_price IS NOT NULL',
+            '(i.tier_price + id.min_price)',
+            'NULL'
+        );
 
-        $table = ['i' => $temporaryPriceTableName];
         $selectForCrossUpdate = $this->getConnection()->select()->join(
-            ['id' => $temporaryOptionsTableName],
+            ['id' => $temporaryDownloadableTableName],
             'i.entity_id = id.entity_id AND i.customer_group_id = id.customer_group_id' .
             ' AND i.website_id = id.website_id',
             []
@@ -263,20 +263,8 @@ class Price implements DimensionalIndexerInterface
                 'tier_price' => new \Zend_Db_Expr($ifTierPrice),
             ]
         );
-        $query = $selectForCrossUpdate->crossUpdateFromSelect($table);
+        $query = $selectForCrossUpdate->crossUpdateFromSelect(['i' => $temporaryPriceTableName]);
         $this->getConnection()->query($query);
-    }
-
-    /**
-     * Get main table
-     *
-     * @param array $dimensions
-     * @return string
-     */
-    private function getMainTable($dimensions)
-    {
-        //TODO: Need to add logic to use another table for partial reindex
-        return $this->tableMaintainer->getMainReplicaTable($dimensions);
     }
 
     /**
