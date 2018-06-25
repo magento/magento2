@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAddVariableToWYSIWYGNewsletterTest">
         <annotations>
-            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <features value="Newsletter"/>
             <stories value="MAGETWO-42158-Variable with WYSIWYG"/>
             <group value="Newsletter"/>
             <title value="Admin should be able to add variable to WYSIWYG Editor of Newsletter"/>
