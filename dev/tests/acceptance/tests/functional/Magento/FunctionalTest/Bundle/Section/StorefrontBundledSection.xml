@@ -17,5 +17,6 @@
         <element name="fixedPricing" type="text" selector="//div[@class='price-box price-final_price']//span[@id]//..//span[contains(text(),'{{var1}}')]" parameterized="true"/>
         <element name="customizeProduct" type="button" selector="//*[@id='bundle-slide']"/>
         <element name="customizableBundleItemOption" type="text" selector="//div[@class='field choice'][1]//input[@type='checkbox']"/>
+        <element name="customizableBundleItemOption2" type="text" selector="//div[@class='field choice'][2]//input[@type='checkbox']"/>
     </section>
 </sections>
