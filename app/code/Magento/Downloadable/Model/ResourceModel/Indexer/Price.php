@@ -155,11 +155,11 @@ class Price implements DimensionalIndexerInterface
         array $dimensions
     ) {
         $temporaryDownloadableTableName = 'catalog_product_index_price_downlod_temp';
-        $this->getConnection()->createTable(
-        $this->getConnection()->createTableByDdl(
+        $this->getConnection()->createTemporaryTableLike(
+            $temporaryDownloadableTableName,
             $this->getTable('catalog_product_index_price_downlod_tmp'),
-            $temporaryDownloadableTableName
-        ));
+            true
+        );
         $this->fillTemporaryTable($temporaryDownloadableTableName, $dimensions);
         $this->updateTemporaryDownloadableTable($temporaryPriceTable->getTableName(), $temporaryDownloadableTableName);
         $this->getConnection()->delete($temporaryDownloadableTableName);
