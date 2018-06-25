@@ -11,6 +11,7 @@ use Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 
@@ -78,31 +79,32 @@ class PlaceOrderStep implements TestStepInterface
     /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
-     * @param AssertOrderSuccessPlacedMessage $assertOrderSuccessPlacedMessage
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param FixtureFactory $fixtureFactory
      * @param array $products
      * @param array $prices
      * @param OrderInjectable|null $order
+     * @param AssertOrderSuccessPlacedMessage $assertOrderSuccessPlacedMessage
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         AssertGrandTotalOrderReview $assertGrandTotalOrderReview,
-        AssertOrderSuccessPlacedMessage $assertOrderSuccessPlacedMessage,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         FixtureFactory $fixtureFactory,
         array $products = [],
         array $prices = [],
-        OrderInjectable $order = null
+        OrderInjectable $order = null,
+        AssertOrderSuccessPlacedMessage $assertOrderSuccessPlacedMessage = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertGrandTotalOrderReview = $assertGrandTotalOrderReview;
-        $this->assertOrderSuccessPlacedMessage = $assertOrderSuccessPlacedMessage;
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->fixtureFactory = $fixtureFactory;
         $this->products = $products;
         $this->prices = $prices;
         $this->order = $order;
+        $this->assertOrderSuccessPlacedMessage = $assertOrderSuccessPlacedMessage
+            ?: ObjectManager::getInstance()->create(AssertOrderSuccessPlacedMessage::class);
     }
 
     /**
