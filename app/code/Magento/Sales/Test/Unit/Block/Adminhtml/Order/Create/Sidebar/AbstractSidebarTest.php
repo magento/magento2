@@ -39,6 +39,9 @@ class AbstractSidebarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->abstractSidebar->getItemQty($this->itemMock));
     }
 
+    /**
+     * @return array
+     */
     public function getItemQtyDataProvider()
     {
         return ['whenQtyIsset' => [2, 10, 10], 'whenQtyNotIsset' => [1, false, 1]];

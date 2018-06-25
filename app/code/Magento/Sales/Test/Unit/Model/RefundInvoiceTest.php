@@ -463,6 +463,9 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         $creditmemoItemCreationMock = $this->getMockBuilder(CreditmemoItemCreationInterface::class)

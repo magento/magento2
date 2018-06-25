@@ -30,6 +30,9 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->_filter->tokenize());
     }
 
+    /**
+     * @return array
+     */
     public function sampleTokenizeStringProvider()
     {
         return [

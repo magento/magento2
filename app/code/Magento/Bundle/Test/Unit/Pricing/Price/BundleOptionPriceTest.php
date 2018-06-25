@@ -159,6 +159,9 @@ class BundleOptionPriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($priceTypeMock));
     }
 
+    /**
+     * @return array
+     */
     public function getOptionsDataProvider()
     {
         return [

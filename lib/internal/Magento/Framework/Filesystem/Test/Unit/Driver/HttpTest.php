@@ -40,6 +40,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, (new Http())->isExists(''));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestIsExists()
     {
         return [['200 OK', true], ['404 Not Found', false]];
@@ -54,6 +57,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, (new Http())->stat(''));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestStat()
     {
         $headers1 = [

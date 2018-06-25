@@ -42,6 +42,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($classTypeMock, $taxClassFactory->create($classMock));
     }
 
+    /**
+     * @return array
+     */
     public function createDataProvider()
     {
         $customerClassMock = $this->getMock('Magento\Tax\Model\TaxClass\Type\Customer', [], [], '', false);

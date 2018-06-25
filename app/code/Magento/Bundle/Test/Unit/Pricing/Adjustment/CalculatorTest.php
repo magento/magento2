@@ -608,6 +608,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $result, 'Incorrect result');
     }
 
+    /**
+     * @return array
+     */
     public function getOptionsAmountDataProvider()
     {
         return [

@@ -327,6 +327,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->printLogQuery($printQuery, false, $query);
     }
 
+    /**
+     * @return array
+     */
     public function printLogQueryPrintingDataProvider()
     {
         return [
@@ -350,6 +353,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->printLogQuery(false, $logQuery, 'some_query');
     }
 
+    /**
+     * @return array
+     */
     public function printLogQueryLoggingDataProvider()
     {
         return [
@@ -541,6 +547,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->distinct($flag);
     }
 
+    /**
+     * @return array
+     */
     public function distinctDataProvider()
     {
         return [

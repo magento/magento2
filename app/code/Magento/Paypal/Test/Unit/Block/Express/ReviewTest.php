@@ -81,6 +81,9 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('result url', $this->model->getViewFileUrl('some file'));
     }
 
+    /**
+     * @return array
+     */
     public function getViewFileUrlDataProvider()
     {
         return [[true], [false]];

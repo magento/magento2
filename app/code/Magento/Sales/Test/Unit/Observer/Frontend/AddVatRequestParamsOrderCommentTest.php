@@ -87,6 +87,9 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->observer->execute($observer));
     }
 
+    /**
+     * @return array
+     */
     public function addVatRequestParamsOrderCommentDataProvider()
     {
         return [

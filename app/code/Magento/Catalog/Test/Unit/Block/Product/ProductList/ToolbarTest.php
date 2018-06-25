@@ -239,6 +239,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $block->getModes());
     }
 
+    /**
+     * @return array
+     */
     public function setModesDataProvider()
     {
         return [

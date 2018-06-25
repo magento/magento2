@@ -81,6 +81,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($value, $this->config->{$getter}());
     }
 
+    /**
+     * @return array
+     */
     public function optionsProvider()
     {
         return [
@@ -342,6 +345,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->config->getOptions());
     }
 
+    /**
+     * @return array
+     */
     public function constructorDataProvider()
     {
         return [

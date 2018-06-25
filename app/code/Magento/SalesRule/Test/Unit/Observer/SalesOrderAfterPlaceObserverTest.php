@@ -193,6 +193,9 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model, $this->model->execute($observer));
     }
 
+    /**
+     * @return array
+     */
     public function salesOrderAfterPlaceDataProvider()
     {
         return [

@@ -88,6 +88,9 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
         $this->_model->execute($observerObject);
     }
 
+    /**
+     * @return array
+     */
     public function flushCacheByTagsDataProvider()
     {
         return [

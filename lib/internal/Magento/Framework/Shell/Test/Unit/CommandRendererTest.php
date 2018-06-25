@@ -24,6 +24,9 @@ class CommandRendererTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function commandsDataProvider()
     {
         $testArgument  = 'argument';

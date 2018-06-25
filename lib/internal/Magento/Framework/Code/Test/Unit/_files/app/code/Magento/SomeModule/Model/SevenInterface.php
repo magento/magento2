@@ -42,6 +42,7 @@ interface SevenInterface extends \Magento\Framework\Code\Generator\CodeGenerator
      */
     public function testMethod2($data = 'test_default', $flag = true);
 
+    
     public function testMethod3();
 
 

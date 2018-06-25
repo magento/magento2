@@ -57,6 +57,9 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function linksDataProvider()
     {
         return [
@@ -107,6 +110,9 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->links->saveLinksData($linksData);
     }
 
+    /**
+     * @return array
+     */
     public function attributesDataProvider()
     {
         return [
@@ -135,6 +141,9 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @param $dbAttributes
+     */
     protected function processAttributeGetter($dbAttributes)
     {
         $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
@@ -162,6 +171,9 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($returnedAttributes, $actualAttributes);
     }
 
+    /**
+     * @param $behavior
+     */
     protected function processBehaviorGetter($behavior)
     {
         $dataSource = $this->getMock('Magento\ImportExport\Model\ResourceModel\Import\Data', [], [], '', false);

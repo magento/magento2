@@ -90,6 +90,9 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function isAllowedDataProvider()
     {
         return [
@@ -106,6 +109,9 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->block->isAllowed());
     }
 
+    /**
+     * @return mixed
+     */
     protected function getItemMock()
     {
         $methods = [

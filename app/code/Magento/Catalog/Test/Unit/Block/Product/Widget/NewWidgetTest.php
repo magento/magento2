@@ -154,6 +154,9 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->block->getCurrentPage());
     }
 
+    /**
+     * @return array
+     */
     public function getCurrentPageDataProvider()
     {
         return [
@@ -315,6 +318,9 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getProductCollectionDataProvider()
     {
         return [

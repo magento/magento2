@@ -404,6 +404,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $model->isValidForSend());
     }
 
+    /**
+     * @return array
+     */
     public function isValidForSendDataProvider()
     {
         return [

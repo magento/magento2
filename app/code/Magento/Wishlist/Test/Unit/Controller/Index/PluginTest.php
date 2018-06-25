@@ -67,6 +67,9 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return \Magento\Wishlist\Controller\Index\Plugin
+     */
     protected function getPlugin()
     {
         return new \Magento\Wishlist\Controller\Index\Plugin(
