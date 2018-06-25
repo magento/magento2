@@ -29,6 +29,7 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
      * @param string &$remainder
      * @param bool $breakWords
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function truncateString($value, $length = 80, $etc = '...', &$remainder = '', $breakWords = true)
     {

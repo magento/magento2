@@ -19,7 +19,8 @@ class TruncateFilterTest extends \PHPUnit\Framework\TestCase
      * @dataProvider truncateDataProvider
      */
     public function testFilter(
-        $expectedValue, $expectedRemainder,
+        $expectedValue,
+        $expectedRemainder,
         $string,
         $length = 5,
         $etc = '...',

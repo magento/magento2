@@ -90,7 +90,11 @@ class TruncateFilter implements \Zend_Filter_Interface
             $preparedString = $string;
             $preparedLength = $length;
             if (!$this->breakWords) {
-                $preparedString = preg_replace('/\s+?(\S+)?$/u', '', $this->stringUtils->substr($string, 0, $length + 1));
+                $preparedString = preg_replace(
+                    '/\s+?(\S+)?$/u',
+                    '',
+                    $this->stringUtils->substr($string, 0, $length + 1)
+                );
                 $preparedLength = $this->stringUtils->strlen($preparedString);
             }
             $result->setRemainder($this->stringUtils->substr($string, $preparedLength, $originalLength));
