@@ -125,7 +125,7 @@
         <waitForPageLoad stepKey="loading3"/>
 
         <!--Locating delete message-->
-        <seeElement selector="{{AdminProductFiltersSection.deleteMessage}}" stepKey="deleteMessage"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.deleteMessage}}" stepKey="deleteMessage"/>
 
         <!--Clear Cache - resets products according to enabled/disabled view-->
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="ClearPageCaches"/>
