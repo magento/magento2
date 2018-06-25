@@ -16,4 +16,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Downloadable\Model\ResourceModel\Indexer\Price">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="catalogRulePriceModifier" xsi:type="object">Magento\CatalogRule\Model\Indexer\ProductPriceIndexModifier</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
