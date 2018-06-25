@@ -141,6 +141,9 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->kernel->process($this->responseMock);
     }
 
+    /**
+     * @return array
+     */
     public function testProcessSaveCacheDataProvider()
     {
         return [

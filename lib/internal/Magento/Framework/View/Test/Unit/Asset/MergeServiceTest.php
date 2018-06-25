@@ -117,6 +117,9 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($mergedAsset, $this->object->getMergedAssets($assets, $contentType));
     }
 
+    /**
+     * @return array
+     */
     public static function getMergedAssetsDataProvider()
     {
         $jsAssets = [

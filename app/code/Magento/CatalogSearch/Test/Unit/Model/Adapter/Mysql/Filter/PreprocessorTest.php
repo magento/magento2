@@ -327,6 +327,9 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $this->removeWhitespaces($actualResult));
     }
 
+    /**
+     * @return array
+     */
     public function testTermFilterDataProvider()
     {
         return [

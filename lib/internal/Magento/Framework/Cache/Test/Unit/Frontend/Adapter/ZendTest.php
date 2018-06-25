@@ -85,6 +85,9 @@ class ZendTest extends \PHPUnit_Framework_TestCase
         $object->clean($cleaningMode);
     }
 
+    /**
+     * @return array
+     */
     public function cleanExceptionDataProvider()
     {
         return [

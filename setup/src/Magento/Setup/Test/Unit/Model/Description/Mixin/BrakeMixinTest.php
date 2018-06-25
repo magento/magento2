@@ -25,6 +25,9 @@ class BrakeMixinTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->mixin->apply($subject));
     }
 
+    /**
+     * @return array
+     */
     public function getTestData()
     {
         return [

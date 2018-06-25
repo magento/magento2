@@ -319,6 +319,9 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->simpleType->isRowValid($rowData, $rowNum));
     }
 
+    /**
+     * @return array
+     */
     public function addAttributeOptionDataProvider()
     {
         return [

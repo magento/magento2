@@ -47,6 +47,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getType('global'));
     }
 
+    /**
+     * @return array
+     */
     public function getTypeDataProvider()
     {
         return [

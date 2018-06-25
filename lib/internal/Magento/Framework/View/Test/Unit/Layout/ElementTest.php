@@ -20,6 +20,9 @@ class ElementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($name, $model->getElementName());
     }
 
+    /**
+     * @return array
+     */
     public function elementNameDataProvider()
     {
         return [
@@ -31,6 +34,9 @@ class ElementTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function cacheableDataProvider()
     {
         return [

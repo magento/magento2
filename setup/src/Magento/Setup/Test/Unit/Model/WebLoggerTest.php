@@ -184,6 +184,9 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
         $this->webLogger->clear();
     }
 
+    /**
+     * @return string
+     */
     public static function readLog()
     {
         return self::$log;
@@ -202,6 +205,9 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
         self::$log = '';
     }
 
+    /**
+     * @return bool
+     */
     public static function isExist()
     {
         return self::$log != '';

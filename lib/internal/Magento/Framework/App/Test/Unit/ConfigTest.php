@@ -77,6 +77,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->appConfig->getValue($path, $scope, $scopeCode ?: $this->scope));
     }
 
+    /**
+     * @return array
+     */
     public function getValueDataProvider()
     {
         return [

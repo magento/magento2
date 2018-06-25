@@ -91,6 +91,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($languages, $this->_helper->getLanguageCodes());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestConvertLanguage()
     {
         return [

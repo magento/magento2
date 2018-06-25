@@ -194,6 +194,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_model->getMenu();
     }
 
+    /**
+     * @return array
+     */
     public function getMenuExceptionLoggedDataProvider()
     {
         return [

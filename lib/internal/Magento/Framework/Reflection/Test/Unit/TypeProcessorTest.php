@@ -217,6 +217,9 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_typeProcessor->processSimpleAndAnyType($value, $type);
     }
 
+    /**
+     * @return array
+     */
     public static function processSimpleTypeExceptionProvider()
     {
         return [

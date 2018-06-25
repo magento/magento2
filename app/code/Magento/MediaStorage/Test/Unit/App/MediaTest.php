@@ -229,6 +229,9 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->model->catchException($bootstrap, $exception);
     }
 
+    /**
+     * @return array
+     */
     public function catchExceptionDataProvider()
     {
         return [

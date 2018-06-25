@@ -179,6 +179,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->_storageModel->uploadFile($this->_storageRoot);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function _prepareUploader()
     {
         $uploader = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
@@ -550,6 +553,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->_storageModel->deleteDirectory($directoryPath);
     }
 
+    /**
+     * @return array
+     */
     public function booleanCasesDataProvider()
     {
         return [[true], [false]];

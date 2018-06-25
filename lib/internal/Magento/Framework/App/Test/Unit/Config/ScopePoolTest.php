@@ -165,6 +165,9 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getScopeDataProvider()
     {
         $baseScope = $this->getMockForAbstractClass('Magento\Framework\App\ScopeInterface');
