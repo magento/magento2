@@ -31,4 +31,8 @@
         <data key="attribute_code">short_description</data>
         <data key="value" unique="suffix">API Product Short Description</data>
     </entity>
+    <entity name="ApiProductNewsFromDate" type="custom_attribute">
+        <data key="attribute_code">news_from_date</data>
+        <data key="value">2018-05-17 00:00:00</data>
+    </entity>
 </entities>

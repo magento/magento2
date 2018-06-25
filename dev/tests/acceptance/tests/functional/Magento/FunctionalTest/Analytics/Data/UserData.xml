@@ -18,5 +18,16 @@
         <data key="interface_local">en_US</data>
         <data key="is_active">true</data>
         <data key="current_password">123123q</data>
+</entity>
+    <entity name="restrictedWebUser" type="user">
+        <data key="username" unique="suffix">restrictedWebUser</data>
+        <data key="firstname">restricted</data>
+        <data key="lastname">webUser</data>
+        <data key="email" unique="prefix">restrictedWebUser@example.com</data>
+        <data key="password">123123q</data>
+        <data key="password_confirmation">123123q</data>
+        <data key="interface_local">en_US</data>
+        <data key="is_active">true</data>
+        <data key="current_password">123123q</data>
     </entity>
 </entities>

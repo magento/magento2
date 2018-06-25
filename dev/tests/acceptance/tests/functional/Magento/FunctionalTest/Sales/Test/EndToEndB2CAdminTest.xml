@@ -242,8 +242,7 @@
         <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminGridBeforePaging" after="checkStatusSortOrderAsc"/>
         <comment userInput="Admin uses paging on order grid" stepKey="usePagingOrderGridComment" after="resetAdminGridBeforePaging"/>
         <actionGroup ref="adminDataGridSelectCustomPerPage" stepKey="select1OrderPerPage" after="usePagingOrderGridComment">
-            <!--@TODO Change this to scalar when MQE-498 is implemented-->
-            <argument name="perPage" value="Const.one"/>
+            <argument name="perPage" value="1"/>
         </actionGroup>
         <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" userInput="1" stepKey="see1RowOnFirstPage" after="select1OrderPerPage"/>
         <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="seeOnFirstPageOrderGrid" after="see1RowOnFirstPage"/>
@@ -251,13 +250,11 @@
         <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageOrderGrid" after="clickNextPageOrderGrid"/>
         <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" userInput="1" stepKey="see1RowOnSecondPage" after="seeOnSecondPageOrderGrid"/>
         <actionGroup ref="adminDataGridSelectPerPage" stepKey="select50OrdersPerPage" after="see1RowOnSecondPage">
-            <!--@TODO Change this to scalar when MQE-498 is implemented-->
-            <argument name="perPage" value="Const.fifty"/>
+            <argument name="perPage" value="50"/>
         </actionGroup>
         <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" parameterArray="[2,50]" stepKey="seeCorrectNumberOfRowsPerPage" after="select50OrdersPerPage"/>
 
         <!--Add column to order grid-->
-        <!--@TODO Change to action group when MQE-498 is implemented-->
         <comment userInput="Admin adds column to order grid" stepKey="adminAddsColumnOrderGrid" after="seeCorrectNumberOfRowsPerPage"/>
         <dontSeeElement selector="{{AdminDataGridTableSection.columnHeader('Customer Email')}}" stepKey="dontSeeCustomerEmailColumnInGrid" after="adminAddsColumnOrderGrid"/>
         <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="openOrderGridColumnOptions" after="dontSeeCustomerEmailColumnInGrid"/>
@@ -265,7 +262,6 @@
         <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="closeOrderGridColumnOptions" after="addCustomerEmailColumnToOrderGrid"/>
         <seeElement selector="{{AdminDataGridTableSection.columnHeader('Customer Email')}}" stepKey="seeCustomerEmailColumnInGrid" after="closeOrderGridColumnOptions"/>
         <!--Remove column from order grid-->
-        <!--@TODO Change to action group when MQE-498 is implemented-->
         <comment userInput="Admin removes column from order grid" stepKey="adminRemovesColumnOrderGrid" after="seeCustomerEmailColumnInGrid"/>
         <seeElement selector="{{AdminDataGridTableSection.columnHeader('Purchase Point')}}" stepKey="seePurchasePointColumnInGrid" after="adminRemovesColumnOrderGrid"/>
         <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="openOrderGridColumnOptionsPurchasePoint" after="seePurchasePointColumnInGrid"/>

@@ -64,4 +64,16 @@ class SalesEvent implements SalesEventInterface
     {
         return $this->objectId;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function toArray(): array
+    {
+        return [
+            'event_type' => $this->getType(),
+            'object_type' => $this->getObjectType(),
+            'object_id' => $this->getObjectId(),
+        ];
+    }
 }

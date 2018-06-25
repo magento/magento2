@@ -7,7 +7,8 @@
         "magento/module-catalog-inventory": "*",
         "magento/module-inventory-catalog-api": "*",
         "magento/module-inventory-configuration-api": "*",
-        "magento/module-inventory-sales-api": "*"
+        "magento/module-inventory-sales-api": "*",
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [

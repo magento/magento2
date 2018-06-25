@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminManageStockGridChangeColumnOrderByDragAndDropTest">
+        <annotations>
+            <features value="Multi-Stock Inventory"/>
+            <stories value="Column drag and drop changed column order."/>
+            <title value="Column drag and drop changed column order in Manage Stock grid by Admin user."/>
+            <description value="Column drag and drop changed column order in Manage Stock grid by Admin user."/>
+            <testCaseId value="934"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+        </annotations>
+
+        <before>
+            <createData entity="BasicMsiStock1" stepKey="createCustomStock"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <waitForPageLoad stepKey="waitForPageLoadAfterLogin"/>
+
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStocksGridPage"/>
+            <waitForPageLoad stepKey="waitForTheStocksGridPageLoad"/>
+            <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnTheColumnsButton"/>
+            <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+            <click selector="{{AdminGridColumnsControls.cancel}}" stepKey="clickOnCancelToCloseDropdownMenu"/>
+        </before>
+        <after>
+            <dragAndDrop selector1="{{AdminGridHeaders.headerByName('Sales Channels')}}"
+                         selector2="{{AdminGridHeaders.headerByName('ID')}}"
+                         stepKey="dragAndDropNameColumnBackToDefault"/>
+            <waitForPageLoad time="30" stepKey="waitForMoveConfirmationAfterMoveNameColumnToDefaultPosition"/>
+            <dragAndDrop selector1="{{AdminGridHeaders.headerByName('Name')}}"
+                         selector2="{{AdminGridHeaders.headerByName('ID')}}"
+                         stepKey="dragAndDropIdColumnBackToDefault"/>
+            <waitForPageLoad time="30" stepKey="waitForMoveConfirmationAfterMoveSalesChannelsColumnToDefaultPosition"/>
+
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <grabMultiple selector="{{AdminGridHeaders.columnsNames}}" stepKey="grabColumnsDefaultOrder" />
+        <assertEquals stepKey="assertDefaultOrder">
+            <actualResult type="variable">grabColumnsDefaultOrder</actualResult>
+            <expectedResult type="array">["ID", "Name", "Sales Channels", "Action"]</expectedResult>
+        </assertEquals>
+
+        <dragAndDrop selector1="{{AdminGridHeaders.headerByName('ID')}}"
+                     selector2="{{AdminGridHeaders.headerByName('Sales Channels')}}"
+                     stepKey="dragAndDropIdColumn"/>
+        <waitForPageLoad time="30" stepKey="waitForMoveConfirmationAfterIdColumnMoved"/>
+        <grabMultiple selector="{{AdminGridHeaders.columnsNames}}" stepKey="grabColumnsAfterIdColumnMoved" />
+        <assertEquals stepKey="assertOrderAfterIdColumnMoved">
+            <actualResult type="variable">grabColumnsAfterIdColumnMoved</actualResult>
+            <expectedResult type="array">["Name", "Sales Channels", "ID", "Action"]</expectedResult>
+        </assertEquals>
+
+        <dragAndDrop selector1="{{AdminGridHeaders.headerByName('Name')}}"
+                     selector2="{{AdminGridHeaders.headerByName('Sales Channels')}}"
+                     stepKey="dragAndDropNameColumn"/>
+        <waitForPageLoad time="30" stepKey="waitForMoveConfirmationAfterNameColumnMoved"/>
+        <grabMultiple selector="{{AdminGridHeaders.columnsNames}}" stepKey="grabColumnsAfterNameColumnMoved" />
+        <assertEquals stepKey="assertOrderAfterNameColumnMoved">
+            <actualResult type="variable">grabColumnsAfterNameColumnMoved</actualResult>
+            <expectedResult type="array">["Sales Channels", "Name", "ID", "Action"]</expectedResult>
+        </assertEquals>
+    </test>
+</tests>
