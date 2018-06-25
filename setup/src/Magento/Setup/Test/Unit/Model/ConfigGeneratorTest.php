@@ -11,6 +11,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Setup\Model\ConfigGenerator;
+use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
 class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,6 +29,11 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
      * @var ConfigData|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configDataMock;
+
+    /**
+     * @var DriverOptions
+     */
+    private $driverOptionsMock;
 
     public function setUp()
     {
@@ -50,11 +56,17 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
         $configDataFactoryMock->method('create')
             ->willReturn($this->configDataMock);
 
+        $this->driverOptionsMock = $this->getMockBuilder(DriverOptions::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDriverOptions'])
+            ->getMock();
+
         $this->model = $objectManager->getObject(
             ConfigGenerator::class,
             [
                 'deploymentConfig'  => $this->deploymentConfigMock,
                 'configDataFactory' => $configDataFactoryMock,
+                'driverOptions'     => $this->driverOptionsMock,
             ]
         );
     }
