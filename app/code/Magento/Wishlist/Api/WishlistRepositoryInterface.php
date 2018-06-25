@@ -3,7 +3,6 @@
 namespace Magento\Wishlist\Api;
 
 use Magento\Wishlist\Api\Data\WishlistInterface;
-use Magento\Wishlist\Api\Data\WishlistSearchResultsInterface;
 
 /**
  * Interface WishlistRepositoryInterface
@@ -18,7 +17,7 @@ interface WishlistRepositoryInterface
      * @return \Magento\Wishlist\Api\Data\WishlistInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($id): \Magento\Wishlist\Api\Data\WishlistInterface;
+    public function getById($id): \Magento\Wishlist\Api\Data\WishlistInterface;
 
     /**
      * Get list of wishlists by criteria

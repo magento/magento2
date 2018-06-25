@@ -36,7 +36,7 @@ class WishlistRepository implements WishlistRepositoryInterface
      * WishlistRepository constructor.
      * @param CollectionProcessorInterface $collectionProcessor
      * @param WishlistFactory $wishlistFactory
-     * @param \Magento\Wishlist\Api\Data\WishlistSearchResultsInterfaceFactory $searchResultFactory
+     * @param \Magento\Wishlist\Api\Data\WishlistSearchResultsInterfaceFactory $searchResultsFactory
      * @param ResourceModel\Wishlist\CollectionFactory $collectionFactory
      * @param ResourceModel\Wishlist $wishlistResource
      */
@@ -58,7 +58,7 @@ class WishlistRepository implements WishlistRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get($id): WishlistInterface
+    public function getById($id): WishlistInterface
     {
         $wishlist = $this->wishlistFactory->create();
         $this->wishlistResource->load($wishlist, $id);
@@ -106,7 +106,11 @@ class WishlistRepository implements WishlistRepositoryInterface
      */
     public function delete(WishlistInterface $wishlist)
     {
-        $this->wishlistResource->delete($wishlist);
+        try {
+            $this->wishlistResource->delete($wishlist);
+        } catch (\Exception $e) {
+            throw new StateException(__('Cannot delete wishlist.'));
+        }
         return true;
     }
 
@@ -116,7 +120,7 @@ class WishlistRepository implements WishlistRepositoryInterface
     public function deleteById($id)
     {
         $wishlist = $this->get($id);
-        $this->wishlistResource->delete($wishlist);
+        $this->delete($wishlist);
         return true;
     }
 }
