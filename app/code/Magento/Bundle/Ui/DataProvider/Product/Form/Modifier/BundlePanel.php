@@ -377,6 +377,7 @@ class BundlePanel extends AbstractModifier
                                                     'selection_price_type' => '',
                                                     'selection_price_value' => '',
                                                     'selection_qty' => '',
+                                                    'selection_qty_is_integer' => 'selection_qty_is_integer',
                                                 ],
                                                 'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
                                                 'imports' => [
@@ -682,10 +683,11 @@ class BundlePanel extends AbstractModifier
                                 'validation' => [
                                     'required-entry' => true,
                                     'validate-number' => true,
+                                    'validate-digits' => true,
                                     'validate-greater-than-zero' => true
                                 ],
                                 'imports' => [
-                                    'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer'
+                                    'validateDigits' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer',
                                 ],
                             ],
                         ],

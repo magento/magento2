@@ -8,6 +8,7 @@ namespace Magento\Bundle\Ui\DataProvider\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
 use Magento\Bundle\Helper\Data;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 
 class BundleDataProvider extends ProductDataProvider
 {
@@ -17,12 +18,18 @@ class BundleDataProvider extends ProductDataProvider
     protected $dataHelper;
 
     /**
+     * @var StockItemRepositoryInterface
+     */
+    protected $stockItemRepository;
+
+    /**
      * Construct
      *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
+     * @param StockItemRepositoryInterface $stockItemRepository
      * @param Data $dataHelper
      * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
@@ -34,6 +41,7 @@ class BundleDataProvider extends ProductDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
+        StockItemRepositoryInterface $stockItemRepository,
         Data $dataHelper,
         array $meta = [],
         array $data = [],
@@ -52,6 +60,7 @@ class BundleDataProvider extends ProductDataProvider
         );
 
         $this->dataHelper = $dataHelper;
+        $this->stockItemRepository = $stockItemRepository;
     }
 
     /**
@@ -73,10 +82,29 @@ class BundleDataProvider extends ProductDataProvider
             $this->getCollection()->load();
         }
         $items = $this->getCollection()->toArray();
+        
+        foreach ($items as $index => $item) {
+            if (!is_array($item) || !array_key_exists('entity_id', $item)) {
+                continue;
+            }
+            $items[$index]['selection_qty_is_integer'] = !$this->isProductQtyDecimal($item['entity_id']);
+        }
 
         return [
             'totalRecords' => $this->getCollection()->getSize(),
             'items' => array_values($items),
         ];
+    }
+
+    /**
+     * @param $productId
+     *
+     * @return bool
+     */
+    protected function isProductQtyDecimal($productId)
+    {
+        $productStock = $this->stockItemRepository->get($productId);
+
+        return $productStock->getIsQtyDecimal();
     }
 }

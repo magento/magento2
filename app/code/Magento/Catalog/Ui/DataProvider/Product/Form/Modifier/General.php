@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\CatalogInventory\Helper\ProductStockIsQtyDecimal;
 
 /**
  * Data provider for main panel of product page
@@ -35,16 +36,23 @@ class General extends AbstractModifier
      */
     private $localeCurrency;
 
+    protected $isProductQtyDecimal;
+
     /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
+     * @param ProductStockIsQtyDecimal $isProductQtyDecimal
+     *
+     * @return void
      */
     public function __construct(
         LocatorInterface $locator,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        ProductStockIsQtyDecimal $isProductQtyDecimal
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
+        $this->isProductQtyDecimal = $isProductQtyDecimal;
     }
 
     /**
@@ -106,7 +114,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    (float) $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
+                    $this->formatPriceQty($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY]);
             }
         }
 
@@ -406,6 +414,24 @@ class General extends AbstractModifier
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
 
         return $value;
+    }
+
+    /**
+     * Make price qty even int or decimal
+     *
+     * @param $priceQty
+     *
+     * @return int
+     */
+    protected function formatPriceQty($priceQty)
+    {
+        $productId = $this->locator->getProduct()->getId();
+
+        if ($this->isProductQtyDecimal->execute($productId)) {
+            return $priceQty;
+        }
+
+        return (int) $priceQty;
     }
 
     /**
