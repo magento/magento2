@@ -216,4 +216,23 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->builder->setReplyTo('replyTo@example.com', 'replyName');
     }
+
+    /**
+     * @return void
+     */
+    public function testSetFromByStore()
+    {
+        $sender = ['email' => 'from@example.com', 'name' => 'name'];
+        $store = 1;
+        $this->senderResolverMock->expects($this->once())
+            ->method('resolve')
+            ->with($sender, $store)
+            ->willReturn($sender);
+        $this->messageMock->expects($this->once())
+            ->method('setFrom')
+            ->with('from@example.com', 'name')
+            ->willReturnSelf();
+
+        $this->builder->setFromByStore($sender, $store);
+    }
 }
