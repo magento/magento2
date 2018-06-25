@@ -17,6 +17,8 @@ use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 
 /**
  * Configurable Products Price Indexer Resource model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Configurable implements DimensionalIndexerInterface
 {
@@ -96,6 +98,7 @@ class Configurable implements DimensionalIndexerInterface
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
         $this->productType = $productType;
+        $this->connectionName = $connectionName;
         $this->priceModifiers = $priceModifiers;
         $this->metadataPool = $metadataPool;
         $this->resource = $resource;

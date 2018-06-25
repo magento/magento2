@@ -182,6 +182,9 @@
         <arguments>
             <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
             <argument name="connectionName" xsi:type="string">indexer</argument>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="customOptionPriceModifier" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CustomOptionPriceModifier</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product">
