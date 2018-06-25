@@ -503,7 +503,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve customer name
      *
-     * @return string|void
+     * @return string|null
      */
     public function getCustomerName()
     {

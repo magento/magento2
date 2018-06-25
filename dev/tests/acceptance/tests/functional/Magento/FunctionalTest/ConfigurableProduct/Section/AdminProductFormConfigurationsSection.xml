@@ -16,14 +16,16 @@
         <element name="currentVariationsPriceCells" type="textarea" selector=".admin__control-fields[data-index='price_container']"/>
         <element name="currentVariationsQuantityCells" type="textarea" selector=".admin__control-fields[data-index='quantity_container']"/>
         <element name="currentVariationsAttributesCells" type="textarea" selector=".admin__control-fields[data-index='attributes']"/>
+        <element name="currentVariationsStatusCells" type="textarea" selector="._no-header[data-index='status']"/>
         <element name="actionsBtn" type="button" selector="(//button[@class='action-select']/span[contains(text(), 'Select')])[{{var1}}]" parameterized="true"/>
         <element name="removeProductBtn" type="button" selector="//a[text()='Remove Product']"/>
         <element name="disableProductBtn" type="button" selector="//a[text()='Disable Product']"/>
+        <element name="enableProductBtn" type="button" selector="//a[text()='Enable Product']"/>
     </section>
     <section name="AdminConfigurableProductFormSection">
         <element name="productWeight" type="input" selector=".admin__control-text[name='product[weight]']"/>
         <element name="productQuantity" type="input" selector=".admin__control-text[name='product[quantity_and_stock_status][qty]']"/>
-        <element name="currentVariationsQuantityCells" type="button" selector="td[data-index='quantity_per_source_container']"/>
+        <element name="currentVariationsQuantityCells" type="button" selector="td[data-index='quantity_container']"/>
         <element name="rowByCode" type="textarea" selector="//span[contains(text(), '{{var1}}-{{var2}}')]//ancestor-or-self::tr" parameterized="true"/>
     </section>
     <section name="AdminConfigurableProductSelectAttributesSlideOut">
