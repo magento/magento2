@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -43,17 +42,8 @@ class UpdateTest extends WebapiAbstract
             SourceInterface::POSTCODE => 'source-postcode-updated',
             SourceInterface::PHONE => 'source-phone-updated',
             SourceInterface::FAX => 'source-fax-updated',
-            SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
-            SourceInterface::CARRIER_LINKS => [
-                [
-                    SourceCarrierLinkInterface::CARRIER_CODE => 'dhl',
-                    SourceCarrierLinkInterface::POSITION => 2000,
-                ],
-                [
-                    SourceCarrierLinkInterface::CARRIER_CODE => 'fedex',
-                    SourceCarrierLinkInterface::POSITION => 3000,
-                ],
-            ],
+            SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 1,
+            SourceInterface::CARRIER_LINKS => [],
         ];
         $serviceInfo = [
             'rest' => [
