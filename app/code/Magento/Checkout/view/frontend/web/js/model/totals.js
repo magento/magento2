@@ -14,20 +14,17 @@ define([
     'use strict';
 
     var quoteItems = ko.observable(quote.totals().items),
-        cartData = customerData.get('cart');
+        cartData = customerData.get('cart'),
+        quoteSubtotal = parseFloat(quote.totals().subtotal),
+        subtotalAmount = parseFloat(cartData().subtotalAmount);
 
     quote.totals.subscribe(function (newValue) {
         quoteItems(newValue.items);
     });
 
-    cartData.subscribe(function () {
-        var quoteSubtotal = parseFloat(quote.totals().subtotal),
-            subtotalAmount = parseFloat(cartData().subtotalAmount);
-
-        if (quoteSubtotal !== subtotalAmount) {
-            customerData.reload(['cart'], false);
-        }
-    }, this);
+    if (quoteSubtotal !== subtotalAmount) {
+        customerData.reload(['cart'], false);
+    }
 
     return {
         totals: quote.totals,
