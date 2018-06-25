@@ -14,6 +14,10 @@
         <element name="resetButton" type="button" selector="#reset" timeout="30"/>
         <element name="saveButton" type="button" selector="#save" timeout="30"/>
     </section>
+    <section name="AdminEditStockActionModalSection">
+        <element name="cancel" type="button" selector=".modal-popup.confirm button.action-dismiss"/>
+        <element name="ok" type="button" selector=".modal-popup.confirm button.action-accept" timeout="60"/>
+    </section>
     <section name="AdminEditStockGeneralSection">
         <element name="name" type="input" selector=".admin__control-text[name='general[name]']"/>
     </section>

@@ -14,7 +14,6 @@
         <!-- Advanced Search with Product 1 Data -->
         <comment userInput="Advanced search" stepKey="commentAdvancedSearch" after="startOfSearchingProducts"/>
         <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="searchOpenAdvancedSearchForm" after="commentAdvancedSearch"/>
-        <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
         <fillField userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontCatalogSearchAdvancedFormSection.ProductName}}" stepKey="searchAdvancedFillProductName" after="searchOpenAdvancedSearchForm"/>
         <fillField userInput="$$createSimpleProduct1.sku$$" selector="{{StorefrontCatalogSearchAdvancedFormSection.SKU}}" stepKey="searchAdvancedFillSKU" after="searchAdvancedFillProductName"/>
         <fillField userInput="$$createSimpleProduct1.price$$" selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceFrom}}" stepKey="searchAdvancedFillPriceFrom" after="searchAdvancedFillSKU"/>
@@ -41,8 +40,7 @@
         <!-- Quick Search with common part of product names -->
         <comment userInput="Quick search" stepKey="commentQuickSearch" after="searchAdvancedAssertSimpleProduct1PageImageNotDefault"/>
         <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchQuickSearchCommonPart" after="commentQuickSearch">
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="phrase" value="CONST.apiSimpleProduct"/>
+            <argument name="phrase" value="Api Simple Product"/>
         </actionGroup>
         <actionGroup ref="StorefrontSelectSearchFilterCategoryActionGroup" stepKey="searchSelectFilterCategoryCommonPart" after="searchQuickSearchCommonPart">
             <argument name="category" value="$$createCategory$$"/>
@@ -68,8 +66,7 @@
         <!-- Quick Search with non-existent product name -->
         <comment userInput="Quick Search with non-existent product name" stepKey="commentQuickSearchWithNonExistentProductName" after="searchAssertSimpleProduct2ImageNotDefault" />
         <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchFillQuickSearchNonExistent" after="commentQuickSearchWithNonExistentProductName">
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="phrase" value="CONST.nonexistentProductName"/>
+            <argument name="phrase" value="NonexistentProductName"/>
         </actionGroup>
         <see userInput="Your search returned no results." selector="{{StorefrontCatalogSearchMainSection.message}}" stepKey="searchAssertQuickSearchMessageNonExistent" after="searchFillQuickSearchNonExistent"/>
         <comment userInput="End of searching products" stepKey="endOfSearchingProducts" after="searchAssertQuickSearchMessageNonExistent" />

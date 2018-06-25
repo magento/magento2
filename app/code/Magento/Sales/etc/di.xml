@@ -65,6 +65,7 @@
     <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
     <preference for="Magento\Sales\Api\OrderManagementInterface" type="Magento\Sales\Model\Service\OrderService"/>
     <preference for="Magento\Sales\Api\OrderStatusHistoryRepositoryInterface" type="Magento\Sales\Model\Order\Status\HistoryRepository"/>
+    <preference for="Magento\Sales\Api\PaymentFailuresInterface" type="Magento\Sales\Model\Service\PaymentFailuresService" />
     <preference for="Magento\Sales\Api\ShipmentCommentRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\CommentRepository"/>
     <preference for="Magento\Sales\Api\ShipmentItemRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\ItemRepository"/>
     <preference for="Magento\Sales\Api\ShipmentRepositoryInterface" type="Magento\Sales\Model\Order\ShipmentRepository"/>
@@ -991,4 +992,7 @@
             </argument>
         </arguments>
     </type>
+    <preference
+            for="Magento\Sales\Api\OrderCustomerDelegateInterface"
+            type="Magento\Sales\Model\Order\OrderCustomerDelegate" />
 </config>

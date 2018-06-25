@@ -17,7 +17,7 @@ class Footer extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'page/footer.phtml';
+    protected $_template = 'Magento_Backend::page/footer.phtml';
 
     /**
      * @var \Magento\Framework\App\ProductMetadataInterface

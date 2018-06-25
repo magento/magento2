@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryCache\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
@@ -24,11 +23,6 @@ class GetProductIdsByStockIds
     private $resource;
 
     /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
-    /**
      * @var StockIndexTableNameResolverInterface
      */
     private $stockIndexTableNameResolver;
@@ -39,51 +33,31 @@ class GetProductIdsByStockIds
     private $defaultStockProvider;
 
     /**
-     * @var IndexStructure
-     */
-    private $indexStructure;
-
-    /**
      * @var string
      */
-    private $productSkuColumn;
-
-    /**
-     * @var string
-     */
-    private $productInterfaceClassName;
+    private $productTableName;
 
     /**
      * @param ResourceConnection $resource
-     * @param MetadataPool $metadataPool
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param IndexStructure $indexStructure
-     * @param string $productSkuColumn
-     * @param string $productInterfaceClassName
+     * @param string $productTableName
      */
     public function __construct(
         ResourceConnection $resource,
-        MetadataPool $metadataPool,
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         DefaultStockProviderInterface $defaultStockProvider,
-        IndexStructure $indexStructure,
-        string $productSkuColumn,
-        string $productInterfaceClassName
+        string $productTableName
     ) {
         $this->resource = $resource;
-        $this->metadataPool = $metadataPool;
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->indexStructure = $indexStructure;
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
-        $this->productSkuColumn = $productSkuColumn;
-        $this->productInterfaceClassName = $productInterfaceClassName;
+        $this->productTableName = $productTableName;
     }
 
     /**
      * @param array $stockIds
      * @return array
-     * @throws \Exception in case product entity type hasn't been initialize.
      */
     public function execute(array $stockIds): array
     {
@@ -93,18 +67,16 @@ class GetProductIdsByStockIds
                 continue;
             }
             $stockIndexTableName = $this->stockIndexTableNameResolver->execute($stockId);
-            $entityMetadata = $this->metadataPool->getMetadata($this->productInterfaceClassName);
-            $linkField = $entityMetadata->getLinkField();
             $connection = $this->resource->getConnection();
-            $sql = $connection->select()
-                ->from(['main' => $stockIndexTableName], [])
-                ->join(
-                    ['product' => $this->resource->getTableName('catalog_product_entity')],
-                    'product.' . $this->productSkuColumn . '=main.' . $this->productSkuColumn,
-                    [$linkField]
-                );
 
             if ($connection->isTableExists($stockIndexTableName)) {
+                $sql = $connection->select()
+                    ->from(['stock_index' => $stockIndexTableName], [])
+                    ->join(
+                        ['product' => $this->resource->getTableName($this->productTableName)],
+                        'product.sku = stock_index.' . IndexStructure::SKU,
+                        ['product.entity_id']
+                    );
                 $productIds[] = $connection->fetchCol($sql);
             }
         }
