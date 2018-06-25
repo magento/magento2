@@ -125,6 +125,7 @@ class Price implements DimensionalIndexerInterface
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
         ]);
+        $this->fillFinalPrice($dimensions, $entityIds, $temporaryPriceTable);
         $this->applyPriceModifiers($temporaryPriceTable);
         $this->applyDownloadableLink($temporaryPriceTable, $dimensions);
     }
@@ -154,11 +155,11 @@ class Price implements DimensionalIndexerInterface
         array $dimensions
     ) {
         $temporaryDownloadableTableName = 'catalog_product_index_price_downlod_temp';
-        $this->getConnection()->createTemporaryTableLike(
-            $temporaryDownloadableTableName,
+        $this->getConnection()->createTable(
+        $this->getConnection()->createTableByDdl(
             $this->getTable('catalog_product_index_price_downlod_tmp'),
-            true
-        );
+            $temporaryDownloadableTableName
+        ));
         $this->fillTemporaryTable($temporaryDownloadableTableName, $dimensions);
         $this->updateTemporaryDownloadableTable($temporaryPriceTable->getTableName(), $temporaryDownloadableTableName);
         $this->getConnection()->delete($temporaryDownloadableTableName);
