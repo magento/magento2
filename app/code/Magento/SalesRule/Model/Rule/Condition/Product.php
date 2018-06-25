@@ -80,7 +80,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $model->getBaseRowTotal()
         );
 
-
         if ('category_ids' == $this->getAttribute()) {
             return $this->validateAttribute($this->_getAvailableInCategories($product->getId()));
         }
