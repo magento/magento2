@@ -210,7 +210,7 @@ class Wishlist extends AbstractModel implements IdentityInterface, WishlistInter
      */
     public function getId()
     {
-        return $this->_getData($this->_idFieldName);
+        return $this->_getData(self::WISHLIST_ID);
     }
 
 
