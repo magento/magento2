@@ -47,7 +47,13 @@ class DatabaseCheck extends AbstractActionController
                     ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY => (int) $params['driverOptionsSslVerify'],
                 ];
             }
-            $this->dbValidator->checkDatabaseConnectionWithDriverOptions($params['name'], $params['host'], $params['user'], $password, $driverOptions);
+            $this->dbValidator->checkDatabaseConnectionWithDriverOptions(
+                $params['name'],
+                $params['host'],
+                $params['user'],
+                $password,
+                $driverOptions
+            );
             $tablePrefix = isset($params['tablePrefix']) ? $params['tablePrefix'] : '';
             $this->dbValidator->checkDatabaseTablePrefix($tablePrefix);
             return new JsonModel(['success' => true]);
