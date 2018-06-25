@@ -49,7 +49,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->selectHydratorMock = $this->getMockBuilder(selectHydrator::class)
+        $this->selectHydratorMock = $this->getMockBuilder(SelectHydrator::class)
             ->disableOriginalConstructor()
             ->getMock();
 

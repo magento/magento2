@@ -209,6 +209,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $model->hasPlugins($type));
     }
 
+    /**
+     * @return array
+     */
     public function hasPluginsDataProvider()
     {
         return [

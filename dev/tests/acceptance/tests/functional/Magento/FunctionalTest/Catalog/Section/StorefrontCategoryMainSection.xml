@@ -17,5 +17,6 @@
         <element name="productCount" type="text" selector="#toolbar-amount"/>
         <element name="CatalogDescription" type="text" selector="//div[@class='category-description']//p"/>
         <element name="mediaDescription" type="text" selector="img[alt='{{var1}}']" parameterized="true"/>
+        <element name="productsList" type="text" selector="//ol[@class='products list items product-items']"/>
     </section>
 </sections>
