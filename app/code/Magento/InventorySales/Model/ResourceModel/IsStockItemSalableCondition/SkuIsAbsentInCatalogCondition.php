@@ -20,6 +20,6 @@ class SkuIsAbsentInCatalogCondition implements GetIsStockItemSalableConditionInt
      */
     public function execute(Select $select): string
     {
-        return 'product_entity.sku IS NULL';
+        return 'product.sku IS NULL';
     }
 }

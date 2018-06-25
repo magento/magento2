@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesAdminUi\Ui\Component\Listing\Column;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventorySalesAdminUi\Ui\SalesChannelNameResolverInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponentFactory;

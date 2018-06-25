@@ -119,7 +119,6 @@
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
 
-
     <!--Fill customer billing address-->
     <actionGroup name="fillOrderCustomerInformation">
         <arguments>
