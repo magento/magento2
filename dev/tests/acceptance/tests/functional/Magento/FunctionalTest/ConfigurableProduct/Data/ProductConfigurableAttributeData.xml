@@ -25,4 +25,21 @@
         <data key="name" unique="suffix">Blue</data>
         <data key="price">3.00</data>
     </entity>
+    <entity name="colorProductAttribute4" type="product_attribute">
+        <data key="name" unique="suffix">Orange</data>
+        <data key="price">99.99</data>
+    </entity>
+    <entity name="colorDefaultProductAttribute" type="product_attribute">
+        <data key="default_label">Color</data>
+        <data key="input_type">Dropdown</data>
+        <data key="attribute_quantity">2</data>
+    </entity>
+    <entity name="colorDefaultProductAttribute1" type="product_attribute">
+        <data key="name">Green</data>
+        <data key="price">4.00</data>
+    </entity>
+    <entity name="colorDefaultProductAttribute2" type="product_attribute">
+        <data key="name">Black</data>
+        <data key="price">5.00</data>
+    </entity>
 </entities>
