@@ -19,7 +19,7 @@ class GuestAuthorization
      * Check if resource for which access is needed has anonymous permissions defined in webapi config.
      *
      * @param \Magento\Framework\Authorization $subject
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @param string $resource
      * @param string $privilege
      * @return bool true If resource permission is anonymous,
