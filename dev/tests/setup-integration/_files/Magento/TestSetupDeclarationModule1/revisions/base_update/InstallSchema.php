@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\TestSetupDeclarationModule1\Setup;
 
@@ -39,7 +40,7 @@ class InstallSchema implements InstallSchemaInterface
             ->setComment('Reference table');
         $installer->getConnection()->createTable($table);
 
-        $testTable = $installer->getConnection()->newTable('test_table')
+        $testTable = $installer->getConnection()->newTable($installer->getTable('test_table'))
             ->addColumn(
                 'smallint',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -97,19 +98,19 @@ class InstallSchema implements InstallSchemaInterface
                 'Boolean'
             )
             ->addIndex(
-                $installer->getIdxName($installer->getTable('test_table'), ['smallint', 'bigint']),
+                $installer->getIdxName('test_table', ['smallint', 'bigint']),
                 ['smallint', 'bigint'],
                 ['type' => \Magento\Framework\DB\Adapter\Pdo\Mysql::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
-                $installer->getIdxName($installer->getTable('test_table'), ['bigint']),
+                $installer->getIdxName('test_table', ['bigint']),
                 ['bigint']
             )
             ->addForeignKey(
                 $installer->getFkName(
                     $installer->getTable('test_table'),
                     'smallint',
-                    $installer->getTable('reference_table'),
+                    'reference_table',
                     'smallint_ref'
                 ),
                 'smallint',
