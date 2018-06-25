@@ -28,9 +28,6 @@ class WishlistRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $customerRepository;
 
-    /** @var  SortOrderBuilder */
-    private $sortOrderBuilder;
-
     /** @var FilterBuilder */
     private $filterBuilder;
 
@@ -52,10 +49,6 @@ class WishlistRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->filterBuilder = $this->objectManager->get(
             \Magento\Framework\Api\FilterBuilder::class
         );
-        $this->sortOrderBuilder = $this->objectManager->get(
-            \Magento\Framework\Api\SortOrderBuilder::class
-        );
-
     }
 
     /**
@@ -115,7 +108,7 @@ class WishlistRepositoryTest extends \PHPUnit\Framework\TestCase
         $customer = $this->objectManager->get(CustomerInterface::class);
         $customer->setFirstname('Test');
         $customer->setLastname('Customer');
-        $customer->setEmail( uniqid() . '_test@customer.test');
+        $customer->setEmail( 'test@customer.test');
         return $customer;
     }
 
