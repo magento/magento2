@@ -11,8 +11,8 @@ use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Assert\AssertArrayContains;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class AssignSalesChannelTest extends WebapiAbstract
 {
@@ -119,7 +119,6 @@ class AssignSalesChannelTest extends WebapiAbstract
         self::assertArrayHasKey(StockInterface::STOCK_ID, $response);
         return $response;
     }
-
 
     /**
      * @param array $salesChannels
