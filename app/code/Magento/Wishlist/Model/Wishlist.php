@@ -12,7 +12,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Wishlist\Api\data\WishlistInterface;
+use Magento\Wishlist\Api\Data\WishlistInterface;
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as ResourceWishlist;
 use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;

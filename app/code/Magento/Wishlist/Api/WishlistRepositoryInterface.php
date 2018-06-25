@@ -12,7 +12,7 @@ interface WishlistRepositoryInterface
     /**
      * @param int $customerId
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return \Magento\Wishlist\Api\data\WishlistInterface
+     * @return \Magento\Wishlist\Api\Data\WishlistInterface
      */
     public function getWishlistForCustomer($customerId);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Magento\Wishlist\Api\data;
+namespace Magento\Wishlist\Api\Data;
 
 interface WishlistInterface
 {
