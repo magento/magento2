@@ -14,8 +14,8 @@ interface SectionPoolInterface
      * Get section data by section names. If $sectionNames is null then return all sections data
      *
      * @param array $sectionNames
-     * @param bool $updateIds
+     * @param bool $forceNewTimestamp
      * @return array
      */
-    public function getSectionsData(array $sectionNames = null, $updateIds = false);
+    public function getSectionsData(array $sectionNames = null, $forceNewTimestamp = false);
 }
