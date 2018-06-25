@@ -11,9 +11,9 @@
     <actionGroup name="BundleProductFilter">
         <!--Setting filter-->
         <!--Prereq: go to admin product catalog page-->
-        <click selector="{{AdminProductCatalog.filter}}" stepKey="ClickOnFilter"/>
-        <click selector="{{AdminProductCatalog.typeDropDown}}" stepKey="ClickOnTypeDropDown"/>
-        <click selector="{{AdminProductCatalog.bundleOption}}" stepKey="ClickOnBundleOption"/>
-        <click selector="{{AdminProductCatalog.applyFilters}}" stepKey="ClickOnApplyFilters"/>
+        <click selector="{{AdminProductFiltersSection.filter}}" stepKey="ClickOnFilter"/>
+        <click selector="{{AdminProductFiltersSection.typeDropDown}}" stepKey="ClickOnTypeDropDown"/>
+        <click selector="{{AdminProductFiltersSection.bundleOption}}" stepKey="ClickOnBundleOption"/>
+        <click selector="{{AdminProductFiltersSection.applyFilters}}" stepKey="ClickOnApplyFilters"/>
     </actionGroup>
 </actionGroups>

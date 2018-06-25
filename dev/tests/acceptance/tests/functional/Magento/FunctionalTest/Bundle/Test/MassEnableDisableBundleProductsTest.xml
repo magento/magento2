@@ -123,10 +123,10 @@
         <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
 
         <!--Disabling bundle products-->
-        <click selector="{{AdminProductCatalog.allCheckbox}}" stepKey="ClickOnSelectAllCheckBox"/>
-        <click selector="{{AdminProductCatalog.actions}}" stepKey="ClickOnActions"/>
-        <click selector="{{AdminProductCatalog.changeStatus}}" stepKey="ClickOnChangeStatus"/>
-        <click selector="{{AdminProductCatalog.disable}}" stepKey="ClickOnDisable"/>
+        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="ClickOnSelectAllCheckBox"/>
+        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActions"/>
+        <click selector="{{AdminProductFiltersSection.changeStatus}}" stepKey="ClickOnChangeStatus"/>
+        <click selector="{{AdminProductFiltersSection.disable}}" stepKey="ClickOnDisable"/>
         <waitForPageLoad stepKey="waitForPageloadToExecute"/>
 
         <!--Clear Cache - reindex - resets products according to enabled/disabled view-->
@@ -142,10 +142,10 @@
         <!--Enabling bundle products-->
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToCatalogPageChangingView"/>
         <waitForPageLoad stepKey="WaitForPageToLoadFullyChangingView"/>
-        <click selector="{{AdminProductCatalog.allCheckbox}}" stepKey="ClickOnSelectAllCheckBoxChangingView"/>
-        <click selector="{{AdminProductCatalog.actions}}" stepKey="ClickOnActionsChangingView"/>
-        <click selector="{{AdminProductCatalog.changeStatus}}" stepKey="ClickOnChangeStatusChangingView"/>
-        <click selector="{{AdminProductCatalog.enable}}" stepKey="ClickOnEnable"/>
+        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="ClickOnSelectAllCheckBoxChangingView"/>
+        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActionsChangingView"/>
+        <click selector="{{AdminProductFiltersSection.changeStatus}}" stepKey="ClickOnChangeStatusChangingView"/>
+        <click selector="{{AdminProductFiltersSection.enable}}" stepKey="ClickOnEnable"/>
 
         <!--Clear Cache - reindex - resets products according to enabled/disabled view-->
         <magentoCLI command="indexer:reindex" stepKey="reindex2"/>

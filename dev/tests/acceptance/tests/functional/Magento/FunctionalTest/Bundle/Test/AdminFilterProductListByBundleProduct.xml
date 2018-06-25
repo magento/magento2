@@ -67,7 +67,7 @@
         <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
 
         <!--Testing application of filter-->
-        <see selector="{{AdminProductCatalog.productType('0')}}" userInput="Bundle Product" stepKey="correcType0"/>
-        <dontSeeElement selector="{{AdminProductCatalog.AllProductsNotOfBundleType}}" stepKey="checkingRowsForIncorrectType"/>
+        <see selector="{{AdminProductFiltersSection.productType('0')}}" userInput="Bundle Product" stepKey="correcType0"/>
+        <dontSeeElement selector="{{AdminProductFiltersSection.AllProductsNotOfBundleType}}" stepKey="checkingRowsForIncorrectType"/>
     </test>
 </tests>

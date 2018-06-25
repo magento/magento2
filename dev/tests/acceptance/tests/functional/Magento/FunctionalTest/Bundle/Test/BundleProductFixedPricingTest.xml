@@ -76,12 +76,12 @@
         <!--Set filter to product name-->
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
         <waitForPageLoad stepKey="WaitForPageToLoad"/>
-        <conditionalClick selector="{{AdminProductCatalog.filtersClear}}" dependentSelector="{{AdminProductCatalog.filtersClear}}" visible="true" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
+        <conditionalClick selector="{{AdminProductFiltersSection.filtersClear}}" dependentSelector="{{AdminProductFiltersSection.filtersClear}}" visible="true" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
         <waitForPageLoad stepKey="WaitForClear"/>
         <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductCatalog.priceOfFirstRow(BundleProduct.fixedPrice)}}" stepKey="seePrice"/>
+        <seeElement selector="{{AdminProductFiltersSection.priceOfFirstRow(BundleProduct.fixedPrice)}}" stepKey="seePrice"/>
         <!--Storefront-->
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>

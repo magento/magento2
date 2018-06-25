@@ -59,10 +59,10 @@
         <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductCatalog.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="seeAttributeSet"/>
+        <seeElement selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="seeAttributeSet"/>
 
         <!--Editing Attribute set-->
-        <click selector="{{AdminProductCatalog.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="clickAttributeSet2"/>
+        <click selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="clickAttributeSet2"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
 
         <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet2"/>
@@ -80,6 +80,6 @@
         <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName2">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductCatalog.attributeSetOfFirstRow(BundleProduct.defaultAttribute)}}" stepKey="seeAttributeSet2"/>
+        <seeElement selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(BundleProduct.defaultAttribute)}}" stepKey="seeAttributeSet2"/>
     </test>
 </tests>

@@ -117,15 +117,15 @@
         <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
 
         <!--Delete-->
-        <click selector="{{AdminProductCatalog.allCheckbox}}" stepKey="SelectAllOnly1"/>
+        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="SelectAllOnly1"/>
         <waitForPageLoad stepKey="loading"/>
-        <click selector="{{AdminProductCatalog.actions}}" stepKey="ClickOnActionsChangingView"/>
-        <click selector="{{AdminProductCatalog.delete}}" stepKey="ClickDelete"/>
+        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActionsChangingView"/>
+        <click selector="{{AdminProductFiltersSection.delete}}" stepKey="ClickDelete"/>
         <click selector="//button[@class='action-primary action-accept']" stepKey="ConfirmDelete"/>
         <waitForPageLoad stepKey="loading3"/>
 
         <!--Locating delete message-->
-        <seeElement selector="{{AdminProductCatalog.deleteMessage}}" stepKey="deleteMessage"/>
+        <seeElement selector="{{AdminProductFiltersSection.deleteMessage}}" stepKey="deleteMessage"/>
 
         <!--Clear Cache - resets products according to enabled/disabled view-->
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="ClearPageCaches"/>
