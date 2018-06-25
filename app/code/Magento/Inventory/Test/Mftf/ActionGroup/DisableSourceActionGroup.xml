@@ -22,7 +22,8 @@
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters"/>
         <fillField userInput="{{sourceCode}}" selector="{{AdminManageSourcesGridFilterControls.code}}" stepKey="fillCodeField"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
-        <click selector="{{source_code}}"
+        <waitForLoadingMaskToDisappear stepKey="waitFiltersApplied"/>
+        <click selector="{{AdminGridRow.editByValue(sourceCode)}}"
                stepKey="clickEditCustomSource"/>
         <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad"/>
         <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableCustomSource"/>

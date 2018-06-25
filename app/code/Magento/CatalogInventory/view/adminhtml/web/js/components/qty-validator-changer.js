@@ -20,6 +20,7 @@ define([
             var isDigits = value !== 1;
 
             this.validation['validate-integer'] = isDigits;
+            this.validation['validate-digits'] = isDigits;
             this.validation['less-than-equals-to'] = isDigits ? 99999999 : 99999999.9999;
             this.validate();
         }

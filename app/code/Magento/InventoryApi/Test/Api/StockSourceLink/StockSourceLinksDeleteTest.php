@@ -18,8 +18,9 @@ class StockSourceLinksDeleteTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/stock-source-link';
+    const RESOURCE_PATH = '/V1/inventory/stock-source-links';
     const RESOURCE_DELETE_PATH = '/V1/inventory/stock-source-links-delete';
+
     const SERVICE_NAME_SAVE = 'inventoryApiStockSourceLinksSaveV1';
     const SERVICE_NAME_DELETE = 'inventoryApiStockSourceLinksDeleteV1';
     const SERVICE_NAME_GET_LIST = 'inventoryApiGetStockSourceLinksV1';

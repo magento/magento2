@@ -5,13 +5,18 @@
  */
 namespace Magento\Elasticsearch\Model\Indexer;
 
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Action as ProductAction;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\CatalogSearch\Model\Indexer\Fulltext as CatalogSearchFulltextIndexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
+use Magento\Indexer\Model\Indexer;
 
 /**
  * Important: Please make sure that each integration test file works with unique elastic search index. In order to
@@ -20,107 +25,79 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
  *
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ConnectionManager
+     * @var ProductRepositoryInterface
      */
-    protected $connectionManager;
+    private $productRepository;
 
     /**
      * @var ElasticsearchClient
      */
-    protected $client;
+    private $client;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var int[]
      */
-    protected $storeIds;
+    private $storeIds;
 
     /**
-     * @var Config
+     * @var string
      */
-    protected $clientConfig;
+    private $entityType;
+
+    /**
+     * @var Indexer
+     */
+    private $indexer;
 
     /**
      * @var SearchIndexNameResolver
      */
-    protected $searchIndexNameResolver;
+    private $searchIndexNameResolver;
 
     /**
-     * @var Product
-     */
-    protected $productApple;
-
-    /**
-     * @var Product
-     */
-    protected $productBanana;
-
-    /**
-     * @var Product
-     */
-    protected $productOrange;
-
-    /**
-     * @var Product
-     */
-    protected $productPapaya;
-
-    /**
-     * @var Product
-     */
-    protected $productCherry;
-
-    /**
-     * Setup method
+     * {@inheritdoc}
      */
     protected function setUp()
     {
-        $this->connectionManager = Bootstrap::getObjectManager()->create(
-            \Magento\Elasticsearch\SearchAdapter\ConnectionManager::class
-        );
+        $connectionManager = Bootstrap::getObjectManager()->create(ConnectionManager::class);
+        $this->client = $connectionManager->getConnection();
 
-        $this->client = $this->connectionManager->getConnection();
-
-        $this->storeManager = Bootstrap::getObjectManager()->create(
-            \Magento\Store\Model\StoreManagerInterface::class
-        );
+        $this->storeManager = Bootstrap::getObjectManager()->create(StoreManagerInterface::class);
         $this->storeIds = array_keys($this->storeManager->getStores());
 
-        $this->clientConfig = Bootstrap::getObjectManager()->create(
-            \Magento\Elasticsearch\Model\Config::class
-        );
+        $clientConfig = Bootstrap::getObjectManager()->create(Config::class);
+        $this->entityType = $clientConfig->getEntityType();
 
-        $this->searchIndexNameResolver = Bootstrap::getObjectManager()->create(
-            \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver::class
-        );
+        $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
+        $this->indexer->load(CatalogSearchFulltextIndexer::INDEXER_ID);
+        $this->indexer->reindexAll();
 
-        $this->productApple = $this->getProductBySku('fulltext-1');
-        $this->productBanana = $this->getProductBySku('fulltext-2');
-        $this->productOrange = $this->getProductBySku('fulltext-3');
-        $this->productPapaya = $this->getProductBySku('fulltext-4');
-        $this->productCherry = $this->getProductBySku('fulltext-5');
+        $this->searchIndexNameResolver = Bootstrap::getObjectManager()->create(SearchIndexNameResolver::class);
+        $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
     }
 
     /**
-     * Test reindex process
      * @magentoConfigFixture default/catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
+     * @return void
      */
-    public function testReindexAll()
+    public function testReindexAll(): void
     {
-        $this->reindexAll();
+        $productApple = $this->productRepository->get('fulltext-1');
         foreach ($this->storeIds as $storeId) {
             $products = $this->searchByName('Apple', $storeId);
             $this->assertCount(1, $products);
-            $this->assertEquals($this->productApple->getId(), $products[0]['_id']);
+            $this->assertEquals($productApple->getId(), $products[0]['_id']);
 
             $products = $this->searchByName('Simple Product', $storeId);
             $this->assertCount(5, $products);
@@ -128,19 +105,17 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoConfigFixture default/catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
+     * @return void
      */
-    public function testReindexRowAfterEdit()
+    public function testReindexRowAfterEdit(): void
     {
-        // The test executes fine locally. On bamboo there is some issue with parallel test execution or other
-        // test interaction. It is being marked as skipped until more time is available to investigate and
-        // fix the issue.
-        $this->markTestSkipped('MAGETWO-53851 - Ticket to investiage this test failure on Bamboo and fix it.');
-
-        $this->productApple->setData('name', 'Simple Product Cucumber');
-        $this->productApple->save();
-        $this->reindexAll();
+        $this->storeManager->setCurrentStore('admin');
+        $productApple = $this->productRepository->get('fulltext-1');
+        $productApple->setName('Simple Product Cucumber');
+        $this->productRepository->save($productApple);
 
         foreach ($this->storeIds as $storeId) {
             $products = $this->searchByName('Apple', $storeId);
@@ -148,7 +123,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
 
             $products = $this->searchByName('Cucumber', $storeId);
             $this->assertCount(1, $products);
-            $this->assertEquals($this->productApple->getId(), $products[0]['_id']);
+            $this->assertEquals($productApple->getId(), $products[0]['_id']);
 
             $products = $this->searchByName('Simple Product', $storeId);
             $this->assertCount(5, $products);
@@ -158,22 +133,21 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoConfigFixture default/catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
+     * @return void
      */
-    public function testReindexRowAfterMassAction()
+    public function testReindexRowAfterMassAction(): void
     {
-        $this->reindexAll();
+        $productApple = $this->productRepository->get('fulltext-1');
+        $productBanana = $this->productRepository->get('fulltext-2');
         $productIds = [
-            $this->productApple->getId(),
-            $this->productBanana->getId(),
+            $productApple->getId(),
+            $productBanana->getId(),
         ];
         $attrData = [
             'name' => 'Simple Product Common',
         ];
-
-        /** @var \Magento\Catalog\Model\Product\Action $action */
-        $action = Bootstrap::getObjectManager()->get(
-            \Magento\Catalog\Model\Product\Action::class
-        );
+        /** @var ProductAction $action */
+        $action = Bootstrap::getObjectManager()->get(ProductAction::class);
 
         foreach ($this->storeIds as $storeId) {
             $action->updateAttributes($productIds, $attrData, $storeId);
@@ -199,30 +173,67 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture default/catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @magentoAppArea adminhtml
+     * @return void
      */
-    public function testReindexRowAfterDelete()
+    public function testReindexRowAfterDelete(): void
     {
-        $this->reindexAll();
-        $this->productBanana->delete();
+        $productBanana = $this->productRepository->get('fulltext-2');
+        $this->productRepository->delete($productBanana);
 
         foreach ($this->storeIds as $storeId) {
+            $products = $this->searchByName('Banana', $storeId);
+            $this->assertEmpty($products);
+
             $products = $this->searchByName('Simple Product', $storeId);
             $this->assertCount(4, $products);
         }
     }
 
     /**
-     * Search docs in Elasticsearch by name
+     * @magentoDbIsolation enabled
+     * @magentoAppArea adminhtml
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
+     * @magentoDataFixture Magento/Elasticsearch/_files/configurable_products.php
+     * @return void
+     */
+    public function testReindexRowAfterUpdateStockStatus(): void
+    {
+        foreach ($this->storeIds as $storeId) {
+            $products = $this->searchByName('ProductOption1', $storeId);
+            $this->assertNotEmpty($products);
+        }
+        $product = $this->productRepository->get('simple_10');
+        /** @var StockRegistryInterface $stockRegistry */
+        $stockRegistry = Bootstrap::getObjectManager()->create(StockRegistryInterface::class);
+        $stockItem = $stockRegistry->getStockItem($product->getId());
+        $stockItem->setIsInStock(false);
+        /** @var StockItemRepositoryInterface $stockRepository */
+        $stockRepository = Bootstrap::getObjectManager()->create(StockItemRepositoryInterface::class);
+        $stockRepository->save($stockItem);
+
+        foreach ($this->storeIds as $storeId) {
+            $products = $this->searchByName('ProductOption1', $storeId);
+            $this->assertEmpty($products);
+
+            $products = $this->searchByName('Configurable', $storeId);
+            $this->assertNotEmpty($products);
+        }
+    }
+
+    /**
+     * Search docs in Elasticsearch by name.
      *
      * @param string $text
      * @param int $storeId
      * @return array
      */
-    protected function searchByName($text, $storeId)
+    private function searchByName(string $text, int $storeId): array
     {
+        $index = $this->searchIndexNameResolver->getIndexName($storeId, $this->indexer->getId());
         $searchQuery = [
-            'index' => $this->searchIndexNameResolver->getIndexName($storeId, 'catalogsearch_fulltext'),
-            'type' => $this->clientConfig->getEntityType(),
+            'index' => $index,
+            'type' => $this->entityType,
             'body' => [
                 'query' => [
                     'bool' => [
@@ -240,35 +251,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
         ];
         $queryResult = $this->client->query($searchQuery);
         $products = isset($queryResult['hits']['hits']) ? $queryResult['hits']['hits'] : [];
+
         return $products;
-    }
-
-    /**
-     * Return product by SKU
-     *
-     * @param string $sku
-     * @return Product
-     */
-    protected function getProductBySku($sku)
-    {
-        /** @var Product $product */
-        $product = Bootstrap::getObjectManager()->get(
-            \Magento\Catalog\Model\Product::class
-        );
-        return $product->loadByAttribute('sku', $sku);
-    }
-
-    /**
-     * Perform full reindex
-     *
-     * @return void
-     */
-    private function reindexAll()
-    {
-        $indexer = Bootstrap::getObjectManager()->create(
-            \Magento\Indexer\Model\Indexer::class
-        );
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
     }
 }
