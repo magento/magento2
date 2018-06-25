@@ -7,6 +7,8 @@ interface WishlistInterface
     /**#@+
      * Constants defined for keys of  data array
      */
+    const WISHLIST_ID = 'wishlist_id';
+
     const NAME = 'name';
 
     const SHARING_CODE = 'sharing_code';
@@ -69,6 +71,13 @@ interface WishlistInterface
      * @return int
      */
     public function getCustomerId();
+
+    /**
+     * Set wishlist customer id
+     *
+     * @return $this
+     */
+    public function setCustomerId($customerId);
 
     /**
      * Get wishlist last updated time
