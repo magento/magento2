@@ -11,16 +11,12 @@
 <?php $_item = $block->getItem() ?>
     <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
         <span class="price-wrapper price-including-tax" data-label="<?= /* @escapeNotVerified */ __('Incl. Tax') ?>">
-            <span class="minicart-price">
-                <?php $_incl = $_item->getPriceInclTax(); ?>
-                <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
-            </span>
+            <?php $_incl = $_item->getPriceInclTax(); ?>
+            <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
         </span>
     <?php endif; ?>
     <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
         <span class="price-wrapper price-excluding-tax" data-label="<?= /* @escapeNotVerified */ __('Excl. Tax') ?>">
-            <span class="minicart-price">
-                <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>
-            </span>
+            <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>
         </span>
     <?php endif; ?>
