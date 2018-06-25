@@ -2,46 +2,68 @@
 
 namespace Magento\Wishlist\Model;
 
-use Magento\Catalog\Model\ProductRepository;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Wishlist\Api\Data\WishlistInterface;
+use Magento\Wishlist\Api\Data\WishlistSearchResultsInterface;
 use Magento\Wishlist\Api\WishlistRepositoryInterface;
 
 class WishlistRepository implements WishlistRepositoryInterface
 {
     /**
-     * @var ProductRepository
+     * @var ResourceModel\Wishlist
      */
-    private $productRepository;
+    private $wishlistResource;
     /**
      * @var WishlistFactory
      */
     private $wishlistFactory;
+    /**
+     * @var ResourceModel\Wishlist\CollectionFactory
+     */
+    private $collectionFactory;
+    /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+    /**
+     * @var \Magento\Wishlist\Api\Data\WishlistSearchResultsInterfaceFactory
+     */
+    private $searchResultsFactory;
 
     /**
      * WishlistRepository constructor.
-     * @param ProductRepository $productRepository
+     * @param CollectionProcessorInterface $collectionProcessor
      * @param WishlistFactory $wishlistFactory
+     * @param \Magento\Wishlist\Api\Data\WishlistSearchResultsInterfaceFactory $searchResultFactory
+     * @param ResourceModel\Wishlist\CollectionFactory $collectionFactory
+     * @param ResourceModel\Wishlist $wishlistResource
      */
     public function __construct(
-        ProductRepository $productRepository,
-        WishlistFactory $wishlistFactory
+        CollectionProcessorInterface $collectionProcessor,
+        WishlistFactory $wishlistFactory,
+        \Magento\Wishlist\Api\Data\WishlistSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\Wishlist\Model\ResourceModel\Wishlist\CollectionFactory $collectionFactory,
+        \Magento\Wishlist\Model\ResourceModel\Wishlist $wishlistResource
     ) {
-        $this->productRepository = $productRepository;
-        $this->wishlistFactory = $wishlistFactory;
-    }
 
+        $this->wishlistResource = $wishlistResource;
+        $this->wishlistFactory = $wishlistFactory;
+        $this->collectionFactory = $collectionFactory;
+        $this->collectionProcessor = $collectionProcessor;
+        $this->searchResultsFactory = $searchResultsFactory;
+    }
 
     /**
      * @inheritdoc
      */
-    public function getWishlistForCustomer($customerId)
+    public function get($id): WishlistInterface
     {
-        /** @var \Magento\Wishlist\Model\ResourceModel\Wishlist $resourceModel */
-        $wishlist = $this->wishlistFactory->create()->loadByCustomerId($customerId, false);
-        if (!$wishlist->getId()) {
-            throw new NoSuchEntityException(__('No wishlist for customer.'));
+        $wishlist = $this->wishlistFactory->create();
+        $this->wishlistResource->load($wishlist, $id);
+        if (!$id) {
+            throw new NoSuchEntityException(__('Wishlist with id "%1" does not exist.', $id));
         }
 
         return $wishlist;
@@ -50,20 +72,51 @@ class WishlistRepository implements WishlistRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function addWishlistForCustomer($customerId, $productId)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        /** @var Wishlist $wishlist */
-        $wishlist = $this->wishlistFactory->create()->loadByCustomerId($customerId, true);
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToSelect('*');
+        $this->collectionProcessor->process($searchCriteria, $collection);
+        $collection->load();
 
-        $product = $this->productRepository->getById($productId);
+        $searchResult = $this->searchResultsFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($collection->getItems());
+        $searchResult->setTotalCount($collection->getSize());
 
+        return $searchResult;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function save(WishlistInterface $wishlist): WishlistInterface
+    {
         try {
-            $item = $wishlist->addNewItem($product);
-            return $item->getId();
-
-        } catch (LocalizedException $exception) {
-            throw new StateException(__('Product with id: ' . $productId . ' already attached to wishlist'));
+            $this->wishlistResource->save($wishlist);
+        } catch (\Exception $e) {
+            throw new StateException(__('Cannot save wishlist'));
         }
+        return $wishlist;
 
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete(WishlistInterface $wishlist)
+    {
+        $this->wishlistResource->delete($wishlist);
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function deleteById($id)
+    {
+        $wishlist = $this->get($id);
+        $this->wishlistResource->delete($wishlist);
+        return true;
     }
 }
