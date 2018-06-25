@@ -12,7 +12,7 @@
     <actionGroup name="StorefrontAddCategoryProductToCartActionGroup">
         <arguments>
             <argument name="product"/>
-            <argument name="productCount" defaultValue="1" type="string"/>
+            <argument name="productCount" type="string"/>
         </arguments>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
         <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart" />
