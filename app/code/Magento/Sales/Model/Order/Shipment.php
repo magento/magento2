@@ -155,8 +155,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         $this->_trackCollectionFactory = $trackCollectionFactory;
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->shipmentCommentRepository = $shipmentCommentRepository;
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
             ->get(SearchCriteriaBuilder::class);
