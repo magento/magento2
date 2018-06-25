@@ -232,11 +232,9 @@ define([
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
 
-                countryData.subscribe(function () {
-                    if (_.isEmpty(countryData())) {
-                        customerData.reload(['directory-data'], false);
-                    }
-                }, this);
+                if (_.isEmpty(countryData())) {
+                    customerData.reload(['directory-data'], false);
+                }
             }
         },
 
