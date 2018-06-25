@@ -12,6 +12,11 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
 
 class ApplyStockConditionToSelectOnDefaultStockTest extends TestCase
 {
@@ -21,6 +26,26 @@ class ApplyStockConditionToSelectOnDefaultStockTest extends TestCase
     private $applyStockConditionToSelect;
 
     /**
+     * @var DefaultSourceProviderInterface
+     */
+    private $defaultSourceProvider;
+
+    /**
+     * @var SourceItemRepositoryInterface
+     */
+    private $sourceItemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var GetSourceItemsBySkuInterface
+     */
+    private $getSourceItemsBySku;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -28,6 +53,10 @@ class ApplyStockConditionToSelectOnDefaultStockTest extends TestCase
         parent::setUp();
 
         $this->applyStockConditionToSelect = Bootstrap::getObjectManager()->get(ApplyStockConditionToSelect::class);
+        $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
+        $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $this->getSourceItemsBySku = Bootstrap::getObjectManager()->get(GetSourceItemsBySkuInterface::class);
     }
 
     /**
@@ -48,6 +77,22 @@ class ApplyStockConditionToSelectOnDefaultStockTest extends TestCase
 
         $result = $select->query()->fetchAll();
 
-        self::assertEquals(4, count($result));
+        /**
+         * Taking into account that `inventory_stock_1` is a MySQL View referring cataloginventory_stock_status table
+         * all the legacy StockItems will get into the Default Index
+         */
+        self::assertEquals(5, count($result));
+
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceItemInterface::SKU, ['SKU-1', 'SKU-2', 'SKU-3', 'SKU-4', 'SKU-5'], 'in')
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $this->defaultSourceProvider->getCode())
+            ->create();
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
+        self::assertEquals(4, count($sourceItems));
+
+        /**
+         * For SKU-5 we should not have Source Item created
+         */
+        self::assertEmpty($this->getSourceItemsBySku->execute('SKU-5'));
     }
 }

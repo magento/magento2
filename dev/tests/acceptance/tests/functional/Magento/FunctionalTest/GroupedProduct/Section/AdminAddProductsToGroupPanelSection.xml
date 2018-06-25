@@ -16,4 +16,8 @@
         <element name="firstCheckbox" type="input" selector="tr[data-repeat-index='0'] .admin__control-checkbox"/>
         <element name="nThCheckbox" type="input" selector="tr[data-repeat-index='{{n}}'] .admin__control-checkbox" parameterized="true"/>
     </section>
+
+    <section name="AdminAddedProductsToGroupGrid">
+        <element name="inputByProductName" type="input" selector="//div[@data-index='grouped']//table//tr[td[@data-index='name']//span[text()='{{productName}}']]//td[@data-index='qty']//input" parameterized="true"/>
+    </section>
 </sections>

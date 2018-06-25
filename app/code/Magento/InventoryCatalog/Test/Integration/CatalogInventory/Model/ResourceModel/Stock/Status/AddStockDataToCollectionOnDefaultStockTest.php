@@ -54,7 +54,7 @@ class AddStockDataToCollectionOnDefaultStockTest extends TestCase
     {
         return [
             [3, true],
-            [4, false],
+            [5, false],
         ];
     }
 }

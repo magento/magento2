@@ -8,11 +8,13 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
-    <section name="AdminAdvancedInventoryControls">
+    <section name="AdminAdvancedInventoryControlsSection">
         <element name="done" type="button" selector=".page-main-actions button.action-primary" timeout="10"/>
     </section>
     <section name="AdminAdvancedInventorySection">
-        <element name="manageStockUseDefault" type="checkbox" selector="input[name='product[stock_data][use_config_manage_stock]']"/>
         <element name="manageStock" type="select" selector="select[name='product[stock_data][manage_stock]']"/>
+        <element name="manageStockUseDefault" type="checkbox" selector="input[name='product[stock_data][use_config_manage_stock]']"/>
+        <element name="outOfStockThreshold" type="text" selector="input[name='product[stock_data][min_qty]']"/>
+        <element name="outOfStockThresholdUseDefault" type="checkbox" selector="input[name='product[stock_data][use_config_min_qty]']"/>
     </section>
 </sections>
