@@ -152,24 +152,22 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $bundle = $productRepository->get('bundle-product');
 
         $child = $productRepository->get('simple');
-        $stockRegistry = $this->objectManager->get(StockRegistryInterface::class);
-        $childStockItem = $stockRegistry->getStockItem($child->getId());
+        $childStockItem = $child->getExtensionAttributes()->getStockItem();
         $childStockItem->setQty($qty);
         $childStockItem->setIsInStock($isInStock);
         $childStockItem->setUseConfigManageStock(false);
         $childStockItem->setManageStock($manageStock);
         $childStockItem->setUseConfigBackorders(false);
         $childStockItem->setBackorders($backorders);
-        $stockRegistry->updateStockItemBySku($child->getSku(), $childStockItem);
+        $productRepository->save($child);
 
-        $linkManagement = $this->objectManager->get(\Magento\Bundle\Api\ProductLinkManagementInterface::class);
         foreach ($bundle->getExtensionAttributes()->getBundleProductOptions() as $productOption) {
             foreach ($productOption->getProductLinks() as $productLink) {
                 $productLink->setCanChangeQuantity(0);
                 $productLink->setQty($selectionQty);
-                $linkManagement->saveChild($bundle->getSku(), $productLink);
             }
         }
+        $productRepository->save($bundle);
 
         $this->assertEquals($isSalable, $bundle->isSalable());
     }
