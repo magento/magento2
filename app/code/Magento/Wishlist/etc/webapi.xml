@@ -1,41 +1,70 @@
 <?xml version="1.0" ?>
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
     <route method="GET" url="/V1/wishlist/customer/:customerId">
         <service class="Magento\Wishlist\Api\WishlistManagementInterface" method="getWishlistByCustomerId"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Wishlist::api"/>
         </resources>
     </route>
+
     <route method="POST" url="/V1/wishlist/:customerId/addItem/:sku">
         <service class="Magento\Wishlist\Api\WishlistManagementInterface" method="addWishlistItemByCustomerId"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Wishlist::api"/>
         </resources>
     </route>
+
+    <route method="GET" url="/V1/wishlist/customer/me">
+        <service class="Magento\Wishlist\Api\WishlistManagementInterface" method="getWishlistByCustomerId"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customer.id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+
+    <route method="POST" url="/V1/wishlist/me/addItem/:sku">
+        <service class="Magento\Wishlist\Api\WishlistManagementInterface" method="addWishlistItemByCustomerId"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customer.id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+
+
 
     <route url="/V1/wishlist/search" method="GET">
         <service class="Magento\Wishlist\Api\WishlistRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Wishlist::api"/>
         </resources>
     </route>
     <route url="/V1/wishlist" method="POST">
         <service class="Magento\Wishlist\Api\WishlistRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Wishlist::api"/>
+        </resources>
+    </route>
+    <route url="/V1/wishlist/:id" method="GET">
+        <service class="Magento\Wishlist\Api\WishlistRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Magento_Wishlist::api"/>
         </resources>
     </route>
     <route url="/V1/wishlist/:id" method="PUT">
         <service class="Magento\Wishlist\Api\WishlistRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Wishlist::api"/>
         </resources>
     </route>
     <route url="/V1/wishlist/:id" method="DELETE">
         <service class="Magento\Wishlist\Api\WishlistRepositoryInterface" method="deleteById"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Wishlist::api"/>
         </resources>
     </route>
-
 </routes>
