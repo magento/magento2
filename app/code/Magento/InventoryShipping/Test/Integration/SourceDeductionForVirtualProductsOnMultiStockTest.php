@@ -71,7 +71,6 @@ class SourceDeductionForVirtualProductsOnMultiStockTest extends TestCase
 
     protected function setUp()
     {
-        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/1054');
         $this->invoiceOrder = Bootstrap::getObjectManager()->get(InvoiceOrderInterface::class);
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);

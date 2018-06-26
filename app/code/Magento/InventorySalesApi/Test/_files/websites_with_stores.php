@@ -10,16 +10,25 @@ use Magento\Store\Api\Data\GroupInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
-use Magento\TestFramework\Db\Sequence;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\InventorySalesApi\Test\OriginalSequenceBuilder;
+use Magento\SalesSequence\Model\EntityPool;
+use Magento\SalesSequence\Model\Config;
 
 $websiteCodes = ['eu_website', 'us_website', 'global_website'];
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var ManagerInterface $eventManager */
 $eventManager = $objectManager->create(ManagerInterface::class);
-/** @var Sequence $sequence */
-$sequence = $objectManager->create(Sequence::class);
+
+/** @var OriginalSequenceBuilder $sequence */
+$sequenceBuilder = $objectManager->create(OriginalSequenceBuilder::class);
+/** @var EntityPool $entityPool */
+$entityPool = $objectManager->create(EntityPool::class);
+/** @var Config $sequenceConfig */
+$sequenceConfig = $objectManager->create(Config::class);
+
+
 /** @var StoreInterface $store */
 $store = $objectManager->create(Store::class);
 $store->load('default');
@@ -61,5 +70,18 @@ foreach ($websiteCodes as $key => $websiteCode) {
     $website->save();
     $store->setGroupId($group->getId());
     $store->save();
-    $eventManager->dispatch('store_add', ['store' => $store]);
+
+    //Generate sequence tables
+    // It use for testing sales operations (order, invoice, shipment etc.)
+    foreach ($entityPool->getEntities() as $entityType) {
+        $sequenceBuilder->setPrefix($store->getId())
+            ->setSuffix($sequenceConfig->get('suffix'))
+            ->setStartValue($sequenceConfig->get('startValue'))
+            ->setStoreId($store->getId())
+            ->setStep($sequenceConfig->get('step'))
+            ->setWarningValue($sequenceConfig->get('warningValue'))
+            ->setMaxValue($sequenceConfig->get('maxValue'))
+            ->setEntityType($entityType)
+            ->create();
+    }
 }
