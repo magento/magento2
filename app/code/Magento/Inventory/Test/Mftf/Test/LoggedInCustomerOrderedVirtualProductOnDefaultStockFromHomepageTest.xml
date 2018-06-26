@@ -7,16 +7,17 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminCreateInvoiceForVirtualProductOnDefaultStock">
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="LoggedInCustomerOrderedVirtualProductOnDefaultStockFromHomepageTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Create invoice for virtual product on default stock."/>
-            <title value="Create invoice for virtual product on default stock."/>
-            <description value="Check, admin user able to create invoice for virtual product on default stock."/>
-            <testCaseId value="1129"/>
+            <stories value="Add Virtual Product"/>
+            <title value="Logged customer place order with virtual product on default stock"/>
+            <description value="Customer should be able to place order with virtual product on default stock."/>
+            <testCaseId value="1298"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="multi_mode"/>
         </annotations>
 
         <before>
@@ -76,11 +77,12 @@
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="customStock" stepKey="deleteStock"/>
         </after>
 
         <comment userInput="Assign category to created virtual product." stepKey="assignCategoryToProductComment"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditProduct"/>
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySku">
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySku">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$product.sku$$"/>
         </actionGroup>
@@ -98,13 +100,13 @@
         </actionGroup>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
-        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addSimpleProductToCart">
+        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addVirtualProductToCart">
             <argument name="product" value="$$product$$"/>
             <argument name="quantity" value="50"/>
             <argument name="checkQuantity" value="1"/>
         </actionGroup>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitFroPaymentSelectionPageLoad"/>
+        <waitForPageLoad stepKey="waitForPaymentSelectionPageLoad"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
         <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
@@ -113,41 +115,24 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
 
-        <comment userInput="Back to admin area, to check product quantity and create invoice." stepKey="createInvoiceComment"/>
-
-        <comment userInput="Check product sources quantity and salable quantity after order placed." stepKey="checkProductQtyAfterPlaceOrderComment"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterPlaceOrder"/>
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySkuToCheckQtyAfterPlaceOrder">
-            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="$$product.sku$$"/>
-        </actionGroup>
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="950" stepKey="checkSalableQtyAfterPlaceOrder"/>
-
+        <comment userInput="Back to admin area, to check ordered quantity" stepKey="checkOrderedQuantity"/>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitOrderListPageLoad"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
         <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="checkSuccessMessage"/>
-        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
-        <waitForLoadingMaskToDisappear stepKey="waitInvoiceGridLoad" />
-        <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="{$grabOrderNumber}" stepKey="checkOrderId"/>
-        <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="John Doe" stepKey="checkUserName"/>
-        <click selector="{{AdminOrderDetailsOrderViewSection.information}}" stepKey="clickInformation"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrderInformationSectionLoad"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="checkOrderStatus"/>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 50" stepKey="orderedQuantity"/>
 
-        <comment userInput="Check product sources quantity and salable quantity after invoice been created." stepKey="checkProductQtyAfterInvoiceCreatedComment"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterInvoiceCreated"/>
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySkuToCheckQtyAfterInvoiceCreated">
+
+        <comment userInput="Check product sources quantity and salable quantity after order placed." stepKey="checkProductQtyAfterPlaceOrderComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterPlaceOrder"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySkuToCheckQtyAfterPlaceOrder">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$product.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="950" stepKey="checkProductSourceQtyInvoiceCreated"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="950" stepKey="checkSalableQtyAfterInvoiceCreated"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="950" stepKey="checkSalableQtyAfterPlaceOrder"/>
     </test>
 </tests>
