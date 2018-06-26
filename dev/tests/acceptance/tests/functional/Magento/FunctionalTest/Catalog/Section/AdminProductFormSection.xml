@@ -11,6 +11,7 @@
     <section name="AdminProductFormSection">
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
+        <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
