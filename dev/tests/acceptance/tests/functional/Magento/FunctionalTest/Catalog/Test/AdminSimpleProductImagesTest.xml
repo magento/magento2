@@ -172,8 +172,6 @@
             <description value="Admin should be able to remove Product Images assigned as Base, Small and Thumbnail from Simple Product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-191"/>
-            <!-- skipped due to MAGETWO-92996 -->
-            <group value="skip"/>
             <group value="Catalog"/>
         </annotations>
 
