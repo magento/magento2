@@ -199,6 +199,69 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     */
+    public function testUpdateWithNoDefaultLabelAndAdminStorelabel()
+    {
+        $attributeCode = uniqid('label_attr_code');
+        $attribute = $this->createAttribute($attributeCode);
+
+        $attributeData = [
+            'attribute' => [
+                'attribute_id' => $attribute['attribute_id'],
+                'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
+                'is_used_in_grid' => true,
+                'frontend_labels' => [
+                    //Update existing
+                    ['store_id' => 0, 'label' => 'front_lbl_store0_new'],
+                    ['store_id' => 1, 'label' => 'front_lbl_store1_new'],
+                ],
+                'is_required' => false,
+                'frontend_input' => 'select',
+            ],
+        ];
+        $result = $this->updateAttribute($attributeCode, $attributeData);
+
+        $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
+        $this->assertEquals(true, $result['is_used_in_grid']);
+        $this->assertEquals($attributeCode, $result['attribute_code']);
+        $this->assertEquals('front_lbl_store0_new', $result['default_frontend_label']);
+        $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     */
+    public function testUpdateWithNoDefaultLabelAndNoAdminStoreLabel()
+    {
+        $attributeCode = uniqid('label_attr_code');
+        $attribute = $this->createAttribute($attributeCode);
+
+        $attributeData = [
+            'attribute' => [
+                'attribute_id' => $attribute['attribute_id'],
+                'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
+                'is_used_in_grid' => true,
+                'frontend_labels' => [
+                    //Update existing
+                    ['store_id' => 1, 'label' => 'front_lbl_store1_new'],
+                ],
+                'is_required' => false,
+                'frontend_input' => 'select',
+            ],
+        ];
+        $result = $this->updateAttribute($attributeCode, $attributeData);
+
+        $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
+        $this->assertEquals(true, $result['is_used_in_grid']);
+        $this->assertEquals($attributeCode, $result['attribute_code']);
+        $this->assertEquals('default_label', $result['default_frontend_label']);
+        $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
+    }
+
+    /**
      * Test source model and backend type can not be changed to custom, as they depends on attribute frontend type.
      *
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
