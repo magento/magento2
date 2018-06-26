@@ -17,32 +17,23 @@
             <testCaseId value="966"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="multi_mode"/>
         </annotations>
 
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <createData entity="_minimalSource" stepKey="customSource"/>
-            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="customStock"/>
+            <createData entity="FullSource1" stepKey="customSource"/>
+
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource"/>
+            </createData>
 
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <waitForPageLoad stepKey="waitForDashboardLoad"/>
-
-            <comment userInput="Assign source and sales channel to stock." stepKey="assignSourceToStockComment"/>
-            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
-            <waitForPageLoad time="30" stepKey="waitForStockGridLoad"/>
-            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomStockByName">
-                <argument name="keyword" value="$$customStock.stock[name]$$"/>
-            </actionGroup>
-            <click selector="{{AdminGridRow.editByValue($$customStock.stock[name]$$)}}" stepKey="clickEditCustomStock"/>
-            <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
-            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannelForCustomStock"/>
-            <click selector="{{AdminEditStockSourcesSection.assignSources}}" stepKey="clickOnAssignSources"/>
-            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByName">
-                <argument name="keyword" value="$$customSource.source[name]$$"/>
-            </actionGroup>
-            <click selector="{{AdminGridRow.checkboxByValue($$customSource.source[name]$$)}}" stepKey="selectCustomSourceForCustomStock"/>
-            <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneCustomSourceAssignment"/>
-            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
         </before>
 
         <after>
@@ -115,7 +106,7 @@
         <click selector="{{AdminGridRow.checkboxByValue($$customSource.source[name]$$)}}" stepKey="selectCustomSource"/>
         <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="daneAssignSources"/>
 
-        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSource}}" userInput="100" stepKey="fillQuantityForCustomSource"/>
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}" userInput="100" stepKey="fillQuantityForCustomSource"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariations"/>
 
