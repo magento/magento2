@@ -5,13 +5,13 @@
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceModifierInterface;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 
@@ -68,9 +68,9 @@ class Configurable implements DimensionalIndexerInterface
     private $productType;
 
     /**
-     * @var PriceModifierInterface[]
+     * @var BasePriceModifier
      */
-    private $priceModifiers;
+    private $basePriceModifier;
 
     /**
      * @param BaseFinalPrice $baseFinalPrice
@@ -89,20 +89,20 @@ class Configurable implements DimensionalIndexerInterface
         TableMaintainer $tableMaintainer,
         MetadataPool $metadataPool,
         \Magento\Framework\App\ResourceConnection $resource,
+        BasePriceModifier $basePriceModifier,
         $fullReindexAction = false,
         $connectionName = 'indexer',
-        $productType = \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
-        array $priceModifiers = []
+        $productType = \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
     ) {
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
         $this->productType = $productType;
         $this->connectionName = $connectionName;
-        $this->priceModifiers = $priceModifiers;
         $this->metadataPool = $metadataPool;
         $this->resource = $resource;
         $this->fullReindexAction = $fullReindexAction;
+        $this->basePriceModifier = $basePriceModifier;
     }
 
     /**
@@ -130,21 +130,8 @@ class Configurable implements DimensionalIndexerInterface
         $query = $select->insertFromSelect($temporaryPriceTable->getTableName(), [], false);
         $this->tableMaintainer->getConnection()->query($query);
 
-        $this->applyPriceModifiers($temporaryPriceTable);
+        $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
         $this->applyConfigurableOption($temporaryPriceTable, $dimensions, iterator_to_array($entityIds));
-    }
-
-    /**
-     * Apply price modifiers to temporary price index table
-     *
-     * @param IndexTableStructure $temporaryPriceTable
-     * @return void
-     */
-    private function applyPriceModifiers(IndexTableStructure $temporaryPriceTable)
-    {
-        foreach ($this->priceModifiers as $priceModifier) {
-            $priceModifier->modifyPrice($temporaryPriceTable);
-        }
     }
 
     /**

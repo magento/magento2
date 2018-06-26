@@ -7,6 +7,7 @@ namespace Magento\Downloadable\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
@@ -16,7 +17,6 @@ use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceModifierInterface;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 
@@ -67,13 +67,14 @@ class Price implements DimensionalIndexerInterface
     private $productType;
 
     /**
-     * @var PriceModifierInterface[]
-     */
-    private $priceModifiers;
-    /**
      * @var Config
      */
     private $eavConfig;
+
+    /**
+     * @var BasePriceModifier
+     */
+    private $basePriceModifier;
 
     /**
      * @param BaseFinalPrice $baseFinalPrice
@@ -84,6 +85,7 @@ class Price implements DimensionalIndexerInterface
      * @param ResourceConnection $resource
      * @param string $connectionName
      * @param string $productType
+     * @param BasePriceModifier $basePriceModifier
      * @param array $priceModifiers
      */
     public function __construct(
@@ -93,19 +95,19 @@ class Price implements DimensionalIndexerInterface
         MetadataPool $metadataPool,
         Config $eavConfig,
         ResourceConnection $resource,
+        BasePriceModifier $basePriceModifier,
         $connectionName = 'indexer',
-        $productType = Type::TYPE_DOWNLOADABLE,
-        array $priceModifiers = []
+        $productType = Type::TYPE_DOWNLOADABLE
     ) {
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
         $this->productType = $productType;
         $this->connectionName = $connectionName;
-        $this->priceModifiers = $priceModifiers;
         $this->metadataPool = $metadataPool;
         $this->resource = $resource;
         $this->eavConfig = $eavConfig;
+        $this->basePriceModifier = $basePriceModifier;
     }
 
     /**
@@ -128,21 +130,8 @@ class Price implements DimensionalIndexerInterface
             'tierPriceField' => 'tier_price',
         ]);
         $this->fillFinalPrice($dimensions, $entityIds, $temporaryPriceTable);
-        $this->applyPriceModifiers($temporaryPriceTable);
+        $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
         $this->applyDownloadableLink($temporaryPriceTable, $dimensions);
-    }
-
-    /**
-     * Apply price modifiers to temporary price index table
-     *
-     * @param IndexTableStructure $temporaryPriceTable
-     * @return void
-     */
-    private function applyPriceModifiers(IndexTableStructure $temporaryPriceTable)
-    {
-        foreach ($this->priceModifiers as $priceModifier) {
-            $priceModifier->modifyPrice($temporaryPriceTable);
-        }
     }
 
     /**
@@ -298,9 +287,11 @@ class Price implements DimensionalIndexerInterface
     /**
      * @param array $dimensions
      * @param \Traversable $entityIds
-     * @param $temporaryPriceTable
+     * @param IndexTableStructure $temporaryPriceTable
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Select_Exception
      */
-    private function fillFinalPrice(array $dimensions, \Traversable $entityIds, $temporaryPriceTable): void
+    private function fillFinalPrice(array $dimensions, \Traversable $entityIds, IndexTableStructure $temporaryPriceTable)
     {
         $select = $this->baseFinalPrice->getQuery($dimensions, $this->productType, iterator_to_array($entityIds));
         $query = $select->insertFromSelect($temporaryPriceTable->getTableName(), [], false);
