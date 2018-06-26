@@ -17,6 +17,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -35,9 +37,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
 
         $this->model = $this->objectManager->create(Product::class);
         $this->model->setTypeId(Type::TYPE_BUNDLE);
@@ -104,9 +112,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testMultipleStores()
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $bundle = $productRepository->get('bundle-product');
+        $bundle = $this->productRepository->get('bundle-product');
 
         /** @var StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
@@ -120,8 +126,128 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $bundle->setStoreId($store->getId())
             ->setCopyFromView(true);
-        $updatedBundle = $productRepository->save($bundle);
+        $updatedBundle = $this->productRepository->save($bundle);
 
         self::assertEquals($store->getId(), $updatedBundle->getStoreId());
+    }
+
+    /**
+     * @param float $selectionQty
+     * @param float $qty
+     * @param int $isInStock
+     * @param bool $manageStock
+     * @param int $backorders
+     * @param bool $isSalable
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/product.php
+     * @dataProvider stockConfigDataProvider
+     * @covers \Magento\Catalog\Model\Product::isSalable
+     */
+    public function testIsSalable(
+        float $selectionQty,
+        float $qty,
+        int $isInStock,
+        bool $manageStock,
+        int $backorders,
+        bool $isSalable
+    ) {
+        /** @var \Magento\Catalog\Model\Product $bundle */
+        $bundle = $this->productRepository->get('bundle-product');
+
+        $child = $this->productRepository->get('simple');
+        $stockRegistry = $this->objectManager->get(StockRegistryInterface::class);
+        $childStockItem = $stockRegistry->getStockItem($child->getId());
+        $childStockItem->setQty($qty);
+        $childStockItem->setIsInStock($isInStock);
+        $childStockItem->setUseConfigManageStock(false);
+        $childStockItem->setManageStock($manageStock);
+        $childStockItem->setUseConfigBackorders(false);
+        $childStockItem->setBackorders($backorders);
+        $stockRegistry->updateStockItemBySku($child->getSku(), $childStockItem);
+
+        $linkManagement = $this->objectManager->get(\Magento\Bundle\Api\ProductLinkManagementInterface::class);
+        foreach ($bundle->getExtensionAttributes()->getBundleProductOptions() as $productOption) {
+            foreach ($productOption->getProductLinks() as $productLink) {
+                $productLink->setCanChangeQuantity(0);
+                $productLink->setQty($selectionQty);
+                $linkManagement->saveChild($bundle->getSku(), $productLink);
+
+            }
+        }
+
+        $this->assertEquals($isSalable, $bundle->isSalable());
+    }
+
+    /**
+     * @return array
+     */
+    public function stockConfigDataProvider(): array
+    {
+        $qtyVars = [0, 10];
+        $isInStockVars = [
+            Stock::STOCK_OUT_OF_STOCK,
+            Stock::STOCK_IN_STOCK,
+        ];
+        $manageStockVars = [false, true];
+        $backordersVars = [
+            Stock::BACKORDERS_NO,
+            Stock::BACKORDERS_YES_NONOTIFY,
+            Stock::BACKORDERS_YES_NOTIFY,
+        ];
+        $selectionQtyVars = [5, 10, 15];
+
+        $variations = [];
+        foreach ($qtyVars as $qty) {
+            foreach ($isInStockVars as $isInStock) {
+                foreach ($manageStockVars as $manageStock) {
+                    foreach ($backordersVars as $backorders) {
+                        foreach ($selectionQtyVars as $selectionQty) {
+                            $variationName = "selectionQty: {$selectionQty}"
+                                . " qty: {$qty}"
+                                . " isInStock: {$isInStock}"
+                                . " manageStock: {$manageStock}"
+                                . " backorders: {$backorders}";
+                            $isSalable = $this->checkIsSalable(
+                                $selectionQty,
+                                $qty,
+                                $isInStock,
+                                $manageStock,
+                                $backorders
+                            );
+
+                            $variations[$variationName] = [
+                                $selectionQty,
+                                $qty,
+                                $isInStock,
+                                $manageStock,
+                                $backorders,
+                                $isSalable
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $variations;
+    }
+
+    /**
+     * @param float $selectionQty
+     * @param float $qty
+     * @param int $isInStock
+     * @param bool $manageStock
+     * @param int $backorders
+     * @return bool
+     * @see \Magento\Bundle\Model\ResourceModel\Selection\Collection::addQuantityFilter
+     */
+    private function checkIsSalable(
+        float $selectionQty,
+        float $qty,
+        int $isInStock,
+        bool $manageStock,
+        int $backorders
+    ): bool {
+        return !$manageStock || ($isInStock && ($backorders || $selectionQty <= $qty));
     }
 }
