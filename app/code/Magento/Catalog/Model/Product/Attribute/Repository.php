@@ -306,15 +306,15 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     private function extractAdminStoreFrontendLabel($attribute)
     {
-        $frontendLabel[0] = null;
+        $frontendLabel = [];
         $frontendLabels = $attribute->getFrontendLabels();
-        if (is_array($frontendLabels)
-            && !empty($frontendLabels)
-            && $frontendLabels[0] instanceof \Magento\Eav\Model\Entity\Attribute\FrontendLabel) {
+        if (isset($frontendLabels[0])
+            && $frontendLabels[0] instanceof \Magento\Eav\Api\Data\AttributeFrontendLabelInterface
+        ) {
             foreach ($attribute->getFrontendLabels() as $label) {
                 $frontendLabel[$label->getStoreId()] = $label->getLabel();
             }
         }
-        return $frontendLabel[0];
+        return $frontendLabel[0] ?? null;
     }
 }

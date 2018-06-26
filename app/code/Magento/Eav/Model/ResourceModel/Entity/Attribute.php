@@ -753,9 +753,9 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $resultLabel = [];
         $frontendLabels = $object->getFrontendLabels();
-        if (is_array($frontendLabels)
-            && !empty($frontendLabels)
-            && $frontendLabels[0] instanceof \Magento\Eav\Model\Entity\Attribute\FrontendLabel) {
+        if (isset($frontendLabels[0])
+            && $frontendLabels[0] instanceof \Magento\Eav\Model\Entity\Attribute\FrontendLabel
+        ) {
             foreach ($frontendLabels as $label) {
                 $resultLabel[$label->getStoreId()] = $label->getLabel();
             }

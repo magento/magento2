@@ -272,7 +272,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveSavesDefaultFrontendLabelIfItIsPresentInPayload()
     {
-        $labelMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\FrontendLabel::class);
+        $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeFrontendLabelInterface::class);
         $labelMock->expects($this->any())->method('getStoreId')->willReturn(1);
         $labelMock->expects($this->any())->method('getLabel')->willReturn('Store Scope Label');
 
