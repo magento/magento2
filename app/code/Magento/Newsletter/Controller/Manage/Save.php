@@ -80,24 +80,24 @@ class Save extends \Magento\Newsletter\Controller\Manage
                     ->getIsSubscribed();
                 $isSubscribedParam = (boolean)$this->getRequest()
                     ->getParam('is_subscribed', false);
-                if ($isSubscribedParam != $isSubscribedState) {
+                if ($isSubscribedParam !== $isSubscribedState) {
                     $this->customerRepository->save($customer);
                     if ($isSubscribedParam) {
                         $subscribeModel = $this->subscriberFactory->create()
                             ->subscribeCustomerById($customerId);
                         $subscribeStatus = $subscribeModel->getStatus();
                         if ($subscribeStatus == Subscriber::STATUS_SUBSCRIBED) {
-                            $this->messageManager->addSuccess(__('We saved the subscription.'));
+                            $this->messageManager->addSuccess(__('We have saved your subscription.'));
                         } else {
-                            $this->messageManager->addSuccess(__('The confirmation request has been sent.'));
+                            $this->messageManager->addSuccess(__('A confirmation request has been sent.'));
                         }
                     } else {
                         $this->subscriberFactory->create()
                             ->unsubscribeCustomerById($customerId);
-                        $this->messageManager->addSuccess(__('We removed the subscription.'));
+                        $this->messageManager->addSuccess(__('We have removed your newsletter subscription.'));
                     }
                 } else {
-                    $this->messageManager->addSuccess(__('We updated the subscription.'));
+                    $this->messageManager->addSuccess(__('We have updated your subscription.'));
                 }
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
