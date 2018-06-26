@@ -136,6 +136,11 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const GENERATED_METADATA = 'metadata';
 
     /**
+     * Relative directory key for generated PDFs
+     */
+    const PDF = 'pdf';
+
+    /**
      * {@inheritdoc}
      */
     public static function getDefaultConfig()
@@ -164,6 +169,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::GENERATED => [parent::PATH => 'generated'],
             self::GENERATED_CODE => [parent::PATH => Io::DEFAULT_DIRECTORY],
             self::GENERATED_METADATA => [parent::PATH => 'generated/metadata'],
+            self::PDF => [parent::PATH => 'var/pdf'],
         ];
         return parent::getDefaultConfig() + $result;
     }
