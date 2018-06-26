@@ -12,6 +12,9 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\AbstractComponent;
 
+/**
+ * Provide validation of allowed massaction for user.
+ */
 class MassAction extends AbstractComponent
 {
     const NAME = 'massaction';
@@ -38,7 +41,7 @@ class MassAction extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepare()
     {
@@ -62,7 +65,7 @@ class MassAction extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getComponentName(): string
     {
@@ -80,8 +83,6 @@ class MassAction extends AbstractComponent
         $isAllowed = true;
         switch ($actionType) {
             case 'delete':
-                $isAllowed = $this->authorization->isAllowed('Magento_Catalog::products');
-                break;
             case 'status':
                 $isAllowed = $this->authorization->isAllowed('Magento_Catalog::products');
                 break;
