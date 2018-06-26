@@ -269,6 +269,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                         'isMain' => $image->getFile() == $product->getImage(),
                         'type' => str_replace('external-', '', $image->getMediaType()),
                         'videoUrl' => $image->getVideoUrl(),
+                        'video' => $image->getVideoUrl(),
                     ];
             }
         }

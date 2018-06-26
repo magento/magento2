@@ -283,6 +283,7 @@ define([
                     tmpVideoData.id = dataUrl.id;
                     tmpVideoData.provider = dataUrl.type;
                     tmpVideoData.videoUrl = tmpInputData.videoUrl;
+                    tmpVideoData.video = tmpInputData.videoUrl;
                 }
 
                 videoData.push(tmpVideoData);

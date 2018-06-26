@@ -121,6 +121,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'isMain' => $this->isMainImage($image),
                 'type' => str_replace('external-', '', $image->getMediaType()),
                 'videoUrl' => $image->getVideoUrl(),
+                'video' => $image->getVideoUrl(),
             ];
         }
         if (empty($imagesItems)) {
@@ -133,6 +134,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'isMain' => true,
                 'type' => 'image',
                 'videoUrl' => null,
+                'video' => null,
             ];
         }
         return json_encode($imagesItems);
