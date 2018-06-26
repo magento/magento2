@@ -58,7 +58,7 @@ class ManageTest extends \Magento\TestFramework\TestCase\AbstractController
          * Check that success message
          */
         $this->assertSessionMessages(
-            $this->equalTo(['We saved the subscription.']),
+            $this->equalTo(['We have saved your subscription.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
@@ -85,7 +85,7 @@ class ManageTest extends \Magento\TestFramework\TestCase\AbstractController
          * Check that success message
          */
         $this->assertSessionMessages(
-            $this->equalTo(['We updated the subscription.']),
+            $this->equalTo(['We have updated your subscription.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
