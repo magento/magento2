@@ -75,12 +75,13 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attributes">CustomAttributeProductAttribute</requiredEntity>
     </entity>
-    <entity name="ImageUpload" type="uploadImage">
+    <entity name="ProductImage" type="uploadImage">
         <data key="title" unique="suffix">Image1</data>
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
         <data key="file">magento-logo.png</data>
+        <data key="fileName">magento-logo</data>
     </entity>
     <entity name="productWithDescription" type="product">
         <data key="sku" unique="suffix">testProductWithDescriptionSku</data>
@@ -146,5 +147,20 @@
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductNewsFromDate</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithImage" type="product">
+        <data key="sku" unique="suffix">SimpleProduct</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">125.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">1000</data>
+        <data key="urlKey" unique="suffix">simple-product-with-image</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="media_gallery_entries">ProductAttributeMediaGalleryEntryMagentoLogo</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
 </entities>
