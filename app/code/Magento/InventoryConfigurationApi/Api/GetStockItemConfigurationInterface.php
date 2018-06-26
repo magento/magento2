@@ -23,7 +23,7 @@ interface GetStockItemConfigurationInterface
      * @param int $stockId
      * @return StockItemConfigurationInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException
      */
     public function execute(string $sku, int $stockId): StockItemConfigurationInterface;
 }

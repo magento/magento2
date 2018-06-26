@@ -14,6 +14,7 @@ use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterfaceFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException;
 
 /**
  * @inheritdoc
@@ -152,14 +153,24 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
             $this->setConditions();
         }
 
-        $requiredConditionsErrors = $this->processRequiredConditions($sku, $stockId, $requestedQty);
-        if (count($requiredConditionsErrors)) {
-            return $this->productSalableResultFactory->create(['errors' => $requiredConditionsErrors]);
-        }
+        try {
+            $requiredConditionsErrors = $this->processRequiredConditions($sku, $stockId, $requestedQty);
+            if (count($requiredConditionsErrors)) {
+                return $this->productSalableResultFactory->create(['errors' => $requiredConditionsErrors]);
+            }
 
-        $sufficientConditionsErrors = $this->processSufficientConditions($sku, $stockId, $requestedQty);
-        if (count($sufficientConditionsErrors)) {
-            return $this->productSalableResultFactory->create(['errors' => $sufficientConditionsErrors]);
+            $sufficientConditionsErrors = $this->processSufficientConditions($sku, $stockId, $requestedQty);
+            if (count($sufficientConditionsErrors)) {
+                return $this->productSalableResultFactory->create(['errors' => $sufficientConditionsErrors]);
+            }
+        } catch (SkuIsNotAssignedToStockException $e) {
+            $errors = [
+                $this->productSalabilityErrorFactory->create([
+                    'code' => 'requested-sku-is-not-assigned-to-given-stock',
+                    'message' => __('The requested sku is not assigned to given stock.')
+                ])
+            ];
+            return $this->productSalableResultFactory->create(['errors' => $errors]);
         }
 
         return $this->productSalableResultFactory->create(['errors' => []]);

@@ -9,7 +9,7 @@ namespace Magento\InventorySales\Model\IsProductSalableCondition;
 
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException;
 
 /**
  * @inheritdoc
@@ -84,10 +84,14 @@ class IsProductSalableConditionChain implements IsProductSalableInterface
      */
     public function execute(string $sku, int $stockId): bool
     {
-        foreach ($this->conditions as $condition) {
-            if ($condition->execute($sku, $stockId) === true) {
-                return true;
+        try {
+            foreach ($this->conditions as $condition) {
+                if ($condition->execute($sku, $stockId) === true) {
+                    return true;
+                }
             }
+        } catch (SkuIsNotAssignedToStockException $e) {
+            return false;
         }
 
         return false;

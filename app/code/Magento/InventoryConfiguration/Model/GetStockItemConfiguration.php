@@ -11,7 +11,7 @@ use Magento\InventoryApi\Model\IsProductAssignedToStockInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException;
 
 /**
  * @inheritdoc
@@ -72,7 +72,7 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
         if ($this->defaultStockProvider->getId() !== $stockId
             && true === $this->isSourceItemManagementAllowedForSku->execute($sku)
             && false === $this->isProductAssignedToStock->execute($sku, $stockId)) {
-            throw new NoSuchEntityException(
+            throw new SkuIsNotAssignedToStockException(
                 __('The requested sku is not assigned to given stock.')
             );
         }
