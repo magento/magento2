@@ -17,7 +17,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -148,8 +147,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         bool $isSalable
     ) {
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        /** @var \Magento\Catalog\Model\Product $bundle */
-        $bundle = $productRepository->get('bundle-product');
 
         $child = $productRepository->get('simple');
         $childStockItem = $child->getExtensionAttributes()->getStockItem();
@@ -161,15 +158,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $childStockItem->setBackorders($backorders);
         $productRepository->save($child);
 
-        foreach ($bundle->getExtensionAttributes()->getBundleProductOptions() as $productOption) {
+        $this->model->load(3);
+        foreach ($this->model->getExtensionAttributes()->getBundleProductOptions() as $productOption) {
             foreach ($productOption->getProductLinks() as $productLink) {
                 $productLink->setCanChangeQuantity(0);
                 $productLink->setQty($selectionQty);
             }
         }
-        $productRepository->save($bundle);
+        $productRepository->save($this->model);
 
-        $this->assertEquals($isSalable, $bundle->isSalable());
+        $this->assertEquals($isSalable, $this->model->isSalable());
     }
 
     /**
