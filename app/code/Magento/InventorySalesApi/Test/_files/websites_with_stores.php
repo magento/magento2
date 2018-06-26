@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Api\Data\GroupInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
@@ -18,16 +17,12 @@ use Magento\SalesSequence\Model\Config;
 $websiteCodes = ['eu_website', 'us_website', 'global_website'];
 
 $objectManager = Bootstrap::getObjectManager();
-/** @var ManagerInterface $eventManager */
-$eventManager = $objectManager->create(ManagerInterface::class);
-
 /** @var OriginalSequenceBuilder $sequence */
-$sequenceBuilder = $objectManager->create(OriginalSequenceBuilder::class);
+$sequenceBuilder = $objectManager->get(OriginalSequenceBuilder::class);
 /** @var EntityPool $entityPool */
-$entityPool = $objectManager->create(EntityPool::class);
+$entityPool = $objectManager->get(EntityPool::class);
 /** @var Config $sequenceConfig */
-$sequenceConfig = $objectManager->create(Config::class);
-
+$sequenceConfig = $objectManager->get(Config::class);
 
 /** @var StoreInterface $store */
 $store = $objectManager->create(Store::class);
