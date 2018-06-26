@@ -4,11 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Storage model test
- */
 namespace Magento\Theme\Test\Unit\Model\Wysiwyg;
 
+/**
+ * Class StorageTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
