@@ -11,7 +11,6 @@
     <actionGroup name="searchAndMultiSelectActionGroup">
         <arguments>
             <argument name="dropDownSelector" />
-            <!-- TODO: Can changed when https://github.com/magento/magento2-functional-testing-framework/pull/89 is released -->
             <argument name="options" type="string"/>
         </arguments>
         <waitForPageLoad stepKey="waitForPageLoad"/>
