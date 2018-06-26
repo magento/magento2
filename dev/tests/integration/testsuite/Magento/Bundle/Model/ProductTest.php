@@ -24,6 +24,9 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Entity;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -158,16 +161,17 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $childStockItem->setBackorders($backorders);
         $productRepository->save($child);
 
-        $this->model->load(3);
-        foreach ($this->model->getExtensionAttributes()->getBundleProductOptions() as $productOption) {
+        /** @var \Magento\Catalog\Model\Product $bundle */
+        $bundle = $productRepository->get('bundle-product');
+        foreach ($bundle->getExtensionAttributes()->getBundleProductOptions() as $productOption) {
             foreach ($productOption->getProductLinks() as $productLink) {
                 $productLink->setCanChangeQuantity(0);
                 $productLink->setQty($selectionQty);
             }
         }
-        $productRepository->save($this->model);
+        $productRepository->save($bundle);
 
-        $this->assertEquals($isSalable, $this->model->isSalable());
+        $this->assertEquals($isSalable, $bundle->isSalable());
     }
 
     /**
