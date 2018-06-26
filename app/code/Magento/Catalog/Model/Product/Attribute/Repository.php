@@ -123,7 +123,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             }
 
             $this->updateDefaultFrontendLabel($attribute, $existingModel);
-
         } else {
             $attribute->setAttributeId(null);
 

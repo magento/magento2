@@ -176,7 +176,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->setStoreLabels($object, $frontendLabel);
         }
 
-
         /**
          * @todo need use default source model of entity type !!!
          */

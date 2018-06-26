@@ -1229,7 +1229,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getFrontendLabels()
     {
-       if ($this->getData(self::FRONTEND_LABELS) == null){
+        if ($this->getData(self::FRONTEND_LABELS) == null) {
             $attributeId = $this->getAttributeId();
             $storeLabels = $this->_getResource()->getStoreLabelsByAttributeId($attributeId);
 
