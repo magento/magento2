@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Code\Test\Unit;
 
 use Magento\Framework\Code\Generator;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
+use Psr\Log\LoggerInterface;
 
 class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
@@ -95,7 +95,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testGenerateClassWithError()
+    public function testGenerateClassWhenClassIsNotGenerationSuccess()
     {
         $expectedEntities = array_values($this->expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
@@ -104,6 +104,49 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerMock->expects($this->once())->method('create')->willReturn($entityGeneratorMock);
+        $this->model->setObjectManager($objectManagerMock);
+        $this->model->generateClass($resultClassName);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function testGenerateClassWithErrors()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage("Some error message 0\nSome error message 1\nSome error message 2");
+        $errorMessages = [
+            'Some error message 0',
+            'Some error message 1',
+            'Some error message 2',
+        ];
+        $expectedEntities = array_values($this->expectedEntities);
+        $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $entityGeneratorMock = $this->getMockBuilder(\Magento\Framework\Code\Generator\EntityAbstract::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $loggerMock = $this->createMock(LoggerInterface::class);
+
+        $objectManagerMock->expects($this->once())
+            ->method('create')
+            ->willReturn($entityGeneratorMock);
+        $entityGeneratorMock->expects($this->once())
+            ->method('getSourceClassName')
+            ->willReturn(self::SOURCE_CLASS);
+        $this->definedClassesMock->expects($this->once())
+            ->method('isClassLoadable')
+            ->with(self::SOURCE_CLASS)
+            ->willReturn(true);
+        $entityGeneratorMock->expects($this->once())
+            ->method('generate')
+            ->willReturn(false);
+        $objectManagerMock->expects($this->once())
+            ->method('get')
+            ->willReturn($loggerMock);
+        $entityGeneratorMock->expects($this->once())
+            ->method('getErrors')
+            ->willReturn($errorMessages);
         $this->model->setObjectManager($objectManagerMock);
         $this->model->generateClass($resultClassName);
     }

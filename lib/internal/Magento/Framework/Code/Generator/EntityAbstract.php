@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Code\Generator;
 
+use Magento\Framework\Exception\FileSystemException;
 use Zend\Code\Generator\ValueGenerator;
 
 abstract class EntityAbstract
@@ -106,6 +107,15 @@ abstract class EntityAbstract
                     $this->_addError('Can\'t generate source code.');
                 }
             }
+        } catch (FileSystemException $e) {
+            $message = <<<'EOT'
+Error: an object of a generated class may be a dependency for another object, but this dependency has not been defined or set correctly in the signature of the related construct method.
+Due to the current error, executing the CLI commands `bin/magento setup:di:compile` or `bin/magento deploy:mode:set production` does not create the required generated classes.
+Magento cannot write a class file to the "generated" directory that is read-only. Before using the read-only file system, the classes to be generated must be created beforehand in the "generated" directory.
+For details, see the "File systems access permissions" topic at http://devdocs.magento.com.
+EOT;
+            $this->_addError($message);
+            $this->_addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_addError($e->getMessage());
         }

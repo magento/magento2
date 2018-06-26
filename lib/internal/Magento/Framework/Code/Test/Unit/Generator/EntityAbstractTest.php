@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Phrase;
+
 class EntityAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
@@ -209,6 +212,48 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function testGenerateFailure() {
+
+        $infoMessage = <<<'EOT'
+Error: an object of a generated class may be a dependency for another object, but this dependency has not been defined or set correctly in the signature of the related construct method.
+Due to the current error, executing the CLI commands `bin/magento setup:di:compile` or `bin/magento deploy:mode:set production` does not create the required generated classes.
+Magento cannot write a class file to the "generated" directory that is read-only. Before using the read-only file system, the classes to be generated must be created beforehand in the "generated" directory.
+For details, see the "File systems access permissions" topic at http://devdocs.magento.com.
+EOT;
+        $exceptionMessage = 'Some description';
+
+        $abstractGetters = ['_getClassProperties', '_getClassMethods'];
+
+        $arguments = $this->_prepareMocksForGenerateCode(true);
+
+        /** @var \Magento\Framework\Code\Generator\Io|\PHPUnit_Framework_MockObject_MockObject $ioObjectMock */
+        $ioObjectMock = $arguments['io_object'];
+        $ioObjectMock->expects($this->once())
+            ->method('writeResultFile')
+            ->with(self::RESULT_FILE, self::RESULT_CODE)
+            ->willThrowException(new FileSystemException(new Phrase($exceptionMessage)));
+
+        $this->_model = $this->getMockForAbstractClass(
+            \Magento\Framework\Code\Generator\EntityAbstract::class,
+            $arguments,
+            '',
+            true,
+            true,
+            true,
+            $abstractGetters
+        );
+        // we need to mock abstract methods to set correct return value type
+        foreach ($abstractGetters as $methodName) {
+            $this->_model->expects($this->any())->method($methodName)->will($this->returnValue([]));
+        }
+
+        $result = $this->_model->generate();
+        $this->assertFalse($result);
+        $this->assertEquals([$infoMessage, $exceptionMessage], $this->_model->getErrors());
+    }
     /**
      * Prepares mocks for validation verification
      *

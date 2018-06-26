@@ -7,6 +7,7 @@ namespace Magento\Framework\Code;
 
 use Magento\Framework\Code\Generator;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
 use Magento\Framework\ObjectManager\Code\Generator as DIGenerator;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceFactoryGenerator;
@@ -36,20 +37,25 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
      */
-    protected $varDirectory;
+    protected $generatedDirectory;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\Read
+     */
+    protected $logDirectory;
 
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->varDirectory = $objectManager->get(
-            \Magento\Framework\Filesystem::class
-        )->getDirectoryWrite(
-            DirectoryList::VAR_DIR
-        );
-        $generationDirectory = $this->varDirectory->getAbsolutePath('generation');
+        /** @var Filesystem $filesystem */
+        $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
+        $this->generatedDirectory = $filesystem->getDirectoryWrite(DirectoryList::GENERATED_CODE);
+        $this->logDirectory = $filesystem->getDirectoryRead(DirectoryList::LOG);
+        $this->generatedDirectory->create();
+        $generatedDirectory = $this->generatedDirectory->getAbsolutePath();
         $this->_ioObject = new \Magento\Framework\Code\Generator\Io(
             new \Magento\Framework\Filesystem\Driver\File(),
-            $generationDirectory
+            $generatedDirectory
         );
         $this->_generator = $objectManager->create(
             \Magento\Framework\Code\Generator::class,
@@ -70,7 +76,8 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        $this->varDirectory->delete('generation');
+        $this->generatedDirectory->changePermissionsRecursively('./', 0777, 0666);
+        $this->generatedDirectory->delete();
         $this->_generator = null;
     }
 
@@ -163,8 +170,8 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGenerateClassExtensionAttributesInterfaceFactoryWithNamespace()
     {
         $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'ExtensionInterfaceFactory';
-        $this->varDirectory->create(
-            $this->varDirectory->getAbsolutePath('generation') . '/Magento/Framework/Code/GeneratorTest/'
+        $this->generatedDirectory->create(
+            $this->generatedDirectory->getAbsolutePath() . '/Magento/Framework/Code/GeneratorTest/'
         );
 
         $generatorResult = $this->_generator->generateClass($factoryClassName);
@@ -184,5 +191,27 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
             file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceExtensionInterfaceFactory.php.sample')
         );
         $this->assertEquals($expectedContent, $content);
+    }
+
+    public function testGeneratorClassWithErrorSaveClassFile()
+    {
+        $exceptionMessageRegExp = '/Error: an object of a generated class may be a dependency for another object, '
+            . 'but this dependency has not been defined or set correctly in the signature of the related construct '
+            . 'method\.\nDue to the current error, executing the CLI commands `bin\/magento setup:di:compile` '
+            . 'or `bin\/magento deploy:mode:set production` does not create the required generated classes\.\nMagento '
+            . 'cannot write a class file to the "generated" directory that is read\-only\. Before using the read-only '
+            . 'file system, the classes to be generated must be created beforehand in the "generated" directory\.\n'
+            . 'For details, see the "File systems access permissions" topic at http:\/\/devdocs\.magento\.com\.\n'
+            . 'The specified ".*" file couldn\'t be written.  in \[.*\]/';
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageRegExp($exceptionMessageRegExp);
+        $this->generatedDirectory->changePermissionsRecursively('./', 0555, 0444);
+        $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'ExtensionInterfaceFactory';
+
+        $generatorResult = $this->_generator->generateClass($factoryClassName);
+        $this->assertFalse($generatorResult);
+        $pathToSystemLog =  $this->logDirectory->getAbsolutePath('system.log');
+        $this->assertRegexp($exceptionMessageRegExp, file_get_contents($pathToSystemLog));
     }
 }

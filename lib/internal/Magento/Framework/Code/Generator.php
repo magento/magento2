@@ -7,6 +7,7 @@ namespace Magento\Framework\Code;
 
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\EntityAbstract;
+use Psr\Log\LoggerInterface;
 
 class Generator
 {
@@ -111,8 +112,12 @@ class Generator
         if ($generator !== null) {
             $this->tryToLoadSourceClass($className, $generator);
             if (!($file = $generator->generate())) {
+                /** @var $logger LoggerInterface */
+                $logger = $this->objectManager->get(LoggerInterface::class);
                 $errors = $generator->getErrors();
-                throw new \RuntimeException(implode(' ', $errors) . ' in [' . $className . ']');
+                $message = implode(PHP_EOL, $errors) . ' in [' . $className . ']';
+                $logger->critical($message);
+                throw new \RuntimeException($message);
             }
             if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
                 $this->_ioObject->includeFile($file);
