@@ -291,8 +291,11 @@ class Price implements DimensionalIndexerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_Db_Select_Exception
      */
-    private function fillFinalPrice(array $dimensions, \Traversable $entityIds, IndexTableStructure $temporaryPriceTable)
-    {
+    private function fillFinalPrice(
+        array $dimensions,
+        \Traversable $entityIds,
+        IndexTableStructure $temporaryPriceTable
+    ) {
         $select = $this->baseFinalPrice->getQuery($dimensions, $this->productType, iterator_to_array($entityIds));
         $query = $select->insertFromSelect($temporaryPriceTable->getTableName(), [], false);
         $this->tableMaintainer->getConnection()->query($query);

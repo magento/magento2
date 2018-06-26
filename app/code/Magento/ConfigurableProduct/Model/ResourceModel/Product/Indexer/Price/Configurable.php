@@ -78,10 +78,10 @@ class Configurable implements DimensionalIndexerInterface
      * @param TableMaintainer $tableMaintainer
      * @param MetadataPool $metadataPool
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param string $fullReindexAction
+     * @param BasePriceModifier $basePriceModifier
+     * @param bool $fullReindexAction
      * @param string $connectionName
      * @param string $productType
-     * @param array $priceModifiers
      */
     public function __construct(
         BaseFinalPrice $baseFinalPrice,
