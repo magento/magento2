@@ -107,8 +107,6 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
             ->setGroupId($storeGroup->getId())
             ->save();
 
-        /* Refresh stores memory cache */
-        $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
         return $store;
     }
 }
