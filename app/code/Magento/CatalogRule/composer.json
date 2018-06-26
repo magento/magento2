@@ -14,7 +14,6 @@
     },
     "suggest": {
         "magento/module-import-export": "100.2.*",
-        "magento/module-downloadable": "100.2.*",
         "magento/module-catalog-rule-sample-data": "Sample Data version:100.2.*"
     },
     "type": "magento2-module",
