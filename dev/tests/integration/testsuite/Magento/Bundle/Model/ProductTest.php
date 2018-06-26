@@ -37,15 +37,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
 
         $this->model = $this->objectManager->create(Product::class);
         $this->model->setTypeId(Type::TYPE_BUNDLE);
@@ -112,7 +106,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testMultipleStores()
     {
-        $bundle = $this->productRepository->get('bundle-product');
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $bundle = $productRepository->get('bundle-product');
 
         /** @var StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
@@ -126,7 +122,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $bundle->setStoreId($store->getId())
             ->setCopyFromView(true);
-        $updatedBundle = $this->productRepository->save($bundle);
+        $updatedBundle = $productRepository->save($bundle);
 
         self::assertEquals($store->getId(), $updatedBundle->getStoreId());
     }
@@ -151,10 +147,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         int $backorders,
         bool $isSalable
     ) {
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Model\Product $bundle */
-        $bundle = $this->productRepository->get('bundle-product');
+        $bundle = $productRepository->get('bundle-product');
 
-        $child = $this->productRepository->get('simple');
+        $child = $productRepository->get('simple');
         $stockRegistry = $this->objectManager->get(StockRegistryInterface::class);
         $childStockItem = $stockRegistry->getStockItem($child->getId());
         $childStockItem->setQty($qty);
@@ -171,7 +168,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 $productLink->setCanChangeQuantity(0);
                 $productLink->setQty($selectionQty);
                 $linkManagement->saveChild($bundle->getSku(), $productLink);
-
             }
         }
 
