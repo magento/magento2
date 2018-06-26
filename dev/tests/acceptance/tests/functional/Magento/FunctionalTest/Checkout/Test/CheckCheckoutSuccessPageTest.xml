@@ -117,7 +117,7 @@
         <waitForElementNotVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitInvisiblePrint"/>
         <dontSeeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeInvisiblePrint"/>
         <maximizeWindow stepKey="maximizeWindowKey1"/>
-        <waitForElementVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitVisiblePrint"/>cd
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitVisiblePrint"/>
         <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint2" />
 
         <!--See print page-->
