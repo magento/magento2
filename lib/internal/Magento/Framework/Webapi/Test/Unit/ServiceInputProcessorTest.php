@@ -518,6 +518,9 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function invalidCustomAttributesDataProvider()
     {
         return [

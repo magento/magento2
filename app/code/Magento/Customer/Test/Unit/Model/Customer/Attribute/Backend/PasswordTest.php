@@ -39,6 +39,9 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->testable->validate($object));
     }
 
+    /**
+     * @return array
+     */
     public function passwordNegativeDataProvider()
     {
         return [

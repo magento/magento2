@@ -69,6 +69,9 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedFirstRun, $model->isDisplayed());
     }
 
+    /**
+     * @return array
+     */
     public function isDisplayedDataProvider()
     {
         return [

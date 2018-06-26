@@ -68,6 +68,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $block->toHtml());
     }
 
+    /**
+     * @return array
+     */
     public function toHtmlDataProvider()
     {
         return [[false, true], [true, false], [false, false]];

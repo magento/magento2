@@ -128,6 +128,9 @@ class VarnishPluginTest extends \PHPUnit_Framework_TestCase
         $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock);
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [

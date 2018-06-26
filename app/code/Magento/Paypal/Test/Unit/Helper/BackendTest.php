@@ -92,6 +92,9 @@ class BackendTest extends \PHPUnit_Framework_TestCase
         $this->configurationCountryCodeAssertResult('GB');
     }
 
+    /**
+     * @return array
+     */
     public function getConfigurationCountryCodeFromConfigDataProvider()
     {
         return [
@@ -116,6 +119,9 @@ class BackendTest extends \PHPUnit_Framework_TestCase
         $this->configurationCountryCodeAssertResult($default);
     }
 
+    /**
+     * @return array
+     */
     public function getConfigurationCountryCodeFromDefaultDataProvider()
     {
         return [

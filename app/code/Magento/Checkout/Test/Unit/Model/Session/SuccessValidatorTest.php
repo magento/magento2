@@ -90,10 +90,15 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $checkoutSession
+     * @return object
+     */
     protected function createSuccessValidator(\PHPUnit_Framework_MockObject_MockObject $checkoutSession)
     {
         return $this->objectManagerHelper->getObject(
-            'Magento\Checkout\Model\Session\SuccessValidator', ['checkoutSession' => $checkoutSession]
+            'Magento\Checkout\Model\Session\SuccessValidator',
+            ['checkoutSession' => $checkoutSession]
         );
     }
 }

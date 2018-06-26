@@ -64,6 +64,9 @@ class NamedParamsTest extends \PHPUnit_Framework_TestCase
         $this->_model->evaluate($input);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateWrongParamDataProvider()
     {
         return [

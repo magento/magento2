@@ -34,6 +34,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedCode, $result);
     }
 
+    /**
+     * @return array
+     */
     public static function setCodeProvider()
     {
         $largeCode = 256;

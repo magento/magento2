@@ -135,6 +135,9 @@ class ShowTest extends \PHPUnit_Framework_TestCase
         $this->controller->execute();
     }
 
+    /**
+     * @return array
+     */
     public function dataForExecute()
     {
         return [

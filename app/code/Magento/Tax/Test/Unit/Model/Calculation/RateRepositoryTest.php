@@ -345,6 +345,9 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->save($rateMock);
     }
 
+    /**
+     * @return array
+     */
     public function saveThrowsExceptionIfCannotSaveTitlesDataProvider()
     {
         return [

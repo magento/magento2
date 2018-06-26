@@ -37,6 +37,9 @@ class SwitcherPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['', $getUrlParams], $this->_model->aroundGetUrl($subject, $getUrl, '', []));
     }
 
+    /**
+     * @return array
+     */
     public function aroundGetUrlDataProvider()
     {
         return [

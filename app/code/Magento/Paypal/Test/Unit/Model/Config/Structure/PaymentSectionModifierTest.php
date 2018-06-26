@@ -151,6 +151,10 @@ class PaymentSectionModifierTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param $structure
+     * @return array
+     */
     private function fetchAllAvailableGroups($structure)
     {
         $availableGroups = [];

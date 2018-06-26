@@ -247,6 +247,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->hasMessages());
     }
 
+    /**
+     * @return array
+     */
     public function addMessageDataProvider()
     {
         return [
@@ -277,6 +280,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->model->addUniqueMessages([$messages]);
     }
 
+    /**
+     * @return array
+     */
     public function addUniqueMessagesWhenMessagesImplementMessageInterfaceDataProvider()
     {
         return [
@@ -310,6 +316,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->model->addUniqueMessages($messages);
     }
 
+    /**
+     * @return array
+     */
     public function addUniqueMessagesDataProvider()
     {
         return [

@@ -128,6 +128,9 @@ class RowParserTest extends \PHPUnit_Framework_TestCase
         throw $exception;
     }
 
+    /**
+     * @return array
+     */
     public function parseWithExceptionDataProvider()
     {
         $rowData = ['a', 'b', 'c', 'd', 'e'];

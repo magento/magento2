@@ -34,6 +34,9 @@ class TypeDuplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_validator->validate($className));
     }
 
+    /**
+     * @return array
+     */
     public function validClassesDataProvider()
     {
         return [
