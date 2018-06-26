@@ -72,6 +72,9 @@
             <settings>
                 <filter>text</filter>
                 <label translate="true">Theme Path</label>
+                <fieldClass>
+                    <class name="theme_path">true</class>
+                </fieldClass>
             </settings>
         </column>
         <actionsColumn name="actions" class="Magento\Theme\Ui\Component\Listing\Column\ViewAction" sortOrder="50">
