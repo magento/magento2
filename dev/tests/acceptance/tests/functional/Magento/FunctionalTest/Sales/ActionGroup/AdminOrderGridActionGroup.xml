@@ -10,11 +10,14 @@
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!--Filter order grid by order id field-->
     <actionGroup name="filterOrderGridById">
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage"/>
         <waitForPageLoad stepKey="waitForOrderGridLoad"/>
         <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
         <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openOrderGridFilters"/>
-        <fillField selector="{{AdminOrdersGridSection.idFilter}}" userInput="$getOrderId" stepKey="fillOrderIdFilter"/>
+        <fillField selector="{{AdminOrdersGridSection.idFilter}}" userInput="{{orderId}}" stepKey="fillOrderIdFilter"/>
         <click selector="{{AdminOrdersGridSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
     </actionGroup>
 
