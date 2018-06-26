@@ -16,6 +16,9 @@
                         </resource>
                     </resource>
                 </resource>
+                <resource id="Magento_Wishlist::wishlist" title="Wish List" translate="title" sortOrder="95">
+                    <resource id="Magento_Wishlist::api" title="API" translate="title" />
+                </resource>
             </resource>
         </resources>
     </acl>
