@@ -78,6 +78,7 @@
             <settings>
                 <dataType>boolean</dataType>
                 <label translate="true">Is Enabled</label>
+                <notice translate="true">The Default Source must be enabled. A default source is required for single source merchants and product migration.</notice>
             </settings>
             <formElements>
                 <checkbox>
