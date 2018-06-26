@@ -36,9 +36,9 @@ class BackordersCondition implements GetIsStockItemSalableConditionInterface
     {
         $globalBackorders = (int)$this->configuration->getBackorders();
 
-        $condition = (0 === $globalBackorders)
+        $condition = (1 === $globalBackorders)
             ? 'legacy_stock_item.use_config_backorders = 1'
-            : 'legacy_stock_item.use_config_backorders = 0 AND legacy_stock_item.backorders = 0';
+            : 'legacy_stock_item.use_config_backorders = 0 AND legacy_stock_item.backorders = 1';
 
         return $condition;
     }
