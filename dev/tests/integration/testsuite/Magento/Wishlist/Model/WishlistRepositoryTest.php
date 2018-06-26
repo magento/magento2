@@ -6,7 +6,6 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SortOrderBuilder;
 use Magento\TestFramework\ObjectManager;
 use Magento\Wishlist\Api\Data\WishlistInterface;
 use Magento\Wishlist\Api\WishlistRepositoryInterface;
