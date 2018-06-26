@@ -39,7 +39,7 @@ class BulkAssign extends Action
      * @param Action\Context $context
      * @param CollectionFactory $collectionFactory
      * @param Filter $filter
-     * @param MassAssignSessionStorage $bulkSessionProductsStorage
+     * @param BulkSessionProductsStorage $bulkSessionProductsStorage
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
