@@ -113,4 +113,17 @@
             <resource ref="Magento_InventoryApi::source"/>
         </resources>
     </route>
+    <!-- Bulk operations -->
+    <route url="/V1/inventory/bulk-product-source-assign" method="POST">
+        <service class="Magento\InventoryApi\Api\BulkSourceAssignInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Catalog::products"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/bulk-product-source-unassign" method="POST">
+        <service class="Magento\InventoryApi\Api\BulkSourceUnassignInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Catalog::products"/>
+        </resources>
+    </route>
 </routes>
