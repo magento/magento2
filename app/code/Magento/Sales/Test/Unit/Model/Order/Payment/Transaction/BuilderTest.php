@@ -194,7 +194,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-
     /**
      * @param int $orderId
      * @param int $paymentId

@@ -217,7 +217,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->getAlias(''));
     }
 
-
     public function testGetCookie()
     {
         $key = "cookieName";
@@ -230,7 +229,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $this->getModel()->getCookie($key, $default);
     }
-
 
     public function testGetCookieDefault()
     {

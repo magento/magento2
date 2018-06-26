@@ -181,6 +181,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
      * Data provider for testAfterConvert and testAfterConvertNullExtensionAttribute
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function afterConvertDataProvider()
     {

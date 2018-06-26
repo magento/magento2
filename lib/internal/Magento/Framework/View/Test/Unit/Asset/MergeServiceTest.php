@@ -18,6 +18,7 @@ use Magento\Framework\View\Asset\MergeStrategy\FileExists;
 
 /**
  * Class MergeServiceTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MergeServiceTest extends \PHPUnit_Framework_TestCase
 {
