@@ -73,13 +73,22 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
-            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
         <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
-        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="addnewWebsite"/>
-        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="addNewStoreGroup"/>
+        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="addNewWebsite">
+            <argument name="newWebsiteName" value="Second Website"/>
+            <argument name="websiteCode" value="second_website"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="addNewStoreGroup">
+            <argument name="website" value="Second Website"/>
+            <argument name="storeGroupName" value="Second Store"/>
+            <argument name="storeGroupCode" value="second_store"/>
+        </actionGroup>
 
         <!--Create Store view -->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>

@@ -80,7 +80,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         //Second time installation should not find anything as we do not change anything
         self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getData(), $shardData);
+        self::assertEquals($this->getTrimmedData(), $shardData);
     }
 
     /**
@@ -111,7 +111,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         );
         self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getData(), $shardData);
+        self::assertEquals($this->getTrimmedData(), $shardData);
     }
 
     /**
@@ -157,7 +157,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         );
         self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getData(), $shardData);
+        self::assertEquals($this->getTrimmedData(), $shardData);
     }
 
     /**
@@ -243,7 +243,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule1']
         );
         $beforeRollback = $this->describeTable->describeShard('default');
-        self::assertEquals($this->getData()['before'], $beforeRollback);
+        self::assertEquals($this->getTrimmedData()['before'], $beforeRollback);
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',

@@ -12,5 +12,6 @@
         <element name="subTotal" type="text" selector=".order-subtotal-table tbody tr.col-0>td span.price"/>
         <element name="grandTotal" type="text" selector=".order-subtotal-table tfoot tr.col-0>td span.price"/>
         <element name="shippingAndHandling" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Shipping &amp; Handling']/following-sibling::td//span[@class='price']"/>
+        <element name="total" type="text" selector="//table[contains(@class,'order-subtotal-table')]/tbody/tr/td[contains(text(), '{{total}}')]/following-sibling::td/span/span[contains(@class, 'price')]" parameterized="true"/>
     </section>
 </sections>
