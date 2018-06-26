@@ -169,33 +169,13 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _beforeSave(AbstractModel $object)
     {
         $frontendLabel = $object->getFrontendLabel();
-        $frontendLabels = $object->getFrontendLabels();
-        if (is_array($frontendLabels)
-            && !empty($frontendLabels)
-            && $frontendLabels[0] instanceof \Magento\Eav\Model\Entity\Attribute\FrontendLabel) {
-            $resultLabel = [];
-            foreach ($frontendLabels as $label) {
-                $resultLabel[$label->getStoreId()] = $label->getLabel();
-            }
-            $object->setStoreLabels($resultLabel);
-            $isDefaultLabel = ($frontendLabel !== null && $frontendLabel != '');
-            $isStoreZeroLabel = (
-                isset($resultLabel[0])
-                && $resultLabel[0] !== null
-                && $resultLabel[0] != '');
-            if (!$isDefaultLabel & !$isStoreZeroLabel) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The storefront label is not defined.'));
-            }
-            if (!$isDefaultLabel & $isStoreZeroLabel) {
-                $object->setFrontendLabel($frontendLabel[0]);
-            }
-        }
         if (is_array($frontendLabel)) {
-            if (!isset($frontendLabel[0]) || $frontendLabel[0] === null || $frontendLabel[0] == '') {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The storefront label is not defined.'));
-            }
+            $this->checkDefaultFrontendLabelExists($frontendLabel, $frontendLabel);
             $object->setFrontendLabel($frontendLabel[0])->setStoreLabels($frontendLabel);
+        } else {
+            $this->setStoreLabels($object, $frontendLabel);
         }
+
 
         /**
          * @todo need use default source model of entity type !!!
@@ -759,5 +739,44 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         parent::__wakeup();
         $this->_storeManager = \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Store\Model\StoreManagerInterface::class);
+    }
+
+    /**
+     * This method extracts frontend labels into array and sets array values as storeLabels into an object.
+     *
+     * @param AbstractModel $object
+     * @param string|null $frontendLabel
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function setStoreLabels(AbstractModel $object, $frontendLabel)
+    {
+        $resultLabel = [];
+        $frontendLabels = $object->getFrontendLabels();
+        if (is_array($frontendLabels)
+            && !empty($frontendLabels)
+            && $frontendLabels[0] instanceof \Magento\Eav\Model\Entity\Attribute\FrontendLabel) {
+            foreach ($frontendLabels as $label) {
+                $resultLabel[$label->getStoreId()] = $label->getLabel();
+            }
+            $this->checkDefaultFrontendLabelExists($frontendLabel, $resultLabel);
+            $object->setStoreLabels($resultLabel);
+        }
+    }
+
+    /**
+     * This method checks whether value for default frontend label exists in attribute data.
+     *
+     * @param array|string|null $frontendLabel
+     * @param array $resultLabels
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function checkDefaultFrontendLabelExists($frontendLabel, $resultLabels)
+    {
+        $isAdminStoreLabel = (isset($resultLabels[0]) && !empty($resultLabels[0]));
+        if (empty($frontendLabel) && !$isAdminStoreLabel) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('The storefront label is not defined.'));
+        }
     }
 }

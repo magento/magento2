@@ -283,23 +283,36 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     private function updateDefaultFrontendLabel($attribute, $existingModel)
     {
-        $frontendLabel[0] = $attribute->getDefaultFrontendLabel();
-        if (empty($frontendLabel[0])) {
-            $frontendLabels = $attribute->getFrontendLabels();
-            if (is_array($frontendLabels)
-                && !empty($frontendLabels)
-                && $frontendLabels[0] instanceof \Magento\Eav\Model\Entity\Attribute\FrontendLabel) {
-                foreach ($attribute->getFrontendLabels() as $label) {
-                    $frontendLabel[$label->getStoreId()] = $label->getLabel();
-                }
-            }
-            if (empty($frontendLabel[0])) {
+        $frontendLabel = $attribute->getDefaultFrontendLabel();
+        if (empty($frontendLabel)) {
+            $frontendLabel = $this->extractAdminStoreFrontendLabel($attribute);
+            if (empty($frontendLabel)) {
                 if ($existingModel) {
-                    $frontendLabel[0] = $existingModel->getDefaultFrontendLabel();
+                    $frontendLabel = $existingModel->getDefaultFrontendLabel();
                 } else {
                     throw InputException::invalidFieldValue('frontend_label', null);
                 }
-                $attribute->setDefaultFrontendLabel($frontendLabel[0]);
+            }
+            $attribute->setDefaultFrontendLabel($frontendLabel);
+        }
+        return $frontendLabel;
+    }
+
+    /**
+     * This method extracts frontend label from FrontendLabel object for admin store.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @return string|null
+     */
+    private function extractAdminStoreFrontendLabel($attribute)
+    {
+        $frontendLabel[0] = null;
+        $frontendLabels = $attribute->getFrontendLabels();
+        if (is_array($frontendLabels)
+            && !empty($frontendLabels)
+            && $frontendLabels[0] instanceof \Magento\Eav\Model\Entity\Attribute\FrontendLabel) {
+            foreach ($attribute->getFrontendLabels() as $label) {
+                $frontendLabel[$label->getStoreId()] = $label->getLabel();
             }
         }
         return $frontendLabel[0];

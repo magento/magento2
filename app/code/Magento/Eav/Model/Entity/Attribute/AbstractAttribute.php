@@ -1238,10 +1238,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
                 $frontendLabel = $this->frontendLabelFactory->create();
                 $frontendLabel->setStoreId($i);
                 $frontendLabel->setLabel($label);
-                array_push($resultFrontedLabels, $frontendLabel);
+                $resultFrontedLabels[] = $frontendLabel;
             }
             $this->setData(self::FRONTEND_LABELS, $resultFrontedLabels);
-
         }
         return $this->_getData(self::FRONTEND_LABELS);
     }
