@@ -249,7 +249,6 @@ class Tabs extends \Magento\Backend\Block\Widget
         return parent::_beforeToHtml();
     }
     
-    
     /**
      * Reorder the tabs.
      *
@@ -337,7 +336,6 @@ class Tabs extends \Magento\Backend\Block\Widget
         return $ordered;
     }
     
-
     /**
      * @return string
      */
