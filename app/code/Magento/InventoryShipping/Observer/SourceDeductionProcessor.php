@@ -9,6 +9,7 @@ namespace Magento\InventoryShipping\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
@@ -16,8 +17,7 @@ use Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterf
 use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterfaceFactory;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
-use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
-use Magento\InventoryShipping\Model\GetItemsToDeduct;
+use Magento\InventoryShipping\Model\GetItemsToDeductFromShipment;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
 /**
@@ -61,9 +61,9 @@ class SourceDeductionProcessor implements ObserverInterface
     private $isSingleSourceMode;
 
     /**
-     * @var GetItemsToDeduct
+     * @var GetItemsToDeductFromShipment
      */
-    private $getItemsToDeduct;
+    private $getItemsToDeductFromShipment;
 
     /**
      * @param SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory
@@ -73,7 +73,7 @@ class SourceDeductionProcessor implements ObserverInterface
      * @param SalesEventInterfaceFactory $salesEventFactory
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param IsSingleSourceModeInterface $isSingleSourceMode
-     * @param GetItemsToDeduct $getItemsToDeduct
+     * @param GetItemsToDeductFromShipment $getItemsToDeductFromShipment
      */
     public function __construct(
         SourceDeductionRequestInterfaceFactory $sourceDeductionRequestFactory,
@@ -83,7 +83,7 @@ class SourceDeductionProcessor implements ObserverInterface
         SalesEventInterfaceFactory $salesEventFactory,
         WebsiteRepositoryInterface $websiteRepository,
         IsSingleSourceModeInterface $isSingleSourceMode,
-        GetItemsToDeduct $getItemsToDeduct
+        GetItemsToDeductFromShipment $getItemsToDeductFromShipment
     ) {
         $this->sourceDeductionRequestFactory = $sourceDeductionRequestFactory;
         $this->sourceDeductionService = $sourceDeductionService;
@@ -92,7 +92,7 @@ class SourceDeductionProcessor implements ObserverInterface
         $this->salesEventFactory = $salesEventFactory;
         $this->websiteRepository = $websiteRepository;
         $this->isSingleSourceMode = $isSingleSourceMode;
-        $this->getItemsToDeduct = $getItemsToDeduct;
+        $this->getItemsToDeductFromShipment = $getItemsToDeductFromShipment;
     }
 
     /**
@@ -104,12 +104,10 @@ class SourceDeductionProcessor implements ObserverInterface
     {
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
         $shipment = $observer->getEvent()->getShipment();
-
         if ($shipment->getOrigData('entity_id')) {
             return;
         }
 
-        //TODO: I'm not sure that is good idea (with default source code)...
         if (!empty($shipment->getExtensionAttributes())
             && !empty($shipment->getExtensionAttributes()->getSourceCode())) {
             $sourceCode = $shipment->getExtensionAttributes()->getSourceCode();
@@ -117,12 +115,7 @@ class SourceDeductionProcessor implements ObserverInterface
             $sourceCode = $this->defaultSourceProvider->getCode();
         }
 
-        /** @var \Magento\Sales\Model\Order\Shipment\Item $shipmentItem */
-        foreach ($shipment->getAllItems() as $shipmentItem) {
-            foreach ($this->getItemsToDeduct->execute($shipmentItem) as $item) {
-                $shipmentItems[] = $item;
-            }
-        }
+        $shipmentItems = $this->getItemsToDeductFromShipment->execute($shipment);
 
         if (!empty($shipmentItems)) {
             $websiteId = $shipment->getOrder()->getStore()->getWebsiteId();
