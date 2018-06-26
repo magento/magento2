@@ -126,7 +126,6 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->any())->method('getDefaultValue')->willReturn('default_value');
         $attribute->expects($this->any())->method('usesSource')->willReturn(true);
 
-
         $entityAttributes = [
             [
                 'attribute_id' => 'attribute_id',

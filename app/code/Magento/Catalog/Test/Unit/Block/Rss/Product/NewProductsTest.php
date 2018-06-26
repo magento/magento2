@@ -100,6 +100,7 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
             [0, false]
         ];
     }
+
     /**
      * @dataProvider isAllowedDataProvider
      */

@@ -22,7 +22,6 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
      */
     protected $_tableStrategyInterface;
 
-
     protected function setUp()
     {
         $this->_resourceMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
