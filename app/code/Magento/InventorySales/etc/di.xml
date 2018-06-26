@@ -152,4 +152,11 @@
         <plugin name="delete_website_to_stock_link" type="Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website\DeleteWebsiteToStockLinkPlugin"/>
         <plugin name="update_sales_channel_website_code" type="Magento\InventorySales\Plugin\Store\Model\ResourceModel\Website\UpdateSalesChannelWebsiteCodePlugin"/>
     </type>
+    <type name="Magento\InventoryApi\Model\StockValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sales_channels" xsi:type="object">Magento\InventorySales\Model\Stock\Validator\SalesChannelsValidator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
