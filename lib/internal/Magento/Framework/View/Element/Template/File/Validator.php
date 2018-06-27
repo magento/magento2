@@ -104,26 +104,37 @@ class Validator
     public function isValid($filename)
     {
         $filename = str_replace('\\', '/', $filename);
+        
         if (!isset($this->_templatesValidationResults[$filename])) {
-            if ($this->_isAllowSymlinks && $this->isOutsourceFile($filename)) {
-                $result = true;
-
-                if (!file_exists($filename) || !is_readable($filename)) {
-                    $result = false;
-                }
-
-                $this->_templatesValidationResults[$filename] = $result;
-            } else {
-                $this->_templatesValidationResults[$filename] =
-                    ($this->isPathInDirectories($filename, $this->_compiledDir)
-                        || $this->isPathInDirectories($filename, $this->moduleDirs)
-                        || $this->isPathInDirectories($filename, $this->_themesDir)
-                        || $this->_isAllowSymlinks)
-                    && $this->getRootDirectory()->isFile($this->getRootDirectory()->getRelativePath($filename));
-            }
+            $this->setTemplateValidationResults($filename);
         }
 
         return $this->_templatesValidationResults[$filename];
+    }
+
+    /**
+     * @param string $filename
+     * @return void
+     */
+    private function setTemplateValidationResults($filename)
+    {
+        if ($this->_isAllowSymlinks && $this->isOutsourceFile($filename)) {
+            $result = true;
+
+            if (!file_exists($filename) || !is_readable($filename)) {
+                $result = false;
+            }
+
+            $this->_templatesValidationResults[$filename] = $result;
+            return;
+        }
+
+        $this->_templatesValidationResults[$filename] =
+            ($this->isPathInDirectories($filename, $this->_compiledDir)
+                || $this->isPathInDirectories($filename, $this->moduleDirs)
+                || $this->isPathInDirectories($filename, $this->_themesDir)
+                || $this->_isAllowSymlinks)
+            && $this->getRootDirectory()->isFile($this->getRootDirectory()->getRelativePath($filename));
     }
 
     /**
