@@ -278,7 +278,6 @@ class Tabs extends \Magento\Backend\Block\Widget
         return $this->applyTabsCorrectOrder($orderByPosition, $orderByIdentity);
     }
 
-
     /**
      * @param array $orderByPosition
      * @param array $orderByIdentity
@@ -313,7 +312,6 @@ class Tabs extends \Magento\Backend\Block\Widget
 
         return $this->finalTabsSortOrder($orderByPosition);
     }
-
 
     /**
      * Apply the last sort order to tabs.
