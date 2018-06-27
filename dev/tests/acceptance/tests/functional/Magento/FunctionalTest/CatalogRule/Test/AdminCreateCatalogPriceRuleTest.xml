@@ -44,6 +44,7 @@
         </after>
 
         <!-- Go to category page and make sure that all of the prices are correct -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategory"/>
         <see stepKey="seeOldPrice" selector="{{StorefrontCategoryProductSection.ProductOldPriceByNumber('1')}}" userInput="$$createProduct.price$$"/>
@@ -102,6 +103,7 @@
         </after>
 
         <!-- Go to category page and make sure that all of the prices are correct -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategory"/>
         <see stepKey="seeOldPrice" selector="{{StorefrontCategoryProductSection.ProductOldPriceByNumber('1')}}" userInput="$$createProduct.price$$"/>
@@ -160,6 +162,7 @@
         </after>
 
         <!-- Go to category page and make sure that all of the prices are correct -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategory"/>
         <see stepKey="seeOldPrice" selector="{{StorefrontCategoryProductSection.ProductOldPriceByNumber('1')}}" userInput="$$createProduct.price$$"/>
@@ -218,6 +221,7 @@
         </after>
 
         <!-- Go to category page and make sure that all of the prices are correct -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategory"/>
         <see stepKey="seeOldPrice" selector="{{StorefrontCategoryProductSection.ProductOldPriceByNumber('1')}}" userInput="$$createProduct.price$$"/>
