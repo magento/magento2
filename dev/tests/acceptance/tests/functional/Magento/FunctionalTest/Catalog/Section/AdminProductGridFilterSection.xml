@@ -16,5 +16,6 @@
         <element name="clearFilters" type="button" selector=".admin__data-grid-header button[data-action='grid-filter-reset']" timeout="30"/>
         <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
         <element name="newFromDateFilter" type="input" selector="input.admin__control-text[name='news_from_date[from]']"/>
+        <element name="skuFilter" type="input" selector="input.admin__control-text[name='sku']"/>
     </section>
 </sections>
