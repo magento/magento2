@@ -1088,9 +1088,7 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Price\Plugin\TableResolver">
         <arguments>
-            <argument name="priceTableResolver" xsi:type="object">
-                Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver\Proxy
-            </argument>
+            <argument name="priceTableResolver" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver\Proxy</argument>
             <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
             <argument name="context" xsi:type="object">Magento\Framework\App\Http\Context\Proxy</argument>
             <!-- Unccomment after fix issue with Proxy generation -->
