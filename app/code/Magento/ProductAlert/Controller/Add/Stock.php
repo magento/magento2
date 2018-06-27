@@ -62,13 +62,13 @@ class Stock extends AddController
                         ->getWebsiteId()
                 );
             $model->save();
-            $this->messageManager->addSuccess(__('Alert subscription has been saved.'));
+            $this->messageManager->addSuccessMessage(__('Alert subscription has been saved.'));
         } catch (NoSuchEntityException $noEntityException) {
-            $this->messageManager->addError(__('There are not enough parameters.'));
+            $this->messageManager->addErrorMessage(__('There are not enough parameters.'));
             $resultRedirect->setUrl($backUrl);
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __("The alert subscription couldn't update at this time. Please try again later.")
             );

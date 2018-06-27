@@ -51,7 +51,7 @@ class MassDelete extends AbstractMassAction
         }
 
         if ($customersDeleted) {
-            $this->messageManager->addSuccess(__('A total of %1 record(s) were deleted.', $customersDeleted));
+            $this->messageManager->addSuccessMessage(__('A total of %1 record(s) were deleted.', $customersDeleted));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

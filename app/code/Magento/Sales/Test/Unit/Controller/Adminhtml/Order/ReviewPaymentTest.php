@@ -137,7 +137,7 @@ class ReviewPaymentTest extends \PHPUnit\Framework\TestCase
         $this->paymentMock->expects($this->once())->method('update');
         $this->paymentMock->expects($this->any())->method('getIsTransactionApproved')->willReturn(true);
 
-        $this->messageManagerMock->expects($this->once())->method('addSuccess');
+        $this->messageManagerMock->expects($this->once())->method('addSuccessMessage');
 
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')

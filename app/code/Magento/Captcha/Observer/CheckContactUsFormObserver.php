@@ -76,7 +76,7 @@ class CheckContactUsFormObserver implements ObserverInterface
             /** @var \Magento\Framework\App\Action\Action $controller */
             $controller = $observer->getControllerAction();
             if (!$captcha->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))) {
-                $this->messageManager->addError(__('Incorrect CAPTCHA.'));
+                $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA.'));
                 $this->getDataPersistor()->set($formId, $controller->getRequest()->getPostValue());
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->redirect->redirect($controller->getResponse(), 'contact/index/index');

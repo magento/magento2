@@ -163,13 +163,13 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
                 $metadata->setPath('/');
                 $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
             }
-            $this->messageManager->addSuccess($this->getSuccessMessage());
+            $this->messageManager->addSuccessMessage($this->getSuccessMessage());
             $resultRedirect->setUrl($this->getSuccessRedirect());
             return $resultRedirect;
         } catch (StateException $e) {
-            $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.'));
+            $this->messageManager->addExceptionMessage($e, __('This confirmation key is invalid or has expired.'));
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('There was an error confirming the account'));
+            $this->messageManager->addExceptionMessage($e, __('There was an error confirming the account'));
         }
 
         $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);

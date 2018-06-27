@@ -134,7 +134,7 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
         }
 
         if (empty($documents)) {
-            $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
+            $this->messageManager->addErrorMessage(__('There are no printable documents related to selected orders.'));
             return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
 

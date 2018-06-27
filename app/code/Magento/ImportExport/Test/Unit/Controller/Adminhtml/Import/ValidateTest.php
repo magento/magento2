@@ -144,7 +144,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Sorry, but the data is invalid or the file is not uploaded.'));
 
         $this->assertEquals($resultRedirectMock, $this->validate->execute());
@@ -170,7 +170,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $resultBlock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('The file was not uploaded.'));
 
         $layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)

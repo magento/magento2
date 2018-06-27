@@ -28,7 +28,7 @@ class Grid extends \Magento\Newsletter\Controller\Adminhtml\Problem
                 $collection->walk('unsubscribe');
             }
 
-            $this->messageManager->addSuccess(__('We unsubscribed the people you identified.'));
+            $this->messageManager->addSuccessMessage(__('We unsubscribed the people you identified.'));
         }
 
         if ($this->getRequest()->getParam('_delete')) {
@@ -43,7 +43,7 @@ class Grid extends \Magento\Newsletter\Controller\Adminhtml\Problem
                 $collection->walk('delete');
             }
 
-            $this->messageManager->addSuccess(__('The problems you identified have been deleted.'));
+            $this->messageManager->addSuccessMessage(__('The problems you identified have been deleted.'));
         }
         $this->_view->loadLayout(false);
         $this->_view->getLayout()->getMessagesBlock()->setMessages($this->messageManager->getMessages(true));

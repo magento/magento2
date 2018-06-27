@@ -236,7 +236,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         if (!$formKeyIsValid || !$isPost) {
             $this->messageManager->expects($this->once())
-                ->method('addError');
+                ->method('addErrorMessage');
 
             $this->resultRedirect->expects($this->once())
                 ->method('setPath')

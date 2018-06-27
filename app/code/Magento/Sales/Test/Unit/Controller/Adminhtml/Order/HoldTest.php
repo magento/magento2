@@ -117,7 +117,7 @@ class HoldTest extends \PHPUnit\Framework\TestCase
             ->method('isPost')
             ->willReturn(false);
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('You have not put the order on hold.');
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
