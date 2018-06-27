@@ -21,6 +21,7 @@
         <element name="bundleOptionXRequired" type="checkbox" selector="[name='bundle_options[bundle_options][{{x}}][required]']" parameterized="true"/>
         <element name="bundleOptionXProductYQuantity" type="input" selector="[name='bundle_options[bundle_options][{{x}}][bundle_selections][{{y}}][selection_qty]']" parameterized="true"/>
         <element name="addProductsToOption" type="button" selector="[data-index='modal_set']" timeout="30"/>
+        <element name="nthAddProductsToOption" type="button" selector="//tr[{{var}}]//button[@data-index='modal_set']" timeout="30" parameterized="true"/>
         <!--Select"url Key"InputForm-->
         <element name="urlKey" type="input" selector="//input[@name='product[url_key]']" timeout="30"/>
         <!--AddSelectedProducts-->
