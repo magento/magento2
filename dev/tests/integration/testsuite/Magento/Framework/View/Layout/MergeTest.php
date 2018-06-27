@@ -273,7 +273,16 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $handles = ['fixture_handle_one', 'fixture_handle_two'];
         $this->_model->load($handles);
         $this->assertEquals($handles, $this->_model->getHandles());
-        $this->assertEquals(self::FIXTURE_LAYOUT_XML, $this->_model->asString());
+        $expectedResult = <<<XML
+<body>
+   <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+</body>
+<body>
+   <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
+</body>
+
+XML;
+        $this->assertEquals($expectedResult, $this->_model->asString());
     }
 
     public function testLoadDbApp()
