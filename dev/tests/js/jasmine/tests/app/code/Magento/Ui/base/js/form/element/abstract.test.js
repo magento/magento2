@@ -32,7 +32,10 @@ define([
                 provider: 'provName',
                 name: '',
                 index: 'testIndex',
-                dataScope: dataScope
+                dataScope: dataScope,
+                service: {
+                    template: "ui/form/element/helper/service"
+                }
             },
             model;
 
@@ -78,6 +81,7 @@ define([
                 var expectedValue = 1;
 
                 spyOn(model, 'getInitialValue').and.returnValue(expectedValue);
+                model.service = true;
                 expect(model.setInitialValue()).toEqual(model);
                 expect(model.getInitialValue).toHaveBeenCalled();
                 expect(model.source.set).toHaveBeenCalledWith('data.use_default.' + model.index, 0);
