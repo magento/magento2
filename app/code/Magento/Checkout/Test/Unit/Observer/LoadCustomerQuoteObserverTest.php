@@ -55,7 +55,7 @@ class LoadCustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
         $this->checkoutSession->expects($this->once())->method('loadCustomerQuote')->will(
             $this->throwException($exception)
         );
-        $this->messageManager->expects($this->once())->method('addException')
+        $this->messageManager->expects($this->once())->method('addExceptionMessage')
             ->with($exception, 'Load customer quote error');
 
         $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)

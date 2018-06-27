@@ -86,7 +86,7 @@ class CleanMediaTest extends \PHPUnit\Framework\TestCase
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
 
         $messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('The JavaScript/CSS cache has been cleaned.');
 
         $valueMap = [

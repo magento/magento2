@@ -107,7 +107,7 @@ class MassDeleteTest extends \PHPUnit\Framework\TestCase
         $this->createQuery(0, 1);
         $this->createQuery(1, 2);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->will($this->returnSelf());
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')

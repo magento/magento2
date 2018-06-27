@@ -142,7 +142,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $this->responseMock->expects($this->once())->method('setRedirect');
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $this->deleteController->execute();
     }

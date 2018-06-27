@@ -250,7 +250,7 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($transactionMock));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('The invoice has been voided.');
 
         $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
@@ -285,7 +285,7 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
         $this->messageManagerMock->expects($this->never())
             ->method('addError');
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $resultForward = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
             ->disableOriginalConstructor()

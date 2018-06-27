@@ -175,7 +175,7 @@ class MassEnableTest extends \PHPUnit\Framework\TestCase
             ->willThrowException($exception);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, 'An error occurred while enabling cache.')
             ->willReturnSelf();
 
@@ -215,7 +215,7 @@ class MassEnableTest extends \PHPUnit\Framework\TestCase
             ->method('persist');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('1 cache type(s) enabled.')
             ->willReturnSelf();
 

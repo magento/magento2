@@ -94,7 +94,7 @@ class AuthTest extends \PHPUnit\Framework\TestCase
             ->method('isOtherSessionsTerminated')
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addWarning')
+            ->method('addWarningMessage')
             ->with($warningMessage);
 
         $this->model->afterLogin($this->authMock);

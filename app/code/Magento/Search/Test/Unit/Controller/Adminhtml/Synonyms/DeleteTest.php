@@ -107,7 +107,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('get')->with(10)->willReturn($this->synonymGroupMock);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('The synonym group has been deleted.'));
 
         $this->messageManagerMock->expects($this->never())->method('addError');
@@ -127,7 +127,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->method('addError')
             ->with(__('We can\'t find a synonym group to delete.'));
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')

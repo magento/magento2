@@ -37,9 +37,9 @@ class TokensExchangeTest extends \Magento\Integration\Test\Unit\Controller\Admin
         $consumerMock->expects($this->once())->method('getId')->willReturn(1);
         $this->_oauthSvcMock->expects($this->once())->method('loadConsumer')->willReturn($consumerMock);
 
-        $this->_messageManager->expects($this->once())->method('addNotice');
+        $this->_messageManager->expects($this->once())->method('addNoticeMessage');
         $this->_messageManager->expects($this->never())->method('addError');
-        $this->_messageManager->expects($this->never())->method('addSuccess');
+        $this->_messageManager->expects($this->never())->method('addSuccessMessage');
 
         $this->_viewMock->expects($this->once())->method('loadLayout');
         $this->_viewMock->expects($this->once())->method('renderLayout');

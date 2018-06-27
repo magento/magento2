@@ -205,7 +205,7 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
                     ->method('setScheduled')->with(true)->will($this->returnValue(1));
             }
 
-            $this->messageManager->expects($this->any())->method('addSuccess')->will($this->returnValue(1));
+            $this->messageManager->expects($this->any())->method('addSuccessMessage')->will($this->returnValue(1));
 
             if ($exception !== null) {
                 $this->messageManager
@@ -213,7 +213,7 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
                     ->method('addError')
                     ->with($exception->getMessage());
                 $this->messageManager->expects($this->exactly($expectsExceptionValues[1]))
-                    ->method('addException')
+                    ->method('addExceptionMessage')
                     ->with($exception, "We couldn't change indexer(s)' mode because of an error.");
             }
         }
