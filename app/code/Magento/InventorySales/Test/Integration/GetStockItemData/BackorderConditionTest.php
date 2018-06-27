@@ -92,8 +92,6 @@ class BackorderConditionTest extends TestCase
      * @param string $sku
      * @param int $stockId
      * @param array|null $expectedData
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testBackordersDisabled(string $sku, int $stockId, $expectedData)
     {
@@ -117,8 +115,6 @@ class BackorderConditionTest extends TestCase
      * @param string $sku
      * @param int $stockId
      * @param array|null $expectedData
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testGlobalBackordersEnabled(string $sku, int $stockId, $expectedData)
     {
@@ -142,12 +138,6 @@ class BackorderConditionTest extends TestCase
      * @param string $sku
      * @param int $stockId
      * @param array|null $expectedData
-     *
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Validation\ValidationException
      */
     public function testStockItemBackordersDisabled(string $sku, int $stockId, $expectedData)
     {
@@ -173,12 +163,6 @@ class BackorderConditionTest extends TestCase
      * @param string $sku
      * @param int $stockId
      * @param array|null $expectedData
-     *
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Validation\ValidationException
      */
     public function testStockItemBackordersEnabled(string $sku, int $stockId, $expectedData)
     {
@@ -222,11 +206,6 @@ class BackorderConditionTest extends TestCase
      *
      * @param string $sku
      * @param int $backordersStatus
-     *
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Validation\ValidationException
      */
     private function setStockItemBackorders(string $sku, int $backordersStatus): void
     {
