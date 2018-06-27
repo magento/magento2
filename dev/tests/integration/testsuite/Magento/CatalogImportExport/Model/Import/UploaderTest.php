@@ -55,8 +55,9 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testMoveWithValidFile() : void
+    public function testMoveWithValidFile(): void
     {
         $fileName = 'magento_additional_image_one.jpg';
         $filePath = $this->directory->getAbsolutePath($this->uploader->getTmpDir() . '/' . $fileName);
@@ -67,9 +68,10 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @return void
      * @expectedException \Exception
      */
-    public function testMoveWithInvalidFile() :void
+    public function testMoveWithInvalidFile(): void
     {
         $fileName = 'media_import_image.php';
         $filePath = $this->directory->getAbsolutePath($this->uploader->getTmpDir() . '/' . $fileName);
