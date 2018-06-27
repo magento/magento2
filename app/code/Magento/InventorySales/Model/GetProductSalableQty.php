@@ -46,6 +46,7 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
     private $getProductTypesBySkus;
 
     /**
+     * @param GetStockItemConfigurationInterface $getStockItemConfig
      * @param GetStockItemDataInterface $getStockItemData
      * @param GetReservationsQuantityInterface $getReservationsQuantity
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
@@ -76,11 +77,8 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
             return 0;
         }
 
-        $minQty = 0;
         $stockItemConfig = $this->getStockItemConfiguration->execute($sku, $stockId);
-        if (null !== $stockItemConfig) {
-            $minQty = $stockItemConfig->getMinQty();
-        }
+        $minQty = $stockItemConfig->getMinQty();
 
         $productQtyInStock = $stockItemData[GetStockItemDataInterface::QUANTITY]
             + $this->getReservationsQuantity->execute($sku, $stockId)

@@ -7,14 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model;
 
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Model\Order\Shipment\Item;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterfaceFactory;
-use Magento\Sales\Model\Order\Item as OrderItem;
-use Magento\Sales\Model\Order\Shipment\Item;
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Framework\Exception\NoSuchEntityException;
 
-class GetItemsToDeduct
+class GetItemsToDeductFromShipment
 {
     /**
      * @var GetSkusByProductIdsInterface
@@ -47,31 +48,61 @@ class GetItemsToDeduct
     }
 
     /**
-     * @param Item $shipmentItem
+     * @param Shipment $shipment
      * @return array
      * @throws NoSuchEntityException
      */
-    public function execute(Item $shipmentItem): array
+    public function execute(Shipment $shipment): array
     {
-        $orderItem = $shipmentItem->getOrderItem();
         $itemsToShip = [];
-        if ($orderItem->getHasChildren()) {
-            if ($orderItem->isDummy(true)) {
-                return [];
+
+        /** @var \Magento\Sales\Model\Order\Shipment\Item $shipmentItem */
+        foreach ($shipment->getAllItems() as $shipmentItem) {
+            $orderItem = $shipmentItem->getOrderItem();
+            if ($orderItem->getHasChildren()) {
+                if (!$orderItem->isDummy(true)) {
+                    foreach ($this->processComplexItem($shipmentItem) as $item) {
+                        $itemsToShip[] = $item;
+                    }
+                }
+            } else {
+                $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(
+                    [$shipmentItem->getProductId()]
+                )[$shipmentItem->getProductId()];
+                $qty = $this->castQty($orderItem, $shipmentItem->getQty());
+                $itemsToShip[] = $this->itemToDeduct->create([
+                    'sku' => $itemSku,
+                    'qty' => $qty
+                ]);
             }
-            $itemsToShip = $this->processComplexItem($shipmentItem);
-        } else {
-            $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(
-                [$shipmentItem->getProductId()]
-            )[$shipmentItem->getProductId()];
-            $qty = $this->castQty($orderItem, $shipmentItem->getQty());
-            $itemsToShip[] = $this->itemToDeduct->create([
-                'sku' => $itemSku,
+        }
+
+        return $this->groupItemsBySku($itemsToShip);
+    }
+
+    /**
+     * @param array $shipmentItems
+     * @return array
+     */
+    private function groupItemsBySku(array $shipmentItems): array
+    {
+        $processingItems = $groupedItems = [];
+        foreach ($shipmentItems as $shipmentItem) {
+            if (empty($processingItems[$shipmentItem->getSku()])) {
+                $processingItems[$shipmentItem->getSku()] = $shipmentItem->getQty();
+            } else {
+                $processingItems[$shipmentItem->getSku()] += $shipmentItem->getQty();
+            }
+        }
+
+        foreach ($processingItems as $sku => $qty) {
+            $groupedItems[] = $this->itemToDeduct->create([
+                'sku' => $sku,
                 'qty' => $qty
             ]);
         }
 
-        return $itemsToShip;
+        return $groupedItems;
     }
 
     /**

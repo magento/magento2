@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
@@ -14,8 +13,6 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-/** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-$searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
 /** @var CartRepositoryInterface $cartRepository */
 $cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::class);
 /** @var CartManagementInterface $cartManagement */
@@ -31,7 +28,7 @@ $cartId = $cartManagement->createEmptyCart();
 $cart = $cartRepository->get($cartId);
 $cart->setCustomerEmail('admin@example.com');
 $cart->setCustomerIsGuest(true);
-$store = $storeRepository->getActiveStoreByCode('store_for_eu_website');
+$store = $storeRepository->get('store_for_eu_website');
 $cart->setStoreId($store->getId());
 $storeManager->setCurrentStore($store->getCode());
 
