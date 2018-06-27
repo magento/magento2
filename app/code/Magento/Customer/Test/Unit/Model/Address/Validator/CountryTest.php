@@ -6,6 +6,8 @@
 
 namespace Magento\Customer\Test\Unit\Model\Address\Validator;
 
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Magento\Customer\Model\Address\Validator\Country tests.
  */
@@ -20,14 +22,34 @@ class CountryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManager;
 
+    /**
+     * @var \Magento\Directory\Model\AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $allowedCountriesReaderMock;
+
+    /**
+     * @var \Magento\Customer\Model\Config\Share|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shareConfigMock;
+
     protected function setUp()
     {
         $this->directoryDataMock = $this->createMock(\Magento\Directory\Helper\Data::class);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->allowedCountriesReaderMock = $this->createPartialMock(
+            \Magento\Directory\Model\AllowedCountries::class,
+            ['getAllowedCountries']
+        );
+        $this->shareConfigMock = $this->createPartialMock(
+            \Magento\Customer\Model\Config\Share::class,
+            ['isGlobalScope']
+        );
         $this->model = $this->objectManager->getObject(
             \Magento\Customer\Model\Address\Validator\Country::class,
             [
                 'directoryData' => $this->directoryDataMock,
+                'allowedCountriesReader' => $this->allowedCountriesReaderMock,
+                'shareConfig' => $this->shareConfigMock,
             ]
         );
     }
@@ -59,16 +81,11 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             ->method('isRegionRequired')
             ->willReturn($data['regionRequired']);
 
-        $countryCollectionMock = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Country\Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAllIds'])
-            ->getMock();
-
-        $this->directoryDataMock->expects($this->any())
-            ->method('getCountryCollection')
-            ->willReturn($countryCollectionMock);
-
-        $countryCollectionMock->expects($this->any())->method('getAllIds')->willReturn($countryIds);
+        $this->shareConfigMock->method('isGlobalScope')->willReturn(false);
+        $this->allowedCountriesReaderMock
+            ->method('getAllowedCountries')
+            ->with(ScopeInterface::SCOPE_WEBSITE, null)
+            ->willReturn($countryIds);
 
         $addressMock->method('getCountryId')->willReturn($data['country_id']);
 
