@@ -31,11 +31,6 @@ use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 class Grouped implements DimensionalIndexerInterface
 {
     /**
-     * @var BaseFinalPrice
-     */
-    private $baseFinalPrice;
-
-    /**
      * @var IndexTableStructureFactory
      */
     private $indexTableStructureFactory;
@@ -71,45 +66,34 @@ class Grouped implements DimensionalIndexerInterface
     private $priceModifiers;
 
     /**
-     * @var Config
-     */
-    private $eavConfig;
-
-    /**
      * @var bool
      */
     private $fullReindexAction;
 
     /**
-     * @param BaseFinalPrice $baseFinalPrice
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
      * @param MetadataPool $metadataPool
-     * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param string $connectionName
      * @param bool $fullReindexAction
      * @param array $priceModifiers
      */
     public function __construct(
-        BaseFinalPrice $baseFinalPrice,
         IndexTableStructureFactory $indexTableStructureFactory,
         TableMaintainer $tableMaintainer,
         MetadataPool $metadataPool,
-        Config $eavConfig,
         ResourceConnection $resource,
         $connectionName = 'indexer',
         $fullReindexAction = false,
         array $priceModifiers = []
     ) {
-        $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
         $this->connectionName = $connectionName;
         $this->priceModifiers = $priceModifiers;
         $this->metadataPool = $metadataPool;
         $this->resource = $resource;
-        $this->eavConfig = $eavConfig;
         $this->fullReindexAction = $fullReindexAction;
         $this->connection = $this->resource->getConnection($this->connectionName);
     }
