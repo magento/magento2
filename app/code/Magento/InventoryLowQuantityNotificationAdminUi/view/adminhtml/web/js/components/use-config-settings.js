@@ -15,7 +15,7 @@ define([
         },
 
         /**
-         * @returns {Element}
+         * @inheritdoc
          */
         initObservable: function () {
             return this
@@ -34,12 +34,17 @@ define([
             this._super(newChecked);
         },
 
+        /**
+         * @returns {String}
+         */
         getInitialValue: function () {
             var values = [this.value(), this.default],
                 value;
 
             values.some(function (v) {
-                return v ? value = v : !!v
+                value = v || !!v;
+
+                return value;
             });
 
             return this.normalizeData(value);
