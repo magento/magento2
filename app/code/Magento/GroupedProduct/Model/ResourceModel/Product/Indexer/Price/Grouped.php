@@ -8,6 +8,7 @@
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -69,12 +70,17 @@ class Grouped implements DimensionalIndexerInterface
      * @var bool
      */
     private $fullReindexAction;
+    /**
+     * @var BasePriceModifier
+     */
+    private $basePriceModifier;
 
     /**
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resource
+     * @param BasePriceModifier $basePriceModifier
      * @param string $connectionName
      * @param bool $fullReindexAction
      * @param array $priceModifiers
@@ -84,6 +90,7 @@ class Grouped implements DimensionalIndexerInterface
         TableMaintainer $tableMaintainer,
         MetadataPool $metadataPool,
         ResourceConnection $resource,
+        BasePriceModifier $basePriceModifier,
         $connectionName = 'indexer',
         $fullReindexAction = false,
         array $priceModifiers = []
@@ -96,6 +103,7 @@ class Grouped implements DimensionalIndexerInterface
         $this->resource = $resource;
         $this->fullReindexAction = $fullReindexAction;
         $this->connection = $this->resource->getConnection($this->connectionName);
+        $this->basePriceModifier = $basePriceModifier;
     }
 
     /**
@@ -132,7 +140,7 @@ class Grouped implements DimensionalIndexerInterface
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
         ]);
-
+        $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
         $query = $this->_prepareGroupedProductPriceDataSelect($dimensions, iterator_to_array($entityIds))
             ->insertFromSelect($temporaryPriceTable->getTableName());
         $this->connection->query($query);
