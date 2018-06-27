@@ -117,7 +117,7 @@ class Tabs extends \Magento\Backend\Block\Widget
         if (empty($tabId)) {
             throw new \Exception(__('Please correct the tab configuration and try again. Tab Id should be not empty'));
         }
-        
+
         if (is_array($tab)) {
             $this->_tabs[$tabId] = new \Magento\Framework\DataObject($tab);
         } elseif ($tab instanceof \Magento\Framework\DataObject) {
