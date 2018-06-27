@@ -103,6 +103,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         }
         return parent::_setIsLoaded($flag);
     }
+
     /**
      * Adds subscribers info
      *
