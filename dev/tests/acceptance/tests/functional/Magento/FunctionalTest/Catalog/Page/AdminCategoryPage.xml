@@ -18,5 +18,6 @@
         <section name="AdminCategoryProductsGridSection"/>
         <section name="AdminCategoryModalSection"/>
         <section name="AdminCategoryMessagesSection"/>
+        <section name="AdminCategoryContentSection"/>
     </page>
 </pages>

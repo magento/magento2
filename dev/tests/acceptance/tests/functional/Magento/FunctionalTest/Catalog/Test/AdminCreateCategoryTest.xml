@@ -10,10 +10,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreateCategoryTest">
         <annotations>
-            <features value="Category Creation"/>
+            <features value="Catalog"/>
             <stories value="Create a Category via the Admin"/>
-            <title value="You should be able to create a Category in the admin back-end."/>
-            <description value="You should be able to create a Category in the admin back-end."/>
+            <title value="Admin should be able to create a Category"/>
+            <description value="Admin should be able to create a Category"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-72102"/>
             <group value="category"/>
@@ -39,10 +39,10 @@
     </test>
     <test name="AdminConfigDefaultCategoryLayoutFromConfigurationSettingTest">
         <annotations>
-            <features value="[CMS] WYSIWYG update MAGETWO-36659"/>
+            <features value="Catalog"/>
             <stories value="Default layout configuration MAGETWO-88793"/>
-            <title value="Admin are able to config default layout for Category Page from System Configuration"/>
-            <description value="Admin are able to select layout that will be applied by default to Category Page, so that he does not need to change it manually every time he create a page"/>
+            <title value="Admin should be able to configure the default layout for Category Page from System Configuration"/>
+            <description value="Admin should be able to configure the default layout for Category Page from System Configuration"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-89024"/>
             <group value="category"/>

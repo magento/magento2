@@ -15,4 +15,7 @@
         <data key="type">0</data>
         <var key="rule_id" entityType="SalesRule" entityKey="rule_id"/>
     </entity>
+    <entity name="_defaultCoupon" type="SalesRuleCoupon">
+        <data key="code" unique="suffix">defaultCoupon</data>
+    </entity>
 </entities>

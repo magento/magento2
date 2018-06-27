@@ -9,15 +9,13 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminEditTextEditorProductAttributeTest">
         <annotations>
-            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <features value="Catalog"/>
             <stories value="MAGETWO-51484-Input type configuration for custom Product Attributes"/>
             <group value="Catalog"/>
-            <title value="Admin see TinyMCEv4.6 is native WYSIWYG on Product Page"/>
-            <description value="Admin should be able to switch between 2 version of Tinymce in the admin back-end."/>
+            <title value="Admin should be able to switch between two versions of TinyMCE"/>
+            <description value="Admin should be able to switch between two versions of TinyMCE"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-85745"/>
-            <!-- Skipped, see https://jira.corp.magento.com/browse/MQE-890 -->
-            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>

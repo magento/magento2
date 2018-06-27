@@ -10,11 +10,11 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="VerifyTinyMCEv4IsNativeWYSIWYGOnCMSPageTest">
         <annotations>
-            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <features value="Cms"/>
             <stories value="MAGETWO-42046-Apply new WYSIWYG on CMS Page"/>
             <group value="Cms"/>
-            <title value="Admin see TinyMCEv4.6 is native WYSIWYG on CMS Page"/>
-            <description value="Admin see TinyMCEv4.6 is native WYSIWYG on CMS Page"/>
+            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on CMS Page"/>
+            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on CMS Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84182 "/>
         </annotations>

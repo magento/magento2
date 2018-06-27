@@ -45,4 +45,7 @@
     <type name="Magento\Framework\Communication\Config\CompositeReader">
         <plugin name="forceTopicsTypeToAsync" type="Magento\WebapiAsync\Plugin\Communication\Config\CompositeReader" />
     </type>
+    <type name="Magento\Webapi\Controller\Rest">
+        <plugin name="webapiContorllerRestAsync" type="Magento\WebapiAsync\Plugin\ControllerRest" />
+    </type>
 </config>
