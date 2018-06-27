@@ -12,6 +12,9 @@ use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Bulk\OperationInterface;
 
+/**
+ * @magentoDbIsolation enabled
+ */
 class OperationRepositoryInterfaceTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/bulk';

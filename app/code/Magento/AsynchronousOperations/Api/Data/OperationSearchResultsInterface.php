@@ -10,19 +10,21 @@ declare(strict_types=1);
 namespace Magento\AsynchronousOperations\Api\Data;
 
 /**
+ * Interface defines Operation Search Results data object
+ *
  * @api
  */
 interface OperationSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
-     * Get attributes list.
+     * Get operations list.
      *
      * @return \Magento\AsynchronousOperations\Api\Data\OperationInterface[]
      */
     public function getItems();
 
     /**
-     * Set attributes list.
+     * Set operations list.
      *
      * @param \Magento\AsynchronousOperations\Api\Data\OperationInterface[] $items
      * @return $this
