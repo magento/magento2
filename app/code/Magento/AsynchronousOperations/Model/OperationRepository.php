@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\AsynchronousOperations\Api\Data\DetailedOperationStatusInterfaceFactory;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationSearchResultsInterfaceFactory as SearchResultFactory;
@@ -20,7 +18,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Operation Management Service
+ * Repository class for @see \Magento\AsynchronousOperations\Api\OperationRepositoryInterface
  */
 class OperationRepository implements \Magento\AsynchronousOperations\Api\OperationRepositoryInterface
 {
@@ -61,6 +59,7 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
 
     /**
      * OperationRepository constructor.
+     *
      * @param EntityManager $entityManager
      * @param CollectionFactory $collectionFactory
      * @param SearchResultFactory $searchResultFactory
@@ -83,6 +82,7 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
         $this->searchResultFactory = $searchResultFactory;
         $this->joinProcessor = $joinProcessor;
         $this->operationExtensionFactory = $operationExtension;
+        $this->collectionProcessor = $collectionProcessor;
         $this->logger = $logger;
     }
 
@@ -100,18 +100,7 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setTotalCount($collection->getSize());
-
-        $items = [];
-        foreach ($collection->getItems() as $item) {
-            $extensionAttributes = $item->getExtensionAttributes();
-            if ($extensionAttributes == null) {
-                $extensionAttributes = $this->operationExtensionFactory->create();
-            }
-            $extensionAttributes->setStartTime($item->getExtensionAttributeStartTimeStartTime());
-            $item->setExtensionAttributes($extensionAttributes);
-            $items[] = $item;
-        }
-        $searchResult->setItems($items);
+        $searchResult->setItems($collection->getItems());
 
         return $searchResult;
     }
