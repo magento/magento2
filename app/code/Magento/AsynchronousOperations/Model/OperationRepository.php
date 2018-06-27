@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\AsynchronousOperations\Api\Data\DetailedOperationStatusInterfaceFactory;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationSearchResultsInterfaceFactory as SearchResultFactory;
@@ -20,7 +18,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class OperationManagement
+ * Repository class for @see \Magento\AsynchronousOperations\Api\OperationRepositoryInterface
  */
 class OperationRepository implements \Magento\AsynchronousOperations\Api\OperationRepositoryInterface
 {
@@ -66,7 +64,7 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
      * @param \Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory $collectionFactory
      * @param \Magento\AsynchronousOperations\Api\Data\OperationSearchResultsInterfaceFactory $searchResultFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
-     * @param \Magento\AsynchronousOperations\Api\Data\OperationExtensionInterfaceFactory $operationExtensionFactory
+     * @param \Magento\AsynchronousOperations\Api\Data\OperationExtensionInterfaceFactory $operationExtension
      * @param \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface|null $collectionProcessor
      * @param \Psr\Log\LoggerInterface $logger
      */
@@ -76,7 +74,7 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
         SearchResultFactory $searchResultFactory,
         JoinProcessorInterface $joinProcessor,
         OperationExtensionInterfaceFactory $operationExtension,
-        CollectionProcessorInterface $collectionProcessor = null,
+        CollectionProcessorInterface $collectionProcessor,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
@@ -84,8 +82,7 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
         $this->searchResultFactory = $searchResultFactory;
         $this->joinProcessor = $joinProcessor;
         $this->operationExtensionFactory = $operationExtension;
-        $this->collectionProcessor = $collectionProcessor ? : ObjectManager::getInstance()
-            ->get(\Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class);
+        $this->collectionProcessor = $collectionProcessor;
         $this->logger = $logger;
     }
 
@@ -103,18 +100,7 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setTotalCount($collection->getSize());
-
-        $items = [];
-        foreach ($collection->getItems() as $item) {
-            $extensionAttributes = $item->getExtensionAttributes();
-            if ($extensionAttributes == null) {
-                $extensionAttributes = $this->operationExtensionFactory->create();
-            }
-            $extensionAttributes->setStartTime('dsadsa');
-            $item->setExtensionAttributes($extensionAttributes);
-            $items[] = $item;
-        }
-        $searchResult->setItems($items);
+        $searchResult->setItems($collection->getItems());
 
         return $searchResult;
     }
