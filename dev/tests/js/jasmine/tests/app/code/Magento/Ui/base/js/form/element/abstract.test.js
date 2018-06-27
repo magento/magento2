@@ -34,7 +34,7 @@ define([
                 index: 'testIndex',
                 dataScope: dataScope,
                 service: {
-                    template: "ui/form/element/helper/service"
+                    template: 'ui/form/element/helper/service'
                 }
             },
             model;
