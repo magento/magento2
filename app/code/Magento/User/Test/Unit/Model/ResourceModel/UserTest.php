@@ -68,7 +68,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-
         $this->dateTimeMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -126,7 +125,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($returnData, $this->model->loadByUsername('user1'));
     }
-
 
     public function testHasAssigned2Role()
     {
