@@ -37,7 +37,6 @@ class GetSalableQuantityDataBySku
      */
     private $getStockItemConfiguration;
 
-
     /**
      * @param GetProductSalableQtyInterface $getProductSalableQty
      * @param StockRepositoryInterface $stockRepository
