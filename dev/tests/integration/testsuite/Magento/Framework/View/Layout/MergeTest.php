@@ -275,10 +275,10 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($handles, $this->_model->getHandles());
         $expectedResult = <<<XML
 <body>
-   <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+   <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_one.phtml"/>
 </body>
 <body>
-   <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
+   <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_two.phtml"/>
 </body>
 
 XML;
