@@ -34,6 +34,9 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
      */
     private $mediaDirectory;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -46,12 +49,15 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
             [
                 'baseTmpPath' => $this->mediaDirectory->getRelativePath('tmp'),
                 'basePath' => __DIR__,
-                'allowedExtensions' => ['jpg', 'jpeg', 'gif', 'png']
+                'allowedExtensions' => ['jpg', 'jpeg', 'gif', 'png'],
             ]
         );
     }
 
-    public function testSaveFileToTmpDir()
+    /**
+     * @return void
+     */
+    public function testSaveFileToTmpDir(): void
     {
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
@@ -75,8 +81,9 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage File validation failed.
+     * @return void
      */
-    public function testSaveFileToTmpDirWithWrongExtension()
+    public function testSaveFileToTmpDirWithWrongExtension(): void
     {
         $fileName = 'text.txt';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
@@ -100,8 +107,9 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage File validation failed.
+     * @return void
      */
-    public function testSaveFileToTmpDirWithWrongFile()
+    public function testSaveFileToTmpDirWithWrongFile(): void
     {
         $fileName = 'file.gif';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);

@@ -59,7 +59,7 @@ class Mime
     ];
 
     /**
-     * List of mime types that can be defined by file extension
+     * List of mime types that can be defined by file extension.
      *
      * @var array $defineByExtensionList
      */
@@ -125,7 +125,7 @@ class Mime
     }
 
     /**
-     * Get file extension by file name
+     * Get file extension by file name.
      *
      * @param string $file
      * @return string

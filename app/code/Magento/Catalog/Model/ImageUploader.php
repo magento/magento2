@@ -230,7 +230,6 @@ class ImageUploader
      * @return string[]
      *
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Exception
      */
     public function saveFileToTmpDir($fileId)
     {

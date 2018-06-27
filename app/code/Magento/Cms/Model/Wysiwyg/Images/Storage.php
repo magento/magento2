@@ -478,7 +478,6 @@ class Storage extends \Magento\Framework\DataObject
      * @param string $type Type of storage, e.g. image, media etc.
      * @return array File info Array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Exception
      */
     public function uploadFile($targetPath, $type = null)
     {
@@ -757,7 +756,7 @@ class Storage extends \Magento\Framework\DataObject
     }
 
     /**
-     * Prepare mime types config settings
+     * Prepare mime types config settings.
      *
      * @param string|null $type Type of storage, e.g. image, media etc.
      * @return array Array of allowed file extensions
@@ -770,7 +769,7 @@ class Storage extends \Magento\Framework\DataObject
     }
 
     /**
-     * Get list of allowed file extensions with mime type in values
+     * Get list of allowed file extensions with mime type in values.
      *
      * @param string|null $type
      * @return array
@@ -782,6 +781,7 @@ class Storage extends \Magento\Framework\DataObject
         } else {
             $allowed = $this->_extensions['allowed'];
         }
+
         return $allowed;
     }
 }
