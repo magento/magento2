@@ -93,7 +93,9 @@ define([
 
                         /** @inheritdoc */
                         always: function (e) {
-                            e.stopImmediatePropagation();
+                            if (e && typeof e.stopImmediatePropagation === 'function') {
+                                e.stopImmediatePropagation();
+                            }
                         }
                     }
                 });
