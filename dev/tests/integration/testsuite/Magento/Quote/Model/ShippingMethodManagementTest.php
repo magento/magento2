@@ -175,4 +175,41 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($expectedResult[$rate->getCarrierCode()]['method_code'], $rate->getMethodCode());
         }
     }
+
+    /**
+     * Test that getList returns all available shipping methods.
+     *
+     * @magentoConfigFixture current_store carriers/tablerate/active 1
+     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_qty
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @return void
+     */
+    public function testGetList()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $objectManager->get(\Magento\Quote\Model\Quote::class);
+        $quote->load('test01', 'reserved_order_id');
+        $cartId = $quote->getId();
+        if (!$cartId) {
+            $this->fail('quote fixture failed');
+        }
+        /** @var  \Magento\Quote\Api\ShippingMethodManagementInterface $shippingEstimation */
+        $shippingEstimation = $objectManager->get(\Magento\Quote\Api\ShippingMethodManagementInterface::class);
+        $result = $shippingEstimation->getList($cartId);
+
+        self::assertNotEmpty($result);
+        self::assertCount(2, $result);
+        self::assertEquals(
+            $result[0]->getCarrierCode(),
+            'flatrate'
+        );
+        self::assertEquals(
+            $result[1]->getCarrierCode(),
+            'tablerate'
+        );
+    }
 }

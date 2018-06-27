@@ -58,6 +58,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Shipping/_files/enable_freeshipping.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
     public function testGetList()
@@ -77,16 +78,46 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
-
-        $quote->getShippingAddress()->collectShippingRates();
-        $expectedRates = $quote->getShippingAddress()->getGroupedAllShippingRates();
-
-        $expectedData = $this->convertRates($expectedRates, $quote->getQuoteCurrencyCode());
-
+        $expectedData = $this->getExpectedShippingMethods();
         $requestData = ["cartId" => $cartId];
-
         $returnedRates = $this->_webApiCall($this->getListServiceInfo($cartId), $requestData);
+
         $this->assertEquals($expectedData, $returnedRates);
+    }
+
+    /**
+     * Expected shipping method data.
+     *
+     * @return array
+     */
+    private function getExpectedShippingMethods()
+    {
+        return [
+            [
+                ShippingMethodInterface::KEY_CARRIER_CODE => 'flatrate',
+                ShippingMethodInterface::KEY_METHOD_CODE => 'flatrate',
+                ShippingMethodInterface::KEY_CARRIER_TITLE => 'Flat Rate',
+                ShippingMethodInterface::KEY_METHOD_TITLE => 'Fixed',
+                ShippingMethodInterface::KEY_SHIPPING_AMOUNT => 10,
+                ShippingMethodInterface::KEY_BASE_SHIPPING_AMOUNT => 10,
+                ShippingMethodInterface::KEY_AVAILABLE => true,
+                ShippingMethodInterface::KEY_ERROR_MESSAGE => '',
+                ShippingMethodInterface::KEY_PRICE_EXCL_TAX => 10,
+                ShippingMethodInterface::KEY_PRICE_INCL_TAX => 10,
+            ],
+            [
+                ShippingMethodInterface::KEY_CARRIER_CODE => 'freeshipping',
+                ShippingMethodInterface::KEY_METHOD_CODE => 'freeshipping',
+                ShippingMethodInterface::KEY_CARRIER_TITLE => 'Free Shipping',
+                ShippingMethodInterface::KEY_METHOD_TITLE => 'Free',
+                ShippingMethodInterface::KEY_SHIPPING_AMOUNT => 0,
+                ShippingMethodInterface::KEY_BASE_SHIPPING_AMOUNT => 0,
+                ShippingMethodInterface::KEY_AVAILABLE => true,
+                ShippingMethodInterface::KEY_ERROR_MESSAGE => '',
+                ShippingMethodInterface::KEY_PRICE_EXCL_TAX => 0,
+                ShippingMethodInterface::KEY_PRICE_INCL_TAX => 0,
+            ],
+        ];
     }
 
     /**

@@ -133,6 +133,7 @@ class ShippingMethodManagement implements
         if (!$shippingAddress->getCountryId()) {
             throw new StateException(__('Shipping address not set.'));
         }
+        $shippingAddress->setCollectShippingRates(true);
         $shippingAddress->collectShippingRates();
         $shippingRates = $shippingAddress->getGroupedAllShippingRates();
         foreach ($shippingRates as $carrierRates) {

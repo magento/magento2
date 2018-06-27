@@ -50,6 +50,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Shipping/_files/enable_freeshipping.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
     public function testGetList()
@@ -61,18 +62,15 @@ class ShippingMethodManagementTest extends WebapiAbstract
         if (!$cartId) {
             $this->fail('quote fixture failed');
         }
-        $quote->getShippingAddress()->collectShippingRates();
-        $expectedRates = $quote->getShippingAddress()->getGroupedAllShippingRates();
-
-        $expectedData = $this->convertRates($expectedRates, $quote->getQuoteCurrencyCode());
-
+        $expectedData = $this->getExpectedShippingMethods();
         $requestData = ["cartId" => $cartId];
-
         $returnedRates = $this->_webApiCall($this->getListServiceInfo($cartId), $requestData);
+
         $this->assertEquals($expectedData, $returnedRates);
     }
 
     /**
+     * @magentoApiDataFixture Magento/Shipping/_files/enable_freeshipping.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
@@ -101,26 +99,47 @@ class ShippingMethodManagementTest extends WebapiAbstract
                 'token' => $token
             ]
         ];
-
+        $expected = $this->getExpectedShippingMethods();
         $result = $this->_webApiCall($serviceInfo, []);
-        $this->assertNotEmpty($result);
-        $this->assertCount(1, $result);
 
-        $shippingMethod = $shippingMethodManagementService->get($this->quote->getId());
-        $expectedData = [
-            ShippingMethodInterface::KEY_CARRIER_CODE => $shippingMethod->getCarrierCode(),
-            ShippingMethodInterface::KEY_METHOD_CODE => $shippingMethod->getMethodCode(),
-            ShippingMethodInterface::KEY_CARRIER_TITLE => $shippingMethod->getCarrierTitle(),
-            ShippingMethodInterface::KEY_METHOD_TITLE => $shippingMethod->getMethodTitle(),
-            ShippingMethodInterface::KEY_SHIPPING_AMOUNT => $shippingMethod->getAmount(),
-            ShippingMethodInterface::KEY_BASE_SHIPPING_AMOUNT => $shippingMethod->getBaseAmount(),
-            ShippingMethodInterface::KEY_AVAILABLE => $shippingMethod->getAvailable(),
-            ShippingMethodInterface::KEY_ERROR_MESSAGE => null,
-            ShippingMethodInterface::KEY_PRICE_EXCL_TAX => $shippingMethod->getPriceExclTax(),
-            ShippingMethodInterface::KEY_PRICE_INCL_TAX => $shippingMethod->getPriceInclTax(),
+        self::assertNotEmpty($result);
+        self::assertCount(2, $result);
+        self::assertEquals($expected, $result);
+    }
+
+    /**
+     * Expected shipping method data.
+     *
+     * @return array
+     */
+    private function getExpectedShippingMethods()
+    {
+        return [
+            [
+                ShippingMethodInterface::KEY_CARRIER_CODE => 'flatrate',
+                ShippingMethodInterface::KEY_METHOD_CODE => 'flatrate',
+                ShippingMethodInterface::KEY_CARRIER_TITLE => 'Flat Rate',
+                ShippingMethodInterface::KEY_METHOD_TITLE => 'Fixed',
+                ShippingMethodInterface::KEY_SHIPPING_AMOUNT => 10,
+                ShippingMethodInterface::KEY_BASE_SHIPPING_AMOUNT => 10,
+                ShippingMethodInterface::KEY_AVAILABLE => true,
+                ShippingMethodInterface::KEY_ERROR_MESSAGE => '',
+                ShippingMethodInterface::KEY_PRICE_EXCL_TAX => 10,
+                ShippingMethodInterface::KEY_PRICE_INCL_TAX => 10,
+            ],
+            [
+                ShippingMethodInterface::KEY_CARRIER_CODE => 'freeshipping',
+                ShippingMethodInterface::KEY_METHOD_CODE => 'freeshipping',
+                ShippingMethodInterface::KEY_CARRIER_TITLE => 'Free Shipping',
+                ShippingMethodInterface::KEY_METHOD_TITLE => 'Free',
+                ShippingMethodInterface::KEY_SHIPPING_AMOUNT => 0,
+                ShippingMethodInterface::KEY_BASE_SHIPPING_AMOUNT => 0,
+                ShippingMethodInterface::KEY_AVAILABLE => true,
+                ShippingMethodInterface::KEY_ERROR_MESSAGE => '',
+                ShippingMethodInterface::KEY_PRICE_EXCL_TAX => 0,
+                ShippingMethodInterface::KEY_PRICE_INCL_TAX => 0,
+            ],
         ];
-
-        $this->assertEquals($expectedData, $result[0]);
     }
 
     /**
