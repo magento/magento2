@@ -64,7 +64,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 
                 $couponCodes = $this->couponGenerator->generateCodes($data);
                 $generated = count($couponCodes);
-                $this->messageManager->addSuccess(__('%1 coupon(s) have been generated.', $generated));
+                $this->messageManager->addSuccessMessage(__('%1 coupon(s) have been generated.', $generated));
                 $this->_view->getLayout()->initMessages();
                 $result['messages'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
             } catch (\Magento\Framework\Exception\InputException $inputException) {

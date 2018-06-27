@@ -128,7 +128,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->messageManagerMock->expects($this->never())
-            ->method('addNotice');
+            ->method('addNoticeMessage');
 
         /** @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject $pageMock */
         $pageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
@@ -217,7 +217,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->messageManagerMock->expects($this->never())
-            ->method('addNotice');
+            ->method('addNoticeMessage');
 
         /** @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject $pageMock */
         $pageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
@@ -293,7 +293,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with(__('You can\'t send messages more than %1 times an hour.', 11))
             ->willReturnSelf();
 

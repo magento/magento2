@@ -116,7 +116,7 @@ class CheckContactUsFormObserverTest extends \PHPUnit\Framework\TestCase
         $this->helperMock->expects($this->any())
             ->method('getCaptcha')
             ->with($formId)->willReturn($this->captchaMock);
-        $this->sessionMock->expects($this->never())->method('addError');
+        $this->sessionMock->expects($this->never())->method('addErrorMessage');
 
         $this->checkContactUsFormObserver->execute(
             new \Magento\Framework\Event\Observer(['controller_action' => $controller])
@@ -163,7 +163,7 @@ class CheckContactUsFormObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getCaptcha')
             ->with($formId)
             ->willReturn($this->captchaMock);
-        $this->messageManagerMock->expects($this->once())->method('addError')->with($warningMessage);
+        $this->messageManagerMock->expects($this->once())->method('addErrorMessage')->with($warningMessage);
         $this->actionFlagMock->expects($this->once())
             ->method('set')
             ->with('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);

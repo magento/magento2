@@ -196,7 +196,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->with($invoiceId)
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You sent the message.');
 
         $this->resultRedirectFactory->expects($this->atLeastOnce())

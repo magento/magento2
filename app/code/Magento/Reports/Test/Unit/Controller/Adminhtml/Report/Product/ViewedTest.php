@@ -190,7 +190,7 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
 
         $this->messageManagerMock
             ->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($errorText);
 
         $logMock
@@ -217,7 +217,7 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
 
         $this->messageManagerMock
             ->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($errorText);
 
         $this->menuBlockMock

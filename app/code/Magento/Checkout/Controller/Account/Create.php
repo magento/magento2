@@ -87,7 +87,7 @@ class Create extends \Magento\Framework\App\Action\Action
                 ]
             );
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, $e->getMessage());
+            $this->messageManager->addExceptionMessage($e, $e->getMessage());
             throw $e;
         }
     }

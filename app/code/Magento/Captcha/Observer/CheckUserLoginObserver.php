@@ -142,7 +142,7 @@ class CheckUserLoginObserver implements ObserverInterface
                 } catch (NoSuchEntityException $e) {
                     //do nothing as customer existance is validated later in authenticate method
                 }
-                $this->messageManager->addError(__('Incorrect CAPTCHA'));
+                $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->_session->setUsername($login);
                 $beforeUrl = $this->_session->getBeforeAuthUrl();

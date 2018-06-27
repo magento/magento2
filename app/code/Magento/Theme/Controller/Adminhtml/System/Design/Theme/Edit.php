@@ -41,10 +41,10 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $this->_setActiveMenu('Magento_Theme::system_design_theme');
             $this->_view->renderLayout();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_redirect('adminhtml/*/');
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We cannot find the theme.'));
+            $this->messageManager->addErrorMessage(__('We cannot find the theme.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->_redirect('adminhtml/*/');
         }

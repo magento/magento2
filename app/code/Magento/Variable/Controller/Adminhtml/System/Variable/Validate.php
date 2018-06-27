@@ -25,7 +25,7 @@ class Validate extends \Magento\Variable\Controller\Adminhtml\System\Variable
         $variable->addData($this->getRequest()->getPost('variable'));
         $result = $variable->validate();
         if ($result instanceof \Magento\Framework\Phrase) {
-            $this->messageManager->addError($result->getText());
+            $this->messageManager->addErrorMessage($result->getText());
             $layout = $this->layoutFactory->create();
             $layout->initMessages();
             $response->setError(true);
