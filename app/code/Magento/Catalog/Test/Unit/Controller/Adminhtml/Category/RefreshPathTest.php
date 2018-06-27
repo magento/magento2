@@ -83,11 +83,11 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
 
         $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPath', 'getParentID', 'getResource'])
+            ->setMethods(['getPath', 'getParentId', 'getResource'])
             ->getMock();
 
         $categoryMock->expects($this->any())->method('getPath')->willReturn($value['path']);
-        $categoryMock->expects($this->any())->method('getParentID')->willReturn($value['parentId']);
+        $categoryMock->expects($this->any())->method('getParentId')->willReturn($value['parentId']);
 
         $categoryResource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category::class);
 
