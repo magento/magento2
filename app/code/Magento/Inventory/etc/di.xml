@@ -88,27 +88,4 @@
                       xsi:type="object">Magento\InventoryApi\Model\StockSourceLinkValidatorChain</argument>
         </arguments>
     </type>
-    <!-- Mass Source Assignment -->
-    <preference for="Magento\InventoryApi\Api\BulkSourceAssignInterface"
-                type="Magento\Inventory\Model\BulkSourceAssign"/>
-    <preference for="Magento\InventoryApi\Api\BulkSourceUnassignInterface"
-                type="Magento\Inventory\Model\BulkSourceUnassign"/>
-
-    <type name="\Magento\InventoryApi\Model\BulkSourceAssignValidatorChain">
-        <arguments>
-            <argument name="validators" xsi:type="array">
-                <item name="sources"
-                      xsi:type="object">Magento\Inventory\Model\Source\Validator\Bulk\AssignSourcesValidator</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <type name="\Magento\InventoryApi\Model\BulkSourceUnassignValidatorChain">
-        <arguments>
-            <argument name="validators" xsi:type="array">
-                <item name="sources"
-                      xsi:type="object">Magento\Inventory\Model\Source\Validator\Bulk\UnassignSourcesValidator</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

@@ -15,10 +15,4 @@
                 type="Magento\InventoryApi\Model\SourceItemValidatorChain"/>
     <preference for="Magento\InventoryApi\Model\SourceValidatorInterface"
                 type="Magento\InventoryApi\Model\SourceValidatorChain"/>
-
-    <!-- Bulk validators chain -->
-    <preference for="Magento\InventoryApi\Model\BulkSourceAssignValidatorInterface"
-                type="Magento\InventoryApi\Model\BulkSourceAssignValidatorChain" />
-    <preference for="Magento\InventoryApi\Model\BulkSourceUnassignValidatorInterface"
-                type="Magento\InventoryApi\Model\BulkSourceUnassignValidatorChain" />
 </config>
