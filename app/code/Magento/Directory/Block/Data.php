@@ -158,7 +158,7 @@ class Data extends \Magento\Framework\View\Element\Template
      * @param string $title
      * @return string
      */
-    public function getRegionHtmlSelect($defValue = null, $name = 'region', $id = 'state', $title = 'State/Province')
+    public function getRegionHtmlSelect($defValue = null, $name = 'region', $stateId = 'state', $title = 'State/Province')
     {
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         $cacheKey = 'DIRECTORY_REGION_SELECT_STORE' . $this->_storeManager->getStore()->getId();
@@ -180,7 +180,7 @@ class Data extends \Magento\Framework\View\Element\Template
         )->setTitle(
             __($title)
         )->setId(
-            $id
+            $stateId
         )->setClass(
             'required-entry validate-state'
         )->setValue(
