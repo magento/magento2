@@ -12,7 +12,7 @@
             <title value="Email is required to create an order from Admin Panel"/>
             <description value="Admin should not be able to submit orders without an email address"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-60034"/>
+            <testCaseId value="MAGETWO-93030"/>
             <group value="sales"/>
 
         </annotations>
