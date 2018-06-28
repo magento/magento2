@@ -7,37 +7,31 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminProductBundleCreationTest">
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminFilterProductListByBundleProduct">
         <annotations>
             <features value="Bundle"/>
-            <stories value="Create/Edit bundle product in Admin"/>
-            <title value="Admin should be able to save and publish a bundle product"/>
-            <description value="Admin should be able to save and publish a bundle product"/>
+            <stories value="Admin list bundle products"/>
+            <title value="Admin should be able to filter product list by type = Bundle Product"/>
+            <description value="Admin should be able to filter product list by type = Bundle Product"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-225"/>
+            <testCaseId value="MC-214"/>
             <group value="Bundle"/>
         </annotations>
         <before>
-            <!--Creating Data-->
-            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
-
-            <!-- Admin Login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
         </before>
         <after>
-            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
-            <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <!-- go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
 
-        <!-- Add two bundle items -->
+        <!--Create bundle product-->
+        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
+        <waitForPageLoad stepKey="waitForBundleProductCreationPage"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
         <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
@@ -58,20 +52,22 @@
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
 
-        <!--Create a bundle product with ancillary data-->
-        <actionGroup ref="CreateBasicBundleProduct" stepKey="createBundledProduct">
-            <argument name="bundleProduct" value="BundleProduct"/>
-        </actionGroup>
+        <!--Fill out ancillary data on bundle product-->
+        <actionGroup ref="AncillaryPrepBundleProduct" stepKey="createBundledProductForTwoSimpleProducts"/>
 
-        <!--save the product/published by default-->
+        <!--Save the product-->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
-        <!-- go to page-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
+        <!--Apply Bundle Product Filter-->
+        <!--Clear Filters-->
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFilters"/>
 
-        <!--Test Assertion - on correct page/page has been published-->
-        <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement stepKey="LookingForNameOfProduct" selector="{{BundleStorefrontSection.bundleProductName}}"/>
+        <!--Setting filter-->
+        <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
+
+        <!--Testing application of filter-->
+        <see selector="{{AdminProductFiltersSection.productType('0')}}" userInput="Bundle Product" stepKey="correcType0"/>
+        <dontSeeElement selector="{{AdminProductFiltersSection.AllProductsNotOfBundleType}}" stepKey="checkingRowsForIncorrectType"/>
     </test>
 </tests>

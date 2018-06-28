@@ -49,4 +49,38 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionTX</requiredEntity>
     </entity>
+    <entity name="US_Address_NY" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">368</data>
+        <array key="street">
+            <item>368 Broadway St.</item>
+            <item>113</item>
+        </array>
+        <data key="city">New York</data>
+        <data key="state">New York</data>
+        <data key="country_id">US</data>
+        <data key="postcode">10001</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionNY</requiredEntity>
+    </entity>
+    <entity name="US_Address_CA" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+            <item>113</item>
+        </array>
+        <data key="city">Los Angeles</data>
+        <data key="state">California</data>
+        <data key="country_id">US</data>
+        <data key="postcode">90001</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionCA</requiredEntity>
+    </entity>
 </entities>
