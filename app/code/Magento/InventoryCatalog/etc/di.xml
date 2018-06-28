@@ -91,6 +91,8 @@
                 type="Magento\InventoryCatalog\Model\BulkSourceAssign"/>
     <preference for="Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface"
                 type="Magento\InventoryCatalog\Model\BulkSourceUnassign"/>
+    <preference for="Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface"
+                type="Magento\InventoryCatalog\Model\BulkInventoryTransfer"/>
 
     <type name="\Magento\InventoryCatalogApi\Model\BulkSourceAssignValidatorChain">
         <arguments>
@@ -106,6 +108,15 @@
             <argument name="validators" xsi:type="array">
                 <item name="sources"
                       xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\Bulk\UnassignSourcesValidator</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="\Magento\InventoryCatalogApi\Model\BulkInventoryTransferValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sources"
+                      xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\Bulk\DestinationSourceValidator</item>
             </argument>
         </arguments>
     </type>

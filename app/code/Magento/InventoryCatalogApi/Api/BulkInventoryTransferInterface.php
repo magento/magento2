@@ -12,14 +12,15 @@ namespace Magento\InventoryCatalogApi\Api;
  *
  * @api
  */
-interface BulkTransferInventoryInterface
+interface BulkInventoryTransferInterface
 {
     /**
      * Run bulk inventory transfer
      * @param array $skus
      * @param string $destinationSource
      * @param bool $defaultSourceOnly
-     * @return int
+     * @return void
+     * @throws \Magento\Framework\Validation\ValidationException
      */
-    public function execute(array $skus, string $destinationSource, bool $defaultSourceOnly): int;
+    public function execute(array $skus, string $destinationSource, bool $defaultSourceOnly = false): void;
 }
