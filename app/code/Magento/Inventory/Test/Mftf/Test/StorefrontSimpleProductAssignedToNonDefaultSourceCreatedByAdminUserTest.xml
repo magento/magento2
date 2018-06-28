@@ -21,6 +21,8 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
             <createData entity="SimpleSubCategory" stepKey="createSimpleSubCategory"/>
             <createData entity="_minimalSource" stepKey="createCustomSource"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createCustomStock"/>
@@ -37,29 +39,6 @@
         <after>
             <deleteData createDataKey="createSimpleSubCategory" stepKey="deleteSimpleSubCategory"/>
 
-            <!-- Disable source as it can broke single source mode tests. -->
-            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPage"/>
-            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSource"/>
-            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSources">
-                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-                <argument name="value" value="$$createCustomSource.source[source_code]$$"/>
-            </actionGroup>
-            <click selector="{{AdminGridRow.editByValue($$createCustomSource.source[source_code]$$)}}" stepKey="clickOnEditCustomSource"/>
-            <waitForPageLoad time="30" stepKey="waitForSourceEditPageLoad"/>
-            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisable"/>
-            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSource"/>
-
-            <!-- Assign Default Stock to Main Website -->
-            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPageToEditDefaultStock"/>
-            <waitForPageLoad time="30" stepKey="waitForStockPageLoadToEditDefaultStock"/>
-            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeywordDefaultStock">
-                <argument name="keyword" value="_defaultStock.name"/>
-            </actionGroup>
-            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickOnEditForDefaultStock"/>
-            <waitForPageLoad time="30" stepKey="waitForPageLoadToEditDefaultStock"/>
-            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannelForDefaultStock"/>
-            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
-
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
@@ -69,7 +48,6 @@
         <actionGroup ref="FillMainProductFormInMultiSourceMode" stepKey="fillMainProductFieldsInAdmin">
             <argument name="product" value="SimpleMsiProduct"/>
         </actionGroup>
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createSimpleSubCategory.name$$]" stepKey="searchAndSelectCategory"/>
 
         <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSourcesOnProductPage"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSourcesOnProductPage">
@@ -82,6 +60,9 @@
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createCustomSource.source[name]$$" stepKey="seeSourceNameInGridOnProductPage"/>
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillSourceQtyFieldOnProductPage"/>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createSimpleSubCategory.name$$]" stepKey="searchAndSelectCategory"/>
 
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSimpleProduct"/>
 

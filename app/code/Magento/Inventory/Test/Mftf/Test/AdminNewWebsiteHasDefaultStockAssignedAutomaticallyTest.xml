@@ -40,6 +40,11 @@
         <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminManageSourcesGridFilterControls.dropDown}}" visible="true" stepKey="clearTheFiltersIfPresent1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+            <argument name="selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="value" value="default"/>
+        </actionGroup>
+
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="seeTheNewWebsiteAssignedToDefaultSource1"/>
     </test>
 </tests>

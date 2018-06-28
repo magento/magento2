@@ -113,10 +113,10 @@
             <argument name="product" value="ConfigurableMsiProduct"/>
         </actionGroup>
 
-        <seeElement selector="div[id*='option-label-visual_swatch_attribute_'][option-label='{{visualSwatchColor1.name}}']" stepKey="seeRedOption1"/>
-        <seeElement selector="div[id*='option-label-visual_swatch_attribute_'][option-label='{{visualSwatchColor2.name}}']" stepKey="seeBlueOption1"/>
+        <seeElement selector="//div[contains(@id, 'option-label-visual_swatch_')][@option-label='{{visualSwatchColor1.name}}']" stepKey="seeRedOption1"/>
+        <seeElement selector="//div[contains(@id, 'option-label-visual_swatch_')][@option-label='{{visualSwatchColor2.name}}']" stepKey="seeBlueOption1"/>
 
-        <click selector="div[id*='option-label-visual_swatch_attribute_'][option-label='{{visualSwatchColor1.name}}']" stepKey="clickOnRedOption1"/>
+        <click selector="div[id*='option-label-visual_swatch_'][option-label='{{visualSwatchColor1.name}}']" stepKey="clickOnRedOption1"/>
         <waitForPageLoad stepKey="waitForPageLoad11"/>
         <see selector=".swatch-attribute-selected-option" userInput="{{visualSwatchColor1.name}}" stepKey="seeOptionName1"/>
 

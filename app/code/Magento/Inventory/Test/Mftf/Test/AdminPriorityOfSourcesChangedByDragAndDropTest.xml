@@ -17,6 +17,7 @@
             <testCaseId value="952"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="multi_mode"/>
         </annotations>
 
         <before>
@@ -63,10 +64,10 @@
         <click selector="{{AdminGridRow.editByValue($$createStock.stock[name]$$)}}" stepKey="clickOnEditForStock"/>
         <waitForPageLoad time="30" stepKey="waitForStockPageLoad"/>
 
-        <see selector="{{AdminEditStockSourcesSection.rowSourceName('0')}}" userInput="$$createSource1.source[name]$$" stepKey="checkDefaultSourcesOrder1"></see>
-        <see selector="{{AdminEditStockSourcesSection.rowSourceName('1')}}" userInput="$$createSource2.source[name]$$" stepKey="checkDefaultSourcesOrder2"></see>
-        <see selector="{{AdminEditStockSourcesSection.rowSourceName('2')}}" userInput="$$createSource3.source[name]$$" stepKey="checkDefaultSourcesOrder3"></see>
-        <see selector="{{AdminEditStockSourcesSection.rowSourceName('3')}}" userInput="$$createSource4.source[name]$$" stepKey="checkDefaultSourcesOrder4"></see>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('0')}}" userInput="$$createSource1.source[name]$$" stepKey="checkDefaultSourcesOrder1"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('1')}}" userInput="$$createSource2.source[name]$$" stepKey="checkDefaultSourcesOrder2"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('2')}}" userInput="$$createSource3.source[name]$$" stepKey="checkDefaultSourcesOrder3"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('3')}}" userInput="$$createSource4.source[name]$$" stepKey="checkDefaultSourcesOrder4"/>
 
         <!-- Change Sources priority-->
         <dragAndDrop selector1="{{AdminEditStockSourcesSection.rowSourceDrag('3')}}"
@@ -77,9 +78,9 @@
         <waitForPageLoad time="30" stepKey="waitForStockSaved"/>
 
         <!-- Check Sources priority saved -->
-        <see selector="{{AdminEditStockSourcesSection.rowSourceName('0')}}" userInput="$$createSource1.source[name]$$" stepKey="checkChangedtSourcesOrder1"></see>
-        <see selector="{{AdminEditStockSourcesSection.rowSourceName('1')}}" userInput="$$createSource4.source[name]$$" stepKey="checkChangedtSourcesOrder2"></see>
-        <see selector="{{AdminEditStockSourcesSection.rowSourceName('2')}}" userInput="$$createSource2.source[name]$$" stepKey="checkChangedtSourcesOrder3"></see>
-        <see selector="{{AdminEditStockSourcesSection.rowSourceName('3')}}" userInput="$$createSource3.source[name]$$" stepKey="checkChangedtSourcesOrder4"></see>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('0')}}" userInput="$$createSource1.source[name]$$" stepKey="checkChangedtSourcesOrder1"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('1')}}" userInput="$$createSource4.source[name]$$" stepKey="checkChangedtSourcesOrder2"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('2')}}" userInput="$$createSource2.source[name]$$" stepKey="checkChangedtSourcesOrder3"/>
+        <see selector="{{AdminEditStockSourcesSection.rowSourceName('3')}}" userInput="$$createSource3.source[name]$$" stepKey="checkChangedtSourcesOrder4"/>
     </test>
 </tests>

@@ -21,6 +21,9 @@
         </annotations>
         
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="MsiCustomer1" stepKey="createCustomer1"/>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="BasicMsiStock1" stepKey="createStock1"/>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
@@ -69,19 +72,12 @@
 
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose2"/>
 
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
-            <argument name="Customer" value="MsiCustomer1"/>
-        </actionGroup>
-
-        <amOnPage url="/admin/" stepKey="goToAdminDashboard1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
-
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
 
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickOnCreateNewOrder1"/>
 
-        <fillField selector="#sales_order_create_customer_grid_filter_email" userInput="{{MsiCustomer1.email}}" stepKey="enterTheEmailAddress1"/>
+        <fillField selector="#sales_order_create_customer_grid_filter_email" userInput="$$createCustomer1.customer[email]$$" stepKey="enterTheEmailAddress1"/>
         <click selector=".admin__filter-actions button[title='Search']" stepKey="clickOnSearch1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
 
@@ -95,32 +91,32 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
 
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="$$simpleProduct1.product[sku]$$" stepKey="fillProductSkuField1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad9"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
         <click selector="#order-search button[title='Search']" stepKey="clickOnSearch2"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad10"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
 
         <click selector="tbody tr .col-sku" stepKey="clickOnSku1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad11"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
 
         <fillField selector="tr .qty" userInput="5" stepKey="fillProductQuantity1"/>
         <click selector=".action-add" stepKey="clickOnAddSelectedProductsToOrder1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad12"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad12"/>
 
         <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
-            <argument name="customer" value="MsiCustomer1"/>
+            <argument name="customer" value="$$createCustomer1$$"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
 
         <click selector=".admin__field-shipping-same-as-billing label" stepKey="clickOnSameAsBillingAddress1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad13"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad13"/>
 
         <click selector="#order-shipping-method-summary a" stepKey="clickOnGetShippingMethodsAndRates1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad14"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad14"/>
 
         <click selector=".admin__order-shipment-methods-options-list li label" stepKey="clickOnFixedShippingRate1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad15"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad15"/>
 
         <click selector=".order-totals-actions .save" stepKey="clickOnSubmitOrder1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad16"/>
@@ -131,7 +127,7 @@
         <grabTextFrom selector=".page-title" stepKey="grabTheOrderId1"/>
 
         <actionGroup ref="verifyBasicOrderInformation" stepKey="verifyOrderInformation">
-            <argument name="customer" value="MsiCustomer1"/>
+            <argument name="customer" value="$$createCustomer1$$"/>
             <argument name="shippingAddress" value="US_Address_TX"/>
             <argument name="billingAddress" value="US_Address_TX"/>
         </actionGroup>
@@ -148,8 +144,8 @@
         <click selector=".data-grid-search-control-wrap button" stepKey="clickOnApplyFilters1"/>
         <waitForPageLoad time="5" stepKey="waitForPageLoad18"/>
 
-        <see selector="{{AdminGridRow.rowOne}}" userInput="{{MsiCustomer1.firstname}}" stepKey="seeFirstName1"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="{{MsiCustomer1.lastname}}" stepKey="seeLastName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createCustomer1.customer[firstname]$$" stepKey="seeFirstName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createCustomer1.customer[lastname]$$" stepKey="seeLastName1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Pending" stepKey="seeFirstName3"/>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>
