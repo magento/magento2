@@ -17,6 +17,7 @@
             <testCaseId value="859"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="multi_mode"/>
         </annotations>
 
         <before>
@@ -44,7 +45,6 @@
             <createData entity="BasicMsiStock1" stepKey="createStock22"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
-
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>

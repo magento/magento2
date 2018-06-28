@@ -17,10 +17,12 @@
             <testCaseId value="957"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
-            <group value="new"/>
+            <group value="multi_mode"/>
         </annotations>
 
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
             <createData entity="FullSource1" stepKey="createSource"/>
             <createData entity="BasicMsiStock1" stepKey="createStock"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
