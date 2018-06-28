@@ -47,14 +47,14 @@ class AddStockDataToCollection
         );
         $collection->getSelect()
             ->join(
-                ['stock_index' => $stockIndexTableName],
-                'product.sku = stock_index.' . IndexStructure::SKU,
+                ['stock_status_index' => $stockIndexTableName],
+                'product.sku = stock_status_index.' . IndexStructure::SKU,
                 [IndexStructure::IS_SALABLE]
             );
 
         if ($isFilterInStock) {
             $collection->getSelect()
-                ->where('stock_index.' . IndexStructure::IS_SALABLE . ' = ?', 1);
+                ->where('stock_status_index.' . IndexStructure::IS_SALABLE . ' = ?', 1);
         }
     }
 }

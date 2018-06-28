@@ -113,11 +113,20 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->_model->reindex();
     }
 
-    public function testReindexWithNotNullArgumentExecutesReindexEntities()
-    {
-        $childIds = [1, 2, 3];
-        $parentIds = [4];
-        $reindexIds = array_merge($childIds, $parentIds);
+    /**
+     * @param array $ids
+     * @param array $parentIds
+     * @param array $childIds
+     * @return void
+     * @dataProvider reindexEntitiesDataProvider
+     */
+    public function testReindexWithNotNullArgumentExecutesReindexEntities(
+        array $ids,
+        array $parentIds,
+        array $childIds
+    ) : void {
+        $reindexIds = array_unique(array_merge($ids, $parentIds, $childIds));
+
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->getMockForAbstractClass();
 
@@ -129,11 +138,23 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $eavSource->expects($this->once())->method('getRelationsByChild')->with($childIds)->willReturn($childIds);
-        $eavSource->expects($this->once())->method('getRelationsByParent')->with($childIds)->willReturn($parentIds);
+        $eavSource->expects($this->once())
+            ->method('getRelationsByChild')
+            ->with($ids)
+            ->willReturn($parentIds);
+        $eavSource->expects($this->once())
+            ->method('getRelationsByParent')
+            ->with(array_unique(array_merge($parentIds, $ids)))
+            ->willReturn($childIds);
 
-        $eavDecimal->expects($this->once())->method('getRelationsByChild')->with($reindexIds)->willReturn($reindexIds);
-        $eavDecimal->expects($this->once())->method('getRelationsByParent')->with($reindexIds)->willReturn([]);
+        $eavDecimal->expects($this->once())
+            ->method('getRelationsByChild')
+            ->with($reindexIds)
+            ->willReturn($parentIds);
+        $eavDecimal->expects($this->once())
+            ->method('getRelationsByParent')
+            ->with(array_unique(array_merge($parentIds, $reindexIds)))
+            ->willReturn($childIds);
 
         $eavSource->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->once())->method('getConnection')->willReturn($connectionMock);
@@ -153,6 +174,18 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($eavDecimal));
 
-        $this->_model->reindex($childIds);
+        $this->_model->reindex($ids);
+    }
+
+    /**
+     * @return array
+     */
+    public function reindexEntitiesDataProvider() : array
+    {
+        return [
+            [[4], [], [1, 2, 3]],
+            [[3], [4], []],
+            [[5], [], []],
+        ];
     }
 }

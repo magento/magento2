@@ -56,10 +56,10 @@
         </actionGroup>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
-        <actionGroup ref="StorefrontAddCategoryProductToCartActionGroup" stepKey="addSimpleProductToCart">
+        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addSimpleProductToCart">
             <argument name="product" value="$$product$$"/>
-            <!--@TODO: Change to scalar value after MQE-498 is implemented-->
-            <argument name="productCount" value="CONST.one"/>
+            <argument name="quantity" value="50"/>
+            <argument name="checkQuantity" value="1"/>
         </actionGroup>
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>

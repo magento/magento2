@@ -28,7 +28,6 @@ $cartId = $cartManagement->createEmptyCart();
 $cart = $cartRepository->get($cartId);
 $cart->setCustomerEmail('admin@example.com');
 $cart->setCustomerIsGuest(true);
-$cart->setStoreId($storeRepository->getActiveStoreByCode('default')->getId());
 
 /** @var AddressInterface $address */
 $address = $addressFactory->create(
