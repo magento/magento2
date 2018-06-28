@@ -39,7 +39,6 @@
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType(x)}}" userInput="{{inputType}}" stepKey="selectType"/>
         <waitForElementVisible selector="{{AdminProductFormBundleSection.nthAddProductsToOption(n)}}" stepKey="waitForAddBtn"/>
         <click selector="{{AdminProductFormBundleSection.nthAddProductsToOption(n)}}" stepKey="clickAdd"/>
-        <waitForPageLoad stepKey="waitForAdd"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters1"/>
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{prodOneSku}}" stepKey="fillProductSkuFilter1"/>

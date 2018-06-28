@@ -12,8 +12,8 @@
         <annotations>
             <features value="Bundle"/>
             <stories value="Bundle product details page"/>
-            <title value="Customer should not be able to add the product to the cart without to select customisable bundle product options"/>
-            <description value="Customer should not be able to add the product to the cart without to select customisable bundle product options"/>
+            <title value="Customer should not be able to add a Bundle Product to the cart without selecting options"/>
+            <description value="Customer should not be able to add a Bundle Product to the cart without selecting options"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-233"/>
             <group value="Bundle"/>
