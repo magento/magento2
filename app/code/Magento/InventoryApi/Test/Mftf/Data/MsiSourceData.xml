@@ -75,6 +75,50 @@
         <data key="postcode">QC G2E 6J5</data>
         <data key="use_default_carrier_config">1</data>
     </entity>
+    <entity name="FullSource3" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 3 </data>
+        <data key="source_code" unique="suffix">test_source_3_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 3</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">0</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource4" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 4 </data>
+        <data key="source_code" unique="suffix">test_source_4_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 4</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">0</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
     <!-- This entity shouldn't be used in tests as it will fail test AdminManageSourceGridColumnsSortingTest -->
     <!-- The reason: source can't be deleted, only disabled-->
     <entity name="SourceForColumnsSortingOrderTestOnly" type="source">
