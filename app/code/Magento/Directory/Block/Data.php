@@ -154,29 +154,32 @@ class Data extends \Magento\Framework\View\Element\Template
     /**
      * @return string
      */
-    public function getRegionHtmlSelect()
+    public function getRegionHtmlSelect($defValue = null, $name = 'region', $id = 'state', $title = 'State/Province')
     {
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         $cacheKey = 'DIRECTORY_REGION_SELECT_STORE' . $this->_storeManager->getStore()->getId();
+		if ($defValue === null) {
+            $defValue = $this->getRegionId();
+        }
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
-            $options = unserialize($cache);
+            $options = $this->getSerializer()->unserialize($cache);
         } else {
             $options = $this->getRegionCollection()->toOptionArray();
-            $this->_configCacheType->save(serialize($options), $cacheKey);
+            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
         }
         $html = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setName(
-            'region'
+            $name
         )->setTitle(
-            __('State/Province')
+            __($title)
         )->setId(
-            'state'
+            $id
         )->setClass(
             'required-entry validate-state'
         )->setValue(
-            intval($this->getRegionId())
+            intval($defValue)
         )->setOptions(
             $options
         )->getHtml();
