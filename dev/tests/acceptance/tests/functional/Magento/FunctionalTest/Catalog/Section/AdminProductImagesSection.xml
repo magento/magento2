@@ -22,14 +22,14 @@
 
         <element name="altText" type="textarea" selector="textarea[data-role='image-description']"/>
 
-        <element name="roleBase" type="button" selector="div.field-image-role ul li:nth-of-type(1) label"/>
-        <element name="roleSmall" type="button" selector="div.field-image-role ul li:nth-of-type(2) label"/>
-        <element name="roleThumbnail" type="button" selector="div.field-image-role ul li:nth-of-type(3) label"/>
-        <element name="roleSwatch" type="button" selector="div.field-image-role ul li:nth-of-type(4) label"/>
+        <element name="roleBase" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Base']"/>
+        <element name="roleSmall" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Small']"/>
+        <element name="roleThumbnail" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Thumbnail']"/>
+        <element name="roleSwatch" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Swatch']"/>
 
-        <element name="isBaseSelected" type="button" selector="div.field-image-role ul li.selected:nth-of-type(1)"/>
-        <element name="isSmallSelected" type="button" selector="div.field-image-role ul li.selected:nth-of-type(2)"/>
-        <element name="isThumbnailSelected" type="button" selector="div.field-image-role ul li.selected:nth-of-type(3)"/>
-        <element name="isSwatchSelected" type="button" selector="div.field-image-role ul li.selected:nth-of-type(4)"/>
+        <element name="isBaseSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Base']"/>
+        <element name="isSmallSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Small']"/>
+        <element name="isThumbnailSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Thumbnail']"/>
+        <element name="isSwatchSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Swatch']"/>
     </section>
 </sections>
