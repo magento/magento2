@@ -298,52 +298,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         if (!empty($rowData['_super_attribute_code'])) {
             $superAttrCode = $rowData['_super_attribute_code'];
-
             if (!$this->_isAttributeSuper($superAttrCode)) {
-                // This attribute code is not a super attribute. Need to give a clearer message why?
-                $codeExists = false;
-                $codeNotGlobal = false;
-                $codeNotTypeSelect = false;
-                // Does this attribute code exist? Does is have the correct settings?
-                $commonAttributes = self::$commonAttributesCache;
-                foreach ($commonAttributes as $attributeRow) {
-
-                    if ($attributeRow['code'] == $superAttrCode)
-                    {
-                        $codeExists = true;
-
-                        if ($attributeRow['is_global'] !== '1')
-                        {
-                            $codeNotGlobal = true;
-                        }
-                        elseif ($attributeRow['type'] !== 'select')
-                        {
-                            $codeNotTypeSelect = true;
-                        }
-
-                        break;
-                    }
-                }
-
-                if ($codeExists == false)
+                // Identify reason why attribute is not super:
+                if (!$this->_identifySuperAttributeError($superAttrCode, $rowNum))
                 {
-                    $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST, $rowNum, $superAttrCode);
-                    return false;
+                    $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER, $rowNum, $superAttrCode);
                 }
-                elseif ($codeNotGlobal == true)
-                {
-                    $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE, $rowNum, $superAttrCode);
-                    return false;
-                }
-                elseif ($codeNotTypeSelect == true)
-                {
-                    $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT, $rowNum, $superAttrCode);
-                    return false;
-                }
-
-                $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER, $rowNum, $superAttrCode);
                 return false;
-
             } elseif (isset($rowData['_super_attribute_option']) && strlen($rowData['_super_attribute_option'])) {
                 $optionKey = strtolower($rowData['_super_attribute_option']);
                 if (!isset($this->_superAttributes[$superAttrCode]['options'][$optionKey])) {
@@ -353,6 +314,61 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
         }
         return true;
+    }
+
+    /**
+     * Identify exactly why a super attribute code is not super.
+     *
+     * @param string $superAttrCode
+     * @param int $rowNum
+     * @return bool
+     */
+    protected function _identifySuperAttributeError($superAttrCode, $rowNum)
+    {
+        // This attribute code is not a super attribute. Need to give a clearer message why?
+        $reasonFound = false;
+
+        $codeExists = false;
+        $codeNotGlobal = false;
+        $codeNotTypeSelect = false;
+        // Does this attribute code exist? Does is have the correct settings?
+        $commonAttributes = self::$commonAttributesCache;
+        foreach ($commonAttributes as $attributeRow) {
+
+            if ($attributeRow['code'] == $superAttrCode)
+            {
+                $codeExists = true;
+
+                if ($attributeRow['is_global'] !== '1')
+                {
+                    $codeNotGlobal = true;
+                }
+                elseif ($attributeRow['type'] !== 'select')
+                {
+                    $codeNotTypeSelect = true;
+                }
+
+                break;
+            }
+        }
+
+        if ($codeExists == false)
+        {
+            $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST, $rowNum, $superAttrCode);
+            $reasonFound = true;
+        }
+        elseif ($codeNotGlobal == true)
+        {
+            $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE, $rowNum, $superAttrCode);
+            $reasonFound = true;
+        }
+        elseif ($codeNotTypeSelect == true)
+        {
+            $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT, $rowNum, $superAttrCode);
+            $reasonFound = true;
+        }
+
+        return $reasonFound;
     }
 
     /**
