@@ -32,6 +32,17 @@
                     <label translate="true">Unassign Inventory Source</label>
                 </settings>
             </action>
+            <action name="inventory_transfer">
+                <settings>
+                    <confirm>
+                        <title translate="true">Transfer Inventory To Source</title>
+                        <message translate="true">Are you sure you want to transfer the inventory of the selected items?</message>
+                    </confirm>
+                    <url path="inventorycatalog/inventory/bulkTransfer"/>
+                    <type>inventory-transfer</type>
+                    <label translate="true">Transfer Inventory To Source</label>
+                </settings>
+            </action>
         </massaction>
     </listingToolbar>
 </listing>
