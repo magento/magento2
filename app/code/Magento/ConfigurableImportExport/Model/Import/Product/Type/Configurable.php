@@ -25,6 +25,12 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Error codes.
      */
+    const ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST = 'attrCodeDoesNotExist';
+
+    const ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE = 'attrCodeNotGlobalScope';
+
+    const ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT = 'attrCodeNotTypeSelect';
+
     const ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER = 'attrCodeIsNotSuper';
 
     const ERROR_INVALID_OPTION_VALUE = 'invalidOptionValue';
@@ -41,8 +47,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @var array
      */
     protected $_messageTemplates = [
-        self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Attribute with code "%s" is not super',
-        self::ERROR_INVALID_OPTION_VALUE => 'Invalid option value for attribute "%s"',
+        self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST => 'Column configurable_variations: Attribute with code "%s" does not exist or is missing from product attribute set',
+        self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE => 'Column configurable_variations: Attribute with code "%s" is not super - it needs to have Global Scope',
+        self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT => 'Column configurable_variations: Attribute with code "%s" is not super - it needs to be Input Type of Dropdown, Visual Swatch or Text Swatch',
+        self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Column configurable_variations: Attribute with code "%s" is not super',
+        self::ERROR_INVALID_OPTION_VALUE => 'Column configurable_variations: Invalid option value for attribute "%s"',
         self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
         self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
         self::ERROR_UNIDENTIFIABLE_VARIATION => 'Configurable variation "%s" is unidentifiable',
@@ -291,9 +300,50 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $superAttrCode = $rowData['_super_attribute_code'];
 
             if (!$this->_isAttributeSuper($superAttrCode)) {
-                // check attribute superity
+                // This attribute code is not a super attribute. Need to give a clearer message why?
+                $codeExists = false;
+                $codeNotGlobal = false;
+                $codeNotTypeSelect = false;
+                // Does this attribute code exist? Does is have the correct settings?
+                $commonAttributes = self::$commonAttributesCache;
+                foreach ($commonAttributes as $attributeRow) {
+
+                    if ($attributeRow['code'] == $superAttrCode)
+                    {
+                        $codeExists = true;
+
+                        if ($attributeRow['is_global'] !== '1')
+                        {
+                            $codeNotGlobal = true;
+                        }
+                        elseif ($attributeRow['type'] !== 'select')
+                        {
+                            $codeNotTypeSelect = true;
+                        }
+
+                        break;
+                    }
+                }
+
+                if ($codeExists == false)
+                {
+                    $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST, $rowNum, $superAttrCode);
+                    return false;
+                }
+                elseif ($codeNotGlobal == true)
+                {
+                    $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE, $rowNum, $superAttrCode);
+                    return false;
+                }
+                elseif ($codeNotTypeSelect == true)
+                {
+                    $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT, $rowNum, $superAttrCode);
+                    return false;
+                }
+
                 $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER, $rowNum, $superAttrCode);
                 return false;
+
             } elseif (isset($rowData['_super_attribute_option']) && strlen($rowData['_super_attribute_option'])) {
                 $optionKey = strtolower($rowData['_super_attribute_option']);
                 if (!isset($this->_superAttributes[$superAttrCode]['options'][$optionKey])) {
