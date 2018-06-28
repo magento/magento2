@@ -9,9 +9,9 @@
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAbleToShipPartiallyInvoicedItemsTest">
         <annotations>
-            <title value="Email is required to create an order from Admin Panel"/>
-            <description value="Admin should not be able to submit orders without an email address"/>
-            <severity value="MAJOR"/>
+            <title value="Ship Action is available for remaining of the partially invoiced items "/>
+            <description value="Admin should be able to ship remaining ordered items if some of them are already refunded"/>
+            <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93030"/>
             <group value="sales"/>
 
@@ -78,10 +78,7 @@
         <scrollTo selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" stepKey="scrollToItemsInvoiced"/>
 
         <!--Verify items invoiced information-->
-
-        <!--<see selector="{{AdminInvoiceItemsSection.itemQty('1')}}" userInput="Invoiced Partial" stepKey="seeQtyOfItemsInvoiced"/>-->
         <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="5" stepKey="invoiceHalfTheItems"/>
-
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQtyToBeInvoiced"/>
         <waitForLoadingMaskToDisappear stepKey="WaitForQtyToUpdate"/>
         <waitForElementVisible selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="waitforSubmitInvoiceBtn"/>
