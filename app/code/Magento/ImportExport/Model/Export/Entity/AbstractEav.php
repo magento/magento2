@@ -32,6 +32,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * Attribute code to its types. Only attributes with options
      *
      * @var array
+     * @since 100.2.0
      */
     protected $attributeTypes = [];
 
@@ -100,6 +101,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * Initializes attribute types
      *
      * @return $this
+     * @since 100.2.0
      */
     protected function _initAttributeTypes()
     {

@@ -18,8 +18,8 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * @var array
      */
     protected $_availableTemplates = [
-        self::FULL_VIEW => 'helper/summary.phtml',
-        self::SHORT_VIEW => 'helper/summary_short.phtml',
+        self::FULL_VIEW => 'Magento_Review::helper/summary.phtml',
+        self::SHORT_VIEW => 'Magento_Review::helper/summary_short.phtml',
     ];
 
     /**
@@ -57,6 +57,10 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
         $templateType = self::DEFAULT_VIEW,
         $displayIfNoReviews = false
     ) {
+        if (!$product->getRatingSummary()) {
+            $this->_reviewFactory->create()->getEntitySummary($product, $this->_storeManager->getStore()->getId());
+        }
+
         if (!$product->getRatingSummary() && !$displayIfNoReviews) {
             return '';
         }
@@ -68,9 +72,6 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
 
         $this->setDisplayIfEmpty($displayIfNoReviews);
 
-        if (!$product->getRatingSummary()) {
-            $this->_reviewFactory->create()->getEntitySummary($product, $this->_storeManager->getStore()->getId());
-        }
         $this->setProduct($product);
 
         return $this->toHtml();

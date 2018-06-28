@@ -286,4 +286,16 @@ class CartItem extends AbstractCartItem
     {
         return $this->_rootElement->find($this->edit)->isVisible();
     }
+
+    /**
+     * Remove all items from Shopping Cart.
+     *
+     * @return void
+     */
+    public function clearShoppingCart()
+    {
+        while ($this->_rootElement->find($this->removeItem)->isVisible()) {
+            $this->removeItem();
+        }
+    }
 }

@@ -168,13 +168,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
-        <arguments>
-            <argument name="customStrategies" xsi:type="array">
-                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="object">\Magento\ConfigurableProduct\Model\Product\Cache\Tag\Configurable</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
         <arguments>
             <argument name="estimators" xsi:type="array">
@@ -195,5 +188,29 @@
         <arguments>
             <argument name="productIndexer" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Full</argument>
         </arguments>
+    </type>
+    <virtualType name="LinkedProductSelectBuilderByIndexMinPrice" type="Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilderComposite">
+        <arguments>
+            <argument name="linkedProductSelectBuilder" xsi:type="array">
+                <item name="indexPrice" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider">
+        <arguments>
+            <argument name="linkedProductSelectBuilder" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilder</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilder">
+        <arguments>
+            <argument name="baseSelectProcessor" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</argument>
+            <argument name="linkedProductSelectBuilder" xsi:type="object">LinkedProductSelectBuilderByIndexMinPrice</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver">
+        <plugin name="configurable" type="Magento\ConfigurableProduct\Plugin\Catalog\Model\Product\Pricing\Renderer\SalableResolver" />
+    </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="product_identities_extender" type="Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender" />
     </type>
 </config>

@@ -225,11 +225,37 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function collectItemHasChildrenDataProvider()
     {
         $data = [
             // 3 items, each $100, testing that discount are distributed to item correctly
-            'three_items' => [
+            [
+                    'child_item_data' => [
+                        'item1' => [
+                            'base_row_total' => 0,
+                        ]
+                    ],
+                    'parent_item_data' => [
+                        'discount_amount' => 20,
+                        'base_discount_amount' => 10,
+                        'original_discount_amount' => 40,
+                        'base_original_discount_amount' => 20,
+                        'base_row_total' => 0,
+                    ],
+                    'expected_child_item_data' => [
+                        'item1' => [
+                            'discount_amount' => 0,
+                            'base_discount_amount' => 0,
+                            'original_discount_amount' => 0,
+                            'base_original_discount_amount' => 0,
+                        ]
+                    ],
+                ],
+            [
+                // 3 items, each $100, testing that discount are distributed to item correctly
                 'child_item_data' => [
                     'item1' => [
                         'base_row_total' => 100,

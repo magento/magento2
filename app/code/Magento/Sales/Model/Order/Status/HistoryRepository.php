@@ -15,9 +15,6 @@ use Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderStatusHistoryRepositoryInterface;
 use Magento\Sales\Model\Spi\OrderStatusHistoryResourceInterface;
 
-/**
- * @since 2.2.0
- */
 class HistoryRepository implements OrderStatusHistoryRepositoryInterface
 {
     /**

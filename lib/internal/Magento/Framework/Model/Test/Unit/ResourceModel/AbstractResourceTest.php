@@ -27,11 +27,7 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
         $this->abstractResource = $objectManager->getObject(AbstractResourceStub::class);
-        $objectManager->setBackwardCompatibleProperty(
-            $this->abstractResource,
-            'serializer',
-            $this->serializerMock
-        );
+        $objectManager->setBackwardCompatibleProperty($this->abstractResource, 'serializer', $this->serializerMock);
     }
 
     /**
@@ -201,9 +197,6 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
         $this->abstractResource->commit();
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testCommitZeroLevelCallbackException()
     {
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */

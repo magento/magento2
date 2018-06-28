@@ -5,53 +5,66 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Option;
 
+use Magento\Catalog\Model\Product\Option\Value as OptionValue;
+use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Catalog product custom option resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Value extends AbstractDb
 {
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Currency factory
      *
-     * @var \Magento\Directory\Model\CurrencyFactory
+     * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
      * Core config model
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @var \Magento\Framework\Locale\FormatInterface
+     * @var FormatInterface
      */
     private $localeFormat;
 
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param Context $context
+     * @param CurrencyFactory $currencyFactory
+     * @param StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface $config
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        Context $context,
+        CurrencyFactory $currencyFactory,
+        StoreManagerInterface $storeManager,
+        ScopeConfigInterface $config,
         $connectionName = null
     ) {
         $this->_currencyFactory = $currencyFactory;
@@ -74,10 +87,10 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Proceed operations after object is saved
      * Save options store data
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @param AbstractModel $object
+     * @return AbstractDb
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         $this->_saveValuePrices($object);
         $this->_saveValueTitles($object);
@@ -88,20 +101,21 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Save option value price data
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function _saveValuePrices(\Magento\Framework\Model\AbstractModel $object)
+    protected function _saveValuePrices(AbstractModel $object)
     {
+        $objectPrice = $object->getPrice();
         $priceTable = $this->getTable('catalog_product_option_type_price');
-        $formattedPrice = $this->getLocaleFormatter()->getNumber($object->getPrice());
+        $formattedPrice = $this->getLocaleFormatter()->getNumber($objectPrice);
 
         $price = (double)sprintf('%F', $formattedPrice);
         $priceType = $object->getPriceType();
 
-        if ($object->getPrice() && $priceType) {
+        if (isset($objectPrice) && $priceType) {
             //save for store_id = 0
             $select = $this->getConnection()->select()->from(
                 $priceTable,
@@ -111,7 +125,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 (int)$object->getId()
             )->where(
                 'store_id = ?',
-                \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                Store::DEFAULT_STORE_ID
             );
             $optionTypeId = $this->getConnection()->fetchOne($select);
 
@@ -120,7 +134,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     $bind = ['price' => $price, 'price_type' => $priceType];
                     $where = [
                         'option_type_id = ?' => $optionTypeId,
-                        'store_id = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                        'store_id = ?' => Store::DEFAULT_STORE_ID,
                     ];
 
                     $this->getConnection()->update($priceTable, $bind, $where);
@@ -128,7 +142,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             } else {
                 $bind = [
                     'option_type_id' => (int)$object->getId(),
-                    'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                    'store_id' => Store::DEFAULT_STORE_ID,
                     'price' => $price,
                     'price_type' => $priceType,
                 ];
@@ -137,17 +151,17 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         $scope = (int)$this->_config->getValue(
-            \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            Store::XML_PATH_PRICE_SCOPE,
+            ScopeInterface::SCOPE_STORE
         );
 
-        if ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE
+        if ($scope == Store::PRICE_SCOPE_WEBSITE
             && $priceType
-            && $object->getPrice()
-            && $object->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID
+            && isset($objectPrice)
+            && $object->getStoreId() != Store::DEFAULT_STORE_ID
         ) {
             $baseCurrency = $this->_config->getValue(
-                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                Currency::XML_PATH_CURRENCY_BASE,
                 'default'
             );
 
@@ -156,7 +170,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 foreach ($storeIds as $storeId) {
                     if ($priceType == 'fixed') {
                         $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
-                        /** @var $currencyModel \Magento\Directory\Model\Currency */
+                        /** @var $currencyModel Currency */
                         $currencyModel = $this->_currencyFactory->create();
                         $currencyModel->load($baseCurrency);
                         $rate = $currencyModel->getRate($storeCurrency);
@@ -198,8 +212,8 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 }
             }
         } else {
-            if ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE
-                && !$object->getPrice()
+            if ($scope == Store::PRICE_SCOPE_WEBSITE
+                && !isset($objectPrice)
                 && !$priceType
             ) {
                 $storeIds = $this->_storeManager->getStore($object->getStoreId())->getWebsite()->getStoreIds();
@@ -217,13 +231,13 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Save option value title data
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _saveValueTitles(\Magento\Framework\Model\AbstractModel $object)
+    protected function _saveValueTitles(AbstractModel $object)
     {
-        foreach ([\Magento\Store\Model\Store::DEFAULT_STORE_ID, $object->getStoreId()] as $storeId) {
+        foreach ([Store::DEFAULT_STORE_ID, $object->getStoreId()] as $storeId) {
             $titleTable = $this->getTable('catalog_product_option_type_title');
             $select = $this->getConnection()->select()->from(
                 $titleTable,
@@ -238,7 +252,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $optionTypeId = $this->getConnection()->fetchOne($select);
             $existInCurrentStore = $this->getOptionIdFromOptionTable($titleTable, (int)$object->getId(), (int)$storeId);
 
-            if ($storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $object->getData('is_delete_store_title')) {
+            if ($storeId != Store::DEFAULT_STORE_ID && $object->getData('is_delete_store_title')) {
                 $object->unsetData('title');
             }
 
@@ -256,11 +270,11 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     $existInDefaultStore = $this->getOptionIdFromOptionTable(
                         $titleTable,
                         (int)$object->getId(),
-                        \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                        Store::DEFAULT_STORE_ID
                     );
                     // we should insert record into not default store only of if it does not exist in default store
-                    if (($storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInDefaultStore)
-                        || ($storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInCurrentStore)
+                    if (($storeId == Store::DEFAULT_STORE_ID && !$existInDefaultStore)
+                        || ($storeId != Store::DEFAULT_STORE_ID && !$existInCurrentStore)
                     ) {
                         $bind = [
                             'option_type_id' => (int)$object->getId(),
@@ -273,7 +287,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             } else {
                 if ($storeId
                     && $optionTypeId
-                    && $object->getStoreId() > \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                    && $object->getStoreId() > Store::DEFAULT_STORE_ID
                 ) {
                     $where = [
                         'option_type_id = ?' => (int)$optionTypeId,
@@ -353,12 +367,12 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Duplicate product options value
      *
-     * @param \Magento\Catalog\Model\Product\Option\Value $object
+     * @param OptionValue $object
      * @param int $oldOptionId
      * @param int $newOptionId
-     * @return \Magento\Catalog\Model\Product\Option\Value
+     * @return OptionValue
      */
-    public function duplicate(\Magento\Catalog\Model\Product\Option\Value $object, $oldOptionId, $newOptionId)
+    public function duplicate(OptionValue $object, $oldOptionId, $newOptionId)
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from($this->getMainTable())->where('option_id = ?', $oldOptionId);
@@ -425,14 +439,14 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get FormatInterface to convert price from string to number format
      *
-     * @return \Magento\Framework\Locale\FormatInterface
+     * @return FormatInterface
      * @deprecated 101.0.8
      */
     private function getLocaleFormatter()
     {
         if ($this->localeFormat === null) {
-            $this->localeFormat = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Locale\FormatInterface::class);
+            $this->localeFormat = ObjectManager::getInstance()
+                ->get(FormatInterface::class);
         }
         return $this->localeFormat;
     }

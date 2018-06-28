@@ -516,6 +516,9 @@ Groups,Groups
 "Maximum image width","Maximum image width"
 "Maximum image height","Maximum image height"
 "Maximum number of characters:","Maximum number of characters:"
+"Maximum %1 characters", "Maximum %1 characters"
+"too many", "too many"
+"remaining", "remaining"
 "start typing to search template","start typing to search template"
 "Product online","Product online"
 "Product offline","Product offline"
@@ -615,7 +618,7 @@ Submit,Submit
 "We don't recognize or support this file extension type.","We don't recognize or support this file extension type."
 "Configure Product","Configure Product"
 OK,OK
-"This value does not follow the specified format (for example, 200X300).","This value does not follow the specified format (for example, 200X300)."
+"This value does not follow the specified format (for example, 200x300).","This value does not follow the specified format (for example, 200x300)."
 "Select type of option.","Select type of option."
 "Please add rows to option.","Please add rows to option."
 "Please select items.","Please select items."

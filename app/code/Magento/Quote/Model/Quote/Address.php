@@ -1008,6 +1008,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         /**
          * Store and website identifiers specified from StoreManager
          */
+        $request->setQuoteStoreId($this->getQuote()->getStoreId());
         $request->setStoreId($this->storeManager->getStore()->getId());
         $request->setWebsiteId($this->storeManager->getWebsite()->getId());
         $request->setFreeShipping($this->getFreeShipping());
@@ -1170,7 +1171,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getAppliedTaxes()
     {
-        return $this->serializer->unserialize($this->getData('applied_taxes'));
+        $taxes = $this->getData('applied_taxes');
+        return $taxes ? $this->serializer->unserialize($taxes) : [];
     }
 
     /**

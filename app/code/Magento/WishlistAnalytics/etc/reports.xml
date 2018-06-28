@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Analytics:etc/reports.xsd">
+    <report name="wishlists" connection="default">
+        <source name="wishlist">
+            <attribute name="wishlist_id"/>
+            <attribute name="customer_id"/>
+        </source>
+    </report>
+    <report name="wishlist_items" connection="default">
+        <source name="wishlist_item">
+            <attribute name="wishlist_item_id"/>
+            <attribute name="added_at"/>
+            <attribute name="qty"/>
+            <attribute name="store_id"/>
+            <attribute name="wishlist_id"/>
+            <attribute name="product_id"/>
+        </source>
+    </report>
+</config>

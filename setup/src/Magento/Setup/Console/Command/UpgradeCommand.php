@@ -6,6 +6,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\ConsoleLogger;
@@ -38,15 +39,24 @@ class UpgradeCommand extends AbstractSetupCommand
     private $deploymentConfig;
 
     /**
+     * @var AppState
+     */
+    private $appState;
+
+    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
      * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(InstallerFactory $installerFactory, DeploymentConfig $deploymentConfig = null)
-    {
+    public function __construct(
+        InstallerFactory $installerFactory,
+        DeploymentConfig $deploymentConfig = null,
+        AppState $appState = null
+    ) {
         $this->installerFactory = $installerFactory;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->appState = $appState ?: ObjectManager::getInstance()->get(AppState::class);
         parent::__construct();
     }
 
@@ -90,7 +100,7 @@ class UpgradeCommand extends AbstractSetupCommand
                 $importConfigCommand->run($arrayInput, $output);
             }
 
-            if (!$keepGenerated) {
+            if (!$keepGenerated && $this->appState->getMode() === AppState::MODE_PRODUCTION) {
                 $output->writeln(
                     '<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>'
                 );

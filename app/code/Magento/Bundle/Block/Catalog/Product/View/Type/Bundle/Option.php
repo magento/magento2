@@ -165,6 +165,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param \Magento\Bundle\Model\Option $option
      * @param mixed $selectionId
      * @return void
+     * @since 100.2.0
      */
     protected function assignSelection(\Magento\Bundle\Model\Option $option, $selectionId)
     {
@@ -190,9 +191,8 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
             return in_array($selection->getSelectionId(), $selectedOptions);
         } elseif ($selectedOptions == 'None') {
             return false;
-        } else {
-            return $selection->getIsDefault() && $selection->isSaleable();
         }
+        return $selection->getIsDefault() && $selection->isSaleable();
     }
 
     /**

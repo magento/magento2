@@ -25,7 +25,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="code">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.tax.rule.columnSet.code" as="code">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Name</argument>
                             <argument name="index" xsi:type="string">code</argument>
@@ -35,7 +35,7 @@
                             <argument name="header_css_class" xsi:type="string">col-name</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="customer_tax_classes">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.tax.rule.columnSet.customer_tax_classes" as="customer_tax_classes">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Customer Tax Class</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
@@ -46,7 +46,7 @@
                             <argument name="options" xsi:type="options" model="Magento\Tax\Model\TaxClass\Source\Customer"/>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="product_tax_classes">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.tax.rule.columnSet.product_tax_classes" as="product_tax_classes">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Product Tax Class</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
@@ -57,7 +57,7 @@
                             <argument name="options" xsi:type="options" model="Magento\Tax\Model\TaxClass\Source\Product"/>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="tax_rates_codes">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.tax.rule.columnSet.tax_rates_codes" as="tax_rates_codes">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Tax Rate</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
@@ -69,21 +69,21 @@
                             <argument name="renderer" xsi:type="string">Magento\Tax\Block\Grid\Renderer\Codes</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="priority">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.tax.rule.columnSet.priority" as="priority">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Priority</argument>
                             <argument name="index" xsi:type="string">priority</argument>
                             <argument name="type" xsi:type="string">text</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="calculate_subtotal">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.tax.rule.columnSet.calculate_subtotal" as="calculate_subtotal">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Subtotal Only</argument>
                             <argument name="index" xsi:type="string">calculate_subtotal</argument>
                             <argument name="type" xsi:type="string">text</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="position">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.tax.rule.columnSet.position" as="position">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Sort Order</argument>
                             <argument name="index" xsi:type="string">position</argument>

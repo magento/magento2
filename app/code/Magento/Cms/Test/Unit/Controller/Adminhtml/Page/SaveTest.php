@@ -153,12 +153,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($page);
 
-        $page->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $page->expects($this->any())
-            ->method('getId')
-            ->willReturn(true);
+        $this->pageRepository->expects($this->once())->method('getById')->with($this->pageId)->willReturn($page);
         $page->expects($this->once())->method('setData');
         $this->pageRepository->expects($this->once())->method('save')->with($page);
 
@@ -178,6 +173,36 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     public function testSaveActionWithoutData()
     {
         $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(false);
+        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
+    }
+
+    public function testSaveActionNoId()
+    {
+        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(['page_id' => 1]);
+        $this->requestMock->expects($this->atLeastOnce())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['page_id', null, 1],
+                    ['back', null, false],
+                ]
+            );
+
+        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->pageFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($page);
+        $this->pageRepository->expects($this->once())
+            ->method('getById')
+            ->with($this->pageId)
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException(__('Error message')));
+        $this->messageManagerMock->expects($this->once())
+            ->method('addErrorMessage')
+            ->with(__('This page no longer exists.'));
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
@@ -204,12 +229,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($page);
 
-        $page->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $page->expects($this->any())
-            ->method('getId')
-            ->willReturn(true);
+        $this->pageRepository->expects($this->once())->method('getById')->with($this->pageId)->willReturn($page);
         $page->expects($this->once())->method('setData');
         $this->pageRepository->expects($this->once())->method('save')->with($page);
 
@@ -251,12 +271,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($page);
 
-        $page->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $page->expects($this->any())
-            ->method('getId')
-            ->willReturn(true);
+        $this->pageRepository->expects($this->once())->method('getById')->with($this->pageId)->willReturn($page);
         $page->expects($this->once())->method('setData');
         $this->pageRepository->expects($this->once())->method('save')->with($page)
             ->willThrowException(new \Exception('Error message.'));
@@ -274,53 +289,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('setPath')
             ->with('*/*/edit', ['page_id' => $this->pageId])
             ->willReturnSelf();
-
-        $this->assertSame($this->resultRedirect, $this->saveController->execute());
-    }
-
-    /**
-     * Test for saving page after edit of it if page_id does not exists in the system
-     *
-     * @security-private
-     */
-    public function testSaveNotExistingPage()
-    {
-        $this->pageId = 1111111111111111111111111;
-        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(['page_id' => $this->pageId]);
-        $this->requestMock->expects($this->atLeastOnce())
-          ->method('getParam')
-          ->willReturnMap(
-              [
-                  ['page_id', null, $this->pageId],
-                  ['back', null, true],
-              ]
-          );
-
-        $this->dataProcessorMock->expects($this->any())
-          ->method('filter')
-          ->willReturnArgument(0);
-        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
-          ->disableOriginalConstructor()
-          ->getMock();
-        $this->pageFactory->expects($this->atLeastOnce())
-          ->method('create')
-          ->willReturn($page);
-
-        $page->expects($this->any())
-          ->method('load')
-          ->willReturnSelf();
-        $page->expects($this->any())
-          ->method('getId')
-          ->willReturn(null);
-
-        $this->messageManagerMock->expects($this->once())
-          ->method('addErrorMessage')
-          ->with(__('This page no longer exists.'));
-
-        $this->resultRedirect->expects($this->atLeastOnce())
-          ->method('setPath')
-          ->with('*/*/')
-          ->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }

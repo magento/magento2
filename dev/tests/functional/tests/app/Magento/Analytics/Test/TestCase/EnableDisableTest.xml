@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Analytics\Test\TestCase\EnableDisableTest" summary="Enable Disable Analytics" ticketId="MAGETWO-66465">
+        <variation name="disableAnalytics">
+            <data name="vertical" xsi:type="string">Apps and Games</data>
+            <data name="state" xsi:type="string">Disable</data>
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" />
+        </variation>
+        <variation name="enableAnalytics">
+            <data name="vertical" xsi:type="string">Apps and Games</data>
+            <data name="state" xsi:type="string">Enable</data>
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" />
+        </variation>
+    </testCase>
+</config>

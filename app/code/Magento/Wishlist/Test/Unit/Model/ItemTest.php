@@ -172,6 +172,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($actualOption->isDeleted());
     }
 
+    /**
+     * @return array
+     */
     public function getOptionsDataProvider()
     {
         $optionMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)
@@ -299,7 +302,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProductWithException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, __('Cannot specify product.'));
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Cannot specify product.');
         $this->model->getProduct();
     }
 

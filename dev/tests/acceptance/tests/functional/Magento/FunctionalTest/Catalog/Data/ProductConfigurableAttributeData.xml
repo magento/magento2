@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="colorProductAttribute" type="product_attribute">
+        <data key="default_label" unique="suffix">Color</data>
+        <data key="attribute_quantity">1</data>
+    </entity>
+    <entity name="colorProductAttribute1" type="product_attribute">
+        <data key="name" unique="suffix">White</data>
+        <data key="price">1.00</data>
+    </entity>
+    <entity name="colorProductAttribute2" type="product_attribute">
+        <data key="name" unique="suffix">Red</data>
+        <data key="price">2.00</data>
+    </entity>
+    <entity name="colorProductAttribute3" type="product_attribute">
+        <data key="name" unique="suffix">Blue</data>
+        <data key="price">3.00</data>
+    </entity>
+</entities>

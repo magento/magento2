@@ -22,6 +22,12 @@ $_attributeLabel = $block->getAtLabel();
 $_attributeType = $block->getAtType();
 $_attributeAddAttribute = $block->getAddAttribute();
 
+$renderLabel = true;
+// if defined as 'none' in layout, do not render
+if ($_attributeLabel == 'none') {
+    $renderLabel = false;
+}
+
 if ($_attributeLabel && $_attributeLabel == 'default') {
     $_attributeLabel = $_product->getResource()->getAttribute($_code)->getStoreLabel();
 }
@@ -31,10 +37,9 @@ if ($_attributeType && $_attributeType == 'text') {
     $_attributeValue = $_helper->productAttribute($_product, $_product->$_call(), $_code);
 }
 ?>
-
 <?php if ($_attributeValue): ?>
 <div class="product attribute <?= /* @escapeNotVerified */ $_className ?>">
-    <?php if ($_attributeLabel != 'none'): ?><strong class="type"><?= /* @escapeNotVerified */ $_attributeLabel ?></strong><?php endif; ?>
+    <?php if ($renderLabel): ?><strong class="type"><?= /* @escapeNotVerified */ $_attributeLabel ?></strong><?php endif; ?>
     <div class="value" <?= /* @escapeNotVerified */ $_attributeAddAttribute ?>><?= /* @escapeNotVerified */ $_attributeValue ?></div>
 </div>
 <?php endif; ?>

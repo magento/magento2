@@ -12,7 +12,6 @@
 <?php $parentItem = $block->getItem() ?>
 <?php $items = array_merge([$parentItem->getOrderItem()], $parentItem->getOrderItem()->getChildrenItems()) ?>
 <?php $shipItems = $block->getChildren($parentItem) ?>
-<?php $_count = count($items) ?>
 <?php $_index = 0 ?>
 
 <?php $_prevOptionId = '' ?>

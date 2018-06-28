@@ -121,6 +121,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         $result[] = "ga('require', 'ec', 'ec.js');";
 
         foreach ($collection as $order) {
+            $result[] = "ga('set', 'currencyCode', '" . $order->getOrderCurrencyCode() . "');";
             foreach ($order->getAllVisibleItems() as $item) {
                 $result[] = sprintf(
                     "ga('ec:addProduct', {
@@ -129,9 +130,9 @@ class Ga extends \Magento\Framework\View\Element\Template
                         'price': '%s',
                         'quantity': %s
                     });",
-                    $this->escapeJs($item->getSku()),
-                    $this->escapeJs($item->getName()),
-                    $item->getBasePrice(),
+                    $this->escapeJsQuote($item->getSku()),
+                    $this->escapeJsQuote($item->getName()),
+                    $item->getPrice(),
                     $item->getQtyOrdered()
                 );
             }
@@ -145,10 +146,10 @@ class Ga extends \Magento\Framework\View\Element\Template
                     'shipping': '%s'
                 });",
                 $order->getIncrementId(),
-                $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
-                $order->getBaseGrandTotal(),
-                $order->getBaseTaxAmount(),
-                $order->getBaseShippingAmount()
+                $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
+                $order->getGrandTotal(),
+                $order->getTaxAmount(),
+                $order->getShippingAmount()
             );
 
             $result[] = "ga('send', 'pageview');";
@@ -235,19 +236,20 @@ class Ga extends \Magento\Framework\View\Element\Template
         foreach ($collection as $order) {
             foreach ($order->getAllVisibleItems() as $item) {
                 $result['products'][] = [
-                    'id' => $this->escapeJs($item->getSku()),
-                    'name' =>  $this->escapeJs($item->getName()),
-                    'price' => $item->getBasePrice(),
+                    'id' => $this->escapeJsQuote($item->getSku()),
+                    'name' =>  $this->escapeJsQuote($item->getName()),
+                    'price' => $item->getPrice(),
                     'quantity' => $item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
                 'id' =>  $order->getIncrementId(),
-                'affiliation' => $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
-                'revenue' => $order->getBaseGrandTotal(),
-                'tax' => $order->getBaseTaxAmount(),
-                'shipping' => $order->getBaseShippingAmount(),
+                'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
+                'revenue' => $order->getGrandTotal(),
+                'tax' => $order->getTaxAmount(),
+                'shipping' => $order->getShippingAmount(),
             ];
+            $result['currency'] = $order->getOrderCurrencyCode();
         }
         return $result;
     }

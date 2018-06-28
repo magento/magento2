@@ -40,7 +40,13 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
         ],
         'price_including_tax' => [
             'selector' => '.price-including-tax .price'
-        ]
+        ],
+        'old_price_from' => [
+            'selector' => '.price-from .old-price .price-wrapper'
+        ],
+        'old_price_to' => [
+            'selector' => '.price-to .old-price .price-wrapper'
+        ],
     ];
 
     /**
@@ -142,6 +148,28 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
     public function getPriceIncludingTax($currency = '$')
     {
         return $this->getTypePrice('price_including_tax', $currency);
+    }
+
+    /**
+     * Get min old price
+     *
+     * @param string $currency
+     * @return string|null
+     */
+    public function getOldPriceFrom($currency = '$')
+    {
+        return $this->getTypePrice('old_price_from', $currency);
+    }
+
+    /**
+     * Get max old price
+     *
+     * @param string $currency
+     * @return string|null
+     */
+    public function getOldPriceTo($currency = '$')
+    {
+        return $this->getTypePrice('old_price_to', $currency);
     }
 
     /**

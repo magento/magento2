@@ -259,6 +259,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $category->getUseFlatResource());
     }
 
+    /**
+     * @return object
+     */
     protected function getCategoryModel()
     {
         return $this->objectManager->getObject(
@@ -287,6 +290,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function reindexFlatEnabledTestDataProvider()
     {
         return [
@@ -318,7 +324,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
 
         $this->flatIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($flatScheduled));
-        $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexRow')->with('123');
+        $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexList')->with(['123']);
 
         $this->productIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($productScheduled));
         $this->productIndexer->expects($this->exactly($expectedProductReindexCall))->method('reindexList')->with($pathIds);
@@ -336,6 +342,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->category->reindex();
     }
 
+    /**
+     * @return array
+     */
     public function reindexFlatDisabledTestDataProvider()
     {
         return [
@@ -426,7 +435,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("description", $this->category->getCustomAttribute($descriptionAttributeCode)->getValue());
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->category->setData($descriptionAttributeCode, "new description");
+        $this->category->setCustomAttribute($descriptionAttributeCode, "new description");
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
         $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
         $this->assertEquals(
@@ -505,5 +514,34 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $result = $model->getImageUrl();
 
         $this->assertEquals('http://www.example.com/catalog/category/myimage', $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetIdentities()
+    {
+        $category = $this->getCategoryModel();
+
+        //Without an ID no identities can be given.
+        $this->assertEmpty($category->getIdentities());
+
+        //Now because ID is set we can get some
+        $category->setId(42);
+
+        $this->assertNotEmpty($category->getIdentities());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetIdentitiesWithAffectedCategories()
+    {
+        $category = $this->getCategoryModel();
+        $expectedIdentities = ['cat_c_1', 'cat_c_2', 'cat_c_3', 'cat_c_p_1'];
+        $category->setId(1);
+        $category->setAffectedCategoryIds([1,2,3]);
+
+        $this->assertEquals($expectedIdentities, $category->getIdentities());
     }
 }

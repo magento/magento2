@@ -26,7 +26,7 @@
                                 </item>
                             </argument>
                         </arguments>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="time">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.group.grid.columnSet.time" as="time">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">ID</argument>
                                 <argument name="id" xsi:type="string">id</argument>
@@ -35,13 +35,13 @@
                                 <argument name="header_css_class" xsi:type="string">col-id</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="type">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.group.grid.columnSet.type" as="type">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Group</argument>
                                 <argument name="index" xsi:type="string">code</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="class_name">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.group.grid.columnSet.class_name" as="class_name">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Tax Class</argument>
                                 <argument name="index" xsi:type="string">tax_class_name</argument>

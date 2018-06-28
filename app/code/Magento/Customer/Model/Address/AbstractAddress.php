@@ -13,6 +13,8 @@ use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Address abstract model
@@ -30,6 +32,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method string getPostcode()
  * @method bool getShouldIgnoreValidation()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @api
  * @since 100.0.2
@@ -119,6 +122,16 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Directory\Model\AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
+     * @var \Magento\Customer\Model\Config\Share
+     */
+    private $shareConfig;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -153,7 +166,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Directory\Model\AllowedCountries $allowedCountriesReader = null,
+        \Magento\Customer\Model\Config\Share $shareConfig = null
     ) {
         $this->_directoryData = $directoryData;
         $data = $this->_implodeArrayField($data);
@@ -165,6 +180,10 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $this->addressDataFactory = $addressDataFactory;
         $this->regionDataFactory = $regionDataFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->allowedCountriesReader = $allowedCountriesReader
+            ?: ObjectManager::getInstance()->get(\Magento\Directory\Model\AllowedCountries::class);
+        $this->shareConfig = $shareConfig
+            ?: ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
         parent::__construct(
             $context,
             $registry,
@@ -263,13 +282,13 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param array|string $key
      * @param null $value
-     * @return \Magento\Framework\DataObject
+     * @return $this
      */
     public function setData($key, $value = null)
     {
         if (is_array($key)) {
             $key = $this->_implodeArrayField($key);
-        } elseif (is_array($value) && !empty($value) && $this->isAddressMultilineAttribute($key)) {
+        } elseif (is_array($value) && $this->isAddressMultilineAttribute($key)) {
             $value = $this->_implodeArrayValues($value);
         }
         return parent::setData($key, $value);
@@ -309,7 +328,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     protected function _implodeArrayValues($value)
     {
-        if (is_array($value) && count($value)) {
+        if (is_array($value)) {
+            if (!count($value)) {
+                return '';
+            }
+
             $isScalar = false;
             foreach ($value as $val) {
                 if (is_scalar($val)) {
@@ -558,9 +581,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Validate address attribute values
-     *
-     *
+     * Validate address attribute values.
      *
      * @return bool|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -615,24 +636,69 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $errors[] = __('%fieldName is a required field.', ['fieldName' => 'postcode']);
         }
 
-        if (!\Zend_Validate::is($this->getCountryId(), 'NotEmpty')) {
+        $countryId = $this->getCountryId();
+        if (!\Zend_Validate::is($countryId, 'NotEmpty')) {
             $errors[] = __('%fieldName is a required field.', ['fieldName' => 'countryId']);
-        }
-
-        if ($this->getCountryModel()->getRegionCollection()->getSize() && !\Zend_Validate::is(
-            $this->getRegionId(),
-            'NotEmpty'
-        ) && $this->_directoryData->isRegionRequired(
-            $this->getCountryId()
-        )
-        ) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'regionId']);
+        } else {
+            //Checking if such country exists.
+            if (!in_array($countryId, $this->getWebsiteAllowedCountries(), true)) {
+                $errors[] = __(
+                    'Invalid value of "%value" provided for the %fieldName field.',
+                    [
+                        'fieldName' => 'countryId',
+                        'value' => htmlspecialchars($countryId)
+                    ]
+                );
+            } else {
+                //If country is valid then validating selected region ID.
+                $countryModel = $this->getCountryModel();
+                $regionCollection = $countryModel->getRegionCollection();
+                $region = $this->getRegion();
+                $regionId = (string)$this->getRegionId();
+                $allowedRegions = $regionCollection->getAllIds();
+                $isRegionRequired = $this->_directoryData->isRegionRequired($countryId);
+                if ($isRegionRequired && empty($allowedRegions) && !\Zend_Validate::is($region, 'NotEmpty')) {
+                    //If region is required for country and country doesn't provide regions list
+                    //region must be provided.
+                    $errors[] = __('%fieldName is a required field.', ['fieldName' => 'region']);
+                } elseif ($allowedRegions && !\Zend_Validate::is($regionId, 'NotEmpty') && $isRegionRequired) {
+                    //If country actually has regions and requires you to
+                    //select one then it must be selected.
+                    $errors[] = __('%fieldName is a required field.', ['fieldName' => 'regionId']);
+                } elseif ($regionId && !in_array($regionId, $allowedRegions, true)) {
+                    //If a region is selected then checking if it exists.
+                    $errors[] = __(
+                        'Invalid value of "%value" provided for the %fieldName field.',
+                        [
+                            'fieldName' => 'regionId',
+                            'value' => htmlspecialchars($regionId)
+                        ]
+                    );
+                }
+            }
         }
 
         if (empty($errors) || $this->getShouldIgnoreValidation()) {
             return true;
         }
+
         return $errors;
+    }
+
+    /**
+     * Return allowed counties per website.
+     *
+     * @return array
+     */
+    private function getWebsiteAllowedCountries(): array
+    {
+        $websiteId = null;
+
+        if (!$this->shareConfig->isGlobalScope()) {
+            $websiteId = $this->getCustomer() ? $this->getCustomer()->getWebsiteId() : null;
+        }
+
+        return $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $websiteId);
     }
 
     /**

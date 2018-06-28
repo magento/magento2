@@ -8,6 +8,8 @@ namespace Magento\Framework\Reflection;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
+use Zend\Code\Reflection\DocBlock\Tag\ParamTag;
+use Zend\Code\Reflection\DocBlock\Tag\ReturnTag;
 use Zend\Code\Reflection\DocBlockReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
@@ -16,6 +18,7 @@ use Zend\Code\Reflection\ParameterReflection;
  * Type processor of config reader properties
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity) this suppress MUST be removed after removing deprecated methods.
  */
 class TypeProcessor
 {
@@ -275,22 +278,7 @@ class TypeProcessor
      */
     public function getGetterReturnType($methodReflection)
     {
-        $methodDocBlock = $methodReflection->getDocBlock();
-        if (!$methodDocBlock) {
-            throw new \InvalidArgumentException(
-                "Each getter must have description with @return annotation. "
-                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
-            );
-        }
-        $returnAnnotations = $methodDocBlock->getTags('return');
-        if (empty($returnAnnotations)) {
-            throw new \InvalidArgumentException(
-                "Getter return type must be specified using @return annotation. "
-                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
-            );
-        }
-        /** @var \Zend\Code\Reflection\DocBlock\Tag\ReturnTag $returnAnnotation */
-        $returnAnnotation = current($returnAnnotations);
+        $returnAnnotation = $this->getMethodReturnAnnotation($methodReflection);
         $types = $returnAnnotation->getTypes();
         $returnType = current($types);
         $nullable = in_array('null', $types);
@@ -362,7 +350,7 @@ class TypeProcessor
                 self::NORMALIZED_INT_TYPE,
                 self::NORMALIZED_FLOAT_TYPE,
                 self::NORMALIZED_DOUBLE_TYPE,
-                self::NORMALIZED_BOOLEAN_TYPE
+                self::NORMALIZED_BOOLEAN_TYPE,
             ]
         );
     }
@@ -526,35 +514,24 @@ class TypeProcessor
         }
         if ($type == 'array') {
             // try to determine class, if it's array of objects
-            $docBlock = $param->getDeclaringFunction()->getDocBlock();
-            $pattern = "/\@param\s+([\w\\\_]+\[\])\s+\\\${$param->getName()}\n/";
-            $matches = [];
-            if (preg_match($pattern, $docBlock->getContents(), $matches)) {
-                return $matches[1];
-            }
-            return "{$type}[]";
+            $paramDocBlock = $this->getParamDocBlockTag($param);
+            $paramTypes = $paramDocBlock->getTypes();
+            $paramType = array_shift($paramTypes);
+            return strpos($paramType, '[]') !== false ? $paramType : "{$paramType}[]";
         }
         return $type;
     }
 
     /**
-     * Get parameter description
+     * Gets method parameter description.
      *
      * @param ParameterReflection $param
      * @return string|null
      */
     public function getParamDescription(ParameterReflection $param)
     {
-        $docBlock = $param->getDeclaringFunction()->getDocBlock();
-        $docBlockLines = explode("\n", $docBlock->getContents());
-        $pattern = "/\@param\s+([\w\\\_\[\]\|]+)\s+(\\\${$param->getName()})\s(.*)/";
-        $matches = [];
-
-        foreach ($docBlockLines as $line) {
-            if (preg_match($pattern, $line, $matches)) {
-                return $matches[3];
-            }
-        }
+        $paramDocBlock = $this->getParamDocBlockTag($param);
+        return $paramDocBlock->getDescription();
     }
 
     /**
@@ -707,5 +684,71 @@ class TypeProcessor
             $type = $this->getArrayItemType($type);
         }
         return $type;
+    }
+
+    /**
+     * Parses `return` annotation from reflection method.
+     *
+     * @param MethodReflection $methodReflection
+     * @return ReturnTag
+     * @throws \InvalidArgumentException if doc block is empty or `@return` annotation doesn't exist
+     */
+    private function getMethodReturnAnnotation(MethodReflection $methodReflection)
+    {
+        $methodName = $methodReflection->getName();
+        $returnAnnotations = $this->getReturnFromDocBlock($methodReflection);
+        if (empty($returnAnnotations)) {
+            // method can inherit doc block from implemented interface, like for interceptors
+            $implemented = $methodReflection->getDeclaringClass()->getInterfaces();
+            /** @var ClassReflection $parentClassReflection */
+            foreach ($implemented as $parentClassReflection) {
+                if ($parentClassReflection->hasMethod($methodName)) {
+                    $returnAnnotations = $this->getReturnFromDocBlock(
+                        $parentClassReflection->getMethod($methodName)
+                    );
+                    break;
+                }
+            }
+            // throw an exception if even implemented interface doesn't have return annotations
+            if (empty($returnAnnotations)) {
+                throw new \InvalidArgumentException(
+                    "Method's return type must be specified using @return annotation. "
+                    . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodName}()"
+                );
+            }
+        }
+        return $returnAnnotations;
+    }
+
+    /**
+     * Parses `return` annotation from doc block.
+     *
+     * @param MethodReflection $methodReflection
+     * @return ReturnTag
+     */
+    private function getReturnFromDocBlock(MethodReflection $methodReflection)
+    {
+        $methodDocBlock = $methodReflection->getDocBlock();
+        if (!$methodDocBlock) {
+            throw new \InvalidArgumentException(
+                "Each method must have a doc block. "
+                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
+            );
+        }
+        return current($methodDocBlock->getTags('return'));
+    }
+
+    /**
+     * Gets method's param doc block.
+     *
+     * @param ParameterReflection $param
+     * @return ParamTag
+     */
+    private function getParamDocBlockTag(ParameterReflection $param)
+    {
+        $docBlock = $param->getDeclaringFunction()
+            ->getDocBlock();
+        $paramsTag = $docBlock->getTags('param');
+        return $paramsTag[$param->getPosition()];
     }
 }

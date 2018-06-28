@@ -263,7 +263,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
-        $defaultBatchSize = 1000;
 
         $this->stateMock->expects($this->any())
             ->method('getViewId')
@@ -297,7 +296,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             'getList'
         )->with(
             $lastVersionId,
-            $lastVersionId + $defaultBatchSize
+            $currentVersionId
         )->will(
             $this->returnValue($listId)
         );
@@ -327,7 +326,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
-        $defaultBatchSize = 1000;
 
         $this->stateMock->expects($this->any())
             ->method('getViewId')
@@ -360,7 +358,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             'getList'
         )->with(
             $lastVersionId,
-            $lastVersionId + $defaultBatchSize
+            $currentVersionId
         )->will(
             $this->returnValue($listId)
         );
@@ -466,6 +464,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->model->resume();
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderResumeNotSuspended()
     {
         return [
@@ -522,6 +523,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->model->isEnabled());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderIsEnabled()
     {
         return [
@@ -543,6 +547,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->model->isIdle());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderIsIdle()
     {
         return [
@@ -565,6 +572,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->model->isWorking());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderIsWorking()
     {
         return [
@@ -587,6 +597,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->model->isSuspended());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderIsSuspended()
     {
         return [
@@ -619,6 +632,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->model->load($viewId);
     }
 
+    /**
+     * @return array
+     */
     protected function getViewData()
     {
         return [

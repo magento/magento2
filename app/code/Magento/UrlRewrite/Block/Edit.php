@@ -118,7 +118,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
             'reset',
             [
                 'label' => __('Reset'),
-                'onclick' => '$(\'edit_form\').reset()',
+                'onclick' => 'location.reload();',
                 'class' => 'scalable',
                 'level' => -1
             ]

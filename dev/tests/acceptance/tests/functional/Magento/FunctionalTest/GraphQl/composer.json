@@ -1,0 +1,35 @@
+{
+    "name": "magento/magento2-functional-test-module-graph-ql",
+    "description": "Magento 2 Functional Test Module Graph Ql",
+    "type": "magento2-test-module",
+    "version": "100.0.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "magento/magento2-functional-testing-framework": "1.0.0",
+        "php": "~7.0.13|~7.1.0"
+    },
+    "suggest": {
+        "magento/magento2-functional-test-module-webapi": "100.0.0-dev",
+        "magento/magento2-functional-test-module-eav": "100.0.0-dev",
+        "magento/magento2-functional-test-module-catalog": "100.0.0-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\FunctionalTest\\GraphQl\\": ""
+        }
+    },
+    "extra": {
+        "map": [
+            [
+                "*",
+                "tests/functional/Magento/FunctionalTest/GraphQl"
+            ]
+        ]
+    }
+}

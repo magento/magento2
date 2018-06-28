@@ -363,12 +363,11 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     public function getCurrentCurrencyCode()
     {
         if ($this->_currentCurrencyCode === null) {
-            $this->_currentCurrencyCode = count(
-                $this->_storeIds
-            ) > 0 ? $this->_storeManager->getStore(
-                array_shift($this->_storeIds)
-            )->getBaseCurrencyCode() : $this->_storeManager->getStore()->getBaseCurrencyCode();
+            $this->_currentCurrencyCode = count($this->_storeIds) > 0
+                ? $this->_storeManager->getStore(array_shift($this->_storeIds))->getCurrentCurrencyCode()
+                : $this->_storeManager->getStore()->getBaseCurrencyCode();
         }
+
         return $this->_currentCurrencyCode;
     }
 

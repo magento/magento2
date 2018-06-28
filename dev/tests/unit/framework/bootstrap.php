@@ -20,6 +20,10 @@ setCustomErrorHandler();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+/*  For data consistency between displaying (printing) and serialization a float number */
+ini_set('precision', 14);
+ini_set('serialize_precision', 14);
+
 /**
  * Set custom error handler
  */

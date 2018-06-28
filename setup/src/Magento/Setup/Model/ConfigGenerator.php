@@ -6,13 +6,14 @@
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Math\Random;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\State;
-use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\Math\Random;
 
 /**
  * Creates deployment config data based on user input array
@@ -26,23 +27,18 @@ class ConfigGenerator
      * @var array
      */
     private static $paramMap = [
-        ConfigOptionsListConstants::INPUT_KEY_DB_HOST => ConfigOptionsListConstants::KEY_HOST,
-        ConfigOptionsListConstants::INPUT_KEY_DB_NAME => ConfigOptionsListConstants::KEY_NAME,
-        ConfigOptionsListConstants::INPUT_KEY_DB_USER => ConfigOptionsListConstants::KEY_USER,
-        ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD => ConfigOptionsListConstants::KEY_PASSWORD,
-        ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX => ConfigOptionsListConstants::KEY_PREFIX,
-        ConfigOptionsListConstants::INPUT_KEY_DB_MODEL => ConfigOptionsListConstants::KEY_MODEL,
-        ConfigOptionsListConstants::INPUT_KEY_DB_ENGINE => ConfigOptionsListConstants::KEY_ENGINE,
+        ConfigOptionsListConstants::INPUT_KEY_DB_HOST            => ConfigOptionsListConstants::KEY_HOST,
+        ConfigOptionsListConstants::INPUT_KEY_DB_NAME            => ConfigOptionsListConstants::KEY_NAME,
+        ConfigOptionsListConstants::INPUT_KEY_DB_USER            => ConfigOptionsListConstants::KEY_USER,
+        ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD        => ConfigOptionsListConstants::KEY_PASSWORD,
+        ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX          => ConfigOptionsListConstants::KEY_PREFIX,
+        ConfigOptionsListConstants::INPUT_KEY_DB_MODEL           => ConfigOptionsListConstants::KEY_MODEL,
+        ConfigOptionsListConstants::INPUT_KEY_DB_ENGINE          => ConfigOptionsListConstants::KEY_ENGINE,
         ConfigOptionsListConstants::INPUT_KEY_DB_INIT_STATEMENTS => ConfigOptionsListConstants::KEY_INIT_STATEMENTS,
-        ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => ConfigOptionsListConstants::KEY_ENCRYPTION_KEY,
-        ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE => ConfigOptionsListConstants::KEY_SAVE,
-        ConfigOptionsListConstants::INPUT_KEY_RESOURCE => ConfigOptionsListConstants::KEY_RESOURCE,
+        ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY     => ConfigOptionsListConstants::KEY_ENCRYPTION_KEY,
+        ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE       => ConfigOptionsListConstants::KEY_SAVE,
+        ConfigOptionsListConstants::INPUT_KEY_RESOURCE           => ConfigOptionsListConstants::KEY_RESOURCE,
     ];
-
-    /**
-     * @var Random
-     */
-    protected $random;
 
     /**
      * @var DeploymentConfig
@@ -50,15 +46,39 @@ class ConfigGenerator
     protected $deploymentConfig;
 
     /**
+     * @var Random
+     * @deprecated 100.2.0
+     */
+    protected $random;
+
+    /**
+     * @var ConfigDataFactory
+     */
+    private $configDataFactory;
+
+    /**
+     * @var CryptKeyGeneratorInterface
+     */
+    private $cryptKeyGenerator;
+
+    /**
      * Constructor
      *
-     * @param Random $random
+     * @param Random $random Deprecated since 100.2.0
      * @param DeploymentConfig $deploymentConfig
+     * @param ConfigDataFactory|null $configDataFactory
+     * @param CryptKeyGeneratorInterface|null $cryptKeyGenerator
      */
-    public function __construct(Random $random, DeploymentConfig $deploymentConfig)
-    {
+    public function __construct(
+        Random $random,
+        DeploymentConfig $deploymentConfig,
+        ConfigDataFactory $configDataFactory = null,
+        CryptKeyGeneratorInterface $cryptKeyGenerator = null
+    ) {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
+        $this->configDataFactory = $configDataFactory ?? ObjectManager::getInstance()->get(ConfigDataFactory::class);
+        $this->cryptKeyGenerator = $cryptKeyGenerator ?? ObjectManager::getInstance()->get(CryptKeyGenerator::class);
     }
 
     /**
@@ -70,23 +90,17 @@ class ConfigGenerator
     {
         $currentKey = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
 
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
-        if (isset($data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])) {
-            if ($currentKey !== null) {
-                $key = $currentKey . "\n" . $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY];
-            } else {
-                $key = $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY];
-            }
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
 
-            $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, $key);
-        } else {
-            if ($currentKey === null) {
-                $configData->set(
-                    ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY,
-                    md5($this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE))
-                );
-            }
-        }
+        // Use given key if set, else use current
+        $key = $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY] ?? $currentKey;
+
+        // If there is no key given or currently set, generate a new one
+        $key = $key ?? $this->cryptKeyGenerator->generate();
+
+        // Chaining of ".. ?? .." is not used to keep it simpler to understand
+
+        $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, $key);
 
         return $configData;
     }
@@ -99,7 +113,7 @@ class ConfigGenerator
      */
     public function createSessionConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
 
         if (isset($data[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])) {
             $configData->set(
@@ -132,7 +146,7 @@ class ConfigGenerator
      */
     public function createDbConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
 
         $optional = [
             ConfigOptionsListConstants::INPUT_KEY_DB_HOST,
@@ -151,25 +165,18 @@ class ConfigGenerator
             );
         }
 
+        $dbConnectionPrefix = ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/';
+
         foreach ($optional as $key) {
             if (isset($data[$key])) {
-                $configData->set(
-                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . self::$paramMap[$key],
-                    $data[$key]
-                );
+                $configData->set($dbConnectionPrefix . self::$paramMap[$key], $data[$key]);
             }
         }
 
-        $currentStatus = $this->deploymentConfig->get(
-            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsListConstants::KEY_ACTIVE
-        );
+        $currentStatus = $this->deploymentConfig->get($dbConnectionPrefix . ConfigOptionsListConstants::KEY_ACTIVE);
 
         if ($currentStatus === null) {
-            $configData->set(
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
-                . '/' . ConfigOptionsListConstants::KEY_ACTIVE,
-                '1'
-            );
+            $configData->set($dbConnectionPrefix . ConfigOptionsListConstants::KEY_ACTIVE, '1');
         }
 
         return $configData;
@@ -182,7 +189,7 @@ class ConfigGenerator
      */
     public function createResourceConfig()
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
 
         if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_RESOURCE_DEFAULT_SETUP) === null) {
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_RESOURCE_DEFAULT_SETUP, 'default');
@@ -198,10 +205,12 @@ class ConfigGenerator
      */
     public function createXFrameConfig()
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
+
         if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT) === null) {
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT, 'SAMEORIGIN');
         }
+
         return $configData;
     }
 
@@ -212,10 +221,12 @@ class ConfigGenerator
      */
     public function createModeConfig()
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
+
         if ($this->deploymentConfig->get(State::PARAM_MODE) === null) {
             $configData->set(State::PARAM_MODE, State::MODE_DEFAULT);
         }
+
         return $configData;
     }
 
@@ -227,21 +238,29 @@ class ConfigGenerator
      */
     public function createCacheHostsConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
+
         if (isset($data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
-            $hostData = explode(',', $data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]);
-            $hosts = [];
-            foreach ($hostData as $data) {
-                $dataArray = explode(':', trim($data));
-                $host = [];
-                $host['host'] = $dataArray[0];
-                if (isset($dataArray[1])) {
-                    $host['port'] = $dataArray[1];
-                }
-                $hosts[] = $host;
-            }
+            $hosts = explode(',', $data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]);
+
+            $hosts = array_map(
+                function ($hostData) {
+                    $hostDataParts = explode(':', trim($hostData));
+
+                    $tmp = ['host' => $hostDataParts[0]];
+
+                    if (isset($hostDataParts[1])) {
+                        $tmp['port'] = $hostDataParts[1];
+                    }
+
+                    return $tmp;
+                },
+                $hosts
+            );
+
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS, $hosts);
         }
+
         $configData->setOverrideWhenSave(true);
         return $configData;
     }

@@ -124,7 +124,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockIsTableExists($changelogTableName, false);
         $this->mockGetTableName();
 
-        $this->expectException('Exception', "Table {$changelogTableName} does not exist");
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->getVersion();
     }
@@ -135,7 +136,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockIsTableExists($changelogTableName, false);
         $this->mockGetTableName();
 
-        $this->expectException('Exception', "Table {$changelogTableName} does not exist");
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->drop();
     }
@@ -226,7 +228,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockIsTableExists($changelogTableName, false);
         $this->mockGetTableName();
 
-        $this->expectException('Exception', "Table {$changelogTableName} does not exist");
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->getList(mt_rand(1, 200), mt_rand(201, 400));
     }
@@ -237,7 +240,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockIsTableExists($changelogTableName, false);
         $this->mockGetTableName();
 
-        $this->expectException('Exception', "Table {$changelogTableName} does not exist");
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->clear(mt_rand(1, 200));
     }
@@ -255,6 +259,10 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())->method('getTableName')->will($this->returnArgument(0));
     }
 
+    /**
+     * @param $changelogTableName
+     * @param $result
+     */
     protected function mockIsTableExists($changelogTableName, $result)
     {
         $this->connectionMock->expects(

@@ -110,7 +110,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
             $remoteFileUrl = $this->getRequest()->getParam('remote_image');
             $this->validateRemoteFile($remoteFileUrl);
             $localFileName = Uploader::getCorrectFileName(basename($remoteFileUrl));
-            $localTmpFileName = Uploader::getDispretionPath($localFileName) . DIRECTORY_SEPARATOR . $localFileName;
+            $localTmpFileName = Uploader::getDispersionPath($localFileName) . DIRECTORY_SEPARATOR . $localFileName;
             $localFilePath = $baseTmpMediaPath . ($localTmpFileName);
             $localUniqFilePath = $this->appendNewFileName($localFilePath);
             $this->validateRemoteFileExtensions($localUniqFilePath);
@@ -174,7 +174,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     protected function appendResultSaveRemoteImage($fileName)
     {
         $fileInfo = pathinfo($fileName);
-        $tmpFileName = Uploader::getDispretionPath($fileInfo['basename']) . DIRECTORY_SEPARATOR . $fileInfo['basename'];
+        $tmpFileName = Uploader::getDispersionPath($fileInfo['basename']) . DIRECTORY_SEPARATOR . $fileInfo['basename'];
         $result['name'] = $fileInfo['basename'];
         $result['type'] = $this->imageAdapter->getMimeType();
         $result['error'] = 0;

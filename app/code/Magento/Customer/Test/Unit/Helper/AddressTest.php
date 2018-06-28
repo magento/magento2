@@ -78,6 +78,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedNumLines, $this->helper->getStreetLines());
     }
 
+    /**
+     * @return array
+     */
     public function providerGetStreetLines()
     {
         return [
@@ -190,6 +193,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->helper->convertStreetLines($origStreets, $toCount));
     }
 
+    /**
+     * @return array
+     */
     public function getConvertStreetLinesDataProvider()
     {
         return [
@@ -322,19 +328,24 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->addressConfig->expects($this->once())
             ->method('getFormatByCode')
             ->with($code)
-            ->will($this->returnValue(
-                new \Magento\Framework\DataObject($result !== null ? ['renderer' => $result] : [])
-            ));
+            ->will(
+                $this->returnValue(
+                    new \Magento\Framework\DataObject($result !== null ? ['renderer' => $result] : [])
+                )
+            );
         $this->assertEquals($result, $this->helper->getFormatTypeRenderer($code));
     }
 
+    /**
+     * @return array
+     */
     public function getFormatTypeRendererDataProvider()
     {
         $renderer = $this->getMockBuilder(\Magento\Customer\Block\Address\Renderer\RendererInterface::class)
             ->disableOriginalConstructor()->getMock();
         return [
             ['valid_code', $renderer],
-            ['invalid_code', null]
+            ['invalid_code', null],
         ];
     }
 
@@ -355,18 +366,23 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->addressConfig->expects($this->once())
             ->method('getFormatByCode')
             ->with($code)
-            ->will($this->returnValue(
-                new \Magento\Framework\DataObject(!empty($result) ? ['renderer' => $renderer] : [])
-            ));
+            ->will(
+                $this->returnValue(
+                    new \Magento\Framework\DataObject(!empty($result) ? ['renderer' => $renderer] : [])
+                )
+            );
 
         $this->assertEquals($result, $this->helper->getFormat($code));
     }
 
+    /**
+     * @return array
+     */
     public function getFormatDataProvider()
     {
         return [
             ['valid_code', ['key' => 'value']],
-            ['invalid_code', '']
+            ['invalid_code', ''],
         ];
     }
 
@@ -392,11 +408,14 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($isMetadataExists, $this->helper->isAttributeVisible($attributeCode));
     }
 
+    /**
+     * @return array
+     */
     public function isAttributeVisibleDataProvider()
     {
         return [
             ['fax', true],
-            ['invalid_code', false]
+            ['invalid_code', false],
         ];
     }
 }

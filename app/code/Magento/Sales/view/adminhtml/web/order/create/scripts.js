@@ -21,6 +21,7 @@ define([
             this.loadBaseUrl    = false;
             this.customerId     = data.customer_id ? data.customer_id : false;
             this.storeId        = data.store_id ? data.store_id : false;
+            this.quoteId        = data['quote_id'] ? data['quote_id'] : false;
             this.currencyId     = false;
             this.currencySymbol = data.currency_symbol ? data.currency_symbol : '';
             this.addresses      = data.addresses ? data.addresses : $H({});
@@ -55,7 +56,8 @@ define([
                     }
                 });
 
-                var searchButton = new ControlButton(jQuery.mage.__('Add Products')),
+                var searchButtonId = 'add_products',
+                    searchButton = new ControlButton(jQuery.mage.__('Add Products'), searchButtonId),
                     searchAreaId = this.getAreaId('search');
                 searchButton.onClick = function() {
                     $(searchAreaId).show();
@@ -74,7 +76,7 @@ define([
 
                     this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function(proceed) {
                         proceed();
-                        if ($(searchAreaId) && !$(searchAreaId).visible()) {
+                        if ($(searchAreaId) && !$(searchAreaId).visible() && !$(searchButtonId)) {
                             this.addControlButton(searchButton);
                         }
                     });
@@ -157,6 +159,7 @@ define([
             }
             if(this.addresses[id]){
                 this.fillAddressFields(container, this.addresses[id]);
+
             }
             else{
                 this.fillAddressFields(container, {});
@@ -190,43 +193,53 @@ define([
             }
         },
 
-        changeAddressField : function(event){
-            var field = Event.element(event);
-            var re = /[^\[]*\[([^\]]*)_address\]\[([^\]]*)\](\[(\d)\])?/;
-            var matchRes = field.name.match(re);
+        /**
+         * Triggers on each form's element changes.
+         *
+         * @param {Object} event
+         */
+        changeAddressField: function (event) {
+            var field = Event.element(event),
+                re = /[^\[]*\[([^\]]*)_address\]\[([^\]]*)\](\[(\d)\])?/,
+                matchRes = field.name.match(re),
+                type,
+                name,
+                data;
 
             if (!matchRes) {
                 return;
             }
 
-            var type = matchRes[1];
-            var name = matchRes[2];
-            var data;
+            type = matchRes[1];
+            name = matchRes[2];
 
-            if(this.isBillingField(field.id)){
-                data = this.serializeData(this.billingAddressContainer)
-            }
-            else{
-                data = this.serializeData(this.shippingAddressContainer)
+            if (this.isBillingField(field.id)) {
+                data = this.serializeData(this.billingAddressContainer);
+            } else {
+                data = this.serializeData(this.shippingAddressContainer);
             }
             data = data.toObject();
 
-            if( (type == 'billing' && this.shippingAsBilling)
-                || (type == 'shipping' && !this.shippingAsBilling) ) {
+            if (type === 'billing' && this.shippingAsBilling || type === 'shipping' && !this.shippingAsBilling) {
                 data['reset_shipping'] = true;
             }
 
-            data['order['+type+'_address][customer_address_id]'] = $('order-'+type+'_address_customer_address_id').value;
+            data['order[' + type + '_address][customer_address_id]'] = null;
+            data['shipping_as_billing'] = jQuery('[name="shipping_same_as_billing"]').is(':checked') ? 1 : 0;
+
+            if (name === 'customer_address_id') {
+                data['order[' + type + '_address][customer_address_id]'] =
+                    $('order-' + type + '_address_customer_address_id').value;
+            }
 
             if (data['reset_shipping']) {
                 this.resetShippingMethod(data);
             } else {
                 this.saveData(data);
-                if (name == 'country_id' || name == 'customer_address_id') {
+
+                if (name === 'country_id' || name === 'customer_address_id') {
                     this.loadArea(['shipping_method', 'billing_method', 'totals', 'items'], true, data);
                 }
-                // added for reloading of default sender and default recipient for giftmessages
-                //this.loadArea(['giftmessage'], true, data);
             }
         },
 
@@ -313,12 +326,12 @@ define([
                 data = this.serializeData(this.billingAddressContainer);
             } else {
                 data = this.serializeData(this.shippingAddressContainer);
-                areasToLoad.push('shipping_method');
             }
+            areasToLoad.push('shipping_method');
             data = data.toObject();
             data['shipping_as_billing'] = flag ? 1 : 0;
             data['reset_shipping'] = 1;
-            this.loadArea( areasToLoad, true, data);
+            this.loadArea(areasToLoad, true, data);
         },
 
         resetShippingMethod : function(data){
@@ -1383,12 +1396,15 @@ define([
         _label: '',
         _node: null,
 
-        initialize: function(label){
+        initialize: function(label, id){
             this._label = label;
             this._node = new Element('button', {
                 'class': 'action-secondary action-add',
                 'type':  'button'
             });
+            if (typeof id !== 'undefined') {
+                this._node.setAttribute('id', id)
+            }
         },
 
         onClick: function(){

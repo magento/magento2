@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Service;
 
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Deploy\Console\InputValidator;
+use Magento\Framework\View\Design\Theme\ListInterface;
+use Magento\Framework\View\DesignInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -91,15 +95,15 @@ class DeployPackage
      * @param array $options
      * @param bool $skipLogging
      * @return bool true on success
+     * @throws \Exception
      */
     public function deploy(Package $package, array $options, $skipLogging = false)
     {
         $result = $this->appState->emulateAreaCode(
-            $package->getArea() == Package::BASE_AREA ? 'global' : $package->getArea(),
+            $package->getArea() === Package::BASE_AREA ? 'global' : $package->getArea(),
             function () use ($package, $options, $skipLogging) {
                 // emulate application locale needed for correct file path resolving
                 $this->localeResolver->setLocale($package->getLocale());
-
                 $this->deployEmulated($package, $options, $skipLogging);
             }
         );
@@ -111,7 +115,7 @@ class DeployPackage
      * @param Package $package
      * @param array $options
      * @param bool $skipLogging
-     * @return int
+     * @return bool
      */
     public function deployEmulated(Package $package, array $options, $skipLogging = false)
     {
@@ -200,14 +204,14 @@ class DeployPackage
     private function checkIfCanCopy(PackageFile $file, Package $package, Package $parentPackage = null)
     {
         return $parentPackage
-        && $file->getOrigPackage() !== $package
-        && (
-            $file->getArea() !== $package->getArea()
-            || $file->getTheme() !== $package->getTheme()
-            || $file->getLocale() !== $package->getLocale()
-        )
-        && $file->getOrigPackage() == $parentPackage
-        && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+            && $file->getOrigPackage() !== $package
+            && (
+                $file->getArea() !== $package->getArea()
+                || $file->getTheme() !== $package->getTheme()
+                || $file->getLocale() !== $package->getLocale()
+            )
+            && $file->getOrigPackage() === $parentPackage
+            && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
     }
 
     /**
@@ -219,10 +223,10 @@ class DeployPackage
      */
     private function checkFileSkip($filePath, array $options)
     {
-        if ($filePath != '.') {
+        if ($filePath !== '.') {
             $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
             $basename = pathinfo($filePath, PATHINFO_BASENAME);
-            if ($ext == 'less' && strpos($basename, '_') === 0) {
+            if ($ext === 'less' && strpos($basename, '_') === 0) {
                 return true;
             }
             $option = isset(InputValidator::$fileExtensionOptionMap[$ext])
@@ -267,7 +271,7 @@ class DeployPackage
         $this->deployStaticFile->writeTmpFile('info.json', $package->getPath(), json_encode($info));
 
         if (!$skipLogging) {
-            $this->logger->notice($logMessage);
+            $this->logger->info($logMessage);
         }
     }
 }

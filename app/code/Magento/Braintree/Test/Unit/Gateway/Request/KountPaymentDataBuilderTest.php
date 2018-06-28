@@ -5,12 +5,14 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Braintree\Gateway\Request\KountPaymentDataBuilder;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class KountPaymentDataBuilderTest
@@ -27,39 +29,31 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
-    private $configMock;
+    private $config;
 
     /**
-     * @var Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|MockObject
      */
-    private $paymentMock;
+    private $payment;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $paymentDO;
-
-    /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $subjectReaderMock;
 
     protected function setUp()
     {
         $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
-        $this->configMock = $this->getMockBuilder(Config::class)
+        $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+        $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->builder = new KountPaymentDataBuilder($this->configMock, $this->subjectReaderMock);
+        $this->builder = new KountPaymentDataBuilder($this->config, new SubjectReader());
     }
 
     /**
@@ -69,14 +63,8 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $buildSubject = [];
 
-        $this->configMock->expects(static::once())
-            ->method('hasFraudProtection')
+        $this->config->method('hasFraudProtection')
             ->willReturn(true);
-
-        $this->subjectReaderMock->expects(self::once())
-            ->method('readPayment')
-            ->with($buildSubject)
-            ->willThrowException(new \InvalidArgumentException());
 
         $this->builder->build($buildSubject);
     }
@@ -91,26 +79,23 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
             KountPaymentDataBuilder::DEVICE_DATA => self::DEVICE_DATA,
         ];
 
+        $order = $this->createMock(OrderAdapterInterface::class);
+        $this->paymentDO->method('getOrder')
+            ->willReturn($order);
+
         $buildSubject = ['payment' => $this->paymentDO];
 
-        $this->paymentMock->expects(static::exactly(count($additionalData)))
+        $this->payment->expects(self::exactly(count($additionalData)))
             ->method('getAdditionalInformation')
             ->willReturn($additionalData);
 
-        $this->configMock->expects(static::once())
-            ->method('hasFraudProtection')
+        $this->config->method('hasFraudProtection')
             ->willReturn(true);
 
-        $this->paymentDO->expects(static::once())
-            ->method('getPayment')
-            ->willReturn($this->paymentMock);
+        $this->paymentDO->method('getPayment')
+            ->willReturn($this->payment);
 
-        $this->subjectReaderMock->expects(self::once())
-            ->method('readPayment')
-            ->with($buildSubject)
-            ->willReturn($this->paymentDO);
-
-        static::assertEquals(
+        self::assertEquals(
             $expectedResult,
             $this->builder->build($buildSubject)
         );

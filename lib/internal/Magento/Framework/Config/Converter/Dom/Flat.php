@@ -102,9 +102,9 @@ class Flat
             }
         } else {
             if ($result) {
-                $result['value'] = $value;
+                $result['value'] = trim($value);
             } else {
-                $result = $value;
+                $result = trim($value);
             }
         }
         return $result;

@@ -53,7 +53,10 @@ class AssertCartPerCustomer extends AbstractConstraint
                     ['customer' => $customer]
                 )->run();
                 \PHPUnit_Framework_Assert::assertEquals(
-                    sprintf(self::WELCOME_MESSAGE, $customer->getFirstname()),
+                    sprintf(
+                        self::WELCOME_MESSAGE,
+                        $customer->getFirstname() . ' ' . $customer->getLastname()
+                    ),
                     $cmsIndex->getLinksBlock()->getWelcomeText(),
                     'Customer welcome message is wrong.'
                 );

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="SampleSection">
+        <element name="oneParamElement" type="button" selector="#element .{{var1}}" parameterized="true"/>
+        <element name="twoParamElement" type="button" selector="#{{var1}} .{{var2}}" parameterized="true"/>
+        <element name="threeParamElement" type="button" selector="#{{var1}}-{{var2}} .{{var3}}" parameterized="true"/>
+        <element name="timeoutElement" type="button" selector="#foo" timeout="30"/>
+    </section>
+    <section name="ColumnSection">
+        <element name="panelFieldLabel" type="text" selector='//div[@data-index="{{arg1}}"]/descendant::div[@data-index="{{arg2}}"]/label | //div[@data-index="{{arg3}}"]/descendant::*[@class="admin__field-label"]/span[text()="{{arg4}}"]' parameterized="true" />
+    </section>
+</sections>

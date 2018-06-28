@@ -139,7 +139,6 @@
             <settings>
                 <filter>text</filter>
                 <label translate="true">ID</label>
-                <sorting>desc</sorting>
             </settings>
         </column>
         <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
@@ -154,6 +153,7 @@
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
                 <label translate="true">Purchase Date</label>
+                <sorting>desc</sorting>
             </settings>
         </column>
         <column name="billing_name">

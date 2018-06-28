@@ -12,6 +12,13 @@ use Magento\Framework\Controller\ResultFactory;
 class CleanImages extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::flush_catalog_images';
+
+    /**
      * Clean JS/css files cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect

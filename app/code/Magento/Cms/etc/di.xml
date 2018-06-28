@@ -14,6 +14,7 @@
     <preference for="Magento\Cms\Api\Data\BlockInterface" type="Magento\Cms\Model\Block" />
     <preference for="Magento\Cms\Api\BlockRepositoryInterface" type="Magento\Cms\Model\BlockRepository" />
     <preference for="Magento\Cms\Api\PageRepositoryInterface" type="Magento\Cms\Model\PageRepository" />
+    <preference for="Magento\Cms\Api\GetUtilityPageIdentifiersInterface" type="Magento\Cms\Model\GetUtilityPageIdentifiers" />
     <type name="Magento\Cms\Model\Wysiwyg\Config">
         <arguments>
             <argument name="windowSize" xsi:type="array">
@@ -186,6 +187,14 @@
     <type name="Magento\Cms\Model\BlockRepository">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Cms\Ui\Component\DataProvider">
+        <arguments>
+            <argument name="additionalFilterPool" xsi:type="array">
+                <item name="fulltext" xsi:type="object">Magento\Cms\Ui\Component\Page\FulltextFilter</item>
+            </argument>
         </arguments>
     </type>
 </config>

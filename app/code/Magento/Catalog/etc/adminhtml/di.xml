@@ -78,6 +78,11 @@
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
         <plugin name="invalidate_pagecache_after_attribute_save" type="Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save" />
     </type>
+    <virtualType name="\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory" type="\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">\Magento\Catalog\Ui\DataProvider\Product\ProductCollection</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider">
         <arguments>
             <argument name="addFieldStrategies" xsi:type="array">
@@ -86,6 +91,7 @@
             <argument name="addFilterStrategies" xsi:type="array">
                 <item name="store_id" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddStoreFieldToCollection</item>
             </argument>
+            <argument name="collectionFactory" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
@@ -143,6 +149,10 @@
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Attributes</item>
                     <item name="sortOrder" xsi:type="number">120</item>
                 </item>
+                <item name="alerts" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Alerts</item>
+                    <item name="sortOrder" xsi:type="number">130</item>
+                </item>
                 <item name="advanced-pricing-tier-price-type" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice</item>
                     <item name="sortOrder" xsi:type="number">150</item>
@@ -179,5 +189,8 @@
         <arguments>
             <argument name="scopeOverriddenValue" xsi:type="object">Magento\Catalog\Model\Attribute\ScopeOverriddenValue</argument>
         </arguments>
+    </type>
+    <type name="Magento\Eav\Api\AttributeSetRepositoryInterface">
+        <plugin name="remove_products" type="Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts"/>
     </type>
 </config>

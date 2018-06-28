@@ -204,14 +204,14 @@ class PhpCookieManager implements CookieManagerInterface
 
         $sizeOfCookie = $this->sizeOfCookie($name, $value);
 
-        if ($numCookies > PhpCookieManager::MAX_NUM_COOKIES) {
+        if ($numCookies > static::MAX_NUM_COOKIES) {
             $this->logger->warning(
                 new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
                 array_merge($_COOKIE, ['user-agent' => $this->httpHeader->getHttpUserAgent()])
             );
         }
 
-        if ($sizeOfCookie > PhpCookieManager::MAX_COOKIE_SIZE) {
+        if ($sizeOfCookie > static::MAX_COOKIE_SIZE) {
             throw new CookieSizeLimitReachedException(
                 new Phrase(
                     'Unable to send the cookie. Size of \'%name\' is %size bytes.',
@@ -237,7 +237,9 @@ class PhpCookieManager implements CookieManagerInterface
         ) {
             $expireTime = $metadataArray[PhpCookieManager::KEY_EXPIRE_TIME];
         } else {
-            if (isset($metadataArray[CookieMetadata::KEY_DURATION])) {
+            if (isset($metadataArray[CookieMetadata::KEY_DURATION])
+                && $metadataArray[CookieMetadata::KEY_DURATION] !== PhpCookieManager::EXPIRE_AT_END_OF_SESSION_TIME
+            ) {
                 $expireTime = $metadataArray[CookieMetadata::KEY_DURATION] + time();
             } else {
                 $expireTime = PhpCookieManager::EXPIRE_AT_END_OF_SESSION_TIME;

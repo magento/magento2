@@ -15,9 +15,6 @@ use Magento\Sales\Api\Data\ShipmentItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\ShipmentItemRepositoryInterface;
 use Magento\Sales\Model\Spi\ShipmentItemResourceInterface;
 
-/**
- * @since 2.2.0
- */
 class ItemRepository implements ShipmentItemRepositoryInterface
 {
     /**

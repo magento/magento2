@@ -26,7 +26,7 @@ class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
             $str .= htmlspecialchars($row->getTemplateSenderName()) . ' ';
         }
         if ($row->getTemplateSenderEmail()) {
-            $str .= '[' . $row->getTemplateSenderEmail() . ']';
+            $str .= '[' . htmlspecialchars($row->getTemplateSenderEmail()) . ']';
         }
         if ($str == '') {
             $str .= '---';

@@ -15,11 +15,11 @@
 
 <?php if ($block->hasSamples()): ?>
     <dl class="items samples">
-        <dt class="item-title samples-item-title"><?= /* @escapeNotVerified */ $block->getSamplesTitle() ?></dt>
+        <dt class="item-title samples-item-title"><?= $block->escapeHtml($block->getSamplesTitle()) ?></dt>
         <?php $_samples = $block->getSamples() ?>
         <?php foreach ($_samples as $_sample): ?>
             <dd class="item samples-item">
-                <a href="<?= /* @escapeNotVerified */ $block->getSampleUrl($_sample) ?>" <?= $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>
+                <a href="<?= $block->escapeHtml($block->getSampleUrl($_sample)) ?>" <?= $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>
                    class="item-link samples-item-link">
                     <?= $block->escapeHtml($_sample->getTitle()) ?>
                 </a>

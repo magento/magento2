@@ -18,7 +18,7 @@ use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Framework\EntityManager\HydratorInterface;
 
 /**
- * Class ShipmentDocumentFactoryTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -92,7 +92,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addComment', 'addTrack'])
+            ->setMethods(['addComment', 'addTrack', 'setCustomerNote', 'setCustomerNoteNotify'])
             ->getMockForAbstractClass();
 
         $this->hydratorPoolMock = $this->getMockBuilder(HydratorPool::class)
@@ -128,14 +128,8 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
         $packages = [];
         $items = [1 => 10];
 
-        $this->itemMock->expects($this->once())
-            ->method('getOrderItemId')
-            ->willReturn(1);
-
-        $this->itemMock->expects($this->once())
-            ->method('getQty')
-            ->willReturn(10);
-
+        $this->itemMock->expects($this->once())->method('getOrderItemId')->willReturn(1);
+        $this->itemMock->expects($this->once())->method('getQty')->willReturn(10);
         $this->shipmentFactoryMock->expects($this->once())
             ->method('create')
             ->with(
@@ -166,7 +160,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
         if ($appendComment) {
             $comment = "New comment!";
             $visibleOnFront = true;
-            $this->commentMock->expects($this->once())
+            $this->commentMock->expects($this->exactly(2))
                 ->method('getComment')
                 ->willReturn($comment);
 
@@ -178,6 +172,10 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
                 ->method('addComment')
                 ->with($comment, $appendComment, $visibleOnFront)
                 ->willReturnSelf();
+
+            $this->shipmentMock->expects($this->once())
+                ->method('setCustomerNoteNotify')
+                ->with(true);
         }
 
         $this->assertEquals(

@@ -10,7 +10,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>http://store.com/product.html</loc>
-        <lastmod>2012-12-21T00:00:00-08:00</lastmod>
+        <lastmod>0000-01-01T00:00:00-08:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
