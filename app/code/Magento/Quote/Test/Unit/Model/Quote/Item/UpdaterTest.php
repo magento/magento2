@@ -130,6 +130,9 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->object);
     }
 
+    /**
+     * @return array
+     */
     public function qtyProvider()
     {
         return [
@@ -142,6 +145,9 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function qtyProviderDecimal()
     {
         return [
