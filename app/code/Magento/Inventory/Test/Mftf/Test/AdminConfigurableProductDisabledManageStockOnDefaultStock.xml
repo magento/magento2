@@ -17,11 +17,11 @@
             <testCaseId value="969"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="single_mode"/>
         </annotations>
 
         <before>
             <createData entity="_defaultCategory" stepKey="category"/>
-            <createData entity="FullSource1" stepKey="customSource"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
         </before>
         <after>
@@ -68,13 +68,7 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStep"/>
 
         <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
-        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="selectSources"/>
-
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter"/>
-        <click selector="{{AdminGridRow.checkboxByValue('default')}}" stepKey="selectDefaultSource"/>
-        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="daneAssignSources"/>
-
-        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSource}}" userInput="100" stepKey="fillQuantityForDefaultSource"/>
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForSingleMode}}" userInput="100" stepKey="fillQuantityForDefaultSource"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariations"/>
 
@@ -87,7 +81,6 @@
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkRedAttributeVariationName"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute1.name}}" stepKey="checkWhiteAttributeVariationSku"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="checkRedAttributeVariationSku"/>
-        <see selector="{{AdminConfigurableProductFormSection.currentVariationsQuantityCells}}" userInput="100" stepKey="checkQtyIsCorrectForDefaultSource"/>
 
         <comment userInput="Check, configurable product is present on category page and has 'In Stock' status" stepKey="checkConfigurableIsPresentOnCategoryPageComment"/>
 
@@ -113,7 +106,7 @@
             <argument name="product" value="colorProductAttribute1"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="editWhiteConfigurableVariation"/>
-        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setWhiteConfigurableVariationToOutOfStock"/>
+        <selectOption selector="*[name='product[quantity_and_stock_status][is_in_stock]']" userInput="Out of Stock" stepKey="setConfigurableWhiteVariationToOutOfStock"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveWhiteConfigurableVariation"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkWhiteConfigurableVariationSaveMessage"/>
 
@@ -123,7 +116,7 @@
             <argument name="product" value="colorProductAttribute2"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="editConfigurableRedVariation"/>
-        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setConfigurableRedVariationToOutOfStock"/>
+        <selectOption selector="*[name='product[quantity_and_stock_status][is_in_stock]']" userInput="Out of Stock" stepKey="setConfigurableRedVariationToOutOfStock"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableRedVariation"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkRedConfigurableVariationSaveMessage"/>
 
