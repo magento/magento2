@@ -514,11 +514,11 @@ class Application
      *
      * @return void
      */
-    private function copyGlobalConfigFile()
+    /*private function copyGlobalConfigFile()
     {
         $targetFile = $this->_configDir . '/config.php';
         copy($this->globalConfigFile, $targetFile);
-    }
+    }*/
 
     /**
      * Gets a list of CLI params for installation
