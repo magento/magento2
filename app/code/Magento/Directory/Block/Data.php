@@ -152,6 +152,10 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @param null|string $defValue
+     * @param string $name
+     * @param string $id
+     * @param string $title
      * @return string
      */
     public function getRegionHtmlSelect($defValue = null, $name = 'region', $id = 'state', $title = 'State/Province')
