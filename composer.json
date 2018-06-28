@@ -7,10 +7,6 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "config": {
-        "preferred-install": "dist",
-        "sort-packages": true
-    },
     "repositories": [
         {
             "type": "git",
