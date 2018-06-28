@@ -66,30 +66,39 @@ class BulkInventoryTransfer
      * Extract quantity from sources and return its sum
      * @param string $sku
      * @param string $skipSource
+     * @param array $sourceItemsIds
      * @param bool $defaultSourceOnly
      * @return float
      */
-    private function extractSourcesQuantity(string $sku, string $skipSource, bool $defaultSourceOnly = false): float
-    {
+    private function extractSourcesQuantity(
+        string $sku,
+        string $skipSource,
+        array &$sourceItemsIds,
+        bool $defaultSourceOnly = false
+    ): float {
+        $sourceItemsIds = [];
+
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
 
+        // Determine where condition
         if ($defaultSourceOnly) {
-            $condition = $connection->quoteInto(
+            $sourceCodeCondition = $connection->quoteInto(
                 SourceItemInterface::SOURCE_CODE . ' = ?',
                 $this->defaultSourceProvider->getCode()
             );
         } else {
-            $condition = $connection->quoteInto(
+            $sourceCodeCondition = $connection->quoteInto(
                 SourceItemInterface::SOURCE_CODE . ' != ?',
                 $skipSource
             );
         }
 
+        // Check total quantity
         $selectQuery = $connection->select()
             ->from($tableName, new Expression('SUM(' . SourceItemInterface::QUANTITY . ')'))
             ->where(SourceItemInterface::SKU . ' = ?', $sku)
-            ->where($condition);
+            ->where($sourceCodeCondition);
 
         $quantityExtracted = (float) $connection->fetchOne($selectQuery);
 
@@ -99,29 +108,29 @@ class BulkInventoryTransfer
             SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
         ], [
             SourceItemInterface::SKU . ' = ?' => $sku,
-            $condition,
+            $sourceCodeCondition,
         ]);
 
         return $quantityExtracted;
     }
 
     /**
+     * Transfer quantity
      * @param string $sku
      * @param string $destinationSource
      * @param float $quantity
-     * @return void
      */
-    private function transferQuantity(string $sku, string $destinationSource, float $quantity): void
+    private function transferQuantity(string $sku, string $destinationSource, float $quantity)
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
 
-        $query = $connection->select()->from($tableName, SourceItemInterface::QUANTITY)
+        $query = $connection->select()->from($tableName, new Expression('SUM(' . SourceItemInterface::QUANTITY . ')'))
             ->where(SourceItemInterface::SOURCE_CODE . ' = ?', $destinationSource)
             ->where(SourceItemInterface::SKU . ' = ?', $sku);
 
-        $currentQty = $connection->fetchOne($query);
-        if ($currentQty === null) {
+        $qtyDestinationSource = $connection->fetchOne($query);
+        if ($qtyDestinationSource === null) {
             $connection->insert($tableName, [
                 SourceItemInterface::SOURCE_CODE => $destinationSource,
                 SourceItemInterface::SKU => $sku,
@@ -131,10 +140,13 @@ class BulkInventoryTransfer
                     SourceItemInterface::STATUS_OUT_OF_STOCK
             ]);
         } else {
-            $finalQty = $quantity + (float) $currentQty;
+            $finalQty = $quantity + (float) $qtyDestinationSource;
 
             $connection->update($tableName, [
-                SourceItemInterface::QUANTITY => $finalQty
+                SourceItemInterface::QUANTITY => $finalQty,
+                SourceItemInterface::STATUS => $finalQty > 0 ?
+                    SourceItemInterface::STATUS_IN_STOCK :
+                    SourceItemInterface::STATUS_OUT_OF_STOCK
             ], [
                 SourceItemInterface::SOURCE_CODE . '=?' => $destinationSource,
                 SourceItemInterface::SKU . '=?' => $sku,
@@ -157,7 +169,15 @@ class BulkInventoryTransfer
         foreach ($types as $sku => $type) {
             if ($this->isSourceItemManagementAllowedForProductType->execute($type)) {
                 $connection->beginTransaction();
-                $totalQty = $this->extractSourcesQuantity($sku, $destinationSource, $defaultSourceOnly);
+
+                $sourceItemsIds = [];
+                $totalQty = $this->extractSourcesQuantity(
+                    $sku,
+                    $destinationSource,
+                    $sourceItemsIds,
+                    $defaultSourceOnly
+                );
+
                 $this->transferQuantity($sku, $destinationSource, $totalQty);
                 $connection->commit();
             }

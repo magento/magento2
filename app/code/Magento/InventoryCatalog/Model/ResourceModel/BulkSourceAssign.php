@@ -77,12 +77,11 @@ class BulkSourceAssign
                             SourceItemInterface::QUANTITY => 0,
                             SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
                         ]);
+                        $count++;
                     } catch (DuplicateException $e) {
                         // Skip if source assignment is duplicated
                         continue;
                     }
-
-                    $count++;
                 }
             }
         }

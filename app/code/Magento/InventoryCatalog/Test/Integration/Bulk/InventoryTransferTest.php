@@ -93,15 +93,8 @@ class InventoryTransferTest extends TestCase
      */
     public function testBulkInventoryTransfer()
     {
-        $skus = ['SKU-1', 'SKU-2'];
+        $skus = ['SKU-1'];
         $this->bulkInventoryTransfer->execute($skus, 'eu-3', false);
-
-        $sourceItemCodes = $this->getSourceItemCodesBySku('SKU-2');
-        self::assertNotContains(
-            'eu-3',
-            $sourceItemCodes,
-            'Products are not transferred'
-        );
 
         $sourceItemCodes = $this->getSourceItemCodesBySku('SKU-1');
         self::assertContains(

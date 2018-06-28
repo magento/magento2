@@ -11,6 +11,7 @@ use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryCatalog\Model\ResourceModel\BulkInventoryTransfer as BulkInventoryTransferResource;
 use Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface;
 use Magento\InventoryCatalogApi\Model\BulkInventoryTransferValidatorInterface;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**
  * @inheritdoc
@@ -28,17 +29,25 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
     private $bulkInventoryTransfer;
 
     /**
+     * @var InventoryIndexer
+     */
+    private $inventoryIndexer;
+
+    /**
      * MassProductSourceAssign constructor.
      * @param BulkInventoryTransferValidatorInterface $inventoryTransferValidator
      * @param BulkInventoryTransferResource $bulkInventoryTransfer
+     * @param InventoryIndexer $inventoryIndexer
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         BulkInventoryTransferValidatorInterface $inventoryTransferValidator,
-        BulkInventoryTransferResource $bulkInventoryTransfer
+        BulkInventoryTransferResource $bulkInventoryTransfer,
+        InventoryIndexer $inventoryIndexer
     ) {
         $this->bulkInventoryTransferValidator = $inventoryTransferValidator;
         $this->bulkInventoryTransfer = $bulkInventoryTransfer;
+        $this->inventoryIndexer = $inventoryIndexer;
     }
 
     /**
@@ -56,11 +65,12 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
             throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
 
-        // TODO: Trigger reindex?
         $this->bulkInventoryTransfer->execute(
             $skus,
             $destinationSource,
             $defaultSourceOnly
         );
+
+        $this->inventoryIndexer->executeFull();
     }
 }
