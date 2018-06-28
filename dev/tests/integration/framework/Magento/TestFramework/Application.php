@@ -449,7 +449,7 @@ class Application
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::VAR_DIR][DirectoryList::PATH]);
 
         $this->copyAppConfigFiles();
-        $this->copyGlobalConfigFile();
+        //$this->copyGlobalConfigFile();
 
         $installParams = $this->getInstallCliParams();
 
