@@ -188,10 +188,10 @@
     <!-- Assumes you are already on the product edit page -->
     <actionGroup name="EditProductDescription">
         <arguments>
-            <argument name="short" defaultValue="sampleShortDescription"/>
+            <argument name="description" defaultValue="sampleShortDescription"/>
         </arguments>
         <click stepKey="clickContentDropdown" selector="{{AdminProductContentSection.sectionHeader}}"/>
-        <fillField stepKey="fillShortDescription" selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{long}}"/>
+        <fillField stepKey="fillShortDescription" selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{description}}"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
     </actionGroup>

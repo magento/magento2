@@ -16,7 +16,7 @@
             <description value="Guest customer should be able to search configurable product by attributes of child products"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-249"/>
-            <group value="ConfigurableProduct"/>
+            <group value="Levi"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
@@ -104,7 +104,7 @@
         </actionGroup>
         <actionGroup stepKey="openProductEditPage" ref="openProducForEditByClickingRowXColumnYInProductGrid"/>
         <actionGroup stepKey="editProductDescription" ref="EditProductDescription">
-            <argument name="short" value="sampleShortDescription"/>
+            <argument name="description" value="sampleShortDescription"/>
         </actionGroup>
 
         <!-- Quick search the storefront for the first attribute option -->
