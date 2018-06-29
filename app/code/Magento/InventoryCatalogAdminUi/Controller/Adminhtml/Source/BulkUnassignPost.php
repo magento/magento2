@@ -58,7 +58,7 @@ class BulkUnassignPost extends Action
         try {
             $count = $this->bulkSourceUnassign->execute($skus, $sourceCodes);
             $this->messageManager->addSuccessMessage(__('Bulk operation was successful: %count unassignments.', [
-                'count' => $count,
+                'count' => $count
             ]));
         } catch (ValidationException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());

@@ -58,7 +58,7 @@ class BulkAssignPost extends Action
         try {
             $count = $this->bulkSourceAssign->execute($skus, $sourceCodes);
             $this->messageManager->addSuccessMessage(__('Bulk operation was successful: %count assignments.', [
-                'count' => $count,
+                'count' => $count
             ]));
         } catch (ValidationException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
