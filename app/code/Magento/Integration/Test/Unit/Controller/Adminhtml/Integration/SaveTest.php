@@ -56,7 +56,9 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ->with(self::INTEGRATION_ID)
             ->will($this->throwException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage))));
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())
+            ->method('addErrorMessage')
+            ->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
