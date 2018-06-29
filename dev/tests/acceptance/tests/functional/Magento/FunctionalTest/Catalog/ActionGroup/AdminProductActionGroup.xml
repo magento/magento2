@@ -192,6 +192,7 @@
         </arguments>
         <click stepKey="clickContentDropdown" selector="{{AdminProductContentSection.sectionHeader}}"/>
         <fillField stepKey="fillShortDescription" selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{description}}"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
     </actionGroup>
