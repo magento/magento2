@@ -342,8 +342,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
                 if ($attributeRow['is_global'] !== '1') {
                     $codeNotGlobal = true;
-                }
-                elseif ($attributeRow['type'] !== 'select') {
+                } elseif ($attributeRow['type'] !== 'select') {
                     $codeNotTypeSelect = true;
                 }
 
@@ -354,12 +353,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if ($codeExists == false) {
             $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST, $rowNum, $superAttrCode);
             $reasonFound = true;
-        }
-        elseif ($codeNotGlobal == true) {
+        } elseif ($codeNotGlobal == true) {
             $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE, $rowNum, $superAttrCode);
             $reasonFound = true;
-        }
-        elseif ($codeNotTypeSelect == true) {
+        } elseif ($codeNotTypeSelect == true) {
             $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT, $rowNum, $superAttrCode);
             $reasonFound = true;
         }
