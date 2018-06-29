@@ -15,5 +15,14 @@
                 </field>
             </group>
         </section>
+        <section id="catalog">
+            <group id="frontend">
+                <field id="product_attributes_sort_by" translate="label comment" type="select" sortOrder="400" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
+                    <label>Configurable Product Attributes Sort by</label>
+                    <source_model>Magento\ConfigurableProduct\Model\Config\Source\ProductAttributesSort</source_model>
+                    <comment>"Global Attribute Position Setting" allows change configurable attributes position globally for all products.</comment>
+                </field>
+            </group>
+        </section>
     </system>
 </config>
