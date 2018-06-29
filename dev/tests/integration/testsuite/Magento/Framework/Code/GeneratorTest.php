@@ -42,12 +42,12 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Filesystem\Directory\Read
      */
-    protected $logDirectory;
+    private $logDirectory;
 
     /**
      * @var int
      */
-    protected $oldPermissionGenerationDir;
+    private $oldPermissionGenerationDir;
 
     /**
      * @inheritdoc
