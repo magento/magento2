@@ -55,7 +55,10 @@ class Save extends ProductController
                 } catch (LocalizedException $e) {
                     $this->messageManager->addErrorMessage($e->getMessage());
                 } catch (\Exception $e) {
-                    $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving this review.'));
+                    $this->messageManager->addExceptionMessage(
+                        $e,
+                        __('Something went wrong while saving this review.')
+                    );
                 }
             }
 
