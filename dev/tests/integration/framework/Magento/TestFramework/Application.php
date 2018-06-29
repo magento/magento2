@@ -516,7 +516,7 @@ class Application
      */
     private function copyGlobalConfigFile()
     {
-        $targetFile = $this->_configDir . '/config.php';
+        $targetFile = $this->_configDir . '/config.local.php';
         copy($this->globalConfigFile, $targetFile);
     }
 
