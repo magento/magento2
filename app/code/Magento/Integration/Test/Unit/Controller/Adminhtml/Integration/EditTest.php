@@ -61,7 +61,9 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
     {
         $exceptionMessage = 'This integration no longer exists.';
         // verify the error
-        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())
+            ->method('addErrorMessage')
+            ->with($this->equalTo($exceptionMessage));
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
         // put data in session, the magic function getFormData is called so, must match __call method name
         $this->_backendSessionMock->expects(
