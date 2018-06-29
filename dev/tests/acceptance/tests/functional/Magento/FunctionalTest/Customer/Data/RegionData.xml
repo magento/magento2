@@ -17,4 +17,14 @@
         <data key="region_code">TX</data>
         <data key="region_id">1</data>
     </entity>
+    <entity name="RegionCA" type="region">
+        <data key="region">California</data>
+        <data key="region_code">CA</data>
+        <data key="region_id">2</data>
+    </entity>
+    <entity name="RegionNY" type="region">
+        <data key="region">New York</data>
+        <data key="region_code">NY</data>
+        <data key="region_id">3</data>
+    </entity>
 </entities>
