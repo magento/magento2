@@ -32,7 +32,10 @@ class CleanMedia extends \Magento\Backend\Controller\Adminhtml\Cache
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('An error occurred while clearing the JavaScript/CSS cache.'));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('An error occurred while clearing the JavaScript/CSS cache.')
+            );
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
