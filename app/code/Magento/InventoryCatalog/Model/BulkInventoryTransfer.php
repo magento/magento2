@@ -53,7 +53,7 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $skus, string $destinationSource, bool $defaultSourceOnly = false): void
+    public function execute(array $skus, string $destinationSource, bool $defaultSourceOnly = false): bool
     {
         $validationResult = $this->bulkInventoryTransferValidator->validate(
             $skus,
@@ -72,5 +72,6 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
         );
 
         $this->inventoryIndexer->executeFull();
+        return true;
     }
 }

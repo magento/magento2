@@ -16,11 +16,11 @@ interface BulkInventoryTransferInterface
 {
     /**
      * Run bulk inventory transfer
-     * @param array $skus
+     * @param string[] $skus
      * @param string $destinationSource
      * @param bool $defaultSourceOnly
-     * @return void
+     * @return bool
      * @throws \Magento\Framework\Validation\ValidationException
      */
-    public function execute(array $skus, string $destinationSource, bool $defaultSourceOnly = false): void;
+    public function execute(array $skus, string $destinationSource, bool $defaultSourceOnly = false): bool;
 }

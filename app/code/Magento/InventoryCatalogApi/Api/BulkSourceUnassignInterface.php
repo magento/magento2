@@ -16,8 +16,8 @@ interface BulkSourceUnassignInterface
 {
     /**
      * Run mass product to source un-assignment
-     * @param array $skus
-     * @param array $sourceCodes
+     * @param string[] $skus
+     * @param string[] $sourceCodes
      * @return int
      * @throws \Magento\Framework\Validation\ValidationException
      */
