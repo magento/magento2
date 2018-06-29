@@ -189,10 +189,8 @@
     <actionGroup name="EditProductDescription">
         <arguments>
             <argument name="short" defaultValue="sampleShortDescription"/>
-            <argument name="long" defaultValue="sampleLongDescription"/>
         </arguments>
         <click stepKey="clickContentDropdown" selector="{{AdminProductContentSection.sectionHeader}}"/>
-        <fillField stepKey="fillLongDescription" selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="{{short}}"/>
         <fillField stepKey="fillShortDescription" selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{long}}"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
