@@ -63,7 +63,7 @@
         <!--Category Selection-->
         <element name="categoriesDropDown" type="multiselect" selector="//div[@data-index='category_ids']//div" timeout="30"/>
         <element name="defaultCategory" type="multiselect" selector="//div[@data-index='category_ids']//span[contains(text(), 'Default Category')]"/>
-        <element name="category" type="multiselect" selector="//div[@data-index='category_ids']//span[contains(text(), '{{category}}')]" parameterized="true"/>
+        <element name="categoryByName" type="multiselect" selector="//div[@data-index='category_ids']//span[contains(text(), '{{category}}')]" parameterized="true"/>
         <element name="searchForCategory" type="input" selector="div.action-menu._active > div.admin__action-multiselect-search-wrap input" timeout="30"/>
         <element name="selectCategory" type="multiselect" selector="//div[@class='action-menu _active']//label[@class='admin__action-multiselect-label']"/>
         <element name="categoriesLabel" type="text" selector="//div[@class='action-menu _active']//button[@data-action='close-advanced-select']"/>

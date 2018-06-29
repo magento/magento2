@@ -85,13 +85,13 @@
         <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertCategoryNameInTitle"/>
         <see userInput="{{SimpleSubCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
         <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCount"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.firstProduct}}" stepKey="assertBundleProductPresence"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.listedProduct('1')}}" stepKey="assertBundleProductPresence"/>
 
         <!--Check in list view-->
-        <click selector="{{StorefrontCategoryMainSection.categoryListView}}" stepKey="switchToListView"/>
+        <click selector="{{StorefrontCategoryProductSection.categoryListView}}" stepKey="switchToListView"/>
         <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertCategoryNameInTitleAgain"/>
         <see userInput="{{SimpleSubCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNamAgain"/>
         <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCountAgain"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.firstProduct}}" stepKey="assertBundleProductPresenceAgain"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.listedProduct('1')}}" stepKey="assertBundleProductPresenceAgain"/>
     </test>
 </tests>
