@@ -18,6 +18,7 @@ require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespaceExtension.php';
 
 /**
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
