@@ -36,7 +36,7 @@
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
         "composer/composer": "^1.6",
         "elasticsearch/elasticsearch": "~2.0|~5.1",
-        "magento/composer": "dev-MC-2338",
+        "magento/composer": "~1.4.0",
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "~1.14.0",
         "monolog/monolog": "^1.17",
