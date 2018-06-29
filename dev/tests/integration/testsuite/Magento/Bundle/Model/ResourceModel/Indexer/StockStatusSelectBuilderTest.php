@@ -7,14 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Provide tests for StockStatusSelectBuilder indexer resource model.
+ *
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class StockStatusSelectBuilderTest extends TestCase
 {
@@ -24,9 +27,9 @@ class StockStatusSelectBuilderTest extends TestCase
     private $productCollectionFactory;
 
     /**
-     * @var Processor
+     * @var ProductRepositoryInterface
      */
-    private $processor;
+    private $productRepository;
 
     /**
      * @var Status
@@ -38,29 +41,40 @@ class StockStatusSelectBuilderTest extends TestCase
      */
     protected function setUp()
     {
-        $this->processor = Bootstrap::getObjectManager()->get(Processor::class);
         $this->productCollectionFactory = Bootstrap::getObjectManager()->create(CollectionFactory::class);
+        $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->stockStatus = Bootstrap::getObjectManager()->create(Status::class);
     }
 
     /**
-     * Check, bundle product without options will be returned in case "isFilterInStock" set to false.
+     * Test bundle product without options will be returned in case "isFilterInStock" set to false.
      *
      * @magentoDataFixture Magento/Bundle/_files/empty_bundle_product.php
      * @dataProvider buildSelectDataProvider
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      * @param bool $isFilterInStock
      * @param int $resultCount
      * @return void
      */
-    public function testBuildSelect(bool $isFilterInStock, int $resultCount): void
+    public function testCollectionResults(bool $isFilterInStock, int $resultCount)
     {
-        $this->processor->reindexAll();
         $productCollection = $this->productCollectionFactory->create();
         $this->stockStatus->addStockDataToCollection($productCollection, $isFilterInStock);
 
         $this->assertEquals($resultCount, $productCollection->getSize());
+    }
+
+    /**
+     * Test bundle product without options is present in cataloginventory_stock_status table.
+     *
+     * @magentoDataFixture Magento/Bundle/_files/empty_bundle_product.php
+     * @return void
+     */
+    public function testIndexTable()
+    {
+        $product = $this->productRepository->get('bundle-product');
+        $stockStatuses = $this->stockStatus->getProductsStockStatuses([$product->getId()], 0);
+
+        $this->assertEquals([$product->getId() => 0], $stockStatuses);
     }
 
     /**
