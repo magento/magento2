@@ -62,34 +62,28 @@ define([
          * @param {Object} form
          */
         submitForm: function (form) {
-            var addToCartButton, self = this;
-
-            if (form.has('input[type="file"]').length && form.find('input[type="file"]').val() !== '') {
-                self.element.off('submit');
-                // disable 'Add to Cart' button
-                addToCartButton = $(form).find(this.options.addToCartButtonSelector);
-                addToCartButton.prop('disabled', true);
-                addToCartButton.addClass(this.options.addToCartButtonDisabledClass);
-                form.submit();
-            } else {
-                self.ajaxSubmit(form);
-            }
+            this.ajaxSubmit(form);
         },
 
         /**
          * @param {String} form
          */
         ajaxSubmit: function (form) {
-            var self = this;
+            var self = this,
+                formData;
 
             $(self.options.minicartSelector).trigger('contentLoading');
             self.disableAddToCartButton(form);
+            formData = new FormData(form[0]);
 
             $.ajax({
                 url: form.attr('action'),
-                data: form.serialize(),
+                data: formData,
                 type: 'post',
                 dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
 
                 /** @inheritdoc */
                 beforeSend: function () {
@@ -125,7 +119,12 @@ define([
                             parameters.push(eventData.redirectParameters.join('&'));
                             res.backUrl = parameters.join('#');
                         }
-                        window.location = res.backUrl;
+                        window.location.href = res.backUrl;
+
+                        // page does not reload when anchor (#) is added
+                        if (res.backUrl.indexOf('#') !== -1) {
+                            window.location.reload();
+                        }
 
                         return;
                     }

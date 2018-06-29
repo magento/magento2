@@ -22,6 +22,7 @@ $_attributes = $block->decorateArray($block->getAllowAttributes());
             <div class="control">
                 <select name="super_attribute[<?= /* @escapeNotVerified */ $_attribute->getAttributeId() ?>]"
                         data-selector="super_attribute[<?= /* @escapeNotVerified */ $_attribute->getAttributeId() ?>]"
+                        data-attribute-code="<?= /* @escapeNotVerified */ $_attribute->getAttributeId() ?>"
                         data-validate="{required:true}"
                         id="attribute<?= /* @escapeNotVerified */ $_attribute->getAttributeId() ?>"
                         class="super-attribute-select">
@@ -38,6 +39,9 @@ $_attributes = $block->decorateArray($block->getAllowAttributes());
                     "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
                         'Magento_ConfigurableProduct') ?: 'replace'; ?>"
                 }
+            },
+            "*" : {
+                "Magento_ConfigurableProduct/js/catalog-add-to-cart": {}
             }
         }
     </script>
