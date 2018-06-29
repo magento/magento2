@@ -49,7 +49,7 @@ class MethodInvokedAtIndex implements \PHPUnit\Framework\MockObject\Matcher\Invo
     /**
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'invoked at sequence index ' . $this->sequenceIndex;
     }
@@ -58,7 +58,7 @@ class MethodInvokedAtIndex implements \PHPUnit\Framework\MockObject\Matcher\Invo
      * @param  \PHPUnit\Framework\MockObject\Invocation $invocation
      * @return boolean
      */
-    public function matches(BaseInvocation $invocation)
+    public function matches(BaseInvocation $invocation): bool
     {
         /** @noinspection PhpUndefinedFieldInspection */
         if (!isset($this->indexes[$invocation->getMethodName()])) {
@@ -76,6 +76,7 @@ class MethodInvokedAtIndex implements \PHPUnit\Framework\MockObject\Matcher\Invo
 
     /**
      * @param BaseInvocation $invocation
+     * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function invoked(BaseInvocation $invocation)
@@ -88,7 +89,7 @@ class MethodInvokedAtIndex implements \PHPUnit\Framework\MockObject\Matcher\Invo
      *
      * @throws ExpectationFailedException
      */
-    public function verify()
+    public function verify(): void
     {
         if ($this->currentIndex < $this->sequenceIndex) {
             throw new ExpectationFailedException(
