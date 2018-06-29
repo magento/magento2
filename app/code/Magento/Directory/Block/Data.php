@@ -166,7 +166,6 @@ class Data extends \Magento\Framework\View\Element\Template
         if ($defValue === null) {
             $defValue = $this->getRegionId();
         }
-
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
             $options = $this->getSerializer()->unserialize($cache);
