@@ -351,9 +351,7 @@ abstract class EntityAbstract
      *
      * @return null|ValueGenerator
      */
-    private function extractParameterDefaultValue(
-        \ReflectionParameter $parameter
-    ): ?ValueGenerator
+    private function extractParameterDefaultValue(\ReflectionParameter $parameter): ?ValueGenerator
     {
         /** @var ValueGenerator|null $value */
         $value = null;
