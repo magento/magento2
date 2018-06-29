@@ -669,8 +669,8 @@
                 <item name="billing_address" xsi:type="object">BillingAddressAggregator</item>
                 <item name="shipping_address" xsi:type="object">ShippingAddressAggregator</item>
                 <item name="shipping_information" xsi:type="string">sales_order.shipping_description</item>
-                <item name="subtotal" xsi:type="string">sales_order.base_subtotal</item>
-                <item name="shipping_and_handling" xsi:type="string">sales_order.base_shipping_amount</item>
+                <item name="subtotal" xsi:type="string">sales_invoice.base_subtotal</item>
+                <item name="shipping_and_handling" xsi:type="string">sales_invoice.base_shipping_amount</item>
                 <item name="base_grand_total" xsi:type="string">sales_invoice.base_grand_total</item>
                 <item name="grand_total" xsi:type="string">sales_invoice.grand_total</item>
                 <item name="created_at" xsi:type="string">sales_invoice.created_at</item>
