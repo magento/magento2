@@ -38,7 +38,7 @@
                     </argument>
                     <settings>
                         <dataScope>notify_stock_qty_use_default</dataScope>
-                        <label translate="true">Notify Quantity Use default</label>
+                        <label translate="true">Notify Quantity Use Default</label>
                         <links>
                             <link name="linkedValue">${$.provider}:${$.parentScope}.notify_stock_qty</link>
                         </links>
