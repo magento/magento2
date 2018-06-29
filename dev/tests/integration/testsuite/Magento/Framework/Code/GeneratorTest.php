@@ -44,6 +44,14 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     protected $logDirectory;
 
+    /**
+     * @var int
+     */
+    protected $oldPermissionGenerationDir;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -51,7 +59,6 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
         $this->generatedDirectory = $filesystem->getDirectoryWrite(DirectoryList::GENERATED_CODE);
         $this->logDirectory = $filesystem->getDirectoryRead(DirectoryList::LOG);
-        $this->generatedDirectory->create();
         $generatedDirectory = $this->generatedDirectory->getAbsolutePath();
         $this->_ioObject = new \Magento\Framework\Code\Generator\Io(
             new \Magento\Framework\Filesystem\Driver\File(),
@@ -72,6 +79,10 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->_generator->setObjectManager($objectManager);
+
+        if (file_exists($generatedDirectory)) {
+            $this->oldPermissionGenerationDir = fileperms($generatedDirectory);
+        }
     }
 
     protected function tearDown()
@@ -79,6 +90,14 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->generatedDirectory->changePermissionsRecursively('./', 0777, 0666);
         $this->generatedDirectory->delete();
         $this->_generator = null;
+
+        if ($this->oldPermissionGenerationDir) {
+            mkdir(
+                $this->generatedDirectory->getAbsolutePath(),
+                $this->oldPermissionGenerationDir,
+                true
+            );
+        }
     }
 
     protected function _clearDocBlock($classBody)
@@ -195,23 +214,20 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
 
     public function testGeneratorClassWithErrorSaveClassFile()
     {
-        $exceptionMessageRegExp = '/Error: an object of a generated class may be a dependency for another object, '
+        $msgPart = 'Error: an object of a generated class may be a dependency for another object, '
             . 'but this dependency has not been defined or set correctly in the signature of the related construct '
-            . 'method\. Due to the current error, executing the CLI commands `bin\/magento setup:di:compile` '
-            . 'or `bin\/magento deploy:mode:set production` does not create the required generated classes\. Magento '
-            . 'cannot write a class file to the "generated" directory that is read-only\. Before using the read-only '
-            . 'file system, the classes to be generated must be created beforehand in the "generated" directory\. '
-            . 'For details, see the "File systems access permissions" topic at http:\/\/devdocs\.magento\.com\.\n'
-            . 'The specified ".*" file couldn\'t be written.  in \[.*\]/';
+            . 'method';
 
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessageRegExp($exceptionMessageRegExp);
+        $this->expectExceptionMessageRegExp("/^$msgPart.*/");
         $this->generatedDirectory->changePermissionsRecursively('./', 0555, 0444);
         $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'ExtensionInterfaceFactory';
 
         $generatorResult = $this->_generator->generateClass($factoryClassName);
         $this->assertFalse($generatorResult);
-        $pathToSystemLog =  $this->logDirectory->getAbsolutePath('system.log');
-        $this->assertRegexp($exceptionMessageRegExp, file_get_contents($pathToSystemLog));
+
+        $pathToSystemLog = $this->logDirectory->getAbsolutePath('system.log');
+        $logs = array_slice(file($pathToSystemLog), -2);
+        $this->assertContains($msgPart, $logs[0]);
     }
 }
