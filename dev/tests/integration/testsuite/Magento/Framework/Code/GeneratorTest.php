@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Code;
 
-use Magento\Framework\Code\Generator;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
