@@ -118,7 +118,9 @@ class Save extends \Magento\Backend\App\Action
         $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
         $isPost = $this->getRequest()->isPost();
         if (!$formKeyIsValid || !$isPost) {
-            $this->messageManager->addErrorMessage(__("The invoice can't be saved at this time. Please try again later."));
+            $this->messageManager->addErrorMessage(
+                __("The invoice can't be saved at this time. Please try again later.")
+            );
             return $resultRedirect->setPath('sales/order/index');
         }
 
