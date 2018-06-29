@@ -147,8 +147,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
     public function testIndexActionWithAllowedSection()
     {
-        $this->_sectionCheckerMock->expects($this->any())->method('isSectionAllowed')->will($this->returnValue(true));
-        $this->messageManagerMock->expects($this->once())->method('addSuccessMessage')->with('You saved the configuration.');
+        $this->_sectionCheckerMock->expects($this->any())
+            ->method('isSectionAllowed')
+            ->will($this->returnValue(true));
+        $this->messageManagerMock->expects($this->once())
+            ->method('addSuccessMessage')
+            ->with('You saved the configuration.');
 
         $groups = ['some_key' => 'some_value'];
         $requestParamMap = [
