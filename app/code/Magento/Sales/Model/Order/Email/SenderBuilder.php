@@ -110,9 +110,8 @@ class SenderBuilder
         $this->transportBuilder->setTemplateIdentifier($this->templateContainer->getTemplateId());
         $this->transportBuilder->setTemplateOptions($this->templateContainer->getTemplateOptions());
         $this->transportBuilder->setTemplateVars($this->templateContainer->getTemplateVars());
-        $this->transportBuilderByStore->setFromByStore(
+        $this->transportBuilder->setFrom(
             $this->identityContainer->getEmailIdentity(),
-            $this->identityContainer->getStore()->getId()
-        );
+            $this->identityContainer->getStore()->getId());
     }
 }
