@@ -449,7 +449,7 @@ class Application
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::VAR_DIR][DirectoryList::PATH]);
 
         $this->copyAppConfigFiles();
-        //$this->copyGlobalConfigFile();
+        $this->copyGlobalConfigFile();
 
         $installParams = $this->getInstallCliParams();
 
@@ -514,11 +514,11 @@ class Application
      *
      * @return void
      */
-    /*private function copyGlobalConfigFile()
+    private function copyGlobalConfigFile()
     {
         $targetFile = $this->_configDir . '/config.php';
         copy($this->globalConfigFile, $targetFile);
-    }*/
+    }
 
     /**
      * Gets a list of CLI params for installation
