@@ -127,6 +127,7 @@ class Config
         'description' => null,
         'keywords' => null,
         'robots' => null,
+        'title' => null,
     ];
 
     /**
