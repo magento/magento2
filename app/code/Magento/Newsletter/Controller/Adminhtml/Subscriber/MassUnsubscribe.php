@@ -28,7 +28,10 @@ class MassUnsubscribe extends \Magento\Newsletter\Controller\Adminhtml\Subscribe
                     );
                     $subscriber->unsubscribe();
                 }
-                $this->messageManager->addSuccessMessage(__('A total of %1 record(s) were updated.', count($subscribersIds)));
+                $this->messageManager->addSuccessMessage(
+                    __('A total of %1 record(s) were updated.',
+                       count($subscribersIds))
+                );
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             }
