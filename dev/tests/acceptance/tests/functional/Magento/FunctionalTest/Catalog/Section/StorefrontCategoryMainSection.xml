@@ -24,5 +24,7 @@
         <element name="productLinkByHref" type="text" selector="a.product-item-link[href$='{{var1}}.html']" parameterized="true"/>
         <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
         <element name="categoryImage" type="text" selector=".category-image"/>
+        <element name="firstProduct" type="block" selector="ol li:first-of-type img"/>
+        <element name="categoryListView" type="button" selector="a[title='List']" timeout="30"/>
     </section>
 </sections>
