@@ -50,7 +50,10 @@ class Save extends TermController
                 $this->messageManager->addErrorMessage($e->getMessage());
                 return $this->proceedToEdit($data);
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the search query.'));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('Something went wrong while saving the search query.')
+                );
                 return $this->proceedToEdit($data);
             }
         }
