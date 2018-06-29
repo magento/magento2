@@ -110,11 +110,12 @@ abstract class EntityAbstract
         } catch (FileSystemException $e) {
             $message = 'Error: an object of a generated class may be a dependency for another object, but this '
                 . 'dependency has not been defined or set correctly in the signature of the related construct method. '
-                . 'Due to the current error, executing the CLI commands `bin/magento setup:di:compile` or `bin/magento '
-                . 'deploy:mode:set production` does not create the required generated classes. '
+                . 'Due to the current error, executing the CLI commands `bin/magento setup:di:compile` or `bin/magento'
+                . ' deploy:mode:set production` does not create the required generated classes. '
                 . 'Magento cannot write a class file to the "generated" directory that is read-only. Before using the '
-                . 'read-only file system, the classes to be generated must be created beforehand in the "generated" directory. '
-                . 'For details, see the "File systems access permissions" topic at http://devdocs.magento.com.';
+                . 'read-only file system, the classes to be generated must be created beforehand in the "generated" '
+                . 'directory. For details, see the "File systems access permissions" topic '
+                . 'at http://devdocs.magento.com.';
             $this->_addError($message);
             $this->_addError($e->getMessage());
         } catch (\Exception $e) {
@@ -261,9 +262,9 @@ abstract class EntityAbstract
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
         } elseif (/**
-             * If makeResultFileDirectory only fails because the file is already created,
-             * a competing process has generated the file, no exception should be thrown.
-             */
+         * If makeResultFileDirectory only fails because the file is already created,
+         * a competing process has generated the file, no exception should be thrown.
+         */
             !$this->_ioObject->makeResultFileDirectory($resultClassName)
             && !$this->_ioObject->fileExists($resultDir)
         ) {
@@ -322,7 +323,8 @@ abstract class EntityAbstract
      */
     private function extractParameterType(
         \ReflectionParameter $parameter
-    ): ?string {
+    ): ?string
+    {
         /** @var string|null $typeName */
         $typeName = null;
         if ($parameter->hasType()) {
@@ -339,7 +341,7 @@ abstract class EntityAbstract
             }
 
             if ($parameter->allowsNull()) {
-                $typeName = '?' .$typeName;
+                $typeName = '?' . $typeName;
             }
         }
 
@@ -353,7 +355,8 @@ abstract class EntityAbstract
      */
     private function extractParameterDefaultValue(
         \ReflectionParameter $parameter
-    ): ?ValueGenerator {
+    ): ?ValueGenerator
+    {
         /** @var ValueGenerator|null $value */
         $value = null;
         if ($parameter->isOptional() && $parameter->isDefaultValueAvailable()) {
