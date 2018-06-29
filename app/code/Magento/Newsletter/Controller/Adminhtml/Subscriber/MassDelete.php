@@ -28,7 +28,10 @@ class MassDelete extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
                     );
                     $subscriber->delete();
                 }
-                $this->messageManager->addSuccessMessage(__('Total of %1 record(s) were deleted.', count($subscribersIds)));
+                $this->messageManager->addSuccessMessage(
+                    __('Total of %1 record(s) were deleted.',
+                       count($subscribersIds))
+                );
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             }
