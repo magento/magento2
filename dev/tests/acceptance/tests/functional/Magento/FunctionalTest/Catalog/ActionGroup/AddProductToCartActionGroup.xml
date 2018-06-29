@@ -14,5 +14,6 @@
         <amOnPage url="/{{product.name}}.html" stepKey="navigateProductPage"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="seeAddedToCartMessage"/>
     </actionGroup>
 </actionGroups>

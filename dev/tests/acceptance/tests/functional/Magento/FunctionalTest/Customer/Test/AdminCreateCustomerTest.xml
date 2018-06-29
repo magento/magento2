@@ -10,15 +10,14 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreateCustomerTest">
         <annotations>
-            <features value="Customer Creation"/>
+            <features value="Customer"/>
             <stories value="Create a Customer via the Admin"/>
-            <title value="You should be able to create a customer in the Admin back-end."/>
-            <description value="You should be able to create a customer in the Admin back-end."/>
+            <title value="Admin should be able to create a customer"/>
+            <description value="Admin should be able to create a customer"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-72095"/>
             <group value="customer"/>
             <group value="create"/>
-            <group value="skip"/>
         </annotations>
         <after>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>

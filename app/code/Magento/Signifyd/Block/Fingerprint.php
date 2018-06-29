@@ -85,6 +85,8 @@ class Fingerprint extends Template
      */
     public function isModuleActive()
     {
-        return $this->config->isActive();
+        $storeId = $this->quoteSession->getQuote()->getStoreId();
+
+        return $this->config->isActive($storeId);
     }
 }
