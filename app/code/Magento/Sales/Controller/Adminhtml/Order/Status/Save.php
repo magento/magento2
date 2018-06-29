@@ -40,7 +40,9 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
             $status = $this->_objectManager->create(\Magento\Sales\Model\Order\Status::class)->load($statusCode);
             // check if status exist
             if ($isNew && $status->getStatus()) {
-                $this->messageManager->addErrorMessage(__('We found another order status with the same order status code.'));
+                $this->messageManager->addErrorMessage(
+                    __('We found another order status with the same order status code.')
+                );
                 $this->_getSession()->setFormData($data);
                 return $resultRedirect->setPath('sales/*/new');
             }
