@@ -16,7 +16,7 @@
             <description value="Guest customer should be able to search configurable product by attributes of child products"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-249"/>
-            <group value="Levi"/>
+            <group value="ConfigurableProduct"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
