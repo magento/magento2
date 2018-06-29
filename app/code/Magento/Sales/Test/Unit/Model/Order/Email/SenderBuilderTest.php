@@ -77,7 +77,6 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
                 'setTemplateOptions',
                 'setTemplateVars',
                 'setFrom',
-                'setFromByStore',
             ]
         );
 
@@ -106,9 +105,6 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
         $this->transportBuilder->expects($this->once())
             ->method('setFrom')
             ->with($this->equalTo($emailIdentity));
-        $this->transportBuilder->expects($this->once())
-            ->method('setFromByStore')
-            ->with($this->equalTo($emailIdentity));
 
         $this->identityContainerMock->expects($this->once())
             ->method('getEmailCopyTo')
@@ -125,6 +121,8 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $customerName = 'test_name';
         $customerEmail = 'test_email';
+        $identity = 'email_identity_test';
+
         $transportMock = $this->createMock(
             \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class
         );
@@ -148,6 +146,9 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(1);
         $this->transportBuilder->expects($this->once())
+            ->method('setFrom')
+            ->with($identity, 1);
+        $this->transportBuilder->expects($this->once())
             ->method('addTo')
             ->with($this->equalTo($customerEmail), $this->equalTo($customerName));
 
@@ -160,6 +161,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
 
     public function testSendCopyTo()
     {
+        $identity = 'email_identity_test';
         $transportMock = $this->createMock(
             \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class
         );
@@ -173,6 +175,9 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
         $this->transportBuilder->expects($this->once())
             ->method('addTo')
             ->with($this->equalTo('example@mail.com'));
+        $this->transportBuilder->expects($this->once())
+            ->method('setFrom')
+            ->with($identity, 1);
         $this->identityContainerMock->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);

@@ -156,24 +156,6 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
     public function testSetFrom()
     {
         $sender = ['email' => 'from@example.com', 'name' => 'name'];
-        $this->senderResolverMock->expects($this->once())
-            ->method('resolve')
-            ->with($sender)
-            ->willReturn($sender);
-        $this->messageMock->expects($this->once())
-            ->method('setFrom')
-            ->with('from@example.com', 'name')
-            ->willReturnSelf();
-
-        $this->builder->setFrom($sender);
-    }
-
-    /**
-     * @return void
-     */
-    public function testSetFromByStore()
-    {
-        $sender = ['email' => 'from@example.com', 'name' => 'name'];
         $store = 1;
         $this->senderResolverMock->expects($this->once())
             ->method('resolve')
@@ -184,7 +166,7 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
             ->with('from@example.com', 'name')
             ->willReturnSelf();
 
-        $this->builder->setFromByStore($sender, $store);
+        $this->builder->setFrom($sender, $store);
     }
 
     /**
