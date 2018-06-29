@@ -37,6 +37,16 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Category" stepKey="seeCategoryPageTitle"/>
     </actionGroup>
 
+    <!-- Go to admin category page by id -->
+    <actionGroup name="goToAdminCategoryPageById">
+        <arguments>
+            <argument name="id" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminCategoryEditPage.url(id)}}" stepKey="amOnAdminCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="{{id}}" stepKey="seeCategoryPageTitle"/>
+    </actionGroup>
+
     <!-- Fill category fields -->
     <actionGroup name="fillCategoryForm">
         <arguments>
@@ -201,7 +211,6 @@
         <seeInCurrentUrl url="{{AdminCategoryPage.url}}add" stepKey="seeBackOnCreateCategoryPage"/>
         <see selector="{{AdminCategoryBasicFieldSection.FieldError('uid')}}" userInput="This is a required field." stepKey="seeErrorMessage"/>
     </actionGroup>
-
 
     <actionGroup name="switchCategoryStoreView">
         <arguments>

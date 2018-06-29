@@ -9,6 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AncillaryPrepBundleProduct">
+        <!--Prereq: go to bundle product creation page-->
         <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillProductSku"/>
 
@@ -18,11 +19,6 @@
 
         <!--Fill URL input-->
         <fillField userInput="{{BundleProduct.urlKey}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="FillsinSEOlinkExtension"/>
-    </actionGroup>
-
-    <!--Enable/Disable Product Toggle-->
-    <actionGroup name="EnableDisableProduct">
-       <click stepKey="ClickOnEnableDisableToggle" selector="{{AdminProductFormBundleSection.enableDisableToggle}}"/>
     </actionGroup>
 
     <!--Edit existing product by searching in product catalog-->
