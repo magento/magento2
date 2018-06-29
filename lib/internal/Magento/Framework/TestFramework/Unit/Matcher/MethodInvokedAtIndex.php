@@ -76,6 +76,7 @@ class MethodInvokedAtIndex implements \PHPUnit\Framework\MockObject\Matcher\Invo
 
     /**
      * @param BaseInvocation $invocation
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function invoked(BaseInvocation $invocation)
     {
