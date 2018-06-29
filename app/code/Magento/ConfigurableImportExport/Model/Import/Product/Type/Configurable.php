@@ -41,10 +41,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     const ERROR_UNIDENTIFIABLE_VARIATION = 'unidentifiableVariation';
 
+    // @codingStandardsIgnoreStart
     /**
      * Validation failure message template definitions
      *
      * @var array
+     *
+     * Note: Many of these messages exceed maximum limit of 120 characters. Ignore from coding standards.
      */
     protected $_messageTemplates = [
         self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST => 'Column configurable_variations: Attribute with code "%s" does not exist or is missing from product attribute set',
@@ -56,6 +59,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
         self::ERROR_UNIDENTIFIABLE_VARIATION => 'Configurable variation "%s" is unidentifiable',
     ];
+    // @codingStandardsIgnoreEnd
 
     /**
      * Column names that holds values with particular meaning.
@@ -300,8 +304,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $superAttrCode = $rowData['_super_attribute_code'];
             if (!$this->_isAttributeSuper($superAttrCode)) {
                 // Identify reason why attribute is not super:
-                if (!$this->_identifySuperAttributeError($superAttrCode, $rowNum))
-                {
+                if (!$this->_identifySuperAttributeError($superAttrCode, $rowNum)) {
                     $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER, $rowNum, $superAttrCode);
                 }
                 return false;
@@ -334,17 +337,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         // Does this attribute code exist? Does is have the correct settings?
         $commonAttributes = self::$commonAttributesCache;
         foreach ($commonAttributes as $attributeRow) {
-
-            if ($attributeRow['code'] == $superAttrCode)
-            {
+            if ($attributeRow['code'] == $superAttrCode) {
                 $codeExists = true;
 
-                if ($attributeRow['is_global'] !== '1')
-                {
+                if ($attributeRow['is_global'] !== '1') {
                     $codeNotGlobal = true;
                 }
-                elseif ($attributeRow['type'] !== 'select')
-                {
+                elseif ($attributeRow['type'] !== 'select') {
                     $codeNotTypeSelect = true;
                 }
 
@@ -352,18 +351,15 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
         }
 
-        if ($codeExists == false)
-        {
+        if ($codeExists == false) {
             $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST, $rowNum, $superAttrCode);
             $reasonFound = true;
         }
-        elseif ($codeNotGlobal == true)
-        {
+        elseif ($codeNotGlobal == true) {
             $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE, $rowNum, $superAttrCode);
             $reasonFound = true;
         }
-        elseif ($codeNotTypeSelect == true)
-        {
+        elseif ($codeNotTypeSelect == true) {
             $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT, $rowNum, $superAttrCode);
             $reasonFound = true;
         }
