@@ -65,7 +65,7 @@
 
         <!--Save the product-->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
-        <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Testing enabled view-->
         <!--Product enabled by default-->
@@ -76,9 +76,9 @@
 
         <!--Testing disabled view-->
         <actionGroup ref="FindProductToEdit" stepKey="FindProductEditPage"/>
-        <actionGroup ref="EnableDisableProduct" stepKey="EnableProduct"/>
+        <click stepKey="ClickOnEnableDisableToggle" selector="{{AdminProductFormBundleSection.enableDisableToggle}}"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButtonAgain"/>
-        <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown2"/>
         <waitForPageLoad stepKey="PauseForSave"/>
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
         <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
