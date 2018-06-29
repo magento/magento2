@@ -113,7 +113,7 @@ class Generator
             $this->tryToLoadSourceClass($className, $generator);
             if (!($file = $generator->generate())) {
                 /** @var $logger LoggerInterface */
-                $logger = $this->objectManager->get(LoggerInterface::class);
+                $logger = $this->getObjectManager()->get(LoggerInterface::class);
                 $errors = $generator->getErrors();
                 $message = implode(PHP_EOL, $errors) . ' in [' . $className . ']';
                 $logger->critical($message);

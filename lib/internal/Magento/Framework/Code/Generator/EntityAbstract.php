@@ -109,11 +109,11 @@ abstract class EntityAbstract
             }
         } catch (FileSystemException $e) {
             $message = 'Error: an object of a generated class may be a dependency for another object, but this '
-                . 'dependency has not been defined or set correctly in the signature of the related construct method.'
+                . 'dependency has not been defined or set correctly in the signature of the related construct method. '
                 . 'Due to the current error, executing the CLI commands `bin/magento setup:di:compile` or `bin/magento '
-                . 'deploy:mode:set production` does not create the required generated classes.'
+                . 'deploy:mode:set production` does not create the required generated classes. '
                 . 'Magento cannot write a class file to the "generated" directory that is read-only. Before using the '
-                . 'read-only file system, the classes to be generated must be created beforehand in the "generated" directory.'
+                . 'read-only file system, the classes to be generated must be created beforehand in the "generated" directory. '
                 . 'For details, see the "File systems access permissions" topic at http://devdocs.magento.com.';
             $this->_addError($message);
             $this->_addError($e->getMessage());

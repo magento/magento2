@@ -196,10 +196,10 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $exceptionMessageRegExp = '/Error: an object of a generated class may be a dependency for another object, '
             . 'but this dependency has not been defined or set correctly in the signature of the related construct '
-            . 'method\.\nDue to the current error, executing the CLI commands `bin\/magento setup:di:compile` '
-            . 'or `bin\/magento deploy:mode:set production` does not create the required generated classes\.\nMagento '
-            . 'cannot write a class file to the "generated" directory that is read\-only\. Before using the read-only '
-            . 'file system, the classes to be generated must be created beforehand in the "generated" directory\.\n'
+            . 'method\. Due to the current error, executing the CLI commands `bin\/magento setup:di:compile` '
+            . 'or `bin\/magento deploy:mode:set production` does not create the required generated classes\. Magento '
+            . 'cannot write a class file to the "generated" directory that is read-only\. Before using the read-only '
+            . 'file system, the classes to be generated must be created beforehand in the "generated" directory\. '
             . 'For details, see the "File systems access permissions" topic at http:\/\/devdocs\.magento\.com\.\n'
             . 'The specified ".*" file couldn\'t be written.  in \[.*\]/';
 

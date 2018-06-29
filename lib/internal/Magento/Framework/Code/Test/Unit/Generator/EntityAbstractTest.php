@@ -215,14 +215,16 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function testGenerateFailure() {
+    public function testGenerateFailure()
+    {
+        $infoMessage = 'Error: an object of a generated class may be a dependency for another object, but this '
+            . 'dependency has not been defined or set correctly in the signature of the related construct method. '
+            . 'Due to the current error, executing the CLI commands `bin/magento setup:di:compile` or `bin/magento '
+            . 'deploy:mode:set production` does not create the required generated classes. '
+            . 'Magento cannot write a class file to the "generated" directory that is read-only. Before using the '
+            . 'read-only file system, the classes to be generated must be created beforehand in the "generated" directory. '
+            . 'For details, see the "File systems access permissions" topic at http://devdocs.magento.com.';
 
-        $infoMessage = <<<'EOT'
-Error: an object of a generated class may be a dependency for another object, but this dependency has not been defined or set correctly in the signature of the related construct method.
-Due to the current error, executing the CLI commands `bin/magento setup:di:compile` or `bin/magento deploy:mode:set production` does not create the required generated classes.
-Magento cannot write a class file to the "generated" directory that is read-only. Before using the read-only file system, the classes to be generated must be created beforehand in the "generated" directory.
-For details, see the "File systems access permissions" topic at http://devdocs.magento.com.
-EOT;
         $exceptionMessage = 'Some description';
 
         $abstractGetters = ['_getClassProperties', '_getClassMethods'];
@@ -254,6 +256,7 @@ EOT;
         $this->assertFalse($result);
         $this->assertEquals([$infoMessage, $exceptionMessage], $this->_model->getErrors());
     }
+
     /**
      * Prepares mocks for validation verification
      *
