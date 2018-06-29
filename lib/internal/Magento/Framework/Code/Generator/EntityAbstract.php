@@ -321,9 +321,7 @@ abstract class EntityAbstract
      *
      * @return null|string
      */
-    private function extractParameterType(
-        \ReflectionParameter $parameter
-    ): ?string
+    private function extractParameterType(\ReflectionParameter $parameter): ?string
     {
         /** @var string|null $typeName */
         $typeName = null;
