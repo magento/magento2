@@ -53,6 +53,11 @@ class Config implements ConfigInterface
                 sprintf('Config element "%s" is not declared in GraphQL schema', $configElementName)
             );
         }
+
+        if (!empty($data['fields']) && is_array($data['fields'])) {
+            ksort($data['fields']);
+        }
+
         return $this->configElementFactory->createFromConfigData($data);
     }
 
