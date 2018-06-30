@@ -1,0 +1,19 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    cmsPage (
+        id: Int @doc(description: "Id of the CMS page")
+    ): CmsPage @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\CmsPage") @doc(description: "The CMS page query returns information about a CMS page")
+}
+
+type CmsPage @doc(description: "CMS page defines all CMS page information") {
+    url_key: String @doc(description: "URL key of CMS page")
+    page_title: String @doc(description: "CMS page title")
+    page_content: String @doc(description: "CMS page content")
+    content_heading: String @doc(description: "CMS page content heading")
+    layout: String @doc(description: "CMS page content heading")
+    mate_title: String @doc(description: "CMS page meta title")
+    mate_description: String @doc(description: "CMS page meta description")
+    mate_keywords: String @doc(description: "CMS page meta keywords")
+}

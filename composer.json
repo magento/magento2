@@ -158,6 +158,7 @@
         "magento/module-url-rewrite-graph-ql": "*",
         "magento/module-cms-url-rewrite-graph-ql": "*",
         "magento/module-weee-graph-ql": "*",
+        "magento/module-cms-graph-ql": "*",
         "magento/module-grouped-import-export": "*",
         "magento/module-grouped-product": "*",
         "magento/module-grouped-product-graph-ql": "*",
