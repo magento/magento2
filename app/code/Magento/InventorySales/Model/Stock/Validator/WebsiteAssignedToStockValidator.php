@@ -13,8 +13,7 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Model\StockValidatorInterface;
 use Magento\InventorySales\Model\ResourceModel\StockIdResolver;
 use Magento\InventorySales\Model\SalesChannel;
-use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\InventorySalesApi\Model\GetAssignedSalesChannelsForStockInterface;
 
 class WebsiteAssignedToStockValidator implements StockValidatorInterface
 {
@@ -24,9 +23,9 @@ class WebsiteAssignedToStockValidator implements StockValidatorInterface
     private $validationResultFactory;
 
     /**
-     * @var WebsiteRepositoryInterface
+     * @var GetAssignedSalesChannelsForStockInterface
      */
-    private $websiteRepository;
+    private $getAssignedSalesChannelsForStock;
 
     /**
      * @var StockIdResolver
@@ -35,17 +34,17 @@ class WebsiteAssignedToStockValidator implements StockValidatorInterface
 
     /**
      * @param ValidationResultFactory $validationResultFactory
-     * @param WebsiteRepositoryInterface $websiteRepository
+     * @param GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock
      * @param StockIdResolver $stockIdResolver
      */
     public function __construct(
         ValidationResultFactory $validationResultFactory,
-        WebsiteRepositoryInterface $websiteRepository,
+        GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock,
         StockIdResolver $stockIdResolver
     ) {
         $this->validationResultFactory = $validationResultFactory;
+        $this->getAssignedSalesChannelsForStock = $getAssignedSalesChannelsForStock;
         $this->stockIdResolver = $stockIdResolver;
-        $this->websiteRepository = $websiteRepository;
     }
 
     /**
@@ -53,27 +52,42 @@ class WebsiteAssignedToStockValidator implements StockValidatorInterface
      */
     public function validate(StockInterface $stock): ValidationResult
     {
-        $extensionAttributes = $stock->getExtensionAttributes();
-        $salesChannels = $extensionAttributes->getSalesChannels() ?: [];
+        $errors = [];
+        $unAssignedWebsiteCodes = $this->getUnassignedWebsiteCodesForStock($stock);
 
-        $assignedWebsites = $errors = [];
-        foreach ($salesChannels as $salesChannel) {
-            if ($salesChannel->getType() === SalesChannel::TYPE_WEBSITE) {
-                $assignedWebsites[] = $salesChannel->getCode();
-            }
-        }
-
-        foreach ($this->websiteRepository->getList() as $website) {
-            if ($website->getCode() === WebsiteInterface::ADMIN_CODE
-            || in_array($website->getCode(), $assignedWebsites)) {
-                continue;
-            }
-
-            if (null === $this->stockIdResolver->resolve(SalesChannel::TYPE_WEBSITE, $website->getCode())) {
-                $errors[] = __('Website "%field" should be linked to stock.', ['field' => $website->getName()]);
+        foreach ($unAssignedWebsiteCodes as $websiteCode) {
+            if (null === $this->stockIdResolver->resolve(SalesChannel::TYPE_WEBSITE, $websiteCode)) {
+                $errors[] = __('Website "%field" should be linked to stock.', ['field' => $websiteCode]);
             }
         }
 
         return $this->validationResultFactory->create(['errors' => $errors]);
+    }
+
+    /**
+     * @param StockInterface $stock
+     * @return array
+     */
+    private function getUnassignedWebsiteCodesForStock(StockInterface $stock): array
+    {
+        $assignedWebsiteCodes = $newWebsiteCodes = [];
+        $assignedSalesChannels = $this->getAssignedSalesChannelsForStock->execute((int)$stock->getStockId());
+
+        foreach ($assignedSalesChannels as $salesChannel) {
+            if ($salesChannel->getType() === SalesChannel::TYPE_WEBSITE) {
+                $assignedWebsiteCodes[] = $salesChannel->getCode();
+            }
+        }
+
+        $extensionAttributes = $stock->getExtensionAttributes();
+        $newSalesChannels = $extensionAttributes->getSalesChannels() ?: [];
+
+        foreach ($newSalesChannels as $salesChannel) {
+            if ($salesChannel->getType() === SalesChannel::TYPE_WEBSITE) {
+                $newWebsiteCodes[] = $salesChannel->getCode();
+            }
+        }
+
+        return array_diff($assignedWebsiteCodes, $newWebsiteCodes);
     }
 }
