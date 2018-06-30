@@ -22,7 +22,7 @@ interface WishlistRepositoryInterface
      * @return \Magento\Wishlist\Api\Data\WishlistInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getById($id): \Magento\Wishlist\Api\Data\WishlistInterface;
+    public function get($id): \Magento\Wishlist\Api\Data\WishlistInterface;
 
     /**
      * Get list of wishlists by criteria
@@ -40,15 +40,7 @@ interface WishlistRepositoryInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Wishlist\Api\Data\WishlistInterface $wishlist): WishlistInterface;
-
-    /**
-     * Delete wishlist by passing object
-     *
-     * @param \Magento\Wishlist\Api\Data\WishlistInterface $wishlist
-     * @return bool
-     */
-    public function delete(\Magento\Wishlist\Api\Data\WishlistInterface $wishlist);
-
+    
     /**
      * Delete wishlist by id
      *

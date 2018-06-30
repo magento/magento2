@@ -16,7 +16,7 @@ interface ItemRepositoryInterface
      * @return \Magento\Wishlist\Api\Data\ItemInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getById($id): \Magento\Wishlist\Api\Data\ItemInterface;
+    public function get($id): \Magento\Wishlist\Api\Data\ItemInterface;
 
     /**
      * Get list of wishlist items by criteria
@@ -35,15 +35,6 @@ interface ItemRepositoryInterface
      * @throws \Magento\Framework\Exception\StateException
      */
     public function save(\Magento\Wishlist\Api\Data\ItemInterface $item): ItemInterface;
-
-    /**
-     * Delete wishlist item by passing object
-     *
-     * @param \Magento\Wishlist\Api\Data\ItemInterface $item
-     * @throws \Magento\Framework\Exception\StateException
-     * @return bool
-     */
-    public function delete(\Magento\Wishlist\Api\Data\ItemInterface $item);
 
     /**
      * Delete item by id
