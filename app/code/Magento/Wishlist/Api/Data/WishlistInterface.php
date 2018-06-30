@@ -12,6 +12,8 @@ interface WishlistInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      */
     const WISHLIST_ID = 'wishlist_id';
 
+    const DEFAULT_WISHLIST_NAME = 'wishlist';
+
     const NAME = 'name';
 
     const SHARING_CODE = 'sharing_code';
@@ -19,8 +21,6 @@ interface WishlistInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     const CUSTOMER_ID = 'customer_id';
 
     const SHARED = 'shared';
-
-    const UPDATED_AT = 'updated_at';
 
     /**#@-*/
 
@@ -30,6 +30,13 @@ interface WishlistInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return int|null
      */
     public function getId();
+
+    /**
+     * Set wishlist id
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id);
 
     /**
      * Get wishlist name
@@ -81,21 +88,6 @@ interface WishlistInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return $this
      */
     public function setCustomerId($customerId);
-
-    /**
-     * Get wishlist last updated time
-     *
-     * @return string|null
-     */
-    public function getUpdatedAt();
-
-    /**
-     * Set wishlist last updated time
-     *
-     * @param string $datetime
-     * @return $this
-     */
-    public function setUpdatedAt($datetime);
 
     /**
      * Retrieve existing extension attributes object or create a new one.
