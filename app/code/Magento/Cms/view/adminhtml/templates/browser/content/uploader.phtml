@@ -147,8 +147,8 @@ require([
             maxFileSize: <?= (int) $block->getFileSizeService()->getMaxFileSize() ?> * 10
         }, {
             action: 'resize',
-            maxWidth: <?= $block->getUploadImageMaxWidth()  ?> ,
-            maxHeight: <?= $block->getUploadImageMaxHeight()  ?>
+            maxWidth: <?= (int)$block->getUploadImageMaxWidth()  ?> ,
+            maxHeight: <?= (int)$block->getUploadImageMaxHeight()  ?>
         }, {
             action: 'save'
         }]

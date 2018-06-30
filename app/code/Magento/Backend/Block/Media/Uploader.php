@@ -9,7 +9,6 @@ namespace Magento\Backend\Block\Media;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
-
 use Magento\Framework\Image\Adapter\ConfigInterface;
 
 /**
@@ -61,8 +60,8 @@ class Uploader extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
 
         $this->_fileSizeService = $fileSize;
+        $this->imageConfig = $imageConfig?: ObjectManager::getInstance()->get(ConfigInterface::class);
         $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
-        $this->imageConfig = $imageConfig;
     }
 
     /**
