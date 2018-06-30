@@ -30,7 +30,7 @@ interface ItemRepositoryInterface
      * Save wishlist item object
      *
      * @param Data\ItemInterface $item
-     * @return \Magento\Wishlist\Api\Data\ItemInterface
+     * @return int
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\StateException
      */

@@ -102,7 +102,7 @@ class WishlistRepository implements WishlistRepositoryInterface
         } catch (\Exception $e) {
             throw new StateException(__('Cannot save wishlist'));
         }
-        return $wishlist;
+        return $wishlist->getId();
 
     }
 

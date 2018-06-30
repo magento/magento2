@@ -36,11 +36,11 @@ interface WishlistRepositoryInterface
      * Save wishlist object
      *
      * @param Data\WishlistInterface $wishlist
-     * @return \Magento\Wishlist\Api\Data\WishlistInterface
+     * @return int
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Wishlist\Api\Data\WishlistInterface $wishlist): WishlistInterface;
-    
+
     /**
      * Delete wishlist by id
      *

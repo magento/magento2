@@ -106,7 +106,7 @@ class ItemRepository implements ItemRepositoryInterface
         }
 
 
-        return $item;
+        return $item->getId();
     }
 
     /**
