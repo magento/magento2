@@ -77,7 +77,6 @@ class CmsPageDataProvider
     private function processCmsPage(CmsPageInterface $cmsPageModel) : array
     {
         $cmsPageData = [
-            'id' => $cmsPageModel->getId(),
             'url_key' => $cmsPageModel->getIdentifier(),
             'page_title' => $cmsPageModel->getTitle(),
             'page_content' => $cmsPageModel->getContent(),
