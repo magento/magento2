@@ -8,8 +8,18 @@ type EntityUrl @doc(description: "EntityUrl is an output object containing the `
 }
 
 type Query {
-    urlResolver(url: String!): EntityUrl @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite") @doc(description: "The urlResolver query returns the canonical URL for a specified product, category or CMS page")
+    urlResolver(url: String!): EntityUrl @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\EntityUrl") @doc(description: "The urlResolver query returns the canonical URL for a specified product, category or CMS page")
 }
 
 enum UrlRewriteEntityTypeEnum {
+}
+
+type UrlRewrite @doc(description: "The object contains URL rewrite details") {
+    url: String @doc(description: "Request URL")
+    parameters: [HttpQueryParameter] @doc(description: "Request parameters")
+}
+
+type HttpQueryParameter @doc(description: "The object details of target path parameters") {
+    name: String @doc(description: "Parameter name")
+    value: String @doc(description: "Parameter value")
 }

@@ -15,6 +15,7 @@
             <module name="Magento_GraphQl"/>
             <module name="Magento_StoreGraphQl"/>
             <module name="Magento_EavGraphQl"/>
+            <module name="Magento_UrlRewriteGraphQl"/>
         </sequence>
     </module>
 </config>
