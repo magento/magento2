@@ -79,6 +79,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($encodedUrl, $helper->getEncodedUrl($url));
     }
 
+    /**
+     * @return array
+     */
     public function getEncodedUrlDataProvider()
     {
         return [
@@ -98,6 +101,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $helper->addRequestParam('http://example.com', $param));
     }
 
+    /**
+     * @return array
+     */
     public function addRequestParamDataProvider()
     {
         return [
@@ -145,6 +151,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $helper->removeRequestParam($url, $paramKey));
     }
 
+    /**
+     * @return array
+     */
     public function removeRequestParamDataProvider()
     {
         return [

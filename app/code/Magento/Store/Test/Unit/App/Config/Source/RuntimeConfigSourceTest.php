@@ -202,6 +202,10 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->getExpectedResult($path), $this->configSource->get($path));
     }
 
+    /**
+     * @param $path
+     * @return array
+     */
     private function getExpectedResult($path)
     {
         switch ($this->getScope($path)) {
@@ -221,6 +225,9 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
         return $result;
     }
 
+    /**
+     * @param $path
+     */
     private function prepareStores($path)
     {
         $scope = $this->getScope($path);
@@ -254,6 +261,9 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @param $path
+     */
     private function prepareGroups($path)
     {
         $scope = $this->getScope($path);
@@ -287,6 +297,9 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @param $path
+     */
     private function prepareWebsites($path)
     {
         $scope = $this->getScope($path);
@@ -320,11 +333,19 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @param $path
+     * @return string
+     */
     private function getScopeCode($path)
     {
         return implode('/', array_slice(explode('/', $path), 1, 1));
     }
 
+    /**
+     * @param $path
+     * @return string
+     */
     private function getScope($path)
     {
         return implode('/', array_slice(explode('/', $path), 0, 1));

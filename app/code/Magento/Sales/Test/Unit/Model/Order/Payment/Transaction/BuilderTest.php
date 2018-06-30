@@ -194,7 +194,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-
     /**
      * @param int $orderId
      * @param int $paymentId
@@ -287,6 +286,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($isPaymentTransactionClosed);
     }
 
+    /**
+     * @return array
+     */
     public function createDataProvider()
     {
         return [

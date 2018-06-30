@@ -160,6 +160,9 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
         static::assertEquals($createdAt, $paymentToken->getCreatedAt());
     }
 
+    /**
+     * @return array
+     */
     public function testPositiveCaseDataProvider()
     {
         return [

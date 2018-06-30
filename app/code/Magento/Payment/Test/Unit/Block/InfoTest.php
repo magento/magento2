@@ -83,6 +83,9 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expectedResult);
     }
 
+    /**
+     * @return array
+     */
     public function getIsSecureModeDataProvider()
     {
         return [

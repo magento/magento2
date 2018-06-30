@@ -121,6 +121,9 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($cachedData, $this->translate->getData());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderLoadDataCachedTranslation()
     {
         $cachedData = ['cached 1' => 'translated 1', 'cached 2' => 'translated 2'];
@@ -216,6 +219,9 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->translate->getData());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestLoadData()
     {
         return [
@@ -243,6 +249,9 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->translate->getData());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestGetData()
     {
         $data = ['original 1' => 'translated 1', 'original 2' => 'translated 2'];

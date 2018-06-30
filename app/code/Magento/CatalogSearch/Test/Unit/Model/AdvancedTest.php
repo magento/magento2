@@ -15,30 +15,37 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
      */
     protected $collection;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced
      */
     protected $resource;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\ResourceProvider
      */
     protected $resourceProvider;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject[]|\Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
      */
     protected $attributes;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Collection
      */
     protected $dataCollection;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Directory\Model\Currency
      */
     private $currency;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
      */
@@ -104,6 +111,9 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->store);
     }
 
+    /**
+     * @return array
+     */
     public function addFiltersDataProvider()
     {
         return array_merge(
@@ -277,6 +287,10 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         return $backend;
     }
 
+    /**
+     * @param string $optionText
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function createSource($optionText = 'optionText')
     {
         $source = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Source\AbstractSource')
@@ -289,6 +303,9 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         return $source;
     }
 
+    /**
+     * @return array
+     */
     private function addFiltersPriceDataProvider()
     {
         return [
@@ -369,7 +386,6 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
-
 
     /**
      * @param $backend

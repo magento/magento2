@@ -253,6 +253,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($blockHtml, $this->helper->getInfoBlockHtml($infoMock, $storeId));
     }
 
+    /**
+     * @return array
+     */
     public function getSortMethodsDataProvider()
     {
         return [

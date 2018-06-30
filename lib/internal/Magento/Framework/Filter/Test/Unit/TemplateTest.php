@@ -138,6 +138,9 @@ EXPECTED_RESULT;
         $this->assertEquals($expectedResult, $this->templateFilter->filter($construction));
     }
 
+    /**
+     * @return array
+     */
     public function varDirectiveDataProvider()
     {
         /* @var $stub \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */

@@ -366,6 +366,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function renderPageExtendedDataProvider()
     {
         return [
@@ -466,6 +469,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->object->getPageUrl($pageId));
     }
 
+    /**
+     * @return array
+     */
     public function getPageUrlDataProvider()
     {
         return [

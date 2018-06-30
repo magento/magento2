@@ -89,6 +89,9 @@ class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($count > 0, $this->callAroundIsApplicable($proceed, $paymentMethod, $quote));
     }
 
+    /**
+     * @return array
+     */
     public function aroundIsApplicableDataProvider()
     {
         return [[0], [1], [2]];

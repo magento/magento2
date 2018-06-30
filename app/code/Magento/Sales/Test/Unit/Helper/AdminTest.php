@@ -193,6 +193,9 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function displayPricesDataProvider()
     {
         return [
@@ -305,6 +308,9 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         $this->adminHelper->applySalableProductTypesFilter($collectionMock);
     }
 
+    /**
+     * @return array
+     */
     public function applySalableProductTypesFilterDataProvider()
     {
         return [

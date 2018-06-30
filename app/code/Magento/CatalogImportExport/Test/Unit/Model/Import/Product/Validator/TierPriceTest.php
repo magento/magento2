@@ -56,6 +56,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param $groupId
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Validator\TierPrice
+     */
     protected function processInit($groupId)
     {
         $searchResult = $this->getMock('Magento\Customer\Api\Data\GroupSearchResultsInterface', [], [], '', false);

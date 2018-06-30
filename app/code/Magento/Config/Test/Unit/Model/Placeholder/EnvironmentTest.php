@@ -52,6 +52,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getGenerateDataProvider()
     {
         return [

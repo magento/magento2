@@ -751,6 +751,9 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $this->invokeMethod($this->advancedPricing, 'saveProductPrices', [$priceData, 'table']);
     }
 
+    /**
+     * @return array
+     */
     public function saveProductPricesDataProvider()
     {
         return [
@@ -822,6 +825,9 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         );
     }
 
+    /**
+     * @return array
+     */
     public function deleteProductTierPricesDataProvider()
     {
         return [
@@ -904,6 +910,9 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $this->invokeMethod($this->advancedPricing, 'processCountExistingPrices', [$prices, 'table']);
     }
 
+    /**
+     * @return array
+     */
     public function processCountExistingPricesDataProvider()
     {
         return [

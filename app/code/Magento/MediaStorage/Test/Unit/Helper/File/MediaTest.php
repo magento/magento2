@@ -87,6 +87,9 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->helper->collectFileInfo($mediaDirectory, $path));
     }
 
+    /**
+     * @return array
+     */
     public function pathDataProvider()
     {
         return [

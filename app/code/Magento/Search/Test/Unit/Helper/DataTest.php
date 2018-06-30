@@ -116,6 +116,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getEscapedQueryText());
     }
 
+    /**
+     * @return array
+     */
     public function queryTextDataProvider()
     {
         return [

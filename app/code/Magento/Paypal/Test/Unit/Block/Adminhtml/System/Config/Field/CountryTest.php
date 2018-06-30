@@ -114,6 +114,9 @@ class CountryTest extends \PHPUnit_Framework_TestCase
         $this->_model->render($this->_element);
     }
 
+    /**
+     * @return array
+     */
     public function renderDataProvider()
     {
         return [

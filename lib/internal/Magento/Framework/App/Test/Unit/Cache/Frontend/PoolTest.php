@@ -105,6 +105,9 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         $model->current();
     }
 
+    /**
+     * @return array
+     */
     public function initializationParamsDataProvider()
     {
         return [
