@@ -58,7 +58,7 @@ class WishlistRepository implements WishlistRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getById($id): WishlistInterface
+    public function get($id): WishlistInterface
     {
         $wishlist = $this->wishlistFactory->create();
         $this->wishlistResource->load($wishlist, $id);
@@ -109,23 +109,15 @@ class WishlistRepository implements WishlistRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function delete(WishlistInterface $wishlist)
+    public function deleteById($id)
     {
+        $wishlist = $this->get($id);
         try {
             $this->wishlistResource->delete($wishlist);
         } catch (\Exception $e) {
             throw new StateException(__('Cannot delete wishlist.'));
         }
         return true;
-    }
 
-    /**
-     * @inheritdoc
-     */
-    public function deleteById($id)
-    {
-        $wishlist = $this->get($id);
-        $this->delete($wishlist);
-        return true;
     }
 }

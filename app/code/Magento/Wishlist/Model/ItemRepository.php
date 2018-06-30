@@ -57,7 +57,7 @@ class ItemRepository implements ItemRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getById($id): \Magento\Wishlist\Api\Data\ItemInterface
+    public function get($id): \Magento\Wishlist\Api\Data\ItemInterface
     {
         $item = $this->itemFactory->create();
         $this->itemResource->load($item, $id);
@@ -112,22 +112,14 @@ class ItemRepository implements ItemRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function delete(\Magento\Wishlist\Api\Data\ItemInterface $item) {
+    public function deleteById($id) {
+        $item = $this->get($id);
+
         try {
             $this->itemResource->delete($item);
         } catch (\Exception $e) {
             throw new StateException(__('Cannot delete wishlist item'));
         }
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteById($id) {
-        $item = $this->getById($id);
-        $this->delete($item);
 
         return true;
     }
