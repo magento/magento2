@@ -7,33 +7,21 @@
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory;
-use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * Wishlist item model
- *
- * @method int getWishlistId()
- * @method \Magento\Wishlist\Model\Item setWishlistId(int $value)
- * @method int getProductId()
- * @method \Magento\Wishlist\Model\Item setProductId(int $value)
- * @method int getStoreId()
- * @method \Magento\Wishlist\Model\Item setStoreId(int $value)
- * @method string getAddedAt()
- * @method \Magento\Wishlist\Model\Item setAddedAt(string $value)
- * @method string getDescription()
- * @method \Magento\Wishlist\Model\Item setDescription(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
  * @since 100.0.2
  */
-class Item extends AbstractModel implements ItemInterface
+class Item extends AbstractModel implements \Magento\Wishlist\Api\Data\ItemInterface, \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
 {
     /**
      * Custom path to download attached file
@@ -181,16 +169,118 @@ class Item extends AbstractModel implements ItemInterface
     }
 
     /**
-     * Set quantity. If quantity is less than 0 - set it to 1
-     *
-     * @param int $qty
-     * @return $this
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->getData(self::WISHLIST_ITEM_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setId($id)
+    {
+        return $this->setData(self::WISHLIST_ITEM_ID);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getQty()
+    {
+        return $this->getData(self::QTY);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function setQty($qty)
     {
-        $this->setData('qty', $qty >= 0 ? $qty : 1);
-        return $this;
+        return $this->setData(self::QTY, $qty >= 0 ? $qty : 1);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getWishlistId()
+    {
+        return $this->getData(self::WISHLIST_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWishlistId($id)
+    {
+        return $this->setData(self::WISHLIST_ITEM_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductId()
+    {
+        return $this->getData(self::PRODUCT_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductId($id)
+    {
+        return $this->setData(self::PRODUCT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStoreId()
+    {
+        return $this->getData(self::STORE_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreId($id)
+    {
+        return $this->setData(self::STORE_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAddedAt()
+    {
+        return $this->getData(self::ADDED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAddedAt($datetime)
+    {
+        return $this->setData(self::ADDED_AT, $datetime);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription()
+    {
+        return $this->getData(self::DESCRIPTION);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDescription($description)
+    {
+        return $this->setData(self::DESCRIPTION, $description);
+    }
+
 
     /**
      * Check if two options array are identical
@@ -291,16 +381,6 @@ class Item extends AbstractModel implements ItemInterface
         return $this->_flagOptionsSaved;
     }
 
-    /**
-     * Save item options after item saved
-     *
-     * @return $this
-     */
-    public function afterSave()
-    {
-        $this->saveItemOptions();
-        return parent::afterSave();
-    }
 
     /**
      * Validate wish list item data
@@ -344,6 +424,18 @@ class Item extends AbstractModel implements ItemInterface
 
         return $this;
     }
+
+    /**
+     * Save item options after item saved
+     *
+     * @return $this
+     */
+    public function afterSave()
+    {
+        $this->saveItemOptions();
+        return parent::afterSave();
+    }
+
 
     /**
      * Load item by product, wishlist and shared stores
@@ -398,7 +490,7 @@ class Item extends AbstractModel implements ItemInterface
      * Return false for disabled or unvisible products
      *
      * @param \Magento\Checkout\Model\Cart $cart
-     * @param bool $delete  delete the item after successful add to cart
+     * @param bool $delete delete the item after successful add to cart
      * @return bool
      * @throws \Magento\Catalog\Model\Product\Exception
      */
@@ -663,8 +755,8 @@ class Item extends AbstractModel implements ItemInterface
             $option->setItem($this);
         } elseif ($option instanceof \Magento\Framework\DataObject) {
             $option = $this->_wishlistOptFactory->create()->setData($option->getData())
-               ->setProduct($option->getProduct())
-               ->setItem($this);
+                ->setProduct($option->getProduct())
+                ->setItem($this);
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid item option format.'));
         }

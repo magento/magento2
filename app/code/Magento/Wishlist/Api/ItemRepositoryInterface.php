@@ -1,0 +1,58 @@
+<?php
+
+namespace Magento\Wishlist\Api;
+
+use Magento\Wishlist\Api\Data\ItemInterface;
+
+/**
+ * Interface ItemRepositoryInterface
+ * @package Magento\Wishlist\Api
+ */
+interface ItemRepositoryInterface
+{
+    /**
+     * Get wishlist item by id
+     * @param int $id
+     * @return \Magento\Wishlist\Api\Data\ItemInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getById($id): \Magento\Wishlist\Api\Data\ItemInterface;
+
+    /**
+     * Get list of wishlist items by criteria
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\Wishlist\Api\Data\ItemSearchResultsInterface
+     */
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+
+    /**
+     * Save wishlist item object
+     *
+     * @param Data\ItemInterface $item
+     * @return \Magento\Wishlist\Api\Data\ItemInterface
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function save(\Magento\Wishlist\Api\Data\ItemInterface $item): ItemInterface;
+
+    /**
+     * Delete wishlist item by passing object
+     *
+     * @param \Magento\Wishlist\Api\Data\ItemInterface $item
+     * @throws \Magento\Framework\Exception\StateException
+     * @return bool
+     */
+    public function delete(\Magento\Wishlist\Api\Data\ItemInterface $item);
+
+    /**
+     * Delete item by id
+     *
+     * @param int $id
+     * @return bool
+     * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function deleteById($id);
+
+}
