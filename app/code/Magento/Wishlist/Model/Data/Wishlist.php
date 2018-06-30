@@ -31,7 +31,7 @@ class Wishlist extends \Magento\Framework\Api\AbstractExtensibleObject implement
     {
         $name = $this->_get(self::NAME);
         if (!strlen($name)) {
-            return __(self::DEFAULT_WISHLIST_NAME);
+            return self::DEFAULT_WISHLIST_NAME;
         }
         return $name;
     }
@@ -52,14 +52,14 @@ class Wishlist extends \Magento\Framework\Api\AbstractExtensibleObject implement
      */
     public function getCustomerId()
     {
-        return $this->getData(self::CUSTOMER_ID);
+        return $this->_get(self::CUSTOMER_ID);
     }
     /**
      * @inheritdoc
      */
     public function getShared()
     {
-        return $this->getData(self::SHARED);
+        return $this->_get(self::SHARED);
     }
 
     /**
@@ -75,7 +75,7 @@ class Wishlist extends \Magento\Framework\Api\AbstractExtensibleObject implement
      */
     public function getSharingCode()
     {
-        return $this->getData(self::SHARING_CODE);
+        return $this->_get(self::SHARING_CODE);
     }
 
     /**
