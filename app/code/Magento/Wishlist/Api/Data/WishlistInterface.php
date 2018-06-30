@@ -39,6 +39,12 @@ interface WishlistInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function setId($id);
 
     /**
+     * Get wishlist items
+     * @return \Magento\Wishlist\Api\Data\ItemInterface[]
+     */
+    public function getItems();
+
+    /**
      * Get wishlist name
      *
      * @return string|null

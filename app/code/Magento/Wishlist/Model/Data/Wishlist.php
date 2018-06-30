@@ -2,10 +2,45 @@
 
 namespace Magento\Wishlist\Model\Data;
 
+use Magento\Wishlist\Api\Data\ItemInterface;
 use Magento\Wishlist\Api\Data\WishlistInterface;
+use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory;
+use Magento\Wishlist\Model\WishlistFactory;
 
 class Wishlist extends \Magento\Framework\Api\AbstractExtensibleObject implements WishlistInterface
 {
+    /**
+     * @var WishlistFactory
+     */
+    private $wishlistFactory;
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+    /**
+     * @var ItemInterface[];
+     */
+    private $items;
+
+    /**
+     * Wishlist constructor.
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory
+     * @param array $data
+     * @param WishlistFactory $wishlistFactory
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(
+        ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory,
+        array $data = [],
+        WishlistFactory $wishlistFactory,
+        CollectionFactory $collectionFactory
+    ) {
+        parent::__construct($extensionFactory, $attributeValueFactory, $data);
+        $this->wishlistFactory = $wishlistFactory;
+        $this->collectionFactory = $collectionFactory;
+    }
 
     /**
      * @inheritdoc
@@ -23,6 +58,29 @@ class Wishlist extends \Magento\Framework\Api\AbstractExtensibleObject implement
         return $this->setData(self::WISHLIST_ID, $id);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getItems()
+    {
+        if ($this->items === null) {
+
+            /*
+             * We create wishlist because addWishlistFilter() expects legacy wishlist model just to call getId() on it.
+             */
+            $wishlist = $this->wishlistFactory->create()->setId($this->getId());
+
+            $this->items = $this->collectionFactory->create()->addWishlistFilter(
+                $wishlist
+            )->addStoreFilter(
+                $this->wishlistFactory->create()->getSharedStoreIds()
+            )->setVisibilityFilter()->toArray();
+        }
+
+        return $this->items;
+
+    }
+
 
     /**
      * @inheritdoc
@@ -35,6 +93,7 @@ class Wishlist extends \Magento\Framework\Api\AbstractExtensibleObject implement
         }
         return $name;
     }
+
     /**
      * Set customer id
      *
@@ -54,6 +113,7 @@ class Wishlist extends \Magento\Framework\Api\AbstractExtensibleObject implement
     {
         return $this->_get(self::CUSTOMER_ID);
     }
+
     /**
      * @inheritdoc
      */
