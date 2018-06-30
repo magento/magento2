@@ -66,7 +66,7 @@ class WishlistRepository implements WishlistRepositoryInterface
             throw new NoSuchEntityException(__('Wishlist with id "%1" does not exist.', $id));
         }
 
-        return $wishlist;
+        return $wishlist->getDataModel();
     }
 
     /**
@@ -81,8 +81,13 @@ class WishlistRepository implements WishlistRepositoryInterface
 
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
-        $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
+
+        foreach ($collection as $wishlistModel) {
+            $customers[] = $wishlistModel->getDataModel();
+        }
+        $searchResult->setItems($customers);
+
 
         return $searchResult;
     }
