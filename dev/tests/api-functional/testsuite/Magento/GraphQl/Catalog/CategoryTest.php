@@ -63,9 +63,6 @@ class CategoryTest extends GraphQlAbstract
           children {
             level
             id
-            children {
-              id
-            }
           }
         }
       }
