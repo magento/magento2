@@ -7,6 +7,8 @@ namespace Magento\Framework\Code\Generator;
 
 use Magento\Framework\Exception\FileSystemException;
 use Zend\Code\Generator\ValueGenerator;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\ObjectManagerInterface;
 
 abstract class EntityAbstract
 {
@@ -42,7 +44,7 @@ abstract class EntityAbstract
     /**
      * Class generator object
      *
-     * @var \Magento\Framework\Code\Generator\CodeGeneratorInterface
+     * @var CodeGeneratorInterface
      */
     protected $_classGenerator;
 
@@ -55,20 +57,20 @@ abstract class EntityAbstract
      * @param null|string $sourceClassName
      * @param null|string $resultClassName
      * @param Io $ioObject
-     * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
+     * @param CodeGeneratorInterface $classGenerator
      * @param DefinedClasses $definedClasses
      */
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
-        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
+        CodeGeneratorInterface $classGenerator = null,
         DefinedClasses $definedClasses = null
     ) {
         if ($ioObject) {
             $this->_ioObject = $ioObject;
         } else {
-            $this->_ioObject = new Io(new \Magento\Framework\Filesystem\Driver\File());
+            $this->_ioObject = new Io(new File());
         }
         if ($classGenerator) {
             $this->_classGenerator = $classGenerator;
@@ -201,7 +203,7 @@ abstract class EntityAbstract
             'visibility' => 'protected',
             'docblock' => [
                 'shortDescription' => 'Object Manager instance',
-                'tags' => [['name' => 'var', 'description' => '\\' . \Magento\Framework\ObjectManagerInterface::class]],
+                'tags' => [['name' => 'var', 'description' => '\\' . ObjectManagerInterface::class]],
             ],
         ];
 
