@@ -26,7 +26,7 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
  * @api
  * @since 100.0.2
  */
-class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implements IdentityInterface, WishlistInterface
+class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implements IdentityInterface
 {
     /**
      * Cache tag
@@ -181,6 +181,21 @@ class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implemen
         $this->productRepository = $productRepository;
     }
 
+    public function getDataModel(): WishlistInterface
+    {
+        $wishlistData = $this->getData();
+        /** @var WishlistInterface $wishlistDataObject */
+        $wishlistDataObject = $this->wishlistDataFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $wishlistDataObject,
+            $wishlistData,
+            \Magento\Wishlist\Api\Data\WishlistInterface::class
+        );
+        $wishlistDataObject->setId($this->getId());
+        return $wishlistDataObject;
+
+    }
+
     /**
      * Load wishlist by customer id
      *
@@ -205,26 +220,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implemen
         return $this;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getId()
-    {
-        return $this->_getData(self::WISHLIST_ID);
-    }
-
-
-    /**
-     * @inheritdoc
-     */
-    public function getName()
-    {
-        $name = $this->_getData(self::NAME);
-        if (!strlen($name)) {
-            return $this->_wishlistData->getDefaultWishlistName();
-        }
-        return $name;
-    }
 
     /**
      * Set random sharing code
@@ -483,25 +478,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implemen
         return $item;
     }
 
-    /**
-     * Set customer id
-     *
-     * @param int $customerId
-     * @return $this
-     */
-    public function setCustomerId($customerId)
-    {
-        return $this->setData(self::CUSTOMER_ID, $customerId);
-    }
 
-
-    /**
-     * @inheritdoc
-     */
-    public function getCustomerId()
-    {
-        return $this->getData(self::CUSTOMER_ID);
-    }
 
     /**
      * Retrieve data for save
@@ -710,66 +687,5 @@ class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implemen
         return $identities;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getShared()
-    {
-        return $this->getData(self::SHARED);
-    }
 
-    /**
-     * @inheritdoc
-     */
-    public function setShared(int $amount)
-    {
-        return $this->setData(self::SHARED, $amount);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSharingCode()
-    {
-        return $this->getData(self::SHARING_CODE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setSharingCode(string $code)
-    {
-        return $this->setData(self::SHARING_CODE, $code);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getUpdatedAt()
-    {
-        return $this->getData(self::UPDATED_AT);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setUpdatedAt($datetime) {
-        return $this->setData(self::UPDATED_AT, $datetime);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setExtensionAttributes(\Magento\Wishlist\Api\Data\WishlistExtensionInterface $extensionAttributes)
-    {
-        return $this->_setExtensionAttributes($extensionAttributes);
-    }
 }
