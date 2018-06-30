@@ -20,32 +20,16 @@ use Magento\Framework\Webapi\ServiceOutputProcessor;
 class CmsPageDataProvider
 {
     /**
-     * @var ServiceOutputProcessor
-     */
-    private $serviceOutputProcessor;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $jsonSerializer;
-
-    /**
      * @var CmsPageRepositoryInterface
      */
     private $cmsPageRepository;
 
     /**
      * @param CmsPageRepositoryInterface $cmsPageRepository
-     * @param ServiceOutputProcessor $serviceOutputProcessor
-     * @param SerializerInterface $jsonSerializer
      */
     public function __construct(
-        CmsPageRepositoryInterface $cmsPageRepository,
-        ServiceOutputProcessor $serviceOutputProcessor,
-        SerializerInterface $jsonSerializer
+        CmsPageRepositoryInterface $cmsPageRepository
     ) {
-        $this->serviceOutputProcessor = $serviceOutputProcessor;
-        $this->jsonSerializer = $jsonSerializer;
         $this->cmsPageRepository = $cmsPageRepository;
     }
 
@@ -92,54 +76,6 @@ class CmsPageDataProvider
             'mate_keywords' => $cmsPageModel->getMetaKeywords(),
         ];
 
-        if (isset($cmsPageData['extension_attributes'])) {
-            $cmsPageData = array_merge($cmsPageData, $cmsPageData['extension_attributes']);
-        }
-
-        if (isset($cmsPageData['custom_attributes'])) {
-            $cmsPageData = array_merge($cmsPageData, $this->processCustomAttributes($cmsPageData['custom_attributes']));
-        }
-
         return $cmsPageData;
     }
-
-    /**
-     * @param array $customAttributes
-     *
-     * @return array
-     */
-    private function processCustomAttributes(array $customAttributes) : array
-    {
-        $processedCustomAttributes = [];
-
-        foreach ($customAttributes as $customAttribute) {
-            $isArray = false;
-            $customAttributeCode = $customAttribute['attribute_code'];
-            $customAttributeValue = $customAttribute['attribute_code'];
-
-            if (is_array($customAttributeValue)) {
-                $isArray = true;
-
-                foreach ($customAttributeValue as $attributeValue) {
-                    if (is_array($attributeValue)) {
-                        $processedCustomAttributes[$customAttributeCode] = $this->jsonSerializer->serialize(
-                            $customAttributeValue
-                        );
-                        continue;
-                    }
-                    $processedCustomAttributes[$customAttributeCode] = implode(',', $customAttributeValue);
-                    continue;
-                }
-            }
-
-            if ($isArray) {
-                continue;
-            }
-
-            $processedCustomAttributes[$customAttributeCode] = $customAttributeValue;
-        }
-
-        return $processedCustomAttributes;
-    }
-
 }
