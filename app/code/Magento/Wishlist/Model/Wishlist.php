@@ -7,6 +7,7 @@
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -26,7 +27,7 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
  * @api
  * @since 100.0.2
  */
-class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implements IdentityInterface
+class Wishlist extends AbstractModel implements IdentityInterface
 {
     /**
      * Cache tag
@@ -124,6 +125,14 @@ class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      * @var Json
      */
     private $serializer;
+    /**
+     * @var Data\WishlistFactory
+     */
+    private $wishlistFactory;
+    /**
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
 
     /**
      * Constructor
@@ -145,6 +154,8 @@ class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      * @param bool $useCurrentWebsite
      * @param array $data
      * @param Json|null $serializer
+     * @param Data\WishlistFactory $wishlistFactory
+     * @param DataObjectHelper $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -164,7 +175,9 @@ class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implemen
         ProductRepositoryInterface $productRepository,
         $useCurrentWebsite = true,
         array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+    \Magento\Wishlist\Model\Data\WishlistFactory $wishlistFactory,
+    DataObjectHelper $dataObjectHelper
     ) {
         $this->_useCurrentWebsite = $useCurrentWebsite;
         $this->_catalogProduct = $catalogProduct;
@@ -179,13 +192,15 @@ class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implemen
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
+        $this->wishlistFactory = $wishlistFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     public function getDataModel(): WishlistInterface
     {
         $wishlistData = $this->getData();
         /** @var WishlistInterface $wishlistDataObject */
-        $wishlistDataObject = $this->wishlistDataFactory->create();
+        $wishlistDataObject = $this->wishlistFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $wishlistDataObject,
             $wishlistData,
