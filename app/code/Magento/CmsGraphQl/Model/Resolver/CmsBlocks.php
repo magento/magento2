@@ -11,6 +11,7 @@ use Magento\CmsGraphQl\Model\Resolver\Cms\CmsBlockDataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -63,7 +64,7 @@ class CmsBlocks implements ResolverInterface
                     $cmsBlockIdentifier
                 );
             } catch (NoSuchEntityException $ex) {
-                $cmsBlockListData[$cmsBlockIdentifier] = new GraphQlInputException(
+                $cmsBlockListData[$cmsBlockIdentifier] = new GraphQlNoSuchEntityException(
                     __(
                         'CMS block with "%1" ID does not found',
                         $cmsBlockIdentifier
