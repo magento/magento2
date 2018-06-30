@@ -5,7 +5,7 @@
  */
 namespace Magento\Wishlist\Api\Data;
 
-interface WishlistInterface
+interface WishlistInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants defined for keys of  data array
@@ -96,5 +96,21 @@ interface WishlistInterface
      * @return $this
      */
     public function setUpdatedAt($datetime);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Wishlist\Api\Data\WishlistExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Wishlist\Api\Data\WishlistExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Wishlist\Api\Data\WishlistExtensionInterface $extensionAttributes);
+
 
 }

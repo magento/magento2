@@ -26,7 +26,7 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
  * @api
  * @since 100.0.2
  */
-class Wishlist extends AbstractModel implements IdentityInterface, WishlistInterface
+class Wishlist extends \Magento\Framework\Model\AbstractExtensibleModel implements IdentityInterface, WishlistInterface
 {
     /**
      * Cache tag
@@ -755,5 +755,21 @@ class Wishlist extends AbstractModel implements IdentityInterface, WishlistInter
      */
     public function setUpdatedAt($datetime) {
         return $this->setData(self::UPDATED_AT, $datetime);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(\Magento\Wishlist\Api\Data\WishlistExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
