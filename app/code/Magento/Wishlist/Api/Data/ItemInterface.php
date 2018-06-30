@@ -2,7 +2,9 @@
 
 namespace Magento\Wishlist\Api\Data;
 
-interface ItemInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface ItemInterface extends ExtensibleDataInterface
 {
     /**#@+
      * Constants defined for keys of the data array. Identical to the name of the getter in snake case
@@ -107,6 +109,22 @@ interface ItemInterface
      * @return $this
      */
     public function setQty($qty);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Wishlist\Api\Data\ItemExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Wishlist\Api\Data\ItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Wishlist\Api\Data\ItemExtensionInterface $extensionAttributes);
+
 
 
 }
