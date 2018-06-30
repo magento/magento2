@@ -1,0 +1,18 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    cmsBlocks (
+        identifiers: [String] @doc(description: "Identifiers of the CMS blocks")
+    ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\CmsBlocks") @doc(description: "The CMS block query returns information about CMS blocks")
+}
+
+type CmsBlocks @doc(description: "CMS blocks information") {
+    items: [CmsBlock] @doc(description: "An array of CMS blocks")
+}
+
+type CmsBlock @doc(description: "CMS block defines all CMS block information") {
+    identifier: String @doc(description: "CMS block identifier")
+    title: String @doc(description: "CMS block title")
+    content: String @doc(description: "CMS block content")
+}
