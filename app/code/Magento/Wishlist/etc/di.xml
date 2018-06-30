@@ -12,6 +12,7 @@
     <preference for="Magento\Wishlist\Api\WishlistManagementInterface" type="Magento\Wishlist\Model\WishlistManagement" />
     <preference for="Magento\Wishlist\Api\Data\WishlistInterface" type="Magento\Wishlist\Model\Wishlist" />
     <preference for="Magento\Wishlist\Api\Data\WishlistSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Wishlist\Api\Data\WishlistExtensionInterface" type="Magento\Wishlist\Model\WishlistExtension" />
 
 
     <type name="Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid">
