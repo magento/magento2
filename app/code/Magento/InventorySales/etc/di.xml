@@ -156,6 +156,7 @@
         <arguments>
             <argument name="validators" xsi:type="array">
                 <item name="sales_channels" xsi:type="object">Magento\InventorySales\Model\Stock\Validator\SalesChannelsValidator</item>
+                <item name="website_assigned_to_stock" xsi:type="object">Magento\InventorySales\Model\Stock\Validator\WebsiteAssignedToStockValidator</item>
             </argument>
         </arguments>
     </type>
