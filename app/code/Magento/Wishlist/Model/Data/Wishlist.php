@@ -2,6 +2,7 @@
 
 namespace Magento\Wishlist\Model\Data;
 
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Wishlist\Api\Data\ItemInterface;
 use Magento\Wishlist\Api\Data\WishlistInterface;
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory;
