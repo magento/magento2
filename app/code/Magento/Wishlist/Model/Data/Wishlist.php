@@ -32,7 +32,7 @@ class Wishlist extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory,
         array $data = [],
         WishlistFactory $wishlistFactory,
