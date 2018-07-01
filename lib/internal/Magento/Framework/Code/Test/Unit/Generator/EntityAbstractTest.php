@@ -153,17 +153,17 @@ class EntityAbstractTest extends TestCase
      * @param bool $willWriteCode
      *
      * @dataProvider generateDataProvider
-     * @covers EntityAbstract::generate
-     * @covers EntityAbstract::getErrors
-     * @covers EntityAbstract::getSourceClassName
-     * @covers EntityAbstract::_getResultClassName
-     * @covers EntityAbstract::_getDefaultResultClassName
-     * @covers EntityAbstract::_generateCode
-     * @covers EntityAbstract::_addError
-     * @covers EntityAbstract::_validateData
-     * @covers EntityAbstract::_getClassDocBlock
-     * @covers EntityAbstract::_getGeneratedCode
-     * @covers EntityAbstract::_fixCodeStyle
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::generate
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::getErrors
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::getSourceClassName
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getResultClassName
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getDefaultResultClassName
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_generateCode
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_addError
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_validateData
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getClassDocBlock
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getGeneratedCode
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_fixCodeStyle
      */
     public function testGenerate(
         $errors = [],

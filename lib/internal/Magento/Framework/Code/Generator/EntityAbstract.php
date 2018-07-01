@@ -323,7 +323,7 @@ abstract class EntityAbstract
      *
      * @return null|string
      */
-    private function extractParameterType(\ReflectionParameter $parameter): ?string
+    private function extractParameterType(\ReflectionParameter $parameter)
     {
         /** @var string|null $typeName */
         $typeName = null;
@@ -353,7 +353,7 @@ abstract class EntityAbstract
      *
      * @return null|ValueGenerator
      */
-    private function extractParameterDefaultValue(\ReflectionParameter $parameter): ?ValueGenerator
+    private function extractParameterDefaultValue(\ReflectionParameter $parameter)
     {
         /** @var ValueGenerator|null $value */
         $value = null;
