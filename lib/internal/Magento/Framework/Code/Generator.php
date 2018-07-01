@@ -7,7 +7,11 @@ namespace Magento\Framework\Code;
 
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\EntityAbstract;
+use Magento\Framework\Code\Generator\Io;
+use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Filesystem\Driver\File;
 
 class Generator
 {
@@ -18,7 +22,7 @@ class Generator
     const GENERATION_SKIP = 'skip';
 
     /**
-     * @var \Magento\Framework\Code\Generator\Io
+     * @var Io
      */
     protected $_ioObject;
 
@@ -33,24 +37,21 @@ class Generator
     protected $definedClasses;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @param Generator\Io   $ioObject
-     * @param array          $generatedEntities
+     * @param Generator\Io $ioObject
+     * @param array $generatedEntities
      * @param DefinedClasses $definedClasses
      */
     public function __construct(
-        \Magento\Framework\Code\Generator\Io $ioObject = null,
+        Io $ioObject = null,
         array $generatedEntities = [],
         DefinedClasses $definedClasses = null
     ) {
-        $this->_ioObject = $ioObject
-            ?: new \Magento\Framework\Code\Generator\Io(
-                new \Magento\Framework\Filesystem\Driver\File()
-            );
+        $this->_ioObject = $ioObject ?: new Io(new File());
         $this->definedClasses = $definedClasses ?: new DefinedClasses();
         $this->_generatedEntities = $generatedEntities;
     }
@@ -132,7 +133,7 @@ class Generator
      * @param string $generatorClass
      * @param string $entityName
      * @param string $className
-     * @return \Magento\Framework\Code\Generator\EntityAbstract
+     * @return EntityAbstract
      */
     protected function createGeneratorInstance($generatorClass, $entityName, $className)
     {
@@ -145,10 +146,10 @@ class Generator
     /**
      * Set object manager instance.
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @return $this
      */
-    public function setObjectManager(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function setObjectManager(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
         return $this;
@@ -157,11 +158,11 @@ class Generator
     /**
      * Get object manager instance.
      *
-     * @return \Magento\Framework\ObjectManagerInterface
+     * @return ObjectManagerInterface
      */
     public function getObjectManager()
     {
-        if (!($this->objectManager instanceof \Magento\Framework\ObjectManagerInterface)) {
+        if (!($this->objectManager instanceof ObjectManagerInterface)) {
             throw new \LogicException(
                 "Object manager was expected to be set using setObjectManger() "
                 . "before getObjectManager() invocation."
@@ -174,7 +175,7 @@ class Generator
      * Try to load/generate source class to check if it is valid or not.
      *
      * @param string $className
-     * @param \Magento\Framework\Code\Generator\EntityAbstract $generator
+     * @param EntityAbstract $generator
      * @return void
      * @throws \RuntimeException
      */
@@ -183,7 +184,7 @@ class Generator
         $sourceClassName = $generator->getSourceClassName();
         if (!$this->definedClasses->isClassLoadable($sourceClassName)) {
             if ($this->generateClass($sourceClassName) !== self::GENERATION_SUCCESS) {
-                $phrase = new \Magento\Framework\Phrase(
+                $phrase = new Phrase(
                     'Source class "%1" for "%2" generation does not exist.',
                     [$sourceClassName, $className]
                 );

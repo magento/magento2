@@ -49,7 +49,7 @@ class GeneratorTest extends TestCase
     protected $ioObjectMock;
 
     /**
-     * @var DefinedClasses | Mock
+     * @var DefinedClasses|Mock
      */
     protected $definedClassesMock;
 
@@ -81,6 +81,8 @@ class GeneratorTest extends TestCase
     }
 
     /**
+     * @param string $className
+     * @param string $entityType
      * @expectedException \RuntimeException
      * @dataProvider generateValidClassDataProvider
      */
@@ -134,7 +136,9 @@ class GeneratorTest extends TestCase
         ];
         $expectedEntities = array_values($this->expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
+        /** @var ObjectManagerInterface|Mock $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        /** @var EntityAbstract|Mock $entityGeneratorMock */
         $entityGeneratorMock = $this->getMockBuilder(EntityAbstract::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -14,6 +14,7 @@ use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Code\Generator\ClassGenerator;
 use Magento\Framework\Code\Generator\DefinedClasses;
+use \PHPUnit_Framework_MockObject_MockObject as Mock;
 
 class EntityAbstractTest extends TestCase
 {
@@ -43,7 +44,7 @@ class EntityAbstractTest extends TestCase
     /**
      * Model under test
      *
-     * @var \Magento\Framework\Code\Generator\EntityAbstract| \PHPUnit_Framework_MockObject_MockObject
+     * @var EntityAbstract|Mock
      */
     protected $_model;
 
@@ -75,22 +76,11 @@ class EntityAbstractTest extends TestCase
         $this->assertAttributeEmpty('_sourceClassName', $this->_model);
         $this->assertAttributeEmpty('_resultClassName', $this->_model);
         $this->assertAttributeInstanceOf(Io::class, '_ioObject', $this->_model);
-        $this->assertAttributeInstanceOf(
-            ClassGenerator::class,
-            '_classGenerator',
-            $this->_model
-        );
-        $this->assertAttributeInstanceOf(
-            DefinedClasses::class,
-            'definedClasses',
-            $this->_model
-        );
+        $this->assertAttributeInstanceOf(ClassGenerator::class, '_classGenerator', $this->_model);
+        $this->assertAttributeInstanceOf(DefinedClasses::class, 'definedClasses', $this->_model);
 
         // with source class name
-        $this->_model = $this->getMockForAbstractClass(
-            EntityAbstract::class,
-            [$this->sourceClass]
-        );
+        $this->_model = $this->getMockForAbstractClass(EntityAbstract::class, [$this->sourceClass]);
         $this->assertAttributeEquals($this->sourceClass, '_sourceClassName', $this->_model);
         $this->assertAttributeEquals($this->sourceClass . 'Abstract', '_resultClassName', $this->_model);
 
@@ -163,17 +153,17 @@ class EntityAbstractTest extends TestCase
      * @param bool $willWriteCode
      *
      * @dataProvider generateDataProvider
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::generate
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::getErrors
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::getSourceClassName
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getResultClassName
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getDefaultResultClassName
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_generateCode
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_addError
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_validateData
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getClassDocBlock
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getGeneratedCode
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_fixCodeStyle
+     * @covers EntityAbstract::generate
+     * @covers EntityAbstract::getErrors
+     * @covers EntityAbstract::getSourceClassName
+     * @covers EntityAbstract::_getResultClassName
+     * @covers EntityAbstract::_getDefaultResultClassName
+     * @covers EntityAbstract::_generateCode
+     * @covers EntityAbstract::_addError
+     * @covers EntityAbstract::_validateData
+     * @covers EntityAbstract::_getClassDocBlock
+     * @covers EntityAbstract::_getGeneratedCode
+     * @covers EntityAbstract::_fixCodeStyle
      */
     public function testGenerate(
         $errors = [],
@@ -238,7 +228,7 @@ class EntityAbstractTest extends TestCase
 
         $arguments = $this->_prepareMocksForGenerateCode(true);
 
-        /** @var \Magento\Framework\Code\Generator\Io|\PHPUnit_Framework_MockObject_MockObject $ioObjectMock */
+        /** @var Io|Mock $ioObjectMock */
         $ioObjectMock = $arguments['io_object'];
         $ioObjectMock->expects($this->once())
             ->method('writeResultFile')
@@ -344,7 +334,7 @@ class EntityAbstractTest extends TestCase
             ->will($this->returnValue($willWriteCode ? self::RESULT_CODE : null));
 
         // Add configuration for the generation step
-        /** @var $ioObject \PHPUnit_Framework_MockObject_MockObject */
+        /** @var Io|Mock $ioObject */
         $ioObject = $mocks['io_object'];
         if ($willWriteCode) {
             $ioObject->expects($this->once())->method('writeResultFile')->with(self::RESULT_FILE, self::RESULT_CODE);
