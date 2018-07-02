@@ -16,6 +16,7 @@ use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
 use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
+use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedType;
 
 /**
  * Calculate minimal and maximal prices for Grouped products
@@ -111,24 +112,43 @@ class Grouped implements DimensionalIndexerInterface
     /**
      * Prepare data index select for Grouped products prices
      * @param $dimensions
-     * @param array $entityIds the parent entity ids limitation
+     * @param int|array $entityIds the parent entity ids limitation
      * @return \Magento\Framework\DB\Select
      */
     protected function _prepareGroupedProductPriceDataSelect($dimensions, $entityIds = null)
     {
-        $connection = $this->getConnection();
+        $select = $this->getConnection()->select();
 
-        $taxClassId = $connection->getCheckSql('MIN(i.tax_class_id) IS NULL', '0', 'MIN(i.tax_class_id)');
-        $minCheckSql = $connection->getCheckSql('e.required_options = 0', 'i.min_price', 0);
-        $maxCheckSql = $connection->getCheckSql('e.required_options = 0', 'i.max_price', 0);
+        $select->from(
+            ['e' => $this->getTable('catalog_product_entity')],
+            'entity_id'
+        );
+
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-
-        $select = $connection->select()->from(['l' => $this->getTable('catalog_product_link')], []);
+        $select->joinLeft(
+            ['l' => $this->getTable('catalog_product_link')],
+            'e.' . $linkField . ' = l.product_id AND l.link_type_id=' . Link::LINK_TYPE_GROUPED,
+            []
+        );
+        //aditional infromation about inner products
+        $select->joinLeft(
+            ['le' => $this->getTable('catalog_product_entity')],
+            'le.entity_id = l.linked_product_id',
+            []
+        );
         $select->columns(
             [
-                'entity_id' => new \Zend_Db_Expr('l.product_id'),
-                'customer_group_id' => new \Zend_Db_Expr('i.customer_group_id'),
-                'website_id' => new \Zend_Db_Expr('i.website_id'),
+                'i.customer_group_id',
+                'i.website_id',
+            ]
+        );
+        $taxClassId = $this->getConnection()->getCheckSql('MIN(i.tax_class_id) IS NULL', '0', 'MIN(i.tax_class_id)');
+        $minCheckSql = $this->getConnection()->getCheckSql('le.required_options = 0', 'i.min_price', 0);
+        $maxCheckSql = $this->getConnection()->getCheckSql('le.required_options = 0', 'i.max_price', 0);
+        $select->joinLeft(
+            ['i' => $this->getMainTable($dimensions)],
+            'i.entity_id = l.linked_product_id',
+            [
                 'tax_class_id' => $taxClassId,
                 'price' => new \Zend_Db_Expr('NULL'),
                 'final_price' => new \Zend_Db_Expr('NULL'),
@@ -137,13 +157,16 @@ class Grouped implements DimensionalIndexerInterface
                 'tier_price' => new \Zend_Db_Expr('NULL'),
             ]
         );
-        $select->join(['i' => $this->getMainTable($dimensions)], 'i.entity_id = l.linked_product_id', []);
-        $select->join(['e' => $this->getTable('catalog_product_entity')], "e.$linkField = l.linked_product_id", []);
-        $select->where('l.link_type_id = ?', Link::LINK_TYPE_GROUPED);
-        $select->group(['l.product_id', 'i.customer_group_id', 'i.website_id']);
+        $select->group(
+            ['e.entity_id', 'i.customer_group_id', 'i.website_id']
+        );
+        $select->where(
+            'e.type_id=?',
+            GroupedType::TYPE_CODE
+        );
 
         if ($entityIds !== null) {
-            $select->where('l.product_id IN(?)', $entityIds);
+            $select->where('e.entity_id IN(?)', $entityIds);
         }
 
         return $select;
