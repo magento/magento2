@@ -16,6 +16,11 @@ use Magento\Framework\Phrase;
 use Magento\SampleData\Model\Dependency;
 use Magento\Framework\Filesystem\DriverPool;
 
+/**
+ * Class DependencyTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
