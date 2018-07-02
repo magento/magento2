@@ -11,8 +11,6 @@ use Magento\Cms\Api\Data\PageInterface as CmsPageInterface;
 use Magento\Cms\Api\PageRepositoryInterface as CmsPageRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Webapi\ServiceOutputProcessor;
 
 /**
  * Cms field data provider, used for GraphQL request processing.
@@ -38,7 +36,7 @@ class CmsPageDataProvider
      *
      * @param int $cmsPageId
      * @return array
-     * @throws NoSuchEntityException|LocalizedException
+     * @throws LocalizedException
      */
     public function getCmsPageById(int $cmsPageId) : array
     {

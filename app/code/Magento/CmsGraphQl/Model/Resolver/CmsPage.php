@@ -8,10 +8,8 @@ declare(strict_types=1);
 namespace Magento\CmsGraphQl\Model\Resolver;
 
 use Magento\CmsGraphQl\Model\Resolver\Cms\CmsPageDataProvider;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -56,18 +54,13 @@ class CmsPage implements ResolverInterface
     ) : Value {
 
         $cmsPageId = $this->getCmsPageId($args);
+        $cmsPageData = $this->cmsPageDataProvider->getCmsPageById($cmsPageId);
 
-        try {
-            $cmsPageData = $this->cmsPageDataProvider->getCmsPageById($cmsPageId);
+        $result = function () use ($cmsPageData) {
+            return !empty($cmsPageData) ? $cmsPageData : [];
+        };
 
-            $result = function () use ($cmsPageData) {
-                return !empty($cmsPageData) ? $cmsPageData : [];
-            };
-
-            return $this->valueFactory->create($result);
-        } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(__('CMS page with ID %1 does not exist.', [$cmsPageId]));
-        }
+        return $this->valueFactory->create($result);
     }
 
     /**
