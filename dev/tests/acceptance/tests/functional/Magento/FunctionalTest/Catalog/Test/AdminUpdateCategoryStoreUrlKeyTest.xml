@@ -19,7 +19,7 @@
             <group value="category"/>
         </annotations>
         <before>
-            <!-- Create category, change store view to default -->
+            <!-- Create category -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
             <waitForPageLoad stepKey="waitForPageLoad1"/>
@@ -57,7 +57,7 @@
         <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="assertCategoryOnStorefront"/>
         <seeInTitle userInput="{{_defaultCategory.name}}" stepKey="seeCategoryNameInTitle"/>
         <seeInCurrentUrl stepKey="verifyUrlKey" url="{{_defaultCategory.name_lwr}}-hattest.html"/>
-        <!-- Update SEO key to original, uncheck "Create Redirect", confirm in frontend, delete category -->
+        <!-- Update SEO key to original, uncheck "Create Redirect", confirm in frontend -->
         <!--Switch to "Default Store View" scope-->
         <actionGroup ref="switchCategoryStoreView" stepKey="SwitchStoreView2">
             <argument name="store" value="_defaultStore.name"/>

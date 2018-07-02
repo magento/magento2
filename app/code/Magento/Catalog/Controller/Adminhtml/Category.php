@@ -19,7 +19,6 @@ use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\DataObject;
-use Zend_Filter_Input;
 
 /**
  * Catalog category controller
@@ -42,10 +41,8 @@ abstract class Category extends Action
      * @param Context $context
      * @param Date|null $dateFilter
      */
-    public function __construct(
-        Context $context,
-        Date $dateFilter = null
-    ) {
+    public function __construct(Context $context, Date $dateFilter = null)
+    {
         $this->dateFilter = $dateFilter;
         parent::__construct($context);
     }
@@ -117,7 +114,7 @@ abstract class Category extends Action
         return $storeId ?: (int)$this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID);
     }
 
-    /**Zend_Filter_Input
+    /**
      * Build response for ajax request
      *
      * @param CategoryModel $category
@@ -127,10 +124,8 @@ abstract class Category extends Action
      *
      * @deprecated 101.0.0
      */
-    protected function ajaxRequestResponse(
-        CategoryModel $category,
-        Page $resultPage
-    ): Json {
+    protected function ajaxRequestResponse(CategoryModel $category, Page $resultPage): Json
+    {
         // prepare breadcrumbs of selected category, if any
         $breadcrumbsPath = $category->getPath();
         if (empty($breadcrumbsPath)) {
@@ -167,6 +162,7 @@ abstract class Category extends Action
         $resultJson = $this->_objectManager->get(Json::class);
         $resultJson->setHeader('Content-type', 'application/json', true);
         $resultJson->setData($eventResponse->getData());
+
         return $resultJson;
     }
 
@@ -189,7 +185,7 @@ abstract class Category extends Action
                 }
             }
         }
-        $inputFilter = new Zend_Filter_Input($dateFieldFilters, [], $postData);
+        $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $postData);
         return $inputFilter->getUnescaped();
     }
 }
