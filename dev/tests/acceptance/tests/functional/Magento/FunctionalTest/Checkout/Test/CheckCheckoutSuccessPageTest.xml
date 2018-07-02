@@ -116,7 +116,7 @@
         <resizeWindow width="600" height="800" stepKey="resizeWindow"/>
         <waitForElementNotVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitInvisiblePrint"/>
         <dontSeeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeInvisiblePrint"/>
-        <maximizeWindow stepKey="maximizeWindowKey1"/>
+        <resizeWindow width="1360" height="1020" stepKey="maximizeWindowKey1"/>
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitVisiblePrint"/>
         <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint2" />
 
