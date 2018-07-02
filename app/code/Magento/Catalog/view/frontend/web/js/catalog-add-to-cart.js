@@ -50,6 +50,23 @@ define([
         },
 
         /**
+         * @private
+         */
+        _redirect: function (url) {
+            var urlParts, locationParts, forceReload;
+
+            urlParts = url.split('#');
+            locationParts = window.location.href.split('#');
+            forceReload = urlParts[0] === locationParts[0];
+
+            window.location.assign(url);
+
+            if (forceReload) {
+                window.location.reload();
+            }
+        },
+
+        /**
          * @return {Boolean}
          */
         isLoaderEnabled: function () {
@@ -119,12 +136,8 @@ define([
                             parameters.push(eventData.redirectParameters.join('&'));
                             res.backUrl = parameters.join('#');
                         }
-                        window.location.href = res.backUrl;
 
-                        // page does not reload when anchor (#) is added
-                        if (res.backUrl.indexOf('#') !== -1) {
-                            window.location.reload();
-                        }
+                        self._redirect(res.backUrl);
 
                         return;
                     }

@@ -9,9 +9,7 @@ require([
 
     $('body').on('catalogCategoryAddToCartRedirect', function (event, data) {
         $(data.form).find('select[name*="super"]').each(function (index, item) {
-            var $item = $(item);
-
-            data.redirectParameters.push($item.attr('data-attribute-code') + '=' + $item.val());
+            data.redirectParameters.push(item.config.id + '=' + $(item).val());
         });
     });
 });
