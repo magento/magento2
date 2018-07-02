@@ -4,6 +4,9 @@
 type Query {
 }
 
+type Mutation {
+}
+
 input FilterTypeInput @doc(description: "FilterTypeInput specifies which action will be performed in a query ") {
     eq: String @doc(description: "Equals")
     finset: [String] @doc(description: "Find in set. The value can contain a set of comma-separated values")
