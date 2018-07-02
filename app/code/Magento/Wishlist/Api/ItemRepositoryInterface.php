@@ -24,17 +24,17 @@ interface ItemRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Wishlist\Api\Data\ItemSearchResultsInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria): \Magento\Wishlist\Api\Data\ItemSearchResultsInterface;
 
     /**
      * Save wishlist item object
      *
-     * @param Data\ItemInterface $item
+     * @param \Magento\Wishlist\Api\Data\ItemInterface $item
      * @return int
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function save(\Magento\Wishlist\Api\Data\ItemInterface $item): ItemInterface;
+    public function save(\Magento\Wishlist\Api\Data\ItemInterface $item): \Magento\Wishlist\Api\Data\ItemInterface;
 
     /**
      * Delete item by id
