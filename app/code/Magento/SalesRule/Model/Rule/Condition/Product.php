@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\SalesRule\Model\Rule\Condition;
 
 /**
@@ -53,6 +54,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
         if ('category_ids' == $attrCode) {
             return $this->validateAttribute($this->_getAvailableInCategories($product->getId()));
+        }
+
+        if ($attrCode === 'quote_item_price') {
+            $numericOperations = $this->getDefaultOperatorInputByType()['numeric'];
+            if (in_array($this->getOperator(), $numericOperations)) {
+                $this->setData('value', $this->_localeFormat->getNumber($this->getValue()));
+            }
         }
 
         return parent::validate($product);
