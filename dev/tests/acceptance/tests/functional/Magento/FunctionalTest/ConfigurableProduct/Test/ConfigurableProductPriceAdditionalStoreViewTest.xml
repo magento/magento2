@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="ConfigurableProductPriceAdditionalStoreViewTest">
+        <annotations>
+            <features value="ConfigurableProductPriceStoreFront"/>
+            <title value="Configurable product prices should not disappear on storefront for additional store"/>
+            <description value="Configurable product price should not disappear for additional stores on frontEnd if disabled for default store"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-92247"/>
+            <group value="skip"/>
+        </annotations>
+        <before>
+            
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
+        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="addNewWebsite">
+            <argument name="newWebsiteName" value="Second Website"/>
+            <argument name="websiteCode" value="second_website"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="addNewStoreGroup">
+            <argument name="website" value="Second Website"/>
+            <argument name="storeGroupName" value="Second Store"/>
+            <argument name="storeGroupCode" value="second_store"/>
+        </actionGroup>
+
+        <!--Create Store view -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="createStoreViewButton"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <selectOption userInput="Second Store" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
+        <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
+        <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
+        <selectOption userInput="1" selector="{{AdminNewStoreSection.statusDropdown}}" stepKey="enableStoreViewStatus"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickStoreViewSaveButton"/>
+        <waitForElementVisible selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" stepKey="waitForAcceptNewStoreViewCreationModal" />
+        <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="AcceptNewStoreViewCreation"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReolad"/>
+        <see userInput="You saved the store view." stepKey="seeSaveMessage" />
+
+        <!--go to admin and open product edit page to disable product all store view -->
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <waitForPageLoad stepKey="waitEditPage"/>
+        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="disableProductForAllStoreView"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForProductPageSave1" />
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="dontSeeCheckboxEnableProductIsChecked"/>
+
+        <!-- Disable each of the child products for All Store views -->
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActionsForFirstVariation1"/>
+        <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisableChildProduct1"/>
+
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('2')}}" stepKey="clickToExpandActionsForSecondVariation1"/>
+        <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisableChildProduct2"/>
+
+        <!-- Add product to second website -->
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsitesSection1"/>
+        <click selector="{{ProductInWebsitesSection.website('Second Website')}}" stepKey="selectSecondWebsite"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForProductPageSave"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+
+        <!-- switch to the second store view -->
+        <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher"/>
+        <click selector="{{AdminProductFormActionSection.selectStoreView('Second Store View')}}" stepKey="chooseStoreView"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
+        <!--<waitForPageLoad stepKey="waitForStoreViewSwitched"/>-->
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+        <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
+
+        <!-- enable the config product for the second store -->
+       <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSlider"/>
+        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="enableProductForSecondStoreView"/>
+        <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProductIsEnabled"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="enabledConfigProductSecondStore"/>
+
+        <!--go to admin and open product edit page to enable child product for second store view -->
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToProductEditPage2"/>
+        <waitForPageLoad stepKey="waitEditPage2"/>
+       <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher1"/>
+        <click selector="{{AdminProductFormActionSection.selectStoreView('Second Store View')}}" stepKey="chooseStoreView1"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+        <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName1"/>
+
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActionsForFirstVariation2"/>
+        <click selector="{{AdminProductFormConfigurationsSection.enableProductBtn}}" stepKey="clickEnableChildProduct1"/>
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('2')}}" stepKey="clickToExpandActionsForSecondVariation2"/>
+        <click selector="{{AdminProductFormConfigurationsSection.enableProductBtn}}" stepKey="clickEnableChildProduct2"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAll"/>
+
+        <!-- assert second store view storefront category list page -->
+        <amOnPage url="/second_store_view/" stepKey="amOnsecondStoreFront1"/>
+        <waitForPageLoad stepKey="waitForPageLoad31"/>
+        <click userInput="$$createCategory.name$$" stepKey="clickOnCategoryName1"/>
+        <waitForPageLoad stepKey="waitForPageLoad41"/>
+        <see userInput="$$createConfigProduct.name$$" stepKey="assertProductPresent1"/>
+
+        <!--go to admin and open child product1 and assign it to the second website -->
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct1.id$$)}}" stepKey="goToProduct1EditPage1"/>
+        <waitForPageLoad stepKey="waitChild1EditPageToLoad"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProduct1InWebsitesSection"/>
+        <click selector="{{ProductInWebsitesSection.website('Second Website')}}" stepKey="selectSecondWebsite1"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveUpdatedChild1Again"/>
+
+        <!--go to admin again and open child product1 and enable for second store view-->
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct1.id$$)}}" stepKey="goToProduct1EditPage"/>
+        <waitForPageLoad stepKey="waitChild1EditPageToLoad1"/>
+        <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcherP1"/>
+        <click selector="{{AdminProductFormActionSection.selectStoreView('Second Store View')}}" stepKey="chooseStoreView2P1"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessageP1"/>
+        <waitForPageLoad time="30" stepKey="waitForStoreViewSwitchedP1"/>
+        <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewNameP1"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSliderP1"/>
+        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="enableProductForSecondStoreViewP1"/>
+        <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProduct1IsEnabled"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="save2UpdatedChild1"/>
+
+        <!--go to admin and open child product2 edit page  and assign it to the second website -->
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct2.id$$)}}" stepKey="goToProduct2EditPage"/>
+        <waitForPageLoad stepKey="waitChild2EditPageToLoad"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProduct2InWebsitesSection"/>
+        <click selector="{{ProductInWebsitesSection.website('Second Website')}}" stepKey="selectSecondWebsite2"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveUpdatedChild2"/>
+
+        <!--go to admin again and open child product2 and enable for second store view-->
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct2.id$$)}}" stepKey="goToProduct2EditPage2"/>
+        <waitForPageLoad stepKey="waitChild2EditPageToLoad1"/>
+        <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcherP2"/>
+        <click selector="{{AdminProductFormActionSection.selectStoreView('Second Store View')}}" stepKey="chooseStoreView2P2"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessageP2"/>
+        <waitForPageLoad time="30" stepKey="waitForStoreViewSwitchedP2"/>
+        <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewNameP2"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSliderP2"/>
+        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="enableProductForSecondStoreViewP2"/>
+        <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProduct2IsEnabled"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="save2UpdatedChild2"/>
+
+        <!-- assert storefront category list page -->
+        <amOnPage url="/second_store_view/" stepKey="amOnsecondStoreFront"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click userInput="$$createCategory.name$$" stepKey="clickOnCategoryName"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <see userInput="$$createConfigProduct.name$$" stepKey="assertProductPresent"/>
+        <dontSee userInput="$$createConfigChildProduct1.price$$" stepKey="assertProductPricePresent"/>
+    </test>
+</tests>

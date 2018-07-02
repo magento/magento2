@@ -8,9 +8,17 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
+        <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
+        <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input" timeout="30"/>
+        <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
+        <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
+        <element name="enableProductLabel" type="checkbox" selector="input[name='product[status]']+label"/>
+        <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
+        <element name="productNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
+        <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
@@ -30,6 +38,13 @@
         <element name="productFormTabState" type="text" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]/parent::*/parent::*[@data-state-collapsible='{{state}}']" parameterized="true"/>
         <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
+        <element name="divByDataIndex" type="input" selector="div[data-index='{{var}}']" parameterized="true"/>
+        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+    </section>
+    <section name="ProductInWebsitesSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
+        <!--<element name="websites" type="checkbox" selector="input[name='product[website_ids][{{var1}}]']" parameterized="true"/>-->
+        <element name="website" type="checkbox" selector="//label[contains(text(), '{{var1}}')]/parent::div//input[@type='checkbox']" parameterized="true"/>
     </section>
     <section name="ProductDesignSection">
         <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>

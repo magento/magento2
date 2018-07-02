@@ -10,9 +10,9 @@
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontPurchaseProductCustomOptionsDifferentStoreViewsTest">
         <annotations>
-            <features value="Purchase a product with Custom Options on different Store Views"/>
-            <title value="You should be able to sell products with different variants of your own."/>
-            <description value="You should be able to sell products with different variants of your own."/>
+            <features value="Catalog"/>
+            <title value="Admin should be able to sell products with different variants of their own"/>
+            <description value="Admin should be able to sell products with different variants of their own"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-58184"/>
             <group value="product"/>
