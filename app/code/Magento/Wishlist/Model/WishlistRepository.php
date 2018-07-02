@@ -95,7 +95,7 @@ class WishlistRepository implements WishlistRepositoryInterface
     public function getByCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer
     ): \Magento\Wishlist\Api\Data\WishlistInterface {
         $wishlist = $this->wishlistFactory->create();
-        $this->wishlistResource->load($wishlist, $customer->getId());
+        $this->wishlistResource->load($wishlist, $customer->getId(), WishlistInterface::CUSTOMER_ID);
 
         if (!$wishlist->getId()) {
             throw new NoSuchEntityException(__('Wishlist for customer: "%1" does not exist.', $customer->getId()));
