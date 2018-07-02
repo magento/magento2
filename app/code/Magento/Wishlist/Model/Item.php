@@ -13,6 +13,8 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Wishlist\Api\AddOptionToWishlistItemInterface;
+use Magento\Wishlist\Api\Data\OptionInterface;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory;
@@ -117,6 +119,10 @@ class Item extends AbstractExtensibleModel implements \Magento\Wishlist\Api\Data
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
+    /**
+     * @var AddOptionToWishlistItemInterface
+     */
+    private $addOptionToWishlistItem;
 
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -133,9 +139,8 @@ class Item extends AbstractExtensibleModel implements \Magento\Wishlist\Api\Data
         CollectionFactory $wishlOptionCollectionFactory,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
-
-
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        AddOptionToWishlistItemInterface $addOptionToWishlistItem
     ) {
         parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $resource,
             $resourceCollection, $data);
@@ -149,6 +154,7 @@ class Item extends AbstractExtensibleModel implements \Magento\Wishlist\Api\Data
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->productRepository = $productRepository;
 
+        $this->addOptionToWishlistItem = $addOptionToWishlistItem;
     }
 
     /**
@@ -739,17 +745,16 @@ class Item extends AbstractExtensibleModel implements \Magento\Wishlist\Api\Data
      * @param   Option|\Magento\Framework\DataObject|array $option
      * @return  $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated use \Magento\Wishlist\Api\AddOptionToWishlistItemInterface::execute() instead
      */
     public function addOption($option)
     {
+        /** @var $option OptionInterface */
         if (is_array($option)) {
-            $option = $this->_wishlistOptFactory->create()->setData($option)->setItem($this);
-        } elseif ($option instanceof Option) {
-            $option->setItem($this);
+            $option = $this->_wishlistOptFactory->create()->setData($option);
         } elseif ($option instanceof \Magento\Framework\DataObject) {
             $option = $this->_wishlistOptFactory->create()->setData($option->getData())
-                ->setProduct($option->getProduct())
-                ->setItem($this);
+                ->setProduct($option->getProduct());
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid item option format.'));
         }
@@ -758,11 +763,15 @@ class Item extends AbstractExtensibleModel implements \Magento\Wishlist\Api\Data
         if ($exOption) {
             $exOption->addData($option->getData());
         } else {
+            $option = $this->addOptionToWishlistItem->execute($this, $option);
             $this->_addOptionCode($option);
             $this->_options[] = $option;
         }
+
+
         return $this;
     }
+
 
     /**
      * Remove option from item options
