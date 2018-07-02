@@ -9,6 +9,7 @@ namespace Magento\CmsGraphQl\Model\Resolver\Cms;
 
 use Magento\Cms\Api\BlockRepositoryInterface as CmsBlockRepositoryInterface;
 use Magento\Cms\Api\Data\BlockInterface as CmsBlockInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
@@ -37,6 +38,7 @@ class CmsBlockDataProvider
      * @param string $cmsBlockIdentifier
      * @return array|GraphQlInputException
      * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function getCmsBlockById(string $cmsBlockIdentifier)
     {
@@ -65,5 +67,4 @@ class CmsBlockDataProvider
 
         return $cmsBlockData;
     }
-
 }
