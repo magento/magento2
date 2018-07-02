@@ -240,14 +240,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         /**
          * Check for maximum attribute_code length
          */
-        if (isset(
-            $this->_data['attribute_code']
-        ) && !\Zend_Validate::is(
-            $this->_data['attribute_code'],
-            'StringLength',
-            ['max' => self::ATTRIBUTE_CODE_MAX_LENGTH]
-        )
-        ) {
+        if (isset($this->_data['attribute_code']) 
+            && !\Zend_Validate::is(
+                $this->_data['attribute_code'], 
+                'StringLength', 
+                ['max' => self::ATTRIBUTE_CODE_MAX_LENGTH]
+        )) {
             throw new LocalizedException(
                 __('An attribute code must not be more than %1 characters.', self::ATTRIBUTE_CODE_MAX_LENGTH)
             );
@@ -257,10 +255,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
          * Check attribute_code for allowed characters
          */
         if (isset($this->_data['attribute_code'])
-            && !preg_match('/^[a-z]+[a-z0-9_]+$/', $this->_data['attribute_code'])) {
+            && !preg_match('/^[a-z][a-z0-9_]*$/', $this->_data['attribute_code'])
+        ) {
             throw new LocalizedException(
-                __('Please use only letters (a-z), numbers (0-9) or underscore (_) in this 
-                field, and the first character should be a letter.')
+                __('An attribute code must contain only letters (a-z), numbers (0-9) or underscores (_) and begin with a letter.')
             );
         }
 
