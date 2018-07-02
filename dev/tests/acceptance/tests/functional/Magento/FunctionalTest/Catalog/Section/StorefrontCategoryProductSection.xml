@@ -13,6 +13,8 @@
         <element name="ProductPriceByNumber" type="text" selector="//main//li[{{var1}}]//span[@class='price']" parameterized="true"/>
         <element name="ProductInfoByNumber" type="text" selector="//main//li[{{var1}}]//div[@class='product-item-info']" parameterized="true"/>
         <element name="ProductAddToCompareByNumber" type="text" selector="//main//li[{{var1}}]//a[contains(@class, 'tocompare')]" parameterized="true"/>
+        <element name="listedProduct" type="block" selector="ol li:nth-child({{productPositionInList}}) img" parameterized="true"/>
+        <element name="categoryListView" type="button" selector="a[title='List']" timeout="30"/>
 
         <element name="ProductTitleByName" type="button" selector="//main//li//a[contains(text(), '{{var1}}')]" parameterized="true"/>
         <element name="ProductPriceByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//span[@class='price']" parameterized="true"/>
