@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!-- Change the tax configuration to display in cart and checkout flow -->
+    <actionGroup name="editTaxConfigurationByUI">
+        <!-- navigate to the tax configuration page -->
+        <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
+        <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
+
+        <!-- change the default state to California -->
+        <conditionalClick stepKey="clickCalculationSettings" selector="{{AdminConfigureTaxSection.defaultDestination}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDefaultState}}" visible="false" />
+        <uncheckOption stepKey="clickDefaultState" selector="{{AdminConfigureTaxSection.systemValueDefaultState}}"/>
+        <selectOption stepKey="selectDefaultState" selector="{{AdminConfigureTaxSection.dropdownDefaultState}}" userInput="California"/>
+        <fillField stepKey="fillDefaultPostCode" selector="{{AdminConfigureTaxSection.defaultPostCode}}" userInput="*"/>
+
+        <!-- change the options for shopping cart display to show tax -->
+        <conditionalClick stepKey="clickShoppingCartDisplaySettings" selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}" visible="false"/>
+        <uncheckOption stepKey="clickTaxTotalCart" selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}"/>
+        <selectOption stepKey="selectTaxTotalCart" selector="{{AdminConfigureTaxSection.dropdownIncludeTaxTotalCart}}" userInput="Yes"/>
+        <uncheckOption stepKey="clickDisplayTaxSummaryCart" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummaryCart}}"/>
+        <selectOption stepKey="selectDisplayTaxSummaryCart" selector="{{AdminConfigureTaxSection.dropdownDisplayTaxSummaryCart}}" userInput="Yes"/>
+        <uncheckOption stepKey="clickDisplayZeroTaxCart" selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxCart}}"/>
+        <selectOption stepKey="selectDisplayZeroTaxCart" selector="{{AdminConfigureTaxSection.dropdownDisplayZeroTaxCart}}" userInput="Yes"/>
+
+        <!-- change the options for orders, invoices, credit memos display to show tax -->
+        <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" visible="false"/>
+        <uncheckOption stepKey="clickTaxTotalSales" selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}"/>
+        <selectOption stepKey="selectTaxTotalSales" selector="{{AdminConfigureTaxSection.dropdownIncludeTaxTotalSales}}" userInput="Yes"/>
+        <uncheckOption stepKey="clickDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}"/>
+        <selectOption stepKey="selectDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.dropdownDisplayTaxSummarySales}}" userInput="Yes"/>
+        <uncheckOption stepKey="clickDisplayZeroTaxSales" selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxSales}}"/>
+        <selectOption stepKey="selectDisplayZeroTaxSales" selector="{{AdminConfigureTaxSection.dropdownDisplayZeroTaxSales}}" userInput="Yes"/>
+
+        <!-- Save the settings -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click stepKey="saveTaxOptions" selector="{{AdminCategoryMainActionsSection.SaveButton}}"/>
+        <waitForPageLoad stepKey="waitForTaxSaved"/>
+        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the configuration."/>
+    </actionGroup>
+
+    <actionGroup name="changeToDefaultTaxConfigurationUI">
+        <!-- navigate to the tax configuration page -->
+        <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
+        <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
+
+        <!-- change the default state to none -->
+        <conditionalClick stepKey="clickCalculationSettings" selector="{{AdminConfigureTaxSection.defaultDestination}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDefaultState}}" visible="false" />
+        <checkOption stepKey="clickDefaultState" selector="{{AdminConfigureTaxSection.systemValueDefaultState}}"/>
+        <selectOption stepKey="selectDefaultState" selector="{{AdminConfigureTaxSection.dropdownDefaultState}}" userInput="California"/>
+        <fillField stepKey="fillDefaultPostCode" selector="{{AdminConfigureTaxSection.defaultPostCode}}" userInput=""/>
+
+        <!-- change the options for shopping cart display to not show tax -->
+        <conditionalClick stepKey="clickShoppingCartDisplaySettings" selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}" visible="false"/>
+        <checkOption stepKey="clickTaxTotalCart" selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}"/>
+        <selectOption stepKey="selectTaxTotalCart" selector="{{AdminConfigureTaxSection.dropdownIncludeTaxTotalCart}}" userInput="Yes"/>
+        <checkOption stepKey="clickDisplayTaxSummaryCart" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummaryCart}}"/>
+        <selectOption stepKey="selectDisplayTaxSummaryCart" selector="{{AdminConfigureTaxSection.dropdownDisplayTaxSummaryCart}}" userInput="Yes"/>
+        <checkOption stepKey="clickDisplayZeroTaxCart" selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxCart}}"/>
+        <selectOption stepKey="selectDisplayZeroTaxCart" selector="{{AdminConfigureTaxSection.dropdownDisplayZeroTaxCart}}" userInput="Yes"/>
+
+        <!-- change the options for orders, invoices, credit memos display to not show tax -->
+        <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" visible="false"/>
+        <checkOption stepKey="clickTaxTotalSales" selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}"/>
+        <selectOption stepKey="selectTaxTotalSales" selector="{{AdminConfigureTaxSection.dropdownIncludeTaxTotalSales}}" userInput="Yes"/>
+        <checkOption stepKey="clickDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}"/>
+        <selectOption stepKey="selectDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.dropdownDisplayTaxSummarySales}}" userInput="Yes"/>
+        <checkOption stepKey="clickDisplayZeroTaxSales" selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxSales}}"/>
+        <selectOption stepKey="selectDisplayZeroTaxSales" selector="{{AdminConfigureTaxSection.dropdownDisplayZeroTaxSales}}" userInput="Yes"/>
+
+        <!-- Save the settings -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click stepKey="saveTaxOptions" selector="{{AdminCategoryMainActionsSection.SaveButton}}"/>
+        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the configuration."/>
+    </actionGroup>
+
+    <!-- Action group to add a tax rate when on a tax rule configuration page -->
+    <!-- Must already be on a tax rule configuration page or a new tax rule page -->
+    <actionGroup name="addNewTaxRateNoZip">
+        <arguments>
+            <argument name="taxCode"/>
+        </arguments>
+
+        <!-- Go to the tax rate page -->
+        <click stepKey="addNewTaxRate" selector="{{AdminTaxRulesSection.addNewTaxRate}}"/>
+
+        <!-- Fill out a new tax rate -->
+        <fillField stepKey="fillTaxIdentifier" selector="{{AdminTaxRulesSection.taxIdentifier}}" userInput="{{taxCode.state}}-{{taxCode.rate}}"/>
+        <fillField stepKey="fillZipCode" selector="{{AdminTaxRulesSection.zipCode}}" userInput="{{taxCode.zip}}"/>
+        <selectOption stepKey="selectState" selector="{{AdminTaxRulesSection.state}}" userInput="{{taxCode.state}}"/>
+        <selectOption stepKey="selectCountry" selector="{{AdminTaxRulesSection.country}}" userInput="{{taxCode.country}}"/>
+        <fillField stepKey="fillRate" selector="{{AdminTaxRulesSection.rate}}" userInput="{{taxCode.rate}}"/>
+
+        <!-- Save the tax rate -->
+        <click stepKey="saveTaxRate" selector="{{AdminTaxRulesSection.save}}"/>
+    </actionGroup>
+</actionGroups>
