@@ -206,16 +206,25 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
 // functions to override native php functions
 namespace Magento\Setup\Model\Cron;
 
+/**
+ * @return string
+ */
 function fopen()
 {
     return 'filestream';
 }
 
+/**
+ * @return bool
+ */
 function is_resource()
 {
     return true;
 }
 
+/**
+ * @return string
+ */
 function get_resource_type()
 {
     return 'stream';
