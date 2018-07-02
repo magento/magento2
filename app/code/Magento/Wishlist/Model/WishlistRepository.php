@@ -2,11 +2,11 @@
 
 namespace Magento\Wishlist\Model;
 
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Wishlist\Api\Data\WishlistInterface;
-use Magento\Wishlist\Api\Data\WishlistSearchResultsInterface;
 use Magento\Wishlist\Api\WishlistRepositoryInterface;
 
 class WishlistRepository implements WishlistRepositoryInterface
@@ -31,6 +31,10 @@ class WishlistRepository implements WishlistRepositoryInterface
      * @var \Magento\Wishlist\Api\Data\WishlistSearchResultsInterfaceFactory
      */
     private $searchResultsFactory;
+    /**
+     * @var ExtensibleDataObjectConverter
+     */
+    private $extensibleDataObjectConverter;
 
     /**
      * WishlistRepository constructor.
@@ -39,13 +43,15 @@ class WishlistRepository implements WishlistRepositoryInterface
      * @param \Magento\Wishlist\Api\Data\WishlistSearchResultsInterfaceFactory $searchResultsFactory
      * @param ResourceModel\Wishlist\CollectionFactory $collectionFactory
      * @param ResourceModel\Wishlist $wishlistResource
+     * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      */
     public function __construct(
         CollectionProcessorInterface $collectionProcessor,
         WishlistFactory $wishlistFactory,
         \Magento\Wishlist\Api\Data\WishlistSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Wishlist\Model\ResourceModel\Wishlist\CollectionFactory $collectionFactory,
-        \Magento\Wishlist\Model\ResourceModel\Wishlist $wishlistResource
+        \Magento\Wishlist\Model\ResourceModel\Wishlist $wishlistResource,
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter
     ) {
 
         $this->wishlistResource = $wishlistResource;
@@ -53,12 +59,26 @@ class WishlistRepository implements WishlistRepositoryInterface
         $this->collectionFactory = $collectionFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
     }
 
     /**
      * @inheritdoc
      */
-    public function get($id): WishlistInterface
+    public function get($sharingCode): WishlistInterface
+    {
+        $wishlist = $this->wishlistFactory->create();
+        $this->wishlistResource->load($wishlist, $sharingCode, WishlistInterface::SHARING_CODE);
+        if (!$wishlist->getId()) {
+            throw new NoSuchEntityException(__('Wishlist with sharing code "%1" does not exist.', $sharingCode));
+        }
+        return $wishlist->getDataModel();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getById($id): WishlistInterface
     {
         $wishlist = $this->wishlistFactory->create();
         $this->wishlistResource->load($wishlist, $id);
@@ -72,7 +92,23 @@ class WishlistRepository implements WishlistRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getByCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer
+    ): \Magento\Wishlist\Api\Data\WishlistInterface {
+        $wishlist = $this->wishlistFactory->create();
+        $this->wishlistResource->load($wishlist, $customer->getId());
+
+        if (!$wishlist->getId()) {
+            throw new NoSuchEntityException(__('Wishlist for customer: "%1" does not exist.', $customer->getId()));
+        }
+
+        return $wishlist->getDataModel();
+
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria): \Magento\Wishlist\Api\Data\WishlistSearchResultsInterface
     {
         $collection = $this->collectionFactory->create();
         $collection->addFieldToSelect('*');
@@ -88,7 +124,6 @@ class WishlistRepository implements WishlistRepositoryInterface
         }
         $searchResult->setItems($customers);
 
-
         return $searchResult;
     }
 
@@ -97,8 +132,21 @@ class WishlistRepository implements WishlistRepositoryInterface
      */
     public function save(WishlistInterface $wishlist): WishlistInterface
     {
+        $wishlistData = $this->extensibleDataObjectConverter->toNestedArray(
+            $wishlist,
+            [],
+            \Magento\Wishlist\Api\Data\WishlistInterface::class
+        );
+        /** @var Customer $customerModel */
+        $wishlistModel = $this->wishlistFactory->create(
+            ['data' => $wishlistData]
+        );
+        //Model's actual ID field maybe different than "id"
+        //so "id" field from $customerData may be ignored.
+        $wishlistModel->setId($wishlist->getId());
+
         try {
-            $this->wishlistResource->save($wishlist);
+            $this->wishlistResource->save($wishlistModel);
         } catch (\Exception $e) {
             throw new StateException(__('Cannot save wishlist'));
         }
