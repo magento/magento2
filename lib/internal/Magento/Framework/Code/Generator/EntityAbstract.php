@@ -319,57 +319,6 @@ abstract class EntityAbstract
     }
 
     /**
-     * @param \ReflectionParameter $parameter
-     *
-     * @return null|string
-     */
-    private function extractParameterType(\ReflectionParameter $parameter)
-    {
-        /** @var string|null $typeName */
-        $typeName = null;
-        if ($parameter->hasType()) {
-            if ($parameter->isArray()) {
-                $typeName = 'array';
-            } elseif ($parameter->getClass()) {
-                $typeName = $this->_getFullyQualifiedClassName(
-                    $parameter->getClass()->getName()
-                );
-            } elseif ($parameter->isCallable()) {
-                $typeName = 'callable';
-            } else {
-                $typeName = $parameter->getType()->getName();
-            }
-
-            if ($parameter->allowsNull()) {
-                $typeName = '?' . $typeName;
-            }
-        }
-
-        return $typeName;
-    }
-
-    /**
-     * @param \ReflectionParameter $parameter
-     *
-     * @return null|ValueGenerator
-     */
-    private function extractParameterDefaultValue(\ReflectionParameter $parameter)
-    {
-        /** @var ValueGenerator|null $value */
-        $value = null;
-        if ($parameter->isOptional() && $parameter->isDefaultValueAvailable()) {
-            $valueType = ValueGenerator::TYPE_AUTO;
-            $defaultValue = $parameter->getDefaultValue();
-            if ($defaultValue === null) {
-                $valueType = ValueGenerator::TYPE_NULL;
-            }
-            $value = new ValueGenerator($defaultValue, $valueType);
-        }
-
-        return $value;
-    }
-
-    /**
      * Retrieve method parameter info
      *
      * @param \ReflectionParameter $parameter
@@ -380,13 +329,26 @@ abstract class EntityAbstract
         $parameterInfo = [
             'name' => $parameter->getName(),
             'passedByReference' => $parameter->isPassedByReference(),
-            'variadic' => $parameter->isVariadic()
+            'type' => $parameter->getType()
         ];
-        if ($type = $this->extractParameterType($parameter)) {
-            $parameterInfo['type'] = $type;
+
+        if ($parameter->isArray()) {
+            $parameterInfo['type'] = 'array';
+        } elseif ($parameter->getClass()) {
+            $parameterInfo['type'] = $this->_getFullyQualifiedClassName($parameter->getClass()->getName());
+        } elseif ($parameter->isCallable()) {
+            $parameterInfo['type'] = 'callable';
         }
-        if ($default = $this->extractParameterDefaultValue($parameter)) {
-            $parameterInfo['defaultValue'] = $default;
+
+        if ($parameter->isOptional() && $parameter->isDefaultValueAvailable()) {
+            $defaultValue = $parameter->getDefaultValue();
+            if (is_string($defaultValue)) {
+                $parameterInfo['defaultValue'] = $parameter->getDefaultValue();
+            } elseif ($defaultValue === null) {
+                $parameterInfo['defaultValue'] = $this->_getNullDefaultValue();
+            } else {
+                $parameterInfo['defaultValue'] = $defaultValue;
+            }
         }
 
         return $parameterInfo;
