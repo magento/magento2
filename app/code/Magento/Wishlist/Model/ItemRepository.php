@@ -71,7 +71,7 @@ class ItemRepository implements ItemRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria): \Magento\Wishlist\Api\Data\ItemSearchResultsInterface
     {
         $collection = $this->collectionFactory->create();
         $collection->addFieldToSelect('*');
