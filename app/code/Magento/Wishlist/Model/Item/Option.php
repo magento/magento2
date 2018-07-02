@@ -3,21 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Wishlist\Model\Item;
 
-use Magento\Catalog\Model\Product;
-use Magento\Wishlist\Model\Item;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Wishlist\Api\Data\ItemInterface;
+use Magento\Wishlist\Api\Data\OptionInterface;
+use Magento\Wishlist\Model\Item;
 
 /**
  * Item option model
- * @method int getProductId()
  *
  * @api
  * @since 100.0.2
  */
-class Option extends \Magento\Framework\Model\AbstractModel implements
-    \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
+class Option extends \Magento\Framework\Model\AbstractModel implements OptionInterface
 {
     /**
      * @var Item
@@ -79,12 +81,25 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
     }
 
     /**
-     * Set quote item
-     *
-     * @param   Item $item
-     * @return  $this
+     * {@inheritdoc}
      */
-    public function setItem($item)
+    public function getId()
+    {
+        return $this->getData($this->getIdFieldName());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductId()
+    {
+        return $this->getData(self::PRODUCT_ID);
+    }
+
+    /**
+     *{@inheritdoc}
+     */
+    public function setItem(ItemInterface $item)
     {
         $this->setWishlistItemId($item->getId());
         $this->_item = $item;
@@ -92,22 +107,17 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
     }
 
     /**
-     * Get option item
-     *
-     * @return Item
+     *{@inheritdoc}
      */
-    public function getItem()
+    public function getItem(): ItemInterface
     {
         return $this->_item;
     }
 
     /**
-     * Set option product
-     *
-     * @param   Product $product
-     * @return  $this
+     *{@inheritdoc}
      */
-    public function setProduct($product)
+    public function setProduct(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
         $this->setProductId($product->getId());
         $this->_product = $product;
@@ -115,11 +125,9 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
     }
 
     /**
-     * Get option product
-     *
-     * @return Product
+     *{@inheritdoc}
      */
-    public function getProduct()
+    public function getProduct(): \Magento\Catalog\Api\Data\ProductInterface
     {
         //In some cases product_id is present instead product instance
         if (null === $this->_product && $this->getProductId()) {
@@ -129,13 +137,35 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
     }
 
     /**
-     * Get option value
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getValue()
     {
-        return $this->_getData('value');
+        return $this->_getData(self::VALUE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue($value)
+    {
+        return $this->setData(self::VALUE, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCode()
+    {
+        return $this->getData(self::CODE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCode($code)
+    {
+        return $this->setData(self::CODE, $code);
     }
 
     /**
