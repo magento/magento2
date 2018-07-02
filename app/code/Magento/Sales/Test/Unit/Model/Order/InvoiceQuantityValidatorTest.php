@@ -156,6 +156,12 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @param $orderItemId
+     * @param $qty
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getInvoiceItemMock($orderItemId, $qty)
     {
         $invoiceItemMock = $this->getMockBuilder(\Magento\Sales\Api\Data\InvoiceItemInterface::class)
@@ -167,6 +173,13 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
         return $invoiceItemMock;
     }
 
+    /**
+     * @param $id
+     * @param $qtyToInvoice
+     * @param $isDummy
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getOrderItemMock($id, $qtyToInvoice, $isDummy)
     {
         $orderItemMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderItemInterface::class)

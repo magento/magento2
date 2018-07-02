@@ -138,6 +138,9 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
         $this->session->execute($this->observerMock);
     }
 
+    /**
+     * @return array
+     */
     public function getExecuteDataProvider()
     {
         return [

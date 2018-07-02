@@ -142,6 +142,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->enableSegmentation($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.2.6', '<')) {
+            $this->addStoreIdFieldForWebsiteIndexTable($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -798,5 +802,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 )
             );
         }
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     */
+    private function addStoreIdFieldForWebsiteIndexTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->addColumn(
+            $setup->getTable('catalog_product_index_website'),
+            'default_store_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                'nullable' => false,
+                'comment' => 'Default store id for website '
+            ]
+        );
     }
 }

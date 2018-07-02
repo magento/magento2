@@ -46,6 +46,11 @@ class Grid extends AbstractGrid
     private $notSyncedDataProvider;
 
     /**
+     * Order grid rows batch size
+     */
+    const BATCH_SIZE = 100;
+
+    /**
      * @param Context $context
      * @param string $mainTableName
      * @param string $gridTableName
@@ -104,25 +109,20 @@ class Grid extends AbstractGrid
      *
      * Only orders created/updated since the last method call will be added.
      *
-     * @return \Zend_Db_Statement_Interface
+     * @return void
      */
     public function refreshBySchedule()
     {
-        $select = $this->getGridOriginSelect()
-            ->where(
-                $this->mainTableName . '.entity_id IN (?)',
-                $this->notSyncedDataProvider->getIds($this->mainTableName, $this->gridTableName)
+        $notSyncedIds = $this->notSyncedDataProvider->getIds($this->mainTableName, $this->gridTableName);
+        foreach (array_chunk($notSyncedIds, self::BATCH_SIZE) as $bunch) {
+            $select = $this->getGridOriginSelect()->where($this->mainTableName . '.entity_id IN (?)', $bunch);
+            $fetchResult = $this->getConnection()->fetchAll($select);
+            $this->getConnection()->insertOnDuplicate(
+                $this->getTable($this->gridTableName),
+                $fetchResult,
+                array_keys($this->columns)
             );
-
-        return $this->getConnection()->query(
-            $this->getConnection()
-                ->insertFromSelect(
-                    $select,
-                    $this->getTable($this->gridTableName),
-                    array_keys($this->columns),
-                    AdapterInterface::INSERT_ON_DUPLICATE
-                )
-        );
+        }
     }
 
     /**
