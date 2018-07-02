@@ -53,6 +53,37 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @var string[]|null
+     */
+    private $blockWhitelist;
+
+    /**
+     * Return whitelist class names
+     *
+     * @return string[]
+     */
+    private function getWhitelist(): array
+    {
+        if ($this->blockWhitelist === null) {
+            $whiteListFiles = str_replace(
+                '\\',
+                '/',
+                realpath(__DIR__) . '/_files/whitelist/public_code*.txt'
+            );
+            $whiteListItems = [];
+            foreach (glob($whiteListFiles) as $fileName) {
+                $whiteListItems = array_merge(
+                    $whiteListItems,
+                    file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
+                );
+            }
+            $this->blockWhitelist = $whiteListItems;
+        }
+
+        return $this->blockWhitelist;
+    }
+
+    /**
      * Since blocks can be referenced from templates, they should be stable not to break theme customizations.
      * So all blocks should be @api annotated. This test checks that all blocks declared in layout files are public
      *
