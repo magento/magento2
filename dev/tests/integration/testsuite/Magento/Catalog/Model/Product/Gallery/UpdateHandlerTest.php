@@ -19,6 +19,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
  * Test for \Magento\Catalog\Model\Product\Gallery\UpdateHandler.
  *
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+ * @magentoDataFixture Magento/Catalog/_files/product_image.php
  */
 class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -58,10 +59,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->updateHandler = $this->objectManager->create(UpdateHandler::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->rootDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
-
-        $filePath = $this->rootDirectory->getAbsolutePath($this->fileName);
-        $file = fopen($filePath, "wb");
-        fwrite($file, 'Test');
+        $this->rootDirectory->writeFile($this->rootDirectory->getAbsolutePath($this->fileName), 'Test');
     }
 
     /**
@@ -97,7 +95,6 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
-        parent::tearDown();
-        unlink($this->rootDirectory->getAbsolutePath($this->fileName));
+        $this->rootDirectory->getDriver()->deleteFile($this->rootDirectory->getAbsolutePath($this->fileName));
     }
 }
