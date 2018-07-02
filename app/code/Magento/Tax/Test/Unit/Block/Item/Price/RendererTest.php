@@ -96,6 +96,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($flag, $this->renderer->displayPriceInclTax());
     }
 
+    /**
+     * @return array
+     */
     public function displayPriceInclTaxDataProvider()
     {
         $data = [
@@ -143,6 +146,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($flag, $this->renderer->displayPriceExclTax());
     }
 
+    /**
+     * @return array
+     */
     public function displayPriceExclTaxDataProvider()
     {
         $data = [
@@ -190,6 +196,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($flag, $this->renderer->displayBothPrices());
     }
 
+    /**
+     * @return array
+     */
     public function displayBothPricesDataProvider()
     {
         $data = [

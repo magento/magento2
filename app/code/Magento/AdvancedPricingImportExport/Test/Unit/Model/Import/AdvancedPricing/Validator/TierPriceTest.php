@@ -181,6 +181,9 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
         $this->tierPrice->isValid($value);
     }
 
+    /**
+     * @return array
+     */
     public function isValidResultFalseDataProvider()
     {
         return [
@@ -286,6 +289,9 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function isValidAddMessagesCallDataProvider()
     {
         return [

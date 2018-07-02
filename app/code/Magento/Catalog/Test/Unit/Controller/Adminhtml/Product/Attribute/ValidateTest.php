@@ -195,6 +195,9 @@ class ValidateTest extends AttributeTest
         $this->assertInstanceOf(ResultJson::class, $this->getModel()->execute());
     }
 
+    /**
+     * @return array
+     */
     public function provideUniqueData()
     {
         return [
