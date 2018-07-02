@@ -65,7 +65,7 @@
 
         <!--save the product/published by default-->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
-        <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!-- go to page-->
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
