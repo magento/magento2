@@ -11,6 +11,9 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\StoreFactory;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Registry;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type as ProductTypes;
 
 class Builder
 {
@@ -40,6 +43,11 @@ class Builder
     protected $storeFactory;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * Constructor
      *
      * @param ProductFactory $productFactory
@@ -47,13 +55,15 @@ class Builder
      * @param Registry $registry
      * @param WysiwygModel\Config $wysiwygConfig
      * @param StoreFactory|null $storeFactory
+     * @param ProductRepositoryInterface|null $productRepository
      */
     public function __construct(
         ProductFactory $productFactory,
         Logger $logger,
         Registry $registry,
         WysiwygModel\Config $wysiwygConfig,
-        StoreFactory $storeFactory = null
+        StoreFactory $storeFactory = null,
+        ProductRepositoryInterface $productRepository = null
     ) {
         $this->productFactory = $productFactory;
         $this->logger = $logger;
@@ -61,6 +71,8 @@ class Builder
         $this->wysiwygConfig = $wysiwygConfig;
         $this->storeFactory = $storeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Store\Model\StoreFactory::class);
+        $this->productRepository = $productRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -68,40 +80,62 @@ class Builder
      *
      * @param RequestInterface $request
      * @return \Magento\Catalog\Model\Product
+     * @throws \RuntimeException
      */
     public function build(RequestInterface $request)
     {
-        $productId = (int)$request->getParam('id');
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = $this->productFactory->create();
-        $product->setStoreId($request->getParam('store', 0));
-        $store = $this->storeFactory->create();
-        $store->load($request->getParam('store', 0));
-
+        $productId = (int) $request->getParam('id');
+        $storeId = $request->getParam('store', 0);
+        $attributeSetId = (int) $request->getParam('set');
         $typeId = $request->getParam('type');
-        if (!$productId && $typeId) {
-            $product->setTypeId($typeId);
-        }
 
-        $product->setData('_edit_mode', true);
         if ($productId) {
             try {
-                $product->load($productId);
+                $product = $this->productRepository->getById($productId, true, $storeId);
             } catch (\Exception $e) {
-                $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE);
+                $product = $this->createEmptyProduct(ProductTypes::DEFAULT_TYPE, $attributeSetId, $storeId);
                 $this->logger->critical($e);
             }
+        } else {
+            $product = $this->createEmptyProduct($typeId, $attributeSetId, $storeId);
         }
 
-        $setId = (int)$request->getParam('set');
-        if ($setId) {
-            $product->setAttributeSetId($setId);
-        }
+        $store = $this->storeFactory->create();
+        $store->load($storeId);
 
         $this->registry->register('product', $product);
         $this->registry->register('current_product', $product);
         $this->registry->register('current_store', $store);
-        $this->wysiwygConfig->setStoreId($request->getParam('store'));
+
+        $this->wysiwygConfig->setStoreId($storeId);
+
+        return $product;
+    }
+
+    /**
+     * @param int $typeId
+     * @param int $attributeSetId
+     * @param int $storeId
+     * @return \Magento\Catalog\Model\Product
+     */
+    private function createEmptyProduct($typeId, $attributeSetId, $storeId): Product
+    {
+        /** @var $product \Magento\Catalog\Model\Product */
+        $product = $this->productFactory->create();
+        $product->setData('_edit_mode', true);
+
+        if ($typeId !== null) {
+            $product->setTypeId($typeId);
+        }
+
+        if ($storeId !== null) {
+            $product->setStoreId($storeId);
+        }
+
+        if ($attributeSetId) {
+            $product->setAttributeSetId($attributeSetId);
+        }
+
         return $product;
     }
 }

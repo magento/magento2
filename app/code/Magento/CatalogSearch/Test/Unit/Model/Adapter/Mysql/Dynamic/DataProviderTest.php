@@ -74,6 +74,18 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->mysqlDataProviderMock = $this->createMock(DataProviderInterface::class);
         $this->intervalFactoryMock = $this->createMock(IntervalFactory::class);
         $this->storeManagerMock = $this->createMock(StoreManager::class);
+        $this->indexScopeResolverMock = $this->createMock(
+            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+        );
+        $this->dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
+        $this->dimensionFactoryMock = $this->createMock(\Magento\Framework\Indexer\DimensionFactory::class);
+        $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock->method('getId')->willReturn(1);
+        $storeMock->method('getWebsiteId')->willReturn(1);
+        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
+        $this->indexScopeResolverMock->method('resolve')->willReturn('catalog_product_index_price');
+        $this->sessionMock->method('getCustomerGroupId')->willReturn(1);
 
         $this->model = new DataProvider(
             $this->resourceConnectionMock,
@@ -81,7 +93,9 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             $this->sessionMock,
             $this->mysqlDataProviderMock,
             $this->intervalFactoryMock,
-            $this->storeManagerMock
+            $this->storeManagerMock,
+            $this->indexScopeResolverMock,
+            $this->dimensionFactoryMock
         );
     }
 
@@ -96,10 +110,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $entityStorageMock = $this->createMock(EntityStorage::class);
         $entityStorageMock->expects($this->any())->method('getSource')->willReturn($tableMock);
-
-        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
-        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn(42);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $this->model->getAggregations($entityStorageMock);
     }
