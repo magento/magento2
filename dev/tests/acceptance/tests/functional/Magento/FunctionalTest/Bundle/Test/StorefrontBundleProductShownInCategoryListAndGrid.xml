@@ -86,6 +86,8 @@
         <see userInput="{{SimpleSubCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
         <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCount"/>
         <seeElement selector="{{StorefrontCategoryProductSection.listedProduct('1')}}" stepKey="assertBundleProductPresence"/>
+        <see userInput="{{BundleProduct.name}}" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" stepKey="checkTitle"/>
+        <see userInput="$1,230.00" selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" stepKey="checkPrice"/>
 
         <!--Check in list view-->
         <click selector="{{StorefrontCategoryProductSection.categoryListView}}" stepKey="switchToListView"/>
@@ -93,5 +95,7 @@
         <see userInput="{{SimpleSubCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNamAgain"/>
         <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCountAgain"/>
         <seeElement selector="{{StorefrontCategoryProductSection.listedProduct('1')}}" stepKey="assertBundleProductPresenceAgain"/>
+        <see userInput="{{BundleProduct.name}}" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" stepKey="checkTitleAgain"/>
+        <see userInput="$1,230.00" selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" stepKey="checkPriceAgain"/>
     </test>
 </tests>
