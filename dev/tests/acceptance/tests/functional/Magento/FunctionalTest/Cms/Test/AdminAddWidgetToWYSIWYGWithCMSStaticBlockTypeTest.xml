@@ -10,11 +10,11 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAddWidgetToWYSIWYGWithCMSStaticBlockTypeTest">
         <annotations>
-            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <features value="Cms"/>
             <stories value="MAGETWO-42156-Widgets in WYSIWYG"/>
             <group value="Cms"/>
-            <title value="Create CMS Page With Widget Type:CMS Static Block"/>
-            <description value="Create CMS Page With Widget Type:CMS Static Block"/>
+            <title value="Admin should be able to create a CMS page with widget type: CMS Static Block"/>
+            <description value="Admin should be able to create a CMS page with widget type: CMS Static Block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-83787"/>
         </annotations>

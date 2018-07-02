@@ -55,10 +55,6 @@ class PlaceOrder implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if (!$this->signifydIntegrationConfig->isActive()) {
-            return;
-        }
-
         $orders = $this->extractOrders(
             $observer->getEvent()
         );
@@ -68,7 +64,10 @@ class PlaceOrder implements ObserverInterface
         }
 
         foreach ($orders as $order) {
-            $this->createCaseForOrder($order);
+            $storeId = $order->getStoreId();
+            if ($this->signifydIntegrationConfig->isActive($storeId)) {
+                $this->createCaseForOrder($order);
+            }
         }
     }
 
