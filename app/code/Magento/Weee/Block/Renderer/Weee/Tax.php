@@ -33,7 +33,7 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
     /**
      * @var string
      */
-    protected $_template = 'renderer/tax.phtml';
+    protected $_template = 'Magento_Weee::renderer/tax.phtml';
 
     /**
      * Core registry
