@@ -105,7 +105,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->product->expects($this->any())->method('getUrlKey')->will($this->returnValue($productUrlKey));
         $this->product->expects($this->any())->method('formatUrlKey')->will($this->returnValue($productUrlKey));
-        $this->assertEquals($expectedUrlKey, $this->productUrlPathGenerator->getUrlKey($this->product));
+        $this->assertSame($expectedUrlKey, $this->productUrlPathGenerator->getUrlKey($this->product));
     }
 
     /**
@@ -114,7 +114,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     public function getUrlKeyDataProvider()
     {
         return [
-            'URL Key use default' => [false, false],
+            'URL Key use default' => [false, null],
             'URL Key empty' => ['product-url', 'product-url'],
         ];
     }

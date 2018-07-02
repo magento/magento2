@@ -9,11 +9,13 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
+        <element name="stock" type="input" selector=".stock.available"/>
         <element name="productName" type="text" selector=".base"/>
         <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
         <element name="productPrice" type="text" selector=".price"/>
         <element name="productStockStatus" type="text" selector=".stock[title=Availability]>span"/>
         <element name="productDescription" type="text" selector="#description .value"/>
+        <element name="productImageSrc" type="text" selector="//*[@id='maincontent']//div[@class='gallery-placeholder']//img[contains(@src, '{{src}}')]" parameterized="true"/>
         <element name="productOptionFieldInput" type="input" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//input[@type='text']" parameterized="true"/>
         <element name="productOptionAreaInput" type="textarea" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//textarea" parameterized="true"/>
         <element name="productOptionFile" type="file" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'OptionFile')]/../div[@class='control']//input[@type='file']" parameterized="true"/>
