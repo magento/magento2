@@ -92,6 +92,9 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->composerInformation->isMagentoRoot());
     }
 
+    /**
+     * @return array
+     */
     public function isMagentoRootDataProvider()
     {
         return [

@@ -31,9 +31,6 @@ if (!$store->load($storeCode)->getId()) {
         \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
         $store->getId()
     );
-
-    /* Refresh stores memory cache */
-    $storeManager->reinitStores();
 }
 
 /** @var $productFirst \Magento\Catalog\Model\Product */
