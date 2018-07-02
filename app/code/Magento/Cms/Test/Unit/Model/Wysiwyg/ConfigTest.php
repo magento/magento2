@@ -187,6 +187,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('localhost/pub/static/', $config->getData('baseStaticDefaultUrl'));
     }
 
+    /**
+     * @return array
+     */
     public function getConfigDataProvider()
     {
         return [

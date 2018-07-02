@@ -54,6 +54,9 @@ class ModuleDependencyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedFiles, $this->_model->getFiles($theme, '*.xml'), $message);
     }
 
+    /**
+     * @return array
+     */
     public function getFilesDataProvider()
     {
         $fileOne = new \Magento\Framework\View\File('b.xml', 'Fixture_ModuleB');

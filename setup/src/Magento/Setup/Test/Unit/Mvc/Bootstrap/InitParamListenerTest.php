@@ -139,6 +139,9 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedArray, $listener->createService($serviceLocator));
     }
 
+    /**
+     * @return array
+     */
     public function createServiceDataProvider()
     {
         return [

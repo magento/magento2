@@ -300,6 +300,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->onepage->initCheckout();
     }
 
+    /**
+     * @return array
+     */
     public function initCheckoutDataProvider()
     {
         return [
@@ -332,6 +335,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->onepage->getCheckoutMethod());
     }
 
+    /**
+     * @return array
+     */
     public function getCheckoutMethodDataProvider()
     {
         return [

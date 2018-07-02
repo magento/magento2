@@ -364,6 +364,9 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $captcha->isShownToLoggedInUser());
     }
 
+    /**
+     * @return array
+     */
     public function isShownToLoggedInUserDataProvider()
     {
         return [

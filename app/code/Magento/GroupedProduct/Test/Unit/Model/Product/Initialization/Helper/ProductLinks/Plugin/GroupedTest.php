@@ -28,6 +28,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $productRepository;
+
     /**
      * @var \Magento\GroupedProduct\Model\Product\Initialization\Helper\ProductLinks\Plugin\Grouped
      */
@@ -90,6 +91,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->model->beforeInitializeLinks($this->subjectMock, $this->productMock, []);
     }
 
+    /**
+     * @return array
+     */
     public function productTypeDataProvider()
     {
         return [
@@ -142,6 +146,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->model->beforeInitializeLinks($this->subjectMock, $this->productMock, ['associated' => $linksData]);
     }
 
+    /**
+     * @return array
+     */
     public function linksDataProvider()
     {
         return [

@@ -126,6 +126,9 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $this->action->execute();
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [

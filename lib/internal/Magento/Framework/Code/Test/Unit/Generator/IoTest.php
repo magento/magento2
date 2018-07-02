@@ -111,6 +111,9 @@ class IoTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($success, $this->_object->writeResultFile($resultFileName, self::FILE_CONTENT));
     }
 
+    /**
+     * @return array
+     */
     public function testWriteResultFileAlreadyExistsDataProvider()
     {
         return [
@@ -202,6 +205,9 @@ class IoTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($exists, $this->_object->fileExists($fileName));
     }
 
+    /**
+     * @return array
+     */
     public function fileExistsDataProvider()
     {
         return [

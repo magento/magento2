@@ -577,6 +577,9 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderTestExecute()
     {
         return [

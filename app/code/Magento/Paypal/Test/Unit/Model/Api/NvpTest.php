@@ -152,6 +152,9 @@ class NvpTest extends \PHPUnit_Framework_TestCase
         $this->model->call('some method', ['data' => 'some data']);
     }
 
+    /**
+     * @return array
+     */
     public function callDataProvider()
     {
         return [

@@ -79,6 +79,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isValid, $this->validator->isValid(new \Magento\Framework\DataObject($data)));
     }
 
+    /**
+     * @return array
+     */
     public function trueFalseDataProvider()
     {
         return [[true], [false]];

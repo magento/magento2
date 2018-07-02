@@ -51,6 +51,9 @@ class UninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->checkInteraction(false);
     }
 
+    /**
+     * @param $answer
+     */
     public function checkInteraction($answer)
     {
         $question = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper', [], [], '', false);
