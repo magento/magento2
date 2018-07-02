@@ -111,6 +111,12 @@ interface ItemInterface extends ExtensibleDataInterface
     public function setQty($qty);
 
     /**
+     * Get array of custom options for wishlist item
+     * @return mixed
+     */
+    public function getOptions();
+
+    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Wishlist\Api\Data\ItemExtensionInterface|null
