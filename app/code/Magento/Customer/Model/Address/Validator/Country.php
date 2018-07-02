@@ -7,6 +7,8 @@ namespace Magento\Customer\Model\Address\Validator;
 
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Address\ValidatorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Address country and region validator.
@@ -19,12 +21,30 @@ class Country implements ValidatorInterface
     private $directoryData;
 
     /**
+     * @var \Magento\Directory\Model\AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
+     * @var \Magento\Customer\Model\Config\Share
+     */
+    private $shareConfig;
+
+    /**
      * @param \Magento\Directory\Helper\Data $directoryData
+     * @param \Magento\Directory\Model\AllowedCountries|null $allowedCountriesReader
+     * @param \Magento\Customer\Model\Config\Share|null $shareConfig
      */
     public function __construct(
-        \Magento\Directory\Helper\Data $directoryData
+        \Magento\Directory\Helper\Data $directoryData,
+        \Magento\Directory\Model\AllowedCountries $allowedCountriesReader = null,
+        \Magento\Customer\Model\Config\Share $shareConfig = null
     ) {
         $this->directoryData = $directoryData;
+        $this->allowedCountriesReader = $allowedCountriesReader
+            ?: ObjectManager::getInstance()->get(\Magento\Directory\Model\AllowedCountries::class);
+        $this->shareConfig = $shareConfig
+            ?: ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
     }
 
     /**
@@ -52,7 +72,7 @@ class Country implements ValidatorInterface
         $errors = [];
         if (!\Zend_Validate::is($countryId, 'NotEmpty')) {
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'countryId']);
-        } elseif (!in_array($countryId, $this->directoryData->getCountryCollection()->getAllIds(), true)) {
+        } elseif (!in_array($countryId, $this->getWebsiteAllowedCountries($address), true)) {
             //Checking if such country exists.
             $errors[] = __(
                 'Invalid value of "%value" provided for the %fieldName field.',
@@ -96,5 +116,22 @@ class Country implements ValidatorInterface
         }
 
         return $errors;
+    }
+
+    /**
+     * Return allowed counties per website.
+     *
+     * @param AbstractAddress $address
+     * @return array
+     */
+    private function getWebsiteAllowedCountries(AbstractAddress $address): array
+    {
+        $websiteId = null;
+
+        if (!$this->shareConfig->isGlobalScope()) {
+            $websiteId = $address->getCustomer() ? $address->getCustomer()->getWebsiteId() : null;
+        }
+
+        return $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $websiteId);
     }
 }
