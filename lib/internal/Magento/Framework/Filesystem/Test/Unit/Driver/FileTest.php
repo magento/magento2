@@ -31,6 +31,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $file->getAbsolutePath($basePath, $path));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestGetAbsolutePath()
     {
         return [
@@ -50,6 +53,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $file->getRelativePath($basePath, $path));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestGetRelativePath()
     {
         return [
