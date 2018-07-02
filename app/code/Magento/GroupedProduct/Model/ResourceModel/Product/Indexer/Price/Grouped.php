@@ -15,10 +15,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceModifierInterface;
 use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
-use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
-use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 
 /**
  * Calculate minimal and maximal prices for Grouped products
@@ -147,15 +144,6 @@ class Grouped implements DimensionalIndexerInterface
 
         if ($entityIds !== null) {
             $select->where('l.product_id IN(?)', $entityIds);
-        }
-
-        foreach ($dimensions as $dimension) {
-            if ($dimension->getName() === WebsiteDimensionProvider::DIMENSION_NAME) {
-                $select->where('i.website_id = ?', $dimension->getValue());
-            }
-            if ($dimension->getName() === CustomerGroupDimensionProvider::DIMENSION_NAME) {
-                $select->where('i.customer_group_id = ?', $dimension->getValue());
-            }
         }
 
         return $select;
