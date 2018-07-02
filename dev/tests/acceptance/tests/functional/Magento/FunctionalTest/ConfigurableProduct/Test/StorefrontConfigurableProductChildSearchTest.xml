@@ -28,7 +28,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <!-- Create an attribute with two options -->
+            <!-- Create an attribute with two options to be used in the first child product -->
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
             <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
@@ -37,9 +37,23 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
 
+            <!-- Create an attribute with two options to be used in the second child product -->
+            <createData entity="productAttributeMultiselectTwoOptions" stepKey="createConfigProductAttributeMultiSelect"/>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOption1Multiselect">
+                <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
+            </createData>
+            <createData entity="productAttributeOption4" stepKey="createConfigProductAttributeOption2Multiselect">
+                <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
+            </createData>
+
             <!-- Add the attribute we just created to default attribute set -->
             <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Add the third attribute we just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet2">
+                <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
             </createData>
 
             <!-- Get the first option of the attribute we created -->
@@ -47,9 +61,9 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </getData>
 
-            <!-- Get the second option of the attribute we created -->
-            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            <!-- Get the first option of the second attribute we created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
             </getData>
 
             <!-- Create a simple product and give it the attribute with the first option -->
@@ -60,7 +74,7 @@
 
             <!-- Create a simple product and give it the attribute with the second option -->
             <createData entity="ApiSimpleTwoHidden" stepKey="createConfigChildProduct2">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
             </createData>
 
@@ -93,6 +107,8 @@
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createConfigProductAttributeMultiSelect" stepKey="deleteConfigProductAttributeMultiSelect"/>
+            <deleteData createDataKey="createConfigProductAttributeSelect" stepKey="deleteConfigProductAttributeSelect"/>
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
         </after>
 
@@ -107,6 +123,8 @@
             <argument name="description" value="sampleShortDescription"/>
         </actionGroup>
 
+        <pauseExecution stepKey="pause"/>
+
         <!-- Quick search the storefront for the first attribute option -->
         <amOnPage stepKey="goToStoreFront" url="{{StorefrontHomePage.url}}"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
@@ -115,7 +133,7 @@
         <seeElement stepKey="seeProduct1" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
 
         <!-- Quick search the storefront for the second attribute option -->
-        <fillField stepKey="searchStorefront2" selector="{{StorefrontPanelHeaderSection.search}}" userInput="$$createConfigProductAttributeOption2.option[store_labels][0][label]$$"/>
+        <fillField stepKey="searchStorefront2" selector="{{StorefrontPanelHeaderSection.search}}" userInput="$$createConfigProductAttributeOption1Multiselect.option[store_labels][0][label]$$"/>
         <click stepKey="clickSearch2" selector="{{StorefrontPanelHeaderSection.searchButton}}"/>
         <seeElement stepKey="seeProduct2" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
 
