@@ -93,6 +93,9 @@ class ActionListTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->actionList->get($module, $area, $namespace, $action));
     }
 
+    /**
+     * @return array
+     */
     public function getDataProvider()
     {
         $mockClassName = 'Mock_Action_Class';
