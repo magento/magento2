@@ -45,6 +45,7 @@ abstract class PrintAction extends \Magento\Backend\App\Action
 
     /**
      * @return ResponseInterface|void
+     * @throws \Exception
      */
     public function execute()
     {
