@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "daacd8800615d44aa1af0ac06c1ecc46",
+    "content-hash": "0bc35cb5fa65f5a63d09983a646ca6c3",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -837,13 +837,6 @@
                 "reference": "68522e5768edc8e829d1f64b620a3de3753f1141",
                 "shasum": ""
             },
-            "archive": {
-                "exclude": [
-                    "/demos",
-                    "/documentation",
-                    "/tests"
-                ]
-            },
             "require": {
                 "php": ">=5.2.11"
             },
@@ -862,6 +855,7 @@
                     "Zend_": "library/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "library/"
             ],
@@ -871,14 +865,10 @@
             "description": "Magento Zend Framework 1",
             "homepage": "http://framework.zend.com/",
             "keywords": [
-                "framework",
-                "zf1"
+                "ZF1",
+                "framework"
             ],
-            "support": {
-                "source": "https://github.com/magento-engcom/zf1-php-7.2-support/tree/master",
-                "issues": "https://github.com/magento-engcom/zf1-php-7.2-support/issues"
-            },
-            "time": "2018-04-06T17:12:22+00:00"
+            "time": "2018-04-06T18:49:03+00:00"
         },
         {
             "name": "monolog/monolog",

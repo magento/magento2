@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Configuration query interfaces -->
+    <preference for="Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\GetStockItemConfiguration"/>
+    <preference for="Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\SaveStockItemConfiguration"/>
+    <preference for="Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\StockItemConfiguration"/>
+    <!-- Product types -->
+    <preference for="Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface" type="Magento\InventoryConfiguration\Model\IsSourceItemManagementAllowedForProductType"/>
+    <preference for="Magento\InventoryConfigurationApi\Model\GetAllowedProductTypesForSourceItemManagementInterface" type="Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemManagement"/>
+</config>

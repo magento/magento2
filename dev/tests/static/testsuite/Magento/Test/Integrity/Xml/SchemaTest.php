@@ -108,7 +108,9 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
             '#layout/swagger_index_index.xml$#',
             '#Doc/etc/doc/vars.xml$#',
             '#phpunit.xml$#',
-            '#etc/db_schema.xml$#'
+            '#etc/db_schema.xml$#',
+            '#Test/Acceptance#',
+            '#Test/Mftf#'
         ];
         foreach ($list as $pattern) {
             foreach ($files as $key => $value) {

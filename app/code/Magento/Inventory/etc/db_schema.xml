@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="inventory_source" resource="default" engine="innodb">
+        <column xsi:type="varchar" name="source_code" nullable="false" length="255"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255"/>
+        <column xsi:type="smallint" name="enabled" padding="5" unsigned="true" nullable="false" identity="false"
+                default="1"/>
+        <column xsi:type="text" name="description" nullable="true"/>
+        <column xsi:type="decimal" name="latitude" scale="6" precision="8" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="longitude" scale="6" precision="9" unsigned="false" nullable="true"/>
+        <column xsi:type="varchar" name="country_id" nullable="false" length="2"/>
+        <column xsi:type="int" name="region_id" padding="10" unsigned="true" nullable="true" identity="false"/>
+        <column xsi:type="varchar" name="region" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="city" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="street" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="postcode" nullable="false" length="255"/>
+        <column xsi:type="varchar" name="contact_name" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="email" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="phone" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="fax" nullable="true" length="255"/>
+        <column xsi:type="smallint" name="use_default_carrier_config" padding="5" unsigned="true" nullable="false"
+                identity="false" default="1"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="source_code"/>
+        </constraint>
+    </table>
+    <table name="inventory_source_carrier_link" resource="default" engine="innodb">
+        <column xsi:type="int" name="link_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="varchar" name="source_code" nullable="false" length="255"/>
+        <column xsi:type="varchar" name="carrier_code" nullable="false" length="255"/>
+        <column xsi:type="smallint" name="position" padding="5" unsigned="true" nullable="true" identity="false"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="link_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="INV_SOURCE_CARRIER_LNK_SOURCE_CODE_INV_SOURCE_SOURCE_CODE"
+                    table="inventory_source_carrier_link" column="source_code" referenceTable="inventory_source"
+                    referenceColumn="source_code" onDelete="CASCADE"/>
+    </table>
+    <table name="inventory_source_item" resource="default" engine="innodb">
+        <column xsi:type="int" name="source_item_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="varchar" name="source_code" nullable="false" length="255"/>
+        <column xsi:type="varchar" name="sku" nullable="false" length="64"/>
+        <column xsi:type="decimal" name="quantity" scale="4" precision="10" unsigned="false" nullable="false"
+                default="0"/>
+        <column xsi:type="smallint" name="status" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="source_item_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="INVENTORY_SOURCE_ITEM_SOURCE_CODE_INVENTORY_SOURCE_SOURCE_CODE"
+                    table="inventory_source_item" column="source_code" referenceTable="inventory_source"
+                    referenceColumn="source_code" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" name="INVENTORY_SOURCE_ITEM_SOURCE_CODE_SKU">
+            <column name="source_code"/>
+            <column name="sku"/>
+        </constraint>
+    </table>
+    <table name="inventory_stock" resource="default" engine="innodb">
+        <column xsi:type="int" name="stock_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="stock_id"/>
+        </constraint>
+    </table>
+    <table name="inventory_source_stock_link" resource="default" engine="innodb">
+        <column xsi:type="int" name="link_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="stock_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="varchar" name="source_code" nullable="false" length="255"/>
+        <column xsi:type="smallint" name="priority" padding="5" unsigned="true" nullable="false" identity="false"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="link_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="INVENTORY_SOURCE_STOCK_LINK_STOCK_ID_INVENTORY_STOCK_STOCK_ID"
+                    table="inventory_source_stock_link" column="stock_id" referenceTable="inventory_stock"
+                    referenceColumn="stock_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="INV_SOURCE_STOCK_LNK_SOURCE_CODE_INV_SOURCE_SOURCE_CODE"
+                    table="inventory_source_stock_link" column="source_code" referenceTable="inventory_source"
+                    referenceColumn="source_code" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" name="INVENTORY_SOURCE_STOCK_LINK_STOCK_ID_SOURCE_CODE">
+            <column name="stock_id"/>
+            <column name="source_code"/>
+        </constraint>
+        <index name="INVENTORY_SOURCE_STOCK_LINK_STOCK_ID_PRIORITY" indexType="btree">
+            <column name="stock_id"/>
+            <column name="priority"/>
+        </index>
+    </table>
+</schema>

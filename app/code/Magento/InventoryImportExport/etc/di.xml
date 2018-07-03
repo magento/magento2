@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Import -->
+    <preference for="Magento\InventoryImportExport\Model\Import\Validator\ValidatorInterface" type="Magento\InventoryImportExport\Model\Import\Validator\ValidatorChain"/>
+    <type name="Magento\InventoryImportExport\Model\Import\Validator\ValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sku" xsi:type="object">Magento\InventoryImportExport\Model\Import\Validator\SkuValidator</item>
+                <item name="source" xsi:type="object">Magento\InventoryImportExport\Model\Import\Validator\SourceValidator</item>
+                <item name="qty" xsi:type="object">Magento\InventoryImportExport\Model\Import\Validator\QtyValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryImportExport\Model\Import\Sources">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="delete" xsi:type="object">Magento\InventoryImportExport\Model\Import\Command\Delete</item>
+                <item name="append" xsi:type="object">Magento\InventoryImportExport\Model\Import\Command\Append</item>
+                <item name="replace" xsi:type="object">Magento\InventoryImportExport\Model\Import\Command\Replace</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Source Item Import Plugin -->
+    <type name="Magento\CatalogImportExport\Model\StockItemImporterInterface">
+        <plugin name="importStockItemDataForSourceItem" type="Magento\InventoryImportExport\Plugin\Import\SourceItemImporter" />
+    </type>
+
+    <!-- Export -->
+    <preference for="Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactoryInterface" type="Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactory"/>
+    <preference for="Magento\InventoryImportExport\Model\Export\ColumnProviderInterface" type="\Magento\InventoryImportExport\Model\Export\ColumnProvider"/>
+    <type name="Magento\InventoryImportExport\Model\Export\FilterProcessorAggregator">
+        <arguments>
+            <argument name="handler" xsi:type="array">
+                <item name="int" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\IntFilter</item>
+                <!-- IntFilter is also used for 'decimal' type -->
+                <item name="decimal" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\IntFilter</item>
+                <item name="varchar" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\VarcharFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\Import\SampleFileProvider">
+        <arguments>
+            <argument name="samples" xsi:type="array">
+                <item name="stock_sources" xsi:type="string">Magento_InventoryImportExport</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

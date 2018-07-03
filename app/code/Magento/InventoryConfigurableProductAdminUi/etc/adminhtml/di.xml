@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Composite">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="inventoryConfigurablePanel" xsi:type="string">Magento\InventoryConfigurableProductAdminUi\Ui\DataProvider\Product\Form\Modifier\InventoryConfigurablePanel</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk">
+        <plugin name="adapt_configurable_wizard_bulk_block_to_msi"
+                type="Magento\InventoryConfigurableProductAdminUi\Plugin\Block\BulkStepChangeTemplate"/>
+    </type>
+    <type name="Magento\InventoryConfigurableProductAdminUi\Plugin\Block\BulkStepChangeTemplate">
+        <arguments>
+            <argument name="multiSourceTemplate" xsi:type="string">Magento_InventoryConfigurableProductAdminUi::catalog/product/edit/attribute/steps/bulk.phtml</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary">
+        <plugin name="adapt_configurable_wizard_summary_block_to_msi"
+                type="Magento\InventoryConfigurableProductAdminUi\Plugin\Block\SummaryStepChangeTemplate"/>
+    </type>
+    <type name="Magento\InventoryConfigurableProductAdminUi\Plugin\Block\SummaryStepChangeTemplate">
+        <arguments>
+            <argument name="multiSourceTemplate" xsi:type="string">Magento_InventoryConfigurableProductAdminUi::catalog/product/edit/attribute/steps/summary.phtml</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix">
+        <plugin name="add_quantity_per_source_to_variations_matrix"
+                type="Magento\InventoryConfigurableProductAdminUi\Plugin\Block\AddQuantityPerSourceToVariationsMatrix"/>
+    </type>
+</config>

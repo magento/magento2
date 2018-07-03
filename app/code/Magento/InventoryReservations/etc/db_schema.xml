@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="inventory_reservation" resource="default" engine="innodb">
+        <column xsi:type="int" name="reservation_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="stock_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="varchar" name="sku" nullable="false" length="64"/>
+        <column xsi:type="decimal" name="quantity" scale="4" precision="10" unsigned="false" nullable="false"
+                default="0"/>
+        <column xsi:type="varchar" name="metadata" nullable="true" length="255"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="reservation_id"/>
+        </constraint>
+        <index name="INVENTORY_RESERVATION_STOCK_ID_SKU_QUANTITY" indexType="btree">
+            <column name="stock_id"/>
+            <column name="sku"/>
+            <column name="quantity"/>
+        </index>
+    </table>
+</schema>

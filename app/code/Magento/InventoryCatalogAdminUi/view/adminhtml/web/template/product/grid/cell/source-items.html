@@ -1,0 +1,15 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="data-grid-cell-content">
+    <ul data-bind="foreach: { data: $col.getSourceItemsData($row()), as: '$sourceItemData' }">
+        <li>
+            <strong data-bind="text: $sourceItemData.source_name"></strong>
+            :
+            <span data-bind="text: $sourceItemData.qty"></span>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
+    <preference for="Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
+    <preference for="Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface" type="Magento\InventoryCatalog\Model\GetProductIdsBySkus"/>
+    <preference for="Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface" type="Magento\InventoryCatalog\Model\ResourceModel\GetProductTypesBySkus" />
+    <preference for="Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface" type="Magento\InventoryCatalog\Model\GetSkusByProductIds"/>
+    <preference for="Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface" type="Magento\InventoryCatalog\Model\IsSingleSourceMode"/>
+    <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
+        <plugin name="prevent_default_stock_deleting"
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
+        <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
+        <plugin name="set_to_zero_legacy_catalog_inventory_at_source_items_delete"
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface">
+        <plugin name="update_source_item_at_legacy_qty_counter" type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyQtyCounterPlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
+        <plugin name="update_source_item_at_legacy_stock_item_save"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyStockItemSavePlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
+        <plugin name="adapt_add_stock_data_to_collection"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddStockDataToCollectionPlugin"/>
+        <plugin name="adapt_add_stock_status_to_select"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddStockStatusToSelectPlugin"/>
+        <plugin name="adapt_add_is_in_stock_filter_to_collection"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddIsInStockFilterToCollectionPlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Helper\Stock">
+        <plugin name="adapt_add_in_stock_filter_to_collection" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddInStockFilterToCollectionPlugin"/>
+        <plugin name="adapt_add_stock_status_to_products" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddStockStatusToProductsPlugin"/>
+        <plugin name="adapt_assign_status_to_product" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAssignStatusToProductPlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Model\SourceValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="default_source_disable_validator" xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\DefaultSourceDisableValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryApi\Model\StockSourceLinkValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="default_stock_default_source" xsi:type="object">
+                    Magento\InventoryCatalog\Model\StockSourceLink\Validator\AssignToDefaultStockDefaultSourceValidator
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventorySalesApi\Api\StockResolverInterface">
+        <plugin name="adapt_stock_resolver_to_admin_website"
+                type="Magento\InventoryCatalog\Plugin\InventorySalesApi\StockResolver\AdaptStockResolverToAdminWebsitePlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface">
+        <plugin name="prevent_delete_default_stock_links" type="Magento\InventoryCatalog\Plugin\InventoryApi\StockSourceLinksDelete\PreventDeleteDefaultStockLinksPlugin"/>
+    </type>
+    <type name="Magento\InventoryCatalog\Setup\Operation\UpdateInventorySourceItem">
+        <arguments>
+            <argument name="tableNameSourceItem" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem">
+        <arguments>
+            <argument name="sourceItemsSave" xsi:type="object">Magento\Inventory\Model\SourceItem\Command\SourceItemsSaveWithoutLegacySynchronization</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Inventory\Model\SourceItem\Command\SourceItemsSaveWithoutLegacySynchronization">
+        <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save" disabled="true"/>
+    </type>
+    <type name="Magento\CatalogInventory\Api\StockRegistryInterface">
+        <plugin name="adapt_get_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetStockStatusPlugin"/>
+        <plugin name="adapt_get_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetStockStatusBySkuPlugin"/>
+        <plugin name="adapt_get_product_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusPlugin"/>
+        <plugin name="adapt_get_product_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusBySkuPlugin"/>
+    </type>
+</config>

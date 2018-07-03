@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_predispatch_adminhtml_order_shipment_new">
+        <observer name="inventory_shipping_check_data_before_load_new_shipment" instance="Magento\InventoryShippingAdminUi\Observer\NewShipmentLoadBefore"/>
+    </event>
+</config>

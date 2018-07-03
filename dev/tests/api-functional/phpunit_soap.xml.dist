@@ -21,6 +21,9 @@
             <!-- <exclude>testsuite/Magento/GraphQl</exclude> -->
             <directory suffix="Test.php">../../../app/code/*/*/Test/Api</directory>
         </testsuite>
+        <testsuite name="msi">
+            <directory suffix="Test.php">../../../app/code/*/*/Test/Api</directory>
+        </testsuite>
     </testsuites>
 
     <!-- PHP INI settings and constants definition -->

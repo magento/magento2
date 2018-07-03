@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="extra_shipment_info">
+            <block class="Magento\InventoryShippingAdminUi\Block\Adminhtml\Shipment\Inventory" name="inventory_shipment"
+                   template="Magento_InventoryShippingAdminUi::shipment/inventory.phtml" before="-" />
+        </referenceContainer>
+    </body>
+</page>
