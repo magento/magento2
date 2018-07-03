@@ -31,6 +31,9 @@
             <array key="options">
                 <value>product_option</value>
             </array>
+            <array key="media_gallery_entries">
+                <value>media_gallery_entries</value>
+            </array>
         </object>
     </operation>
     <operation name="UpdateProduct" dataType="product" type="update" auth="adminOauth" url="/V1/products/{sku}" method="PUT">

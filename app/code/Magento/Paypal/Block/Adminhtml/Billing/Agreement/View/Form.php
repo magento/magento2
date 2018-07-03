@@ -13,5 +13,5 @@ class Form extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'billing/agreement/view/form.phtml';
+    protected $_template = 'Magento_Paypal::billing/agreement/view/form.phtml';
 }
