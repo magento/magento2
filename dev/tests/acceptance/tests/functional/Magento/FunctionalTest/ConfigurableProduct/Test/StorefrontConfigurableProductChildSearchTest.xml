@@ -51,7 +51,7 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
 
-            <!-- Add the third attribute we just created to default attribute set -->
+            <!-- Add the second attribute we just created to default attribute set -->
             <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet2">
                 <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
             </createData>
@@ -98,6 +98,20 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
+            <!-- Create an attribute with two options to be used in the first child product (in the UI) -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttributeSelect"/>
+            <createData entity="productAttributeOption5" stepKey="createConfigProductAttributeSelectOption1">
+                <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
+            </createData>
+            <createData entity="productAttributeOption6" stepKey="createConfigProductAttributeSelectOption2">
+                <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
+            </createData>
+
+            <!-- Add the attribute we just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet3">
+                <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
+            </createData>
+
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
 
@@ -123,12 +137,16 @@
             <argument name="description" value="sampleShortDescription"/>
         </actionGroup>
 
-        <pauseExecution stepKey="pause"/>
+        <!-- Edit the attribute for the first simple product -->
+        <selectOption stepKey="editSelectAttribute" selector="{{ModifyAttributes.nthExistingAttribute($$createConfigProductAttributeSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
 
         <!-- Quick search the storefront for the first attribute option -->
         <amOnPage stepKey="goToStoreFront" url="{{StorefrontHomePage.url}}"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
-        <fillField stepKey="searchStorefront1" selector="{{StorefrontPanelHeaderSection.search}}" userInput="$$createConfigProductAttributeOption1.option[store_labels][0][label]$$"/>
+        <fillField stepKey="searchStorefront1" selector="{{StorefrontPanelHeaderSection.search}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$"/>
         <click stepKey="clickSearch1" selector="{{StorefrontPanelHeaderSection.searchButton}}"/>
         <seeElement stepKey="seeProduct1" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
 

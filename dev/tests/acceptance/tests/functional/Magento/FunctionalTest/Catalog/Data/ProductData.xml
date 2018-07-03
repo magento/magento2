@@ -131,7 +131,6 @@
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
-        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
     <entity name="ApiSimpleTwo" type="product2">
         <data key="sku" unique="suffix">api-simple-product-two</data>
@@ -157,7 +156,6 @@
         <data key="status">1</data>
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
-        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
     <entity name="VirtualProduct" type="product">
