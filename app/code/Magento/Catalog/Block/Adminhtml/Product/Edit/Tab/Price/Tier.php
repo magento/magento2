@@ -13,7 +13,7 @@ class Tier extends Group\AbstractGroup
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit/price/tier.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/edit/price/tier.phtml';
 
     /**
      * Retrieve list of initial customer groups
