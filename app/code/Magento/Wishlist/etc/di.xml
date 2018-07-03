@@ -14,6 +14,18 @@
     <preference for="Magento\Wishlist\Api\Data\WishlistSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Wishlist\Api\Data\WishlistExtensionInterface" type="Magento\Wishlist\Model\WishlistExtension" />
 
+    <preference for="Magento\Wishlist\Api\Data\ItemInterface" type="Magento\Wishlist\Model\Item" />
+    <preference for="Magento\Wishlist\Api\Data\ItemSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Wishlist\Api\Data\ItemExtensionInterface" type="Magento\Wishlist\Model\ItemExtension" />
+    <preference for="Magento\Wishlist\Api\ItemRepositoryInterface" type="Magento\Wishlist\Model\ItemRepository" />
+
+    <preference for="Magento\Wishlist\Api\Data\OptionInterface" type="Magento\Wishlist\Model\Item\Option" />
+    <preference for="Magento\Wishlist\Api\Data\OptionSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Wishlist\Api\OptionRepositoryInterface" type="Magento\Wishlist\Model\OptionRepository" />
+
+
+    <preference for="Magento\Wishlist\Api\AddItemToWishlistInterface" type="Magento\Wishlist\Model\AddItemToWishlist" />
+    <preference for="Magento\Wishlist\Api\AddOptionToWishlistItemInterface" type="Magento\Wishlist\Model\AddItemToWishlist" />
 
     <type name="Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid">
         <arguments>
