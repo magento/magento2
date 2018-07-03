@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea frontend
  */
-class BreadcrumbsTest extends \PHPUnit_Framework_TestCase
+class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Block\Html\Breadcrumbs

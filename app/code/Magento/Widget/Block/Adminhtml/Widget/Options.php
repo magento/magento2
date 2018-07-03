@@ -9,6 +9,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget;
  * WYSIWYG widget options form
  *
  * @api
+ * @since 100.0.2
  */
 class Options extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -156,10 +157,11 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             $data['value'] = isset($values[$fieldName]) ? $values[$fieldName] : '';
         } else {
             $data['value'] = $parameter->getValue();
-            //prepare unique id value
-            if ($fieldName == 'unique_id' && $data['value'] == '') {
-                $data['value'] = md5(microtime(1));
-            }
+        }
+
+        //prepare unique id value
+        if ($fieldName == 'unique_id' && $data['value'] == '') {
+            $data['value'] = hash('sha256', microtime(1));
         }
 
         if (is_array($data['value'])) {

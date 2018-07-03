@@ -7,7 +7,7 @@ namespace Magento\Framework\Api\Test\Unit\ExtensionAttribute\Config;
 
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\Config\Converter

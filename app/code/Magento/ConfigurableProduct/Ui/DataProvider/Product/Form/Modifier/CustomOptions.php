@@ -127,8 +127,8 @@ class CustomOptions extends AbstractModifier
                     'bannedOptions' => ['percent'],
                     'imports' => [
                         'updateOptions' => 'ns = ${ $.ns }, index = '
-                            . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty'
-                    ]
+                            . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                    ],
                 ]
             );
         }

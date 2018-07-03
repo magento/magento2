@@ -8,7 +8,7 @@ namespace Magento\OfflineShipping\Test\Unit\Model\Quote\Address;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class FreeShippingTest extends \PHPUnit_Framework_TestCase
+class FreeShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Model\Quote\Address\FreeShipping
@@ -27,14 +27,8 @@ class FreeShippingTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->calculatorMock = $this->getMock(
-            \Magento\OfflineShipping\Model\SalesRule\Calculator::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->calculatorMock = $this->createMock(\Magento\OfflineShipping\Model\SalesRule\Calculator::class);
 
         $this->model = new \Magento\OfflineShipping\Model\Quote\Address\FreeShipping(
             $this->storeManagerMock,
@@ -44,7 +38,7 @@ class FreeShippingTest extends \PHPUnit_Framework_TestCase
 
     public function testIsFreeShippingIfNoItems()
     {
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->assertFalse($this->model->isFreeShipping($quoteMock, []));
     }
 
@@ -54,16 +48,11 @@ class FreeShippingTest extends \PHPUnit_Framework_TestCase
         $websiteId = 200;
         $customerGroupId = 300;
         $objectManagerMock = new ObjectManagerHelper($this);
-        $quoteMock = $this->getMock(
+        $quoteMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote::class,
-            ['getShippingAddress', 'getStoreId', 'getCustomerGroupId', 'getCouponCode'],
-            [],
-            '',
-            false
+            ['getShippingAddress', 'getStoreId', 'getCustomerGroupId', 'getCouponCode']
         );
-        $itemMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            [
+        $itemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, [
                 'getNoDiscount',
                 'getParentItemId',
                 'getFreeShipping',
@@ -71,14 +60,10 @@ class FreeShippingTest extends \PHPUnit_Framework_TestCase
                 'isChildrenCalculated',
                 'getHasChildren',
                 'getChildren'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
         $quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
-        $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId)->willReturn($storeMock);
 
@@ -102,7 +87,7 @@ class FreeShippingTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->once())->method('getHasChildren')->willReturn(true);
         $itemMock->expects($this->once())->method('isChildrenCalculated')->willReturn(true);
 
-        $childMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, ['setFreeShipping'], [], '', false);
+        $childMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['setFreeShipping']);
         $childMock->expects($this->once())->method('setFreeShipping')->with(true)->willReturnSelf();
         $itemMock->expects($this->once())->method('getChildren')->willReturn([$childMock]);
 

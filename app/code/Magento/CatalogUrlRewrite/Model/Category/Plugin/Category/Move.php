@@ -11,7 +11,9 @@ use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 
 class Move
 {
-    /** @var CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     */
     protected $categoryUrlPathGenerator;
 
     /**

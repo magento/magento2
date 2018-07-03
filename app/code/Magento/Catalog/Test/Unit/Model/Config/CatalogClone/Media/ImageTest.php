@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ImageTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Config\CatalogClone\Media\Image

@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Config;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\ObjectManager;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     const SAMPLE_CONFIG_PATH = 'web/unsecure/base_url';
 

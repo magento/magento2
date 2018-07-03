@@ -15,6 +15,7 @@ use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\App\ObjectManager;
@@ -23,6 +24,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Gallery extends AbstractView
 {
@@ -47,12 +49,18 @@ class Gallery extends AbstractView
     private $galleryImagesConfigFactory;
 
     /**
+     * @var UrlBuilder
+     */
+    private $imageUrlBuilder;
+
+    /**
      * @param Context $context
      * @param ArrayUtils $arrayUtils
      * @param EncoderInterface $jsonEncoder
      * @param array $data
-     * @param ImagesConfigFactoryInterface $imagesConfigFactory
+     * @param ImagesConfigFactoryInterface|null $imagesConfigFactory
      * @param array $galleryImagesConfig
+     * @param UrlBuilder|null $urlBuilder
      */
     public function __construct(
         Context $context,
@@ -60,13 +68,15 @@ class Gallery extends AbstractView
         EncoderInterface $jsonEncoder,
         array $data = [],
         ImagesConfigFactoryInterface $imagesConfigFactory = null,
-        array $galleryImagesConfig = []
+        array $galleryImagesConfig = [],
+        UrlBuilder $urlBuilder = null
     ) {
         parent::__construct($context, $arrayUtils, $data);
         $this->jsonEncoder = $jsonEncoder;
         $this->galleryImagesConfigFactory = $imagesConfigFactory ?: ObjectManager::getInstance()
             ->get(ImagesConfigFactoryInterface::class);
         $this->galleryImagesConfig = $galleryImagesConfig;
+        $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
     }
 
     /**
@@ -87,9 +97,7 @@ class Gallery extends AbstractView
             foreach ($galleryImagesConfig as $imageConfig) {
                 $image->setData(
                     $imageConfig->getData('data_object_key'),
-                    $this->_imageHelper->init($product, $imageConfig['image_id'])
-                        ->setImageFile($image->getData('file'))
-                        ->getUrl()
+                    $this->imageUrlBuilder->getUrl($image->getFile(), $imageConfig['image_id'])
                 );
             }
         }
@@ -128,9 +136,14 @@ class Gallery extends AbstractView
         /** @var DataObject $image */
         foreach ($this->getGalleryImages() as $image) {
             $imageItem = new DataObject([
+                'thumb' => $image->getData('small_image_url'),
+                'img' => $image->getData('medium_image_url'),
+                'full' => $image->getData('large_image_url'),
                 'caption'  => $image->getData('label'),
                 'position' => $image->getData('position'),
                 'isMain'   => $this->isMainImage($image),
+                'type' => str_replace('external-', '', $image->getMediaType()),
+                'videoUrl' => $image->getVideoUrl(),
             ]);
             foreach ($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
                 $imageItem->setData(
@@ -148,6 +161,8 @@ class Gallery extends AbstractView
                 'caption' => '',
                 'position' => '0',
                 'isMain' => true,
+                'type' => 'image',
+                'videoUrl' => null,
             ];
         }
         return json_encode($imagesItems);

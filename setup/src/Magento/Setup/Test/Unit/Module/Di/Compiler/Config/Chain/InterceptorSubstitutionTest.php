@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config\Chain;
 
 use Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution;
 
-class InterceptorSubstitutionTest extends \PHPUnit_Framework_TestCase
+class InterceptorSubstitutionTest extends \PHPUnit\Framework\TestCase
 {
     public function testModifyArgumentsDoNotExist()
     {

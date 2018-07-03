@@ -13,6 +13,7 @@ use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
+use Magento\Quote\Api\Data\CartExtensionInterface;
 
 /**
  * Class QuoteUpdaterTest
@@ -21,7 +22,7 @@ use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteUpdaterTest extends \PHPUnit_Framework_TestCase
+class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_NONCE = '3ede7045-2aea-463e-9754-cd658ffeeb48';
 
@@ -281,7 +282,7 @@ class QuoteUpdaterTest extends \PHPUnit_Framework_TestCase
      */
     private function getQuoteMock()
     {
-        return $this->getMockBuilder(Quote::class)
+        $quoteMock = $this->getMockBuilder(Quote::class)
             ->setMethods(
                 [
                     'getIsVirtual',
@@ -291,9 +292,21 @@ class QuoteUpdaterTest extends \PHPUnit_Framework_TestCase
                     'collectTotals',
                     'getShippingAddress',
                     'getBillingAddress',
+                    'getExtensionAttributes'
                 ]
             )->disableOriginalConstructor()
             ->getMock();
+
+        $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
+            ->setMethods(['setShippingAssignments'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $quoteMock->expects(self::any())
+            ->method('getExtensionAttributes')
+            ->willReturn($cartExtensionMock);
+
+        return $quoteMock;
     }
 
     /**

@@ -8,6 +8,7 @@ use \Magento\Framework\App\Filesystem\DirectoryList;
 
 $baseDir = realpath(__DIR__ . '/../../../../');
 require $baseDir . '/app/autoload.php';
+require $baseDir . '/vendor/squizlabs/php_codesniffer/autoload.php';
 $testsBaseDir = $baseDir . '/dev/tests/static';
 $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
 $autoloadWrapper->addPsr4('Magento\\', $testsBaseDir . '/testsuite/Magento/');

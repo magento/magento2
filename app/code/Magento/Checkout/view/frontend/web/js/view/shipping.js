@@ -127,10 +127,12 @@ define([
         },
 
         /**
-         * Load data from server for shipping step
+         * Navigator change hash handler.
+         *
+         * @param {Object} step - navigation step
          */
-        navigate: function () {
-            //load data from server for shipping step
+        navigate: function (step) {
+            step && step.isVisible(true);
         },
 
         /**
@@ -264,7 +266,9 @@ define([
                 field;
 
             if (!quote.shippingMethod()) {
-                this.errorValidationMessage($t('Please specify a shipping method.'));
+                this.errorValidationMessage(
+                    $t('The shipping method is missing. Select the shipping method and try again.')
+                );
 
                 return false;
             }

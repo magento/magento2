@@ -13,6 +13,7 @@ use Magento\SalesSequence\Model\ProfileFactory;
  * Class Profile represents profile data for sequence as prefix, suffix, start value etc.
  *
  * @api
+ * @since 100.0.2
  */
 class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

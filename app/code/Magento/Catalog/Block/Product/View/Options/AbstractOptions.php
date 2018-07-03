@@ -15,6 +15,7 @@ use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
 {
@@ -177,7 +178,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
      * Returns price converted to current currency rate
      *
      * @param float $price
-     * @return float
+     * @return float|string
      */
     public function getCurrencyPrice($price)
     {

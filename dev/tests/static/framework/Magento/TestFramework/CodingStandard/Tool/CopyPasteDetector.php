@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * PHP Copy Paste Detector v1.4.0 tool wrapper
  */

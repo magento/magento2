@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\SalesRule\Model;
 
 use Magento\Quote\Model\Quote\Address;
@@ -508,7 +506,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
             foreach ($items as $itemKey => $itemValue) {
                 if ($rule->getActions()->validate($itemValue)) {
                     unset($items[$itemKey]);
-                    array_push($itemsSorted, $itemValue);
+                    $itemsSorted[] = $itemValue;
                 }
             }
         }

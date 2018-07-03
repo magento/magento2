@@ -7,7 +7,7 @@ namespace Magento\MediaStorage\Model\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class StorageTest extends \PHPUnit_Framework_TestCase
+class StorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * test for \Magento\MediaStorage\Model\File\Storage::getScriptConfig()

@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import;
 
-class SourceAbstractTest extends \PHPUnit_Framework_TestCase
+class SourceAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject
@@ -57,7 +57,7 @@ class SourceAbstractTest extends \PHPUnit_Framework_TestCase
         )->method(
             '_getNextRow'
         )->will(
-            $this->onConsecutiveCalls([1, 2, 3], [4, 5, 5], [6, 7, 8])
+            $this->onConsecutiveCalls([1, 2, 3], [4, 5, 5], [6, 7, 8], [])
         );
         $data = [];
         foreach ($this->_model as $key => $value) {

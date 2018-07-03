@@ -7,7 +7,7 @@ namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\Setup\BackendFrontnameGenerator;
 
-class BackendFrontnameGeneratorTest extends \PHPUnit_Framework_TestCase
+class BackendFrontnameGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     public function testGenerate()
     {

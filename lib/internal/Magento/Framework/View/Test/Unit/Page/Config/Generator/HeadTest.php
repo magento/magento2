@@ -16,7 +16,7 @@ use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
 /**
  * Test for page config generator model
  */
-class HeadTest extends \PHPUnit_Framework_TestCase
+class HeadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Head
@@ -62,10 +62,10 @@ class HeadTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $generatorContextMock = $this->getMock(Context::class, [], [], '', false);
+        $generatorContextMock = $this->createMock(Context::class);
         $this->title->expects($this->any())->method('set')->with()->will($this->returnSelf());
-        $structureMock = $this->getMock(Structure::class, [], [], '', false);
-        $readerContextMock = $this->getMock(ReaderContext::class, [], [], '', false);
+        $structureMock = $this->createMock(Structure::class);
+        $readerContextMock = $this->createMock(ReaderContext::class);
         $readerContextMock->expects($this->any())->method('getPageConfigStructure')->willReturn($structureMock);
 
         $structureMock->expects($this->once())->method('processRemoveAssets');

@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\Webapi\Product\Option\Type\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ProcessorTest extends \PHPUnit_Framework_TestCase
+class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

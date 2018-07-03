@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Tests Address convert to order address
  */
-class ToOrderTest extends \PHPUnit_Framework_TestCase
+class ToOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject\Copy | \PHPUnit_Framework_MockObject_MockObject
@@ -44,19 +44,16 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderDataFactoryMock = $this->getMock(
+        $this->orderDataFactoryMock = $this->createPartialMock(
             \Magento\Sales\Api\Data\OrderInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->objectCopyMock = $this->getMock(\Magento\Framework\DataObject\Copy::class, [], [], '', false);
+        $this->objectCopyMock = $this->createMock(\Magento\Framework\DataObject\Copy::class);
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
-        $this->dataObjectHelper = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(
             \Magento\Quote\Model\Quote\Address\ToOrder::class,
@@ -76,8 +73,8 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
         $quoteId = 1;
         $storeId = 777;
 
-        $object = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
-        $quote = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $object = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
         $object->expects($this->exactly(5))->method('getQuote')->willReturn($quote);
         $quote->expects($this->once())->method('getId')->willReturn($quoteId);
         $quote->expects($this->once())->method('getStoreId')->willReturn($storeId);

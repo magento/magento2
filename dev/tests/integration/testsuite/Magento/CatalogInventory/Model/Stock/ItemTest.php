@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventory\Model\Stock;
 
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Stock\Item

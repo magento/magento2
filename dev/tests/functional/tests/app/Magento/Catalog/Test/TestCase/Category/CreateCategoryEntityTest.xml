@@ -175,5 +175,15 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryOnCustomWebsite" />
         </variation>
+        <variation name="CreateCategoryEntityTestVariation11_ProductsGridFilter" summary="Apply category products grid filter">
+            <data name="addCategory" xsi:type="string">addSubcategory</data>
+            <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
+            <data name="category/data/is_active" xsi:type="string">Yes</data>
+            <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+            <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
+            <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default, catalogProductSimple::not_visible_individually</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryProductsGridFilter" />
+        </variation>
     </testCase>
 </config>

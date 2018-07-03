@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav;
 
-class AbstractActionTest extends \PHPUnit_Framework_TestCase
+class AbstractActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction|\PHPUnit_Framework_MockObject_MockObject
@@ -24,19 +24,13 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eavDecimalFactoryMock = $this->getMock(
+        $this->_eavDecimalFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->_eavSourceFactoryMock = $this->getMock(
+        $this->_eavSourceFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction::class,
@@ -119,9 +113,20 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
         $this->_model->reindex();
     }
 
-    public function testReindexWithNotNullArgumentExecutesReindexEntities()
-    {
-        $ids = [1, 2, 3];
+    /**
+     * @param array $ids
+     * @param array $parentIds
+     * @param array $childIds
+     * @return void
+     * @dataProvider reindexEntitiesDataProvider
+     */
+    public function testReindexWithNotNullArgumentExecutesReindexEntities(
+        array $ids,
+        array $parentIds,
+        array $childIds
+    ) : void {
+        $reindexIds = array_unique(array_merge($ids, $parentIds, $childIds));
+
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->getMockForAbstractClass();
 
@@ -133,21 +138,33 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $eavSource->expects($this->once())->method('getRelationsByChild')->with($ids)->willReturn([]);
-        $eavSource->expects($this->once())->method('getRelationsByParent')->with($ids)->willReturn([]);
+        $eavSource->expects($this->once())
+            ->method('getRelationsByChild')
+            ->with($ids)
+            ->willReturn($parentIds);
+        $eavSource->expects($this->once())
+            ->method('getRelationsByParent')
+            ->with(array_unique(array_merge($parentIds, $ids)))
+            ->willReturn($childIds);
 
-        $eavDecimal->expects($this->once())->method('getRelationsByChild')->with($ids)->willReturn([]);
-        $eavDecimal->expects($this->once())->method('getRelationsByParent')->with($ids)->willReturn([]);
+        $eavDecimal->expects($this->once())
+            ->method('getRelationsByChild')
+            ->with($reindexIds)
+            ->willReturn($parentIds);
+        $eavDecimal->expects($this->once())
+            ->method('getRelationsByParent')
+            ->with(array_unique(array_merge($parentIds, $reindexIds)))
+            ->willReturn($childIds);
 
         $eavSource->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->once())
             ->method('reindexEntities')
-            ->with($ids);
+            ->with($reindexIds);
 
         $eavSource->expects($this->once())
             ->method('reindexEntities')
-            ->with($ids);
+            ->with($reindexIds);
 
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
@@ -158,5 +175,17 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($eavDecimal));
 
         $this->_model->reindex($ids);
+    }
+
+    /**
+     * @return array
+     */
+    public function reindexEntitiesDataProvider() : array
+    {
+        return [
+            [[4], [], [1, 2, 3]],
+            [[3], [4], []],
+            [[5], [], []],
+        ];
     }
 }

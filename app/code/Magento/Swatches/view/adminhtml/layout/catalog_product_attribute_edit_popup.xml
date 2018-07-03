@@ -12,8 +12,8 @@
     </head>
     <body>
         <referenceContainer name="form">
-            <block class="Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Visual" before="advanced-options" as="swatches_visual"/>
-            <block class="Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Text" before="advanced-options" as="swatches_text"/>
+            <block class="Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Visual" before="advanced-options" name="form.swatches_visual" as="swatches_visual"/>
+            <block class="Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Text" before="advanced-options" name="form.swatches_text" as="swatches_text"/>
         </referenceContainer>
         <referenceBlock name="attribute_edit_js">
             <action method="setTemplate">

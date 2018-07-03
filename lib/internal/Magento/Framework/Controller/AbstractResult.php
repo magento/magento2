@@ -106,7 +106,7 @@ abstract class AbstractResult implements ResultInterface
         }
         return $this;
     }
-    
+
     /**
      * @param HttpResponseInterface $response
      * @return $this

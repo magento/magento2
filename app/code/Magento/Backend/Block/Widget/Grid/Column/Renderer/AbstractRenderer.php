@@ -13,6 +13,7 @@ use Magento\Framework\DataObject;
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock implements RendererInterface
 {

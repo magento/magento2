@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test for abstract export model
  */
 namespace Magento\ImportExport\Model\Export;
 
-class EntityAbstractTest extends \PHPUnit_Framework_TestCase
+class EntityAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Export\AbstractEntity
@@ -102,10 +100,11 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     }
 }
 /**
+ * @codingStandardsIgnoreStart
  * Stub abstract class which provide to change protected property "$_disabledAttrs" and test methods depended on it
  */
-abstract class Stub_Magento_ImportExport_Model_Export_AbstractEntity
-    extends \Magento\ImportExport\Model\Export\AbstractEntity
+abstract class Stub_Magento_ImportExport_Model_Export_AbstractEntity extends
+    \Magento\ImportExport\Model\Export\AbstractEntity
 {
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -118,3 +117,4 @@ abstract class Stub_Magento_ImportExport_Model_Export_AbstractEntity
         $this->_disabledAttrs = ['default_billing', 'default_shipping'];
     }
 }
+// @codingStandardsIgnoreEnd

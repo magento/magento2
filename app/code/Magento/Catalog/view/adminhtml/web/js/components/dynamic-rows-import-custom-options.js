@@ -10,20 +10,6 @@ define([
 ], function (DynamicRows, _, utils) {
     'use strict';
 
-    var maxId = 0,
-
-    /**
-     * Stores max option_id value of the options from recordData once on initialization
-     * @param {Array} data - array with records data
-     */
-    initMaxId = function (data) {
-        if (data && data.length) {
-            maxId = ~~_.max(data, function (record) {
-                return ~~record['option_id'];
-            })['option_id'];
-        }
-    };
-
     return DynamicRows.extend({
         defaults: {
             mappingSettings: {
@@ -39,17 +25,10 @@ define([
         },
 
         /** @inheritdoc */
-        initialize: function () {
-            this._super();
-            initMaxId(this.recordData());
-
-            return this;
-        },
-
-        /** @inheritdoc */
         processingInsertData: function (data) {
             var options = [],
-                currentOption;
+                currentOption,
+                generalContext = this;
 
             if (!data) {
                 return;
@@ -70,10 +49,7 @@ define([
                     }
 
                     if (currentOption.values.length > 0) {
-                        _.each(currentOption.values, function (optionValue) {
-                            delete optionValue['option_id'];
-                            delete optionValue['option_type_id'];
-                        });
+                        generalContext.removeOptionsIds(currentOption.values);
                     }
                     options.push(currentOption);
                 });
@@ -91,17 +67,20 @@ define([
         },
 
         /**
-         * Set empty array to dataProvider
+         * Removes option_id and option_type_id from every option
+         *
+         * @param {Array} options
          */
-        clearDataProvider: function () {
-            this.source.set(this.dataProvider, []);
+        removeOptionsIds: function (options) {
+            _.each(options, function (optionValue) {
+                delete optionValue['option_id'];
+                delete optionValue['option_type_id'];
+            });
         },
 
         /** @inheritdoc */
         processingAddChild: function (ctx, index, prop) {
-            if (ctx && !_.isNumber(ctx['option_id'])) {
-                ctx['option_id'] = ++maxId;
-            } else if (!ctx) {
+            if (!ctx) {
                 this.showSpinner(true);
                 this.addChild(ctx, index, prop);
 
@@ -109,6 +88,13 @@ define([
             }
 
             this._super(ctx, index, prop);
+        },
+
+        /**
+         * Set empty array to dataProvider
+         */
+        clearDataProvider: function () {
+            this.source.set(this.dataProvider, []);
         },
 
         /**

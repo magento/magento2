@@ -9,7 +9,7 @@ use Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
-class UpgradeHashAlgorithmCommandTest extends \PHPUnit_Framework_TestCase
+class UpgradeHashAlgorithmCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UpgradeHashAlgorithmCommand

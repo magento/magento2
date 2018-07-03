@@ -10,7 +10,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\ShowUpdateResult;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
+class ShowUpdateResultTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
@@ -31,12 +31,9 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
      */
     protected function getSession()
     {
-        $session = $this->getMock(
+        $session = $this->createPartialMock(
             \Magento\Backend\Model\Session::class,
-            ['hasCompositeProductResult', 'getCompositeProductResult', 'unsCompositeProductResult'],
-            [],
-            '',
-            false
+            ['hasCompositeProductResult', 'getCompositeProductResult', 'unsCompositeProductResult']
         );
         $session->expects($this->once())
             ->method('hasCompositeProductResult')
@@ -57,46 +54,36 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
      */
     protected function getContext()
     {
-        $productActionMock = $this->getMock(\Magento\Catalog\Model\Product\Action::class, [], [], '', false);
+        $productActionMock = $this->createMock(\Magento\Catalog\Model\Product\Action::class);
         $objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willreturn($productActionMock);
 
-        $eventManager = $this->getMockForAbstractClass(
-            \Magento\Framework\Event\Manager::class,
-            ['dispatch'],
-            '',
-            false
-        );
+        $eventManager = $this->getMockBuilder(\Magento\Framework\Event\Manager::class)
+            ->setMethods(['dispatch'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $eventManager->expects($this->any())
             ->method('dispatch')
             ->willReturnSelf();
 
-        $this->request = $this->getMock(
+        $this->request = $this->createPartialMock(
             \Magento\Framework\App\Request\Http::class,
-            ['getParam', 'getPost', 'getFullActionName', 'getPostValue'],
-            [],
-            '',
-            false
+            ['getParam', 'getPost', 'getFullActionName', 'getPostValue']
         );
 
-        $responseInterfaceMock = $this->getMock(
+        $responseInterfaceMock = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
+            ['setRedirect', 'sendResponse']
         );
 
-        $managerInterfaceMock = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
+        $managerInterfaceMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $this->session = $this->getSession();
-        $actionFlagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
-        $helperDataMock = $this->getMock(\Magento\Backend\Helper\Data::class, [], [], '', false);
-        $this->context = $this->getMock(
-            \Magento\Backend\App\Action\Context::class,
-            [
+        $actionFlagMock = $this->createMock(\Magento\Framework\App\ActionFlag::class);
+        $helperDataMock = $this->createMock(\Magento\Backend\Helper\Data::class);
+        $this->context = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getRequest',
                 'getResponse',
                 'getObjectManager',
@@ -108,12 +95,8 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
                 'getTitle',
                 'getView',
                 'getResultRedirectFactory'
-            ],
-            [],
-            '',
-            false
-        );
-        
+            ]);
+
         $this->context->expects($this->any())
             ->method('getEventManager')
             ->willReturn($eventManager);
@@ -145,17 +128,11 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $productCompositeHelper = $this->getMock(\Magento\Catalog\Helper\Product\Composite::class, [], [], '', false);
+        $productCompositeHelper = $this->createMock(\Magento\Catalog\Helper\Product\Composite::class);
         $productCompositeHelper->expects($this->once())
             ->method('renderUpdateResult');
 
-        $productBuilder = $this->getMock(
-            \Magento\Catalog\Controller\Adminhtml\Product\Builder::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $productBuilder = $this->createMock(\Magento\Catalog\Controller\Adminhtml\Product\Builder::class);
         $context = $this->getContext();
 
         /** @var \Magento\Catalog\Controller\Adminhtml\Product\ShowUpdateResult $controller */

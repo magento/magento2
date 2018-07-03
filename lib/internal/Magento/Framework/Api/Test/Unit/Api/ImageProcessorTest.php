@@ -9,7 +9,7 @@ namespace Magento\Framework\Api\Test\Unit\Api;
 /**
  * Unit test class for \Magento\Framework\Api\ImageProcessor
  */
-class ImageProcessorTest extends \PHPUnit_Framework_TestCase
+class ImageProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Api\ImageProcessor
@@ -119,7 +119,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The image content is not valid.
+     * @expectedExceptionMessage The image content is invalid. Verify the content and try again.
      */
     public function testSaveInputException()
     {

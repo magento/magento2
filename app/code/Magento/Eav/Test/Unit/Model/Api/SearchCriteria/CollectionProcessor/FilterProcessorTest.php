@@ -12,7 +12,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\Cus
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-class FilterProcessorTest extends \PHPUnit_Framework_TestCase
+class FilterProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Return model
@@ -32,8 +32,7 @@ class FilterProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcess()
     {
         /** @var CustomFilterInterface|\PHPUnit_Framework_MockObject_MockObject $customFilterMock */
-        $customFilterMock = $this->getMockBuilder(CustomFilterInterface::class)
-            ->getMock();
+        $customFilterMock = $this->createPartialMock(CustomFilterInterface::class, ['apply']);
 
         $customFilterField = 'customFilterField';
         $customFilters = [$customFilterField => $customFilterMock];
@@ -151,8 +150,7 @@ class FilterProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessWithException()
     {
         /** @var \stdClass|\PHPUnit_Framework_MockObject_MockObject $customFilterMock */
-        $customFilterMock = $this->getMockBuilder(\stdClass::class)
-            ->getMock();
+        $customFilterMock = $this->createPartialMock(\stdClass::class, ['apply']);
 
         $customFilterField = 'customFilterField';
         $customFilters = [$customFilterField => $customFilterMock];

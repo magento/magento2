@@ -12,7 +12,7 @@ use Magento\Shipping\Model\Rate\Result;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TablerateTest extends \PHPUnit_Framework_TestCase
+class TablerateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Model\Carrier\Tablerate
@@ -194,7 +194,7 @@ class TablerateTest extends \PHPUnit_Framework_TestCase
      * Captures the argument and saves it in the given variable
      *
      * @param $captureVar
-     * @return \PHPUnit_Framework_Constraint_Callback
+     * @return \PHPUnit\Framework\Constraint\Callback
      */
     private function captureArg(&$captureVar)
     {

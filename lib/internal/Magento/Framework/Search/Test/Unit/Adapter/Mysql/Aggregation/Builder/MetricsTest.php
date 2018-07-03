@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Aggregation\Builder;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class MetricsTest extends \PHPUnit_Framework_TestCase
+class MetricsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics

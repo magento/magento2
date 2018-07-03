@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\Module\DbVersionInfo;
 
-class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
+class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DbVersionInfo
@@ -23,6 +23,11 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Module\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleResource;
+
+    /**
+     * @var \Magento\Framework\Module\Output\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $_outputConfig;
 
     protected function setUp()
     {
@@ -60,6 +65,12 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
             ->method('getDbVersion')
             ->with($moduleName)
             ->will($this->returnValue($dbVersion));
+        $this->moduleList->expects(self::once())
+            ->method('getOne')
+            ->with($moduleName)
+            ->willReturn(
+                ['setup_version' => $dbVersion]
+            );
         $this->assertEquals(
             $expectedResult,
             $this->dbVersionInfo->isSchemaUpToDate($moduleName)
@@ -79,6 +90,12 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
             ->method('getDataVersion')
             ->with($moduleName)
             ->will($this->returnValue($dbVersion));
+        $this->moduleList->expects(self::once())
+            ->method('getOne')
+            ->with($moduleName)
+            ->willReturn(
+                ['setup_version' => $dbVersion]
+            );
         $this->assertEquals(
             $expectedResult,
             $this->dbVersionInfo->isDataUpToDate($moduleName)
@@ -92,24 +109,21 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'version in config == version in db' => ['Module_One', '1', true],
-            'version in config < version in db' =>
-                [
-                    'Module_One',
-                    '2',
-                    false
-                ],
-            'version in config > version in db' =>
-                [
-                    'Module_Two',
-                    '1',
-                    false
-                ],
-            'no version in db' =>
-                [
-                    'Module_One',
-                    false,
-                    false
-                ],
+            'version in config < version in db' => [
+                'Module_One',
+                '2',
+                false
+            ],
+            'version in config > version in db' => [
+                'Module_Two',
+                '1',
+                false
+            ],
+            'no version in db' => [
+                'Module_One',
+                false,
+                false
+            ],
         ];
     }
 
@@ -140,20 +154,18 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Setup version for module 'Module_No_Schema' is not specified
+     * Test is DB schema up to date for module with no schema
      */
     public function testIsDbSchemaUpToDateException()
     {
-        $this->dbVersionInfo->isSchemaUpToDate('Module_No_Schema');
+        $this->assertTrue($this->dbVersionInfo->isSchemaUpToDate('Module_No_Schema'));
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Setup version for module 'Module_No_Schema' is not specified
+     * Test is DB Data up to date for module with no schema
      */
     public function testIsDbDataUpToDateException()
     {
-        $this->dbVersionInfo->isDataUpToDate('Module_No_Schema');
+        $this->assertTrue($this->dbVersionInfo->isDataUpToDate('Module_No_Schema'));
     }
 }

@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order\Shipment;
  * Interface for Shipment notifier.
  *
  * @api
+ * @since 100.1.2
  */
 interface NotifierInterface
 {
@@ -21,6 +22,7 @@ interface NotifierInterface
      * @param bool $forceSyncMode
      *
      * @return void
+     * @since 100.1.2
      */
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,

@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\Session;
 
-class SessionTest extends \PHPUnit_Framework_TestCase
+class SessionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
@@ -30,10 +30,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $objectManager =
             $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class, [], '', false);
         $objectManagerProvider =
-            $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, ['get'], [], '', false);
+            $this->createPartialMock(\Magento\Setup\Model\ObjectManagerProvider::class, ['get']);
         $this->objectManager = $objectManager;
         $this->objectManagerProvider = $objectManagerProvider;
-        $this->serviceManager = $this->getMock(\Zend\ServiceManager\ServiceManager::class, ['get'], [], '', false);
+        $this->serviceManager = $this->createPartialMock(\Zend\ServiceManager\ServiceManager::class, ['get']);
     }
 
     /**
@@ -45,16 +45,16 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->objectManager)
         );
         $deployConfigMock =
-            $this->getMock(\Magento\Framework\App\DeploymentConfig::class, ['isAvailable'], [], '', false);
+            $this->createPartialMock(\Magento\Framework\App\DeploymentConfig::class, ['isAvailable']);
         $deployConfigMock->expects($this->once())->method('isAvailable')->will($this->returnValue(true));
 
-        $stateMock = $this->getMock(\Magento\Framework\App\State::class, ['setAreaCode'], [], '', false);
+        $stateMock = $this->createPartialMock(\Magento\Framework\App\State::class, ['setAreaCode']);
         $stateMock->expects($this->once())->method('setAreaCode');
 
         $sessionConfigMock =
-            $this->getMock(\Magento\Backend\Model\Session\AdminConfig::class, ['setCookiePath'], [], '', false);
+            $this->createPartialMock(\Magento\Backend\Model\Session\AdminConfig::class, ['setCookiePath']);
         $sessionConfigMock->expects($this->once())->method('setCookiePath');
-        $urlMock = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
+        $urlMock = $this->createMock(\Magento\Backend\Model\Url::class);
 
         $returnValueMap = [
             [\Magento\Framework\App\State::class, $stateMock],
@@ -68,7 +68,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValueMap($returnValueMap));
 
-        $sessionMock = $this->getMock(\Magento\Backend\Model\Auth\Session::class, ['prolong'], [], '', false);
+        $sessionMock = $this->createPartialMock(\Magento\Backend\Model\Auth\Session::class, ['prolong']);
         $this->objectManager->expects($this->once())
             ->method('create')
             ->will($this->returnValue($sessionMock));

@@ -19,7 +19,7 @@ require_once __DIR__ . '/_files/ioMock.php';
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CsvTest extends \PHPUnit_Framework_TestCase
+class CsvTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
@@ -59,11 +59,11 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         /** @var ObjectManagerHelper $objectManagerHelper */
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->contextMock = $this->getMock(Context::class, [], [], '', false, false);
-        $this->localeMock = $this->getMock(Locale::class, [], [], '', false, false);
-        $this->dictionaryMock = $this->getMock(Dictionary::class, [], [], '', false, false);
-        $this->phraseMock = $this->getMock(Phrase::class, [], [], '', false, false);
-        $this->factoryMock = $this->getMock(Factory::class, [], [], '', false, false);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->localeMock = $this->createMock(Locale::class);
+        $this->dictionaryMock = $this->createMock(Dictionary::class);
+        $this->phraseMock = $this->createMock(Phrase::class);
+        $this->factoryMock = $this->createMock(Factory::class);
 
         $constructorArguments = $objectManagerHelper->getConstructArguments(
             Csv::class,

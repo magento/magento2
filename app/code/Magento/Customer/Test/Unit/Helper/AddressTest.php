@@ -12,7 +12,7 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject */
     protected $helper;
@@ -78,6 +78,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedNumLines, $this->helper->getStreetLines());
     }
 
+    /**
+     * @return array
+     */
     public function providerGetStreetLines()
     {
         return [
@@ -190,6 +193,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->helper->convertStreetLines($origStreets, $toCount));
     }
 
+    /**
+     * @return array
+     */
     public function getConvertStreetLinesDataProvider()
     {
         return [
@@ -328,6 +334,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->helper->getFormatTypeRenderer($code));
     }
 
+    /**
+     * @return array
+     */
     public function getFormatTypeRendererDataProvider()
     {
         $renderer = $this->getMockBuilder(\Magento\Customer\Block\Address\Renderer\RendererInterface::class)
@@ -362,6 +371,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->helper->getFormat($code));
     }
 
+    /**
+     * @return array
+     */
     public function getFormatDataProvider()
     {
         return [
@@ -392,6 +404,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isMetadataExists, $this->helper->isAttributeVisible($attributeCode));
     }
 
+    /**
+     * @return array
+     */
     public function isAttributeVisibleDataProvider()
     {
         return [

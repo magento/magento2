@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\Decorator
 
 use \Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater;
 
-class UpdaterTest extends \PHPUnit_Framework_TestCase
+class UpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -26,7 +26,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_interpreter = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Argument\InterpreterInterface::class
         );

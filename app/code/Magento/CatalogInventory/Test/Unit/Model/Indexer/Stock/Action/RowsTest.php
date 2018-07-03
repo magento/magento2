@@ -11,7 +11,7 @@ namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Action;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class RowsTest extends \PHPUnit_Framework_TestCase
+class RowsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Action\Rows

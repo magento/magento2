@@ -5,7 +5,7 @@
  */
 namespace Magento\Directory\Test\Unit\Model\Country\Postcode\Config;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Model\Country\Postcode\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
@@ -24,21 +24,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->readerMock = $this->getMock(
-            \Magento\Directory\Model\Country\Postcode\Config\Reader::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->cacheMock = $this->getMock(
-            \Magento\Framework\App\Cache\Type\Config::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->readerMock = $this->createMock(\Magento\Directory\Model\Country\Postcode\Config\Reader::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     public function testGet()

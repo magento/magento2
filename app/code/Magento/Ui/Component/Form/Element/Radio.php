@@ -7,6 +7,7 @@ namespace Magento\Ui\Component\Form\Element;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Radio extends AbstractElement
 {

@@ -9,6 +9,7 @@ namespace Magento\Payment\Gateway\Http;
  * Interface TransferFactoryInterface
  * @package Magento\Payment\Gateway\Http
  * @api
+ * @since 100.0.2
  */
 interface TransferFactoryInterface
 {

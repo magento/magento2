@@ -13,7 +13,7 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote\Address\Total;
 
 /**
- * @deprecated
+ * @deprecated 100.1.0
  */
 class Sidebar
 {
@@ -85,7 +85,7 @@ class Sidebar
     {
         $item = $this->cart->getQuote()->getItemById($itemId);
         if (!$item instanceof CartItemInterface) {
-            throw new LocalizedException(__('We can\'t find the quote item.'));
+            throw new LocalizedException(__("The quote item isn't found. Verify the item and try again."));
         }
         return $this;
     }

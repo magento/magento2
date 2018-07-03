@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\QueryChecker;
 
-class FullTextSearchCheckTest extends \PHPUnit_Framework_TestCase
+class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck
@@ -78,6 +78,9 @@ class FullTextSearchCheckTest extends \PHPUnit_Framework_TestCase
         $this->fullTextSearchCheck->isRequiredForQuery($filterMock);
     }
 
+    /**
+     * @return array
+     */
     public function positiveDataProvider()
     {
         $boolQueryMock = $this->getBoolQueryMock();
@@ -114,6 +117,9 @@ class FullTextSearchCheckTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function negativeDataProvider()
     {
         $emptyBoolQueryMock = $this->getBoolQueryMock();
@@ -147,6 +153,9 @@ class FullTextSearchCheckTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getMatchQueryMock()
     {
         $matchQueryMock = $this->getMockBuilder(\Magento\Framework\Search\Request\QueryInterface::class)
@@ -161,6 +170,9 @@ class FullTextSearchCheckTest extends \PHPUnit_Framework_TestCase
         return $matchQueryMock;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getBoolQueryMock()
     {
         $boolQueryMock = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\BoolExpression::class)
@@ -175,6 +187,9 @@ class FullTextSearchCheckTest extends \PHPUnit_Framework_TestCase
         return $boolQueryMock;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getFilterQueryMock()
     {
         $filterQueryMock = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\Filter::class)

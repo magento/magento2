@@ -117,6 +117,7 @@ class Config
         'description' => null,
         'keywords' => null,
         'robots' => null,
+        'title' => null,
     ];
 
     /**
@@ -134,7 +135,7 @@ class Config
      *
      * @return \Magento\Framework\App\State
      *
-     * @deprecated
+     * @deprecated 100.0.7
      */
     private function getAreaResolver()
     {
@@ -173,7 +174,7 @@ class Config
         $this->setElementAttribute(
             self::ELEMENT_TYPE_HTML,
             self::HTML_ATTRIBUTE_LANG,
-            str_replace('_', '-', $this->localeResolver->getLocale())
+            strstr($this->localeResolver->getLocale(), '_', true)
         );
     }
 
@@ -226,7 +227,7 @@ class Config
     public function setMetadata($name, $content)
     {
         $this->build();
-        $this->metadata[$name] = htmlentities($content);
+        $this->metadata[$name] = htmlspecialchars($content);
     }
 
     /**
@@ -463,7 +464,7 @@ class Config
      */
     public function addBodyClass($className)
     {
-        $className = preg_replace('#[^a-z0-9]+#', '-', strtolower($className));
+        $className = preg_replace('#[^a-z0-9-_]+#', '-', strtolower($className));
         $bodyClasses = $this->getElementAttribute(self::ELEMENT_TYPE_BODY, self::BODY_ATTRIBUTE_CLASS);
         $bodyClasses = $bodyClasses ? explode(' ', $bodyClasses) : [];
         $bodyClasses[] = $className;

@@ -5,9 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit;
 
-// @codingStandardsIgnoreFile
-
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Collection
@@ -17,7 +15,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new \Magento\Framework\Data\Collection(
-            $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
+            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
         );
     }
 
@@ -105,19 +103,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testPossibleFlowWithItem()
     {
-        $firstItemMock = $this->getMock(
+        $firstItemMock = $this->createPartialMock(
             \Magento\Framework\DataObject::class,
-            ['getId', 'getData', 'toArray'],
-            [],
-            '',
-            false
+            ['getId', 'getData', 'toArray']
         );
-        $secondItemMock = $this->getMock(
+        $secondItemMock = $this->createPartialMock(
             \Magento\Framework\DataObject::class,
-            ['getId', 'getData', 'toArray'],
-            [],
-            '',
-            false
+            ['getId', 'getData', 'toArray']
         );
         $requiredFields = ['required_field_one', 'required_field_two'];
         $arrItems = [
@@ -179,7 +171,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testEachCallsMethodOnEachItemWithNoArgs()
     {
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testCallback']);
+            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testCallback']);
             $item->expects($this->once())->method('testCallback')->with();
             $this->_model->addItem($item);
         }
@@ -189,7 +181,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testEachCallsMethodOnEachItemWithArgs()
     {
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testCallback']);
+            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testCallback']);
             $item->expects($this->once())->method('testCallback')->with('a', 'b', 'c');
             $this->_model->addItem($item);
         }
@@ -199,7 +191,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testCallsClosureWithEachItemAndNoArgs()
     {
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testCallback']);
+            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testCallback']);
             $item->expects($this->once())->method('testCallback')->with();
             $this->_model->addItem($item);
         }
@@ -211,7 +203,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testCallsClosureWithEachItemAndArgs()
     {
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
+            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
             $item->expects($this->once())->method('testItemCallback')->with('a', 'b', 'c');
             $this->_model->addItem($item);
         }
@@ -230,7 +222,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         });
 
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
+            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
             $item->expects($this->once())->method('testItemCallback')->with();
             $this->_model->addItem($item);
         }
@@ -248,7 +240,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         });
 
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
+            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
             $item->expects($this->once())->method('testItemCallback')->with('a', 'b', 'c');
             $this->_model->addItem($item);
         }

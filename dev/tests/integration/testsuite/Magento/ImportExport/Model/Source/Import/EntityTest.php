@@ -9,7 +9,7 @@
  */
 namespace Magento\ImportExport\Model\Source\Import;
 
-class EntityTest extends \PHPUnit_Framework_TestCase
+class EntityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Source\Import\Entity
@@ -23,7 +23,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_importConfigMock = $this->getMock(\Magento\ImportExport\Model\Import\ConfigInterface::class);
+        $this->_importConfigMock = $this->createMock(\Magento\ImportExport\Model\Import\ConfigInterface::class);
         $this->_model = new \Magento\ImportExport\Model\Source\Import\Entity($this->_importConfigMock);
     }
 

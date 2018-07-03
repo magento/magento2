@@ -26,5 +26,5 @@ $product->setTypeId(
 )->setCateroryIds(
     []
 )->setStockData(
-    ['qty' => 100, 'is_in_stock' => 1]
+    ['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1]
 )->save();

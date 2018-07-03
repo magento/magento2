@@ -106,7 +106,10 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                 $this->_defaultIndexerResource->getMainTable()
             );
 
-            /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer $indexer */
+            // Prepare replica table for indexation.
+            $this->_defaultIndexerResource->getConnection()->truncateTable($replicaTable);
+
+            /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $indexer */
             foreach ($this->getTypeIndexers() as $indexer) {
                 $indexer->getTableStrategy()->setUseIdxTable(false);
                 $connection = $indexer->getConnection();

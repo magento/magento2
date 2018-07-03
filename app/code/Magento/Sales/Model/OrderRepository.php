@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -87,13 +88,15 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new InputException(__('Id required'));
+            throw new InputException(__('An ID is needed. Set the ID and try again.'));
         }
         if (!isset($this->registry[$id])) {
             /** @var OrderInterface $entity */
             $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
-                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
             $this->setShippingAssignments($entity);
             $this->registry[$id] = $entity;
@@ -192,7 +195,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * Get the new ShippingAssignmentBuilder dependency for application code
      *
      * @return ShippingAssignmentBuilder
-     * @deprecated
+     * @deprecated 100.0.4
      */
     private function getShippingAssignmentBuilderDependency()
     {
@@ -210,7 +213,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult
      * @return void
-     * @deprecated
+     * @deprecated 100.2.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(

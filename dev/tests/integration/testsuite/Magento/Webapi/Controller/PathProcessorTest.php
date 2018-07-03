@@ -8,7 +8,7 @@ namespace Magento\Webapi\Controller;
 
 use Magento\Store\Model\Store;
 
-class PathProcessorTest extends \PHPUnit_Framework_TestCase
+class PathProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface

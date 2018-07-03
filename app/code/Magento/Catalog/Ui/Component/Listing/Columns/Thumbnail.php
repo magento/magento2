@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
 {

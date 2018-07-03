@@ -13,7 +13,7 @@ use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\DB\Select\QueryModifierInterface;
 
-class AggregatedFieldDataConverterTest extends \PHPUnit_Framework_TestCase
+class AggregatedFieldDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     public function testConvert()
     {

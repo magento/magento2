@@ -20,7 +20,7 @@ use Magento\Setup\Model\PackagesData;
  * Class ModuleTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ModuleTest extends \PHPUnit_Framework_TestCase
+class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
@@ -128,7 +128,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $objectManager = $this->getMock(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->objectManagerProvider->expects($this->once())
             ->method('get')
             ->willReturn($objectManager);

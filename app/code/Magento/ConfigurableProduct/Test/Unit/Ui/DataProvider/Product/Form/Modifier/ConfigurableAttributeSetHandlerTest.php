@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Mod
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurableAttributeSetHandler;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ConfigurableAttributeSetHandlerTest extends \PHPUnit_Framework_TestCase
+class ConfigurableAttributeSetHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigurableAttributeSetHandler

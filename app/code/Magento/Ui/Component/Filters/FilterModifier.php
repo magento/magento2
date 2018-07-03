@@ -19,13 +19,19 @@ class FilterModifier
      */
     const FILTER_MODIFIER = 'filters_modifier';
 
-    /** @var RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     protected $request;
 
-    /** @var FilterBuilder */
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder
+     */
     protected $filterBuilder;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $allowedConditionTypes;
 
     /**

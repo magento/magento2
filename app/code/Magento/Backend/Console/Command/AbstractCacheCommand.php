@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractCacheCommand extends Command
 {

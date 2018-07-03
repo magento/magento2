@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Xml\Test\Unit;
 
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Xml\Parser */
     protected $parser;

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -15,6 +13,7 @@ use Magento\Shipping\Model\Shipment\Request;
  * Class AbstractCarrier
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractCarrier extends \Magento\Framework\DataObject implements AbstractCarrierInterface
 {
@@ -313,7 +312,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
                 return $error;
             } else {
                 /*
-                 * The admin set not to show the shipping module if the delivery country is not within specific countries
+                 * The admin set not to show the shipping module if the delivery country
+                 * is not within specific countries
                  */
                 return false;
             }
@@ -440,7 +440,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         /**
          * if we did not get our free shipping method in response we must use its old price
          */
-        if (!is_null($price)) {
+        if ($price !== null) {
             $this->_result->getRateById($freeRateId)->setPrice($price);
         }
     }
@@ -453,7 +453,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      */
     public function getFinalPriceWithHandlingFee($cost)
     {
-        $handlingFee = $this->getConfigData('handling_fee');
+        $handlingFee = (float)$this->getConfigData('handling_fee');
         $handlingType = $this->getConfigData('handling_type');
         if (!$handlingType) {
             $handlingType = self::HANDLING_TYPE_FIXED;
@@ -635,6 +635,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *
      * @param string $data
      * @return string
+     * @since 100.1.0
      */
     protected function filterDebugData($data)
     {

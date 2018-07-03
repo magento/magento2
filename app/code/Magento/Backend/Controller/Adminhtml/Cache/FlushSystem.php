@@ -9,6 +9,13 @@ namespace Magento\Backend\Controller\Adminhtml\Cache;
 class FlushSystem extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::flush_magento_cache';
+
+    /**
      * Flush all magento cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect

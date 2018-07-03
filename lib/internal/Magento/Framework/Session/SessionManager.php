@@ -124,9 +124,6 @@ class SessionManager implements SessionManagerInterface
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->appState = $appState;
-
-        // Enable session.use_only_cookies
-        ini_set('session.use_only_cookies', '1');
         $this->start();
     }
 
@@ -183,12 +180,12 @@ class SessionManager implements SessionManagerInterface
             // Need to apply the config options so they can be ready by session_start
             $this->initIniOptions();
             $this->registerSaveHandler();
-
+            $sid = $this->sidResolver->getSid($this);
             // potential custom logic for session id (ex. switching between hosts)
-            $this->setSessionId($this->sidResolver->getSid($this));
+            $this->setSessionId($sid);
             session_start();
             $this->validator->validate($this);
-            $this->renewCookie();
+            $this->renewCookie($sid);
 
             register_shutdown_function([$this, 'writeClose']);
 
@@ -202,14 +199,17 @@ class SessionManager implements SessionManagerInterface
     /**
      * Renew session cookie to prolong session
      *
+     * @param null|string $sid If we have session id we need to use it instead of old cookie value
      * @return $this
      */
-    private function renewCookie()
+    private function renewCookie($sid)
     {
         if (!$this->getCookieLifetime()) {
             return $this;
         }
-        $cookieValue = $this->cookieManager->getCookie($this->getName());
+        //When we renew cookie, we should aware, that any other session client do not
+        //change cookie too
+        $cookieValue = $sid ?: $this->cookieManager->getCookie($this->getName());
         if ($cookieValue) {
             $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
             $metadata->setPath($this->sessionConfig->getCookiePath());
@@ -314,11 +314,8 @@ class SessionManager implements SessionManagerInterface
      */
     public function destroy(array $options = null)
     {
-        if (null === $options) {
-            $options = $this->defaultDestroyOptions;
-        } else {
-            $options = array_merge($this->defaultDestroyOptions, $options);
-        }
+        $options = $options ?? [];
+        $options = array_merge($this->defaultDestroyOptions, $options);
 
         if ($options['clear_storage']) {
             $this->clearStorage();
@@ -500,11 +497,8 @@ class SessionManager implements SessionManagerInterface
         if (headers_sent()) {
             return $this;
         }
-        if ($this->isSessionExists()) {
-            session_regenerate_id(false);
-        } else {
-            session_start();
-        }
+
+        $this->isSessionExists() ? session_regenerate_id(true) : session_start();
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
 
         if ($this->sessionConfig->getUseCookies()) {
@@ -522,7 +516,7 @@ class SessionManager implements SessionManagerInterface
     {
         foreach (array_keys($this->_getHosts()) as $host) {
             // Delete cookies with the same name for parent domains
-            if (strpos($this->sessionConfig->getCookieDomain(), $host) > 0) {
+            if ($this->sessionConfig->getCookieDomain() !== $host) {
                 $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
                 $metadata->setPath($this->sessionConfig->getCookiePath());
                 $metadata->setDomain($host);
@@ -562,13 +556,25 @@ class SessionManager implements SessionManagerInterface
      */
     private function initIniOptions()
     {
+        $result = ini_set('session.use_only_cookies', '1');
+        if ($result === false) {
+            $error = error_get_last();
+            throw new \InvalidArgumentException(
+                sprintf('Failed to set ini option session.use_only_cookies to value 1. %s', $error['message'])
+            );
+        }
+
         foreach ($this->sessionConfig->getOptions() as $option => $value) {
-            $result = ini_set($option, $value);
-            if ($result === false) {
-                $error = error_get_last();
-                throw new \InvalidArgumentException(
-                    sprintf('Failed to set ini option "%s" to value "%s". %s', $option, $value, $error['message'])
-                );
+            if ($option=='session.save_handler') {
+                continue;
+            } else {
+                $result = ini_set($option, $value);
+                if ($result === false) {
+                    $error = error_get_last();
+                    throw new \InvalidArgumentException(
+                        sprintf('Failed to set ini option "%s" to value "%s". %s', $option, $value, $error['message'])
+                    );
+                }
             }
         }
     }

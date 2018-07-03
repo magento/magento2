@@ -11,7 +11,7 @@ use \Magento\Framework\View\Design\Fallback\Rule\Simple;
  * Simple Test
  *
  */
-class SimpleTest extends \PHPUnit_Framework_TestCase
+class SimpleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

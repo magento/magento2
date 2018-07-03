@@ -42,7 +42,7 @@ class Curl extends AbstractCurl implements CustomerGroupInterface
         $response = $curl->read();
         $curl->close();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception(
                 "Customer Group entity creating by curl handler was not successful! Response: $response"
             );

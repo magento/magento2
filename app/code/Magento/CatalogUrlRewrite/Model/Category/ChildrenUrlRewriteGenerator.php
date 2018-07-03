@@ -13,13 +13,19 @@ use Magento\Framework\App\ObjectManager;
 
 class ChildrenUrlRewriteGenerator
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider
+     */
     protected $childrenCategoriesProvider;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory
+     */
     protected $categoryUrlRewriteGeneratorFactory;
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     */
     private $mergeDataProviderPrototype;
 
     /**

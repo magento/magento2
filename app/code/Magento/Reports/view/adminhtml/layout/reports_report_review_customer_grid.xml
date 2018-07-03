@@ -40,7 +40,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="customer_name">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.review.customer.grid.columnSet.customer_name" as="customer_name">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Customer</argument>
                             <argument name="index" xsi:type="string">customer_name</argument>
@@ -51,7 +51,7 @@
                             <argument name="header_css_class" xsi:type="string">col-name</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="review_cnt">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.review.customer.grid.columnSet.review_cnt" as="review_cnt">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Reviews</argument>
                             <argument name="type" xsi:type="string">text</argument>
@@ -60,7 +60,7 @@
                             <argument name="header_css_class" xsi:type="string">col-qty</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="action">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.report.review.customer.grid.columnSet.action" as="action">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Action</argument>
                             <argument name="filter" xsi:type="string">0</argument>

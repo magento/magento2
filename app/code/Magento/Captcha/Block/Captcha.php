@@ -13,6 +13,7 @@ namespace Magento\Captcha\Block;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Captcha extends \Magento\Framework\View\Element\Template
 {

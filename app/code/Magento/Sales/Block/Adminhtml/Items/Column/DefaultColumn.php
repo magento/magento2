@@ -15,6 +15,7 @@ use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {

@@ -30,11 +30,7 @@ class Trigger
 
     /**#@-*/
 
-    /**
-     * List of times available for trigger
-     *
-     * @var array
-     */
+    /**#@-*/
     protected static $listOfTimes = [self::TIME_BEFORE, self::TIME_AFTER];
 
     /**

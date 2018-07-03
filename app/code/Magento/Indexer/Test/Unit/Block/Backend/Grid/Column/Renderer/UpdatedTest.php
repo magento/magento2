@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Test\Unit\Block\Backend\Grid\Column\Renderer;
 
-class UpdatedTest extends \PHPUnit_Framework_TestCase
+class UpdatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $defaultValue
@@ -27,6 +27,9 @@ class UpdatedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $assert);
     }
 
+    /**
+     * @return array
+     */
     public function renderProvider()
     {
         return [

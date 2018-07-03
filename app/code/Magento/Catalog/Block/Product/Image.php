@@ -11,24 +11,26 @@ namespace Magento\Catalog\Block\Product;
  * @method string getWidth()
  * @method string getHeight()
  * @method string getLabel()
- * @method mixed getResizedImageWidth()
- * @method mixed getResizedImageHeight()
  * @method float getRatio()
  * @method string getCustomAttributes()
+ * @since 100.0.2
  */
 class Image extends \Magento\Framework\View\Element\Template
 {
     /**
+     * @deprecated Property isn't used
      * @var \Magento\Catalog\Helper\Image
      */
     protected $imageHelper;
 
     /**
+     * @deprecated Property isn't used
      * @var \Magento\Catalog\Model\Product
      */
     protected $product;
 
     /**
+     * @deprecated Property isn't used
      * @var array
      */
     protected $attributes = [];

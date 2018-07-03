@@ -13,6 +13,7 @@ use Magento\Ui\Component\Layout\Tabs\TabInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid implements TabInterface
 {

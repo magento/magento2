@@ -8,7 +8,7 @@ namespace Magento\Store\Block;
 /**
  * Integration tests for \Magento\Store\Block\Switcher block.
  */
-class SwitcherTest extends \PHPUnit_Framework_TestCase
+class SwitcherTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager

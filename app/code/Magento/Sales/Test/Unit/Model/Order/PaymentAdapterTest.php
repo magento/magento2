@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 /**
  * Unit test for payment adapter.
  */
-class PaymentAdapterTest extends \PHPUnit_Framework_TestCase
+class PaymentAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\PaymentAdapter

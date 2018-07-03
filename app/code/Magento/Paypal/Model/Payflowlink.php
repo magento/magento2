@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model;
 
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
@@ -241,11 +240,13 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             case \Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH:
             case \Magento\Paypal\Model\Config::PAYMENT_ACTION_SALE:
                 $payment = $this->getInfoInstance();
+                /** @var Order $order */
                 $order = $payment->getOrder();
                 $order->setCanSendNewEmailFlag(false);
                 $payment->setAmountAuthorized($order->getTotalDue());
                 $payment->setBaseAmountAuthorized($order->getBaseTotalDue());
                 $this->_generateSecureSilentPostHash($payment);
+                $this->setStore($order->getStoreId());
                 $request = $this->_buildTokenRequest($payment);
                 $response = $this->postRequest($request, $this->getConfig());
                 $this->_processTokenErrors($response, $payment);
@@ -578,7 +579,9 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $website->getDefaultStore()
             );
-            $path = $secure ? \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL : \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL;
+            $path = $secure
+                ? \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL
+                : \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL;
             $websiteUrl = $this->_scopeConfig->getValue(
                 $path,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -589,7 +592,10 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
                 \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
-            $websiteUrl = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, $secure);
+            $websiteUrl = $this->storeManager->getStore()->getBaseUrl(
+                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
+                $secure
+            );
         }
 
         return $websiteUrl . 'paypal/' . $this->_callbackController . '/' . $actionName;

@@ -16,6 +16,7 @@ use Magento\Framework\DB\Select;
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
 {
@@ -116,6 +117,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
 
     /**
      * @return Select
+     * @since 100.2.0
      */
     public function getSelectCountSql()
     {

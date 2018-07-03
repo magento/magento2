@@ -11,7 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
 /**
  * Integration authorization service test.
  */
-class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
+class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AuthorizationService */
     protected $_service;

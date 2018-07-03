@@ -10,6 +10,7 @@ namespace Magento\Wishlist\Block;
  * Wishlist js plugin initialization block
  *
  * @api
+ * @since 100.1.0
  */
 class AddToWishlist extends \Magento\Framework\View\Element\Template
 {
@@ -38,6 +39,7 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
      * Returns wishlist widget options
      *
      * @return array
+     * @since 100.1.0
      */
     public function getWishlistOptions()
     {
@@ -70,6 +72,7 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     protected function _toHtml()
     {

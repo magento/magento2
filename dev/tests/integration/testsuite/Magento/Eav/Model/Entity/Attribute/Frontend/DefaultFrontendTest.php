@@ -16,7 +16,7 @@ use Magento\Eav\Model\Entity\Attribute;
 /**
  * @magentoAppIsolation enabled
  */
-class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
+class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DefaultFrontend
@@ -76,6 +76,19 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
             $this->serializer->serialize($this->options),
             $this->cache->load($this->getCacheKey())
         );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
+     */
+    public function testAttributeEntityValueNotSet()
+    {
+        $entity = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
+        $entity->setStoreId(0);
+        $entity->load(1);
+        $frontEnd = $this->attribute->loadByCode('catalog_product', 'dropdown_attribute');
+        $value = $frontEnd->getFrontend()->getValue($entity);
+        $this->assertFalse($value);
     }
 
     /**

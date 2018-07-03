@@ -8,18 +8,22 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use \Magento\Setup\Model\Installer;
+use Magento\Framework\Setup\SchemaListener;
+use Magento\Setup\Model\DeclarationInstaller;
+use Magento\Setup\Model\Installer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
+use Magento\Framework\Setup\Patch\PatchApplier;
+use Magento\Framework\Setup\Patch\PatchApplierFactory;
 use Magento\Setup\Validator\DbValidator;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InstallerTest extends \PHPUnit_Framework_TestCase
+class InstallerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Model\Installer
@@ -137,15 +141,27 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $phpReadinessCheck;
 
     /**
+     * @var \Magento\Framework\Setup\DeclarationInstaller|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $declarationInstallerMock;
+
+    /**
+     * @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $schemaListenerMock;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
      */
     private static $dbConfig = [
-        ConfigOptionsListConstants::KEY_HOST => '127.0.0.1',
-        ConfigOptionsListConstants::KEY_NAME => 'magento',
-        ConfigOptionsListConstants::KEY_USER => 'magento',
-        ConfigOptionsListConstants::KEY_PASSWORD => '',
+        'default' => [
+            ConfigOptionsListConstants::KEY_HOST => '127.0.0.1',
+            ConfigOptionsListConstants::KEY_NAME => 'magento',
+            ConfigOptionsListConstants::KEY_USER => 'magento',
+            ConfigOptionsListConstants::KEY_PASSWORD => '',
+        ]
     ];
 
     /**
@@ -153,12 +169,22 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      */
     private $contextMock;
 
+    /**
+     * @var PatchApplier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $patchApplierMock;
+
+    /**
+     * @var PatchApplierFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $patchApplierFactoryMock;
+
     protected function setUp()
     {
-        $this->filePermissions = $this->getMock(\Magento\Framework\Setup\FilePermissions::class, [], [], '', false);
-        $this->configWriter = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
-        $this->configReader = $this->getMock(\Magento\Framework\App\DeploymentConfig\Reader::class, [], [], '', false);
-        $this->config = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->filePermissions = $this->createMock(\Magento\Framework\Setup\FilePermissions::class);
+        $this->configWriter = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
+        $this->configReader = $this->createMock(\Magento\Framework\App\DeploymentConfig\Reader::class);
+        $this->config = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
 
         $this->moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
         $this->moduleList->expects($this->any())->method('getOne')->willReturn(
@@ -167,27 +193,32 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->moduleList->expects($this->any())->method('getNames')->willReturn(
             ['Foo_One', 'Bar_Two']
         );
-        $this->moduleLoader = $this->getMock(\Magento\Framework\Module\ModuleList\Loader::class, [], [], '', false);
+        $this->moduleLoader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
         $this->directoryList =
-            $this->getMock(\Magento\Framework\App\Filesystem\DirectoryList::class, [], [], '', false);
-        $this->adminFactory = $this->getMock(\Magento\Setup\Model\AdminAccountFactory::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
+        $this->adminFactory = $this->createMock(\Magento\Setup\Model\AdminAccountFactory::class);
         $this->logger = $this->getMockForAbstractClass(\Magento\Framework\Setup\LoggerInterface::class);
-        $this->random = $this->getMock(\Magento\Framework\Math\Random::class, [], [], '', false);
+        $this->random = $this->createMock(\Magento\Framework\Math\Random::class);
         $this->connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false);
-        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->contextMock =
-            $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
-        $this->configModel = $this->getMock(\Magento\Setup\Model\ConfigModel::class, [], [], '', false);
-        $this->cleanupFiles = $this->getMock(\Magento\Framework\App\State\CleanupFiles::class, [], [], '', false);
-        $this->dbValidator = $this->getMock(\Magento\Setup\Validator\DbValidator::class, [], [], '', false);
-        $this->setupFactory = $this->getMock(\Magento\Setup\Module\SetupFactory::class, [], [], '', false);
-        $this->dataSetupFactory = $this->getMock(\Magento\Setup\Module\DataSetupFactory::class, [], [], '', false);
-        $this->sampleDataState = $this->getMock(\Magento\Framework\Setup\SampleData\State::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
+        $this->configModel = $this->createMock(\Magento\Setup\Model\ConfigModel::class);
+        $this->cleanupFiles = $this->createMock(\Magento\Framework\App\State\CleanupFiles::class);
+        $this->dbValidator = $this->createMock(\Magento\Setup\Validator\DbValidator::class);
+        $this->setupFactory = $this->createMock(\Magento\Setup\Module\SetupFactory::class);
+        $this->dataSetupFactory = $this->createMock(\Magento\Setup\Module\DataSetupFactory::class);
+        $this->sampleDataState = $this->createMock(\Magento\Framework\Setup\SampleData\State::class);
         $this->componentRegistrar =
-            $this->getMock(\Magento\Framework\Component\ComponentRegistrar::class, [], [], '', false);
-        $this->phpReadinessCheck = $this->getMock(\Magento\Setup\Model\PhpReadinessCheck::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
+        $this->phpReadinessCheck = $this->createMock(\Magento\Setup\Model\PhpReadinessCheck::class);
+        $this->declarationInstallerMock = $this->createMock(DeclarationInstaller::class);
+        $this->schemaListenerMock = $this->createMock(SchemaListener::class);
+        $this->patchApplierFactoryMock = $this->createMock(PatchApplierFactory::class);
+        $this->patchApplierMock = $this->createMock(PatchApplier::class);
+        $this->patchApplierFactoryMock->expects($this->any())->method('create')->willReturn($this->patchApplierMock);
         $this->object = $this->createObject();
     }
 
@@ -201,12 +232,12 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private function createObject($connectionFactory = false, $objectManagerProvider = false)
     {
         if (!$connectionFactory) {
-            $connectionFactory = $this->getMock(\Magento\Setup\Module\ConnectionFactory::class, [], [], '', false);
+            $connectionFactory = $this->createMock(\Magento\Setup\Module\ConnectionFactory::class);
             $connectionFactory->expects($this->any())->method('create')->willReturn($this->connection);
         }
         if (!$objectManagerProvider) {
             $objectManagerProvider =
-                $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+                $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
             $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
         }
 
@@ -231,7 +262,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->dataSetupFactory,
             $this->sampleDataState,
             $this->componentRegistrar,
-            $this->phpReadinessCheck
+            $this->phpReadinessCheck,
+            $this->declarationInstallerMock
         );
     }
 
@@ -250,23 +282,30 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
                 [
                     [ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT, null, true],
                     [ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, null, true],
+                    ['modules/Magento_User', null, '1']
                 ]
             );
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
+
+        $this->declarationInstallerMock->expects($this->once())->method('installSchema');
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
-        $setup = $this->getMock(\Magento\Setup\Module\Setup::class, [], [], '', false);
-        $table = $this->getMock(\Magento\Framework\DB\Ddl\Table::class, [], [], '', false);
-        $connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $setup = $this->createMock(\Magento\Setup\Module\Setup::class);
+        $table = $this->createMock(\Magento\Framework\DB\Ddl\Table::class);
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->setMethods(['getSchemaListener', 'newTable'])
+            ->getMockForAbstractClass();
+        $connection->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
         $setup->expects($this->any())->method('getConnection')->willReturn($connection);
         $table->expects($this->any())->method('addColumn')->willReturn($table);
         $table->expects($this->any())->method('setComment')->willReturn($table);
         $table->expects($this->any())->method('addIndex')->willReturn($table);
         $connection->expects($this->any())->method('newTable')->willReturn($table);
-        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->contextMock->expects($this->any())->method('getResources')->willReturn($resource);
         $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
-        $dataSetup = $this->getMock(\Magento\Setup\Module\DataSetup::class, [], [], '', false);
-        $cacheManager = $this->getMock(\Magento\Framework\App\Cache\Manager::class, [], [], '', false);
+        $dataSetup = $this->createMock(\Magento\Setup\Module\DataSetup::class);
+        $dataSetup->expects($this->any())->method('getConnection')->willReturn($connection);
+        $cacheManager = $this->createMock(\Magento\Framework\App\Cache\Manager::class);
         $cacheManager->expects($this->any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
         $cacheManager->expects($this->once())->method('setEnabled')->willReturn(['foo', 'bar']);
         $cacheManager->expects($this->any())->method('clean');
@@ -284,15 +323,33 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap([
                 [\Magento\Framework\App\Cache\Manager::class, [], $cacheManager],
                 [\Magento\Framework\App\State::class, [], $appState],
+                [
+                    PatchApplierFactory::class,
+                    ['objectManager' => $this->objectManager],
+                    $this->patchApplierFactoryMock
+                ],
             ]));
+        $this->patchApplierMock->expects($this->exactly(2))->method('applySchemaPatch')->willReturnMap(
+            [
+                ['Bar_Two'],
+                ['Foo_One'],
+            ]
+        );
+        $this->patchApplierMock->expects($this->exactly(2))->method('applyDataPatch')->willReturnMap(
+            [
+                ['Bar_Two'],
+                ['Foo_One'],
+            ]
+        );
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
                 [\Magento\Framework\App\State::class, $appState],
-                [\Magento\Framework\App\Cache\Manager::class, $cacheManager]
+                [\Magento\Framework\App\Cache\Manager::class, $cacheManager],
+                [\Magento\Setup\Model\DeclarationInstaller::class, $this->declarationInstallerMock]
             ]));
         $this->adminFactory->expects($this->once())->method('create')->willReturn(
-            $this->getMock(\Magento\Setup\Model\AdminAccount::class, [], [], '', false)
+            $this->createMock(\Magento\Setup\Model\AdminAccount::class)
         );
         $this->sampleDataState->expects($this->once())->method('hasError')->willReturn(true);
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(
@@ -396,6 +453,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testUninstall()
     {
+        $this->config->expects($this->once())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS)
+            ->willReturn([]);
         $this->configReader->expects($this->once())->method('getFiles')->willReturn(['ConfigOne.php', 'ConfigTwo.php']);
         $configDir = $this->getMockForAbstractClass(
             \Magento\Framework\Filesystem\Directory\WriteInterface::class
@@ -422,7 +483,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(2))
             ->method('log')
             ->with('No database connection defined - skipping database cleanup');
-        $cacheManager = $this->getMock(\Magento\Framework\App\Cache\Manager::class, [], [], '', false);
+        $cacheManager = $this->createMock(\Magento\Framework\App\Cache\Manager::class);
         $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
         $cacheManager->expects($this->once())->method('clean');
         $this->objectManager->expects($this->any())
@@ -464,7 +525,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $this->config->expects($this->once())
             ->method('get')
-            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT)
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS)
             ->willReturn(self::$dbConfig);
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');
@@ -486,7 +547,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             'New_Module' => [],
         ];
 
-        $cacheManager = $this->getMock(\Magento\Framework\App\Cache\Manager::class, [], [], '', false);
+        $cacheManager = $this->createMock(\Magento\Framework\App\Cache\Manager::class);
         $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
         $cacheManager->expects($this->once())->method('clean');
         $this->objectManager->expects($this->any())

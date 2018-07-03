@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use \Magento\Setup\Model\License;
 
-class LicenseTest extends \PHPUnit_Framework_TestCase
+class LicenseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Read
@@ -22,14 +22,8 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->directoryReadMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\Read::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->directoryReadMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
+        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryRead')

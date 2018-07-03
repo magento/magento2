@@ -11,7 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
 /**
  * Tests \Magento\Webapi\Model\Authorization\OauthUserContext
  */
-class OauthUserContextTest extends \PHPUnit_Framework_TestCase
+class OauthUserContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

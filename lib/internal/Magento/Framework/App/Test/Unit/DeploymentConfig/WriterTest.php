@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -17,12 +18,12 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class WriterTest extends \PHPUnit_Framework_TestCase
+class WriterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Writer
@@ -243,7 +244,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessage Deployment config file env.php is not writable.
+     * @expectedExceptionMessage The "env.php" deployment config file isn't writable.
      */
     public function testSaveConfigException()
     {

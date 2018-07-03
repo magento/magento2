@@ -108,6 +108,13 @@ define([
             /**
              * @param {jQuery.Event} event
              */
+            events['change ' + this.options.item.qty] = function (event) {
+                self._showItemButton($(event.target));
+            };
+
+            /**
+             * @param {jQuery.Event} event
+             */
             events['click ' + this.options.item.button] = function (event) {
                 event.stopPropagation();
                 self._updateItemQty($(event.currentTarget));
@@ -213,6 +220,7 @@ define([
          */
         _updateItemQtyAfter: function (elem) {
             this._hideItemButton(elem);
+            $(document).trigger('ajax:updateItemQty');
         },
 
         /**
@@ -228,10 +236,17 @@ define([
         },
 
         /**
-         * Update content after item remove.
+         * Update content after item remove
+         *
+         * @param {Object} elem
          * @private
          */
-        _removeItemAfter: function () {
+        _removeItemAfter: function (elem) {
+            var productData = customerData.get('cart')().items.find(function (item) {
+                return Number(elem.data('cart-item')) === Number(item['item_id']);
+            });
+
+            $(document).trigger('ajax:removeFromCart', productData['product_sku']);
         },
 
         /**

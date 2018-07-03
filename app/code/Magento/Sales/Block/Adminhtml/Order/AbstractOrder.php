@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class AbstractOrder extends \Magento\Backend\Block\Widget
 {
@@ -134,7 +135,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Retrieve subtotal price include tax html formated content
+     * Retrieve subtotal price include tax html formatted content
      *
      * @param \Magento\Framework\DataObject $order
      * @return string

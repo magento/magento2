@@ -19,7 +19,7 @@ use Magento\Framework\App\DeploymentConfig;
  * Class DebugTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DebugTest extends \PHPUnit_Framework_TestCase
+class DebugTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Debug
@@ -85,9 +85,8 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
             ->willReturn(true);
-        $this->stateMock->expects($this->once())
-            ->method('getMode')
-            ->willReturn(State::MODE_DEVELOPER);
+        $this->stateMock->expects($this->never())
+            ->method('getMode');
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, null)
@@ -101,10 +100,9 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
             ->willReturn(true);
-        $this->stateMock->expects($this->once())
-            ->method('getMode')
-            ->willReturn(State::MODE_PRODUCTION);
-        $this->scopeConfigMock->expects($this->never())
+        $this->stateMock->expects($this->never())
+            ->method('getMode');
+        $this->scopeConfigMock->expects($this->once())
             ->method('getValue');
 
         $this->assertFalse($this->model->isHandling(['formatted' => false, 'level' => Logger::DEBUG]));
@@ -115,9 +113,8 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
             ->willReturn(true);
-        $this->stateMock->expects($this->once())
-            ->method('getMode')
-            ->willReturn(State::MODE_DEVELOPER);
+        $this->stateMock->expects($this->never())
+            ->method('getMode');
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, null)

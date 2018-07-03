@@ -10,7 +10,7 @@ use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Model\Integration as IntegrationModel;
 
-class WebapiTest extends \PHPUnit_Framework_TestCase
+class WebapiTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -83,6 +83,9 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->webapiBlock->canShowTab());
     }
 
+    /**
+     * @return array
+     */
     public function canShowTabProvider()
     {
         return [
@@ -127,6 +130,9 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->webapiBlock->isEverythingAllowed());
     }
 
+    /**
+     * @return array
+     */
     public function isEverythingAllowedProvider()
     {
         return [

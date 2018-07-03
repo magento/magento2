@@ -8,7 +8,7 @@ namespace Magento\ProductVideo\Test\Unit\Model\Plugin\Catalog\Product\Gallery;
 /**
  * Unit test for plugin for catalog product gallery read handler.
  */
-class ReadHandlerTest extends \PHPUnit_Framework_TestCase
+class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Subject of testing.
@@ -40,40 +40,16 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->product = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
 
-        $this->attribute = $this->getMock(
-            \Magento\Eav\Model\Entity\Attribute::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn('media_gallery');
 
-        $this->resourceModel = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Gallery::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceModel = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Gallery::class);
 
-        $this->mediaGalleryReadHandler = $this->getMock(
-            \Magento\Catalog\Model\Product\Gallery\ReadHandler::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->mediaGalleryReadHandler = $this->createMock(\Magento\Catalog\Model\Product\Gallery\ReadHandler::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

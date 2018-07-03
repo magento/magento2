@@ -22,7 +22,7 @@ use Magento\Store\Model\StoreManager;
  * Class DataProviderTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataProvider
@@ -66,14 +66,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
-        $this->sessionMock = $this->getMock(Session::class, [], [], '', false);
-        $this->adapterMock = $this->getMock(AdapterInterface::class);
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
-        $this->rangeMock = $this->getMock(Range::class, [], [], '', false);
-        $this->mysqlDataProviderMock = $this->getMock(DataProviderInterface::class);
-        $this->intervalFactoryMock = $this->getMock(IntervalFactory::class, [], [], '', false);
-        $this->storeManagerMock = $this->getMock(StoreManager::class, [], [], '', false);
+        $this->rangeMock = $this->createMock(Range::class);
+        $this->mysqlDataProviderMock = $this->createMock(DataProviderInterface::class);
+        $this->intervalFactoryMock = $this->createMock(IntervalFactory::class);
+        $this->storeManagerMock = $this->createMock(StoreManager::class);
 
         $this->model = new DataProvider(
             $this->resourceConnectionMock,
@@ -87,17 +87,17 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAggregationsUsesFrontendPriceIndexerTable()
     {
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
         $selectMock->expects($this->any())->method('columns')->willReturnSelf();
         $this->adapterMock->expects($this->once())->method('select')->willReturn($selectMock);
-        $tableMock = $this->getMock(Table::class, [], [], '', false);
+        $tableMock = $this->createMock(Table::class);
 
-        $entityStorageMock = $this->getMock(EntityStorage::class, [], [], '', false);
+        $entityStorageMock = $this->createMock(EntityStorage::class);
         $entityStorageMock->expects($this->any())->method('getSource')->willReturn($tableMock);
 
-        $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn(42);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 

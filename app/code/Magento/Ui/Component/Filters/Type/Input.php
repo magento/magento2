@@ -9,6 +9,7 @@ use Magento\Ui\Component\Form\Element\Input as ElementInput;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Input extends AbstractFilter
 {
@@ -64,7 +65,7 @@ class Input extends AbstractFilter
     protected function applyFilter()
     {
         if (isset($this->filterData[$this->getName()])) {
-            $value = $this->filterData[$this->getName()];
+            $value = str_replace(['%', '_'], ['\%', '\_'], $this->filterData[$this->getName()]);
 
             if (!empty($value)) {
                 $filter = $this->filterBuilder->setConditionType('like')

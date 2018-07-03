@@ -10,6 +10,7 @@ use Magento\Search\Model\Autocomplete\ItemInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface AutocompleteInterface
 {

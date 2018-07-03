@@ -14,10 +14,14 @@ use Magento\Framework\App\Action\Context;
 
 class Edit extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var CustomerRepositoryInterface  */
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
     protected $customerRepository;
 
-    /** @var DataObjectHelper */
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
     protected $dataObjectHelper;
 
     /**

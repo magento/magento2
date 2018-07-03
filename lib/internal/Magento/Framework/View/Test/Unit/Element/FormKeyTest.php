@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element;
 
-class FormKeyTest extends \PHPUnit_Framework_TestCase
+class FormKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\FormKey

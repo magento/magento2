@@ -8,7 +8,7 @@ namespace Magento\Tax\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
+class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Option\Validator;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Option\Validator\File
@@ -20,8 +20,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $configMock = $this->getMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
-        $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price();
+        $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
+        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price($storeManagerMock);
         $config = [
             [
                 'label' => 'group label 1',
@@ -46,7 +47,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         ];
         $configMock->expects($this->once())->method('getAll')->will($this->returnValue($config));
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getImageSizeX', 'getImageSizeY','__wakeup'];
-        $this->valueMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, $methods, [], '', false);
+        $this->valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods);
         $this->validator = new \Magento\Catalog\Model\Product\Option\Validator\File(
             $configMock,
             $priceConfigMock

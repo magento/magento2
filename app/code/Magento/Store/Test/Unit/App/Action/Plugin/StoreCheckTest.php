@@ -5,7 +5,7 @@
  */
 namespace Magento\Store\Test\Unit\App\Action\Plugin;
 
-class StoreCheckTest extends \PHPUnit_Framework_TestCase
+class StoreCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\App\Action\Plugin\StoreCheck
@@ -34,8 +34,8 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->_storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->_storeManagerMock->expects(
             $this->any()
         )->method(
@@ -43,7 +43,7 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_storeMock)
         );
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->subjectMock = $this->getMockBuilder(\Magento\Framework\App\Action\AbstractAction::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -64,6 +64,7 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
     public function testBeforeDispatchWhenStoreIsActive()
     {
         $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(true));
-        $this->_plugin->beforeDispatch($this->subjectMock, $this->requestMock);
+        $result = $this->_plugin->beforeDispatch($this->subjectMock, $this->requestMock);
+        $this->assertNull($result);
     }
 }

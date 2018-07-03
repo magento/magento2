@@ -8,7 +8,7 @@ namespace Magento\Reports\Test\Unit\Model\Plugin;
 
 use Magento\Reports\Model\Plugin\Log;
 
-class LogTest extends \PHPUnit_Framework_TestCase
+class LogTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Model\Plugin\Log

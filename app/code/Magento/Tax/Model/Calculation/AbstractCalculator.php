@@ -29,11 +29,7 @@ abstract class AbstractCalculator
     const KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING = 'tax_before_discount';
     /**#@-*/
 
-    /**
-     * Tax details item data object factory
-     *
-     * @var TaxDetailsItemInterfaceFactory
-     */
+    /**#@-*/
     protected $taxDetailsItemDataObjectFactory;
 
     /**

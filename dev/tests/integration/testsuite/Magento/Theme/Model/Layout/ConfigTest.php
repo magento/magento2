@@ -7,7 +7,7 @@
  */
 namespace Magento\Theme\Model\Layout;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Layout\Config

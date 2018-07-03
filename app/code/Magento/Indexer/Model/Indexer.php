@@ -8,7 +8,7 @@ namespace Magento\Indexer\Model;
 use Magento\Framework\Indexer\ActionFactory;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\ConfigInterface;
-use Magento\Framework\Indexer\IndexerInterface as IdxInterface;
+use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
@@ -16,7 +16,7 @@ use Magento\Framework\Indexer\StructureFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Indexer extends \Magento\Framework\DataObject implements IdxInterface
+class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
 {
     /**
      * @var string
@@ -59,7 +59,6 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
     protected $indexersFactory;
 
     /**
-     * Indexer constructor.
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param StructureFactory $structureFactory
@@ -212,7 +211,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Fill indexer data from config
      *
      * @param string $indexerId
-     * @return IdxInterface
+     * @return IndexerInterface
      * @throws \InvalidArgumentException
      */
     public function load($indexerId)
@@ -259,7 +258,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Set indexer state object
      *
      * @param StateInterface $state
-     * @return IdxInterface
+     * @return IndexerInterface
      */
     public function setState(StateInterface $state)
     {
@@ -369,6 +368,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Return indexer action instance
      *
      * @return ActionInterface
+     * @throws \InvalidArgumentException
      */
     protected function getActionInstance()
     {
@@ -398,7 +398,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
      * Regenerate full index
      *
      * @return void
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function reindexAll()
     {
@@ -414,7 +414,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
                 $state->setStatus(StateInterface::STATUS_VALID);
                 $state->save();
                 $this->getView()->resume();
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
                 $this->getView()->resume();

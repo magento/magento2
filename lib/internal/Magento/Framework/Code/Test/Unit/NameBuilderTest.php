@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Test\Unit;
 
-class NameBuilderTest extends \PHPUnit_Framework_TestCase
+class NameBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Code\NameBuilder
@@ -29,6 +29,9 @@ class NameBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->nameBuilder->buildClassName($parts));
     }
 
+    /**
+     * @return array
+     */
     public function buildClassNameDataProvider()
     {
         return [

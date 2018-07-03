@@ -88,6 +88,7 @@ class Sidebar extends AbstractCart
 
     /**
      * @return string
+     * @since 100.2.0
      */
     public function getSerializedConfig()
     {
@@ -99,9 +100,7 @@ class Sidebar extends AbstractCart
      */
     public function getImageHtmlTemplate()
     {
-        return $this->imageHelper->getFrame()
-            ? 'Magento_Catalog/product/image'
-            : 'Magento_Catalog/product/image_with_borders';
+        return 'Magento_Catalog/product/image_with_borders';
     }
 
     /**

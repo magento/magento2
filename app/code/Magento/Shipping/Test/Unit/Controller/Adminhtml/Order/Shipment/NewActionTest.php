@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewActionTest extends \PHPUnit_Framework_TestCase
+class NewActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
@@ -87,6 +87,11 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
     protected $pageTitleMock;
 
     /**
+     * @var \Magento\Shipping\Model\ShipmentProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shipmentProviderMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -95,7 +100,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
         $this->shipmentLoader = $this->getMockBuilder(
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class
         )->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
             ->getMock();
         $this->labelGenerator = $this->getMockBuilder(\Magento\Shipping\Model\Shipping\LabelGenerator::class)
             ->disableOriginalConstructor()
@@ -109,43 +114,32 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->context = $this->getMock(
-            \Magento\Backend\App\Action\Context::class,
-            [
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->context = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getRequest', 'getResponse', 'getMessageManager', 'getRedirect', 'getObjectManager',
                 'getSession', 'getActionFlag', 'getHelper', 'getView'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->response = $this->getMock(
+            ]);
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
+            ['setRedirect', 'sendResponse']
         );
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->messageManager = $this->getMock(
+        $this->messageManager = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError'],
-            [],
-            '',
-            false
+            ['addSuccess', 'addError']
         );
-        $this->session = $this->getMock(
+        $this->session = $this->createPartialMock(
             \Magento\Backend\Model\Session::class,
-            ['setIsUrlNotice', 'getCommentText'],
-            [],
-            '',
-            false
+            ['setIsUrlNotice', 'getCommentText']
         );
-        $this->actionFlag = $this->getMock(\Magento\Framework\App\ActionFlag::class, ['get'], [], '', false);
-        $this->helper = $this->getMock(\Magento\Backend\Helper\Data::class, ['getUrl'], [], '', false);
-        $this->view = $this->getMock(\Magento\Framework\App\ViewInterface::class, [], [], '', false);
+        $this->shipmentProviderMock = $this->getMockBuilder(\Magento\Shipping\Model\ShipmentProviderInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getShipmentData'])
+            ->getMockForAbstractClass();
+        $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
+        $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
+        $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -181,7 +175,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             \Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction::class,
             [
                 'context' => $this->context, 'shipmentLoader' => $this->shipmentLoader, 'request' => $this->request,
-                'response' => $this->response, 'view' => $this->view
+                'response' => $this->response, 'view' => $this->view, 'shipmentProvider' => $this->shipmentProviderMock
             ]
         );
     }
@@ -192,12 +186,9 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
         $orderId = 10003;
         $tracking = [];
         $shipmentData = ['items' => [], 'send_email' => ''];
-        $shipment = $this->getMock(
+        $shipment = $this->createPartialMock(
             \Magento\Sales\Model\Order\Shipment::class,
-            ['load', 'save', 'register', 'getOrder', 'getOrderId', '__wakeup'],
-            [],
-            '',
-            false
+            ['load', 'save', 'register', 'getOrder', 'getOrderId', '__wakeup']
         );
         $this->request->expects($this->any())
             ->method('getParam')
@@ -206,7 +197,6 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
                     [
                         ['order_id', null, $orderId],
                         ['shipment_id', null, $shipmentId],
-                        ['shipment', null, $shipmentData],
                         ['tracking', null, $tracking],
                     ]
                 )
@@ -249,13 +239,10 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
         $this->pageConfigMock->expects($this->any())
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
-        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
-        $menuBlock = $this->getMock(
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $menuBlock = $this->createPartialMock(
             \Magento\Framework\View\Element\BlockInterface::class,
-            ['toHtml', 'setActive', 'getMenuModel'],
-            [],
-            '',
-            false
+            ['toHtml', 'setActive', 'getMenuModel']
         );
         $menuModel = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
             ->disableOriginalConstructor()->getMock();
@@ -282,6 +269,9 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->method('getBlock')
             ->with('menu')
             ->will($this->returnValue($menuBlock));
+        $this->shipmentProviderMock->expects($this->once())
+            ->method('getShipmentData')
+            ->willReturn($shipmentData);
 
         $this->assertNull($this->newAction->execute());
     }

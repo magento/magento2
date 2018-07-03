@@ -219,6 +219,15 @@
         </xs:attribute>
     </xs:complexType>
 
+    <xs:complexType name="urlsType">
+        <xs:annotation>
+            <xs:documentation>
+                The array of the configuration for urls types to be displayed in the list for selection.
+            </xs:documentation>
+        </xs:annotation>
+
+    </xs:complexType>
+
     <xs:element name="param" type="argumentType"/>
 
     <xs:element name="multiple" type="xs:boolean">
@@ -601,16 +610,31 @@
         </xs:choice>
     </xs:complexType>
 
+    <xs:complexType name="linksType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="link" type="linkType"/>
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:complexType name="exportsType">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="link" type="linkType"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="linksType">
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="link" type="linkType"/>
-        </xs:sequence>
+    <xs:complexType name="urlTypes">
+        <xs:annotation>
+            <xs:documentation>
+                The array of the configuration for urls types to be displayed in the list for selection.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="class" use="required" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+                    Path to the PHP class that provides configuration.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="listensType">

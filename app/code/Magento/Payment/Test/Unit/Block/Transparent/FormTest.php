@@ -15,7 +15,7 @@ use Magento\Payment\Model\Method\TransparentInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FormTesting | \PHPUnit_Framework_MockObject_MockObject
@@ -290,10 +290,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethodNotTransparentInterface()
     {
-        $this->setExpectedException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            __('We cannot retrieve the transparent payment method model object.')
-        );
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage((string)__('We cannot retrieve the transparent payment method model object.'));
 
         $methodMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();

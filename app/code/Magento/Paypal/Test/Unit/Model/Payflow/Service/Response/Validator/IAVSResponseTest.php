@@ -11,7 +11,7 @@ use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\PayflowConfig;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class IAVSResponseTest extends \PHPUnit_Framework_TestCase
+class IAVSResponseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Checks a case when IAVS validator retrieves different response from PayPal.

@@ -11,7 +11,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class SelectHydrator
+ * Hydrator for report select parts
  */
 class SelectHydrator
 {

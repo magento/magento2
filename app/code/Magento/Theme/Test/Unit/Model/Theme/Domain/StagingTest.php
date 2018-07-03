@@ -9,7 +9,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Domain;
 
-class StagingTest extends \PHPUnit_Framework_TestCase
+class StagingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers \Magento\Theme\Model\Theme\Domain\Staging::__construct
@@ -17,19 +17,12 @@ class StagingTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateFromStagingTheme()
     {
-        $parentTheme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false, false);
+        $parentTheme = $this->createMock(\Magento\Theme\Model\Theme::class);
 
-        $theme = $this->getMock(
-            \Magento\Theme\Model\Theme::class,
-            ['__wakeup', 'getParentTheme'],
-            [],
-            '',
-            false,
-            false
-        );
+        $theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'getParentTheme']);
         $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue($parentTheme));
 
-        $themeCopyService = $this->getMock(\Magento\Theme\Model\CopyService::class, ['copy'], [], '', false);
+        $themeCopyService = $this->createPartialMock(\Magento\Theme\Model\CopyService::class, ['copy']);
         $themeCopyService->expects($this->once())->method('copy')->with($theme, $parentTheme);
 
         $object = new \Magento\Theme\Model\Theme\Domain\Staging($theme, $themeCopyService);

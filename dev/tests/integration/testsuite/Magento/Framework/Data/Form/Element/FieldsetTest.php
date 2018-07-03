@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
-class FieldsetTest extends \PHPUnit_Framework_TestCase
+class FieldsetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Form\Element\Fieldset
@@ -246,7 +246,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
         $fieldsetField = $textField;
         $fieldsetField[1] = 'fieldset';
         $advancedFieldsetFld = $fieldsetField;
-        // set isAdvenced flag
+        // set isAdvanced flag
         $advancedFieldsetFld[4] = true;
         $result = [[[$fieldsetField, $textField, $advancedFieldsetFld], 1]];
         return $result;

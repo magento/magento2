@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter\Builder;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class TermTest extends \PHPUnit_Framework_TestCase
+class TermTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit_Framework_MockObject_MockObject

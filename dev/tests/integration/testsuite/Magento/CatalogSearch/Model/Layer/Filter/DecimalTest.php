@@ -14,7 +14,7 @@ namespace Magento\CatalogSearch\Model\Layer\Filter;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class DecimalTest extends \PHPUnit_Framework_TestCase
+class DecimalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogSearch\Model\Layer\Filter\Decimal

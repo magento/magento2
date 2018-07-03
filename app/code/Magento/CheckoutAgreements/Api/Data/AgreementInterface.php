@@ -8,6 +8,7 @@ namespace Magento\CheckoutAgreements\Api\Data;
 /**
  * Interface AgreementInterface
  * @api
+ * @since 100.0.2
  */
 interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

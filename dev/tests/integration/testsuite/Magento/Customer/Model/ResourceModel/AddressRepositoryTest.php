@@ -18,7 +18,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
+class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AddressRepositoryInterface */
     private $repository;
@@ -166,6 +166,13 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $expectedNewAddress = $this->_expectedAddresses[1];
         $expectedNewAddress->setId($savedAddress->getId());
         $expectedNewAddress->setRegion($this->_expectedAddresses[1]->getRegion());
+
+        $this->assertEquals($expectedNewAddress->getExtensionAttributes(), $savedAddress->getExtensionAttributes());
+        $this->assertEquals(
+            $expectedNewAddress->getRegion()->getExtensionAttributes(),
+            $savedAddress->getRegion()->getExtensionAttributes()
+        );
+
         $this->assertEquals($expectedNewAddress, $savedAddress);
     }
 
@@ -213,8 +220,8 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals('One or more input exceptions have occurred.', $exception->getMessage());
             $errors = $exception->getErrors();
             $this->assertCount(2, $errors);
-            $this->assertEquals('firstname is a required field.', $errors[0]->getLogMessage());
-            $this->assertEquals('lastname is a required field.', $errors[1]->getLogMessage());
+            $this->assertEquals('"firstname" is required. Enter and try again.', $errors[0]->getLogMessage());
+            $this->assertEquals('"lastname" is required. Enter and try again.', $errors[1]->getLogMessage());
         }
     }
 

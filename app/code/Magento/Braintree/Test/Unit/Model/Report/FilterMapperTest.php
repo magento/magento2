@@ -15,7 +15,7 @@ use Magento\Braintree\Model\Report\FilterMapper;
  *
  * Test for class \Magento\Braintree\Model\Report\FilterMapper
  */
-class FilterMapperTest extends \PHPUnit_Framework_TestCase
+class FilterMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BraintreeSearchAdapter|\PHPUnit_Framework_MockObject_MockObject

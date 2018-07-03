@@ -6,15 +6,24 @@
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit;
 
-use \Magento\Ui\Test\Block\Adminhtml\FormSections;
-use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Backend\Test\Block\Template;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**
  * Form for creation of a Catalog Price Rule.
  */
 class PromoForm extends FormSections
 {
+    /**
+     * Selector for template block.
+     *
+     * @var string
+     */
+    private $templateBlockSelector = './ancestor::body';
+
     /**
      * Fill form with tabs.
      *
@@ -25,6 +34,7 @@ class PromoForm extends FormSections
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null, array $replace = null)
     {
+        $this->waitPageToLoad();
         $sections = $this->getFixtureFieldsByContainers($fixture);
         if ($replace) {
             $sections = $this->prepareData($sections, $replace);
@@ -54,5 +64,29 @@ class PromoForm extends FormSections
         }
 
         return $tabs;
+    }
+
+    /**
+     * Wait page to load.
+     *
+     * @return void
+     */
+    protected function waitPageToLoad()
+    {
+        $this->waitForElementVisible($this->header);
+        $this->getTemplateBlock()->waitLoader();
+    }
+
+    /**
+     * Get template block.
+     *
+     * @return Template
+     */
+    private function getTemplateBlock()
+    {
+        return $this->blockFactory->create(
+            Template::class,
+            ['element' => $this->_rootElement->find($this->templateBlockSelector, Locator::SELECTOR_XPATH)]
+        );
     }
 }

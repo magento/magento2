@@ -7,7 +7,11 @@ namespace Magento\Sitemap\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ObserverTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class ObserverTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -77,14 +81,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->inlineTranslationMock = $this->getMockBuilder(\Magento\Framework\Translate\Inline\StateInterface::class)
             ->getMock();
-        $this->sitemapCollectionMock = $this->getMock(
+        $this->sitemapCollectionMock = $this->createPartialMock(
             \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection::class,
-            ['getIterator'],
-            [],
-            '',
-            false
+            ['getIterator']
         );
-        $this->sitemapMock = $this->getMock(\Magento\Sitemap\Model\Sitemap::class, ['generateXml'], [], '', false);
+        $this->sitemapMock = $this->createPartialMock(\Magento\Sitemap\Model\Sitemap::class, ['generateXml']);
 
         $this->objectManager = new ObjectManager($this);
         $this->observer = $this->objectManager->getObject(
@@ -99,11 +100,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Exception
-     */
-    public function testScheduledGenerateSitemapsThrowsException()
+    public function testScheduledGenerateSitemapsSendsExceptionEmail()
     {
+        $exception = 'Sitemap Exception';
+        $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
+
         $this->scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
 
         $this->collectionFactoryMock->expects($this->once())
@@ -114,7 +115,55 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->sitemapMock]));
 
-        $this->sitemapMock->expects($this->once())->method('generateXml')->willThrowException(new \Exception);
+        $this->sitemapMock->expects($this->once())
+            ->method('generateXml')
+            ->willThrowException(new \Exception($exception));
+
+        $this->scopeConfigMock->expects($this->at(1))
+            ->method('getValue')
+            ->with(
+                \Magento\Sitemap\Model\Observer::XML_PATH_ERROR_RECIPIENT,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+            ->willReturn('error-recipient@example.com');
+
+        $this->inlineTranslationMock->expects($this->once())
+            ->method('suspend');
+
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setTemplateIdentifier')
+            ->will($this->returnSelf());
+
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setTemplateOptions')
+            ->with([
+                'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+            ])
+            ->will($this->returnSelf());
+
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setTemplateVars')
+            ->with(['warnings' => $exception])
+            ->will($this->returnSelf());
+
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setFrom')
+            ->will($this->returnSelf());
+
+        $this->transportBuilderMock->expects($this->once())
+            ->method('addTo')
+            ->will($this->returnSelf());
+
+        $this->transportBuilderMock->expects($this->once())
+            ->method('getTransport')
+            ->willReturn($transport);
+
+        $transport->expects($this->once())
+            ->method('sendMessage');
+
+        $this->inlineTranslationMock->expects($this->once())
+            ->method('resume');
 
         $this->observer->scheduledGenerateSitemaps();
     }

@@ -12,7 +12,7 @@ use Magento\Sales\Ui\Component\Listing\Column\PaymentMethod;
 /**
  * Class PaymentMethodTest
  */
-class PaymentMethodTest extends \PHPUnit_Framework_TestCase
+class PaymentMethodTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PaymentMethod
@@ -33,7 +33,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
-        $this->paymentHelper = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
+        $this->paymentHelper = $this->createMock(\Magento\Payment\Helper\Data::class);
         $this->model = $objectManager->getObject(
             \Magento\Sales\Ui\Component\Listing\Column\PaymentMethod::class,
             ['paymentHelper' => $this->paymentHelper, 'context' => $contextMock]

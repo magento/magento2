@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Directory\Model;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -15,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Integration test for \Magento\Directory\Model\Observer
  */
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  ObjectManagerInterface */
     protected $objectManager;
@@ -61,13 +59,15 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function testScheduledUpdateCurrencyRates()
     {
         //skipping test if service is unavailable
-        $url = str_replace('{{CURRENCY_FROM}}', 'USD',
+        $url = str_replace(
+            '{{CURRENCY_FROM}}',
+            'USD',
             \Magento\Directory\Model\Currency\Import\Webservicex::CURRENCY_CONVERTER_URL
         );
         $url = str_replace('{{CURRENCY_TO}}', 'GBP', $url);
         try {
             file_get_contents($url);
-        } catch (\PHPUnit_Framework_Exception $e) {
+        } catch (\PHPUnit\Framework\Exception $e) {
             $this->markTestSkipped('http://www.webservicex.net is unavailable ');
         }
 

@@ -67,7 +67,7 @@ class AssertProductOnCustomWebsite extends AbstractAssertForm
     {
         $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::NOT_FOUND_MESSAGE,
             $this->productViewPage->getTitleBlock()->getTitle(),
             'Product ' . $product->getName() . ' is available on Main Website, but should not.'
@@ -88,7 +88,7 @@ class AssertProductOnCustomWebsite extends AbstractAssertForm
                 $_ENV['app_frontend_url'] . 'websites/' . $website->getCode() . '/' . $product->getUrlKey() . '.html'
             );
 
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $product->getName(),
                 $this->productViewPage->getViewBlock()->getProductName(),
                 'Product ' . $product->getName() . ' is not available on ' . $website->getName() . ' website.'

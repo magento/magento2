@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
  * Test class for \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection.
  * @magentoDbIsolation disabled
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider filtersDataProviderSearch
@@ -29,6 +29,45 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $fulltextCollection->loadWithFilter();
         $items = $fulltextCollection->getItems();
         $this->assertCount($expectedCount, $items);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Framework/Search/_files/products_with_the_same_search_score.php
+     */
+    public function testSearchResultsAreTheSameForSameRequests()
+    {
+        $howManySearchRequests = 3;
+        $previousResult = null;
+
+        $objManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        foreach (range(1, $howManySearchRequests) as $i) {
+            /** @var  \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $fulltextCollection */
+            $fulltextCollection = $objManager->create(
+                \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
+                ['searchRequestName' => 'quick_search_container']
+            );
+
+            $fulltextCollection->addFieldToFilter('search_term', 'shorts');
+            $fulltextCollection->setOrder('relevance');
+            $fulltextCollection->load();
+            $items = $fulltextCollection->getItems();
+            $this->assertGreaterThan(
+                0,
+                count($items),
+                sprintf("Search #%s result must not be empty", $i)
+            );
+
+            if ($previousResult) {
+                $this->assertEquals(
+                    $previousResult,
+                    array_keys($items),
+                    "Search result must be the same for the same requests"
+                );
+            }
+
+            $previousResult = array_keys($items);
+        }
     }
 
     public function filtersDataProviderSearch()

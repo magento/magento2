@@ -214,7 +214,7 @@ class ParamsOverrider
      *
      * @return \Magento\Framework\Reflection\MethodsMap
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getMethodsMap()
     {

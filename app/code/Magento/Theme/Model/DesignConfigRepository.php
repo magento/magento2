@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Model;
 
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -15,13 +16,19 @@ use Magento\Theme\Model\Design\Config\Storage as ConfigStorage;
 
 class DesignConfigRepository implements DesignConfigRepositoryInterface
 {
-    /** @var ReinitableConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
+     */
     protected $reinitableConfig;
 
-    /** @var IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
-    /** @var ConfigStorage */
+    /**
+     * @var \Magento\Theme\Model\Design\Config\Storage
+     */
     protected $configStorage;
 
     /**
@@ -51,7 +58,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
      *
      * @return Design\Config\Validator
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getValidator()
     {
@@ -79,7 +86,9 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
         if (!($designConfig->getExtensionAttributes() &&
             $designConfig->getExtensionAttributes()->getDesignConfigData())
         ) {
-            throw new LocalizedException(__('Can not save empty config'));
+            throw new LocalizedException(
+                __("The config can't be saved because it's empty. Complete the config and try again.")
+            );
         }
 
         $this->getValidator()->validate($designConfig);
@@ -99,7 +108,9 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
         if (!($designConfig->getExtensionAttributes() &&
             $designConfig->getExtensionAttributes()->getDesignConfigData())
         ) {
-            throw new LocalizedException(__('Can not save empty config'));
+            throw new LocalizedException(
+                __("The config can't be saved because it's empty. Complete the config and try again.")
+            );
         }
 
         $this->configStorage->delete($designConfig);

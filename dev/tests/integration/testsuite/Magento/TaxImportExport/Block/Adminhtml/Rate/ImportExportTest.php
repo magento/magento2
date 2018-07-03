@@ -5,7 +5,7 @@
  */
 namespace Magento\TaxImportExport\Block\Adminhtml\Rate;
 
-class ImportExportTest extends \PHPUnit_Framework_TestCase
+class ImportExportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TaxImportExport\Block\Adminhtml\Rate\ImportExport

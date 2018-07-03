@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Css\PreProcessor\File\Collector;
 
 use Magento\Framework\App\Bootstrap;
@@ -15,7 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @magentoComponentsDir Magento/Framework/Css/PreProcessor/_files/code/Magento
  * @magentoDbIsolation enabled
  */
-class AggregatedTest extends \PHPUnit_Framework_TestCase
+class AggregatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Css\PreProcessor\File\Collector\Aggregated
@@ -61,11 +59,13 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\View\File\Collector\Base $sourceBase */
         $sourceBase = $this->objectManager->create(
-            \Magento\Framework\View\File\Collector\Base::class, ['filesystem' => $filesystem, 'subDir' => 'web']
+            \Magento\Framework\View\File\Collector\Base::class,
+            ['filesystem' => $filesystem, 'subDir' => 'web']
         );
         /** @var \Magento\Framework\View\File\Collector\Base $sourceBase */
         $overriddenBaseFiles = $this->objectManager->create(
-            \Magento\Framework\View\File\Collector\Override\Base::class, ['filesystem' => $filesystem, 'subDir' => 'web']
+            \Magento\Framework\View\File\Collector\Override\Base::class,
+            ['filesystem' => $filesystem, 'subDir' => 'web']
         );
         $this->model = $this->objectManager->create(
             \Magento\Framework\Css\PreProcessor\File\Collector\Aggregated::class,
@@ -116,7 +116,7 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
                     str_replace(
                         '\\',
                         '/',
-                         "$fixtureDir/_files/design/frontend/Test/default/web/1.file"
+                        "$fixtureDir/_files/design/frontend/Test/default/web/1.file"
                     ),
                     str_replace(
                         '\\',

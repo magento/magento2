@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -44,6 +44,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testAddPriceDataOnSchedule()
     {
@@ -88,6 +89,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testAddPriceDataOnSave()
     {
@@ -123,5 +125,46 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(3, $tierPrices);
         $this->assertEquals(50, $tierPrices[2]->getExtensionAttributes()->getPercentageValue());
         $this->assertEquals(5, $tierPrices[2]->getValue());
+    }
+
+    /**
+     * Checks a case if table for join specified as an array.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testJoinTable()
+    {
+        $this->collection->joinTable(
+            ['alias' => 'url_rewrite'],
+            'entity_id = entity_id',
+            ['request_path'],
+            '{{table}}.entity_type = \'product\'',
+            'left'
+        );
+        $sql = (string) $this->collection->getSelect();
+        $productTable = $this->collection->getTable('catalog_product_entity');
+        $urlRewriteTable = $this->collection->getTable('url_rewrite');
+
+        $expected = 'SELECT `e`.*, `alias`.`request_path` FROM `' . $productTable . '` AS `e`'
+            . ' LEFT JOIN `' . $urlRewriteTable . '` AS `alias` ON (alias.entity_id =e.entity_id)'
+            . ' AND (alias.entity_type = \'product\')';
+
+        self::assertContains($expected, str_replace(PHP_EOL, '', $sql));
+    }
+
+    /**
+     * Checks that a collection uses the correct join when filtering by null.
+     *
+     * This actually affects AbstractCollection, but inheritance yada yada.
+     *
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @magentoDbIsolation enabled
+     */
+    public function testFilterByNull()
+    {
+        $this->collection->addAttributeToFilter([['attribute' => 'special_price', 'null' => true]]);
+        $productCount = $this->collection->count();
+
+        $this->assertEquals(1, $productCount, 'Product with null special_price not found');
     }
 }

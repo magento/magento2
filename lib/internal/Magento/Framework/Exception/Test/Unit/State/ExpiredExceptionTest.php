@@ -13,7 +13,7 @@ use Magento\Framework\Phrase;
 /**
  * Class ExpiredException
  */
-class ExpiredExceptionTest extends \PHPUnit_Framework_TestCase
+class ExpiredExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void

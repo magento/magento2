@@ -10,7 +10,7 @@ use Magento\Setup\Validator\DbValidator;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
-class DbValidatorTest extends \PHPUnit_Framework_TestCase
+class DbValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DbValidator|\PHPUnit_Framework_MockObject_MockObject
@@ -29,7 +29,7 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connectionFactory = $this->getMock(\Magento\Setup\Module\ConnectionFactory::class, [], [], '', false);
+        $this->connectionFactory = $this->createMock(\Magento\Setup\Module\ConnectionFactory::class);
         $this->connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->connectionFactory->expects($this->any())->method('create')->willReturn($this->connection);
         $this->dbValidator = new DbValidator($this->connectionFactory);
@@ -166,7 +166,7 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckDatabaseConnectionFailed()
     {
-        $connectionFactory = $this->getMock(\Magento\Setup\Module\ConnectionFactory::class, [], [], '', false);
+        $connectionFactory = $this->createMock(\Magento\Setup\Module\ConnectionFactory::class);
         $connectionFactory->expects($this->once())->method('create')->willReturn(false);
         $this->dbValidator = new DbValidator($connectionFactory);
         $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');

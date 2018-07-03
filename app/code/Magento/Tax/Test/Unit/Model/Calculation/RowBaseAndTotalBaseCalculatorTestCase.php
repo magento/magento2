@@ -4,18 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Tax\Model\Calculation\RowbaseCalculator;
+use Magento\Tax\Model\Calculation\RowBaseCalculator;
 use Magento\Tax\Model\Calculation\TotalBaseCalculator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
+class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
 {
     const STORE_ID = 2300;
     const QUANTITY = 1;
@@ -84,12 +82,9 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->taxItemDetailsDataObjectFactory = $this->getMock(
+        $this->taxItemDetailsDataObjectFactory = $this->createPartialMock(
             \Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->taxDetailsItem = $this->objectManager->getObject(\Magento\Tax\Model\TaxDetails\ItemDetails::class);
         $this->taxItemDetailsDataObjectFactory->expects($this->any())
@@ -108,20 +103,14 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
 
         $this->mockItem = $this->getMockBuilder(\Magento\Tax\Api\Data\QuoteDetailsItemInterface::class)->getMock();
 
-        $this->appliedTaxDataObjectFactory = $this->getMock(
+        $this->appliedTaxDataObjectFactory = $this->createPartialMock(
             \Magento\Tax\Api\Data\AppliedTaxInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $this->appliedTaxRateDataObjectFactory = $this->getMock(
+        $this->appliedTaxRateDataObjectFactory = $this->createPartialMock(
             \Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->appliedTaxRate = $this->objectManager->getObject(\Magento\Tax\Model\TaxDetails\AppliedTaxRate::class);
         $this->appliedTaxRateDataObjectFactory->expects($this->any())

@@ -5,9 +5,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Test\Unit\Tree;
 
-class NodeTest extends \PHPUnit_Framework_TestCase
+class NodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $data
@@ -20,7 +21,8 @@ class NodeTest extends \PHPUnit_Framework_TestCase
         $expectedException,
         $expectedExceptionMessage
     ) {
-        $this->setExpectedException($expectedException, $expectedExceptionMessage);
+        $this->expectException($expectedException);
+        $this->expectExceptionMessage($expectedExceptionMessage);
         new \Magento\Framework\DB\Tree\Node($data['node_data'], $data['keys']);
     }
 
@@ -93,21 +95,21 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     'node_data' => null,
                     'keys' => null,
                 ], \Magento\Framework\Exception\LocalizedException::class,
-                'Empty array of node information',
+                'The node information is empty. Enter the information and try again.',
             ],
             [
                 [
                     'node_data' => null,
                     'keys' => true,
                 ], \Magento\Framework\Exception\LocalizedException::class,
-                'Empty array of node information'
+                'The node information is empty. Enter the information and try again.'
             ],
             [
                 [
                     'node_data' => true,
                     'keys' => null,
                 ], \Magento\Framework\Exception\LocalizedException::class,
-                'Empty keys array'
+                'The encryption key can\'t be empty. Enter the key and try again.'
             ]
         ];
     }

@@ -22,10 +22,10 @@
                     <settings>
                         <notice translate="true">Allowed file types: jpeg, gif, png.</notice>
                         <label translate="true">Image</label>
-                        <componentType>fileUploader</componentType>
+                        <componentType>imageUploader</componentType>
                     </settings>
                     <formElements>
-                        <fileUploader>
+                        <imageUploader>
                             <settings>
                                 <allowedExtensions>jpg jpeg gif png</allowedExtensions>
                                 <maxFileSize>2097152</maxFileSize>
@@ -33,7 +33,7 @@
                                     <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
                                 </uploaderConfig>
                             </settings>
-                        </fileUploader>
+                        </imageUploader>
                     </formElements>
                 </field>
                 <field name="watermark_image_imageOpacity" formElement="input">
@@ -80,12 +80,11 @@
                 </settings>
                 <field name="watermark_thumbnail_image" formElement="fileUploader">
                     <settings>
-                        <notice translate="true">Allowed file types: jpeg, gif, png.</notice>
                         <label translate="true">Image</label>
-                        <componentType>fileUploader</componentType>
+                        <componentType>imageUploader</componentType>
                     </settings>
                     <formElements>
-                        <fileUploader>
+                        <imageUploader>
                             <settings>
                                 <allowedExtensions>jpg jpeg gif png</allowedExtensions>
                                 <maxFileSize>2097152</maxFileSize>
@@ -93,7 +92,7 @@
                                     <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
                                 </uploaderConfig>
                             </settings>
-                        </fileUploader>
+                        </imageUploader>
                     </formElements>
                 </field>
                 <field name="watermark_thumbnail_imageOpacity" formElement="input">
@@ -140,12 +139,11 @@
                 </settings>
                 <field name="watermark_small_image_image" formElement="fileUploader">
                     <settings>
-                        <notice translate="true">Allowed file types: jpeg, gif, png.</notice>
                         <label translate="true">Image</label>
-                        <componentType>fileUploader</componentType>
+                        <componentType>imageUploader</componentType>
                     </settings>
                     <formElements>
-                        <fileUploader>
+                        <imageUploader>
                             <settings>
                                 <allowedExtensions>jpg jpeg gif png</allowedExtensions>
                                 <maxFileSize>2097152</maxFileSize>
@@ -153,7 +151,7 @@
                                     <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
                                 </uploaderConfig>
                             </settings>
-                        </fileUploader>
+                        </imageUploader>
                     </formElements>
                 </field>
                 <field name="watermark_small_image_imageOpacity" formElement="input">

@@ -6,10 +6,10 @@
 
 namespace Magento\Indexer\Setup;
 
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Indexer\Model\IndexerFactory;
 use Magento\Framework\Indexer\ConfigInterface;
 
 /**
@@ -18,7 +18,7 @@ use Magento\Framework\Indexer\ConfigInterface;
 class RecurringData implements InstallDataInterface
 {
     /**
-     * @var IndexerFactory
+     * @var IndexerInterfaceFactory
      */
     private $indexerFactory;
 
@@ -30,11 +30,11 @@ class RecurringData implements InstallDataInterface
     /**
      * RecurringData constructor.
      *
-     * @param IndexerFactory $indexerFactory
+     * @param IndexerInterfaceFactory $indexerFactory
      * @param ConfigInterface $configInterface
      */
     public function __construct(
-        IndexerFactory $indexerFactory,
+        IndexerInterfaceFactory $indexerFactory,
         ConfigInterface $configInterface
     ) {
         $this->indexerFactory = $indexerFactory;

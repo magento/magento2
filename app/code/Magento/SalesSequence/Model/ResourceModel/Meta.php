@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\SalesSequence\Model\ResourceModel;
 
 use Magento\Framework\Exception\LocalizedException as Exception;
@@ -16,6 +17,7 @@ use Magento\SalesSequence\Model\Profile as ModelProfile;
  * Class Meta represents metadata for sequence as sequence table and store id
  *
  * @api
+ * @since 100.0.2
  */
 class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -116,7 +118,12 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->getData('active_profile') instanceof ModelProfile) {
-            throw new NoSuchEntityException(__('Entity Sequence profile not added to meta active profile'));
+            throw new NoSuchEntityException(
+                __(
+                    "The entity sequence profile wasn't added to the meta active profile. "
+                    . "Verify the profile and try again."
+                )
+            );
         }
 
         if (!$object->getData('entity_type')

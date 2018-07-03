@@ -11,7 +11,7 @@ use \Magento\Framework\App\Area;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AreaTest extends \PHPUnit_Framework_TestCase
+class AreaTest extends \PHPUnit\Framework\TestCase
 {
     const SCOPE_ID = '1';
 
@@ -276,6 +276,9 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->object->detectDesign($requestMock);
     }
 
+    /**
+     * @return array
+     */
     public function detectDesignByRequestDataProvider()
     {
         return [

@@ -9,7 +9,7 @@ use Magento\Framework\View\Design\Theme\Customization\FileServiceFactory;
 use Magento\Framework\View\DesignInterface;
 use Magento\Theme\Model\Theme\File;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var File

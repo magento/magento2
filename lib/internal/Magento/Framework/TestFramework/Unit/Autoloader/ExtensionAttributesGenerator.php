@@ -34,7 +34,6 @@ class ExtensionAttributesGenerator implements GeneratorInterface
         $classGenerator->setName($className)
             ->setImplementedInterfaces(["{$className}Interface"]);
         return $classGenerator->generate();
-
     }
 
     /**

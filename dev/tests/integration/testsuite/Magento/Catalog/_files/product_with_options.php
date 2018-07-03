@@ -11,6 +11,8 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 
 $product->setTypeId(
     'simple'
+)->setId(
+    1
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
@@ -35,10 +37,11 @@ $product->setTypeId(
     true
 )->setStockData(
     [
-        'qty' => 0,
-        'is_in_stock' => 0
+        'qty' => 100,
+        'is_in_stock' => 1,
+        'manage_stock' => 1,
     ]
-);
+)->setHasOptions(true);
 
 $options = [
     [
@@ -204,4 +207,8 @@ foreach ($options as $option) {
     $customOptions[] = $customOption;
 }
 
-$product->setOptions($customOptions)->save();
+$product->setOptions($customOptions);
+
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepository->save($product);

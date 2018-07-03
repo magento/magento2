@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Encryption;
 
-class EncryptorTest extends \PHPUnit_Framework_TestCase
+class EncryptorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Encryption\Encryptor

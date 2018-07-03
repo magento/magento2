@@ -10,7 +10,7 @@ use Magento\Store\Model\Config\Reader\Source\Initial\DefaultScope;
 use Magento\Store\Model\Config\Reader\Source\Initial\Website;
 use Magento\Framework\App\Config\Scope\Converter;
 
-class WebsiteTest extends \PHPUnit_Framework_TestCase
+class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet()
     {

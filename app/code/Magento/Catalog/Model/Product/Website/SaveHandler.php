@@ -16,10 +16,14 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class SaveHandler implements ExtensionInterface
 {
-    /** @var  ProductWebsiteLink */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Website\Link
+     */
     private $productWebsiteLink;
 
-    /** @var  StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $storeManager;
 
     /**

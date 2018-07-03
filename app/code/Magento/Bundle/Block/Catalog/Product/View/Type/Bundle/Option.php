@@ -4,13 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 
 /**
  * Bundle option renderer
  * @api
+ * @since 100.0.2
  */
 class Option extends \Magento\Bundle\Block\Catalog\Product\Price
 {
@@ -92,7 +91,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     public function showSingle()
     {
-        if (is_null($this->_showSingle)) {
+        if ($this->_showSingle === null) {
             $option = $this->getOption();
             $selections = $option->getSelections();
 
@@ -141,7 +140,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     protected function _getSelectedOptions()
     {
-        if (is_null($this->_selectedOptions)) {
+        if ($this->_selectedOptions === null) {
             $this->_selectedOptions = [];
 
             /** @var \Magento\Bundle\Model\Option $option */
@@ -151,15 +150,28 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
                 $selectionId = $this->getProduct()->getPreconfiguredValues()->getData(
                     'bundle_option/' . $option->getId()
                 );
-                if ($selectionId && $option->getSelectionById($selectionId)) {
-                    $this->_selectedOptions = $selectionId;
-                } elseif (!$option->getRequired()) {
-                    $this->_selectedOptions = 'None';
-                }
+                $this->assignSelection($option, $selectionId);
             }
         }
 
         return $this->_selectedOptions;
+    }
+
+    /**
+     * Set selected options.
+     *
+     * @param \Magento\Bundle\Model\Option $option
+     * @param mixed $selectionId
+     * @return void
+     * @since 100.2.0
+     */
+    protected function assignSelection(\Magento\Bundle\Model\Option $option, $selectionId)
+    {
+        if ($selectionId && $option->getSelectionById($selectionId)) {
+            $this->_selectedOptions = $selectionId;
+        } elseif (!$option->getRequired()) {
+            $this->_selectedOptions = 'None';
+        }
     }
 
     /**
@@ -177,9 +189,8 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
             return in_array($selection->getSelectionId(), $selectedOptions);
         } elseif ($selectedOptions == 'None') {
             return false;
-        } else {
-            return $selection->getIsDefault() && $selection->isSaleable();
         }
+        return $selection->getIsDefault() && $selection->isSaleable();
     }
 
     /**
@@ -224,7 +235,11 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     public function getSelectionQtyTitlePrice($selection, $includeContainer = true)
     {
         $this->setFormatProduct($selection);
-        $priceTitle = '<span class="product-name">' . $selection->getSelectionQty() * 1 . ' x ' . $this->escapeHtml($selection->getName()) . '</span>';
+        $priceTitle = '<span class="product-name">'
+            . $selection->getSelectionQty() * 1
+            . ' x '
+            . $this->escapeHtml($selection->getName())
+            . '</span>';
 
         $priceTitle .= ' &nbsp; ' . ($includeContainer ? '<span class="price-notice">' : '') . '+' .
             $this->renderPriceString($selection, $includeContainer) . ($includeContainer ? '</span>' : '');

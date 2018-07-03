@@ -9,9 +9,15 @@ namespace Magento\Store\Api\Data;
  * Website interface
  *
  * @api
+ * @since 100.0.2
  */
 interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**
+     * contains code of admin website
+     */
+    const ADMIN_CODE = 'admin';
+
     /**
      * @return int
      */
@@ -35,7 +41,7 @@ interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setCode($code);
 
     /**
-     * Rethreive website name
+     * Retrieve website name
      *
      * @return string
      */

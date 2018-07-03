@@ -5,7 +5,7 @@
  */
 namespace Magento\OfflineShipping\Test\Unit\Model\Plugin\Checkout\Block\Cart;
 
-class ShippingTest extends \PHPUnit_Framework_TestCase
+class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart\Shipping
@@ -52,6 +52,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($assertResult, $this->model->afterIsStateActive($subjectMock, $result));
     }
 
+    /**
+     * @return array
+     */
     public function afterGetStateActiveDataProvider()
     {
         return [

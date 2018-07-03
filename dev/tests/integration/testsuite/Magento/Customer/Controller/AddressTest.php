@@ -21,7 +21,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     protected function setUp()
     {
         parent::setUp();
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\Session::class,
             [$logger]
@@ -150,8 +150,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo(
                 [
                     'One or more input exceptions have occurred.',
-                    'street is a required field.',
-                    'city is a required field.',
+                    '"street" is required. Enter and try again.',
+                    '"city" is required. Enter and try again.',
                 ]
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR

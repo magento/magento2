@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Setup\Test\Unit\Module\Di\Definition;
 
 /**
  * Class CollectionTest
  * @package Magento\Setup\Module\Di\Definition
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Definition\Collection
@@ -99,6 +97,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->model->addCollection($this->collectionMock);
         $this->assertEquals(
             [self::INSTANCE_1 => $this->getArgument(), self::INSTANCE_2 => $this->getArgument()],
-            $this->model->getCollection());
+            $this->model->getCollection()
+        );
     }
 }

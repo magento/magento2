@@ -12,6 +12,7 @@ use \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
  * Sales order history block
  *
  * @api
+ * @since 100.0.2
  */
 class History extends \Magento\Framework\View\Element\Template
 {
@@ -35,7 +36,9 @@ class History extends \Magento\Framework\View\Element\Template
      */
     protected $_orderConfig;
 
-    /** @var \Magento\Sales\Model\ResourceModel\Order\Collection */
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
+     */
     protected $orders;
 
     /**
@@ -75,7 +78,7 @@ class History extends \Magento\Framework\View\Element\Template
     /**
      * @return CollectionFactoryInterface
      *
-     * @deprecated
+     * @deprecated 100.1.1
      */
     private function getOrderCollectionFactory()
     {

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product\Media;
 
 use Magento\Eav\Model\Entity\Attribute;
@@ -17,6 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Config implements ConfigInterface
 {
@@ -75,7 +74,8 @@ class Config implements ConfigInterface
      */
     public function getBaseMediaUrl()
     {
-        return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product';
+        return $this->storeManager->getStore()
+                ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product';
     }
 
     /**
@@ -169,6 +169,7 @@ class Config implements ConfigInterface
 
     /**
      * @return array
+     * @since 100.0.4
      */
     public function getMediaAttributeCodes()
     {

@@ -15,7 +15,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 /**
  * Contact base helper
  *
- * @deprecated
+ * @deprecated 100.2.0
  * @see \Magento\Contact\Model\ConfigInterface
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
@@ -63,7 +63,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if enabled
      *
      * @return string|null
-     * @deprecated use \Magento\Contact\Api\ConfigInterface::isEnabled() instead
+     * @deprecated 100.2.0 use \Magento\Contact\Api\ConfigInterface::isEnabled() instead
      */
     public function isEnabled()
     {

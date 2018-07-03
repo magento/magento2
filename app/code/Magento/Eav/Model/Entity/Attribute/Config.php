@@ -11,6 +11,7 @@ use Magento\Framework\Serialize\SerializerInterface;
  * Provides EAV attributes configuration
  *
  * @api
+ * @since 100.0.2
  */
 class Config extends \Magento\Framework\Config\Data
 {

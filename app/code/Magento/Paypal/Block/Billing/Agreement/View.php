@@ -9,6 +9,7 @@ namespace Magento\Paypal\Block\Billing\Agreement;
  * Customer account billing agreement view block
  *
  * @api
+ * @since 100.0.2
  */
 class View extends \Magento\Framework\View\Element\Template
 {

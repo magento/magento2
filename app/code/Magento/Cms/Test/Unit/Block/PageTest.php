@@ -8,7 +8,7 @@ namespace Magento\Cms\Test\Unit\Block;
 /**
  * Class PageTest
  */
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Block\Page

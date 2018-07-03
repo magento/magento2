@@ -7,7 +7,7 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class SetRememberMeCheckedStatusObserverTest extends \PHPUnit_Framework_TestCase
+class SetRememberMeCheckedStatusObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\SetRememberMeCheckedStatusObserver
@@ -46,20 +46,17 @@ class SetRememberMeCheckedStatusObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->helperMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
-        $this->sessionHelperMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+        $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
         $checkoutMethods = ['setRememberMeChecked', '__wakeUp'];
-        $this->checkoutSessionMock = $this->getMock(
+        $this->checkoutSessionMock = $this->createPartialMock(
             \Magento\Checkout\Model\Session::class,
-            $checkoutMethods,
-            [],
-            '',
-            false
+            $checkoutMethods
         );
-        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
         $eventMethods = ['getRequest', '__wakeUp'];
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event::class, $eventMethods, [], '', false);
+        $this->eventManagerMock = $this->createPartialMock(\Magento\Framework\Event::class, $eventMethods);
         $this->model = new \Magento\Persistent\Observer\SetRememberMeCheckedStatusObserver(
             $this->helperMock,
             $this->sessionHelperMock,

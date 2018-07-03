@@ -32,6 +32,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\PageCache\Controller\Block">
+        <arguments>
+            <argument name="layoutCacheKey" xsi:type="object">Magento\Framework\View\Layout\LayoutCacheKeyInterface</argument>
+        </arguments>
+    </type>
     <preference for="Magento\PageCache\Model\VclGeneratorInterface" type="Magento\PageCache\Model\Varnish\VclGenerator"/>
     <preference for="Magento\PageCache\Model\VclTemplateLocatorInterface" type="Magento\PageCache\Model\Varnish\VclTemplateLocator"/>
 </config>

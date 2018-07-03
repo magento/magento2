@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\View
@@ -58,14 +58,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
-        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
-        $this->_layoutProcessor = $this->getMock(\Magento\Framework\View\Model\Layout\Merge::class, [], [], '', false);
+        $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->_configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
+        $this->_layoutProcessor = $this->createMock(\Magento\Framework\View\Model\Layout\Merge::class);
         $this->_layoutMock->expects($this->any())->method('getUpdate')
             ->will($this->returnValue($this->_layoutProcessor));
-        $this->_actionFlagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
-        $this->_eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->_actionFlagMock = $this->createMock(\Magento\Framework\App\ActionFlag::class);
+        $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $pageConfigMock = $this->getMockBuilder(
             \Magento\Framework\View\Page\Config::class
         )->disableOriginalConstructor()->getMock();
@@ -99,7 +99,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->resultPage));
 
-        $this->response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
 
         $this->_view = $helper->getObject(
             \Magento\Framework\App\View::class,

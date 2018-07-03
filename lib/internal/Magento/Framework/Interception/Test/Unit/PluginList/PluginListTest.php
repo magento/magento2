@@ -21,7 +21,7 @@ require_once __DIR__ . '/../Custom/Module/Model/StartingBackslash/Plugin.php';
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PluginListTest extends \PHPUnit_Framework_TestCase
+class PluginListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Interception\PluginList\PluginList
@@ -56,11 +56,13 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
-        $readerMock = $this->getMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class, [], [], '', false);
+        $readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
         $readerMock->expects($this->any())->method('read')->will($this->returnValueMap($readerMap));
 
-        $this->configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
-        $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
+        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
+            ->setMethods(['get'])
+            ->getMockForAbstractClass();
         // turn cache off
         $this->cacheMock->expects($this->any())
             ->method('get')
@@ -72,11 +74,13 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
         $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
 
-        $this->objectManagerMock = $this->getMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->setMethods(['get'])
+            ->getMockForAbstractClass();
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnArgument(0);
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
 
@@ -98,7 +102,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
             'logger',

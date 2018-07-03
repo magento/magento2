@@ -10,7 +10,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
-class AbstractResourceTest extends \PHPUnit_Framework_TestCase
+class AbstractResourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AbstractResourceStub
@@ -22,16 +22,19 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
      */
     private $serializerMock;
 
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->serializerMock = $this->getMock(Json::class);
+        $this->serializerMock = $this->createMock(Json::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->abstractResource = $objectManager->getObject(AbstractResourceStub::class);
-        $objectManager->setBackwardCompatibleProperty(
-            $this->abstractResource,
-            'serializer',
-            $this->serializerMock
-        );
+        $objectManager->setBackwardCompatibleProperty($this->abstractResource, 'serializer', $this->serializerMock);
+        $objectManager->setBackwardCompatibleProperty($this->abstractResource, '_logger', $this->loggerMock);
     }
 
     /**
@@ -168,7 +171,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     public function testCommitZeroLevel()
     {
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
-        $connection = $this->getMock(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
@@ -201,13 +204,10 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $this->abstractResource->commit();
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testCommitZeroLevelCallbackException()
     {
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
-        $connection = $this->getMock(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
 
         $this->abstractResource->setConnection($connection);
         $this->abstractResource->addCommitCallback(
@@ -221,6 +221,8 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $connection->expects($this->once())
             ->method('getTransactionLevel')
             ->willReturn(0);
+        $this->loggerMock->expects($this->once())
+            ->method('critical');
 
         $this->abstractResource->commit();
     }
@@ -228,7 +230,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     public function testCommitNotCompletedTransaction()
     {
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
-        $connection = $this->getMock(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()

@@ -14,7 +14,7 @@ use Zend\View\Model\ViewModel;
 /**
  * Class UpdateExtensionGridTest
  */
-class UpdateExtensionGridTest extends \PHPUnit_Framework_TestCase
+class UpdateExtensionGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Extension|MockObject
@@ -30,7 +30,7 @@ class UpdateExtensionGridTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->gridExtensionMock = $this->getMock(Extension::class, [], [], '', false);
+        $this->gridExtensionMock = $this->createMock(Extension::class);
 
         $this->controller = new UpdateExtensionGrid(
             $this->gridExtensionMock

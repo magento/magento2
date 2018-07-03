@@ -12,7 +12,7 @@ use Magento\Setup\Model\Grid\Module;
 /**
  * Class ModuleGridTest
  */
-class ModuleGridTest extends \PHPUnit_Framework_TestCase
+class ModuleGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Module|\PHPUnit_Framework_MockObject_MockObject

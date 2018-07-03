@@ -9,7 +9,7 @@ namespace Magento\User\Test\Unit\Block\Role\Tab;
 use Magento\User\Model\ResourceModel\User\CollectionFactory;
 use Magento\User\Model\ResourceModel\User\Collection;
 
-class UsersTest extends \PHPUnit_Framework_TestCase
+class UsersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\User\Block\Role\Tab\Users

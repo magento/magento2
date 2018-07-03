@@ -16,11 +16,24 @@ define([
 
     describe('paypal/js/view/payment/method-renderer/paypal-express-abstract', function () {
         var injector = new Squire(),
+            successPromise = jasmine.createSpyObj('successPromise', ['done']),
+            setPaymentMock = jasmine.createSpy('set-payment-information', function () {
+                return successPromise;
+            }).and.callThrough(),
+            validateMock = jasmine.createSpy('validate', function () {
+                return true;
+            }).and.callThrough(),
             mocks = {
                 'Magento_Checkout/js/model/quote': {
                     billingAddress: ko.observable(),
                     shippingAddress: ko.observable(),
-                    paymentMethod: ko.observable()
+                    paymentMethod: ko.observable(),
+                    totals: ko.observable({})
+
+                },
+                'Magento_Checkout/js/action/set-payment-information': setPaymentMock,
+                'Magento_Checkout/js/model/payment/additional-validators': {
+                    validate: validateMock
                 }
             },
             paypalExpressAbstract,
@@ -59,6 +72,13 @@ define([
                 });
         });
 
+        afterEach(function () {
+            try {
+                injector.clean();
+                injector.remove();
+            } catch (e) {}
+        });
+
         it('showAcceptanceWindow is invoked when the anchor element of help link is clicked', function (done) {
             spyOn(paypalExpressAbstract, 'showAcceptanceWindow');
             setTimeout(function () {
@@ -81,6 +101,23 @@ define([
                 });
                 done();
             }, 500);
+        });
+
+        it('setPaymentMethodAction is called before redirect to paypal', function () {
+            spyOn(paypalExpressAbstract, 'selectPaymentMethod');
+            paypalExpressAbstract.continueToPayPal();
+            expect(paypalExpressAbstract.selectPaymentMethod).toHaveBeenCalled();
+            expect(validateMock).toHaveBeenCalled();
+            expect(validateMock.calls.mostRecent()).toEqual(jasmine.objectContaining({
+                object: mocks['Magento_Checkout/js/model/payment/additional-validators'],
+                args: [],
+                returnValue: true
+            }));
+            expect(setPaymentMock).toHaveBeenCalled();
+            expect(setPaymentMock.calls.mostRecent()).toEqual(jasmine.objectContaining({
+                returnValue: successPromise
+            }));
+            expect(successPromise.done).toHaveBeenCalledWith(jasmine.any(Function));
         });
 
         afterAll(function (done) {

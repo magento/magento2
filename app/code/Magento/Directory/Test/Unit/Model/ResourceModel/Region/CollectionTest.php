@@ -24,7 +24,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Collection
@@ -39,12 +39,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $entityFactoryMock = $this->getMock(EntityFactory::class, [], [], '', false);
-        $loggerMock = $this->getMock(LoggerInterface::class);
-        $fetchStrategyMock = $this->getMock(FetchStrategyInterface::class);
-        $eventManagerMock = $this->getMock(ManagerInterface::class);
-        $localeResolverMock = $this->getMock(ResolverInterface::class);
-        $connectionMock = $this->getMock(Mysql::class, [], [], '', false);
+        $entityFactoryMock = $this->createMock(EntityFactory::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $connectionMock = $this->createMock(Mysql::class);
         $resourceMock = $this->getMockForAbstractClass(
             AbstractDb::class,
             [],
@@ -54,9 +54,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             true,
             ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
-        $this->allowedCountries = $this->getMock(AllowedCountries::class, [], [], '', false);
+        $this->allowedCountries = $this->createMock(AllowedCountries::class);
 
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
+        $selectMock = $this->createMock(Select::class);
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
         $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $resourceMock->expects($this->any())->method('getTable')->will($this->returnArgument(0));

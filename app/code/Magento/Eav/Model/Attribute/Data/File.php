@@ -12,6 +12,7 @@ use Magento\Framework\App\RequestInterface;
  * EAV Entity Attribute File Data Model
  *
  * @api
+ * @since 100.0.2
  */
 class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
@@ -272,7 +273,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
     }
 
     /**
-     * Return formated attribute value from entity model
+     * Return formatted attribute value from entity model
      *
      * @param string $format
      * @return string|array

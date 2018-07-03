@@ -10,6 +10,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Validator\Locale;
 use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
 
 /**
@@ -101,6 +102,11 @@ class Filesystem
     private $userCollection;
 
     /**
+     * @var Locale
+     */
+    private $locale;
+
+    /**
      * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
      * @param \Magento\Framework\App\DeploymentConfig\Reader $reader
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -109,6 +115,9 @@ class Filesystem
      * @param \Magento\Framework\Filesystem\Driver\File $driverFile
      * @param \Magento\Store\Model\Config\StoreView $storeView
      * @param \Magento\Framework\ShellInterface $shell
+     * @param UserCollection|null $userCollection
+     * @param Locale|null $locale
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\DeploymentConfig\Writer $writer,
@@ -118,7 +127,9 @@ class Filesystem
         \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
         \Magento\Framework\Filesystem\Driver\File $driverFile,
         \Magento\Store\Model\Config\StoreView $storeView,
-        \Magento\Framework\ShellInterface $shell
+        \Magento\Framework\ShellInterface $shell,
+        UserCollection $userCollection = null,
+        Locale $locale = null
     ) {
         $this->writer = $writer;
         $this->reader = $reader;
@@ -128,6 +139,8 @@ class Filesystem
         $this->driverFile = $driverFile;
         $this->storeView = $storeView;
         $this->shell = $shell;
+        $this->userCollection = $userCollection ?: $this->objectManager->get(UserCollection::class);
+        $this->locale = $locale ?: $this->objectManager->get(Locale::class);
         $this->functionCallPath =
             PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
@@ -147,7 +160,8 @@ class Filesystem
                 DirectoryList::CACHE,
                 DirectoryList::GENERATED_CODE,
                 DirectoryList::GENERATED_METADATA,
-                DirectoryList::TMP_MATERIALIZATION_DIR
+                DirectoryList::TMP_MATERIALIZATION_DIR,
+                DirectoryList::STATIC_VIEW
             ]
         );
         
@@ -192,16 +206,17 @@ class Filesystem
     private function getAdminUserInterfaceLocales()
     {
         $locales = [];
-        foreach ($this->getUserCollection() as $user) {
+        foreach ($this->userCollection as $user) {
             $locales[] = $user->getInterfaceLocale();
         }
         return $locales;
     }
 
     /**
-     * Get used store and admin user locales
+     * Get used store and admin user locales.
      *
      * @return array
+     * @throws \InvalidArgumentException if unknown locale is provided by the store configuration
      */
     private function getUsedLocales()
     {
@@ -209,25 +224,19 @@ class Filesystem
             $this->storeView->retrieveLocales(),
             $this->getAdminUserInterfaceLocales()
         );
-        return array_unique($usedLocales);
-    }
 
-    /**
-     * Get user collection
-     *
-     * @return UserCollection
-     * @deprecated Added to not break backward compatibility of the constructor signature
-     * by injecting the new dependency directly.
-     * The method can be removed in a future major release, when constructor signature can be changed.
-     */
-    private function getUserCollection()
-    {
-        if (!($this->userCollection instanceof UserCollection)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                UserCollection::class
-            );
-        }
-        return $this->userCollection;
+        return array_map(
+            function ($locale) {
+                if (!$this->locale->isValid($locale)) {
+                    throw new \InvalidArgumentException(
+                        $locale . ' argument has invalid value, run info:language:list for list of available locales'
+                    );
+                }
+
+                return $locale;
+            },
+            array_unique($usedLocales)
+        );
     }
 
     /**
@@ -306,7 +315,8 @@ class Filesystem
      * @param int $dirPermissions
      * @param int $filePermissions
      * @return void
-     * @deprecated As magento2 doesn't control indirectly the access permissions to the files and directories anymore.
+     * @deprecated 100.0.6 As magento2 doesn't control indirectly
+     * the access permissions to the files and directories anymore.
      * Access permissions to the files and directories are set during deploy Magento 2, directly after
      * uploading code of Magento. Also it is possible to specify the value
      * of inverse mask for setting access permissions to files and directories generated by Magento.
@@ -330,7 +340,8 @@ class Filesystem
      * Change permissions on static resources
      *
      * @return void
-     * @deprecated As magento2 doesn't control indirectly the access permissions to the files and directories anymore.
+     * @deprecated 100.0.6 As magento2 doesn't control indirectly the access permissions to the files
+     * and directories anymore.
      * Access permissions to the files and directories are set during deploy Magento 2, directly after
      * uploading code of Magento. Also it is possible to specify the value
      * of inverse mask for setting access permissions to files and directories generated by Magento.

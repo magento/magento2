@@ -28,7 +28,7 @@ class AssertCancelSuccessMessageInShoppingCart extends AbstractConstraint
     public function processAssert(CheckoutCart $checkoutCart)
     {
         $actualMessage = $checkoutCart->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Success message is not present or has wrong text.'

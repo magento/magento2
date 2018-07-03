@@ -29,9 +29,7 @@ class Container implements Layout\ReaderInterface
     const CONTAINER_OPT_DISPLAY = 'display';
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper
-     */
+    /**#@-*/
     protected $helper;
 
     /**

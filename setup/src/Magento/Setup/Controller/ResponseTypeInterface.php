@@ -6,6 +6,10 @@
 
 namespace Magento\Setup\Controller;
 
+/**
+ * Interface \Magento\Setup\Controller\ResponseTypeInterface
+ *
+ */
 interface ResponseTypeInterface
 {
     /**#@+

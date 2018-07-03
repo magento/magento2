@@ -11,7 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Test for AjaxLoadTest
  */
-class AjaxLoadTest extends \PHPUnit_Framework_TestCase
+class AjaxLoadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http

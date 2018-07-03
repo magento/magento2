@@ -3,6 +3,10 @@
  * See COPYING.txt for license details.
  */
 
+#swatch-visual-options-panel{
+    overflow: visible;
+}
+
 .swatch_sub-menu_container {
     position: absolute;
     z-index: 9999;

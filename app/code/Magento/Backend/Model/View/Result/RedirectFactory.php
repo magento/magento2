@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Factory class for \Magento\Backend\Model\View\Result\Redirect
  * @api
+ * @since 100.0.2
  */
 class RedirectFactory extends \Magento\Framework\Controller\Result\RedirectFactory
 {

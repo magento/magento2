@@ -62,7 +62,7 @@ class AssertCategorySortingOnFilteredProductList extends AbstractConstraint
             }
         }
         $catalogCategoryView->getTopToolbar()->applySorting($sortBy);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             array_map(
                 function ($index) {
                     return $this->products[$index]->getName();

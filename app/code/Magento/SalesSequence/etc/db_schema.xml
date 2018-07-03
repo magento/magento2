@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="sales_sequence_profile" resource="sales" engine="innodb" comment="sales_sequence_profile" onCreate="skip-migration">
+        <column xsi:type="int" name="profile_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Id"/>
+        <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Meta_id"/>
+        <column xsi:type="varchar" name="prefix" nullable="true" length="32" comment="Prefix"/>
+        <column xsi:type="varchar" name="suffix" nullable="true" length="32" comment="Suffix"/>
+        <column xsi:type="int" name="start_value" padding="10" unsigned="true" nullable="false" identity="false"
+                default="1" comment="Start value for sequence"/>
+        <column xsi:type="int" name="step" padding="10" unsigned="true" nullable="false" identity="false" default="1"
+                comment="Step for sequence"/>
+        <column xsi:type="int" name="max_value" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="MaxValue for sequence"/>
+        <column xsi:type="int" name="warning_value" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="WarningValue for sequence"/>
+        <column xsi:type="boolean" name="is_active" nullable="false" default="false" comment="isActive flag"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="profile_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="SALES_SEQUENCE_PROFILE_META_ID_SALES_SEQUENCE_META_META_ID"
+                    table="sales_sequence_profile" column="meta_id" referenceTable="sales_sequence_meta"
+                    referenceColumn="meta_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" name="SALES_SEQUENCE_PROFILE_META_ID_PREFIX_SUFFIX">
+            <column name="meta_id"/>
+            <column name="prefix"/>
+            <column name="suffix"/>
+        </constraint>
+    </table>
+    <table name="sales_sequence_meta" resource="sales" engine="innodb" comment="sales_sequence_meta" onCreate="skip-migration">
+        <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Id"/>
+        <column xsi:type="varchar" name="entity_type" nullable="false" length="32" comment="Prefix"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Store Id"/>
+        <column xsi:type="varchar" name="sequence_table" nullable="false" length="32" comment="table for sequence"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="meta_id"/>
+        </constraint>
+        <constraint xsi:type="unique" name="SALES_SEQUENCE_META_ENTITY_TYPE_STORE_ID">
+            <column name="entity_type"/>
+            <column name="store_id"/>
+        </constraint>
+    </table>
+</schema>

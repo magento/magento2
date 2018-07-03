@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\Quote\Address;
  * @method string getCode()
  *
  * @api
+ * @since 100.0.2
  */
 class Total extends \Magento\Framework\DataObject
 {
@@ -170,6 +171,7 @@ class Total extends \Magento\Framework\DataObject
      *
      * @param array|string $info
      * @return $this
+     * @since 100.1.0
      */
     public function setFullInfo($info)
     {
@@ -181,6 +183,7 @@ class Total extends \Magento\Framework\DataObject
      * Returns the full info, which is used to capture tax related information.
      *
      * @return array
+     * @since 100.1.0
      */
     public function getFullInfo()
     {

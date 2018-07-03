@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Fixtures;
 
 use Magento\Setup\Fixtures\FixtureModel;
 
-class FixtureModelTest extends \PHPUnit_Framework_TestCase
+class FixtureModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Fixtures\FixtureModel
@@ -17,19 +17,13 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $reindexCommandMock = $this->getMock(
-            \Magento\Indexer\Console\Command\IndexerReindexCommand::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $reindexCommandMock = $this->createMock(\Magento\Indexer\Console\Command\IndexerReindexCommand::class);
         $this->model = new FixtureModel($reindexCommandMock);
     }
 
     public function testReindex()
     {
-        $outputMock = $this->getMock(\Symfony\Component\Console\Output\OutputInterface::class, [], [], '', false);
+        $outputMock = $this->createMock(\Symfony\Component\Console\Output\OutputInterface::class);
         $this->model->reindex($outputMock);
     }
 }

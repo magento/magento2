@@ -11,13 +11,14 @@ namespace Magento\Backend\Block\Page;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Header extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'page/header.phtml';
+    protected $_template = 'Magento_Backend::page/header.phtml';
 
     /**
      * Backend data

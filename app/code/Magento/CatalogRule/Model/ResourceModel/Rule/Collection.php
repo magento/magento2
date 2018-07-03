@@ -142,7 +142,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return array
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getAssociatedEntitiesMap()
     {

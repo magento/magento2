@@ -8,6 +8,7 @@ namespace Magento\Config\Block\System\Config;
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
+use Magento\Framework\App\Config\Data\ProcessorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
@@ -19,6 +20,7 @@ use Magento\Framework\DataObject;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @api
+ * @since 100.0.2
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -92,7 +94,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_configStructure;
 
     /**
-     *Form fieldset factory
+     * Form fieldset factory
      *
      * @var \Magento\Config\Block\System\Config\Form\Fieldset\Factory
      */
@@ -157,7 +159,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @return SettingChecker
      */
     private function getSettingChecker()
@@ -424,23 +426,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if ($placeholderValue) {
             $data = $placeholderValue;
         }
-        if ($data === null) {
-            if (array_key_exists($path, $this->_configData)) {
-                $data = $this->_configData[$path];
-            } elseif ($field->getConfigPath() !== null) {
-                $data = $this->getConfigValue($field->getConfigPath());
-            } else {
-                $data = $this->getConfigValue($path);
-            }
 
+        if ($data === null) {
+            $path = $field->getConfigPath() !== null ? $field->getConfigPath() : $path;
+            $data = $this->getConfigValue($path);
             if ($field->hasBackendModel()) {
                 $backendModel = $field->getBackendModel();
-                $backendModel->setPath($path)
-                    ->setValue($data)
-                    ->setWebsite($this->getWebsiteCode())
-                    ->setStore($this->getStoreCode())
-                    ->afterLoad();
-                $data = $backendModel->getValue();
+                // Backend models which implement ProcessorInterface are processed by ScopeConfigInterface
+                if (!$backendModel instanceof ProcessorInterface) {
+                    $backendModel->setPath($path)
+                        ->setValue($data)
+                        ->setWebsite($this->getWebsiteCode())
+                        ->setStore($this->getStoreCode())
+                        ->afterLoad();
+                    $data = $backendModel->getValue();
+                }
             }
         }
 
@@ -600,6 +600,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param int $fieldValue
      * @return bool
+     * @since 100.1.0
      */
     public function isCanRestoreToDefault($fieldValue)
     {
@@ -708,7 +709,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Temporary moved those $this->getRequest()->getParam('blabla') from the code accross this block
+     * Temporary moved those $this->getRequest()->getParam('blabla') from the code across this block
      * to getBlala() methods to be later set from controller with setters
      */
 
@@ -785,7 +786,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Retrieve Deployment Configuration object.
      *
-     * @deprecated
+     * @deprecated 100.1.2
      * @return DeploymentConfig
      */
     private function getAppConfig()
@@ -820,9 +821,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Gets instance of ElementVisibilityInterface.
      *
      * @return ElementVisibilityInterface
-     * @deprecated Added to not break backward compatibility of the constructor signature
+     * @deprecated 100.2.0 Added to not break backward compatibility of the constructor signature
      *             by injecting the new dependency directly.
      *             The method can be removed in a future major release, when constructor signature can be changed.
+     * @since 100.2.0
      */
     public function getElementVisibility()
     {

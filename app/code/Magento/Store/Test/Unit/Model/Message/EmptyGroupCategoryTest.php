@@ -12,7 +12,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ResourceModel\Group\Collection;
 use Magento\Store\Model\Group;
 
-class EmptyGroupCategoryTest extends \PHPUnit_Framework_TestCase
+class EmptyGroupCategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

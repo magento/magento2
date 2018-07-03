@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
 {

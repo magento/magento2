@@ -11,6 +11,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
  * Source is providing the selection options for user interface
  *
  * @api
+ * @since 100.0.2
  */
 interface SourceInterface
 {

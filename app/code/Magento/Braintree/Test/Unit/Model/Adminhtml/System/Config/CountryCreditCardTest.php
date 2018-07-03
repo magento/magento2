@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Class CountryCreditCardTest
  *
  */
-class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
+class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Braintree\Model\Adminhtml\System\Config\CountryCreditCard
@@ -48,7 +48,7 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
         $this->mathRandomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(

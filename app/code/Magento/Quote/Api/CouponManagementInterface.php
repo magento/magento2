@@ -10,6 +10,7 @@ namespace Magento\Quote\Api;
 /**
  * Coupon management service interface.
  * @api
+ * @since 100.0.2
  */
 interface CouponManagementInterface
 {

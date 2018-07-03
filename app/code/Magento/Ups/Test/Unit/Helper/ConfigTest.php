@@ -8,7 +8,7 @@ namespace Magento\Ups\Test\Unit\Helper;
 /**
  * Config helper Test
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Ups config helper

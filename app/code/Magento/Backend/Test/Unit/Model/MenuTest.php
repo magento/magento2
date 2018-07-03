@@ -9,7 +9,7 @@ use Magento\Backend\Model\Menu\Item;
 use Magento\Backend\Model\Menu\Item\Factory;
 use Magento\Framework\Serialize\SerializerInterface;
 
-class MenuTest extends \PHPUnit_Framework_TestCase
+class MenuTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu
@@ -34,16 +34,16 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_items['item1'] = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
+        $this->_items['item1'] = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
         $this->_items['item1']->expects($this->any())->method('getId')->will($this->returnValue('item1'));
 
-        $this->_items['item2'] = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
+        $this->_items['item2'] = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
         $this->_items['item2']->expects($this->any())->method('getId')->will($this->returnValue('item2'));
 
-        $this->_items['item3'] = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
+        $this->_items['item3'] = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
         $this->_items['item3']->expects($this->any())->method('getId')->will($this->returnValue('item3'));
 
-        $this->_logger = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->_logger = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $this->_model = $this->objectManagerHelper->getObject(
             \Magento\Backend\Model\Menu::class,
@@ -55,7 +55,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testAdd()
     {
-        $item = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
+        $item = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
         $this->_model->add($item);
         $this->assertCount(1, $this->_model);
         $this->assertEquals($item, $this->_model[0]);
@@ -63,7 +63,8 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testAddDoLogAddAction()
     {
-        $this->_model->add($this->_items['item1']);
+        $result = $this->_model->add($this->_items['item1']);
+        $this->assertNull($result);
     }
 
     public function testAddToItem()
@@ -79,9 +80,9 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testAddWithSortIndexThatAlreadyExistsAddsItemOnNextAvailableIndex()
     {
-        $this->_model->add($this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false));
-        $this->_model->add($this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false));
-        $this->_model->add($this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false));
+        $this->_model->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
+        $this->_model->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
+        $this->_model->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
 
         $this->_model->add($this->_items['item1'], null, 2);
         $this->assertCount(4, $this->_model);
@@ -207,13 +208,15 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_items['item1']->expects($this->any())->method('getChildren')->will($this->returnValue($menuMock));
         $this->_model->add($this->_items['item1']);
 
-        $this->_model->remove('item2');
+        $result = $this->_model->remove('item2');
+        $this->assertNull($result);
     }
 
     public function testRemoveDoLogRemoveAction()
     {
         $this->_model->add($this->_items['item1']);
-        $this->_model->remove('item1');
+        $result = $this->_model->remove('item1');
+        $this->assertTrue($result);
     }
 
     public function testReorderReordersItemOnTopLevel()
@@ -265,7 +268,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFirstAvailableReturnsLeafNode()
     {
-        $item = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
+        $item = $this->createPartialMock(\Magento\Backend\Model\Menu\Item::class, ['getFirstAvailable', 'isAllowed']);
         $item->expects($this->never())->method('getFirstAvailable');
         $this->_model->add($item);
 
@@ -295,8 +298,8 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleIterationsWorkProperly()
     {
-        $this->_model->add($this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false));
-        $this->_model->add($this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false));
+        $this->_model->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
+        $this->_model->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
 
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2']);
@@ -340,7 +343,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testSerialize()
     {
-        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->expects($this->once())
             ->method('serialize')
             ->with([['arrayData']])
@@ -352,7 +355,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
                 'serializer' => $serializerMock,
             ]
         );
-        $itemMock = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
+        $itemMock = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
         $itemMock->expects($this->any())->method('getId')->will($this->returnValue('item1'));
         $itemMock->expects($this->once())
             ->method('toArray')
@@ -363,11 +366,11 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testUnserialize()
     {
-        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn([['unserializedData']]);
-        $menuItemFactoryMock = $this->getMock(Factory::class, [], [], '', false);
+        $menuItemFactoryMock = $this->createMock(Factory::class);
         $menuItemFactoryMock->expects($this->once())
             ->method('create')
             ->with(['unserializedData']);

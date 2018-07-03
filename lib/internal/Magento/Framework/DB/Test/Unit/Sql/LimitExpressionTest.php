@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Sql;
 
-class LimitExpressionTest extends \PHPUnit_Framework_TestCase
+class LimitExpressionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @expectedException \Zend_Db_Adapter_Exception

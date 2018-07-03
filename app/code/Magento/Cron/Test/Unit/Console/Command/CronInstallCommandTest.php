@@ -13,7 +13,7 @@ use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
-class CronInstallCommandTest extends \PHPUnit_Framework_TestCase
+class CronInstallCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CrontabManagerInterface|\PHPUnit_Framework_MockObject_MockObject

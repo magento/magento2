@@ -1,9 +1,9 @@
 <?php
 /**
- * Application file system directories dictionary
+ * Application file system directories dictionary.
  *
- * Provides information about what directories are available in the application
- * Serves as customizaiton point to specify different directories or add own
+ * Provides information about what directories are available in the application.
+ * Serves as a customization point to specify different directories or add your own.
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -202,6 +202,7 @@ class DirectoryList
      *
      * @param string $code
      * @return string
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function getPath($code)
     {

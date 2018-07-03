@@ -12,7 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Model\Design\Config\MetadataProviderInterface;
 use Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Collection */
     protected $collection;

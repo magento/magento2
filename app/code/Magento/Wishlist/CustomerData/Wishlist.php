@@ -5,6 +5,7 @@
  */
 namespace Magento\Wishlist\CustomerData;
 
+use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 
 /**
@@ -122,6 +123,8 @@ class Wishlist implements SectionSourceInterface
         $product = $wishlistItem->getProduct();
         return [
             'image' => $this->getImageData($product),
+            'product_sku' => $product->getSku(),
+            'product_id' => $product->getId(),
             'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
             'product_name' => $product->getName(),
             'product_price' => $this->block->getProductPriceHtml(
@@ -141,28 +144,38 @@ class Wishlist implements SectionSourceInterface
      * Retrieve product image data
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Block\Product\Image
+     * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getImageData($product)
     {
+        /*Set variant product if it is configurable product.
+        It will show variant product image in sidebar instead of configurable product image.*/
+        $simpleOption = $product->getCustomOption('simple_product');
+        if ($simpleOption !== null) {
+            $optionProduct = $simpleOption->getProduct();
+            $product = $optionProduct;
+        }
+
         /** @var \Magento\Catalog\Helper\Image $helper */
         $helper = $this->imageHelperFactory->create()
             ->init($product, 'wishlist_sidebar_block');
 
-        $template = $helper->getFrame()
-            ? 'Magento_Catalog/product/image'
-            : 'Magento_Catalog/product/image_with_borders';
+        $template = 'Magento_Catalog/product/image_with_borders';
 
-        $imagesize = $helper->getResizedImageInfo();
+        try {
+            $imagesize = $helper->getResizedImageInfo();
+        } catch (NotLoadInfoImageException $exception) {
+            $imagesize = [$helper->getWidth(), $helper->getHeight()];
+        }
 
         $width = $helper->getFrame()
             ? $helper->getWidth()
-            : (!empty($imagesize[0]) ? $imagesize[0] : $helper->getWidth());
+            : $imagesize[0];
 
         $height = $helper->getFrame()
             ? $helper->getHeight()
-            : (!empty($imagesize[1]) ? $imagesize[1] : $helper->getHeight());
+            : $imagesize[1];
 
         return [
             'template' => $template,

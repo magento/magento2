@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TopmenuTest extends \PHPUnit_Framework_TestCase
+class TopmenuTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Plugin\Block\Topmenu
@@ -86,12 +86,9 @@ class TopmenuTest extends \PHPUnit_Framework_TestCase
         $this->categoryCollectionMock = $this->_getCleanMock(
             \Magento\Catalog\Model\ResourceModel\Category\Collection::class
         );
-        $this->categoryCollectionFactoryMock = $this->getMock(
+        $this->categoryCollectionFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $this->catalogLayerMock->expects($this->once())->method('getCurrentCategory')
@@ -136,7 +133,7 @@ class TopmenuTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getCleanMock($className)
     {
-        return $this->getMock($className, [], [], '', false);
+        return $this->createMock($className);
     }
 
     /**
@@ -145,7 +142,7 @@ class TopmenuTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeGetHtml()
     {
-        $treeMock = $this->getMock(\Magento\Framework\Data\Tree::class);
+        $treeMock = $this->createMock(\Magento\Framework\Data\Tree::class);
 
         $parentCategoryNodeMock = $this->_getCleanMock(\Magento\Framework\Data\Tree\Node::class);
         $parentCategoryNodeMock->expects($this->once())->method('getTree')->will($this->returnValue($treeMock));

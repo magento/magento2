@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Category;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Category\View
@@ -31,9 +31,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $categoryTag = ['catalog_category_1'];
-        $currentCatogoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
-        $currentCatogoryMock->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTag));
-        $this->block->setCurrentCategory($currentCatogoryMock);
+        $currentCategoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $currentCategoryMock->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTag));
+        $this->block->setCurrentCategory($currentCategoryMock);
         $this->assertEquals($categoryTag, $this->block->getIdentities());
     }
 }

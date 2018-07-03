@@ -9,7 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 
-class WishlistTest extends \PHPUnit_Framework_TestCase
+class WishlistTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

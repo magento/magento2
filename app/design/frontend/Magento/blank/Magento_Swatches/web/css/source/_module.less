@@ -1,0 +1,292 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+ & when (@media-common = true) {
+    .swatch-attribute-label {
+        font-weight: bold;
+        position: relative;
+    }
+
+    .swatch-attribute-label.required {
+        padding-right: 10px;
+    }
+
+    .swatch-attribute-label[data-required="1"]:after {
+        content: '*';
+        color: red;
+        position: absolute;
+        right: -11px;
+        top: -2px;
+        font-weight: bold;
+        font-size: 1em;
+    }
+
+    .swatch-attribute-selected-option {
+        color: #646464;
+        padding-left: 17px;
+    }
+
+    .swatch-attribute-options {
+        margin-top: 10px;
+    }
+
+    .swatch-option {
+        padding: 1px 2px;
+        min-width: 30px;
+        max-width: 90px;
+        height: 20px;
+        float: left;
+        margin: 0 10px 5px 0;
+        text-align: center;
+        cursor: pointer;
+        position: relative;
+        border: 1px solid rgb(218, 218, 218);
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .swatch-option.text {
+        background: #F0F0F0;
+        color: #686868;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 20px;
+        padding: 4px 8px;
+        min-width: 22px;
+        margin-right: 7px;
+    }
+
+    .swatch-option.selected {
+        outline: 2px solid #ff5501;
+        border: 1px solid #fff;
+        color: #333;
+    }
+
+    .swatch-option.text.selected {
+        background-color: #FFF !important;
+    }
+
+    .clearfix:after {
+        content: '';
+        visibility: hidden;
+        display: block;
+        height: 0;
+        clear: both;
+    }
+
+    .swatch-attribute.size .swatch-option,
+    .swatch-attribute.manufacturer .swatch-option {
+        background: rgb(240, 240, 240);
+        color: rgb(148, 148, 148);
+    }
+
+    .swatch-attribute.size .swatch-option.selected,
+    .swatch-attribute.manufacturer .swatch-option.selected {
+        color: black;
+        background: #fff;
+        border: 1px solid #fff;
+    }
+
+    .swatch-option:not(.disabled):hover {
+        outline: 1px solid #999;
+        border: 1px solid #fff;
+        color: #333;
+    }
+
+    .swatch-option.image:not(.disabled):hover,
+    .swatch-option.color:not(.disabled):hover {
+        outline: 2px solid #ee0000;
+        border: 1px solid #fff;
+    }
+
+    .swatch-option.disabled {
+        cursor: default;
+    }
+
+    .swatch-option.disabled:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: -moz-linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
+        background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(42%, rgba(255, 255, 255, 0)), color-stop(43%, rgba(255, 255, 255, 1)), color-stop(46%, rgba(255, 255, 255, 1)), color-stop(47%, rgba(255, 82, 22, 1)), color-stop(53%, rgba(255, 82, 22, 1)), color-stop(54%, rgba(255, 255, 255, 1)), color-stop(57%, rgba(255, 255, 255, 1)), color-stop(58%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(255, 255, 255, 0)));
+        background: -webkit-linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
+        background: -o-linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
+        background: -ms-linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
+        background: linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#00ffffff', GradientType=1);
+    }
+
+    .swatch-option-tooltip {
+        max-width: 140px;
+        max-height: 100%;
+        min-height: 20px;
+        min-width: 20px;
+        position: absolute;
+        padding: 5px;
+        background: #fff;
+        color: rgb(148, 148, 148);
+        border: 1px solid #adadad;
+        display: none;
+        z-index: 999;
+        text-align: center;
+    }
+
+    .swatch-option-tooltip .corner,
+    .swatch-option-tooltip-layered .corner {
+        left: 40%;
+        position: absolute;
+        bottom: 0;
+        height: 8px;
+    }
+
+    .swatch-option-tooltip .corner:after,
+    .swatch-option-tooltip-layered .corner:after {
+        content: '';
+        position: relative;
+        top: 1px;
+        left: -15px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 7px 7.5px 0 7.5px;
+        border-color: #fff transparent transparent transparent;
+        font-size: 1px;
+    }
+
+    .swatch-option-tooltip .corner:before,
+    .swatch-option-tooltip-layered .corner:before {
+        content: '';
+        position: relative;
+        top: 2px;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 8px 8.5px 0 8.5px;
+        border-color: #adadad transparent transparent transparent;
+        font-size: 1px;
+    }
+
+    .swatch-option-tooltip .image,
+    .swatch-option-tooltip-layered .image {
+        display: block;
+        height: 130px;
+        width: 130px;
+        margin: 0 auto;
+    }
+
+    .swatch-option-tooltip .title {
+        max-width: 140px;
+        min-height: 20px;
+        max-height: 200px;
+        color: rgb(40, 40, 40);
+        text-align: center;
+        display: block;
+        overflow: hidden;
+    }
+
+    .swatch-opt {
+        margin: 20px 0;
+    }
+
+    .swatch-more {
+        display: inline-block;
+        margin: 2px 0;
+        text-decoration: none !important;
+        position: static;
+        z-index: 1;
+    }
+
+    // Layered Features
+    .swatch-option-link-layered {
+        position: relative;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .swatch-option-link-layered:focus>div {
+        box-shadow: 0 0 3px 1px #68a8e0;
+    }
+
+    .swatch-option-tooltip-layered {
+        width: 140px;
+        position: absolute;
+        background: #fff;
+        color: rgb(148, 148, 148);
+        border: 1px solid #adadad;
+        display: none;
+        z-index: 999;
+        left: -47px;
+    }
+
+    .swatch-visual-tooltip-layered {
+        height: 160px;
+        top: -170px;
+    }
+
+    .swatch-textual-tooltip-layered {
+        height: 30px;
+        top: -40px;
+    }
+
+    .swatch-option-link-layered:hover>.swatch-option-tooltip-layered {
+        display: block;
+    }
+
+    .swatch-attribute-options .swatch-option-tooltip-layered .title {
+        width: 100%;
+        height: 20px;
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        color: rgb(40, 40, 40);
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .swatch-option-disabled:after {
+        content: '';
+        position: absolute;
+        width: 42px;
+        height: 2px;
+        background: red;
+        transform: rotate(-30deg);
+        -o-transform: rotate(-30deg);
+        -moz-transform: rotate(-30deg);
+        -ms-transform: rotate(-30deg);
+        -webkit-transform: rotate(-30deg);
+        z-index: 995;
+        left: -4px;
+        top: 10px;
+    }
+
+    .swatch-option-disabled {
+        outline: none !important;
+        cursor: default;
+        border: 0;
+    }
+
+    // Bugfix for Add To Cart button
+    .swatch-opt-listing {
+        margin-bottom: 10px;
+    }
+
+    .swatch-option-loading {
+        content: url(../Magento_Swatches/images/loader-2.gif);
+    }
+
+    .swatch-input {
+        left: -1000px;
+        position: absolute;
+        visibility: hidden;
+    }
+}

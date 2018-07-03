@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Helper\Session;
 
-class CurrentCustomerAddressTest extends \PHPUnit_Framework_TestCase
+class CurrentCustomerAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomerAddress

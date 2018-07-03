@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
 use Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache;
 
-class InterceptionCacheTest extends \PHPUnit_Framework_TestCase
+class InterceptionCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Interception\Config\Config

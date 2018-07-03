@@ -10,6 +10,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
          colors="true"
+         columns="max"
          bootstrap="./framework/bootstrap.php"
 >
     <testsuites>
@@ -19,5 +20,7 @@
     </testsuites>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
+        <!-- TESTCODESTYLE_IS_FULL_SCAN - specify if full scan should be performed for test code style test -->
+        <const name="TESTCODESTYLE_IS_FULL_SCAN" value="1"/>
     </php>
 </phpunit>

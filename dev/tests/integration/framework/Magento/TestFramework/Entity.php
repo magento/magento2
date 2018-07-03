@@ -75,17 +75,17 @@ class Entity
     protected function _testCreate()
     {
         if ($this->_model->getId()) {
-            \PHPUnit_Framework_Assert::fail("Can't run creation test for models with defined id");
+            \PHPUnit\Framework\Assert::fail("Can't run creation test for models with defined id");
         }
         $this->_model->save();
-        \PHPUnit_Framework_Assert::assertNotEmpty($this->_model->getId(), 'CRUD Create error');
+        \PHPUnit\Framework\Assert::assertNotEmpty($this->_model->getId(), 'CRUD Create error');
     }
 
     protected function _testRead()
     {
         $model = $this->_getEmptyModel();
         $model->load($this->_model->getId());
-        \PHPUnit_Framework_Assert::assertEquals($this->_model->getId(), $model->getId(), 'CRUD Read error');
+        \PHPUnit\Framework\Assert::assertEquals($this->_model->getId(), $model->getId(), 'CRUD Read error');
     }
 
     protected function _testUpdate()
@@ -98,7 +98,7 @@ class Entity
         $model = $this->_getEmptyModel();
         $model->load($this->_model->getId());
         foreach ($this->_updateData as $key => $value) {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $value,
                 $model->getDataUsingMethod($key),
                 'CRUD Update "' . $key . '" error'
@@ -113,6 +113,6 @@ class Entity
 
         $model = $this->_getEmptyModel();
         $model->load($modelId);
-        \PHPUnit_Framework_Assert::assertEmpty($model->getId(), 'CRUD Delete error');
+        \PHPUnit\Framework\Assert::assertEmpty($model->getId(), 'CRUD Delete error');
     }
 }

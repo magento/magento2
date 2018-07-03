@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
  *
  * Test for class \Magento\Ui\Component\Form\Element\Multiline
  */
-class MultilineTest extends \PHPUnit_Framework_TestCase
+class MultilineTest extends \PHPUnit\Framework\TestCase
 {
     const NAME = 'test-name';
 

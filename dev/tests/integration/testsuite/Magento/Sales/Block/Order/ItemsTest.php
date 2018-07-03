@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Block\Order;
 
-class ItemsTest extends \PHPUnit_Framework_TestCase
+class ItemsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Block\Order\Items

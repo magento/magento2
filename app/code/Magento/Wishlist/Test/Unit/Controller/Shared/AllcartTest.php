@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\Controller\Shared;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Controller\ResultFactory;
 
-class AllcartTest extends \PHPUnit_Framework_TestCase
+class AllcartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Wishlist\Controller\Shared\Allcart

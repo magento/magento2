@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
@@ -84,26 +84,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['dispatch'])
             ->getMock();
 
-        $this->context = $this->getMock(
-            \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher'],
-            [],
-            '',
-            false
-        );
+        $this->context = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
         $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
 
-        $this->registry = $this->getMock(
-            \Magento\Framework\Registry::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
 
-        $this->customerSession = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
         $store->expects($this->any())->method('getId')->willReturn($this->storeId);
         $this->storeManager = $this->getMockForAbstractClass(
             \Magento\Store\Model\StoreManagerInterface::class,
@@ -111,32 +99,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->stockConfiguration = $this->getMock(
-            \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->stockConfiguration = $this->createMock(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
 
         $this->stockItemRepository = $this->getMockForAbstractClass(
             \Magento\CatalogInventory\Api\StockItemRepositoryInterface::class
         );
 
-        $this->resource = $this->getMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resource = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
 
-        $this->resourceCollection = $this->getMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection::class,
-            [],
-            [],
-            '',
-            false
+        $this->resourceCollection = $this->createMock(
+            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection::class
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -184,20 +156,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testSetProduct()
     {
-        $product = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+        $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 'getId',
                 'getName',
                 'getStoreId',
                 'getTypeId',
                 'dataHasChangedFor',
                 'getIsChangedWebsites',
-                '__wakeup'],
-            [],
-            '',
-            false
-        );
+                '__wakeup']);
         $productId = 2;
         $productName = 'Some Name';
         $storeId = 3;
@@ -428,6 +394,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->setDataArrayValue('qty_increments', $config['qty_increments']);
         $this->setDataArrayValue('enable_qty_increments', $config['enable_qty_increments']);
         $this->setDataArrayValue('use_config_qty_increments', $config['use_config_qty_increments']);
+        $this->setDataArrayValue('is_qty_decimal', $config['is_qty_decimal']);
         if ($config['use_config_qty_increments']) {
             $this->stockConfiguration->expects($this->once())
                 ->method('getQtyIncrements')
@@ -449,7 +416,26 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 [
                     'qty_increments' => 1,
                     'enable_qty_increments' => true,
-                    'use_config_qty_increments' => true
+                    'use_config_qty_increments' => true,
+                    'is_qty_decimal' => false,
+                ],
+                1
+            ],
+            [
+                [
+                    'qty_increments' => 1.5,
+                    'enable_qty_increments' => true,
+                    'use_config_qty_increments' => true,
+                    'is_qty_decimal' => true,
+                ],
+                1.5
+            ],
+            [
+                [
+                    'qty_increments' => 1.5,
+                    'enable_qty_increments' => true,
+                    'use_config_qty_increments' => true,
+                    'is_qty_decimal' => false,
                 ],
                 1
             ],
@@ -457,7 +443,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 [
                     'qty_increments' => -2,
                     'enable_qty_increments' => true,
-                    'use_config_qty_increments' => true
+                    'use_config_qty_increments' => true,
+                    'is_qty_decimal' => false,
                 ],
                 false
             ],
@@ -465,7 +452,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 [
                     'qty_increments' => 3,
                     'enable_qty_increments' => true,
-                    'use_config_qty_increments' => false
+                    'use_config_qty_increments' => false,
+                    'is_qty_decimal' => false,
                 ],
                 3
             ],
@@ -503,6 +491,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function eventsDataProvider()
     {
         return [

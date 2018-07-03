@@ -7,7 +7,7 @@ namespace Magento\SalesRule\Test\Unit\Model\Rule;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\Rule\DataProvider
@@ -46,28 +46,19 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->collectionFactoryMock = $this->getMock(
+        $this->collectionFactoryMock = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $this->collectionMock = $this->getMock(
-            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->collectionMock = $this->createMock(\Magento\SalesRule\Model\ResourceModel\Rule\Collection::class);
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
-        $ruleMock = $this->getMock(\Magento\SalesRule\Model\Rule::class, [], [], '', false);
+        $ruleMock = $this->createMock(\Magento\SalesRule\Model\Rule::class);
         $metaDataValueProviderMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule\Metadata\ValueProvider::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $registryMock->expects($this->once())
             ->method('registry')
             ->willReturn($ruleMock);
@@ -90,9 +81,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $ruleId = 42;
         $ruleData = ['name' => 'Sales Price Rule'];
 
-        $ruleMock = $this->getMock(
-            \Magento\SalesRule\Model\Rule::class,
-            [
+        $ruleMock = $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, [
                 'getDiscountAmount',
                 'setDiscountAmount',
                 'getDiscountQty',
@@ -100,11 +89,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'load',
                 'getId',
                 'getData'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->collectionMock->expects($this->once())->method('getItems')->willReturn([$ruleMock]);
 
         $ruleMock->expects($this->atLeastOnce())->method('getId')->willReturn($ruleId);

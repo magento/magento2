@@ -108,6 +108,7 @@ class Save extends \Magento\Backend\App\Action
         }
 
         $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
+        $responseAjax = new \Magento\Framework\DataObject();
 
         try {
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
@@ -143,7 +144,6 @@ class Save extends \Magento\Backend\App\Action
             $shipment->register();
 
             $shipment->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
-            $responseAjax = new \Magento\Framework\DataObject();
 
             if ($isNeedCreateLabel) {
                 $this->labelGenerator->create($shipment, $this->_request);
@@ -190,7 +190,7 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface
-     * @deprecated
+     * @deprecated 100.1.1
      */
     private function getShipmentValidator()
     {

@@ -11,7 +11,7 @@ use \Magento\Framework\Controller\Router\Route\Factory;
 use Magento\Framework\Controller\Router\Route\Factory as RouteFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
@@ -25,7 +25,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->factory = $objectManager->getObject(

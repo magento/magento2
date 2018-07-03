@@ -90,7 +90,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     /**
      * @var string
      */
-    protected $_template = 'dashboard/graph.phtml';
+    protected $_template = 'Magento_Backend::dashboard/graph.phtml';
 
     /**
      * Adminhtml dashboard data
@@ -421,6 +421,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                     $tmpstring = implode('|', $this->_axisLabels[$idx]);
 
                     $valueBuffer[] = $indexid . ":|" . $tmpstring;
+                } elseif ($idx == 'y') {
+                    $valueBuffer[] = $indexid . ":|" . implode('|', $yLabels);
                 }
                 $indexid++;
             }

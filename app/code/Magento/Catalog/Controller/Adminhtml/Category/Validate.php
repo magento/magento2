@@ -36,11 +36,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function execute()
     {
-        $response = new \Magento\Framework\DataObject();
-        $response->setError(0);
-
         $resultJson = $this->resultJsonFactory->create();
-        $resultJson->setData($response);
+        $resultJson->setData(['error' => 0]);
         
         return $resultJson;
     }

@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\Generator;
 
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

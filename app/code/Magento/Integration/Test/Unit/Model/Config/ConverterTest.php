@@ -10,7 +10,7 @@ use \Magento\Integration\Model\Config\Converter;
 /**
  * Test for conversion of integration XML config into array representation.
  */
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Converter

@@ -242,7 +242,7 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @return \Magento\Catalog\Helper\Image
-     * @deprecated
+     * @deprecated 101.0.3
      */
     private function getImageHelper()
     {

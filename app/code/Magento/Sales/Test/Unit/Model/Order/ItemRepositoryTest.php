@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Model\Order\ItemRepository;
@@ -10,7 +11,7 @@ use Magento\Sales\Model\Order\ItemRepository;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
+class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject\Factory|\PHPUnit_Framework_MockObject_MockObject
@@ -77,12 +78,8 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->collectionProcessor = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
-            [],
-            [],
-            '',
-            false
+        $this->collectionProcessor = $this->createMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
         );
 
         $this->extensionFactory = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductOptionExtensionFactory::class)
@@ -95,7 +92,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage ID required
+     * @expectedExceptionMessage An ID is needed. Set the ID and try again.
      */
     public function testGetWithNoId()
     {
@@ -114,7 +111,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested entity doesn't exist
+     * @expectedExceptionMessage The entity that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetEmptyEntity()
     {

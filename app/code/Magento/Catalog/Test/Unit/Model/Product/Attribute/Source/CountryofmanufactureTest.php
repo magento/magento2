@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
-class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
+class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -39,9 +39,9 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
-        $this->cacheConfig = $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->cacheConfig = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->countryOfManufacture = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture::class,
@@ -51,7 +51,7 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->serializerMock = $this->getMock(SerializerInterface::class, [], [], '', false);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->countryOfManufacture,
             'serializer',
@@ -65,7 +65,7 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
      * @param $cachedDataSrl
      * @param $cachedDataUnsrl
      *
-     * @dataProvider testGetAllOptionsDataProvider
+     * @dataProvider getAllOptionsDataProvider
      */
     public function testGetAllOptions($cachedDataSrl, $cachedDataUnsrl)
     {
@@ -86,7 +86,7 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function testGetAllOptionsDataProvider()
+    public function getAllOptionsDataProvider()
     {
         return
             [

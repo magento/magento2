@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Source;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SortbyTest extends \PHPUnit_Framework_TestCase
+class SortbyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Category\Attribute\Source\Sortby

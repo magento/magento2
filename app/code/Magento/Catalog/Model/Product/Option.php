@@ -20,23 +20,25 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * Catalog product option model
  *
  * @api
- * @method \Magento\Catalog\Model\ResourceModel\Product\Option getResource()
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Option setProductId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Option extends AbstractExtensibleModel implements ProductCustomOptionInterface
 {
     /**
      * @var Option\Repository
+     * @since 101.0.0
      */
     protected $optionRepository;
 
     /**
      * Option type percent
+     * @since 101.0.0
      */
     protected static $typePercent = 'percent';
 
@@ -58,9 +60,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     const KEY_IMAGE_SIZE_X = 'image_size_x';
     /**#@-*/
 
-    /**
-     * @var Product
-     */
+    /**#@-*/
     protected $product;
 
     /**
@@ -148,6 +148,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @deprecated 101.1.0 because resource models should be used directly
      */
     protected function _getResource()
     {
@@ -195,6 +196,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      *
      * @param string $type
      * @return bool
+     * @since 101.1.0
      */
     public function hasValues($type = null)
     {
@@ -334,6 +336,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 101.0.0
      */
     public function beforeSave()
     {
@@ -374,6 +377,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
                 }
             }
         }
+        if ($this->getGroupByType($this->getData('type')) === self::OPTION_GROUP_FILE) {
+            $this->cleanFileExtensions();
+        }
+
         return $this;
     }
 
@@ -449,6 +456,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      *
      * @param Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
+     * @since 101.0.0
      */
     public function getProductOptions(Product $product)
     {
@@ -819,6 +827,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Return regular price.
      *
      * @return float|int
+     * @since 101.0.0
      */
     public function getRegularPrice()
     {
@@ -897,4 +906,20 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     //@codeCoverageIgnoreEnd
+
+    /**
+     * Clears all non-accepted characters from file_extension field.
+     *
+     * @return void
+     */
+    private function cleanFileExtensions()
+    {
+        $rawExtensions = $this->getFileExtension();
+        $matches = [];
+        preg_match_all('/(?<extensions>[a-z0-9]+)/i', strtolower($rawExtensions), $matches);
+        if (!empty($matches)) {
+            $extensions = implode(', ', array_unique($matches['extensions']));
+        }
+        $this->setFileExtension($extensions);
+    }
 }

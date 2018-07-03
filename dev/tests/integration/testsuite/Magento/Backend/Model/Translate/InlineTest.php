@@ -8,7 +8,7 @@ namespace Magento\Backend\Model\Translate;
 /**
  * @magentoAppArea adminhtml
  */
-class InlineTest extends \PHPUnit_Framework_TestCase
+class InlineTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Translate\InlineInterface

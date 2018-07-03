@@ -28,21 +28,12 @@ class MassDisableTest extends AbstractMassActionTest
     {
         parent::setUp();
 
-        $this->collectionFactoryMock = $this->getMock(
+        $this->collectionFactoryMock = $this->createPartialMock(
             \Magento\Cms\Model\ResourceModel\Page\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $this->pageCollectionMock = $this->getMock(
-            \Magento\Cms\Model\ResourceModel\Page\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->pageCollectionMock = $this->createMock(\Magento\Cms\Model\ResourceModel\Page\Collection::class);
 
         $this->massDisableController = $this->objectManager->getObject(
             \Magento\Cms\Controller\Adminhtml\Page\MassDisable::class,
@@ -95,12 +86,9 @@ class MassDisableTest extends AbstractMassActionTest
      */
     protected function getPageMock()
     {
-        $pageMock = $this->getMock(
+        $pageMock = $this->createPartialMock(
             \Magento\Cms\Model\ResourceModel\Page\Collection::class,
-            ['setIsActive', 'save'],
-            [],
-            '',
-            false
+            ['setIsActive', 'save']
         );
         $pageMock->expects($this->once())->method('setIsActive')->with(false)->willReturn(true);
         $pageMock->expects($this->once())->method('save')->willReturn(true);

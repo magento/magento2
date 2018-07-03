@@ -21,18 +21,16 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     const LIBRARY = 'library';
     const THEME = 'theme';
     const LANGUAGE = 'language';
+    const SETUP = 'setup';
     /**#@- */
 
-    /**
-     * All paths
-     *
-     * @var array
-     */
+    /**#@- */
     private static $paths = [
         self::MODULE => [],
         self::LIBRARY => [],
         self::LANGUAGE => [],
         self::THEME => [],
+        self::SETUP => []
     ];
 
     /**

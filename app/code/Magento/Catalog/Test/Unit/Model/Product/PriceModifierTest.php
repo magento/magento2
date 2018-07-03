@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-class PriceModifierTest extends \PHPUnit_Framework_TestCase
+class PriceModifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\PriceModifier
@@ -33,16 +31,8 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productMock =
-            $this->getMock(
-                \Magento\Catalog\Model\Product::class,
-                ['getData', 'setData', '__wakeup'], [], '', false);
-        $this->productRepositoryMock = $this->getMock(
-            \Magento\Catalog\Model\ProductRepository::class,
-            [],
-            [],
-            '',
-            false
-        );
+            $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getData', 'setData', '__wakeup']);
+        $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
         $this->priceModifier = new \Magento\Catalog\Model\Product\PriceModifier(
             $this->productRepositoryMock
         );
@@ -64,7 +54,7 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedMessage This product doesn't have tier price
+     * @expectedMessage Tier price is unavailable for this product.
      */
     public function testRemoveWhenTierPricesNotExists()
     {

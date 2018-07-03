@@ -11,6 +11,8 @@ namespace Magento\Framework\View\Element\Html;
  * @method string getLabel()
  * @method string getPath()
  * @method string getTitle()
+ *
+ * @api
  */
 class Link extends \Magento\Framework\View\Element\Template
 {

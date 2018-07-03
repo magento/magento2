@@ -12,7 +12,7 @@ use Magento\Framework\Exception\AuthenticationException;
 /**
  * Test class for \Magento\User\Controller\Adminhtml\User\Delete testing
  */
-class DeleteTest extends \PHPUnit_Framework_TestCase
+class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\User\Controller\Adminhtml\User\Delete
@@ -152,36 +152,33 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testEmptyPasswordThrowsException()
+    public function testEmptyPassword()
     {
-        try {
-            $currentUserId = 1;
-            $userId = 2;
+        $currentUserId = 1;
+        $userId = 2;
 
-            $currentUserMock = $this->userMock;
-            $this->authSessionMock->expects($this->any())
-                ->method('getUser')
-                ->will($this->returnValue($currentUserMock));
+        $currentUserMock = $this->userMock;
+        $this->authSessionMock->expects($this->any())
+            ->method('getUser')
+            ->will($this->returnValue($currentUserMock));
 
-            $currentUserMock->expects($this->any())->method('getId')->willReturn($currentUserId);
+        $currentUserMock->expects($this->any())->method('getId')->willReturn($currentUserId);
 
-            $this->objectManagerMock
-                ->expects($this->any())
-                ->method('get')
-                ->with(Session::class)
-                ->willReturn($this->authSessionMock);
+        $this->objectManagerMock
+            ->expects($this->any())
+            ->method('get')
+            ->with(Session::class)
+            ->willReturn($this->authSessionMock);
 
-            $this->requestMock->expects($this->any())
-                ->method('getPost')
-                ->willReturnMap([
-                    ['user_id', $userId],
-                    [\Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD, ''],
-                ]);
+        $this->requestMock->expects($this->any())
+            ->method('getPost')
+            ->willReturnMap([
+                ['user_id', $userId],
+                [\Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD, ''],
+            ]);
 
-            $this->controller->execute();
-        } catch (AuthenticationException $e) {
-            $this->assertEquals($e->getMessage(), 'You have entered an invalid password for current user.');
-        }
+        $result = $this->controller->execute();
+        $this->assertNull($result);
     }
 
     /**

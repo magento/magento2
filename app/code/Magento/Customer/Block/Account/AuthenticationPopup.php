@@ -10,6 +10,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class AuthenticationPopup extends \Magento\Framework\View\Element\Template
 {
@@ -69,6 +70,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * Added in scope of https://github.com/magento/magento2/pull/8617
      *
      * @return bool|string
+     * @since 100.2.0
      */
     public function getSerializedConfig()
     {

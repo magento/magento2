@@ -10,7 +10,7 @@ namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable;
  *
  * Test for class \Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable
  */
-class AbstractEnableTest extends \PHPUnit_Framework_TestCase
+class AbstractEnableTest extends \PHPUnit\Framework\TestCase
 {
     const EXPECTED_ATTRIBUTE = 'data-enable="stub"';
 

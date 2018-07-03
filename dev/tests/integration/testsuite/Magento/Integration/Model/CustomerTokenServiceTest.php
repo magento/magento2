@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test class for \Magento\Integration\Model\CustomerTokenService.
  */
-class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
+class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomerTokenServiceInterface
@@ -73,13 +73,17 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\AuthenticationException
-     * @expectedExceptionMessage You did not sign in correctly or your account is temporarily disabled.
      */
     public function testCreateCustomerAccessTokenInvalidCustomer()
     {
         $customerUserName = 'invalid';
         $password = 'invalid';
         $this->tokenService->createCustomerAccessToken($customerUserName, $password);
+
+        $this->expectExceptionMessage(
+            'The account sign-in was incorrect or your account is disabled temporarily. '
+            . 'Please wait and try again later.'
+        );
     }
 
     /**
@@ -105,7 +109,7 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('One or more input exceptions have occurred.', $e->getMessage());
         $errors = $e->getErrors();
         $this->assertCount(2, $errors);
-        $this->assertEquals('username is a required field.', $errors[0]->getLogMessage());
-        $this->assertEquals('password is a required field.', $errors[1]->getLogMessage());
+        $this->assertEquals('"username" is required. Enter and try again.', $errors[0]->getLogMessage());
+        $this->assertEquals('"password" is required. Enter and try again.', $errors[1]->getLogMessage());
     }
 }

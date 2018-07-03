@@ -10,7 +10,7 @@ namespace Magento\Backend\Model\Auth;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
-class SessionTest extends \PHPUnit_Framework_TestCase
+class SessionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Auth

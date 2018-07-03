@@ -8,7 +8,7 @@ namespace Magento\Bundle\Test\Unit\Pricing\Render;
 use Magento\Bundle\Pricing\Render\FinalPriceBox;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 
-class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
+class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FinalPriceBox
@@ -22,7 +22,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->saleableItem = $this->getMock(\Magento\Framework\Pricing\SaleableInterface::class);
+        $this->saleableItem = $this->createMock(\Magento\Framework\Pricing\SaleableInterface::class);
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject(
@@ -38,7 +38,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     {
         $enableCustomOptionMocks = ($optMinValue == $optMaxValue);
 
-        $priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
+        $priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
         $bundlePrice = $this->getMockBuilder(\Magento\Bundle\Pricing\Price\FinalPrice::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -17,6 +17,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class Stock
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Stock
 {
@@ -93,7 +94,7 @@ class Stock
      * Add stock status information to products
      *
      * @param AbstractCollection $productCollection
-     * @deprecated Use Stock::addIsInStockFilterToCollection instead
+     * @deprecated 100.1.0 Use Stock::addIsInStockFilterToCollection instead
      * @return void
      */
     public function addStockStatusToProducts(AbstractCollection $productCollection)
@@ -156,7 +157,7 @@ class Stock
             $resource = $this->getStockStatusResource();
             $resource->addStockDataToCollection(
                 $collection,
-                !$isShowOutOfStock || $collection->getFlag('require_stock_items')
+                !$isShowOutOfStock
             );
             $collection->setFlag($stockFlag, true);
         }
@@ -176,7 +177,7 @@ class Stock
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getStockConfiguration()
     {

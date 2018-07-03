@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Action;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class RowsTest extends \PHPUnit_Framework_TestCase
+class RowsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Rows

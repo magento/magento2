@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 /**
  * @magentoAppArea adminhtml
  */
-class AddTest extends \PHPUnit_Framework_TestCase
+class AddTest extends \PHPUnit\Framework\TestCase
 {
     public function testToHtmlFormId()
     {

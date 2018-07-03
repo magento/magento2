@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Multishipping\Block\Checkout\Address;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -13,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea frontend
  */
-class SelectTest extends \PHPUnit_Framework_TestCase
+class SelectTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Multishipping\Block\Checkout\Address\Select */
     protected $_selectBlock;

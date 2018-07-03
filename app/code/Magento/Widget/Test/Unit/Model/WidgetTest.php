@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Widget\Model\Widget
  */
-class WidgetTest extends \PHPUnit_Framework_TestCase
+class WidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Config\Data|\PHPUnit_Framework_MockObject_MockObject
@@ -148,7 +148,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWidgetDeclaration()
     {
-        $mathRandomMock = $this->getMock(\Magento\Framework\Math\Random::class, ['getRandomString'], [], '', false);
+        $mathRandomMock = $this->createPartialMock(\Magento\Framework\Math\Random::class, ['getRandomString']);
         $mathRandomMock->expects($this->any())->method('getRandomString')->willReturn('asdf');
         $reflection = new \ReflectionClass(get_class($this->widget));
         $reflectionProperty = $reflection->getProperty('mathRandom');
@@ -185,6 +185,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
                 ['encoded-conditions-string', false, 'encoded-conditions-string'],
             ]);
 
+        $this->dataStorageMock->expects($this->once())
+            ->method('get')
+            ->willReturn([]);
+
         $result = $this->widget->getWidgetDeclaration(
             \Magento\CatalogWidget\Block\Product\ProductsList::class,
             $params
@@ -192,12 +196,13 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
         $this->assertContains('title="my &quot;widget&quot;"', $result);
         $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
-        $this->assertContains('page_var_name="pasdf"}}', $result);
+        $this->assertContains('page_var_name="pasdf"', $result);
+        $this->assertContains('type_name=""}}', $result);
     }
 
     public function testGetWidgetDeclarationWithZeroValueParam()
     {
-        $mathRandomMock = $this->getMock(\Magento\Framework\Math\Random::class, ['getRandomString'], [], '', false);
+        $mathRandomMock = $this->createPartialMock(\Magento\Framework\Math\Random::class, ['getRandomString']);
         $mathRandomMock->expects($this->any())
             ->method('getRandomString')
             ->willReturn('asdf');
@@ -230,12 +235,17 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->with($conditions)
             ->willReturn('encoded-conditions-string');
 
+        $this->dataStorageMock->expects($this->once())
+            ->method('get')
+            ->willReturn([]);
+
         $result = $this->widget->getWidgetDeclaration(
             \Magento\CatalogWidget\Block\Product\ProductsList::class,
             $params
         );
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
-        $this->assertContains('page_var_name="pasdf"}}', $result);
+        $this->assertContains('page_var_name="pasdf"', $result);
+        $this->assertContains('type_name=""}}', $result);
         $this->assertContains('products_count=""', $result);
     }
 }

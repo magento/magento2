@@ -10,6 +10,7 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Tab extends \Magento\Backend\Block\Template implements TabInterface
 {

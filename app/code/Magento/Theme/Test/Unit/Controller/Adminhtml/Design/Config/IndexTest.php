@@ -7,7 +7,7 @@ namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config;
 
 use Magento\Theme\Controller\Adminhtml\Design\Config\Index;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Index

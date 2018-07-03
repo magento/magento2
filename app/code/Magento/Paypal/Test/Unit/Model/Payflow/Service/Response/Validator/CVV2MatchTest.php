@@ -14,7 +14,7 @@ use Magento\Payment\Model\Method\ConfigInterface;
  *
  * Test class for \Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match
  */
-class CVV2MatchTest extends \PHPUnit_Framework_TestCase
+class CVV2MatchTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CVV2Match

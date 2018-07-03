@@ -5,7 +5,7 @@
  */
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
-class AbstractStorageTest extends \PHPUnit_Framework_TestCase
+class AbstractStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -115,8 +115,8 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
-     * @expectedExceptionMessage URL key for specified store already exists.
+     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
+     * @expectedExceptionMessage Custom storage message
      */
     public function testReplaceIfThrewDuplicateEntryExceptionWithCustomMessage()
     {
@@ -124,7 +124,23 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('doReplace')
             ->will($this->throwException(
-                new \Magento\Framework\Exception\AlreadyExistsException(__('Custom storage message'))
+                new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(__('Custom storage message'))
+            ));
+
+        $this->storage->replace([['UrlRewrite1']]);
+    }
+
+    /**
+     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
+     * @expectedExceptionMessage URL key for specified store already exists
+     */
+    public function testReplaceIfThrewDuplicateEntryExceptionDefaultMessage()
+    {
+        $this->storage
+            ->expects($this->once())
+            ->method('doReplace')
+            ->will($this->throwException(
+                new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException()
             ));
 
         $this->storage->replace([['UrlRewrite1']]);

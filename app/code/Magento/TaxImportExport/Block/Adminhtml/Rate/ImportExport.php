@@ -7,6 +7,7 @@ namespace Magento\TaxImportExport\Block\Adminhtml\Rate;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class ImportExport extends \Magento\Backend\Block\Widget
 {

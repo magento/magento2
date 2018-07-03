@@ -40,7 +40,7 @@ class Downloadable
 
     /**
      * Constructor
-     * 
+     *
      * @param RequestInterface $request
      * @param LinkBuilder $linkBuilder
      * @param SampleBuilder $sampleBuilder

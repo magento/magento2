@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\Filter;
@@ -11,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
+class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -277,7 +278,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage code is a required field
+     * @expectedExceptionMessage "code" is required. Enter and try again.
      */
     public function testSaveThrowsExceptionIsRequiredFieldsAreMissing()
     {

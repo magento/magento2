@@ -12,6 +12,7 @@ use Magento\Store\Model\System\Store;
  *
  * This class is needed until the layout file supports supplying arguments to an option model.
  * @api
+ * @since 100.0.2
  */
 class AdminOptionHash extends OptionHash
 {

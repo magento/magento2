@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\App\State;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
+use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Layout;
 
 /**
@@ -61,6 +62,13 @@ class Block implements Layout\GeneratorInterface
     protected $exceptionHandlerBlockFactory;
 
     /**
+     * Default block class name. Will be used if no class name is specified in block configuration.
+     *
+     * @var string
+     */
+    private $defaultClass;
+
+    /**
      * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
      * @param \Magento\Framework\Data\Argument\InterpreterInterface $argumentInterpreter
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -69,6 +77,7 @@ class Block implements Layout\GeneratorInterface
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\View\Element\ExceptionHandlerBlockFactory $exceptionHandlerBlockFactory
      * @param State $appState
+     * @param string $defaultClass
      */
     public function __construct(
         \Magento\Framework\View\Element\BlockFactory $blockFactory,
@@ -78,7 +87,8 @@ class Block implements Layout\GeneratorInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
         \Magento\Framework\View\Element\ExceptionHandlerBlockFactory $exceptionHandlerBlockFactory,
-        State $appState
+        State $appState,
+        $defaultClass = Template::class
     ) {
         $this->blockFactory = $blockFactory;
         $this->argumentInterpreter = $argumentInterpreter;
@@ -88,6 +98,7 @@ class Block implements Layout\GeneratorInterface
         $this->scopeResolver = $scopeResolver;
         $this->exceptionHandlerBlockFactory = $exceptionHandlerBlockFactory;
         $this->appState = $appState;
+        $this->defaultClass = $defaultClass;
     }
 
     /**
@@ -210,7 +221,8 @@ class Block implements Layout\GeneratorInterface
         }
 
         // create block
-        $className = $attributes['class'];
+        $className = isset($attributes['class']) && !empty($attributes['class']) ?
+            $attributes['class'] : $this->defaultClass;
         $block = $this->createBlock($className, $elementName, [
             'data' => $this->evaluateArguments($data['arguments'])
         ]);

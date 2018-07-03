@@ -8,7 +8,7 @@ namespace Magento\Integration\Test\Unit\Model;
 /**
  * Unit test for \Magento\Integration\Model\CredentialsValidator
  */
-class CredentialsValidatorTest extends \PHPUnit_Framework_TestCase
+class CredentialsValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Model\CredentialsValidator
@@ -22,7 +22,7 @@ class CredentialsValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage username is a required field.
+     * @expectedExceptionMessage "username" is required. Enter and try again.
      */
     public function testValidateNoUsername()
     {
@@ -34,7 +34,7 @@ class CredentialsValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage password is a required field.
+     * @expectedExceptionMessage "password" is required. Enter and try again.
      */
     public function testValidateNoPassword()
     {
@@ -49,6 +49,7 @@ class CredentialsValidatorTest extends \PHPUnit_Framework_TestCase
         $username = 'my_username';
         $password = 'my_password';
 
-        $this->credentialsValidator->validate($username, $password);
+        $result = $this->credentialsValidator->validate($username, $password);
+        $this->assertNull($result);
     }
 }

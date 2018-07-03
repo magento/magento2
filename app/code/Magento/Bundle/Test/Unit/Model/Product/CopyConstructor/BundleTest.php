@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class BundleTest extends \PHPUnit_Framework_TestCase
+class BundleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Bundle

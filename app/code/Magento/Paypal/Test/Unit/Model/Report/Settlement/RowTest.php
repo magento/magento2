@@ -8,7 +8,7 @@ namespace Magento\Paypal\Test\Unit\Model\Report\Settlement;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class RowTest extends \PHPUnit_Framework_TestCase
+class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Model\Report\Settlement\Row

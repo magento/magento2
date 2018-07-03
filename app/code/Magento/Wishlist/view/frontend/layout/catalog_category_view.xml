@@ -21,7 +21,7 @@
                        template="Magento_Wishlist::catalog/product/list/addto/wishlist.phtml"/>
             </referenceBlock>
             <referenceContainer name="category.product.list.additional">
-                <block class="Magento\Wishlist\Block\AddToWishlist" template="Magento_Wishlist::addto.phtml" />
+                <block class="Magento\Wishlist\Block\AddToWishlist" name="category.product.list.additional.wishlist_addto" template="Magento_Wishlist::addto.phtml" />
             </referenceContainer>
         </referenceContainer>
     </body>

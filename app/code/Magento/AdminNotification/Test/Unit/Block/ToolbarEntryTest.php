@@ -9,7 +9,7 @@
  */
 namespace Magento\AdminNotification\Test\Unit\Block;
 
-class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
+class ToolbarEntryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Retrieve toolbar entry block instance
@@ -21,12 +21,9 @@ class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         // mock collection of unread notifications
-        $notificationList = $this->getMock(
+        $notificationList = $this->createPartialMock(
             \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class,
-            ['getSize', 'setCurPage', 'setPageSize'],
-            [],
-            '',
-            false
+            ['getSize', 'setCurPage', 'setPageSize']
         );
         $notificationList->expects($this->any())->method('getSize')->will($this->returnValue($unreadNotifications));
 

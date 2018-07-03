@@ -8,7 +8,7 @@ namespace Magento\Setup\Module\I18n\Pack;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\ServiceLocator;
 
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

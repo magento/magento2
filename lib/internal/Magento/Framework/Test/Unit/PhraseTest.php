@@ -7,7 +7,7 @@ namespace Magento\Framework\Test\Unit;
 
 use Magento\Framework\Phrase;
 
-class PhraseTest extends \PHPUnit_Framework_TestCase
+class PhraseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Phrase\RendererInterface

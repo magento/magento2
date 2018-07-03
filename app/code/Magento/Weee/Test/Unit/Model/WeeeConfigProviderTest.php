@@ -5,7 +5,7 @@
  */
 namespace Magento\Weee\Test\Unit\Model;
 
-class WeeeConfigProviderTest extends \PHPUnit_Framework_TestCase
+class WeeeConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -34,10 +34,10 @@ class WeeeConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->weeeHelperMock = $this->getMock(\Magento\Weee\Helper\Data::class, [], [], '', false);
-        $this->weeeConfigMock = $this->getMock(\Magento\Weee\Model\Config::class, [], [], '', false);
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->weeeHelperMock = $this->createMock(\Magento\Weee\Helper\Data::class);
+        $this->weeeConfigMock = $this->createMock(\Magento\Weee\Model\Config::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
         $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
 

@@ -17,6 +17,13 @@ use Magento\Framework\App\ObjectManager;
 class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::toggling_cache_type';
+
+    /**
      * @var State
      */
     private $state;
@@ -73,7 +80,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Get State Instance
      *
      * @return State
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getState()
     {

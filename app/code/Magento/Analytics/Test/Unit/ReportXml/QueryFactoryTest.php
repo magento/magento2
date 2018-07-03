@@ -8,7 +8,7 @@ namespace Magento\Analytics\Test\Unit\ReportXml;
 /**
  * A unit test for testing of the query factory.
  */
-class QueryFactoryTest extends \PHPUnit_Framework_TestCase
+class QueryFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Analytics\ReportXml\QueryFactory

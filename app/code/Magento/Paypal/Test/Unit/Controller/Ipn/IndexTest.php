@@ -6,7 +6,7 @@
 
 namespace Magento\Paypal\Test\Unit\Controller\Ipn;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Index */
     protected $model;
@@ -22,9 +22,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(

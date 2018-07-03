@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model\Api;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -13,6 +11,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class ProcessableException extends LocalizedException
 {
@@ -56,14 +55,16 @@ class ProcessableException extends LocalizedException
             case self::API_INTERNAL_ERROR:
             case self::API_UNABLE_PROCESS_PAYMENT_ERROR_CODE:
                 $message = __(
-                    'I\'m sorry - but we were not able to process your payment. Please try another payment method or contact us so we can assist you.'
+                    'I\'m sorry - but we were not able to process your payment.'
+                    . ' Please try another payment method or contact us so we can assist you.'
                 );
                 break;
             case self::API_COUNTRY_FILTER_DECLINE:
             case self::API_MAXIMUM_AMOUNT_FILTER_DECLINE:
             case self::API_OTHER_FILTER_DECLINE:
                 $message = __(
-                    'I\'m sorry - but we are not able to complete your transaction. Please contact us so we can assist you.'
+                    'I\'m sorry - but we are not able to complete your transaction.'
+                    . ' Please contact us so we can assist you.'
                 );
                 break;
             case self::API_ADDRESS_MATCH_FAIL:

@@ -21,7 +21,8 @@ use Magento\User\Test\Fixture\User;
  * Steps:
  * 1. Open Magento admin user login page.
  * 2. Enter incorrect password specified number of times.
- * 3. "You did not sign in correctly or your account is temporarily disabled." appears after each login attempt.
+ * 3. "The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."
+ *    appears after each login attempt.
  * 4. Perform all assertions.
  *
  * @group AuthN_&_AuthZ

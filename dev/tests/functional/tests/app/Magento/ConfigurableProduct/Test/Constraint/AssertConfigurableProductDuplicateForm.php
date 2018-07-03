@@ -44,7 +44,7 @@ class AssertConfigurableProductDuplicateForm extends AssertConfigurableProductFo
         $fixtureData = $this->prepareFixtureData($productData, $this->sortFields);
         $formData = $this->prepareFormData($productPage->getProductForm()->getData($product), $this->sortFields);
         $error = $this->verifyData($fixtureData, $formData);
-        \PHPUnit_Framework_Assert::assertTrue(empty($error), $error);
+        \PHPUnit\Framework\Assert::assertTrue(empty($error), $error);
     }
 
     /**

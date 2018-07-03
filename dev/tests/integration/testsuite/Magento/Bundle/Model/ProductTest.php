@@ -23,7 +23,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Entity;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Product
@@ -100,6 +100,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoDataFixture Magento/Bundle/_files/product_with_multiple_options.php
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoDbIsolation disabled
      */
     public function testMultipleStores()
     {

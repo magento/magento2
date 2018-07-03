@@ -13,10 +13,13 @@ use Magento\Framework\App\Cache\Manager;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
 {
-    /** @var EventManagerInterface */
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
     protected $eventManager;
 
     /**

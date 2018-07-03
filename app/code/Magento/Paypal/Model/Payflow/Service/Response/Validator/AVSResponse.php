@@ -54,9 +54,7 @@ class AVSResponse implements ValidatorInterface
     const CONFIG_OFF = 0;
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $avsCheck = [
         'avsaddr' => 'avs_street',
         'avszip' => 'avs_zip',

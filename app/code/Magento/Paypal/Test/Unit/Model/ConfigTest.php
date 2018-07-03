@@ -8,7 +8,7 @@ namespace Magento\Paypal\Test\Unit\Model;
 use Magento\Paypal\Model\Config;
 use Magento\Store\Model\ScopeInterface;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config
@@ -42,13 +42,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->directoryHelper = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->ccTypeFactory = $this->getMockBuilder(\Magento\Payment\Model\Source\CctypeFactory::class)
             ->disableOriginalConstructor()

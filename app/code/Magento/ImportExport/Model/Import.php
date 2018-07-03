@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ImportExport\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -21,6 +19,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * @method string getBehavior() getBehavior()
  * @method \Magento\ImportExport\Model\Import setEntity() setEntity(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Import extends \Magento\ImportExport\Model\AbstractModel
 {
@@ -103,11 +102,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
     /**#@-*/
 
-    /**
-     * Entity adapter.
-     *
-     * @var \Magento\ImportExport\Model\Import\Entity\AbstractEntity
-     */
+    /**#@-*/
     protected $_entityAdapter;
 
     /**
@@ -237,7 +232,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'The entity adapter object must be an instance of %1 or %2.', \Magento\ImportExport\Model\Import\Entity\AbstractEntity::class, \Magento\ImportExport\Model\Import\AbstractEntity::class
+                            'The entity adapter object must be an instance of %1 or %2.',
+                            \Magento\ImportExport\Model\Import\Entity\AbstractEntity::class,
+                            \Magento\ImportExport\Model\Import\AbstractEntity::class
                         )
                     );
                 }
@@ -437,28 +434,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
     /**
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function processImport()
     {
-        $errorAggregator = $this->_getEntityAdapter()->getErrorAggregator();
-        $errorAggregator->initValidationStrategy(
-            $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
-            $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
-        );
-        try {
-            $this->_getEntityAdapter()->importData();
-        } catch (\Exception $e) {
-            $errorAggregator->addError(
-                \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
-                ProcessingError::ERROR_LEVEL_CRITICAL,
-                null,
-                null,
-                null,
-                $e->getMessage()
-            );
-        }
-
-        return !$errorAggregator->hasToBeTerminated();
+        return $this->_getEntityAdapter()->importData();
     }
 
     /**
@@ -587,7 +567,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 ProcessingError::ERROR_LEVEL_CRITICAL,
                 null,
                 null,
-                null,
                 $e->getMessage()
             );
         }
@@ -705,7 +684,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 try {
                     $result = $this->_getEntityAdapter()->isNeedToLogInHistory();
                 } catch (\Exception $e) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity model'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Please enter a correct entity model')
+                    );
                 }
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity model'));
@@ -734,7 +715,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 $sourceFileRelative = $this->_varDirectory->getRelativePath(self::IMPORT_DIR . $fileName);
             } elseif (isset($result['name'])) {
                 $fileName = $result['name'];
-            } elseif (!is_null($extension)) {
+            } elseif ($extension !== null) {
                 $fileName = $entity . $extension;
             } else {
                 $fileName = basename($sourceFileRelative);

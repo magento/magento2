@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
-class ProductPriceCalculatorTest extends \PHPUnit_Framework_TestCase
+class ProductPriceCalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator

@@ -14,18 +14,20 @@ use Magento\Framework\Exception\CouldNotSaveException;
  * @see ConfigSetCommand
  *
  * @api
+ * @since 100.2.0
  */
 interface ConfigSetProcessorInterface
 {
     /**
      * Processes config:set command.
      *
-     * @param string $path The configuration path in format section/group/field_name
+     * @param string $path The configuration path in format group/section/field_name
      * @param string $value The configuration value
      * @param string $scope The configuration scope (default, website, or store)
      * @param string $scopeCode The scope code
      * @return void
      * @throws CouldNotSaveException An exception on processing error
+     * @since 100.2.0
      */
     public function process($path, $value, $scope, $scopeCode);
 }

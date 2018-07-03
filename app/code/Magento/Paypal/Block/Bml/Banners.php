@@ -11,6 +11,7 @@ use Magento\Paypal\Model\Config;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Banners extends Template
 {

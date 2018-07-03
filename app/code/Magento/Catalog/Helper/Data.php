@@ -20,6 +20,7 @@ use Magento\Tax\Model\Config;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -434,8 +435,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::CONFIG_USE_STATIC_URLS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->_storeId
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

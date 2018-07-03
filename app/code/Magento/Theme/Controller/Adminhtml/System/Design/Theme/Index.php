@@ -8,7 +8,7 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
 /**
  * Class Index
- * @deprecated
+ * @deprecated 100.2.0
  */
 class Index extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
@@ -21,6 +21,7 @@ class Index extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
     {
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Theme::system_design_theme');
+        $this->_view->getLayout()->getBlock('page.title')->setPageTitle('Themes');
         $this->_view->renderLayout();
     }
 }

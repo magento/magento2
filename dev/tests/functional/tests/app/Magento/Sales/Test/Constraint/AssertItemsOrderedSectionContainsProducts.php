@@ -27,7 +27,7 @@ class AssertItemsOrderedSectionContainsProducts extends AbstractConstraint
             $expectedItemNames[] = $product->getName();
         }
         $itemsNames = $orderCreateIndex->getCreateBlock()->getItemsBlock()->getItemsNames();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             sort($expectedItemNames),
             sort($itemsNames),
             "Items Ordered section on Create Order page on backend doesn't contain correct products."

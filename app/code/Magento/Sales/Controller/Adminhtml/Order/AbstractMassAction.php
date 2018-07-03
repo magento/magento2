@@ -14,11 +14,16 @@ use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class AbstractMassStatus
- * @deprecated
+ * @deprecated 100.2.0
  * Never extend from this action. Implement mass-action logic in the "execute" method of your controller.
  */
 abstract class AbstractMassAction extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
+
     /**
      * @var string
      */

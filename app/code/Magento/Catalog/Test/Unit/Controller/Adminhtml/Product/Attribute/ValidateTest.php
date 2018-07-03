@@ -195,6 +195,9 @@ class ValidateTest extends AttributeTest
         $this->assertInstanceOf(ResultJson::class, $this->getModel()->execute());
     }
 
+    /**
+     * @return array
+     */
     public function provideUniqueData()
     {
         return [
@@ -248,6 +251,120 @@ class ValidateTest extends AttributeTest
                         "option_2" => "",
                     ]
                 ], false
+            ],
+            'empty and deleted' => [
+                [
+                    'value' => [
+                        "option_0" => [1, 0],
+                        "option_1" => [2, 0],
+                        "option_2" => ["", ""],
+                    ],
+                    'delete' => [
+                        "option_0" => "",
+                        "option_1" => "",
+                        "option_2" => "1",
+                    ]
+                ], false
+            ],
+        ];
+    }
+
+    /**
+     * Check that empty admin scope labels will trigger error.
+     *
+     * @dataProvider provideEmptyOption
+     * @param array $options
+     * @throws \Magento\Framework\Exception\NotFoundException
+     */
+    public function testEmptyOption(array $options, $result)
+    {
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap([
+                ['frontend_label', null, null],
+                ['frontend_input', 'select', 'multipleselect'],
+                ['attribute_code', null, "test_attribute_code"],
+                ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                ['option', null, $options],
+                ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+            ]);
+
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->attributeMock);
+
+        $this->attributeMock->expects($this->once())
+            ->method('loadByCode')
+            ->willReturnSelf();
+
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+
+        $this->resultJson->expects($this->once())
+            ->method('setJsonData')
+            ->willReturnArgument(0);
+
+        $response = $this->getModel()->execute();
+        $responseObject = json_decode($response);
+        $this->assertEquals($responseObject, $result);
+    }
+
+    /**
+     * Dataprovider for testEmptyOption.
+     *
+     * @return array
+     */
+    public function provideEmptyOption()
+    {
+        return [
+            'empty admin scope options' => [
+                [
+                    'value' => [
+                        "option_0" => [''],
+                    ],
+                ],
+                (object) [
+                    'error' => true,
+                    'message' => 'The value of Admin scope can\'t be empty.',
+                ]
+            ],
+            'not empty admin scope options' => [
+                [
+                    'value' => [
+                        "option_0" => ['asdads'],
+                    ],
+                ],
+                (object) [
+                    'error' => false,
+                ]
+            ],
+            'empty admin scope options and deleted' => [
+                [
+                    'value' => [
+                        "option_0" => [''],
+                    ],
+                    'delete' => [
+                        'option_0' => '1',
+                    ],
+                ],
+                (object) [
+                    'error' => false,
+                ],
+            ],
+            'empty admin scope options and not deleted' => [
+                [
+                    'value' => [
+                        "option_0" => [''],
+                    ],
+                    'delete' => [
+                        'option_0' => '0',
+                    ],
+                ],
+                (object) [
+                    'error' => true,
+                    'message' => 'The value of Admin scope can\'t be empty.',
+                ],
             ],
         ];
     }

@@ -6,7 +6,7 @@
 
 namespace Magento\Directory\Test\Unit\Model\Currency\Import;
 
-class FixerIoTest extends \PHPUnit_Framework_TestCase
+class FixerIoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Model\Currency\Import\FixerIo

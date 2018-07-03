@@ -13,7 +13,7 @@ use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class InitializerTest extends \PHPUnit_Framework_TestCase
+class InitializerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

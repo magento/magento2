@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
 use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory;
@@ -17,7 +18,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @see ConfigSetProcessorFactory
  */
-class ConfigSetProcessorFactoryTest extends \PHPUnit_Framework_TestCase
+class ConfigSetProcessorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSetProcessorFactory
@@ -40,7 +41,7 @@ class ConfigSetProcessorFactoryTest extends \PHPUnit_Framework_TestCase
         $this->model = new ConfigSetProcessorFactory(
             $this->objectManagerMock,
             [
-                ConfigSetProcessorFactory::TYPE_LOCK => LockProcessor::class,
+                ConfigSetProcessorFactory::TYPE_LOCK_ENV => LockProcessor::class,
                 ConfigSetProcessorFactory::TYPE_DEFAULT => DefaultProcessor::class,
                 'wrongType' => \stdClass::class,
             ]
@@ -58,13 +59,13 @@ class ConfigSetProcessorFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             ConfigSetProcessorInterface::class,
-            $this->model->create(ConfigSetProcessorFactory::TYPE_LOCK)
+            $this->model->create(ConfigSetProcessorFactory::TYPE_LOCK_ENV)
         );
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Class for type "dummyType" was not declared
+     * @expectedExceptionMessage The class for "dummyType" type wasn't declared. Enter the class and try again.
      */
     public function testCreateNonExisted()
     {

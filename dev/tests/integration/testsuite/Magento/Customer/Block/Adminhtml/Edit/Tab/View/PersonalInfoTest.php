@@ -14,7 +14,7 @@ use Magento\Customer\Controller\RegistryConstants;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
  */
-class PersonalInfoTest extends \PHPUnit_Framework_TestCase
+class PersonalInfoTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Backend\Block\Template\Context */
     private $_context;
@@ -119,7 +119,10 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomerEmpty()
     {
-        $this->assertEquals($this->_createCustomer(), $this->_block->getCustomer());
+        $expectedCustomer = $this->createCustomerAndAddToBackendSession();
+        $actualCustomer = $this->_block->getCustomer();
+        $this->assertEquals($expectedCustomer->getExtensionAttributes(), $actualCustomer->getExtensionAttributes());
+        $this->assertEquals($expectedCustomer, $actualCustomer);
     }
 
     /**
@@ -133,7 +136,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetGroupNameNull()
     {
-        $this->_createCustomer();
+        $this->createCustomerAndAddToBackendSession();
         $this->assertNull($this->_block->getGroupName());
     }
 
@@ -243,7 +246,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBillingAddressHtmlNoDefaultAddress()
     {
-        $this->_createCustomer();
+        $this->createCustomerAndAddToBackendSession();
         $this->assertEquals(
             __('The customer does not have default billing address.'),
             $this->_block->getBillingAddressHtml()
@@ -253,7 +256,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
-    private function _createCustomer()
+    private function createCustomerAndAddToBackendSession()
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         $customer = $this->_customerFactory->create()->setFirstname(

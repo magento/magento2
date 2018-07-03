@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Category;
  * Class View
  * @api
  * @package Magento\Catalog\Block\Category
+ * @since 100.0.2
  */
 class View extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {

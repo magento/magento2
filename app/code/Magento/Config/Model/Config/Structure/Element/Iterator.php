@@ -7,13 +7,14 @@ namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Iterator implements \Iterator
 {
     /**
      * List of element data
      *
-     * @var \Magento\Config\Model\Config\Structure\ElementInterface[]
+     * @var \Magento\Config\Model\Config\StructureElementInterface[]
      */
     protected $_elements;
 
@@ -66,7 +67,7 @@ class Iterator implements \Iterator
     /**
      * Return the current element
      *
-     * @return \Magento\Config\Model\Config\Structure\ElementInterface
+     * @return \Magento\Config\Model\Config\StructureElementInterface
      */
     public function current()
     {

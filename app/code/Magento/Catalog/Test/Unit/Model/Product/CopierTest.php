@@ -11,7 +11,7 @@ use \Magento\Catalog\Model\Product\Copier;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CopierTest extends \PHPUnit_Framework_TestCase
+class CopierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -45,23 +45,16 @@ class CopierTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->copyConstructorMock = $this->getMock(\Magento\Catalog\Model\Product\CopyConstructorInterface::class);
-        $this->productFactoryMock = $this->getMock(
+        $this->copyConstructorMock = $this->createMock(\Magento\Catalog\Model\Product\CopyConstructorInterface::class);
+        $this->productFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ProductFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->optionRepositoryMock = $this->getMock(
-            \Magento\Catalog\Model\Product\Option\Repository::class,
-            [],
-            [],
-            '',
-            false
+        $this->optionRepositoryMock = $this->createMock(
+            \Magento\Catalog\Model\Product\Option\Repository::class
         );
         $this->optionRepositoryMock;
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->productMock->expects($this->any())->method('getEntityId')->willReturn(1);
 
         $this->metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
@@ -109,10 +102,10 @@ class CopierTest extends \PHPUnit_Framework_TestCase
             ['linkField', null, '1'],
         ]);
 
-        $resourceMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
+        $resourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
         $this->productMock->expects($this->once())->method('getResource')->will($this->returnValue($resourceMock));
 
-        $duplicateMock = $this->getMock(
+        $duplicateMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
             [
                 '__wakeup',
@@ -130,10 +123,7 @@ class CopierTest extends \PHPUnit_Framework_TestCase
                 'save',
                 'setUrlKey',
                 'getUrlKey',
-            ],
-            [],
-            '',
-            false
+            ]
         );
         $this->productFactoryMock->expects($this->once())->method('create')->will($this->returnValue($duplicateMock));
 

@@ -32,7 +32,7 @@
                         <?= /* @escapeNotVerified */ $block->getCustomizedOptionValue($_option) ?>
                     <?php else: ?>
                         <?php $_option = $block->getFormattedOption($_option['value']); ?>
-                        <?= /* @escapeNotVerified */ $_option['value'] ?><?php if (isset($_option['remainder']) && $_option['remainder']): ?><span id="<?= /* @escapeNotVerified */ $_dots = 'dots' . uniqid() ?>"> ...</span><span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid() ?>"><?= /* @escapeNotVerified */ $_option['remainder'] ?></span>
+                        <?= $block->escapeHtml($_option['value']) ?><?php if (isset($_option['remainder']) && $_option['remainder']): ?><span id="<?= /* @escapeNotVerified */ $_dots = 'dots' . uniqid() ?>"> ...</span><span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid() ?>"><?= /* @escapeNotVerified */ $_option['remainder'] ?></span>
                             <script>
                                 require(['prototype'], function() {
                                     $('<?= /* @escapeNotVerified */ $_id ?>').hide();

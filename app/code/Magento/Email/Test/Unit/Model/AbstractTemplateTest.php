@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\Email\Model\AbstractTemplate.
  */
@@ -14,17 +12,12 @@ namespace Magento\Email\Test\Unit\Model;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
+class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $design;
-
-    /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $registry;
 
     /**
      * @var \Magento\Store\Model\App\Emulation|\PHPUnit_Framework_MockObject_MockObject
@@ -124,10 +117,11 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * Return the model under test with additional methods mocked.
      *
-     * @param $mockedMethods array
+     * @param array $mockedMethods
+     * @param array $data
      * @return \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getModelMock(array $mockedMethods = [])
+    protected function getModelMock(array $mockedMethods = [], array $data = [])
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         return $this->getMockForAbstractClass(
@@ -136,7 +130,6 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                 \Magento\Email\Model\AbstractTemplate::class,
                 [
                     'design' => $this->design,
-                    'registry' => $this->registry,
                     'appEmulation' => $this->appEmulation,
                     'storeManager' => $this->storeManager,
                     'filesystem' => $this->filesystem,
@@ -144,7 +137,8 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                     'scopeConfig' => $this->scopeConfig,
                     'emailConfig' => $this->emailConfig,
                     'filterFactory' => $this->filterFactory,
-                    'templateFactory' => $this->templateFactory
+                    'templateFactory' => $this->templateFactory,
+                    'data' => $data,
                 ]
             ),
             '',
@@ -244,7 +238,8 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testGetProcessedTemplateException() {
+    public function testGetProcessedTemplateException()
+    {
         $filterTemplate = $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
             ->setMethods([
                 'setUseSessionInUrl',
@@ -383,6 +378,9 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($config, $model->getDesignConfig()->getData());
     }
 
+    /**
+     * @return array
+     */
     public function invalidInputParametersDataProvider()
     {
         return [[[]], [['area' => 'some_area']], [['store' => 'any_store']]];
@@ -416,12 +414,12 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $designMock = $this->getMock(\Magento\Framework\View\DesignInterface::class);
+        $designMock = $this->createMock(\Magento\Framework\View\DesignInterface::class);
         $designMock->expects($this->any())->method('getArea')->willReturn('test_area');
 
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $storeMock->expects($this->any())->method('getId')->willReturn(2);
-        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
         $model = $this->getMockForAbstractClass(
@@ -437,5 +435,34 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 
         $expectedConfig = ['area' => 'test_area', 'store' => 2];
         $this->assertEquals($expectedConfig, $model->getDesignConfig()->getData());
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetForcedAreaWhenAreaIsNotSet(): void
+    {
+        $templateId = 'test_template';
+        $model = $this->getModelMock([], ['area' => null]);
+
+        $this->emailConfig->expects($this->once())
+            ->method('getTemplateArea')
+            ->with($templateId);
+
+        $model->setForcedArea($templateId);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetForcedAreaWhenAreaIsSet(): void
+    {
+        $templateId = 'test_template';
+        $model = $this->getModelMock([], ['area' => 'frontend']);
+
+        $this->emailConfig->expects($this->never())
+            ->method('getTemplateArea');
+
+        $model->setForcedArea($templateId);
     }
 }

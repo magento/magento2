@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\HTTP\Test\Unit;
 
-class HeaderTest extends \PHPUnit_Framework_TestCase
+class HeaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -26,15 +26,10 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_request = $this->getMock(
-            \Magento\Framework\App\Request\Http::class,
-            ['getServer', 'getRequestUri'],
-            [],
-            '',
-            false
-        );
+        $this->_request =
+            $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getServer', 'getRequestUri']);
 
-        $this->_converter = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class, ['cleanString']);
+        $this->_converter = $this->createPartialMock(\Magento\Framework\Stdlib\StringUtils::class, ['cleanString']);
     }
 
     /**

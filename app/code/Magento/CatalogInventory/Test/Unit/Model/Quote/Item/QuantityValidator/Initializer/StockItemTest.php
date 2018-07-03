@@ -10,7 +10,7 @@ use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StockItemTest extends \PHPUnit_Framework_TestCase
+class StockItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem
@@ -67,12 +67,9 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
         $parentItemQty = 3;
         $websiteId = 1;
 
-        $stockItem = $this->getMock(
+        $stockItem = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Stock\Item::class,
-            ['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem', 'unsIsChildItem', '__wakeup'],
-            [],
-            '',
-            false
+            ['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem', 'unsIsChildItem', '__wakeup']
         );
         $quoteItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->setMethods(
@@ -87,6 +84,7 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
                     'setMessage',
                     'setBackorders',
                     '__wakeup',
+                    'setStockStateResult'
                 ]
             )
             ->disableOriginalConstructor()
@@ -181,6 +179,7 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
         $quoteItem->expects($this->once())->method('setMessage')->with('message')->will($this->returnSelf());
         $result->expects($this->exactly(2))->method('getItemBackorders')->will($this->returnValue('backorders'));
         $quoteItem->expects($this->once())->method('setBackorders')->with('backorders')->will($this->returnSelf());
+        $quoteItem->expects($this->once())->method('setStockStateResult')->with($result)->will($this->returnSelf());
 
         $this->model->initialize($stockItem, $quoteItem, $qty);
     }

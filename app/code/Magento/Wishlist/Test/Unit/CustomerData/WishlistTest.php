@@ -21,7 +21,7 @@ use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class WishlistTest extends \PHPUnit_Framework_TestCase
+class WishlistTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Wishlist */
     protected $model;
@@ -77,6 +77,8 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $imageLabel = 'image_label';
         $imageWidth = 'image_width';
         $imageHeight = 'image_height';
+        $productSku = 'product_sku';
+        $productId = 'product_id';
         $productUrl = 'product_url';
         $productName = 'product_name';
         $productPrice = 'product_price';
@@ -91,12 +93,14 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             'items' => [
                 [
                     'image' => [
-                        'template' => 'Magento_Catalog/product/image',
+                        'template' => 'Magento_Catalog/product/image_with_borders',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,
                         'height' => $imageHeight,
                     ],
+                    'product_sku' => $productSku,
+                    'product_id' => $productId,
                     'product_url' => $productUrl,
                     'product_name' => $productName,
                     'product_price' => $productPrice,
@@ -187,6 +191,12 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ->willReturn($productUrl);
 
         $productMock->expects($this->once())
+            ->method('getSku')
+            ->willReturn($productSku);
+        $productMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($productId);
+        $productMock->expects($this->once())
             ->method('getName')
             ->willReturn($productName);
 
@@ -246,6 +256,8 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $imageLabel = 'image_label';
         $imageWidth = 'image_width';
         $imageHeight = 'image_height';
+        $productSku = 'product_sku';
+        $productId = 'product_id';
         $productUrl = 'product_url';
         $productName = 'product_name';
         $productPrice = 'product_price';
@@ -266,12 +278,14 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             'items' => [
                 [
                     'image' => [
-                        'template' => 'Magento_Catalog/product/image',
+                        'template' => 'Magento_Catalog/product/image_with_borders',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,
                         'height' => $imageHeight,
                     ],
+                    'product_sku' => $productSku,
+                    'product_id' => $productId,
                     'product_url' => $productUrl,
                     'product_name' => $productName,
                     'product_price' => $productPrice,
@@ -282,12 +296,14 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     'image' => [
-                        'template' => 'Magento_Catalog/product/image',
+                        'template' => 'Magento_Catalog/product/image_with_borders',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,
                         'height' => $imageHeight,
                     ],
+                    'product_sku' => $productSku,
+                    'product_id' => $productId,
                     'product_url' => $productUrl,
                     'product_name' => $productName,
                     'product_price' => $productPrice,
@@ -374,6 +390,14 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->exactly(2))
             ->method('getName')
             ->willReturn($productName);
+
+        $productMock->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturn($productId);
+
+        $productMock->expects($this->exactly(2))
+            ->method('getSku')
+            ->willReturn($productSku);
 
         $this->sidebarMock->expects($this->exactly(2))
             ->method('getProductPriceHtml')

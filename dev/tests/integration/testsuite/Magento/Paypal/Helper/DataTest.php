@@ -7,7 +7,7 @@ namespace Magento\Paypal\Helper;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests if method executes without fatal error when some vault payment method is enabled.

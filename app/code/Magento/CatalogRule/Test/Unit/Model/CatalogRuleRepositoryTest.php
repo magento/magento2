@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model;
 
-class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
+class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\CatalogRuleRepository
@@ -30,21 +30,9 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ruleResourceMock = $this->getMock(
-            \Magento\CatalogRule\Model\ResourceModel\Rule::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->ruleFactoryMock = $this->getMock(
-            \Magento\CatalogRule\Model\RuleFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
+        $this->ruleResourceMock = $this->createMock(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
+        $this->ruleFactoryMock = $this->createPartialMock(\Magento\CatalogRule\Model\RuleFactory::class, ['create']);
+        $this->ruleMock = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
         $this->repository = new \Magento\CatalogRule\Model\CatalogRuleRepository(
             $this->ruleResourceMock,
             $this->ruleFactoryMock
@@ -64,7 +52,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $ruleId = 1;
         $ruleData = ['id' => $ruleId];
         $this->ruleMock->expects($this->once())->method('getData')->willReturn($ruleData);
-        $ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
+        $ruleMock = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
         $this->ruleMock->expects($this->exactly(2))->method('getRuleId')->willReturn($ruleId);
         $ruleMock->expects($this->once())->method('addData')->with($ruleData)->willReturn($ruleMock);
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($ruleMock);
@@ -77,7 +65,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Unable to save rule 1
+     * @expectedExceptionMessage The "1" rule was unable to be saved. Please try again.
      */
     public function testEnableSaveRule()
     {
@@ -104,7 +92,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testDeleteRuleById()
     {
         $ruleId = 1;
-        $ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
+        $ruleMock = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('getRuleId')->willReturn($ruleId);
         $ruleMock->expects($this->once())->method('load')->with($ruleId)->willReturn($ruleMock);
@@ -118,7 +106,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Unable to remove rule 1
+     * @expectedExceptionMessage The "1" rule couldn't be removed.
      */
     public function testUnableDeleteRule()
     {
@@ -133,7 +121,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetRule()
     {
         $ruleId = 1;
-        $ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
+        $ruleMock = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('load')->with($ruleId)->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('getRuleId')->willReturn($ruleId);
@@ -144,12 +132,12 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Rule with specified ID "1" not found.
+     * @expectedExceptionMessage The rule with the "1" ID wasn't found. Verify the ID and try again.
      */
     public function testGetNonExistentRule()
     {
         $ruleId = 1;
-        $ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
+        $ruleMock = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('load')->with($ruleId)->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('getRuleId')->willReturn(null);

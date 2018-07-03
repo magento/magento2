@@ -9,7 +9,7 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
-class NotificationTest extends \PHPUnit_Framework_TestCase
+class NotificationTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {
@@ -45,7 +45,7 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);
 
-        $dateTimeFormatter = $this->getMock(\Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class);
+        $dateTimeFormatter = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class);
         $dateTimeFormatter->expects($this->once())
             ->method('formatObject')
             ->with($testDatetime)

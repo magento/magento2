@@ -22,16 +22,24 @@ class UrlRewriteFinder
     const ENTITY_TYPE_CATEGORY = 'category';
     const ENTITY_TYPE_PRODUCT = 'product';
 
-    /** @var DatabaseMapPool */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool
+     */
     private $databaseMapPool;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     private $urlFinder;
 
-    /** @var UrlRewrite */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+     */
     private $urlRewritePrototype;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $urlRewriteClassNames = [];
 
     /**

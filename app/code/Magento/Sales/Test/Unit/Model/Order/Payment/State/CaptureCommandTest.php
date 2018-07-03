@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @see CaptureCommand
  */
-class CaptureCommandTest extends \PHPUnit_Framework_TestCase
+class CaptureCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var float

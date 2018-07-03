@@ -22,7 +22,9 @@ class JoinProcessor implements CollectionProcessorInterface
      */
     private $fieldMapping;
 
-    /** @var array  */
+    /**
+     * @var array
+     */
     private $appliedFields = [];
 
     /**

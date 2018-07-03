@@ -12,6 +12,7 @@ namespace Magento\Bundle\Model;
  * @method int getParentId()
  * @method null|\Magento\Catalog\Model\Product[] getSelections()
  * @method Option setParentId(int $value)
+ * @since 100.0.2
  */
 class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Bundle\Api\Data\OptionInterface
@@ -28,11 +29,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_PRODUCT_LINKS = 'product_links';
     /**#@-*/
 
-    /**
-     * Default selection object
-     *
-     * @var \Magento\Catalog\Model\Product|null
-     */
+    /**#@-*/
     protected $defaultSelection = null;
 
     /**

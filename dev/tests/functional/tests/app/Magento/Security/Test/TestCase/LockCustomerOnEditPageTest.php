@@ -26,7 +26,8 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
  * 3. Click "Change Password" link near "Contact Information".
  * 4. Fill form according to data set and save (current password is incorrect).
  * 5. Perform action for specified number of times.
- * 6. "The password doesn't match this account." appears after each change password attempt.
+ * 6. "The password doesn't match this account. Verify the password and try again." appears after each
+ *    change password attempt.
  * 7. Perform all assertions.
  *
  * @ZephyrId MAGETWO-50559

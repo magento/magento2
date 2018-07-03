@@ -9,7 +9,7 @@ namespace Magento\CatalogWidget\Block\Product;
 /**
  * Tests for @see \Magento\CatalogWidget\Block\Product\ProductsList
  */
-class ProductListTest extends \PHPUnit_Framework_TestCase
+class ProductListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogWidget\Block\Product\ProductsList
@@ -38,6 +38,7 @@ class ProductListTest extends \PHPUnit_Framework_TestCase
      * 4. Set at least 2 options of multiselect attribute to match products for the product list widget
      * 5. Load collection for product list widget and make sure that number of loaded products is correct
      *
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
      */
     public function testCreateCollection()
@@ -68,7 +69,7 @@ class ProductListTest extends \PHPUnit_Framework_TestCase
             . '`value`:[`' . implode(',', $multiselectAttributeOptionIds) . '`]^]^]';
         $this->block->setData('conditions_encoded', $encodedConditions);
 
-        // Load products collection filtered using specified conditions and perform assesrions
+        // Load products collection filtered using specified conditions and perform assertions
         $productCollection = $this->block->createCollection();
         $productCollection->load();
         $this->assertEquals(

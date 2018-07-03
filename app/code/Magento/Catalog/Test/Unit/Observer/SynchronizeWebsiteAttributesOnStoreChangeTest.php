@@ -11,7 +11,7 @@ use Magento\Catalog\Observer\SynchronizeWebsiteAttributesOnStoreChange;
 use Magento\Framework\Event\Observer;
 use Magento\Store\Model\Store;
 
-class SynchronizeWebsiteAttributesOnStoreChangeTest extends \PHPUnit_Framework_TestCase
+class SynchronizeWebsiteAttributesOnStoreChangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param $invalidDataObject

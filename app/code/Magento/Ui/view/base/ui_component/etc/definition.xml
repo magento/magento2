@@ -144,6 +144,25 @@
     <multiline class="Magento\Ui\Component\Form\Element\Multiline" component="Magento_Ui/js/form/components/group"/>
     <range class="Magento\Ui\Component\Form\Element\Range" component="Magento_Ui/js/grid/filters/range"/>
     <fileUploader class="Magento\Ui\Component\Form\Element\DataType\Media" component="Magento_Ui/js/form/element/file-uploader" template="ui/form/element/uploader/uploader"/>
+    <imageUploader class="Magento\Ui\Component\Form\Element\DataType\Media\Image" component="Magento_Ui/js/form/element/image-uploader" template="ui/form/element/uploader/image">
+        <settings>
+            <initialMediaGalleryOpenSubpath>wysiwyg</initialMediaGalleryOpenSubpath>
+        </settings>
+    </imageUploader>
+    <colorPicker class="Magento\Ui\Component\Form\Element\ColorPicker" component="Magento_Ui/js/form/element/color-picker" template="ui/form/field">
+        <settings>
+            <elementTmpl>ui/form/element/color-picker</elementTmpl>
+            <colorFormat>rgb</colorFormat>
+            <colorPickerMode>full</colorPickerMode>
+        </settings>
+    </colorPicker>
+    <urlInput class="Magento\Ui\Component\Form\Element\UrlInput" component="Magento_Ui/js/form/element/url-input" template="ui/form/element/url-input">
+        <settings>
+            <settingTemplate>ui/form/element/urlInput/setting</settingTemplate>
+            <typeSelectorTemplate>ui/form/element/urlInput/typeSelector</typeSelectorTemplate>
+            <isDisplayAdditionalSettings>true</isDisplayAdditionalSettings>
+        </settings>
+    </urlInput>
     <!-- Form elements -->
 
     <!-- Form element data types -->

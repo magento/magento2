@@ -11,7 +11,7 @@ namespace Magento\EncryptionKey\Test\Unit\Model\ResourceModel\Key;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ChangeTest extends \PHPUnit_Framework_TestCase
+class ChangeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $encryptMock;
@@ -35,7 +35,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
     protected $selectMock;
 
     /** @var \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface */
-    protected $tansactionMock;
+    protected $transactionMock;
 
     /** @var |\PHPUnit_Framework_MockObject_MockObject */
     protected $objRelationMock;
@@ -74,10 +74,10 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['from', 'where', 'update'])
             ->getMock();
         $translationClassName = \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class;
-        $this->tansactionMock = $this->getMockBuilder($translationClassName)
+        $this->transactionMock = $this->getMockBuilder($translationClassName)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -86,7 +86,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->randomMock = $this->getMock(\Magento\Framework\Math\Random::class, [], [], '', false);
+        $this->randomMock = $this->createMock(\Magento\Framework\Math\Random::class);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -99,7 +99,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
                 'writer' => $this->writerMock,
                 'adapterInterface' => $this->adapterMock,
                 'resource' => $this->resourceMock,
-                'transactionManager' => $this->tansactionMock,
+                'transactionManager' => $this->transactionMock,
                 'relationProcessor' => $this->objRelationMock,
                 'random' => $this->randomMock
             ]

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Validator\Test\Unit;
 
-class ObjectTest extends \PHPUnit_Framework_TestCase
+class ObjectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Validator\DataObject
@@ -92,6 +92,9 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         return [

@@ -21,7 +21,7 @@ class ProductCategoryFilter implements CustomFilterInterface
      */
     public function apply(Filter $filter, AbstractDb $collection)
     {
-        $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+        $conditionType = $filter->getConditionType() ?: 'eq';
         $categoryFilter = [$conditionType => [$filter->getValue()]];
 
         /** @var Collection $collection */

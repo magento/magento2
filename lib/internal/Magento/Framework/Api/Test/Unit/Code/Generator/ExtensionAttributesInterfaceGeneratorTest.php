@@ -8,7 +8,7 @@ namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 
-class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
+class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     public function testGenerate()
     {

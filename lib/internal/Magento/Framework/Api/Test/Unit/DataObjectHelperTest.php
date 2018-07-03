@@ -12,7 +12,7 @@ use Magento\Framework\Api\AttributeInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
+class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
@@ -367,6 +367,9 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($firstAddressDataObject->getRegion(), $secondAddressDataObject->getRegion());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestMergeDataObjects()
     {
         return [

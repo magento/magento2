@@ -7,12 +7,12 @@ namespace Magento\Framework\App\Test\Unit\Config;
 
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ConfigPathResolver;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * {@inheritdoc}
  */
-class ConfigPathResolverTest extends \PHPUnit_Framework_TestCase
+class ConfigPathResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigPathResolver
@@ -55,6 +55,9 @@ class ConfigPathResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $this->model->resolve($path, $scope, $scopeCode, $type));
     }
 
+    /**
+     * @return array
+     */
     public function resolveDataProvider()
     {
         return [

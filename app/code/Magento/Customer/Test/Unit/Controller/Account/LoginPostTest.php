@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -19,7 +20,7 @@ use Magento\Framework\Controller\Result\Redirect;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoginPostTest extends \PHPUnit_Framework_TestCase
+class LoginPostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LoginPost
@@ -563,7 +564,12 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             case \Magento\Framework\Exception\AuthenticationException::class:
                 $this->messageManager->expects($this->once())
                     ->method('addError')
-                    ->with(__('You did not sign in correctly or your account is temporarily disabled.'))
+                    ->with(
+                        __(
+                            'The account sign-in was incorrect or your account is disabled temporarily. '
+                            . 'Please wait and try again later.'
+                        )
+                    )
                     ->willReturnSelf();
 
                 $this->session->expects($this->once())
@@ -581,7 +587,8 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
 
             case \Magento\Framework\Exception\State\UserLockedException::class:
                 $message = __(
-                    'You did not sign in correctly or your account is temporarily disabled.'
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
                 );
                 $this->messageManager->expects($this->once())
                     ->method('addError')

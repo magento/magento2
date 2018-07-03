@@ -17,7 +17,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FrontTabPluginTest extends \PHPUnit_Framework_TestCase
+class FrontTabPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FrontTabPlugin

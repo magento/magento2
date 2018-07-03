@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @see \Magento\Developer\Console\Command\SourceThemeDeployCommand
  */
-class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
+class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
 {
     const PUB_STATIC_DIRECTORY = 'pub/static';
 

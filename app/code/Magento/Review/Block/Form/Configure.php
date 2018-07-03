@@ -10,6 +10,7 @@ namespace Magento\Review\Block\Form;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Configure extends \Magento\Review\Block\Form
 {

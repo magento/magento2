@@ -15,7 +15,7 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
-class BundlePriceTest extends \PHPUnit_Framework_TestCase
+class BundlePriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BundlePrice

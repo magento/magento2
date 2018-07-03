@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
@@ -103,7 +104,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $this->productTypeManager->processProduct($product);
 
                 if (isset($data['product'][$product->getIdFieldName()])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Unable to save product'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('The product was unable to be saved. Please try again.')
+                    );
                 }
 
                 $originalSku = $product->getSku();
@@ -119,10 +122,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
                 $this->copyToStores($data, $productId);
 
-                $this->messageManager->addSuccess(__('You saved the product.'));
+                $this->messageManager->addSuccessMessage(__('You saved the product.'));
                 $this->getDataPersistor()->clear('catalog_product');
                 if ($product->getSku() != $originalSku) {
-                    $this->messageManager->addNotice(
+                    $this->messageManager->addNoticeMessage(
                         __(
                             'SKU for product %1 has been changed to %2.',
                             $this->_objectManager->get(
@@ -141,22 +144,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
                 if ($redirectBack === 'duplicate') {
                     $newProduct = $this->productCopier->copy($product);
-                    $this->messageManager->addSuccess(__('You duplicated the product.'));
+                    $this->messageManager->addSuccessMessage(__('You duplicated the product.'));
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addExceptionMessage($e);
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }
         } else {
             $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
-            $this->messageManager->addError('No data to save');
+            $this->messageManager->addErrorMessage('No data to save');
             return $resultRedirect;
         }
 
@@ -202,7 +205,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $expectedImagesAmount = count($postData['product']['media_gallery']['images']) - $removedImagesAmount;
                 $product = $this->productRepository->getById($productId);
                 if ($expectedImagesAmount != count($product->getMediaGallery('images'))) {
-                    $this->messageManager->addNotice(
+                    $this->messageManager->addNoticeMessage(
                         __('The image cannot be removed as it has been assigned to the other image role')
                     );
                 }
@@ -212,6 +215,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * Do copying data to stores
+     *
+     * If the 'copy_from' field is not specified in the input data,
+     * the store fallback mechanism will automatically take the admin store's default value.
      *
      * @param array $data
      * @param int $productId
@@ -224,15 +230,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 if (isset($data['product']['website_ids'][$websiteId])
                     && (bool)$data['product']['website_ids'][$websiteId]) {
                     foreach ($group as $store) {
-                        $copyFrom = (isset($store['copy_from'])) ? $store['copy_from'] : 0;
-                        $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
-                        if ($copyTo) {
-                            $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
-                                ->setStoreId($copyFrom)
-                                ->load($productId)
-                                ->setStoreId($copyTo)
-                                ->setCopyFromView(true)
-                                ->save();
+                        if (isset($store['copy_from'])) {
+                            $copyFrom = $store['copy_from'];
+                            $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
+                            if ($copyTo) {
+                                $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
+                                    ->setStoreId($copyFrom)
+                                    ->load($productId)
+                                    ->setStoreId($copyTo)
+                                    ->setCopyFromView(true)
+                                    ->save();
+                            }
                         }
                     }
                 }
@@ -254,7 +262,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return StoreManagerInterface
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getStoreManager()
     {
@@ -269,7 +277,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * Retrieve data persistor
      *
      * @return DataPersistorInterface|mixed
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected function getDataPersistor()
     {

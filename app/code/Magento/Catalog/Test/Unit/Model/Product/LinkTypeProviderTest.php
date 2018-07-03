@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
+class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\LinkTypeProvider
@@ -37,20 +35,17 @@ class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->linkTypeFactoryMock = $this->getMock(
+        $this->linkTypeFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Api\Data\ProductLinkTypeInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->linkAttributeFactoryMock = $this->getMock(
+        $this->linkAttributeFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Api\Data\ProductLinkAttributeInterfaceFactory::class,
-            ['create'], [], '', false, false
+            ['create']
         );
-        $this->linkFactoryMock = $this->getMock(
+        $this->linkFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\LinkFactory::class,
-            ['create'], [], '', false, false
+            ['create']
         );
         $this->linkTypes = [
             'test_product_link_1' => 'test_code_1',
@@ -78,7 +73,7 @@ class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
         $linkTypeMocks = [];
         foreach ($this->linkTypes as $type => $typeCode) {
             $value = ['name' => $type, 'code' => $typeCode];
-            $linkTypeMock = $this->getMock(\Magento\Catalog\Api\Data\ProductLinkTypeInterface::class);
+            $linkTypeMock = $this->createMock(\Magento\Catalog\Api\Data\ProductLinkTypeInterface::class);
             $linkTypeMock->expects($this->once())
                 ->method('setName')
                 ->with($type)
@@ -104,7 +99,7 @@ class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
         $attributes = [
             ['code' => 'test_code_1', 'type' => 'test_type_1'],
         ];
-        $linkAttributeMock = $this->getMock(\Magento\Catalog\Api\Data\ProductLinkAttributeInterface::class);
+        $linkAttributeMock = $this->createMock(\Magento\Catalog\Api\Data\ProductLinkAttributeInterface::class);
         $linkAttributeMock->expects($this->once())
             ->method('setCode')
             ->with($attributes[0]['code'])
@@ -116,13 +111,16 @@ class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             $linkAttributeMock,
         ];
-        $linkMock = $this->getMock(\Magento\Catalog\Model\Product\Link::class, ['getAttributes'], [], '', false);
+        $linkMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Link::class, ['getAttributes']);
         $linkMock->expects($this->once())->method('getAttributes')->willReturn($attributes);
         $this->linkFactoryMock->expects($this->once())->method('create')->with($typeId)->willReturn($linkMock);
         $this->linkAttributeFactoryMock->expects($this->once())->method('create')->willReturn($linkAttributeMock);
         $this->assertEquals($expectedResult, $this->model->getItemAttributes($type));
     }
 
+    /**
+     * @return array
+     */
     public function getItemAttributesDataProvider()
     {
         return [

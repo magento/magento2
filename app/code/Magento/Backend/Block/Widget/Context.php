@@ -18,6 +18,7 @@ namespace Magento\Backend\Block\Widget;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Context extends \Magento\Backend\Block\Template\Context
 {

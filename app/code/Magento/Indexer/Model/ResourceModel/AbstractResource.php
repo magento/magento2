@@ -12,6 +12,7 @@ use Magento\Framework\DB\Select;
  * Abstract resource model. Can be used as base for indexer resources
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

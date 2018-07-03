@@ -12,7 +12,7 @@ use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Price */
     protected $model;
@@ -60,7 +60,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRenderInfoDto = $this->getMock(ProductRenderInterface::class);
+        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
         $productRenderInfoDto->expects($this->exactly(2))
             ->method('getPriceInfo')
             ->willReturn([]);
@@ -88,7 +88,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
             ->willReturn($price);
-        $amount = $this->getMock(AmountInterface::class);
+        $amount = $this->createMock(AmountInterface::class);
 
         $price->expects($this->atLeastOnce())
             ->method('getAmount')

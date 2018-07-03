@@ -7,7 +7,7 @@ namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
 use Magento\CheckoutAgreements\Model\AgreementModeOptions;
 
-class AgreementModeOptionsTest extends \PHPUnit_Framework_TestCase
+class AgreementModeOptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CheckoutAgreements\Model\AgreementModeOptions

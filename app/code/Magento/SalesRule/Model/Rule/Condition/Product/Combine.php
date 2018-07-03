@@ -9,6 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {

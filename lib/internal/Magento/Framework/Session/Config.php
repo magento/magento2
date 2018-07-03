@@ -11,7 +11,6 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Session\Config\ConfigInterface;
-use Magento\Framework\Session\SaveHandlerInterface;
 
 /**
  * Magento session configuration
@@ -51,13 +50,19 @@ class Config implements ConfigInterface
      */
     protected $options = [];
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $_scopeConfig;
 
-    /** @var \Magento\Framework\Stdlib\StringUtils */
+    /**
+     * @var \Magento\Framework\Stdlib\StringUtils
+     */
     protected $_stringHelper;
 
-    /** @var \Magento\Framework\App\RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     protected $_httpRequest;
 
     /**
@@ -72,13 +77,19 @@ class Config implements ConfigInterface
         'session.cookie_httponly',
     ];
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_scopeType;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $lifetimePath;
 
-    /** @var \Magento\Framework\ValidatorFactory */
+    /**
+     * @var \Magento\Framework\ValidatorFactory
+     */
     protected $_validatorFactory;
 
     /**
@@ -120,6 +131,14 @@ class Config implements ConfigInterface
         }
         if ($savePath) {
             $this->setSavePath($savePath);
+        }
+
+        /**
+        * Session save handler - memcache, files, etc
+        */
+        $saveHandler = $deploymentConfig->get(self::PARAM_SESSION_SAVE_METHOD);
+        if ($saveHandler) {
+            $this->setOption('session.save_handler', $saveHandler);
         }
 
         /**

@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Indexer\Product;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Category extends \Magento\Catalog\Model\Indexer\Category\Product
 {
@@ -32,6 +33,7 @@ class Category extends \Magento\Catalog\Model\Indexer\Category\Product
      * Add tags to cache context
      *
      * @return void
+     * @since 100.0.11
      */
     protected function registerTags()
     {
@@ -48,6 +50,7 @@ class Category extends \Magento\Catalog\Model\Indexer\Category\Product
      *
      * @param int[] $ids
      * @return void
+     * @since 100.0.11
      */
     protected function registerEntities($ids)
     {

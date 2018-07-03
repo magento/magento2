@@ -10,6 +10,7 @@ namespace Magento\Tax\Api;
 /**
  * Tax rate CRUD interface.
  * @api
+ * @since 100.0.2
  */
 interface TaxRateRepositoryInterface
 {

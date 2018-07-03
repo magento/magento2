@@ -8,6 +8,10 @@ namespace Magento\Sales\Controller;
 
 use Magento\Framework\App\ActionInterface;
 
+/**
+ * Interface \Magento\Sales\Controller\OrderInterface
+ *
+ */
 interface OrderInterface extends ActionInterface
 {
 }

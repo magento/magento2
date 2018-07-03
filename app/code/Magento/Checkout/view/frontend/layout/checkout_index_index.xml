@@ -364,20 +364,20 @@
                                                             <!-- sort order for this totals is configured on admin panel-->
                                                             <!-- Stores->Configuration->SALES->Sales->General->Checkout Totals Sort Order -->
                                                             <item name="subtotal" xsi:type="array">
-                                                                <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/subtotal</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/subtotal</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="title" xsi:type="string" translate="true">Cart Subtotal</item>
                                                                 </item>
                                                             </item>
                                                             <item name="shipping" xsi:type="array">
-                                                                <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/shipping</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/shipping</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="title" xsi:type="string" translate="true">Shipping</item>
                                                                     <item name="notCalculatedMessage" xsi:type="string" translate="true">Not yet calculated</item>
                                                                 </item>
                                                             </item>
                                                             <item name="grand-total" xsi:type="array">
-                                                                <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/grand-total</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/grand-total</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="title" xsi:type="string" translate="true">Order Total</item>
                                                                 </item>

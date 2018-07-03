@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="sales.email.order.renderers">
-            <block class="Magento\Bundle\Block\Sales\Order\Items\Renderer" as="bundle" template="Magento_Bundle::email/order/items/order/default.phtml"/>
+            <block class="Magento\Bundle\Block\Sales\Order\Items\Renderer" name="sales.email.order.renderers.bundle" as="bundle" template="Magento_Bundle::email/order/items/order/default.phtml"/>
         </referenceBlock>
     </body>
 </page>

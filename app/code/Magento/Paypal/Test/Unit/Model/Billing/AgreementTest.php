@@ -7,7 +7,7 @@ namespace Magento\Paypal\Test\Unit\Model\Billing;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AgreementTest extends \PHPUnit_Framework_TestCase
+class AgreementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Agreement

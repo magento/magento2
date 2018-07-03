@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Comment;
 
 /**
  * Class ValidatorTest
  */
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\Comment\Validator
@@ -25,12 +26,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->commentModelMock = $this->getMock(
+        $this->commentModelMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo\Comment::class,
-            ['hasData', 'getData', '__wakeup'],
-            [],
-            '',
-            false
+            ['hasData', 'getData', '__wakeup']
         );
         $this->validator = new \Magento\Sales\Model\Order\Creditmemo\Comment\Validator();
     }
@@ -85,7 +83,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     'parent_id' => 'Parent Creditmemo Id can not be empty',
-                    'comment' => 'Comment is a required field'
+                    'comment' => '"Comment" is required. Enter and try again.'
                 ]
             ]
         ];

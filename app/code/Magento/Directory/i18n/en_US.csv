@@ -3,13 +3,13 @@ State/Province,State/Province
 lbs,lbs
 kgs,kgs
 "Requested country is not available.","Requested country is not available."
-"Please correct the target currency.","Please correct the target currency."
 "Undefined rate from ""%1-%2"".","Undefined rate from ""%1-%2""."
+"Please correct the target currency.","Please correct the target currency."
 label,label
-"We can\'t retrieve a rate from %1 for %2.","We can\'t retrieve a rate from %1 for %2."
-"We can\'t retrieve a rate from %1.","We can\'t retrieve a rate from %1."
+"We can't retrieve a rate from %1 for %2.","We can't retrieve a rate from %1 for %2."
+"We can't retrieve a rate from %1.","We can't retrieve a rate from %1."
 "FATAL ERROR:","FATAL ERROR:"
-"We can\'t initialize the import model.","We can\'t initialize the import model."
+"We can't initialize the import model.","We can't initialize the import model."
 "Please specify the correct Import Service.","Please specify the correct Import Service."
 WARNING:,WARNING:
 "Please correct the country code: %1.","Please correct the country code: %1."
@@ -30,8 +30,10 @@ Continue,Continue
                     "
 "Default Display Currency","Default Display Currency"
 "Allowed Currencies","Allowed Currencies"
-Webservicex,Webservicex
+"Yahoo Finance Exchange","Yahoo Finance Exchange"
 "Connection Timeout in Seconds","Connection Timeout in Seconds"
+Fixer.io,Fixer.io
+Webservicex,Webservicex
 "Scheduled Import Settings","Scheduled Import Settings"
 Enabled,Enabled
 "Error Email Recipient","Error Email Recipient"

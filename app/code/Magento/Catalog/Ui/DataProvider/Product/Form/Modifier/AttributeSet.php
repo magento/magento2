@@ -16,6 +16,7 @@ use Magento\Ui\Component\Form\Field;
  * Add "Attribute Set" to first fieldset
  *
  * @api
+ * @since 101.0.0
  */
 class AttributeSet extends AbstractModifier
 {
@@ -28,16 +29,19 @@ class AttributeSet extends AbstractModifier
      * Set collection factory
      *
      * @var CollectionFactory
+     * @since 101.0.0
      */
     protected $attributeSetCollectionFactory;
 
     /**
      * @var UrlInterface
+     * @since 101.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
@@ -60,6 +64,7 @@ class AttributeSet extends AbstractModifier
      * Return options for select
      *
      * @return array
+     * @since 101.0.0
      */
     public function getOptions()
     {
@@ -78,6 +83,7 @@ class AttributeSet extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -102,6 +108,7 @@ class AttributeSet extends AbstractModifier
                     self::ATTRIBUTE_SET_FIELD_ORDER
                 ),
                 'multiple' => false,
+                'disabled' => $this->locator->getProduct()->isLockedAttribute('attribute_set_id'),
             ];
         }
 
@@ -110,6 +117,7 @@ class AttributeSet extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {

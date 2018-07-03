@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\App\PageCachePlugin;
 use Magento\PageCache\Model\Cache\Type;
 
-class PageCachePluginTest extends \PHPUnit_Framework_TestCase
+class PageCachePluginTest extends \PHPUnit\Framework\TestCase
 {
     /** @var PageCachePlugin */
     private $plugin;
@@ -57,6 +57,9 @@ class PageCachePluginTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($data, $this->plugin->afterLoad($this->subjectMock, $initResult));
     }
 
+    /**
+     * @return array
+     */
     public function afterSaveDataProvider()
     {
         return [

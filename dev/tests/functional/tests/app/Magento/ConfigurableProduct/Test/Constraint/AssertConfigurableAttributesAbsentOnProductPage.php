@@ -37,7 +37,7 @@ class AssertConfigurableAttributesAbsentOnProductPage extends AbstractConstraint
 
         foreach ($deletedProductAttributes as $attribute) {
             $attributeLabel = $attribute->getFrontendLabel();
-            \PHPUnit_Framework_Assert::assertFalse(
+            \PHPUnit\Framework\Assert::assertFalse(
                 isset($pageOptions[$attributeLabel]),
                 "Configurable attribute '$attributeLabel' found on product page on frontend."
             );

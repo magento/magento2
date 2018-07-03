@@ -6,13 +6,10 @@
 namespace Magento\Analytics\Test\Unit\Model\Connector\ResponseHandler;
 
 use Magento\Analytics\Model\AnalyticsToken;
-use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Analytics\Model\Connector\ResponseHandler\SignUp;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-/**
- * Class SignUpTest
- */
-class SignUpTest extends \PHPUnit_Framework_TestCase
+class SignUpTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleResult()
     {
@@ -23,7 +20,11 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
         $analyticsToken->expects($this->once())
             ->method('storeToken')
             ->with($accessToken);
-        $signUpHandler = new SignUp($analyticsToken, new JsonConverter());
+        $objectManager = new ObjectManager($this);
+        $signUpHandler = $objectManager->getObject(
+            SignUp::class,
+            ['analyticsToken' => $analyticsToken]
+        );
         $this->assertFalse($signUpHandler->handleResponse([]));
         $this->assertEquals($accessToken, $signUpHandler->handleResponse(['access-token' => $accessToken]));
     }

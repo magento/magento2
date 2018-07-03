@@ -9,6 +9,7 @@ namespace Magento\Directory\Api\Data;
  * Exchange Rate interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface ExchangeRateInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

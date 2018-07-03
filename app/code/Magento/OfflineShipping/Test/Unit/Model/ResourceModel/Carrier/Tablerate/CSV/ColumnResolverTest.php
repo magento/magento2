@@ -11,7 +11,7 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnReso
 /**
  * Unit test for Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnResolver
  */
-class ColumnResolverTest extends \PHPUnit_Framework_TestCase
+class ColumnResolverTest extends \PHPUnit\Framework\TestCase
 {
     const CUSTOM_FIELD = 'custom_field';
 

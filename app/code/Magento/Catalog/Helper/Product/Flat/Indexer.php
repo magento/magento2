@@ -13,6 +13,7 @@ use Magento\Framework\App\ResourceConnection;
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
 {

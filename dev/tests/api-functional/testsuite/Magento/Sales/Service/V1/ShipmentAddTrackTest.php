@@ -5,7 +5,11 @@
  */
 namespace Magento\Sales\Service\V1;
 
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
+use Magento\Sales\Model\Order\Shipment\Track;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -31,46 +35,56 @@ class ShipmentAddTrackTest extends WebapiAbstract
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
-     * Test shipment add track service
+     * Creates shipment track item.
      *
      * @magentoApiDataFixture Magento/Sales/_files/shipment.php
      */
     public function testShipmentAddTrack()
     {
+        $shipmentCollection = $this->objectManager->get(Collection::class);
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipmentCollection = $this->objectManager->get(
-            \Magento\Sales\Model\ResourceModel\Order\Shipment\Collection::class
-        );
         $shipment = $shipmentCollection->getFirstItem();
 
         $trackData = [
             ShipmentTrackInterface::ENTITY_ID => null,
             ShipmentTrackInterface::ORDER_ID => $shipment->getOrderId(),
-            ShipmentTrackInterface::CREATED_AT => null,
             ShipmentTrackInterface::PARENT_ID => $shipment->getId(),
             ShipmentTrackInterface::WEIGHT => 20,
             ShipmentTrackInterface::QTY => 5,
             ShipmentTrackInterface::TRACK_NUMBER => 2,
             ShipmentTrackInterface::DESCRIPTION => 'Shipment description',
             ShipmentTrackInterface::TITLE => 'Shipment title',
-            ShipmentTrackInterface::CARRIER_CODE => \Magento\Sales\Model\Order\Shipment\Track::CUSTOM_CARRIER_CODE,
-            ShipmentTrackInterface::CREATED_AT => null,
-            ShipmentTrackInterface::UPDATED_AT => null,
+            ShipmentTrackInterface::CARRIER_CODE => Track::CUSTOM_CARRIER_CODE,
         ];
 
-        $requestData = ['entity' => $trackData];
-        $serviceInfo = [
+        $result = $this->_webApiCall($this->getServiceInfo(), ['entity' => $trackData]);
+
+        self::assertNotEmpty($result);
+        self::assertNotEmpty($result[ShipmentTrackInterface::ENTITY_ID]);
+        self::assertEquals($shipment->getId(), $result[ShipmentTrackInterface::PARENT_ID]);
+    }
+    /**
+     * Returns details about API endpoints and services.
+     *
+     * @return array
+     */
+    private function getServiceInfo()
+    {
+        return [
             'rest' => [
                 'resourcePath' => '/V1/shipment/track',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,
@@ -78,8 +92,5 @@ class ShipmentAddTrackTest extends WebapiAbstract
                 'operation' => self::SERVICE_READ_NAME . 'save',
             ],
         ];
-
-        $result = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertNotEmpty($result);
     }
 }

@@ -8,7 +8,7 @@ namespace Magento\Security\Model\ResourceModel\AdminSessionInfo;
 
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection

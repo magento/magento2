@@ -12,8 +12,6 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * @method Attribute _getResource()
- * @method Attribute getResource()
  * @method Attribute setProductAttribute(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $value)
  * @method \Magento\Eav\Model\Entity\Attribute\AbstractAttribute getProductAttribute()
  */
@@ -31,9 +29,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     const KEY_PRODUCT_ID = 'product_id';
     /**#@-*/
 
-    /**
-     * @var MetadataPool
-     */
+    /**#@-*/
     private $metadataPool;
 
     /**
@@ -115,7 +111,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * Load counfigurable attribute by product and product's attribute
+     * Load configurable attribute by product and product's attribute
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute  $attribute

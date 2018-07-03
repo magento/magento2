@@ -10,7 +10,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Theme\Model\Design\Config\Plugin\Dump;
 
-class DumpTest extends \PHPUnit_Framework_TestCase
+class DumpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Dump

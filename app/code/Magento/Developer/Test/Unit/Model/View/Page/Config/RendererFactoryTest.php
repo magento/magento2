@@ -17,7 +17,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Class RendererFactoryTest
  */
-class RendererFactoryTest extends \PHPUnit_Framework_TestCase
+class RendererFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject

@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\ResourceModel\Sale;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Sales/_files/order_with_customer.php

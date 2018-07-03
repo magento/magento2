@@ -12,6 +12,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Adminhtml sales order item renderer
  *
  * @api
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer
 {

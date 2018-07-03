@@ -13,6 +13,7 @@ namespace Magento\Customer\Block\Adminhtml;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Group extends \Magento\Backend\Block\Widget\Grid\Container
 {

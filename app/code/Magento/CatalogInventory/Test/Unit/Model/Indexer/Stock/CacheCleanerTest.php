@@ -16,7 +16,7 @@ use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\Product;
 
-class CacheCleanerTest extends \PHPUnit_Framework_TestCase
+class CacheCleanerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CacheCleaner

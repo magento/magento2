@@ -13,6 +13,7 @@ use Magento\Framework\DataObject\IdentityInterface;
  * Shopping cart item render block
  *
  * @api
+ * @since 100.0.2
  */
 class Grouped extends Renderer implements IdentityInterface
 {

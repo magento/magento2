@@ -20,25 +20,35 @@ class CategoryUrlRewriteGenerator
     /** Entity type code */
     const ENTITY_TYPE = 'category';
 
-    /** @var StoreViewService */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService
+     */
     protected $storeViewService;
 
     /**
      * @var \Magento\Catalog\Model\Category
-     * @deprecated
+     * @deprecated 100.1.4
      */
     protected $category;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator
+     */
     protected $canonicalUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator
+     */
     protected $currentUrlRewritesRegenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator
+     */
     protected $childrenUrlRewriteGenerator;
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     */
     private $mergeDataProviderPrototype;
 
     /**

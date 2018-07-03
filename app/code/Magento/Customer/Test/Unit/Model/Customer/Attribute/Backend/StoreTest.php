@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\Customer\Attribute\Backend;
 
 use Magento\Customer\Model\Customer\Attribute\Backend\Store;
 
-class StoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Store

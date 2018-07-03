@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\GraphQl\Query\FieldTranslator">
+        <arguments>
+            <argument name="translationMap" xsi:type="array">
+                <item name="ship_bundle_items" xsi:type="string">shipment_type</item>
+                <item name="dynamic_price" xsi:type="string">price_type</item>
+                <item name="dynamic_sku" xsi:type="string">sku_type</item>
+                <item name="dynamic_weight" xsi:type="string">weight_type</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

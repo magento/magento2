@@ -11,7 +11,7 @@ use Magento\Store\Model\Config\Reader\Source\Initial\Website;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\Scope\Converter;
 
-class StoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet()
     {

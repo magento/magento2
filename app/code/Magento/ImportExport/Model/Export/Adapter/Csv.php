@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Model\Export\Adapter;
  * Export adapter csv.
  *
  * @api
+ * @since 100.0.2
  */
 class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
 {
@@ -55,7 +56,7 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
     }
 
     /**
-     * Method called as last step of object instance creation. Can be overrided in child classes.
+     * Method called as last step of object instance creation. Can be overridden in child classes.
      *
      * @return $this
      */

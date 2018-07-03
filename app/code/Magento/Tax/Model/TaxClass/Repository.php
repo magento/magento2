@@ -66,7 +66,9 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      */
     protected $joinProcessor;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -177,12 +179,16 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         $exception = new InputException();
 
         if (!\Zend_Validate::is(trim($taxClass->getClassName()), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => ClassModel::KEY_NAME]));
+            $exception->addError(
+                __('"%fieldName" is required. Enter and try again.', ['fieldName' => ClassModel::KEY_NAME])
+            );
         }
 
         $classType = $taxClass->getClassType();
         if (!\Zend_Validate::is(trim($classType), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => ClassModel::KEY_TYPE]));
+            $exception->addError(
+                __('"%fieldName" is required. Enter and try again.', ['fieldName' => ClassModel::KEY_TYPE])
+            );
         } elseif ($classType !== TaxClassManagementInterface::TYPE_CUSTOMER
             && $classType !== TaxClassManagementInterface::TYPE_PRODUCT
         ) {
@@ -220,7 +226,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param TaxClassCollection $collection
      * @return void
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, TaxClassCollection $collection)
     {
@@ -239,7 +245,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

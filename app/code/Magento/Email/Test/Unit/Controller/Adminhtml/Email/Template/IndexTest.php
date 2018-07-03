@@ -9,17 +9,12 @@ namespace Magento\Email\Test\Unit\Controller\Adminhtml\Email\Template;
  * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Controller\Adminhtml\Email\Template\Index
      */
     protected $indexController;
-
-    /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $registryMock;
 
     /**
      * @var \Magento\Backend\App\Action\Context
@@ -113,7 +108,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             \Magento\Email\Controller\Adminhtml\Email\Template\Index::class,
             [
                 'context' => $this->context,
-                'coreRegistry' => $this->registryMock
             ]
         );
     }

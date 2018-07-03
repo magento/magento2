@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model;
 /**
  * Class CustomOptionTest
  */
-class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
+class ConfigurableAttributeDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
@@ -32,26 +32,16 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->product = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 'getTypeInstance',
                 'setParentId',
                 'hasPreconfiguredValues',
                 'getPreconfiguredValues',
                 'getPriceInfo',
                 'getStoreId'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->attributeMock = $this->getMock(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class,
-            [],
-            [],
-            '',
-            false
+            ]);
+        $this->attributeMock = $this->createMock(
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class
         );
         $this->configurableAttributeData = new \Magento\ConfigurableProduct\Model\ConfigurableAttributeData();
     }

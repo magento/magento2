@@ -12,7 +12,7 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class ShipmentTest extends \PHPUnit_Framework_TestCase
+class ShipmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CollectionFactory|MockObject

@@ -9,7 +9,7 @@ namespace Magento\Paypal\Test\Unit\Model;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Paypal\Model\Info;
 
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Paypal\Model\Info */
     protected $info;
@@ -158,7 +158,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *List of public labels
+     * List of public labels
      *
      * @return array
      */

@@ -7,7 +7,7 @@ namespace Magento\Wishlist\Test\Unit\Model;
 
 use \Magento\Wishlist\Model\LocaleQuantityProcessor;
 
-class LocaleQuantityProcessorTest extends \PHPUnit_Framework_TestCase
+class LocaleQuantityProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LocaleQuantityProcessor
@@ -60,6 +60,9 @@ class LocaleQuantityProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->processor->process($qty));
     }
 
+    /**
+     * @return array
+     */
     public function processDataProvider()
     {
         return [

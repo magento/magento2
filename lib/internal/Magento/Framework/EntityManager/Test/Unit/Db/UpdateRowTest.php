@@ -15,7 +15,7 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 /**
  * Class UpdateRowTest
  */
-class UpdateRowTest extends \PHPUnit_Framework_TestCase
+class UpdateRowTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UpdateRow

@@ -80,7 +80,10 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
         } catch (\Exception $e) {
             $this->getRequestThrottler()->logAuthenticationFailure($username, RequestThrottler::USER_TYPE_CUSTOMER);
             throw new AuthenticationException(
-                __('You did not sign in correctly or your account is temporarily disabled.')
+                __(
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
+                )
             );
         }
         $this->getRequestThrottler()->resetAuthenticationFailuresCount($username, RequestThrottler::USER_TYPE_CUSTOMER);
@@ -88,7 +91,13 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
     }
 
     /**
-     * {@inheritdoc}
+     * Revoke token by customer id.
+     *
+     * The function will delete the token from the oauth_token table.
+     *
+     * @param int $customerId
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function revokeCustomerAccessToken($customerId)
     {
@@ -98,10 +107,10 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
         }
         try {
             foreach ($tokenCollection as $token) {
-                $token->setRevoked(1)->save();
+                $token->delete();
             }
         } catch (\Exception $e) {
-            throw new LocalizedException(__('The tokens could not be revoked.'));
+            throw new LocalizedException(__("The tokens couldn't be revoked."));
         }
         return true;
     }
@@ -110,7 +119,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * Get request throttler instance
      *
      * @return RequestThrottler
-     * @deprecated
+     * @deprecated 100.0.4
      */
     private function getRequestThrottler()
     {

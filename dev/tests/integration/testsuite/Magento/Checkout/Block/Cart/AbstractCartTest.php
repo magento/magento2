@@ -14,7 +14,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class AbstractCartTest extends \PHPUnit_Framework_TestCase
+class AbstractCartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests that product in shopping cart remains visible even after it becomes out of stock.

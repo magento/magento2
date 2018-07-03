@@ -11,8 +11,11 @@
         <referenceContainer name="content">
             <block class="Magento\Shipping\Block\Adminhtml\View" name="sales_shipment_view">
                 <block class="Magento\Shipping\Block\Adminhtml\View\Form" name="form" template="Magento_Shipping::view/form.phtml">
-                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="Magento_Sales::order/view/info.phtml"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="Magento_Sales::order/view/info.phtml">
+                        <container name="extra_customer_info"/>
+                    </block>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Payment" name="order_payment"/>
+                    <container name="extra_shipment_info"/>
                     <block class="Magento\Shipping\Block\Adminhtml\View\Items" name="shipment_items" template="Magento_Shipping::view/items.phtml">
                         <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" name="default" as="default" template="Magento_Shipping::view/items/renderer/default.phtml"/>
                         <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="Magento_Sales::items/column/qty.phtml" group="column"/>

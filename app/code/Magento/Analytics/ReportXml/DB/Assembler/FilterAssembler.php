@@ -11,8 +11,6 @@ use Magento\Analytics\ReportXml\DB\SelectBuilder;
 use Magento\Analytics\ReportXml\DB\ConditionResolver;
 
 /**
- * Class FilterAssembler
- *
  * Assembles WHERE conditions
  */
 class FilterAssembler implements AssemblerInterface

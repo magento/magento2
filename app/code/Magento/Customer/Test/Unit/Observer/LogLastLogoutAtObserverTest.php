@@ -13,7 +13,7 @@ use Magento\Customer\Observer\LogLastLogoutAtObserver;
 /**
  * Class LogLastLogoutAtObserverTest
  */
-class LogLastLogoutAtObserverTest extends \PHPUnit_Framework_TestCase
+class LogLastLogoutAtObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LogLastLogoutAtObserver
@@ -30,7 +30,7 @@ class LogLastLogoutAtObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->loggerMock = $this->getMock(\Magento\Customer\Model\Logger::class, [], [], '', false);
+        $this->loggerMock = $this->createMock(\Magento\Customer\Model\Logger::class);
         $this->logLastLogoutAtObserver = new LogLastLogoutAtObserver($this->loggerMock);
     }
 
@@ -41,9 +41,9 @@ class LogLastLogoutAtObserverTest extends \PHPUnit_Framework_TestCase
     {
         $id = 1;
 
-        $observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
-        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getCustomer'], [], '', false);
-        $customerMock = $this->getMock(\Magento\Customer\Model\Customer::class, [], [], '', false);
+        $observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getCustomer']);
+        $customerMock = $this->createMock(\Magento\Customer\Model\Customer::class);
 
         $observerMock->expects($this->once())
             ->method('getEvent')

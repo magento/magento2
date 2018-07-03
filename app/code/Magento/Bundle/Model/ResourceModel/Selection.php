@@ -15,11 +15,13 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
  * Bundle Selection Resource Model
  *
  * @api
+ * @since 100.0.2
  */
 class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -185,6 +187,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 100.2.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

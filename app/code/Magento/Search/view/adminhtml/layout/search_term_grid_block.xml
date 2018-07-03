@@ -39,13 +39,13 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="search_query">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.search.grid.columnSet.search_query" as="search_query">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Search Query</argument>
                             <argument name="index" xsi:type="string">query_text</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="adminhtml.catalog.search.grid.columnSet.store_id" as="store_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Store</argument>
                             <argument name="type" xsi:type="string">store</argument>
@@ -55,27 +55,27 @@
                             <argument name="sortable" xsi:type="string">0</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="num_results">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.search.grid.columnSet.num_results" as="num_results">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Results</argument>
                             <argument name="index" xsi:type="string">num_results</argument>
                             <argument name="type" xsi:type="string">number</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="popularity">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.search.grid.columnSet.popularity" as="popularity">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Uses</argument>
                             <argument name="index" xsi:type="string">popularity</argument>
                             <argument name="type" xsi:type="string">number</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="redirect">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.search.grid.columnSet.redirect" as="redirect">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Redirect URL</argument>
                             <argument name="index" xsi:type="string">redirect</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="display_in_terms">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.search.grid.columnSet.display_in_terms" as="display_in_terms">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Suggested Terms</argument>
                             <argument name="sortable" xsi:type="string">1</argument>
@@ -93,7 +93,7 @@
                             </argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="action">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.search.grid.columnSet.action" as="action">
                         <arguments>
                             <argument name="type" xsi:type="string">action</argument>
                             <argument name="header" xsi:type="string" translate="true">Action</argument>

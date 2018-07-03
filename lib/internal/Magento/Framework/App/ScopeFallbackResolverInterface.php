@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * Interface \Magento\Framework\App\ScopeFallbackResolverInterface
+ *
+ */
 interface ScopeFallbackResolverInterface
 {
     /**

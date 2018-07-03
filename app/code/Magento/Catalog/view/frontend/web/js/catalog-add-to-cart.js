@@ -38,6 +38,11 @@ define([
         _bindSubmit: function () {
             var self = this;
 
+            if (this.element.data('catalog-addtocart-initialized')) {
+                return;
+            }
+
+            this.element.data('catalog-addtocart-initialized', 1);
             this.element.on('submit', function (e) {
                 e.preventDefault();
                 self.submitForm($(this));
@@ -96,6 +101,12 @@ define([
                 /** @inheritdoc */
                 success: function (res) {
                     var eventData, parameters;
+
+                    $(document).trigger('ajax:addToCart', {
+                        'sku': form.data().productSku,
+                        'form': form,
+                        'response': res
+                    });
 
                     if (self.isLoaderEnabled()) {
                         $('body').trigger(self.options.processStop);

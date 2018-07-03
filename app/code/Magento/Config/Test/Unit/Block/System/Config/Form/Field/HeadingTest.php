@@ -9,7 +9,7 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
-class HeadingTest extends \PHPUnit_Framework_TestCase
+class HeadingTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {

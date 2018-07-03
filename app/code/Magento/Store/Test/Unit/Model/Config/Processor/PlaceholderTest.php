@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Model\Config\Processor;
 /**
  * Class PlaceholderTest
  */
-class PlaceholderTest extends \PHPUnit_Framework_TestCase
+class PlaceholderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Config\Processor\Placeholder
@@ -22,13 +22,7 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configPlaceholderMock = $this->getMock(
-            \Magento\Store\Model\Config\Placeholder::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->configPlaceholderMock = $this->createMock(\Magento\Store\Model\Config\Placeholder::class);
 
         $this->configPlaceholderMock->expects(
             $this->any()

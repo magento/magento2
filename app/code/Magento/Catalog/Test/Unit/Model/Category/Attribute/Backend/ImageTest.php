@@ -5,7 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
-class ImageTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\Filesystem\DirectoryList;
+
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
@@ -26,6 +28,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filesystem;
 
     protected function setUp()
     {
@@ -55,13 +62,13 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ['critical']
         );
 
-        $this->imageUploader = $this->getMock(
+        $this->imageUploader = $this->createPartialMock(
             \Magento\Catalog\Model\ImageUploader::class,
-            ['moveFileFromTmp'],
-            [],
-            '',
-            false
+            ['moveFileFromTmp']
         );
+
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -147,6 +154,38 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test123.jpg', $object->getTestAttribute());
     }
 
+    public function testBeforeSaveAttributeFileNameOutsideOfCategoryDir()
+    {
+        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class, [
+            'filesystem' => $this->filesystem
+        ]);
+
+        $model->setAttribute($this->attribute);
+
+        $this->filesystem
+            ->expects($this->once())
+            ->method('getUri')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn('pub/media');
+
+        $object = new \Magento\Framework\DataObject([
+            'test_attribute' => [
+                [
+                    'name' => '/test123.jpg',
+                    'url' => '/pub/media/wysiwyg/test123.jpg',
+                ]
+            ]
+        ]);
+
+        $model->beforeSave($object);
+
+        $this->assertEquals('/pub/media/wysiwyg/test123.jpg', $object->getTestAttribute());
+        $this->assertEquals(
+            [['name' => '/pub/media/wysiwyg/test123.jpg', 'url' => '/pub/media/wysiwyg/test123.jpg']],
+            $object->getData('_additional_data_test_attribute')
+        );
+    }
+
     public function testBeforeSaveTemporaryAttribute()
     {
         $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
@@ -185,13 +224,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     private function setUpModelForAfterSave()
     {
-        $objectManagerMock = $this->getMock(
-            \Magento\Framework\App\ObjectManager::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $objectManagerMock = $this->createPartialMock(\Magento\Framework\App\ObjectManager::class, ['get']);
 
         $imageUploaderMock = $this->imageUploader;
 
@@ -214,6 +247,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         return $model->setAttribute($this->attribute);
     }
 
+    /**
+     * @return array
+     */
     public function attributeValueDataProvider()
     {
         return [

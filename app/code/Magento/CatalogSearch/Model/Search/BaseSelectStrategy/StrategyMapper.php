@@ -45,8 +45,7 @@ class StrategyMapper
      */
     public function mapSelectContainerToStrategy(SelectContainer $selectContainer)
     {
-        if (
-            $selectContainer->isFullTextSearchRequired()
+        if ($selectContainer->isFullTextSearchRequired()
             && !$selectContainer->hasCustomAttributesFilters()
             && !$selectContainer->hasVisibilityFilter()
         ) {

@@ -18,7 +18,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see Importer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImporterTest extends \PHPUnit_Framework_TestCase
+class ImporterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Importer
@@ -122,9 +122,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->with($data);
         $this->resourceMock->expects($this->once())
             ->method('commit');
-        $this->storeManagerMock->expects($this->once())
+        $this->storeManagerMock->expects($this->exactly(2))
             ->method('reinitStores');
-        $this->cacheManagerMock->expects($this->once())
+        $this->cacheManagerMock->expects($this->exactly(2))
             ->method('clean');
         $this->dataDifferenceCalculatorMock->expects($this->once())
             ->method('getItemsToCreate')
@@ -161,9 +161,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Exception('Some error'));
         $this->resourceMock->expects($this->never())
             ->method('commit');
-        $this->storeManagerMock->expects($this->once())
+        $this->storeManagerMock->expects($this->exactly(2))
             ->method('reinitStores');
-        $this->cacheManagerMock->expects($this->once())
+        $this->cacheManagerMock->expects($this->exactly(2))
             ->method('clean');
 
         $this->model->import([]);

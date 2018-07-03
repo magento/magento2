@@ -5,18 +5,17 @@
  */
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use \Magento\Catalog\Pricing\Price\CustomOptionPrice;
-use Magento\Catalog\Model\Product\Option;
-
-use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Catalog\Model\Product\Option\Value;
+
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
  * Class OptionPriceTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
+class CustomOptionPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Pricing\Price\CustomOptionPrice
@@ -53,43 +52,22 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->product = $this->getMock(
+        $this->product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getOptionById', '__wakeup', 'getPriceInfo', 'getOptions'],
-            [],
-            '',
-            false
+            ['getOptionById', '__wakeup', 'getPriceInfo', 'getOptions']
         );
 
-        $this->priceInfo = $this->getMock(
-            \Magento\Framework\Pricing\PriceInfo\Base::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
 
         $this->product->expects($this->any())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
 
-        $this->calculator = $this->getMock(
-            \Magento\Framework\Pricing\Adjustment\Calculator::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->calculator = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
 
-        $this->amount = $this->getMock(
-            \Magento\Framework\Pricing\Amount\Base::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->amount = $this->createMock(\Magento\Framework\Pricing\Amount\Base::class);
 
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->object = new CustomOptionPrice(
             $this->product,
@@ -99,6 +77,10 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param array $optionsData
+     * @return array
+     */
     protected function setupOptions(array $optionsData)
     {
         $options = [];
@@ -127,6 +109,10 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
         return $options;
     }
 
+    /**
+     * @param $optionsData
+     * @return array
+     */
     protected function setupSingleValueOptions($optionsData)
     {
         $options = [];
@@ -301,7 +287,7 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
     {
         $optionValueMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceType', 'getPrice', 'getId', '__wakeup'])
+            ->setMethods(['getPriceType', 'getPrice', 'getId', '__wakeup', 'getOption', 'getData'])
             ->getMock();
         $optionValueMock->expects($this->any())
             ->method('getPriceType')
@@ -310,6 +296,29 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPrice')
             ->with($this->equalTo(true))
             ->will($this->returnValue($price));
+
+        $optionValueMock->expects($this->any())
+            ->method('getData')
+            ->with(\Magento\Catalog\Model\Product\Option\Value::KEY_PRICE)
+            ->willReturn($price);
+
+        $optionMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProduct'])
+            ->getMock();
+
+        $optionValueMock->expects($this->any())->method('getOption')->willReturn($optionMock);
+
+        $optionMock->expects($this->any())->method('getProduct')->willReturn($this->product);
+
+        $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getValue'])
+            ->getMockForAbstractClass();
+        $priceMock->method('getValue')->willReturn($price);
+
+        $this->priceInfo->method('getPrice')->willReturn($priceMock);
+
         return $optionValueMock;
     }
 

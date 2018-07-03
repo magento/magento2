@@ -58,7 +58,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $mainTable
+     * @param string $mainTable
      * @param null|string $resourceModel
      * @param null|string $identifierName
      * @param null|string $connectionName
@@ -95,7 +95,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @return ResourceConnection
      */
     private function getResourceConnection()

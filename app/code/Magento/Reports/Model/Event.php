@@ -8,8 +8,6 @@ namespace Magento\Reports\Model;
 /**
  * Events model
  *
- * @method \Magento\Reports\Model\ResourceModel\Event _getResource()
- * @method \Magento\Reports\Model\ResourceModel\Event getResource()
  * @method string getLoggedAt()
  * @method \Magento\Reports\Model\Event setLoggedAt(string $value)
  * @method int getEventTypeId()
@@ -25,6 +23,7 @@ namespace Magento\Reports\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 100.0.2
  */
 class Event extends \Magento\Framework\Model\AbstractModel
 {

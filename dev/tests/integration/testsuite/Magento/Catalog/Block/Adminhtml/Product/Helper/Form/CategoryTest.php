@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea adminhtml

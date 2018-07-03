@@ -22,7 +22,7 @@ class AssertStoreGroupNoDeleteButton extends AbstractConstraint
      */
     public function processAssert(NewGroupIndex $newGroupIndex)
     {
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $newGroupIndex->getFormPageActions()->checkDeleteButton(),
             '\'Delete\' button on StoreGroup view edit page is present when it should not.'
         );

@@ -16,6 +16,7 @@ use Magento\Ui\Component\Container;
  * Class Attributes
  *
  * @api
+ * @since 101.0.0
  */
 class Attributes extends AbstractModifier
 {
@@ -25,21 +26,25 @@ class Attributes extends AbstractModifier
 
     /**
      * @var UrlInterface
+     * @since 101.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var Registry
+     * @since 101.0.0
      */
     protected $registry;
 
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var AuthorizationInterface
+     * @since 101.0.0
      */
     protected $authorization;
 
@@ -63,6 +68,7 @@ class Attributes extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -84,6 +90,7 @@ class Attributes extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -174,6 +181,11 @@ class Attributes extends AbstractModifier
                                             'targetName' => 'product_form.product_form.add_attribute_modal'
                                                 . '.create_new_attribute_modal',
                                             'actionName' => 'toggleModal',
+                                        ],
+                                        [
+                                            'targetName' => 'product_form.product_form.add_attribute_modal'
+                                                . '.create_new_attribute_modal.product_attribute_add_form',
+                                            'actionName' => 'destroyInserted'
                                         ],
                                         [
                                             'targetName'

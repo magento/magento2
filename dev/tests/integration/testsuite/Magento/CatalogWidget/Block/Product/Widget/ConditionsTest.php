@@ -9,7 +9,7 @@ namespace Magento\CatalogWidget\Block\Product\Widget;
 /**
  * Class ConditionsTest
  */
-class ConditionsTest extends \PHPUnit_Framework_TestCase
+class ConditionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogWidget\Block\Product\Widget\Conditions

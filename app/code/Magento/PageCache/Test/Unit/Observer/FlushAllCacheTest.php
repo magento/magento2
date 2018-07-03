@@ -5,11 +5,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\PageCache\Test\Unit\Observer;
 
-class FlushAllCacheTest extends \PHPUnit_Framework_TestCase
+class FlushAllCacheTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\PageCache\Observer\FlushAllCache */
     private $_model;
@@ -31,16 +29,10 @@ class FlushAllCacheTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_configMock = $this->getMock(
-            \Magento\PageCache\Model\Config::class,
-            ['getType', 'isEnabled'],
-            [],
-            '',
-            false
-        );
-        $this->_cacheMock = $this->getMock(\Magento\Framework\App\PageCache\Cache::class, ['clean'], [], '', false);
-        $this->fullPageCacheMock = $this->getMock(\Magento\PageCache\Model\Cache\Type::class, ['clean'], [], '', false);
-        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class);
+        $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
+        $this->_cacheMock = $this->createPartialMock(\Magento\Framework\App\PageCache\Cache::class, ['clean']);
+        $this->fullPageCacheMock = $this->createPartialMock(\Magento\PageCache\Model\Cache\Type::class, ['clean']);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
 
         $this->_model = new \Magento\PageCache\Observer\FlushAllCache(
             $this->_configMock,
@@ -61,10 +53,10 @@ class FlushAllCacheTest extends \PHPUnit_Framework_TestCase
         $this->_configMock->expects(
             $this->once()
         )->method(
-                'getType'
-            )->will(
-                $this->returnValue(\Magento\PageCache\Model\Config::BUILT_IN)
-            );
+            'getType'
+        )->will(
+            $this->returnValue(\Magento\PageCache\Model\Config::BUILT_IN)
+        );
 
         $this->fullPageCacheMock->expects($this->once())->method('clean');
         $this->_model->execute($this->observerMock);

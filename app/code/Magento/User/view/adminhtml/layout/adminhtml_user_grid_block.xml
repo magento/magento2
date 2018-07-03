@@ -28,7 +28,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="user_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.user.grid.columnSet.user_id" as="user_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID</argument>
                             <argument name="sortable" xsi:type="string">true</argument>
@@ -37,7 +37,7 @@
                             <argument name="header_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="username">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.user.grid.columnSet.username" as="username">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">User Name</argument>
                             <argument name="type" xsi:type="string">text</argument>
@@ -47,7 +47,7 @@
                             <argument name="header_css_class" xsi:type="string">col-name</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="firstname">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.user.grid.columnSet.firstname" as="firstname">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">First Name</argument>
                             <argument name="type" xsi:type="string">text</argument>
@@ -57,7 +57,7 @@
                             <argument name="header_css_class" xsi:type="string">col-name</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="lastname">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.user.grid.columnSet.lastname" as="lastname">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Last Name</argument>
                             <argument name="type" xsi:type="string">text</argument>
@@ -67,14 +67,21 @@
                             <argument name="header_css_class" xsi:type="string">col-name</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="email">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.user.grid.columnSet.email" as="email">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Email</argument>
                             <argument name="type" xsi:type="string">text</argument>
                             <argument name="index" xsi:type="string">email</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="is_active">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.user.grid.columnSet.role_name" as="role_name">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Role</argument>
+                            <argument name="index" xsi:type="string">role_name</argument>
+                            <argument name="filter_index" xsi:type="string">detail_role.role_name</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.user.grid.columnSet.is_active" as="is_active">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Status</argument>
                             <argument name="type" xsi:type="string">options</argument>

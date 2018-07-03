@@ -19,12 +19,12 @@
             <?php if (!$block->getPrintStatus()): ?>
                 <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                 <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                    <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
+                    <?= $block->escapeHtml($_formatedOptionValue['value']) ?>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
                     <div class="tooltip content">
                         <dl class="item options">
                             <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                            <dd><?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?></dd>
+                            <dd><?= $block->escapeHtml($_formatedOptionValue['full_view']) ?></dd>
                         </dl>
                     </div>
                     <?php endif; ?>

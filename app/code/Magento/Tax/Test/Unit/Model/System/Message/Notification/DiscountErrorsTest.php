@@ -16,7 +16,7 @@ use Magento\Store\Api\Data\WebsiteInterface;
 /**
  * Test class for @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors
  */
-class DiscountErrorsTest extends \PHPUnit_Framework_TestCase
+class DiscountErrorsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DiscountErrorsNotification
@@ -42,7 +42,7 @@ class DiscountErrorsTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $websiteMock = $this->getMock(WebsiteInterface::class, [], [], '', false);
+        $websiteMock = $this->createMock(WebsiteInterface::class);
         $websiteMock->expects($this->any())->method('getName')->willReturn('testWebsiteName');
         $storeMock = $this->getMockForAbstractClass(
             StoreInterface::class,
@@ -55,11 +55,11 @@ class DiscountErrorsTest extends \PHPUnit_Framework_TestCase
         );
         $storeMock->expects($this->any())->method('getName')->willReturn('testStoreName');
         $storeMock->expects($this->any())->method('getWebsite')->willReturn($websiteMock);
-        $this->storeManagerMock = $this->getMock(StoreManagerInterface::class, [], [], '', false);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStores')->willReturn([$storeMock]);
 
-        $this->urlBuilderMock = $this->getMock(UrlInterface::class, [], [], '', false);
-        $this->taxConfigMock = $this->getMock(TaxConfig::class, [], [], '', false);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->taxConfigMock = $this->createMock(TaxConfig::class);
         $this->discountErrorsNotification = (new ObjectManager($this))->getObject(
             DiscountErrorsNotification::class,
             [

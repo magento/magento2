@@ -9,7 +9,7 @@ namespace Magento\Setup\Test\Unit\Model;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Setup\Model\AdminAccount;
 
-class AdminAccountTest extends \PHPUnit_Framework_TestCase
+class AdminAccountTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Mysql
@@ -365,7 +365,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Password is a required field
+     * @expectedExceptionMessage "Password" is required. Enter and try again.
      */
     public function testSaveExceptionPasswordEmpty()
     {

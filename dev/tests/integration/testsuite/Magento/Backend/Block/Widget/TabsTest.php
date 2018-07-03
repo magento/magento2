@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Widget;
 /**
  * @magentoAppArea adminhtml
  */
-class TabsTest extends \PHPUnit_Framework_TestCase
+class TabsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

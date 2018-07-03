@@ -224,7 +224,7 @@ class FormPost extends \Magento\Customer\Controller\Address
      *
      * @return Mapper
      *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getCustomerAddressMapper()
     {

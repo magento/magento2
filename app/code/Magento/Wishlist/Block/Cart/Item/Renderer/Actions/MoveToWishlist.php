@@ -11,6 +11,7 @@ use Magento\Wishlist\Helper\Data;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class MoveToWishlist extends Generic
 {

@@ -26,8 +26,12 @@ class WebApiApplication extends Application
     /**
      * {@inheritdoc}
      */
-    public function install()
+    public function install($cleanup)
     {
+        if ($cleanup) {
+            $this->cleanup();
+        }
+
         $installOptions = $this->getInstallConfig();
 
         /* Install application */

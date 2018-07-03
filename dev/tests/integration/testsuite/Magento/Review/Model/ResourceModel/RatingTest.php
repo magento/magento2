@@ -8,7 +8,7 @@ namespace Magento\Review\Model\ResourceModel;
 /**
  * Class RatingTest
  */
-class RatingTest extends \PHPUnit_Framework_TestCase
+class RatingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var int
@@ -77,7 +77,8 @@ class RatingTest extends \PHPUnit_Framework_TestCase
      */
     public function testRatingSaveWithError()
     {
-        $this->setExpectedException('Exception', 'Rolled back transaction has not been completed correctly');
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Rolled back transaction has not been completed correctly');
         $rating = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Review\Model\Rating::class
         );

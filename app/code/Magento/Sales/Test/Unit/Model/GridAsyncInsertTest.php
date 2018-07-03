@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Model;
 /**
  * Class GridAsyncInsertTest
  */
-class GridAsyncInsertTest extends \PHPUnit_Framework_TestCase
+class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\GridAsyncInsert

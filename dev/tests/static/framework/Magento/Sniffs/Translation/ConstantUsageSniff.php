@@ -5,10 +5,13 @@
  */
 namespace Magento\Sniffs\Translation;
 
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
+
 /**
  * Make sure that constants are not used as the first argument of translation function.
  */
-class ConstantUsageSniff implements \PHP_CodeSniffer_Sniff
+class ConstantUsageSniff implements Sniff
 {
     /**
      * Having previous line content allows to process multi-line declaration.
@@ -30,7 +33,7 @@ class ConstantUsageSniff implements \PHP_CodeSniffer_Sniff
      *
      * {@inheritDoc}
      */
-    public function process(\PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
@@ -60,13 +63,13 @@ class ConstantUsageSniff implements \PHP_CodeSniffer_Sniff
     /**
      * Checks if first argument of \Magento\Framework\Phrase or translation function is a constant
      *
-     * @param \PHP_CodeSniffer_File $phpcsFile
+     * @param File $phpcsFile
      * @param int $stackPtr
      * @param string $lineContent
      * @return void
      */
     private function checkIfFirstArgumentConstant(
-        \PHP_CodeSniffer_File $phpcsFile,
+        File $phpcsFile,
         $stackPtr,
         $lineContent
     ) {

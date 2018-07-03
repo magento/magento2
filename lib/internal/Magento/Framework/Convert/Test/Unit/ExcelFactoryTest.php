@@ -8,7 +8,7 @@ namespace Magento\Framework\Convert\Test\Unit;
 use Magento\Framework\Convert\ExcelFactory;
 use Magento\Framework\ObjectManagerInterface;
 
-class ExcelFactoryTest extends \PHPUnit_Framework_TestCase
+class ExcelFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ExcelFactory

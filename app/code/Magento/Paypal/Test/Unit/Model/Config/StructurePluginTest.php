@@ -12,7 +12,7 @@ use Magento\Paypal\Helper\Backend as BackendHelper;
 use Magento\Config\Model\Config\Structure as ConfigStructure;
 use Magento\Config\Model\Config\Structure\ElementInterface as ElementConfigStructure;
 
-class StructurePluginTest extends \PHPUnit_Framework_TestCase
+class StructurePluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigStructurePlugin

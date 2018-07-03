@@ -7,8 +7,9 @@ define([
     'jquery',
     'mage/storage',
     'Magento_Ui/js/model/messageList',
-    'Magento_Customer/js/customer-data'
-], function ($, storage, globalMessageList, customerData) {
+    'Magento_Customer/js/customer-data',
+    'mage/translate'
+], function ($, storage, globalMessageList, customerData, $t) {
     'use strict';
 
     var callbacks = [],
@@ -38,17 +39,17 @@ define([
                     });
                     customerData.invalidate(['customer']);
 
-                    if (redirectUrl) {
-                        window.location.href = redirectUrl;
-                    } else if (response.redirectUrl) {
+                    if (response.redirectUrl) {
                         window.location.href = response.redirectUrl;
+                    } else if (redirectUrl) {
+                        window.location.href = redirectUrl;
                     } else {
                         location.reload();
                     }
                 }
             }).fail(function () {
                 messageContainer.addErrorMessage({
-                    'message': 'Could not authenticate. Please try again later'
+                    'message': $t('Could not authenticate. Please try again later')
                 });
                 callbacks.forEach(function (callback) {
                     callback(loginData);

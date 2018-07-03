@@ -6,8 +6,6 @@
 namespace Magento\Authorizenet\Model;
 
 /**
- * @method \Magento\Authorizenet\Model\ResourceModel\Debug _getResource()
- * @method \Magento\Authorizenet\Model\ResourceModel\Debug getResource()
  * @method string getRequestBody()
  * @method \Magento\Authorizenet\Model\Debug setRequestBody(string $value)
  * @method string getResponseBody()

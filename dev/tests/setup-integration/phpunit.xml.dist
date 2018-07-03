@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
+         colors="true"
+         columns="max"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         bootstrap="./framework/bootstrap.php"
+         stderr="true"
+>
+    <!-- Test suites definition -->
+    <testsuites>
+        <testsuite name="Magento Setup/Upgrade Tests">
+            <directory suffix="Test.php">testsuite</directory>
+        </testsuite>
+    </testsuites>
+    <!-- Code coverage filters -->
+    <filter>
+        <whitelist addUncoveredFilesFromWhiteList="true">
+            <directory suffix=".php">../../../app/code/Magento</directory>
+            <directory suffix=".php">../../../lib/internal/Magento</directory>
+        </whitelist>
+    </filter>
+    <!-- PHP INI settings and constants definition -->
+    <php>
+        <includePath>.</includePath>
+        <includePath>testsuite</includePath>
+        <ini name="date.timezone" value="America/Los_Angeles"/>
+        <ini name="xdebug.max_nesting_level" value="200"/>
+        <const name="TESTS_INSTALL_CONFIG_FILE" value="{{local_config_file}}"/>
+        <const name="TESTS_GLOBAL_CONFIG_FILE" value="etc/config-global.php"/>
+        <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
+        <const name="TESTS_CLEANUP" value="{{tests_cleanup}}"/>
+        <const name="TESTS_MAGENTO_MODE" value="{{app_mode}}"/>
+        <const name="TESTS_ERROR_LOG_LISTENER_LEVEL" value="1"/>
+    </php>
+    <!-- Test listeners -->
+    <listeners>
+        <listener class="Magento\TestFramework\Event\PhpUnit"/>
+        <listener class="Magento\TestFramework\ErrorLog\Listener"/>
+    </listeners>
+</phpunit>

@@ -17,7 +17,7 @@ use Magento\Payment\Test\Unit\Model\Method\AbstractMethod\Stub;
  * Test for class \Magento\Payment\Model\Method\AbstractMethod
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractMethodTest extends \PHPUnit_Framework_TestCase
+class AbstractMethodTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Payment\Model\Method\AbstractMethod
@@ -121,7 +121,7 @@ class AbstractMethodTest extends \PHPUnit_Framework_TestCase
     public function testAssignData()
     {
         $data = new DataObject();
-        $paymentInfo = $this->getMock(InfoInterface::class);
+        $paymentInfo = $this->createMock(InfoInterface::class);
 
         $this->payment->setInfoInstance($paymentInfo);
 

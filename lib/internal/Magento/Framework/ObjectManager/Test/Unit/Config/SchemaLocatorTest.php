@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
-class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
+class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection\Config\SchemaLocator
@@ -21,7 +21,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->urnResolverMock = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
+        $this->urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
         $this->model = new \Magento\Framework\ObjectManager\Config\SchemaLocator($this->urnResolverMock);
         $property = new \ReflectionProperty($this->model, 'urnResolver');
         $property->setAccessible(true);

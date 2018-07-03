@@ -12,7 +12,7 @@ use Magento\Paypal\Helper\Backend;
 use Magento\Paypal\Model\Config\Rules\Converter;
 use Magento\Paypal\Model\Config\Rules\Reader;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  Reader */
     protected $reader;
@@ -42,26 +42,14 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->fileResolver = $this->getMockForAbstractClass(
             \Magento\Framework\Config\FileResolverInterface::class
         );
-        $this->converter = $this->getMock(
-            \Magento\Paypal\Model\Config\Rules\Converter::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->converter = $this->createMock(\Magento\Paypal\Model\Config\Rules\Converter::class);
         $this->schemaLocator = $this->getMockForAbstractClass(
             \Magento\Framework\Config\SchemaLocatorInterface::class
         );
         $this->validationState = $this->getMockForAbstractClass(
             \Magento\Framework\Config\ValidationStateInterface::class
         );
-        $this->helper = $this->getMock(
-            \Magento\Paypal\Helper\Backend::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->helper = $this->createMock(\Magento\Paypal\Helper\Backend::class);
     }
 
     /**

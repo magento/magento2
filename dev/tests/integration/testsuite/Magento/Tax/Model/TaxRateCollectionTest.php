@@ -8,7 +8,7 @@ namespace Magento\Tax\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class TaxRateCollectionTest extends \PHPUnit_Framework_TestCase
+class TaxRateCollectionTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateTaxRateCollectionItem()
     {

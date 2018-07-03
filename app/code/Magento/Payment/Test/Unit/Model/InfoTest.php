@@ -9,7 +9,7 @@ namespace Magento\Payment\Test\Unit\Model;
 use Magento\Payment\Model\Method;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Payment\Model\InfoInterface */
     protected $info;
@@ -34,22 +34,10 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class);
-        $this->paymentHelperMock = $this->getMock(
-            \Magento\Payment\Helper\Data::class,
-            ['getMethodInstance'],
-            [],
-            '',
-            false
-        );
-        $this->encryptorInterfaceMock = $this->getMock(
-            \Magento\Framework\Encryption\EncryptorInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->paymentHelperMock = $this->createPartialMock(\Magento\Payment\Helper\Data::class, ['getMethodInstance']);
+        $this->encryptorInterfaceMock = $this->createMock(\Magento\Framework\Encryption\EncryptorInterface::class);
         $this->methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
 

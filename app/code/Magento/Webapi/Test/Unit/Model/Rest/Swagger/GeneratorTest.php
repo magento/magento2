@@ -10,7 +10,7 @@ namespace Magento\Webapi\Test\Unit\Model\Rest\Swagger;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     const OPERATION_NAME = 'operationName';
 
@@ -74,12 +74,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::OPERATION_NAME));
 
         $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
-            \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+            \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::class
+        )->disableOriginalConstructor()->setMethods(['getDataTypes'])
+            ->getMockForAbstractClass();
         $this->customAttributeTypeLocatorMock->expects($this->any())
-            ->method('getAllServiceDataInterfaces')
-            ->willReturn(['$customAttributeClass']);
+            ->method('getDataTypes')
+            ->willReturn(['customAttributeClass']);
 
         $storeMock = $this->getMockBuilder(
             \Magento\Store\Model\Store::class
@@ -113,7 +113,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'cache' => $this->cacheMock,
                 'typeProcessor' => $this->typeProcessorMock,
                 'serviceMetadata' => $this->serviceMetadataMock,
-                'customAttributeTypeLocator' => $this->customAttributeTypeLocatorMock,
+                'serviceTypeList' => $this->customAttributeTypeLocatorMock,
                 'authorization' => $authorizationMock,
                 'serializer' => $this->serializer
             ]
@@ -280,7 +280,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $typeName
      * @param array $result
-     * @dataProvider testGetObjectSchemaDataProvider
+     * @dataProvider getObjectSchemaDataProvider
      */
     public function testGetObjectSchema($typeName, $description, $result)
     {
@@ -295,7 +295,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(json_encode($result), json_encode($actual));
     }
 
-    public function testGetObjectSchemaDataProvider()
+    /**
+     * @return array
+     */
+    public function getObjectSchemaDataProvider()
     {
         return [
             [
@@ -332,7 +335,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $typeData
      * @param array $expected
-     * @dataProvider testGenerateDefinitionDataProvider
+     * @dataProvider generateDefinitionDataProvider
      */
     public function testGenerateDefinition($typeData, $expected)
     {
@@ -354,7 +357,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(json_encode($expected), json_encode($actual));
     }
 
-    public function testGenerateDefinitionDataProvider()
+    /**
+     * @return array
+     */
+    public function generateDefinitionDataProvider()
     {
         return [
             [

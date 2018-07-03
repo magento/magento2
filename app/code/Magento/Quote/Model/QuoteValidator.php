@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as 
 
 /**
  * @api
+ * @since 100.0.2
  */
 class QuoteValidator
 {
@@ -89,14 +90,16 @@ class QuoteValidator
                 $this->allowedCountryReader->getAllowedCountries()
             )) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Some addresses cannot be used due to country-specific configurations.')
+                    __("Some addresses can't be used due to the configurations for specific countries.")
                 );
             }
 
             $method = $quote->getShippingAddress()->getShippingMethod();
             $rate = $quote->getShippingAddress()->getShippingRateByCode($method);
             if (!$method || !$rate) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a shipping method.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The shipping method is missing. Select the shipping method and try again.')
+                );
             }
         }
         if ($quote->getBillingAddress()->validate() !== true) {
@@ -108,7 +111,9 @@ class QuoteValidator
             );
         }
         if (!$quote->getPayment()->getMethod()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please select a valid payment method.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Enter a valid payment method and try again. ')
+            );
         }
         if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
             throw new LocalizedException($this->minimumAmountMessage->getMessage());

@@ -19,12 +19,12 @@ class Api
     /**
      * Call API method via API handler.
      *
-     * @param \PHPUnit_Framework_TestCase $testCase Active test case
+     * @param \PHPUnit\Framework\TestCase $testCase Active test case
      * @param string $path
      * @param array $params Order of items matters as they are passed to call_user_func_array
      * @return mixed
      */
-    public static function call(\PHPUnit_Framework_TestCase $testCase, $path, $params = [])
+    public static function call(\PHPUnit\Framework\TestCase $testCase, $path, $params = [])
     {
         $soapAdapterMock = $testCase->getMock(\stdClass::class, ['fault']);
         $soapAdapterMock->expects(
@@ -38,23 +38,11 @@ class Api
         $serverMock = $testCase->getMock(\stdClass::class, ['getAdapter']);
         $serverMock->expects($testCase->any())->method('getAdapter')->will($testCase->returnValue($soapAdapterMock));
 
-        $apiSessionMock = $testCase->getMock(
-            \stdClass::class,
-            ['isAllowed', 'isLoggedIn'],
-            [],
-            '',
-            false
-        );
+        $apiSessionMock = $testCase->createPartialMock(\stdClass::class, ['isAllowed', 'isLoggedIn']);
         $apiSessionMock->expects($testCase->any())->method('isAllowed')->will($testCase->returnValue(true));
         $apiSessionMock->expects($testCase->any())->method('isLoggedIn')->will($testCase->returnValue(true));
 
-        $handlerMock = $testCase->getMock(
-            \stdClass::class,
-            ['_getServer', '_getSession'],
-            [],
-            '',
-            false
-        );
+        $handlerMock = $testCase->createPartialMock(\stdClass::class, ['_getServer', '_getSession']);
         self::$_previousHandler = set_error_handler([$handlerMock, 'handlePhpError']);
 
         $handlerMock->expects($testCase->any())->method('_getServer')->will($testCase->returnValue($serverMock));
@@ -77,14 +65,14 @@ class Api
     /**
      * Call API method via API handler that raises SoapFault exception
      *
-     * @param \PHPUnit_Framework_TestCase $testCase Active test case
+     * @param \PHPUnit\Framework\TestCase $testCase Active test case
      * @param string $path
      * @param array $params Order of items matters as they are passed to call_user_func_array
      * @param string $expectedMessage exception message
      * @return \SoapFault
      */
     public static function callWithException(
-        \PHPUnit_Framework_TestCase $testCase,
+        \PHPUnit\Framework\TestCase $testCase,
         $path,
         $params = [],
         $expectedMessage = ''
@@ -182,7 +170,7 @@ class Api
     /**
      * Check specific fields value in some entity data.
      *
-     * @param \PHPUnit_Framework_TestCase $testCase
+     * @param \PHPUnit\Framework\TestCase $testCase
      * @param array $expectedData
      * @param array $actualData
      * @param array $fieldsToCompare To be able to compare fields from loaded model with fields from API response
@@ -200,7 +188,7 @@ class Api
      *     );
      */
     public static function checkEntityFields(
-        \PHPUnit_Framework_TestCase $testCase,
+        \PHPUnit\Framework\TestCase $testCase,
         array $expectedData,
         array $actualData,
         array $fieldsToCompare = []

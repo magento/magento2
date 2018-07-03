@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -30,6 +30,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @deprecated since 2.3.0 in favor of stateful global objects elimination.
      */
     private $registry;
 
@@ -298,6 +299,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTemplateStyles, $model->getTemplateStyles());
     }
 
+    /**
+     * @return array
+     */
     public function loadDefaultDataProvider()
     {
         return [
@@ -453,6 +457,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $model->isValidForSend());
     }
 
+    /**
+     * @return array
+     */
     public function isValidForSendDataProvider()
     {
         return [
@@ -548,6 +555,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $model->getVariablesOptionArray($withGroup));
     }
 
+    /**
+     * @return array
+     */
     public function getVariablesOptionArrayDataProvider()
     {
         return [
@@ -648,6 +658,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($model->getUseAbsoluteLinks());
     }
 
+    /**
+     * @return array
+     */
     public function processTemplateVariable()
     {
         return [
@@ -723,19 +736,19 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model = $this->getMockBuilder(\Magento\Email\Model\Template::class)
             ->setMethods(['_init'])
             ->setConstructorArgs([
-                $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false),
-                $this->getMock(\Magento\Theme\Model\View\Design::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\Registry::class, [], [], '', false),
-                $this->getMock(\Magento\Store\Model\App\Emulation::class, [], [], '', false),
-                $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                $this->createMock(\Magento\Framework\Model\Context::class),
+                $this->createMock(\Magento\Theme\Model\View\Design::class),
+                $this->createMock(\Magento\Framework\Registry::class),
+                $this->createMock(\Magento\Store\Model\App\Emulation::class),
+                $this->createMock(\Magento\Store\Model\StoreManager::class),
+                $this->createMock(\Magento\Framework\View\Asset\Repository::class),
+                $this->createMock(\Magento\Framework\Filesystem::class),
+                $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class),
                 $emailConfig,
-                $this->getMock(\Magento\Email\Model\TemplateFactory::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\Filter\FilterManager::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\Url::class, [], [], '', false),
-                $this->getMock(\Magento\Email\Model\Template\FilterFactory::class, [], [], '', false),
+                $this->createMock(\Magento\Email\Model\TemplateFactory::class),
+                $this->createMock(\Magento\Framework\Filter\FilterManager::class),
+                $this->createMock(\Magento\Framework\Url::class),
+                $this->createMock(\Magento\Email\Model\Template\FilterFactory::class),
             ])
             ->getMock();
 
@@ -744,6 +757,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $model->getType());
     }
 
+    /**
+     * @return array
+     */
     public function getTypeDataProvider()
     {
         return [['text', 1], ['html', 2]];

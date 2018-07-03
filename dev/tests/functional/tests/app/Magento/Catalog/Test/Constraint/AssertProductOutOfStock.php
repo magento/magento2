@@ -35,7 +35,7 @@ class AssertProductOutOfStock extends AbstractConstraint
         FixtureInterface $product
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::STOCK_AVAILABILITY,
             $catalogProductView->getViewBlock()->stockAvailability(),
             'Control \'' . self::STOCK_AVAILABILITY . '\' is not visible.'

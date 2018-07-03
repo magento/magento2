@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type
@@ -20,7 +20,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param sring|null $typeId
+     * @param string|null $typeId
      * @param string $expectedClass
      * @dataProvider factoryDataProvider
      */
@@ -52,7 +52,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param sring|null $typeId
+     * @param string|null $typeId
      * @dataProvider factoryReturnsSingletonDataProvider
      */
     public function testFactoryReturnsSingleton($typeId)
@@ -82,7 +82,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param sring|null $typeId
+     * @param string|null $typeId
      * @param string $expectedClass
      * @dataProvider priceFactoryDataProvider
      */

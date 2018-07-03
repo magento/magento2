@@ -9,6 +9,7 @@ namespace Magento\Review\Block\Adminhtml\Rss\Grid;
  * Class Link
  * @api
  * @package Magento\Review\Block\Adminhtml\Grid\Rss
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\View\Element\Template
 {

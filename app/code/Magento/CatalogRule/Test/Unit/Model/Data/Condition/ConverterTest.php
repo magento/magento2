@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogRule\Test\Unit\Model\Data\Condition;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogRule\Api\Data\ConditionInterfaceFactory
@@ -19,19 +19,16 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->conditionFactoryMock = $this->getMock(
+        $this->conditionFactoryMock = $this->createPartialMock(
             \Magento\CatalogRule\Api\Data\ConditionInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->model = new \Magento\CatalogRule\Model\Data\Condition\Converter($this->conditionFactoryMock);
     }
 
     public function testDataModelToArray()
     {
-        $childConditionMock = $this->getMock(\Magento\CatalogRule\Api\Data\ConditionInterface::class);
+        $childConditionMock = $this->createMock(\Magento\CatalogRule\Api\Data\ConditionInterface::class);
         $childConditionMock->expects($this->once())->method('getType')->willReturn('child-type');
         $childConditionMock->expects($this->once())->method('getAttribute')->willReturn('child-attr');
         $childConditionMock->expects($this->once())->method('getOperator')->willReturn('child-operator');
@@ -40,7 +37,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $childConditionMock->expects($this->once())->method('getAggregator')->willReturn('all');
         $childConditionMock->expects($this->once())->method('getConditions')->willReturn([]);
 
-        $dataModelMock = $this->getMock(\Magento\CatalogRule\Api\Data\ConditionInterface::class);
+        $dataModelMock = $this->createMock(\Magento\CatalogRule\Api\Data\ConditionInterface::class);
         $dataModelMock->expects($this->once())->method('getType')->willReturn('type');
         $dataModelMock->expects($this->once())->method('getAttribute')->willReturn('attr');
         $dataModelMock->expects($this->once())->method('getOperator')->willReturn('operator');
@@ -91,8 +88,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $conditionMock = $this->getMock(\Magento\CatalogRule\Api\Data\ConditionInterface::class);
-        $conditionChildMock = $this->getMock(\Magento\CatalogRule\Api\Data\ConditionInterface::class);
+        $conditionMock = $this->createMock(\Magento\CatalogRule\Api\Data\ConditionInterface::class);
+        $conditionChildMock = $this->createMock(\Magento\CatalogRule\Api\Data\ConditionInterface::class);
 
         $this->conditionFactoryMock->expects($this->at(0))->method('create')->willReturn($conditionMock);
         $this->conditionFactoryMock->expects($this->at(1))->method('create')->willReturn($conditionChildMock);

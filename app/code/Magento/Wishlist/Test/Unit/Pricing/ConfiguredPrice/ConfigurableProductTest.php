@@ -5,7 +5,7 @@
  */
 namespace Magento\Wishlist\Test\Unit\Pricing\ConfiguredPrice;
 
-class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
+class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject

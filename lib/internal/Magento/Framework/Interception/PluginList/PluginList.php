@@ -295,7 +295,7 @@ class PluginList extends Scoped implements InterceptionPluginList
                 $virtualTypes = [];
                 foreach ($this->_scopePriorityScheme as $scopeCode) {
                     if (false == isset($this->_loadedScopes[$scopeCode])) {
-                        $data = $this->_reader->read($scopeCode);
+                        $data = $this->_reader->read($scopeCode) ?: [];
                         unset($data['preferences']);
                         if (count($data) > 0) {
                             $this->_inherited = [];
@@ -389,7 +389,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getLogger()
     {

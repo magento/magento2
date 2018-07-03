@@ -11,7 +11,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportProductSavedToNewRelic;
 /**
  * Class ReportProductSavedToNewRelicTest
  */
-class ReportProductSavedToNewRelicTest extends \PHPUnit_Framework_TestCase
+class ReportProductSavedToNewRelicTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportProductSavedToNewRelic
@@ -140,6 +140,9 @@ class ReportProductSavedToNewRelicTest extends \PHPUnit_Framework_TestCase
         $this->model->execute($eventObserver);
     }
 
+    /**
+     * @return array
+     */
     public function actionDataProvider()
     {
         return [[true], [false]];

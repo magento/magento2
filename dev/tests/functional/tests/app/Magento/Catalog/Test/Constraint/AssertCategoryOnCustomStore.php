@@ -82,7 +82,7 @@ class AssertCategoryOnCustomStore extends AbstractAssertForm
     {
         $this->browser->open($_ENV['app_frontend_url'] . $category->getUrlKey() . '.html');
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::NOT_FOUND_MESSAGE,
             $this->categoryViewPage->getTitleBlock()->getTitle(),
             'Category ' . $category->getName() . ' is available on Main Store, but should not.'
@@ -99,7 +99,7 @@ class AssertCategoryOnCustomStore extends AbstractAssertForm
     {
         $this->browser->open($_ENV['app_frontend_url'] . $category->getUrlKey() . '.html');
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $category->getName(),
             $this->categoryViewPage->getTitleBlock()->getTitle(),
             'Category ' . $category->getName() . ' is not available on Main Store, but should.'
@@ -119,7 +119,7 @@ class AssertCategoryOnCustomStore extends AbstractAssertForm
 
         $this->browser->open($_ENV['app_frontend_url'] . $category->getUrlKey() . '.html');
 
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $category->getName(),
                 $this->categoryViewPage->getTitleBlock()->getTitle(),
                 'Category ' . $category->getName() . ' is not available on custom store.'

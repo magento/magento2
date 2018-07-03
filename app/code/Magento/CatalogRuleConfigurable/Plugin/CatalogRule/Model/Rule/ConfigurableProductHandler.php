@@ -14,10 +14,14 @@ use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProduct
  */
 class ConfigurableProductHandler
 {
-    /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
+     */
     private $configurable;
 
-    /** @var ConfigurableProductsProvider */
+    /**
+     * @var \Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider
+     */
     private $configurableProductsProvider;
 
     /**

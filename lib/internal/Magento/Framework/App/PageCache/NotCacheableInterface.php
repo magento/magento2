@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\App\PageCache;
 
+/**
+ * Interface \Magento\Framework\App\PageCache\NotCacheableInterface
+ *
+ */
 interface NotCacheableInterface
 {
 }

@@ -9,7 +9,7 @@ use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProvider;
 use Magento\Translation\Model\Json\PreProcessor;
 
-class PreProcessorTest extends \PHPUnit_Framework_TestCase
+class PreProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PreProcessor
@@ -36,31 +36,38 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $translateMock;
 
+    /**
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $designMock;
+
     protected function setUp()
     {
-        $this->configMock = $this->getMock(\Magento\Translation\Model\Js\Config::class, [], [], '', false);
-        $this->dataProviderMock = $this->getMock(\Magento\Translation\Model\Js\DataProvider::class, [], [], '', false);
-        $this->areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $this->configMock = $this->createMock(\Magento\Translation\Model\Js\Config::class);
+        $this->dataProviderMock = $this->createMock(\Magento\Translation\Model\Js\DataProvider::class);
+        $this->areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
         $this->translateMock = $this->getMockForAbstractClass(\Magento\Framework\TranslateInterface::class);
+        $this->designMock = $this->getMockForAbstractClass(\Magento\Framework\View\DesignInterface::class);
         $this->model = new PreProcessor(
             $this->configMock,
             $this->dataProviderMock,
             $this->areaListMock,
-            $this->translateMock
+            $this->translateMock,
+            $this->designMock
         );
     }
 
     public function testGetData()
     {
-        $chain = $this->getMock(\Magento\Framework\View\Asset\PreProcessor\Chain::class, [], [], '', false);
-        $asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
-        $context = $this->getMock(\Magento\Framework\View\Asset\File\FallbackContext::class, [], [], '', false);
+        $chain = $this->createMock(\Magento\Framework\View\Asset\PreProcessor\Chain::class);
+        $asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $context = $this->createMock(\Magento\Framework\View\Asset\File\FallbackContext::class);
         $fileName = 'js-translation.json';
         $targetPath = 'path/js-translation.json';
         $themePath = '*/*';
         $dictionary = ['hello' => 'bonjour'];
         $areaCode = 'adminhtml';
-        $area = $this->getMock(\Magento\Framework\App\Area::class, [], [], '', false);
+        $area = $this->createMock(\Magento\Framework\App\Area::class);
 
         $chain->expects($this->once())
             ->method('getTargetAssetPath')
@@ -80,6 +87,11 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())
             ->method('getAreaCode')
             ->willReturn($areaCode);
+        $context->expects($this->once())
+            ->method('getLocale')
+            ->willReturn('en_US');
+
+        $this->designMock->expects($this->once())->method('setDesignTheme')->with($themePath, $areaCode);
 
         $this->areaListMock->expects($this->once())
             ->method('getArea')
@@ -96,6 +108,9 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
         $chain->expects($this->once())
             ->method('setContentType')
             ->with('json');
+
+        $this->translateMock->expects($this->once())->method('setLocale')->with('en_US')->willReturnSelf();
+        $this->translateMock->expects($this->once())->method('loadData')->with($areaCode, true);
 
         $this->model->process($chain);
     }

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api;
 /**
  * Tier prices storage.
  * @api
+ * @since 101.1.0
  */
 interface TierPriceStorageInterface
 {
@@ -18,6 +19,7 @@ interface TierPriceStorageInterface
      * @param string[] $skus
      * @return \Magento\Catalog\Api\Data\TierPriceInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 101.1.0
      */
     public function get(array $skus);
 
@@ -31,6 +33,7 @@ interface TierPriceStorageInterface
      *
      * @param \Magento\Catalog\Api\Data\TierPriceInterface[] $prices
      * @return \Magento\Catalog\Api\Data\PriceUpdateResultInterface[]
+     * @since 101.1.0
      */
     public function update(array $prices);
 
@@ -44,6 +47,7 @@ interface TierPriceStorageInterface
      *
      * @param \Magento\Catalog\Api\Data\TierPriceInterface[] $prices
      * @return \Magento\Catalog\Api\Data\PriceUpdateResultInterface[]
+     * @since 101.1.0
      */
     public function replace(array $prices);
 
@@ -57,6 +61,7 @@ interface TierPriceStorageInterface
      *
      * @param \Magento\Catalog\Api\Data\TierPriceInterface[] $prices
      * @return \Magento\Catalog\Api\Data\PriceUpdateResultInterface[]
+     * @since 101.1.0
      */
     public function delete(array $prices);
 }

@@ -14,7 +14,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection as BillingAgreementCollection;
 use Magento\Paypal\Model\Billing\Agreement as BillingAgreement;
 
-class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
+class SpecificationPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SpecificationPlugin

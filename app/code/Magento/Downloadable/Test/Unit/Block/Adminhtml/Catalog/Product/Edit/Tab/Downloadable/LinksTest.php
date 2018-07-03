@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
-class LinksTest extends \PHPUnit_Framework_TestCase
+class LinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links
@@ -50,45 +50,25 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->urlBuilder = $this->getMock(\Magento\Backend\Model\Url::class, ['getUrl'], [], '', false);
-        $attributeFactory = $this->getMock(\Magento\Eav\Model\Entity\AttributeFactory::class, [], [], '', false);
-        $urlFactory = $this->getMock(\Magento\Backend\Model\UrlFactory::class, [], [], '', false);
-        $this->fileHelper = $this->getMock(
-            \Magento\Downloadable\Helper\File::class,
-            [
+        $this->urlBuilder = $this->createPartialMock(\Magento\Backend\Model\Url::class, ['getUrl']);
+        $attributeFactory = $this->createMock(\Magento\Eav\Model\Entity\AttributeFactory::class);
+        $urlFactory = $this->createMock(\Magento\Backend\Model\UrlFactory::class);
+        $this->fileHelper = $this->createPartialMock(\Magento\Downloadable\Helper\File::class, [
                 'getFilePath',
                 'ensureFileInFilesystem',
                 'getFileSize'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->productModel = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+            ]);
+        $this->productModel = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 '__wakeup',
                 'getTypeId',
                 'getTypeInstance',
                 'getStoreId'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->downloadableProductModel = $this->getMock(
-            \Magento\Downloadable\Model\Product\Type::class,
-            [
+            ]);
+        $this->downloadableProductModel = $this->createPartialMock(\Magento\Downloadable\Model\Product\Type::class, [
                 '__wakeup',
                 'getLinks'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->downloadableLinkModel = $this->getMock(
-            \Magento\Downloadable\Model\Link::class,
-            [
+            ]);
+        $this->downloadableLinkModel = $this->createPartialMock(\Magento\Downloadable\Model\Link::class, [
                 '__wakeup',
                 'getId',
                 'getTitle',
@@ -101,24 +81,14 @@ class LinksTest extends \PHPUnit_Framework_TestCase
                 'getSortOrder',
                 'getLinkFile',
                 'getStoreTitle'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $this->coreRegistry = $this->getMock(
-            \Magento\Framework\Registry::class,
-            [
+        $this->coreRegistry = $this->createPartialMock(\Magento\Framework\Registry::class, [
                 '__wakeup',
                 'registry'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $this->escaper = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
+        $this->escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
 
         $this->block = $objectManagerHelper->getObject(
             \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links::class,

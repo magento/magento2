@@ -13,6 +13,7 @@ use Magento\Store\Model\ScopeInterface;
  * Factory class for \Magento\Framework\View\Page\Config\RendererInterface
  *
  * @api
+ * @since 100.0.2
  */
 class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactory
 {

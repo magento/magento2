@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Category\DataProvider;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class AttributesTest extends \PHPUnit_Framework_TestCase
+class AttributesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataProvider

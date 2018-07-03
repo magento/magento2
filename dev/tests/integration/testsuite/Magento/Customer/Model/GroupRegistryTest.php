@@ -9,7 +9,7 @@ namespace Magento\Customer\Model;
 /**
  * Test for \Magento\Customer\Model\GroupRegistry
  */
-class GroupRegistryTest extends \PHPUnit_Framework_TestCase
+class GroupRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The group code from the fixture data.

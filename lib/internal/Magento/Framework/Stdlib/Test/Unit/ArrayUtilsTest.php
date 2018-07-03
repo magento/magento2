@@ -12,7 +12,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
  *
  * @see ArrayUtils
  */
-class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
+class ArrayUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ArrayUtils

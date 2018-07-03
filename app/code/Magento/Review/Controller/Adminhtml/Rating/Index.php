@@ -15,7 +15,7 @@ class Index extends RatingController
      */
     public function execute()
     {
-        $this->initEnityId();
+        $this->initEntityId();
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $resultPage->setActiveMenu('Magento_Review::catalog_reviews_ratings_ratings');

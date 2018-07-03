@@ -8,6 +8,7 @@ namespace Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset;
 /**
  * Form fieldset renderer
  * @api
+ * @since 100.0.2
  */
 class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
@@ -22,7 +23,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
     /**
      * @var string
      */
-    protected $_template = 'store/switcher/form/renderer/fieldset/element.phtml';
+    protected $_template = 'Magento_Backend::store/switcher/form/renderer/fieldset/element.phtml';
 
     /**
      * Retrieve an element

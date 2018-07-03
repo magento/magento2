@@ -15,7 +15,7 @@ use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
-class CatalogViewTest extends \PHPUnit_Framework_TestCase
+class CatalogViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CatalogView

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 $addressData = include __DIR__ . '/address_data.php';
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Sales\Model\Order\Address::class,
@@ -16,7 +14,8 @@ $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
 
 $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Sales\Model\Order\Payment::class);
+    \Magento\Sales\Model\Order\Payment::class
+);
 $payment->setMethod(\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS);
 
 $amount = 100;

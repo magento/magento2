@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Store\Controller\Store;
 
 use Magento\Framework\App\Action\Action;
@@ -81,7 +82,7 @@ class SwitchAction extends Action
         } catch (StoreIsInactiveException $e) {
             $error = __('Requested store is inactive');
         } catch (NoSuchEntityException $e) {
-            $error = __('Requested store is not found');
+            $error = __("The store that was requested wasn't found. Verify the store and try again.");
         }
 
         if (isset($error)) {

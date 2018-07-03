@@ -45,7 +45,7 @@ class AssertStoreGroupForm extends AbstractAssertForm
         $storeIndex->open()->getStoreGrid()->searchAndOpenStoreGroup($storeGroup);
         $formData = $editGroup->getEditFormGroup()->getData();
         $errors = $this->verifyData($fixtureData, $formData);
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
     }
 
     /**

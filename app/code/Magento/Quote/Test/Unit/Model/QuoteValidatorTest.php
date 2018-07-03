@@ -3,18 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
-use Magento\Quote\Model\QuoteValidator;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
+use Magento\Quote\Model\QuoteValidator;
 
 /**
  * Class QuoteValidatorTest
  */
-class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
+class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\QuoteValidator
@@ -53,7 +54,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
             $this->orderAmountValidationMessage
         );
 
-        $this->quoteMock = $this->getMock(
+        $this->quoteMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote::class,
             [
                 'getShippingAddress',
@@ -66,10 +67,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
                 'validateMinimumAmount',
                 'getIsMultiShipping',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
+            ]
         );
     }
 
@@ -135,7 +133,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateBeforeSubmitThrowsExceptionIfShippingAddressIsInvalid()
     {
-        $shippingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $shippingAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $this->quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($shippingAddressMock);
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn(false);
         $shippingAddressMock->expects($this->any())->method('validate')->willReturn(['Invalid Shipping Address']);
@@ -145,7 +143,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please specify a shipping method.
+     * @expectedExceptionMessage The shipping method is missing. Select the shipping method and try again.
      */
     public function testValidateBeforeSubmitThrowsExceptionIfShippingRateIsNotSelected()
     {
@@ -174,7 +172,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateBeforeSubmitThrowsExceptionIfBillingAddressIsNotValid()
     {
-        $billingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $billingAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($billingAddressMock);
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn(true);
         $billingAddressMock->expects($this->any())->method('validate')->willReturn(['Invalid Billing Address']);
@@ -184,12 +182,12 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please select a valid payment method.
+     * @expectedExceptionMessage Enter a valid payment method and try again.
      */
     public function testValidateBeforeSubmitThrowsExceptionIfPaymentMethodIsNotSelected()
     {
-        $paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
-        $billingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
+        $billingAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $billingAddressMock->expects($this->any())->method('validate')->willReturn(true);
 
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($billingAddressMock);
@@ -205,10 +203,10 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateBeforeSubmitThrowsExceptionIfMinimumOrderAmount()
     {
-        $paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
+        $paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
         $paymentMock->expects($this->once())->method('getMethod')->willReturn('checkmo');
 
-        $billingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $billingAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $billingAddressMock->expects($this->any())->method('validate')->willReturn(true);
 
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($billingAddressMock);
@@ -228,7 +226,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
      * Test case when country id not present in allowed countries list.
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Some addresses cannot be used due to country-specific configurations.
+     * @expectedExceptionMessage Some addresses can't be used due to the configurations for specific countries.
      */
     public function testValidateBeforeSubmitThrowsExceptionIfCountrySpecificConfigurations()
     {

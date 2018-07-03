@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Observer;
 /**
  * Class GridSyncRemoveObserverTest
  */
-class GridSyncRemoveObserverTest extends \PHPUnit_Framework_TestCase
+class GridSyncRemoveObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Observer\GridSyncRemoveObserver

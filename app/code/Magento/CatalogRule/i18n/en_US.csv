@@ -8,7 +8,7 @@ Save,Save
 "Add New Rule","Add New Rule"
 "Apply Rules","Apply Rules"
 Conditions,Conditions
-"Conditions (don\'t add conditions if rule is applied to all products)","Conditions (don\'t add conditions if rule is applied to all products)"
+"Conditions (don't add conditions if rule is applied to all products)","Conditions (don't add conditions if rule is applied to all products)"
 ID,ID
 Type,Type
 "Attribute Set","Attribute Set"
@@ -16,10 +16,10 @@ SKU,SKU
 Product,Product
 Promotions,Promotions
 "We found updated rules that are not applied. Please click ""Apply Rules"" to update your catalog.","We found updated rules that are not applied. Please click ""Apply Rules"" to update your catalog."
-"We can\'t apply the rules.","We can\'t apply the rules."
+"We can't apply the rules.","We can't apply the rules."
 "You deleted the rule.","You deleted the rule."
-"We can\'t delete this rule right now. Please review the log and try again.","We can\'t delete this rule right now. Please review the log and try again."
-"We can\'t find a rule to delete.","We can\'t find a rule to delete."
+"We can't delete this rule right now. Please review the log and try again.","We can't delete this rule right now. Please review the log and try again."
+"We can't find a rule to delete.","We can't find a rule to delete."
 "This rule no longer exists.","This rule no longer exists."
 "New Catalog Price Rule","New Catalog Price Rule"
 "Edit Rule","Edit Rule"
@@ -32,7 +32,8 @@ Promo,Promo
 "Rule with specified ID ""%1"" not found.","Rule with specified ID ""%1"" not found."
 "Unable to remove rule %1","Unable to remove rule %1"
 "Could not rebuild index for empty products array","Could not rebuild index for empty products array"
-"We can\'t rebuild the index for an undefined product.","We can\'t rebuild the index for an undefined product."
+"We can't rebuild the index for an undefined product.","We can't rebuild the index for an undefined product."
+"Catalog rule indexing failed. See details in exception log.","Catalog rule indexing failed. See details in exception log."
 "Percentage discount should be between 0 and 100.","Percentage discount should be between 0 and 100."
 "Discount value should be 0 or greater.","Discount value should be 0 or greater."
 "Unknown action.","Unknown action."
@@ -49,10 +50,6 @@ Promo,Promo
 "Adjust final price to discount value","Adjust final price to discount value"
 "Conditions Combination","Conditions Combination"
 "Product Attribute","Product Attribute"
-Active,Active
-Inactive,Inactive
-Yes,Yes
-No,No
 "Updated rules applied.","Updated rules applied."
 "You disabled %1 Catalog Price Rules based on ""%2"" attribute.","You disabled %1 Catalog Price Rules based on ""%2"" attribute."
 "Catalog Rule Product","Catalog Rule Product"
@@ -63,7 +60,21 @@ Rule,Rule
 Start,Start
 End,End
 Status,Status
+Active,Active
+Inactive,Inactive
 "Web Site","Web Site"
 Back,Back
 "Rule Information","Rule Information"
+"Rule Name","Rule Name"
+Description,Description
+Websites,Websites
+"Customer Groups","Customer Groups"
+From,From
+To,To
+Priority,Priority
 Actions,Actions
+Apply,Apply
+"Discount Amount","Discount Amount"
+"Discard subsequent rules","Discard subsequent rules"
+Yes,Yes
+No,No

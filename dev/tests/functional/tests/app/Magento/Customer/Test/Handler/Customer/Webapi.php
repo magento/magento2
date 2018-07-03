@@ -150,9 +150,14 @@ class Webapi extends AbstractWebapi implements CustomerInterface
      */
     protected function getCustomerGroup(Customer $customer)
     {
-        return $customer->hasData('group_id')
-            ? $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()->getCustomerGroupId()
-            : self::GENERAL_GROUP;
+        if ($customer->hasData('group_id')) {
+            if ($customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()) {
+                return $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()->getCustomerGroupId();
+            }
+            return $customer->getData('group_id');
+        } else {
+            return self::GENERAL_GROUP;
+        }
     }
 
     /**

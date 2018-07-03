@@ -71,11 +71,6 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
         $resultPage->getConfig()->getTitle()->prepend(__('New Category'));
         $resultPage->addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
 
-        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
-        if ($block) {
-            $block->setStoreId(0);
-        }
-
         return $resultPage;
     }
 }

@@ -13,10 +13,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-/**
- * Class ColumnsResolverTest
- */
-class ColumnsResolverTest extends \PHPUnit_Framework_TestCase
+class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SelectBuilder|\PHPUnit_Framework_MockObject_MockObject

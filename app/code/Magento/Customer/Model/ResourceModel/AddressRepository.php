@@ -92,7 +92,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $this->addressFactory = $addressFactory;
         $this->addressRegistry = $addressRegistry;
         $this->customerRegistry = $customerRegistry;
-        $this->addressResource = $addressResourceModel;
+        $this->addressResourceModel = $addressResourceModel;
         $this->directoryData = $directoryData;
         $this->addressSearchResultsFactory = $addressSearchResultsFactory;
         $this->addressCollectionFactory = $addressCollectionFactory;
@@ -203,7 +203,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -236,7 +236,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $address = $this->addressRegistry->retrieve($addressId);
         $customerModel = $this->customerRegistry->retrieve($address->getCustomerId());
         $customerModel->getAddressesCollection()->clear();
-        $this->addressResource->delete($address);
+        $this->addressResourceModel->delete($address);
         $this->addressRegistry->remove($addressId);
         return true;
     }
@@ -254,7 +254,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $address = $this->addressRegistry->retrieve($addressId);
         $customerModel = $this->customerRegistry->retrieve($address->getCustomerId());
         $customerModel->getAddressesCollection()->removeItemByKey($addressId);
-        $this->addressResource->delete($address);
+        $this->addressResourceModel->delete($address);
         $this->addressRegistry->remove($addressId);
         return true;
     }
@@ -262,7 +262,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

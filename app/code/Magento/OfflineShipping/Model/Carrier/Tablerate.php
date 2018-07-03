@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\OfflineShipping\Model\Carrier;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -12,6 +13,7 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
  * Table rate shipping model
  *
  * @api
+ * @since 100.0.2
  */
 class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
@@ -112,8 +114,9 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
 
         // Free shipping by qty
         $freeQty = 0;
+        $freePackageValue = 0;
+
         if ($request->getAllItems()) {
-            $freePackageValue = 0;
             foreach ($request->getAllItems() as $item) {
                 if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
                     continue;
@@ -226,7 +229,9 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         ];
 
         if (!isset($codes[$type])) {
-            throw new LocalizedException(__('Please correct Table Rate code type: %1.', $type));
+            throw new LocalizedException(
+                __('The "%1" code type for Table Rate is incorrect. Verify the type and try again.', $type)
+            );
         }
 
         if ('' === $code) {
@@ -234,7 +239,9 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         }
 
         if (!isset($codes[$type][$code])) {
-            throw new LocalizedException(__('Please correct Table Rate code for type %1: %2.', $type, $code));
+            throw new LocalizedException(
+                __('The "%1: %2" code type for Table Rate is incorrect. Verify the type and try again.', $type, $code)
+            );
         }
 
         return $codes[$type][$code];

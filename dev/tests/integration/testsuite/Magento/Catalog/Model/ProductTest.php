@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -18,7 +21,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
@@ -481,10 +484,53 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $validationResult = $this->_model->validate();
         $this->assertCount(1, $validationResult);
+
         $this->assertContains(
-            'The value of attribute "' . $attribute->getDefaultFrontendLabel() . '" must be unique',
+            'The value of the "' . $attribute->getDefaultFrontendLabel() .
+            '" attribute isn\'t unique. Set a unique value and try again.',
             $validationResult
         );
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/products_with_unique_input_attribute.php
+     */
+    public function testValidateUniqueInputAttributeOnTheSameProduct()
+    {
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'unique_input_attribute');
+        $this->_model = $this->_model->loadByAttribute(
+            'sku',
+            'simple product with unique input attribute'
+        );
+        $this->_model->setTypeId(
+            'simple'
+        )->setAttributeSetId(
+            4
+        )->setName(
+            'Simple Product with non-unique value'
+        )->setSku(
+            'some product SKU'
+        )->setPrice(
+            10
+        )->setMetaTitle(
+            'meta title'
+        )->setData(
+            $attribute->getAttributeCode(),
+            'unique value'
+        )->setVisibility(
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+        )->setStatus(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        )->setCollectExceptionMessages(
+            true
+        );
+
+        $validationResult = $this->_model->validate();
+        $this->assertTrue($validationResult);
     }
 
     /**
@@ -507,5 +553,48 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 $this->assertEquals($expectedValue[$value->getSku()], floatval($value->getPrice()));
             }
         }
+    }
+
+    /**
+     * Check stock status changing if backorders functionality enabled.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
+     * @dataProvider productWithBackordersDataProvider
+     * @param int $qty
+     * @param int $stockStatus
+     * @param bool $expectedStockStatus
+     *
+     * @return void
+     */
+    public function testSaveWithBackordersEnabled(int $qty, int $stockStatus, bool $expectedStockStatus): void
+    {
+        $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->assertEquals(false, $stockItem->getIsInStock());
+        $stockData = [
+            'backorders' => 1,
+            'qty' => $qty,
+            'is_in_stock' => $stockStatus,
+        ];
+        $product->setStockData($stockData);
+        $product->save();
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+
+        $this->assertEquals($expectedStockStatus, $stockItem->getIsInStock());
+    }
+
+    /**
+     * DataProvider for the testSaveWithBackordersEnabled()
+     * @return array
+     */
+    public function productWithBackordersDataProvider(): array
+    {
+        return [
+            [0, 0, false],
+            [0, 1, true],
+            [-1, 0, false],
+            [-1, 1, true],
+            [1, 1, true],
+        ];
     }
 }

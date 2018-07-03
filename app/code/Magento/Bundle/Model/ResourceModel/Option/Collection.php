@@ -8,6 +8,7 @@ namespace Magento\Bundle\Model\ResourceModel\Option;
 /**
  * Bundle Options Resource Collection
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -113,6 +114,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $productLinkFieldValue
      *
      * @return $this
+     * @since 100.1.0
      */
     public function setProductLinkFilter($productLinkFieldValue)
     {

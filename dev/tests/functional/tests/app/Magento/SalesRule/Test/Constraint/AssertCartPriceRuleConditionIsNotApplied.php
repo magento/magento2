@@ -25,7 +25,7 @@ class AssertCartPriceRuleConditionIsNotApplied extends AssertCartPriceRuleApplyi
             $shippingPrice = $this->checkoutCart->getTotalsBlock()->getShippingPrice();
             $grandTotal = number_format(($grandTotal - $shippingPrice), 2);
         }
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $subTotal,
             $grandTotal,
             'Shopping cart subtotal: \'' . $subTotal . '\' not equals with grand total: \'' . $grandTotal . '\''

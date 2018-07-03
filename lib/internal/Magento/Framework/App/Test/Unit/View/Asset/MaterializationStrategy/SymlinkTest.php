@@ -11,7 +11,7 @@ use \Magento\Framework\App\View\Asset\MaterializationStrategy\Symlink;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset;
 
-class SymlinkTest extends \PHPUnit_Framework_TestCase
+class SymlinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Symlink

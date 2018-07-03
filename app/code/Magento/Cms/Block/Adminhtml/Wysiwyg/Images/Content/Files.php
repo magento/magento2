@@ -9,6 +9,7 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
  * Directory contents block for Wysiwyg Images
  *
  * @api
+ * @since 100.0.2
  */
 class Files extends \Magento\Backend\Block\Template
 {
@@ -74,7 +75,7 @@ class Files extends \Magento\Backend\Block\Template
     }
 
     /**
-     * File idetifier getter
+     * File identifier getter
      *
      * @param  \Magento\Framework\DataObject $file
      * @return string

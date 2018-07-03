@@ -5,7 +5,7 @@
  */
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Sales\Order\View\Items;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject */
     protected $orderItem;
@@ -18,14 +18,11 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderItem = $this->getMock(
+        $this->orderItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
-            ['getProductOptions', '__wakeup', 'getParentItem', 'getOrderItem'],
-            [],
-            '',
-            false
+            ['getProductOptions', '__wakeup', 'getParentItem', 'getOrderItem']
         );
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             \Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer::class,
@@ -44,6 +41,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->model->isShipmentSeparately());
     }
 
+    /**
+     * @return array
+     */
     public function isShipmentSeparatelyWithoutItemDataProvider()
     {
         return [
@@ -60,14 +60,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         if ($parentItem) {
             $parentItem =
-                $this->getMock(
-                    \Magento\Sales\Model\Order\Item::class,
-                    ['getProductOptions',
-                    '__wakeup'],
-                    [],
-                    '',
-                    false
-                );
+                $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, ['getProductOptions',
+                    '__wakeup']);
             $parentItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')
@@ -79,6 +73,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->model->isShipmentSeparately($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function isShipmentSeparatelyWithItemDataProvider()
     {
         return [
@@ -100,6 +97,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->model->isChildCalculated());
     }
 
+    /**
+     * @return array
+     */
     public function isChildCalculatedWithoutItemDataProvider()
     {
         return [
@@ -116,14 +116,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         if ($parentItem) {
             $parentItem =
-                $this->getMock(
-                    \Magento\Sales\Model\Order\Item::class,
-                    ['getProductOptions',
-                    '__wakeup'],
-                    [],
-                    '',
-                    false
-                );
+                $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, ['getProductOptions',
+                    '__wakeup']);
             $parentItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')
@@ -135,6 +129,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->model->isChildCalculated($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function isChildCalculatedWithItemDataProvider()
     {
         return [
@@ -166,6 +163,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($unserializedResult, $this->model->getSelectionAttributes($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function getSelectionAttributesDataProvider()
     {
         return [
@@ -199,6 +199,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->model->canShowPriceInfo($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function canShowPriceInfoDataProvider()
     {
         return [

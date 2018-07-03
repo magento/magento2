@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
@@ -51,7 +52,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * Get security cookie
      *
      * @return SecurityCookie
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getSecurityCookie()
     {
@@ -117,7 +118,9 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             );
             return $resultRedirect->setPath('*');
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
-            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+            $this->messageManager->addError(
+                __('The password entered for the current user is invalid. Verify the password and try again.')
+            );
             return $this->saveDataToSessionAndRedirect($role, $this->getRequest()->getPostValue(), $resultRedirect);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

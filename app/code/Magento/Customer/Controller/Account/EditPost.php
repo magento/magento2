@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Model\AuthenticationInterface;
@@ -57,7 +58,9 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     protected $session;
 
-    /** @var EmailNotificationInterface */
+    /**
+     * @var \Magento\Customer\Model\EmailNotificationInterface
+     */
     private $emailNotification;
 
     /**
@@ -115,7 +118,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {
@@ -166,7 +169,8 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->messageManager->addError($e->getMessage());
             } catch (UserLockedException $e) {
                 $message = __(
-                    'You did not sign in correctly or your account is temporarily disabled.'
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
                 );
                 $this->session->logout();
                 $this->session->start();
@@ -285,7 +289,9 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                     $this->getRequest()->getPost('current_password')
                 );
             } catch (InvalidEmailOrPasswordException $e) {
-                throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
+                throw new InvalidEmailOrPasswordException(
+                    __("The password doesn't match this account. Verify the password and try again.")
+                );
             }
         }
     }
@@ -295,7 +301,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      *
      * @return Mapper
      *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getCustomerMapper()
     {

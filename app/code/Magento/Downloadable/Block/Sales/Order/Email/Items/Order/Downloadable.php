@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Downloadable\Block\Sales\Order\Email\Items\Order;
 
 use Magento\Downloadable\Model\Link;
@@ -17,6 +15,7 @@ use Magento\Store\Model\ScopeInterface;
  * Downloadable Sales Order Email items renderer
  *
  * @api
+ * @since 100.0.2
  */
 class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder
 {
@@ -107,7 +106,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
      * Get frontend URL builder
      *
      * @return \Magento\Framework\UrlInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getFrontendUrlBuilder()
     {

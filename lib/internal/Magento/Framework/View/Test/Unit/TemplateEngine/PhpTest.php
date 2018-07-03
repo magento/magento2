@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\TemplateEngine;
 
-class PhpTest extends \PHPUnit_Framework_TestCase
+class PhpTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_PROP_VALUE = 'TEST_PROP_VALUE';
 
@@ -22,7 +22,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helperFactoryMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_helperFactoryMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_phpEngine = new \Magento\Framework\View\TemplateEngine\Php($this->_helperFactoryMock);
     }
 
@@ -75,7 +75,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
     public function testHelperWithInvalidClass()
     {
         $class = \Magento\Framework\DataObject::class;
-        $object = $this->getMock($class, [], [], '', false);
+        $object = $this->createMock($class);
         $this->_helperFactoryMock->expects(
             $this->once()
         )->method(

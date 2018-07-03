@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Filesystem\Directory;
 
+/**
+ * Interface \Magento\Framework\Filesystem\Directory\WriteInterface
+ *
+ */
 interface WriteInterface extends ReadInterface
 {
     /**

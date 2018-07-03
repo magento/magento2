@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Model\ResourceModel\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
@@ -40,7 +40,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      * 2. Run reindexing.
      * 3. Load the product again and check all the prices.
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
      */

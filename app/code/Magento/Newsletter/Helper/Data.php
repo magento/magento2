@@ -9,6 +9,7 @@ namespace Magento\Newsletter\Helper;
  * Newsletter Data Helper
  *
  * @api
+ * @since 100.0.2
  */
 class Data
 {
@@ -26,7 +27,7 @@ class Data
     }
 
     /**
-     * Retrieve subsription confirmation url
+     * Retrieve subscription confirmation url
      *
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @return string
@@ -42,7 +43,7 @@ class Data
     }
 
     /**
-     * Retrieve unsubsription url
+     * Retrieve unsubscription url
      *
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @return string

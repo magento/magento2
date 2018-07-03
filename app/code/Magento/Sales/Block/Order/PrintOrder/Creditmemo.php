@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\AbstractBlock;
  * Sales order details block
  *
  * @api
+ * @since 100.0.2
  */
 class Creditmemo extends \Magento\Sales\Block\Items\AbstractItems
 {

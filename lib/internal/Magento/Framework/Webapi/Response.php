@@ -33,11 +33,7 @@ class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implement
 
     /**#@-*/
 
-    /**
-     * Messages.
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_messages = [];
 
     /**

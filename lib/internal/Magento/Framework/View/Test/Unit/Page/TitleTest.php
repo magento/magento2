@@ -11,7 +11,7 @@ namespace Magento\Framework\View\Test\Unit\Page;
 
 use Magento\Store\Model\ScopeInterface;
 
-class TitleTest extends \PHPUnit_Framework_TestCase
+class TitleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Page\Title

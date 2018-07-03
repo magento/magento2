@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Test\Unit\Block\Backend\Grid;
 
-class ItemsUpdaterTest extends \PHPUnit_Framework_TestCase
+class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param bool $argument

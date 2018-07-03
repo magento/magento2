@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Cms\Controller;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RouterTest extends \PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Controller\Router
@@ -23,12 +21,13 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->markTestIncomplete('MAGETWO-3393');
         $this->_model = new \Magento\Cms\Controller\Router(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\Framework\App\ActionFactory::class),
+                \Magento\Framework\App\ActionFactory::class
+            ),
             new \Magento\Framework\Event\ManagerInterfaceStub(
                 $this->getMockForAbstractClass(\Magento\Framework\Event\InvokerInterface::class),
-                $this->getMock(\Magento\Framework\Event\Config::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\EventFactory::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\Event\ObserverFactory::class, [], [], '', false)
+                $this->createMock(\Magento\Framework\Event\Config::class),
+                $this->createMock(\Magento\Framework\EventFactory::class),
+                $this->createMock(\Magento\Framework\Event\ObserverFactory::class)
             ),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\UrlInterface::class),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Cms\Model\PageFactory::class),
@@ -57,6 +56,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 }
 /**
  * Event manager stub
+ * @codingStandardsIgnoreStart
  */
 namespace Magento\Framework\Event;
 

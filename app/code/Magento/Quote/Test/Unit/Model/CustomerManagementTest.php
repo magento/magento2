@@ -9,7 +9,7 @@ namespace Magento\Quote\Test\Unit\Model;
  * Class CustomerManagementTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomerManagementTest extends \PHPUnit_Framework_TestCase
+class CustomerManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\CustomerManagement
@@ -90,20 +90,11 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->quoteMock = $this->getMock(
+        $this->quoteMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote::class,
-            ['getId', 'getCustomer', 'getBillingAddress', 'getShippingAddress', 'setCustomer', 'getPasswordHash'],
-            [],
-            '',
-            false
+            ['getId', 'getCustomer', 'getBillingAddress', 'getShippingAddress', 'setCustomer', 'getPasswordHash']
         );
-        $this->quoteAddressMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->quoteAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $this->customerMock = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\CustomerInterface::class,
             [],

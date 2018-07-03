@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * Tests Magento\Setup\Model\PackagesData
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PackagesDataTest extends \PHPUnit_Framework_TestCase
+class PackagesDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PackagesData
@@ -58,10 +58,10 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         $this->timeZoneProvider = $this->getMockBuilder(\Magento\Setup\Model\DateTime\TimeZoneProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $timeZone = $this->getMock(\Magento\Framework\Stdlib\DateTime\Timezone::class, [], [], '', false);
+        $timeZone = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
         $this->timeZoneProvider->expects($this->any())->method('get')->willReturn($timeZone);
-        $this->packagesAuth = $this->getMock(\Magento\Setup\Model\PackagesAuth::class, [], [], '', false);
-        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->packagesAuth = $this->createMock(\Magento\Setup\Model\PackagesAuth::class);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->objectManagerProvider = $this->getMockBuilder(\Magento\Setup\Model\ObjectManagerProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -69,7 +69,7 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         $appFactory = $this->getMockBuilder(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $application = $this->getMock(\Magento\Composer\MagentoComposerApplication::class, [], [], '', false);
+        $application = $this->createMock(\Magento\Composer\MagentoComposerApplication::class);
         $application->expects($this->any())
             ->method('runComposerCommand')
             ->willReturnMap([
@@ -171,7 +171,7 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
      */
     private function getComposerInformation($requiredPackages = [], $installedPackages = [], $repo = [])
     {
-        $composerInformation = $this->getMock(ComposerInformation::class, [], [], '', false);
+        $composerInformation = $this->createMock(ComposerInformation::class);
         $composerInformation->expects($this->any())->method('getInstalledMagentoPackages')->willReturn(
             $installedPackages ?:
             [
@@ -197,7 +197,9 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($repo ?: ['repo1', 'repo2']);
         $composerInformation->expects($this->any())->method('getPackagesTypes')
             ->willReturn(['magento2-module']);
-        $rootPackage = $this->getMock(RootPackage::class, [], ['magento/project', '2.1.0', '2']);
+        $rootPackage = $this->getMockBuilder(RootPackage::class)
+            ->setConstructorArgs(['magento/project', '2.1.0', '2'])
+            ->getMock();
         $rootPackage->expects($this->any())
             ->method('getRequires')
             ->willReturn(

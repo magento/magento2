@@ -12,7 +12,9 @@ use Magento\Framework\DataObject;
 
 class Link extends AbstractRenderer
 {
-    /** @var \Magento\Framework\DataObject */
+    /**
+     * @var \Magento\Framework\DataObject
+     */
     protected $_row;
 
     /**

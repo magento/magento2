@@ -13,6 +13,13 @@
         <xs:sequence>
             <xs:group ref="configurable" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="settings" minOccurs="0" maxOccurs="1" type="componentDataSourceSettings"/>
+            <xs:element name="aclResource" type="xs:string" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>
+                        ACL Resource used to validate access to UI Component data
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
         <xs:attributeGroup ref="ui_element_attributes"/>
     </xs:complexType>

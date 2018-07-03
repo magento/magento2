@@ -10,7 +10,9 @@ namespace Magento\CheckoutAgreements\Model;
  */
 class AgreementsValidator implements \Magento\Checkout\Api\AgreementsValidatorInterface
 {
-    /** @var  AgreementsProviderInterface[] */
+    /**
+     * @var \Magento\CheckoutAgreements\Model\AgreementsProviderInterface[]
+     */
     protected $agreementsProviders;
 
     /**

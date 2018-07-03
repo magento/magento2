@@ -26,7 +26,9 @@ module.exports = {
     read: function (filePath) {
         console.log('Collect data from ' + filePath + ': Start!');
 
-        return glob.sync(filePath);
+        return glob.sync(filePath, {
+            symlinks:  true
+        });
     },
 
     arrayRead: function (pathArr, callback) {

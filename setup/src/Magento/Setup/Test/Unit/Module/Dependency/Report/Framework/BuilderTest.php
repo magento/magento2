@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Framework;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Dependency\Report\Framework\Builder

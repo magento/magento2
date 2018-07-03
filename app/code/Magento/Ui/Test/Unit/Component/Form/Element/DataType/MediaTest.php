@@ -7,7 +7,7 @@ namespace Magento\Ui\Test\Unit\Component\Form\Element\DataType;
 
 use Magento\Ui\Component\Form\Element\DataType\Media;
 
-class MediaTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;

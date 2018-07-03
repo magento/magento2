@@ -10,7 +10,7 @@ use Magento\Customer\Model\Context;
 /**
  * @magentoAppArea frontend
  */
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

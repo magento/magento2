@@ -11,7 +11,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
 
-class StoreWebsiteRelationTest extends \PHPUnit_Framework_TestCase
+class StoreWebsiteRelationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  StoreWebsiteRelation */
     private $model;
@@ -33,7 +33,7 @@ class StoreWebsiteRelationTest extends \PHPUnit_Framework_TestCase
         $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connection = $this->getMock(AdapterInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
 
         $this->model = new StoreWebsiteRelation($this->resourceConnection);
     }

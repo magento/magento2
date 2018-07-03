@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Unit test for Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import
  */
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import
@@ -193,7 +193,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please correct Table Rates File Format.
+     * @expectedExceptionMessage The Table Rates File Format is incorrect. Verify the format and try again.
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetDataFromEmptyFile()

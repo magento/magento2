@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Export;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Export\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
@@ -34,15 +34,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->readerMock = $this->getMock(
-            \Magento\ImportExport\Model\Export\Config\Reader::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->readerMock = $this->createMock(\Magento\ImportExport\Model\Export\Config\Reader::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**
@@ -71,6 +65,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getEntities('entities'));
     }
 
+    /**
+     * @return array
+     */
     public function getEntitiesDataProvider()
     {
         return [
@@ -106,6 +103,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->model->getEntityTypes($entity));
     }
 
+    /**
+     * @return array
+     */
     public function getEntityTypesDataProvider()
     {
         return [
@@ -160,6 +160,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getFileFormats('fileFormats'));
     }
 
+    /**
+     * @return array
+     */
     public function getFileFormatsDataProvider()
     {
         return [

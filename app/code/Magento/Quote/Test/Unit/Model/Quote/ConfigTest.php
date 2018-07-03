@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\Quote\Config
@@ -19,13 +19,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_attributeConfig = $this->getMock(
-            \Magento\Catalog\Model\Attribute\Config::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_attributeConfig = $this->createMock(\Magento\Catalog\Model\Attribute\Config::class);
         $this->_model = new \Magento\Quote\Model\Quote\Config($this->_attributeConfig);
     }
 

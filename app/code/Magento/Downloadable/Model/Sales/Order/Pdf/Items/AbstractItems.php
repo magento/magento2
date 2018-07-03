@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Downloadable\Model\Sales\Order\Pdf\Items;
 
 /**
@@ -107,6 +105,9 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
         if ($this->_purchasedLinks->getLinkSectionTitle()) {
             return $this->_purchasedLinks->getLinkSectionTitle();
         }
-        return $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

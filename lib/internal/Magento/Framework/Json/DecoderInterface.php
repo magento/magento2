@@ -10,7 +10,7 @@ namespace Magento\Framework\Json;
  *
  * @api
  *
- * @deprecated @see \Magento\Framework\Serialize\Serializer\Json::unserialize
+ * @deprecated 100.2.0 @see \Magento\Framework\Serialize\Serializer\Json::unserialize
  */
 interface DecoderInterface
 {

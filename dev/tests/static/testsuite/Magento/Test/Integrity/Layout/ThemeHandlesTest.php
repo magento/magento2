@@ -7,7 +7,7 @@
  */
 namespace Magento\Test\Integrity\Layout;
 
-class ThemeHandlesTest extends \PHPUnit_Framework_TestCase
+class ThemeHandlesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array|null

@@ -15,8 +15,9 @@ use Magento\Framework\Serialize\SerializerInterface;
  * This class gives access to consolidated web API configuration from <Module_Name>/etc/webapi.xml files.
  *
  * @api
+ * @since 100.0.2
  */
-class Config
+class Config implements ConfigInterface
 {
     const CACHE_ID = 'webapi_config';
 
@@ -65,9 +66,7 @@ class Config
     }
 
     /**
-     * Return services loaded from cache if enabled or from files merged previously
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getServices()
     {

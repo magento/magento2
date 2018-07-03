@@ -7,6 +7,7 @@ namespace Magento\AdminNotification\Model\System\Message\Media;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractSynchronization implements \Magento\Framework\Notification\MessageInterface
 {

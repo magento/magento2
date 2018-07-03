@@ -15,7 +15,9 @@ class FieldsFilter
 {
     const FILTER_PARAMETER = 'fields';
 
-    /** @var RestRequest */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Request
+     */
     protected $_request;
 
     /**
@@ -104,9 +106,9 @@ class FieldsFilter
             }
             switch ($filterString[$position]) {
                 case '[':
-                    array_push($parent, $currentElement);
+                    $parent[] = $currentElement;
                     // push current field in stack and initialize current
-                    array_push($stack, $current);
+                    $stack[] = $current;
                     $current = [];
                     break;
 

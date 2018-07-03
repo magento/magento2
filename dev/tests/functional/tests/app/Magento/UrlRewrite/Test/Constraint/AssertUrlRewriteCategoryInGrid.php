@@ -114,7 +114,7 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
     private function rowVisibleAssertion(array $filter)
     {
         $filterRow = implode(', ', $filter);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $this->urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter, true, false),
             'URL Rewrite with request path "' . $filterRow . '" is absent in grid.'
         );

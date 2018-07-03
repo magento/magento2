@@ -10,7 +10,7 @@ use Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator;
 use Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 
-class ApplicationCodeGeneratorTest extends \PHPUnit_Framework_TestCase
+class ApplicationCodeGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Scanner\DirectoryScanner | \PHPUnit_Framework_MockObject_MockObject

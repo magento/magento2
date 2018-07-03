@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Filesystem\File;
 
+/**
+ * Interface \Magento\Framework\Filesystem\File\ReadInterface
+ *
+ */
 interface ReadInterface
 {
     /**
@@ -14,6 +18,15 @@ interface ReadInterface
      * @return string
      */
     public function read($length);
+
+    /**
+     * Returns the complete content of the file.
+     *
+     * @param string|null $flag
+     * @param resource|null $context
+     * @return string
+     */
+    public function readAll($flag = null, $context = null);
 
     /**
      * Reads the line with specified number of bytes from the current position.

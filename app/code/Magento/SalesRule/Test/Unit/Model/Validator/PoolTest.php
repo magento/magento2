@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Test\Unit\Model\Validator;
 /**
  * Test Class PoolTest
  */
-class PoolTest extends \PHPUnit_Framework_TestCase
+class PoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\Validator\Pool;

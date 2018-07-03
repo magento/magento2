@@ -14,8 +14,6 @@ use Magento\Sales\Model\EntityInterface;
  * Sales order shipment model
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment getResource()
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
  * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
  * @method string getCustomerNote()
@@ -23,6 +21,7 @@ use Magento\Sales\Model\EntityInterface;
  * @method bool getCustomerNoteNotify()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Shipment extends AbstractModel implements EntityInterface, ShipmentInterface
 {
@@ -93,6 +92,11 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * @var \Magento\Sales\Api\OrderRepositoryInterface
      */
     protected $orderRepository;
+
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection|null
+     */
+    private $tracksCollection = null;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -258,8 +262,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
                 if (!$item->getOrderItem()->isDummy(true)) {
                     $totalQty += $item->getQty();
                 }
-            } else {
-                $item->isDeleted(true);
             }
         }
 
@@ -322,7 +324,10 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     {
         $item->setShipment($this)->setParentId($this->getId())->setStoreId($this->getStoreId());
         if (!$item->getId()) {
-            $this->getItemsCollection()->addItem($item);
+            $this->setItems(array_merge(
+                $this->getItems() ?? [],
+                [$item]
+            ));
         }
         return $this;
     }
@@ -334,16 +339,11 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      */
     public function getTracksCollection()
     {
-        if (!$this->hasData(ShipmentInterface::TRACKS)) {
-            $this->setTracks($this->_trackCollectionFactory->create()->setShipmentFilter($this->getId()));
-
-            if ($this->getId()) {
-                foreach ($this->getTracks() as $track) {
-                    $track->setShipment($this);
-                }
-            }
+        if ($this->tracksCollection === null) {
+            $this->tracksCollection = $this->_trackCollectionFactory->create()->setShipmentFilter($this->getId());
         }
-        return $this->getTracks();
+
+        return $this->tracksCollection;
     }
 
     /**
@@ -538,7 +538,11 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
                 $this->setData(ShipmentInterface::ITEMS, $collection->getItems());
             }
         }
-        return $this->getData(ShipmentInterface::ITEMS);
+        $shipmentItems = $this->getData(ShipmentInterface::ITEMS);
+        if ($shipmentItems !== null && !is_array($shipmentItems)) {
+            $shipmentItems = $shipmentItems->getItems();
+        }
+        return $shipmentItems;
     }
 
     /**

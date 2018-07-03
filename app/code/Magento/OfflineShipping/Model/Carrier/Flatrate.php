@@ -15,6 +15,7 @@ use Magento\Shipping\Model\Rate\Result;
  * Flat rate shipping model
  *
  * @api
+ * @since 100.0.2
  */
 class Flatrate extends AbstractCarrier implements CarrierInterface
 {

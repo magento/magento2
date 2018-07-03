@@ -5,7 +5,7 @@
  */
 namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Carrier\Tablerate;
 
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Block\Adminhtml\Carrier\Tablerate\Grid

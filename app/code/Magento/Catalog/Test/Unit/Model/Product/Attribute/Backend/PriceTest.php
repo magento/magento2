@@ -10,7 +10,7 @@ use Magento\Store\Model\Store;
 /**
  * Class PriceTest
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Backend\Price
@@ -48,7 +48,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->setMethods(['getAttributeCode', 'isScopeWebsite'])
+            ->setMethods(['getAttributeCode', 'isScopeWebsite', 'getIsGlobal'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->model->setAttribute($this->attribute);
@@ -61,7 +61,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate($value)
     {
-        $object = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $object = $this->createMock(\Magento\Catalog\Model\Product::class);
         $object->expects($this->once())->method('getData')->willReturn($value);
 
         $this->assertTrue($this->model->validate($object));
@@ -91,7 +91,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateForFailure($value)
     {
-        $object = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $object = $this->createMock(\Magento\Catalog\Model\Product::class);
         $object->expects($this->once())->method('getData')->willReturn($value);
 
         $this->model->validate($object);

@@ -496,9 +496,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Join table to collection select
      *
-     * @param string $table
+     * @param string|array $table
      * @param string $cond
-     * @param string $cols
+     * @param string|array $cols
      * @return $this
      */
     public function join($table, $cond, $cols = '*')
@@ -597,6 +597,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
     /**
      * @inheritdoc
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -608,6 +609,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
     /**
      * @inheritdoc
+     * @since 100.0.11
      */
     public function __wakeup()
     {

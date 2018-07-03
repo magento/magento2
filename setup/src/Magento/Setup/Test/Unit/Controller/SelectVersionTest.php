@@ -9,7 +9,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 use \Magento\Setup\Controller\SelectVersion;
 use \Magento\Setup\Controller\ResponseTypeInterface;
 
-class SelectVersionTest extends \PHPUnit_Framework_TestCase
+class SelectVersionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Model\SystemPackage|\PHPUnit_Framework_MockObject_MockObject
@@ -25,7 +25,7 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->systemPackage = $this->getMock(\Magento\Setup\Model\SystemPackage::class, [], [], '', false);
+        $this->systemPackage = $this->createMock(\Magento\Setup\Model\SystemPackage::class);
         $this->controller = new SelectVersion(
             $this->systemPackage
         );

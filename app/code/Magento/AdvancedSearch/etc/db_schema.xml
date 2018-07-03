@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="catalogsearch_recommendations" resource="default" engine="innodb"
+           comment="Advanced Search Recommendations">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="query_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Query Id"/>
+        <column xsi:type="int" name="relation_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Relation Id"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="CATALOGSEARCH_RECOMMENDATIONS_QUERY_ID_SEARCH_QUERY_QUERY_ID"
+                    table="catalogsearch_recommendations" column="query_id" referenceTable="search_query"
+                    referenceColumn="query_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="CATALOGSEARCH_RECOMMENDATIONS_RELATION_ID_SEARCH_QUERY_QUERY_ID"
+                    table="catalogsearch_recommendations" column="relation_id" referenceTable="search_query"
+                    referenceColumn="query_id" onDelete="CASCADE"/>
+    </table>
+</schema>

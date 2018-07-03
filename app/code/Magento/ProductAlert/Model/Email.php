@@ -12,6 +12,7 @@ namespace Magento\ProductAlert\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Email extends \Magento\Framework\Model\AbstractModel
 {

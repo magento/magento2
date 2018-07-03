@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Product attribute add/edit form main tab
  *
@@ -21,6 +19,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Advanced extends Generic
 {

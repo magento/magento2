@@ -17,6 +17,7 @@ use Magento\Framework\EntityManager\MetadataPool;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractType
 {
@@ -134,6 +135,7 @@ abstract class AbstractType
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -501,7 +503,7 @@ abstract class AbstractType
             if ($attrParams['is_static']) {
                 continue;
             }
-            if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
+            if (isset($rowData[$attrCode]) && strlen(trim($rowData[$attrCode]))) {
                 if (in_array($attrParams['type'], ['select', 'boolean'])) {
                     $resultAttrs[$attrCode] = $attrParams['options'][strtolower($rowData[$attrCode])];
                 } elseif ('multiselect' == $attrParams['type']) {
@@ -532,7 +534,7 @@ abstract class AbstractType
     public function clearEmptyData(array $rowData)
     {
         foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
-            if (!$attrParams['is_static'] && empty($rowData[$attrCode])) {
+            if (!$attrParams['is_static'] && !isset($rowData[$attrCode])) {
                 unset($rowData[$attrCode]);
             }
         }
@@ -553,6 +555,7 @@ abstract class AbstractType
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected function getMetadataPool()
     {
@@ -567,6 +570,7 @@ abstract class AbstractType
      * Get product entity link field
      *
      * @return string
+     * @since 100.1.0
      */
     protected function getProductEntityLinkField()
     {
@@ -580,6 +584,7 @@ abstract class AbstractType
 
     /**
      * Clean cached values
+     * @since 100.2.0
      */
     public function __destruct()
     {

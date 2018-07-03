@@ -118,8 +118,8 @@ define([
 
             this._super();
 
-            scope = this.dataScope;
-            name = scope.split('.').slice(1);
+            scope = this.dataScope.split('.');
+            name = scope.length > 1 ? scope.slice(1) : scope;
 
             valueUpdate = this.showFallbackReset ? 'afterkeydown' : this.valueUpdate;
 
@@ -220,7 +220,7 @@ define([
         },
 
         /**
-         * Sets 'value' as 'hidden' propertie's value, triggers 'toggle' event,
+         * Sets 'value' as 'hidden' property's value, triggers 'toggle' event,
          * sets instance's hidden identifier in params storage based on
          * 'value'.
          *

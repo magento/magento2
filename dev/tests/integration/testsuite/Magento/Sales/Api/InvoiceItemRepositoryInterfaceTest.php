@@ -12,7 +12,7 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class InvoiceItemRepositoryInterfaceTest extends \PHPUnit_Framework_TestCase
+class InvoiceItemRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InvoiceItemRepositoryInterface

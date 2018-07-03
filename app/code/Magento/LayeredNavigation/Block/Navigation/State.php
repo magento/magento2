@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\Template;
  * Layered navigation state
  *
  * @api
+ * @since 100.0.2
  */
 class State extends \Magento\Framework\View\Element\Template
 {

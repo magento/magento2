@@ -32,6 +32,7 @@ define([
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
             mediaGalleryInitial: null,
             slyOldPriceSelector: '.sly-old-price',
+            normalPriceLabelSelector: '.normal-price .price-label',
 
             /**
              * Defines the mechanism of how images of a gallery should be
@@ -265,14 +266,17 @@ define([
             } else {
                 this._resetChildren(element);
             }
+
             this._reloadPrice();
             this._displayRegularPriceBlock(this.simpleProduct);
             this._displayTierPriceBlock(this.simpleProduct);
+            this._displayNormalPriceLabel();
             this._changeProductImage();
         },
 
         /**
          * Change displayed product image according to chosen options of configurable product
+         *
          * @private
          */
         _changeProductImage: function () {
@@ -292,18 +296,37 @@ define([
                 }
 
                 images = $.extend(true, [], images);
-
-                images.forEach(function (img) {
-                    img.type = 'image';
-                });
+                images = this._setImageIndex(images);
 
                 galleryObject.updateData(images);
+
+                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                    selectedOption: this.simpleProduct,
+                    dataMergeStrategy: this.options.gallerySwitchStrategy
+                });
             } else {
                 galleryObject.updateData(initialImages);
                 $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
             }
 
             galleryObject.first();
+        },
+
+        /**
+         * Set correct indexes for image set.
+         *
+         * @param {Array} images
+         * @private
+         */
+        _setImageIndex: function (images) {
+            var length = images.length,
+                i;
+
+            for (i = 0; length > i; i++) {
+                images[i].i = i + 1;
+            }
+
+            return images;
         },
 
         /**
@@ -506,13 +529,42 @@ define([
          * @private
          */
         _displayRegularPriceBlock: function (optionId) {
-            if (typeof optionId != 'undefined' &&
-                this.options.spConfig.optionPrices[optionId].oldPrice.amount != //eslint-disable-line eqeqeq
+            var shouldBeShown = true;
+
+            _.each(this.options.settings, function (element) {
+                if (element.value === '') {
+                    shouldBeShown = false;
+                }
+            });
+
+            if (shouldBeShown &&
+                this.options.spConfig.optionPrices[optionId].oldPrice.amount !==
                 this.options.spConfig.optionPrices[optionId].finalPrice.amount
             ) {
                 $(this.options.slyOldPriceSelector).show();
             } else {
                 $(this.options.slyOldPriceSelector).hide();
+            }
+        },
+
+        /**
+         * Show or hide normal price label
+         *
+         * @private
+         */
+        _displayNormalPriceLabel: function () {
+            var shouldBeShown = false;
+
+            _.each(this.options.settings, function (element) {
+                if (element.value === '') {
+                    shouldBeShown = true;
+                }
+            });
+
+            if (shouldBeShown) {
+                $(this.options.normalPriceLabelSelector).show();
+            } else {
+                $(this.options.normalPriceLabelSelector).hide();
             }
         },
 

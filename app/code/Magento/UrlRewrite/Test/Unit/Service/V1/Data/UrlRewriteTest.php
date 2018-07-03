@@ -5,7 +5,7 @@
  */
 namespace Magento\UrlRewrite\Test\Unit\Service\V1\Data;
 
-class UrlRewriteTest extends \PHPUnit_Framework_TestCase
+class UrlRewriteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\UrlRewrite\Model\UrlRewrite
@@ -16,7 +16,7 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+        $serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(

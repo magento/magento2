@@ -15,7 +15,7 @@ use Magento\Framework\Event\Observer\Collection;
  *
  * @package Magento\Framework
  */
-class EventTest extends \PHPUnit_Framework_TestCase
+class EventTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Event

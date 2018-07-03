@@ -9,6 +9,7 @@ namespace Magento\Shipping\Block\Adminhtml\Create;
  * Adminhtml shipment create form
  *
  * @api
+ * @since 100.0.2
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {

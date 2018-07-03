@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminConfigurationEnableDisableAnalyticsTest">
+        <annotations>
+            <features value="Analytics"/>
+            <stories value="Enable/disable Advanced Reporting"/>
+            <title value="Enable Disable Advanced Reporting"/>
+            <description value="An admin user can enable/disable Advanced Reporting."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-66465"/>
+            <group value="analytics"/>
+            <!-- MAGETWO-90659 -->
+            <group value="skip"/>
+        </annotations>
+        <after>
+            <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>
+        </after>
+        <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+        <!--Goto admin stores configure page -->
+        <amOnPage stepKey="amOnAdminConfig" url="{{AdminConfigPage.url}}"/>
+        <!--Enable Advanced Reporting-->
+        <click stepKey="clickAdvancedReportingConfigMenu" selector="{{AdminConfigSection.advancedReportingMenuItem}}"/>
+        <see stepKey="seeAdvancedReportingServiceLabelEnabled" selector="{{AdminConfigSection.advancedReportingServiceLabel}}" userInput="Advanced Reporting Service"/>
+        <selectOption stepKey="selectAdvancedReportingServiceEnabled" selector="{{AdminConfigSection.advancedReportingService}}" userInput="Enable"/>
+        <see stepKey="seeAdvancedReportingIndustryLabel" selector="{{AdminConfigSection.advancedReportingIndustryLabel}}" userInput="Industry"/>
+        <selectOption stepKey="selectAdvancedReportingIndustry" selector="{{AdminConfigSection.advancedReportingIndustry}}" userInput="Apps and Games"/>
+        <click stepKey="clickSaveConfigButtonEnabled" selector="{{AdminConfigSection.saveButton}}"/>
+        <see stepKey="seeSaveConfigurationMessageEnabled" selector="{{AdminConfigSection.advancedReportingSuccessMessage}}" userInput="You saved the configuration."/>
+        <see stepKey="seeAdvancedReportingServiceEnabled" selector="{{AdminConfigSection.advancedReportingService}}" userInput="Enable"/>
+        <see stepKey="seeAdvancedReportingServiceStatusEnabled" selector="{{AdminConfigSection.advancedReportingServiceStatus}}" userInput="Subscription status: Pending"/>
+        <!--Disable Advanced Reporting-->
+        <see stepKey="seeAdvancedReportingServiceLabelDisabled" selector="{{AdminConfigSection.advancedReportingServiceLabel}}" userInput="Advanced Reporting Service"/>
+        <selectOption stepKey="selectAdvancedReportingServiceDisabled" selector="{{AdminConfigSection.advancedReportingService}}" userInput="Disable"/>
+        <click stepKey="clickSaveConfigButtonDisabled" selector="{{AdminConfigSection.saveButton}}"/>
+        <see stepKey="seeSaveConfigurationMessageDisabled" selector="{{AdminConfigSection.advancedReportingSuccessMessage}}" userInput="You saved the configuration."/>
+        <see stepKey="seeAdvancedReportingServiceDisabled" selector="{{AdminConfigSection.advancedReportingService}}" userInput="Disable"/>
+        <see stepKey="seeAdvancedReportingServiceStatusDisabled" selector="{{AdminConfigSection.advancedReportingServiceStatus}}" userInput="Subscription status: Disabled"/>
+    </test>
+</tests>

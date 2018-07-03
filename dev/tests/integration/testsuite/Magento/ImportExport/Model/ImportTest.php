@@ -10,7 +10,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * @magentoDataFixture Magento/ImportExport/_files/import_data.php
  */
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Model object which is used for tests

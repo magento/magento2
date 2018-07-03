@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class ProductRuleTest extends \PHPUnit_Framework_TestCase
+class ProductRuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\Rule

@@ -53,7 +53,7 @@ class AssertCmsBlockInGrid extends AbstractConstraint
             $pieces = explode('/', $filter['store_id']);
             $filter['store_id'] = end($pieces);
         }
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $cmsBlockIndex->getCmsBlockGrid()->isRowVisible($filter, false, false),
             'CMS Block with '
             . 'title \'' . $filter['title'] . '\', '

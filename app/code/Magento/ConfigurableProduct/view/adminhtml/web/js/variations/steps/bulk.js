@@ -78,10 +78,12 @@ define([
              * Make options sections.
              */
             this.makeOptionSections = function () {
-                this.images = new self.makeImages(null);
-                this.price = self.price;
-                this.quantity = self.quantity;
-            };
+                return {
+                    images: new this.makeImages(null),
+                    price: this.price,
+                    quantity: this.quantity
+                };
+            }.bind(this);
 
             /**
              * @param {Object} images
@@ -152,7 +154,7 @@ define([
             //fill option section data
             this.attributes.each(function (attribute) {
                 attribute.chosen.each(function (option) {
-                    option.sections = ko.observable(new this.makeOptionSections());
+                    option.sections = ko.observable(this.makeOptionSections());
                 }, this);
             }, this);
             //reset section.attribute

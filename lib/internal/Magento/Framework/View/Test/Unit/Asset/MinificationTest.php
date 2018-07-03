@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Unit test for Magento\Framework\View\Asset\Minification
  */
-class MinificationTest extends \PHPUnit_Framework_TestCase
+class MinificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\Minification
@@ -203,10 +203,10 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getValue')
             ->with('dev/js/minify_exclude')
-            ->willReturn(
-                "    /tiny_mce/  \n" .
-                "  /tiny_mce2/  "
-            );
+            ->willReturn([
+                'tiny_mce' => '/tiny_mce/',
+                'some_other_unique_name' => '/tiny_mce2/'
+            ]);
 
         $expected = ['/tiny_mce/', '/tiny_mce2/'];
         $this->assertEquals($expected, $this->minification->getExcludes('js'));

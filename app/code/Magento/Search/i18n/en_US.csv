@@ -29,21 +29,22 @@ Store,Store
 "Redirect URL","Redirect URL"
 "ex. http://domain.com","ex. http://domain.com"
 "Display in Suggested Terms","Display in Suggested Terms"
-Marketing,Marketing
-"Search synonyms are not supported by the %1 search engine. Any synonyms you enter won\'t be used.","Search synonyms are not supported by the %1 search engine. Any synonyms you enter won\'t be used."
 "The synonym group has been deleted.","The synonym group has been deleted."
-"We can\'t find a synonym group to delete.","We can\'t find a synonym group to delete."
+"An error was encountered while performing delete operation.","An error was encountered while performing delete operation."
+"We can't find a synonym group to delete.","We can't find a synonym group to delete."
 "This synonyms group no longer exists.","This synonyms group no longer exists."
 "Edit Synonym Group","Edit Synonym Group"
 "Synonym Group","Synonym Group"
 "Failed to delete %1 synonym group(s).","Failed to delete %1 synonym group(s)."
 "A total of %1 synonym group(s) have been deleted.","A total of %1 synonym group(s) have been deleted."
+Marketing,Marketing
+"Search synonyms are not supported by the %1 search engine. Any synonyms you enter won't be used.","Search synonyms are not supported by the %1 search engine. Any synonyms you enter won't be used."
 "This synonym group no longer exists.","This synonym group no longer exists."
 "You saved the synonym group.","You saved the synonym group."
 "The terms you entered, (%1), belong to 1 existing synonym group, %2. Select the ""Merge existing synonyms"" checkbox so the terms can be merged.","The terms you entered, (%1), belong to 1 existing synonym group, %2. Select the ""Merge existing synonyms"" checkbox so the terms can be merged."
 "The terms you entered, (%1), belong to %2 existing synonym groups, %3 and %4. Select the ""Merge existing synonyms"" checkbox so the terms can be merged.","The terms you entered, (%1), belong to %2 existing synonym groups, %3 and %4. Select the ""Merge existing synonyms"" checkbox so the terms can be merged."
 "You deleted the search.","You deleted the search."
-"We can\'t find a search term to delete.","We can\'t find a search term to delete."
+"We can't find a search term to delete.","We can't find a search term to delete."
 "This search no longer exists.","This search no longer exists."
 "Edit Search","Edit Search"
 "Please select searches.","Please select searches."
@@ -53,7 +54,7 @@ Reports,Reports
 "You saved the search term.","You saved the search term."
 "Something went wrong while saving the search query.","Something went wrong while saving the search query."
 "You already have an identical search term query.","You already have an identical search term query."
-"Your search query can\'t be longer than %1, so we shortened your query.","Your search query can\'t be longer than %1, so we shortened your query."
+"Your search query can't be longer than %1, so we shortened your query.","Your search query can't be longer than %1, so we shortened your query."
 "Synonym group with id %1 cannot be deleted. %2","Synonym group with id %1 cannot be deleted. %2"
 "Merge conflict with existing synonym group(s): %1","Merge conflict with existing synonym group(s): %1"
 "All Websites","All Websites"
@@ -75,14 +76,12 @@ yes,yes
 no,no
 Action,Action
 Edit,Edit
-Scope,Scope
 "You can adjust the scope of this synonym group by selecting an option from the list.","You can adjust the scope of this synonym group by selecting an option from the list."
-Synonyms,Synonyms
+Scope,Scope
 "Comma-separated list of synonyms. The terms entered (separated by commas) will be used as an “OR” search query to search your entire store. For example, if you enter “shoes,footwear”, and user were to search for ""shoes"", the search results will include any product or content with term “shoes"" or ""footwear.”","Comma-separated list of synonyms. The terms entered (separated by commas) will be used as an “OR” search query to search your entire store. For example, if you enter “shoes,footwear”, and user were to search for ""shoes"", the search results will include any product or content with term “shoes"" or ""footwear.”"
-"Merge existing synonyms","Merge existing synonyms"
+Synonyms,Synonyms
 "Automatically merges synonyms in groups that share the same scope. If you check this box and you add one or more of the same terms to different synonym groups in the same scope, automatically merges all the terms to one group. If this isn't what you want, uncheck the box and an error displays if you try to add the same terms.","Automatically merges synonyms in groups that share the same scope. If you check this box and you add one or more of the same terms to different synonym groups in the same scope, automatically merges all the terms to one group. If this isn't what you want, uncheck the box and an error displays if you try to add the same terms."
 "Store View","Store View"
 Website,Website
-"Delete items","Delete items"
 "Are you sure you want to delete the selected synonym groups?","Are you sure you want to delete the selected synonym groups?"
-"An error was encountered while performing delete operation.","An error was encountered while performing delete operation."
+"Delete items","Delete items"

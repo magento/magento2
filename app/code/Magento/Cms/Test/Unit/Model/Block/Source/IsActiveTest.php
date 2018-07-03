@@ -8,7 +8,7 @@ namespace Magento\Cms\Test\Unit\Model\Block\Source;
 use Magento\Cms\Model\Block;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class IsActiveTest extends \PHPUnit_Framework_TestCase
+class IsActiveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Block|\PHPUnit_Framework_MockObject_MockObject

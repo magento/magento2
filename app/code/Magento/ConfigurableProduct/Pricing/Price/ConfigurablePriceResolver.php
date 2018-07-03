@@ -12,18 +12,20 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 class ConfigurablePriceResolver implements PriceResolverInterface
 {
-    /** @var PriceResolverInterface */
+    /**
+     * @var \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     */
     protected $priceResolver;
 
     /**
      * @var PriceCurrencyInterface
-     * @deprecated
+     * @deprecated 100.1.1
      */
     protected $priceCurrency;
 
     /**
      * @var Configurable
-     * @deprecated
+     * @deprecated 100.1.1
      */
     protected $configurable;
 

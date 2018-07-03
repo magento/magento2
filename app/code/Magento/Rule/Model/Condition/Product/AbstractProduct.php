@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCondition
 {

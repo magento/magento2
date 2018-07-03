@@ -15,6 +15,7 @@ use Magento\Framework\Indexer\SaveHandler\Batch;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class IndexerHandler implements IndexerInterface
 {
@@ -74,7 +75,7 @@ class IndexerHandler implements IndexerInterface
         Batch $batch,
         IndexScopeResolverInterface $indexScopeResolver,
         array $data,
-        $batchSize = 100
+        $batchSize = 500
     ) {
         $this->indexScopeResolver = $indexScopeResolver;
         $this->indexStructure = $indexStructure;

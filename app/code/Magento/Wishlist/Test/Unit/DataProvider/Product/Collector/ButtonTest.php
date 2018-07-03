@@ -18,7 +18,7 @@ use Magento\Wishlist\Ui\DataProvider\Product\Collector\Button;
 /**
  * Collect information needed to render wishlist button on front
  */
-class ButtonTest extends \PHPUnit_Framework_TestCase
+class ButtonTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Wishlist\Ui\DataProvider\Product\Collector\Button */
     private $button;
@@ -87,7 +87,7 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
         $this->button->collect($productMock, $productRendererMock);
     }
 
-    public function testCollectEmptyExtnsionAttributes()
+    public function testCollectEmptyExtensionAttributes()
     {
         $productRendererMock = $this->getMockBuilder(ProductRenderInterface::class)
             ->disableOriginalConstructor()

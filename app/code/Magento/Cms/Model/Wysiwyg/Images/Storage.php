@@ -16,6 +16,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Storage extends \Magento\Framework\DataObject
 {
@@ -240,10 +241,12 @@ class Storage extends \Magento\Framework\DataObject
     protected function removeItemFromCollection($collection, $conditions)
     {
         $regExp = $conditions['reg_exp'] ? '~' . implode('|', array_keys($conditions['reg_exp'])) . '~i' : null;
-        $storageRootLength = strlen($this->_cmsWysiwygImages->getStorageRoot());
+        $storageRoot = $this->_cmsWysiwygImages->getStorageRoot();
+        $storageRootLength = strlen($storageRoot);
 
         foreach ($collection as $key => $value) {
-            $rootChildParts = explode('/', substr($value->getFilename(), $storageRootLength));
+            $mediaSubPathname = substr($value->getFilename(), $storageRootLength);
+            $rootChildParts = explode('/', '/' . ltrim($mediaSubPathname, '/'));
 
             if (array_key_exists($rootChildParts[1], $conditions['plain'])
                 || ($regExp && preg_match($regExp, $value->getFilename()))) {
@@ -317,6 +320,8 @@ class Storage extends \Magento\Framework\DataObject
             $item->setName($item->getBasename());
             $item->setShortName($this->_cmsWysiwygImages->getShortFilename($item->getBasename()));
             $item->setUrl($this->_cmsWysiwygImages->getCurrentUrl() . $item->getBasename());
+            $item->setSize(filesize($item->getFilename()));
+            $item->setMimeType(\mime_content_type($item->getFilename()));
 
             if ($this->isImage($item->getBasename())) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
@@ -734,7 +739,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     protected function _sanitizePath($path)
     {
-        return rtrim(preg_replace('~[/\\\]+~', '/', $this->_directory->getDriver()->getRealPath($path)), '/');
+        return rtrim(preg_replace('~[/\\\]+~', '/', $this->_directory->getDriver()->getRealPathSafety($path)), '/');
     }
 
     /**

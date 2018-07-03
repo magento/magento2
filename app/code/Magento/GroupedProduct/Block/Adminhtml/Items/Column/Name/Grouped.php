@@ -9,6 +9,7 @@ namespace Magento\GroupedProduct\Block\Adminhtml\Items\Column\Name;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Grouped extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
 {

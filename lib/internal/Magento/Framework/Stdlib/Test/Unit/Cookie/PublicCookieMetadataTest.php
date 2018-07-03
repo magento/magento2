@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Test PublicCookieMetadata
  *
  */
-class PublicCookieMetadataTest extends \PHPUnit_Framework_TestCase
+class PublicCookieMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var PublicCookieMetadata */
     private $publicCookieMetadata;

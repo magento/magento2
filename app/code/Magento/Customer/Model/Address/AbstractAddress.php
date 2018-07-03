@@ -12,6 +12,7 @@ use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Data\Address as AddressData;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -32,6 +33,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class AbstractAddress extends AbstractExtensibleModel implements AddressModelInterface
 {
@@ -117,6 +119,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     protected $dataObjectHelper;
 
+    /** @var CompositeValidator */
+    private $compositeValidator;
+
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -134,6 +139,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CompositeValidator $compositeValidator
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -152,7 +159,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CompositeValidator $compositeValidator = null
     ) {
         $this->_directoryData = $directoryData;
         $data = $this->_implodeArrayField($data);
@@ -164,6 +172,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $this->addressDataFactory = $addressDataFactory;
         $this->regionDataFactory = $regionDataFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->compositeValidator = $compositeValidator ?: ObjectManager::getInstance()
+            ->get(CompositeValidator::class);
         parent::__construct(
             $context,
             $registry,
@@ -230,7 +240,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     public function getStreetFull()
     {
-        return $this->getData('street');
+        $street = $this->getData('street');
+        return is_array($street) ? implode("\n", $street) : $street;
     }
 
     /**
@@ -267,7 +278,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     {
         if (is_array($key)) {
             $key = $this->_implodeArrayField($key);
-        } elseif (is_array($value) && !empty($value) && $this->isAddressMultilineAttribute($key)) {
+        } elseif (is_array($value) && $this->isAddressMultilineAttribute($key)) {
             $value = $this->_implodeArrayValues($value);
         }
         return parent::setData($key, $value);
@@ -307,7 +318,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     protected function _implodeArrayValues($value)
     {
-        if (is_array($value) && count($value)) {
+        if (is_array($value)) {
+            if (!count($value)) {
+                return '';
+            }
+
             $isScalar = false;
             foreach ($value as $val) {
                 if (is_scalar($val)) {
@@ -556,80 +571,22 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Validate address attribute values
+     * Validate address attribute values.
      *
-     *
-     *
-     * @return bool|array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @return array|bool
      */
     public function validate()
     {
-        $errors = [];
-        if (!\Zend_Validate::is($this->getFirstname(), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'firstname']);
-        }
-
-        if (!\Zend_Validate::is($this->getLastname(), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'lastname']);
-        }
-
-        if (!\Zend_Validate::is($this->getStreetLine(1), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'street']);
-        }
-
-        if (!\Zend_Validate::is($this->getCity(), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'city']);
-        }
-
-        if ($this->isTelephoneRequired()) {
-            if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
-                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'telephone']);
-            }
-        }
-
-        if ($this->isFaxRequired()) {
-            if (!\Zend_Validate::is($this->getFax(), 'NotEmpty')) {
-                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'fax']);
-            }
-        }
-
-        if ($this->isCompanyRequired()) {
-            if (!\Zend_Validate::is($this->getCompany(), 'NotEmpty')) {
-                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'company']);
-            }
-        }
-
-        $_havingOptionalZip = $this->_directoryData->getCountriesWithOptionalZip();
-        if (!in_array(
-            $this->getCountryId(),
-            $_havingOptionalZip
-        ) && !\Zend_Validate::is(
-            $this->getPostcode(),
-            'NotEmpty'
-        )
-        ) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'postcode']);
-        }
-
-        if (!\Zend_Validate::is($this->getCountryId(), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'countryId']);
-        }
-
-        if ($this->getCountryModel()->getRegionCollection()->getSize() && !\Zend_Validate::is(
-            $this->getRegionId(),
-            'NotEmpty'
-        ) && $this->_directoryData->isRegionRequired(
-            $this->getCountryId()
-        )
-        ) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'regionId']);
-        }
-
-        if (empty($errors) || $this->getShouldIgnoreValidation()) {
+        if ($this->getShouldIgnoreValidation()) {
             return true;
         }
+
+        $errors = $this->compositeValidator->validate($this);
+
+        if (empty($errors)) {
+            return true;
+        }
+
         return $errors;
     }
 
@@ -652,6 +609,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /**
      * Unset Region from address
      * @return $this
+     * @since 100.2.0
      */
     public function unsRegion()
     {
@@ -660,6 +618,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return bool
+     * @since 100.2.0
      */
     protected function isCompanyRequired()
     {
@@ -668,6 +627,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return bool
+     * @since 100.2.0
      */
     protected function isTelephoneRequired()
     {
@@ -676,6 +636,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return bool
+     * @since 100.2.0
      */
     protected function isFaxRequired()
     {

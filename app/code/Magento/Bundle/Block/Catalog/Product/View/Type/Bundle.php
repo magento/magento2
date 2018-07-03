@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Product;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -85,7 +86,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
      */
     private function getCatalogRuleProcessor()
@@ -216,10 +217,11 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Get formed data from option selection item
+     * Get formed data from option selection item.
      *
      * @param Product $product
      * @param Product $selection
+     *
      * @return array
      */
     private function getSelectionItemData(Product $product, Product $selection)
@@ -227,10 +229,15 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         $qty = ($selection->getSelectionQty() * 1) ?: '1';
 
         $optionPriceAmount = $product->getPriceInfo()
-            ->getPrice('bundle_option')
+            ->getPrice(\Magento\Bundle\Pricing\Price\BundleOptionPrice::PRICE_CODE)
             ->getOptionSelectionAmount($selection);
         $finalPrice = $optionPriceAmount->getValue();
         $basePrice = $optionPriceAmount->getBaseAmount();
+
+        $oldPrice = $product->getPriceInfo()
+            ->getPrice(\Magento\Bundle\Pricing\Price\BundleOptionRegularPrice::PRICE_CODE)
+            ->getOptionSelectionAmount($selection)
+            ->getValue();
 
         $selection = [
             'qty' => $qty,
@@ -238,20 +245,21 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             'optionId' => $selection->getId(),
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $basePrice
+                    'amount' => $oldPrice,
                 ],
                 'basePrice' => [
-                    'amount' => $basePrice
+                    'amount' => $basePrice,
                 ],
                 'finalPrice' => [
-                    'amount' => $finalPrice
-                ]
+                    'amount' => $finalPrice,
+                ],
             ],
             'priceType' => $selection->getSelectionPriceType(),
             'tierPrice' => $this->getTierPrices($product, $selection),
             'name' => $selection->getName(),
-            'canApplyMsrp' => false
+            'canApplyMsrp' => false,
         ];
+
         return $selection;
     }
 

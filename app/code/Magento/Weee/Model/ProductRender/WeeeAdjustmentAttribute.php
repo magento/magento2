@@ -11,12 +11,14 @@ use Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterface;
 /**
  * Price interface.
  * @api
+ * @since 100.2.0
  */
 class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
     WeeeAdjustmentAttributeInterface
 {
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function setAttributeCode($attributeCode)
     {
@@ -25,6 +27,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function getAttributeCode()
     {
@@ -33,6 +36,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function setAmount($amount)
     {
@@ -41,6 +45,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function getAmount()
     {
@@ -49,6 +54,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function getTaxAmount()
     {
@@ -57,6 +63,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function setTaxAmount($taxAmount)
     {
@@ -65,6 +72,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function setAmountExclTax($amountExclTax)
     {
@@ -73,6 +81,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function getAmountExclTax()
     {
@@ -81,6 +90,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function setTaxAmountInclTax($amountInclTax)
     {
@@ -89,6 +99,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function getTaxAmountInclTax()
     {
@@ -97,6 +108,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function getExtensionAttributes()
     {
@@ -109,6 +121,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function setExtensionAttributes(
         \Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeExtensionInterface $extensionAttributes

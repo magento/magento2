@@ -17,7 +17,7 @@ use Magento\Tax\Model\ResourceModel\Calculation\Rate\CollectionFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxRulesFixtureTest extends \PHPUnit_Framework_TestCase
+class TaxRulesFixtureTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

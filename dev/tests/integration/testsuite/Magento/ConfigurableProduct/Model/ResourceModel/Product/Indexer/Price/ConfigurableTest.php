@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StoreManagerInterface
@@ -36,6 +36,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetProductFinalPriceIfOneOfChildIsDisabled()
     {
@@ -70,6 +71,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetProductFinalPriceIfOneOfChildIsDisabledPerStore()
     {

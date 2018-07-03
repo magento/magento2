@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Api\Data;
 
 /**
@@ -15,6 +13,7 @@ namespace Magento\Sales\Api\Data;
  * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
  * customer account so that the customer can make future purchases.
  * @api
+ * @since 100.0.2
  */
 interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -616,7 +615,8 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Gets credit memo comments.
      *
-     * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null Array of any credit memo comments. Otherwise, null.
+     * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null Array of any credit memo comments.
+     * Otherwise, null.
      */
     public function getComments();
 

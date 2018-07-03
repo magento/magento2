@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <!--Types-->
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/name.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/real/decimal.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/real/float.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/real/double.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/integers/integer.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/integers/biginteger.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/integers/smallinteger.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/integers/tinyinteger.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/text.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/longtext.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/mediumtext.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/varchar.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/blob.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/mediumblob.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/longblob.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/varbinary.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/datetime/timestamp.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/datetime/datetime.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/datetime/date.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/boolean.xsd" />
+    <!--Constraints-->
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/constraints/foreign.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/constraints/unique.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/constraints/primary.xsd" />
+    <!--Indexes-->
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/index.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/column.xsd" />
+
+    <xs:element name="schema">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="table" type="table"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="table">
+        <xs:annotation>
+            <xs:documentation>
+                Table definition. Here we can found column, constraints and indexes
+            </xs:documentation>
+        </xs:annotation>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="column" type="abstractColumnType"/>
+            <xs:element name="constraint" />
+            <xs:element name="index" type="index" />
+        </xs:choice>
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="resource" type="resourceType" />
+        <xs:attribute name="engine" type="engineType" />
+        <xs:attribute name="comment" type="xs:string" />
+        <xs:attribute name="collation" type="xs:string" />
+        <xs:attribute name="charset" type="xs:string" />
+        <xs:attribute name="onCreate" type="xs:string" />
+    </xs:complexType>
+
+    <xs:simpleType name="resourceType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="default" />
+            <xs:enumeration value="checkout" />
+            <xs:enumeration value="sales" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="engineType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="innodb" />
+            <xs:enumeration value="memory" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

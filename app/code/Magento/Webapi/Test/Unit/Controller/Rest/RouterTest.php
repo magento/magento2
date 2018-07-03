@@ -5,7 +5,7 @@
  */
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
-class RouterTest extends \PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Webapi\Controller\Rest\Router\Route */
     protected $_routeMock;
@@ -32,7 +32,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ['match']
         )->getMock();
 
-        $areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
 
         $areaListMock->expects($this->once())
             ->method('getFrontName')

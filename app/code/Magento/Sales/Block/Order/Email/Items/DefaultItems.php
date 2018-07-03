@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Item as OrderItem;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class DefaultItems extends \Magento\Framework\View\Element\Template
 {

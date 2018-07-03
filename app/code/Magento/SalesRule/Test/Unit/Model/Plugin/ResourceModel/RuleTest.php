@@ -6,7 +6,7 @@
 
 namespace Magento\SalesRule\Test\Unit\Model\Plugin\ResourceModel;
 
-class RuleTest extends \PHPUnit_Framework_TestCase
+class RuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\Plugin\ResourceModel\Rule

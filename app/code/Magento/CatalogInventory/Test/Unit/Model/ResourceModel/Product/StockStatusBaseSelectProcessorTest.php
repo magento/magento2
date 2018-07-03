@@ -12,7 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
+class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
@@ -56,9 +56,13 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
                 []
             )
             ->willReturnSelf();
-        $this->select->expects($this->once())
+
+        $this->select->expects($this->exactly(2))
             ->method('where')
-            ->with('stock.stock_status = ?', Stock::STOCK_IN_STOCK)
+            ->withConsecutive(
+                ['stock.stock_status = ?', Stock::STOCK_IN_STOCK, null],
+                ['stock.website_id = ?', 0, null]
+            )
             ->willReturnSelf();
 
         $this->stockStatusBaseSelectProcessor->process($this->select);

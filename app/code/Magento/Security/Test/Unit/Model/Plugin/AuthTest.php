@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Security\Model\Plugin\Auth testing
  */
-class AuthTest extends \PHPUnit_Framework_TestCase
+class AuthTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Security\Model\Plugin\Auth
@@ -51,12 +51,9 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->sessionsManager =  $this->getMock(
+        $this->sessionsManager = $this->createPartialMock(
             \Magento\Security\Model\AdminSessionsManager::class,
-            ['processLogin', 'processLogout', 'getCurrentSession'],
-            [],
-            '',
-            false
+            ['processLogin', 'processLogout', 'getCurrentSession']
         );
 
         $this->messageManager = $this->getMockForAbstractClass(
@@ -66,21 +63,12 @@ class AuthTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->currentSession =  $this->getMock(
+        $this->currentSession = $this->createPartialMock(
             \Magento\Security\Model\AdminSessionInfo::class,
-            ['isOtherSessionsTerminated'],
-            [],
-            '',
-            false
+            ['isOtherSessionsTerminated']
         );
 
-        $this->authMock =  $this->getMock(
-            \Magento\Backend\Model\Auth::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->authMock =  $this->createMock(\Magento\Backend\Model\Auth::class);
 
         $this->model = $this->objectManager->getObject(
             \Magento\Security\Model\Plugin\Auth::class,

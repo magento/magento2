@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Source\Locale;
 
-class TimezoneTest extends \PHPUnit_Framework_TestCase
+class TimezoneTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

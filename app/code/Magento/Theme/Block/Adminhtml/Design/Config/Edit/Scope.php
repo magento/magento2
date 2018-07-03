@@ -14,6 +14,7 @@ use Magento\Framework\App\ScopeResolverPool;
  * Scope information block
  *
  * @api
+ * @since 100.1.0
  */
 class Scope extends Template
 {
@@ -38,6 +39,7 @@ class Scope extends Template
      * Retrieve scope title
      *
      * @return string
+     * @since 100.1.0
      */
     public function getScopeTitle()
     {
@@ -55,6 +57,7 @@ class Scope extends Template
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function toHtml()
     {

@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard;
 
-class StatTest extends \PHPUnit_Framework_TestCase
+class StatTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Profiler\Driver\Standard\Stat
@@ -318,7 +318,7 @@ class StatTest extends \PHPUnit_Framework_TestCase
         foreach ($expects as $expectedData) {
             /** @var bool|int|PHPUnit_Framework_Constraint $expectedValue */
             list($timerId, $key, $expectedValue) = array_values($expectedData);
-            if ($expectedValue instanceof \PHPUnit_Framework_Constraint) {
+            if (!is_scalar($expectedValue)) {
                 $expectedValue->evaluate($this->_stat->fetch($timerId, $key));
             } else {
                 $this->assertEquals($expectedValue, $this->_stat->fetch($timerId, $key));

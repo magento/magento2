@@ -2,7 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true expr:true*/
+
 define([
     'jquery',
     'Magento_Catalog/catalog/type-events',

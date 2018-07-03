@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Test\Unit\Console\Command\App\SensitiveConfigSet;
 
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorFactory;
@@ -13,7 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use stdClass;
 
-class CollectorFactoryTest extends \PHPUnit_Framework_TestCase
+class CollectorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface|MockObject
@@ -60,7 +61,7 @@ class CollectorFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Class for type "dummyType" was not declared
+     * @expectedExceptionMessage The class for "dummyType" type wasn't declared. Enter the class and try again.
      */
     public function testCreateNonExisted()
     {

@@ -10,7 +10,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
  *
  * @magentoAppArea adminhtml
  */
-class CartsTest extends \PHPUnit_Framework_TestCase
+class CartsTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Carts */
     private $_block;

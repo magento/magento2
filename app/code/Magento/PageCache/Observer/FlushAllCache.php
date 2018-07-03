@@ -14,7 +14,7 @@ class FlushAllCache implements ObserverInterface
     /**
      * @var \Magento\Framework\App\PageCache\Cache
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_cache;
 

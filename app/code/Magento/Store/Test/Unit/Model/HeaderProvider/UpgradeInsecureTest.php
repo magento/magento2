@@ -11,7 +11,7 @@ use \Magento\Store\Model\Store;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 
-class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
+class UpgradeInsecureTest extends \PHPUnit\Framework\TestCase
 {
     /** Content-Security-Policy Header name */
     const HEADER_NAME = 'Content-Security-Policy';
@@ -56,7 +56,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
     /**
      * @param [] $configValuesMap
      * @param bool $expected
-     * @dataProvider testCanApplyDataProvider
+     * @dataProvider canApplyDataProvider
      */
     public function testCanApply($configValuesMap, $expected)
     {
@@ -71,7 +71,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function testCanApplyDataProvider()
+    public function canApplyDataProvider()
     {
         return [
             [

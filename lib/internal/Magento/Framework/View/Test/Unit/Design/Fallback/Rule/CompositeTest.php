@@ -11,7 +11,7 @@ use \Magento\Framework\View\Design\Fallback\Rule\Composite;
  * Composite Test
  *
  */
-class CompositeTest extends \PHPUnit_Framework_TestCase
+class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

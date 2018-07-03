@@ -11,6 +11,7 @@ use Magento\Framework\Model\AbstractModel;
  * Template db resource
  *
  * @api
+ * @since 100.0.2
  */
 class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

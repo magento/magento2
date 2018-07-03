@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Locale\Test\Unit;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     private static $allAllowedLocales = [
         'af_ZA', 'ar_DZ', 'ar_EG', 'ar_KW', 'ar_MA', 'ar_SA', 'az_Latn_AZ', 'be_BY', 'bg_BG', 'bn_BD',

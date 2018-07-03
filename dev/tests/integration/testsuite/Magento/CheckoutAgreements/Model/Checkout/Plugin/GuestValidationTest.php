@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GuestValidationTest extends \PHPUnit_Framework_TestCase
+class GuestValidationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -142,11 +143,13 @@ class GuestValidationTest extends \PHPUnit_Framework_TestCase
             $this->assertNotNull($orderId);
         } catch (\Magento\Framework\Exception\CouldNotSaveException $e) {
             $this->assertEquals(
-                __('Please agree to all the terms and conditions before placing the order.'),
+                __(
+                    "The order wasn't placed. "
+                    . "First, agree to the terms and conditions, then try placing your order again."
+                ),
                 $e->getMessage()
             );
         }
-
     }
 
     public function dataProvider()

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Store\Model\Resolver;
 
 use Magento\Framework\App\ScopeInterface;
@@ -33,7 +34,7 @@ class Group implements ScopeResolverInterface
     {
         $scope = $this->storeManager->getGroup($scopeId);
         if (!$scope instanceof ScopeInterface) {
-            throw new InitException(__('Invalid scope object'));
+            throw new InitException(__('The scope object is invalid. Verify the scope object and try again.'));
         }
 
         return $scope;

@@ -9,7 +9,7 @@ use Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\Att
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection;
 use Magento\Framework\Api\Filter;
 
-class AttributeGroupAttributeSetIdFilterTest extends \PHPUnit_Framework_TestCase
+class AttributeGroupAttributeSetIdFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AttributeGroupAttributeSetIdFilter

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product\Type;
 
-class VirtualTest extends \PHPUnit_Framework_TestCase
+class VirtualTest extends \PHPUnit\Framework\TestCase
 {
     public function testIsVirtual()
     {

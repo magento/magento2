@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation\Rule;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager

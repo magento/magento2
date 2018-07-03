@@ -30,9 +30,7 @@ class Context
 
     /**#@-*/
 
-    /**
-     * @var ComponentRegistrar
-     */
+    /**#@-*/
     private $componentRegistrar;
 
     /**

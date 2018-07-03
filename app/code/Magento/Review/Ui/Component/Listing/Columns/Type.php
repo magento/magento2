@@ -11,11 +11,13 @@ use Magento\Ui\Component\Listing\Columns\Column;
  * Class Type
  *
  * @api
+ * @since 100.1.0
  */
 class Type extends Column
 {
     /**
      * {@inheritdoc
+     * @since 100.1.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -37,6 +39,7 @@ class Type extends Column
      *
      * @param array $item
      * @return \Magento\Framework\Phrase
+     * @since 100.1.0
      */
     protected function getTypeLabel(array $item)
     {

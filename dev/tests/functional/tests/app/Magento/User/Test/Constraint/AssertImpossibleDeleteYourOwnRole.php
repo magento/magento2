@@ -25,7 +25,7 @@ class AssertImpossibleDeleteYourOwnRole extends AbstractConstraint
     public function processAssert(UserRoleEditRole $rolePage)
     {
         $errorMessage = $rolePage->getMessagesBlock()->getErrorMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_MESSAGE,
             $errorMessage,
             'Wrong success message is displayed.'

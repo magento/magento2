@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit;
 
-class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
+class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResponseFactory
@@ -24,7 +24,7 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Framework\App\ResponseFactory($this->_objectManagerMock);
     }
 

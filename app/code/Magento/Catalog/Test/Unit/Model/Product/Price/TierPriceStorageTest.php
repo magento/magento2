@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 /**
  * TierPriceStorage test.
  */
-class TierPriceStorageTest extends \PHPUnit_Framework_TestCase
+class TierPriceStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Price\TierPricePersistence|\PHPUnit_Framework_MockObject_MockObject

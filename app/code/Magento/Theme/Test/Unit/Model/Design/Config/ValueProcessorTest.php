@@ -7,7 +7,7 @@ namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
 use Magento\Theme\Model\Design\Config\ValueProcessor;
 
-class ValueProcessorTest extends \PHPUnit_Framework_TestCase
+class ValueProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Theme\Model\Design\BackendModelFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $backendModelFactory;

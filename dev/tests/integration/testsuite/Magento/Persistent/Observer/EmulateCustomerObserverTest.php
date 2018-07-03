@@ -9,7 +9,7 @@ namespace Magento\Persistent\Observer;
 /**
  * @magentoDataFixture Magento/Persistent/_files/persistent.php
  */
-class EmulateCustomerObserverTest extends \PHPUnit_Framework_TestCase
+class EmulateCustomerObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface

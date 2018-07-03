@@ -15,7 +15,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
+class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
@@ -100,7 +100,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage entity_type_code is a required field.
+     * @expectedExceptionMessage "entity_type_code" is required. Enter and try again.
      */
     public function testGetListInputException()
     {

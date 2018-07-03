@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\Tax\Model\Config\TaxClass
  */
 namespace Magento\Tax\Test\Unit\Model\Config;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-class TaxClassTest extends \PHPUnit_Framework_TestCase
+
+class TaxClassTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests the afterSave method indirectly
@@ -68,6 +67,7 @@ class TaxClassTest extends \PHPUnit_Framework_TestCase
 
         // Save the tax config data which will call _aftersave() in tax and update the default product tax class
         // No assertion should be thrown
-        $taxClass->save();
+        $result = $taxClass->save();
+        $this->assertNotNull($result);
     }
 }

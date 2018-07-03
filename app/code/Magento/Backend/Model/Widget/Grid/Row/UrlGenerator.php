@@ -8,6 +8,7 @@ namespace Magento\Backend\Model\Widget\Grid\Row;
 /**
  * Grid row url generator
  * @api
+ * @since 100.0.2
  */
 class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorInterface
 {

@@ -10,6 +10,7 @@ namespace Magento\Translation\Model\Js;
  * Provides translation data from a theme.
  *
  * @api
+ * @since 100.0.2
  */
 interface DataProviderInterface
 {

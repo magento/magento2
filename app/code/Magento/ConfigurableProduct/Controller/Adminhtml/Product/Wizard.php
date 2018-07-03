@@ -16,6 +16,13 @@ use Magento\Backend\App\Action\Context;
 class Wizard extends Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
+    /**
      * @var Builder
      */
     protected $productBuilder;

@@ -11,6 +11,7 @@ use Magento\Integration\Model\Integration as IntegrationModel;
  * Integration Service Interface
  *
  * @api
+ * @since 100.0.2
  */
 interface IntegrationServiceInterface
 {

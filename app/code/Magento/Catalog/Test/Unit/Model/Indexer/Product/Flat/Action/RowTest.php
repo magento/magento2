@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class RowTest extends \PHPUnit_Framework_TestCase
+class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row
@@ -61,37 +59,33 @@ class RowTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->connection = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->resource->expects($this->any())->method('getConnection')
             ->with('default')
             ->will($this->returnValue($this->connection));
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->store->expects($this->any())->method('getId')->will($this->returnValue('store_id_1'));
         $this->storeManager->expects($this->any())->method('getStores')->will($this->returnValue([$this->store]));
-        $this->productIndexerHelper = $this->getMock(
-            \Magento\Catalog\Helper\Product\Flat\Indexer::class, [], [], '', false
-        );
-        $this->flatItemEraser = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class, [], [], '', false
-        );
-        $this->flatItemWriter = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class, [], [], '', false
-        );
-        $this->flatTableBuilder = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class, [], [], '', false
+        $this->productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
+        $this->flatItemEraser = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class);
+        $this->flatItemWriter = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class);
+        $this->flatTableBuilder = $this->createMock(
+            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class
         );
 
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class, [
-            'resource' => $this->resource,
-            'storeManager' => $this->storeManager,
-            'productHelper' => $this->productIndexerHelper,
-            'flatItemEraser' => $this->flatItemEraser,
-            'flatItemWriter' => $this->flatItemWriter,
-            'flatTableBuilder' => $this->flatTableBuilder
-        ]);
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class,
+            [
+                'resource' => $this->resource,
+                'storeManager' => $this->storeManager,
+                'productHelper' => $this->productIndexerHelper,
+                'flatItemEraser' => $this->flatItemEraser,
+                'flatItemWriter' => $this->flatItemWriter,
+                'flatTableBuilder' => $this->flatTableBuilder
+            ]
+        );
     }
 
     /**
@@ -126,4 +120,3 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $this->model->execute('product_id_1');
     }
 }
-

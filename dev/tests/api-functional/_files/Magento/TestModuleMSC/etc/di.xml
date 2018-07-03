@@ -38,12 +38,16 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
+    <type name="Magento\Framework\Webapi\ServiceTypeToEntityTypeMap">
         <arguments>
-            <argument name="serviceEntityTypeMap" xsi:type="array">
+            <argument name="serviceTypeToEntityTypeMap" xsi:type="array">
                 <item name="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" xsi:type="string">1</item>
             </argument>
-            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\TypeLocator\ComplexType">
+        <arguments>
+            <argument name="backendModelToAttributeTypeMap" xsi:type="array">
                 <item name="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" xsi:type="array">
                     <item name="Magento\Sample\BackendType1" xsi:type="string">Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface</item>
                     <item name="Magento\Sample\BackendType2" xsi:type="string">Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface</item>

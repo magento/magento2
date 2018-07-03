@@ -6,7 +6,7 @@
 
 namespace Magento\Directory\Test\Unit\Model\Currency\Import;
 
-class YahooFinanceTest extends \PHPUnit_Framework_TestCase
+class YahooFinanceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Model\Currency\Import\YahooFinance

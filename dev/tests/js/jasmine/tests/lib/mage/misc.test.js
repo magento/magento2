@@ -11,6 +11,40 @@ define([
 
     describe('mageUtils', function () {
 
+        it('Check getUrlParameters function', function () {
+            var fixture,
+                url,
+                getParameters;
+
+            fixture = {
+                'not valid url': {},
+                'http://example.com/catalogsearch/result/': {},
+                'http://example.com/catalogsearch/result/?': {},
+                'http://example.com/catalogsearch/result/?q': {
+                    q: ''
+                },
+                'http://example.com/catalogsearch/result/?q=': {
+                    q: ''
+                },
+                'http://example.com/catalogsearch/result/?q=+Simple+99%2C+8%2F%3F&cat=3': {
+                    q: ' Simple 99, 8/?',
+                    cat: '3'
+                },
+                'http://example.com/catalogsearch/result/?q=Simple&cat=3&p=1': {
+                    q: 'Simple',
+                    cat: '3',
+                    p: '1'
+                }
+            };
+
+            for (url in fixture) {
+                if (fixture.hasOwnProperty(url)) {
+                    getParameters = fixture[url];
+                    expect(utils.getUrlParameters(url)).toEqual(getParameters);
+                }
+            }
+        });
+
         it('Check convertToMomentFormat function', function () {
             var format, momentFormat;
 
@@ -35,13 +69,13 @@ define([
         it('Check convertToMomentFormat function for all Magento supported locales', function () {
 
             var fixture,
-            localeValues,
-            format,
-            expectedValue,
-            momentFormat,
-            dt,
-            m,
-            p;
+                localeValues,
+                format,
+                expectedValue,
+                momentFormat,
+                dt,
+                m,
+                p;
 
             fixture = {
                 'af_ZA': {

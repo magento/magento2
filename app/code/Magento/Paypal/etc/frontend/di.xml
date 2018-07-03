@@ -113,4 +113,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\QuoteRepository\SaveHandler">
+        <plugin name="paypal-cartitem" type="Magento\Paypal\Model\Express\QuotePlugin"/>
+    </type>
 </config>

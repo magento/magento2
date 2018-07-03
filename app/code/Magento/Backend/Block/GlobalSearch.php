@@ -7,6 +7,7 @@ namespace Magento\Backend\Block;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class GlobalSearch extends \Magento\Backend\Block\Template
 {
@@ -30,6 +31,7 @@ class GlobalSearch extends \Magento\Backend\Block\Template
                 'filterProperty' => 'name',
                 'preventClickPropagation' => false,
                 'minLength' => 2,
+                'submitInputOnEnter' => false,
             ]
         ];
     }

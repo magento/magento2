@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Class WebsiteAttributesSynchronizerTest
  * @package Magento\Catalog\Model\ResourceModel\Attribute
  */
-class WebsiteAttributesSynchronizerTest extends \PHPUnit_Framework_TestCase
+class WebsiteAttributesSynchronizerTest extends \PHPUnit\Framework\TestCase
 {
     const PRODUCT_ID = 333;
     const PRODUCT_NOT_EDIT_MODE = false;
@@ -52,6 +52,7 @@ class WebsiteAttributesSynchronizerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/website_attribute_sync_flag.php
+     * @magentoDbIsolation disabled
      */
     public function testScheduleSynchronization()
     {
@@ -63,6 +64,7 @@ class WebsiteAttributesSynchronizerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/website_attribute_sync.php
+     * @magentoDbIsolation disabled
      */
     public function testSynchronizeSuccess()
     {

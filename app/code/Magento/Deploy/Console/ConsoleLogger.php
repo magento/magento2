@@ -82,8 +82,8 @@ class ConsoleLogger extends AbstractLogger
         LogLevel::CRITICAL => OutputInterface::VERBOSITY_NORMAL,
         LogLevel::ERROR => OutputInterface::VERBOSITY_NORMAL,
         LogLevel::WARNING => OutputInterface::VERBOSITY_NORMAL,
-        LogLevel::NOTICE => OutputInterface::VERBOSITY_VERBOSE,
-        LogLevel::INFO => OutputInterface::VERBOSITY_VERY_VERBOSE,
+        LogLevel::NOTICE => OutputInterface::VERBOSITY_NORMAL,
+        LogLevel::INFO => OutputInterface::VERBOSITY_VERBOSE,
         LogLevel::DEBUG => OutputInterface::VERBOSITY_DEBUG
     ];
 

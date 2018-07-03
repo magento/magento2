@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -91,7 +92,7 @@ class Http extends File
         if (false === $result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Cannot read contents from file "%1" %2',
+                    'The contents from the "%1" file can\'t be read. %2',
                     [$path, $this->getWarningMessage()]
                 )
             );
@@ -115,7 +116,7 @@ class Http extends File
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'The specified "%1" file could not be written %2',
+                    'The specified "%1" file couldn\'t be written. %2',
                     [$path, $this->getWarningMessage()]
                 )
             );
@@ -137,7 +138,9 @@ class Http extends File
         $urlProp = $this->parseUrl($this->getScheme() . $path);
 
         if (false === $urlProp) {
-            throw new FileSystemException(new \Magento\Framework\Phrase('Please correct the download URL.'));
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase('The download URL is incorrect. Verify and try again.')
+            );
         }
 
         $hostname = $urlProp['host'];

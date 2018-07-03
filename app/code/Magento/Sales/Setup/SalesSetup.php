@@ -10,6 +10,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
@@ -303,8 +304,6 @@ class SalesSetup extends EavSetup
     }
 
     /**
-     * Get sales connection
-     *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     public function getConnection()

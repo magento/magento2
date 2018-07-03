@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSwitchStoreViewActionGroup">
+        <arguments>
+            <argument name="storeView" defaultValue="customStore"/>
+        </arguments>
+        <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.storeViewDropdown}}" stepKey="waitForStoreViewDropdown"/>
+        <click selector="{{StorefrontHeaderSection.storeViewOption(storeView.name)}}" stepKey="clickSelectStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>

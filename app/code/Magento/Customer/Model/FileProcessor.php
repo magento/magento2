@@ -181,6 +181,7 @@ class FileProcessor
         );
 
         $result = $uploader->save($path);
+        unset($result['path']);
         if (!$result) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('File can not be saved to the destination folder.')
@@ -201,7 +202,7 @@ class FileProcessor
     {
         $fileName = ltrim($fileName, '/');
 
-        $dispersionPath = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
+        $dispersionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
         $destinationPath = $this->entityTypeCode . $dispersionPath;
 
         if (!$this->mediaDirectory->create($destinationPath)) {

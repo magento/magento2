@@ -15,7 +15,7 @@ use Magento\Framework\Filesystem;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LibraryTest extends \PHPUnit_Framework_TestCase
+class LibraryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Library

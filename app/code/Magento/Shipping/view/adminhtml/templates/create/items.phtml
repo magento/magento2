@@ -27,7 +27,7 @@
                 </tr>
             </thead>
             <?php $_items = $block->getShipment()->getAllItems() ?>
-            <?php $_i = 0; foreach ($_items as $_item): if ($_item->getOrderItem()->getIsVirtual() || $_item->getOrderItem()->getParentItem()): continue; endif; $_i++ ?>
+            <?php $_i = 0; foreach ($_items as $_item): if ($_item->getOrderItem()->getParentItem()): continue; endif; $_i++ ?>
                 <tbody class="<?= /* @escapeNotVerified */ $_i%2 ? 'odd' : 'even' ?>">
                     <?= $block->getItemHtml($_item) ?>
                     <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>

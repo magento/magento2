@@ -5,7 +5,7 @@
  */
 namespace Magento\Translation\Model;
 
-class InlineParserTest extends \PHPUnit_Framework_TestCase
+class InlineParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Translation\Model\Inline\Parser

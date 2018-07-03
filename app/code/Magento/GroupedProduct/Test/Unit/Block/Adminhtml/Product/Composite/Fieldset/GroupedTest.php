@@ -5,7 +5,7 @@
  */
 namespace Magento\GroupedProduct\Test\Unit\Block\Adminhtml\Product\Composite\Fieldset;
 
-class GroupedTest extends \PHPUnit_Framework_TestCase
+class GroupedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped
@@ -34,16 +34,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->pricingHelperMock = $this->getMock(\Magento\Framework\Pricing\Helper\Data::class, [], [], '', false);
-        $this->storeManagerMock = $this->getMock(
-            \Magento\Store\Model\StoreManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->pricingHelperMock = $this->createMock(\Magento\Framework\Pricing\Helper\Data::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
         $customerMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\CustomerInterface::class
@@ -67,14 +61,8 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductPositive()
     {
-        $instanceMock = $this->getMock(
-            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
         $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
 
@@ -91,14 +79,8 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     public function testGetProductNegative()
     {
         $storeId = 2;
-        $instanceMock = $this->getMock(
-            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
         $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
 
@@ -136,13 +118,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 2;
 
-        $instanceMock = $this->getMock(
-            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
         $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
 
@@ -172,14 +148,8 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 2;
 
-        $objectMock = $this->getMock(\Magento\Framework\DataObject::class, ['getSuperGroup'], [], '', false);
-        $instanceMock = $this->getMock(
-            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $objectMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSuperGroup']);
+        $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
         $objectMock->expects($this->once())->method('getSuperGroup')->will($this->returnValue([]));
 
@@ -241,13 +211,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetIsLastFieldsetNegative($options, $expectedResult)
     {
-        $instanceMock = $this->getMock(
-            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
         $this->block->setData('is_last_fieldset', false);
 
@@ -282,13 +246,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $price = 1.22;
         $expectedPrice = 1;
 
-        $instanceMock = $this->getMock(
-            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
         $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
 

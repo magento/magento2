@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Model\Locator;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -14,7 +15,7 @@ use Magento\Store\Api\Data\StoreInterface;
 /**
  * Class RegistryLocatorTest
  */
-class RegistryLocatorTest extends \PHPUnit_Framework_TestCase
+class RegistryLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -83,7 +84,7 @@ class RegistryLocatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Product was not registered
+     * @expectedExceptionMessage The product wasn't registered.
      */
     public function testGetProductWithException()
     {
@@ -92,7 +93,7 @@ class RegistryLocatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Store was not registered
+     * @expectedExceptionMessage The store wasn't registered. Verify the store and try again.
      */
     public function testGetStoreWithException()
     {

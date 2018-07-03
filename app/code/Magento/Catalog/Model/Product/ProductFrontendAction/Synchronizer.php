@@ -163,7 +163,7 @@ class Synchronizer
 
         /**
          * Note that collection is also filtered by visitor id and customer id
-         * This collection shouldnt be flushed when visitor has products and then login
+         * This collection shouldn't be flushed when visitor has products and then login
          * It can remove only products for visitor, or only products for customer
          *
          * ['product_id' => 'added_at']

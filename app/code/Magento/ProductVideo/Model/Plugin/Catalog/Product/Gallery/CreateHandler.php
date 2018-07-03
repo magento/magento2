@@ -6,7 +6,6 @@
 namespace Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery;
 
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
-use Magento\ProductVideo\Setup\InstallSchema;
 
 /**
  * Plugin for catalog product gallery create/update handlers.
@@ -101,7 +100,7 @@ class CreateHandler extends AbstractHandler
     protected function saveVideoValuesItem(array $item)
     {
         $this->resourceModel->saveDataRow(
-            InstallSchema::GALLERY_VALUE_VIDEO_TABLE,
+            'catalog_product_entity_media_gallery_value_video',
             $this->prepareVideoRowDataForSave($item)
         );
     }
@@ -149,7 +148,7 @@ class CreateHandler extends AbstractHandler
         $result = [];
         if (!empty($ids)) {
             $result = $this->resourceModel->loadDataFromTableByValueId(
-                InstallSchema::GALLERY_VALUE_VIDEO_TABLE,
+                'catalog_product_entity_media_gallery_value_video',
                 $ids,
                 null,
                 $this->videoPropertiesDbMapping

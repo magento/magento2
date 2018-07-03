@@ -12,7 +12,7 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractMainTest extends \PHPUnit_Framework_TestCase
+class AbstractMainTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

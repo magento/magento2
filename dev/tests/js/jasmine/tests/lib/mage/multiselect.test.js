@@ -133,5 +133,26 @@ define([
             expect(instance.data('mage-multiselect2').appendOptions).toHaveBeenCalled();
             expect(instance.data('mage-multiselect2').setCurrentPage).toHaveBeenCalledWith(2);
         });
+
+        it('multiselect2 item click', function () {
+            var option = '<div><label><input type="checkbox" value="1"/><span>Label</span></label></div>',
+                checkbox;
+
+            $('body').append(option);
+
+            checkbox = $(option).find('input[type="checkbox"]');
+            checkbox.on('click', instance.data('mage-multiselect2').onCheck);
+
+            spyOn(instance.data('mage-multiselect2'), '_createSelectedOption').and.returnValue(true);
+
+            checkbox.click();
+
+            expect(instance.data('mage-multiselect2')._createSelectedOption).toHaveBeenCalledWith({
+                value: '1',
+                label: 'Label'
+            });
+
+            $(option).remove();
+        });
     });
 });

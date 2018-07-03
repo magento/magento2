@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @see Transaction
  */
-class TransactionTest extends \PHPUnit_Framework_TestCase
+class TransactionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers \Magento\Paypal\Model\Payflow\Service\Response\Transaction::getResponseObject
@@ -67,7 +67,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             "Input data is a string" => ['testInput'],
-            "Input data is an object" => [new \StdClass],
+            "Input data is an object" => [new \stdClass],
             "Input data is an array" => [['test' => 'input']]
         ];
     }

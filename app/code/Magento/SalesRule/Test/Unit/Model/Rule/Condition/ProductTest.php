@@ -5,6 +5,10 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Condition;
 
+use \Magento\Framework\DB\Adapter\AdapterInterface;
+use \Magento\Framework\DB\Select;
+use \Magento\Framework\Model\AbstractModel;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use \Magento\Rule\Model\Condition\Context;
 use \Magento\Backend\Helper\Data;
 use \Magento\Eav\Model\Config;
@@ -20,7 +24,7 @@ use \Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /** @var SalesRuleProduct */
     protected $model;
@@ -52,6 +56,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var AttributeLoaderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeLoaderInterfaceMock;
 
+    /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $adapterInterfaceMock;
+
+    /** @var Select|\PHPUnit_Framework_MockObject_MockObject */
+    protected $selectMock;
+
     /**
      * Setup the test
      */
@@ -78,15 +88,45 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->attributeLoaderInterfaceMock
             ->expects($this->any())
             ->method('getAttributesByCode')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
+        $this->selectMock = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['distinct', 'from', 'where'])
+            ->getMock();
+        $this->selectMock
+            ->expects($this->any())
+            ->method('distinct')
+            ->willReturnSelf();
+        $this->selectMock
+            ->expects($this->any())
+            ->method('from')
+            ->with($this->anything(), $this->anything())
+            ->willReturnSelf();
+        $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['fetchCol', 'select'])
+            ->getMockForAbstractClass();
+        $this->adapterInterfaceMock
+            ->expects($this->any())
+            ->method('select')
+            ->willReturn($this->selectMock);
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadAllAttributes'])
+            ->setMethods(['loadAllAttributes', 'getConnection', 'getTable'])
             ->getMock();
         $this->productMock
             ->expects($this->any())
             ->method('loadAllAttributes')
-            ->will($this->returnValue($this->attributeLoaderInterfaceMock));
+            ->willReturn($this->attributeLoaderInterfaceMock);
+        $this->productMock
+            ->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->adapterInterfaceMock);
+        $this->productMock
+            ->expects($this->any())
+            ->method('getTable')
+            ->with($this->anything())
+            ->willReturn('table_name');
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -107,7 +147,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testGetValueElementChooserUrlDataProvider()
+    public function getValueElementChooserUrlDataProvider()
     {
         return [
             'category_ids_without_js_object' => [
@@ -140,7 +180,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @param string $attribute
      * @param string $url
      * @param string $jsObject
-     * @dataProvider testGetValueElementChooserUrlDataProvider
+     * @dataProvider getValueElementChooserUrlDataProvider
      */
     public function testGetValueElementChooserUrl($attribute, $url, $jsObject = '')
     {
@@ -157,5 +197,38 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals($url, $this->model->getValueElementChooserUrl());
+    }
+
+    public function testValidateCategoriesIgnoresVisibility()
+    {
+        /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAttribute', 'getId', 'setQuoteItemQty', 'setQuoteItemPrice'])
+            ->getMock();
+        $product
+            ->expects($this->any())
+            ->method('setQuoteItemQty')
+            ->willReturnSelf();
+        $product
+            ->expects($this->any())
+            ->method('setQuoteItemPrice')
+            ->willReturnSelf();
+        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        $item = $this->getMockBuilder(AbstractItem::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProduct'])
+            ->getMockForAbstractClass();
+        $item->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($product);
+        $this->model->setAttribute('category_ids');
+
+        $this->selectMock
+            ->expects($this->once())
+            ->method('where')
+            ->with($this->logicalNot($this->stringContains('visibility')), $this->anything(), $this->anything());
+
+        $this->model->validate($item);
     }
 }

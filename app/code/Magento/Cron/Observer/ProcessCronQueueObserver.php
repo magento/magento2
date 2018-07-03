@@ -12,7 +12,7 @@ namespace Magento\Cron\Observer;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ObserverInterface;
-use \Magento\Cron\Model\Schedule;
+use Magento\Cron\Model\Schedule;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -290,8 +290,15 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         try {
             call_user_func_array($callback, [$schedule]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
+            if (!$e instanceof \Exception) {
+                $e = new \RuntimeException(
+                    'Error when running a cron job',
+                    0,
+                    $e
+                );
+            }
             throw $e;
         }
 

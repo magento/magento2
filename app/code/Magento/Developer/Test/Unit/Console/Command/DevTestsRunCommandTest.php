@@ -15,7 +15,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  * Tests dev:tests:run command.  Only tests error case because DevTestsRunCommand calls phpunit with
  * passthru, so there is no good way to mock out running the tests.
  */
-class DevTestsRunCommandTest extends \PHPUnit_Framework_TestCase
+class DevTestsRunCommandTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -33,5 +33,21 @@ class DevTestsRunCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([DevTestsRunCommand::INPUT_ARG_TYPE => 'bad']);
         $this->assertContains('Invalid type: "bad"', $commandTester->getDisplay());
+    }
+
+    public function testPassArgumentsToPHPUnit()
+    {
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(
+            [
+                DevTestsRunCommand::INPUT_ARG_TYPE                    => 'unit',
+                '-' . DevTestsRunCommand::INPUT_OPT_COMMAND_ARGUMENTS_SHORT => '--list-suites',
+            ]
+        );
+        $this->assertContains(
+            'phpunit  --list-suites',
+            $commandTester->getDisplay(),
+            'Parameters should be passed to PHPUnit'
+        );
     }
 }

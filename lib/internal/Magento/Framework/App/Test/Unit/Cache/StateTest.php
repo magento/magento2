@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Cache;
 use \Magento\Framework\App\Cache\State;
 use Magento\Framework\Config\File\ConfigFilePool;
 
-class StateTest extends \PHPUnit_Framework_TestCase
+class StateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -22,8 +22,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
-        $this->writer = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
+        $this->config = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->writer =
+            $this->createPartialMock(\Magento\Framework\App\DeploymentConfig\Writer::class, ['update', 'saveConfig']);
     }
 
     /**

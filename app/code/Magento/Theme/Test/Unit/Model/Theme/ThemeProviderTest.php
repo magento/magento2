@@ -6,13 +6,13 @@
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\App\Area;
-use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ThemeProviderTest extends \PHPUnit_Framework_TestCase
+class ThemeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** Theme path used by tests */
     const THEME_PATH = 'frontend/Magento/luma';
@@ -44,24 +44,15 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManagerHelper($this);
-        $this->collectionFactory = $this->getMock(
+        $this->collectionFactory = $this->createPartialMock(
             \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->themeFactory = $this->getMock(
-            \Magento\Theme\Model\ThemeFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
         $this->cache = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->themeProvider = $this->objectManager->getObject(
             \Magento\Theme\Model\Theme\ThemeProvider::class,
             [
@@ -71,7 +62,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
                 'serializer' => $this->serializer
             ]
         );
-        $this->theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
+        $this->theme = $this->createMock(\Magento\Theme\Model\Theme::class);
     }
 
     public function testGetByFullPath()
@@ -84,7 +75,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('toArray')
             ->willReturn($themeArray);
 
-        $collectionMock = $this->getMock(\Magento\Theme\Model\ResourceModel\Theme\Collection::class, [], [], '', false);
+        $collectionMock = $this->createMock(\Magento\Theme\Model\ResourceModel\Theme\Collection::class);
         $collectionMock->expects($this->once())
             ->method('getThemeByFullPath')
             ->with(self::THEME_PATH)
@@ -104,7 +95,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('isDbAvailable')
             ->willReturn(true);
 
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([
@@ -133,7 +124,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('isDbAvailable')
             ->willReturn(true);
 
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([

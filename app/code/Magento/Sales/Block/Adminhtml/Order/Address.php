@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order;
  * Edit order address form container block
  *
  * @api
+ * @since 100.0.2
  */
 class Address extends \Magento\Backend\Block\Widget\Form\Container
 {

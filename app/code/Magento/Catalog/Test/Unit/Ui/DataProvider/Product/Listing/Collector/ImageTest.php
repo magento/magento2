@@ -19,7 +19,7 @@ use Magento\Catalog\Helper\Image as ImageHelper;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImageTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ImageFactory | \PHPUnit_Framework_MockObject_MockObject */
     private $imageFactory;
@@ -58,8 +58,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->state = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMock(StoreManagerInterface::class);
-        $this->design = $this->getMock(DesignInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->design = $this->createMock(DesignInterface::class);
         $this->model = new Image(
             $this->imageFactory,
             $this->state,
@@ -80,7 +80,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $imageCode = 'widget_recently_viewed';
-        $productRenderInfoDto = $this->getMock(ProductRenderInterface::class);
+        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
 
         $productRenderInfoDto->expects($this->once())
             ->method('getStoreId')

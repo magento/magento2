@@ -12,6 +12,7 @@ use Magento\GoogleOptimizer\Model\Code as ModelCode;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Form extends \Magento\Framework\App\Helper\AbstractHelper
 {

@@ -9,6 +9,7 @@ namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
 {
@@ -289,6 +290,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check if the field can be restored to default
      *
      * @return bool
+     * @since 100.1.0
      */
     public function canRestore()
     {

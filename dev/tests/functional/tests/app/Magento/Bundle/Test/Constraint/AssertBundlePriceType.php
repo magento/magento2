@@ -101,7 +101,7 @@ class AssertBundlePriceType extends AbstractConstraint
 
         foreach ($optionPrice as $index => $item) {
             $item['price'] -= $item['price'] * $specialPrice;
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 number_format($item['price'], 2),
                 $cartItem->getPriceBundleOptions($index + 1),
                 'Bundle item ' . ($index + 1) . ' options on frontend don\'t equal to fixture.'
@@ -110,7 +110,7 @@ class AssertBundlePriceType extends AbstractConstraint
         $sumOptionsPrice = $product->getDataFieldConfig('price')['source']->getPriceData()['cart_price'];
 
         $subTotal = number_format($cartItem->getPrice(), 2);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $sumOptionsPrice,
             $subTotal,
             'Bundle unit price on frontend doesn\'t equal to fixture.'

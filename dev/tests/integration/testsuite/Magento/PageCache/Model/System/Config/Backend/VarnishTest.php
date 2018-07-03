@@ -5,7 +5,7 @@
  */
 namespace Magento\PageCache\Model\System\Config\Backend;
 
-class VarnishTest extends \PHPUnit_Framework_TestCase
+class VarnishTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\PageCache\Model\System\Config\Backend\Varnish

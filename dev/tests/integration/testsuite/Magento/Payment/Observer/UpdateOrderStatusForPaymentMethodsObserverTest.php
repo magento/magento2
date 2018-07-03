@@ -11,7 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit_Framework_TestCase
+class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Event\Observer

@@ -6,8 +6,8 @@
 namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ZendClient;
-use Magento\Config\Model\Config;
 use Psr\Log\LoggerInterface;
 use Magento\Store\Model\Store;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
@@ -33,7 +33,7 @@ class NotifyDataChangedCommand implements CommandInterface
     private $httpClient;
 
     /**
-     * @var Config
+     * @var ScopeConfigInterface
      */
     private $config;
 
@@ -51,14 +51,14 @@ class NotifyDataChangedCommand implements CommandInterface
      * NotifyDataChangedCommand constructor.
      * @param AnalyticsToken $analyticsToken
      * @param Http\ClientInterface $httpClient
-     * @param Config $config
+     * @param ScopeConfigInterface $config
      * @param ResponseResolver $responseResolver
      * @param LoggerInterface $logger
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
         Http\ClientInterface $httpClient,
-        Config $config,
+        ScopeConfigInterface $config,
         ResponseResolver $responseResolver,
         LoggerInterface $logger
     ) {
@@ -80,16 +80,14 @@ class NotifyDataChangedCommand implements CommandInterface
         if ($this->analyticsToken->isTokenExist()) {
             $response = $this->httpClient->request(
                 ZendClient::POST,
-                $this->config->getConfigDataValue($this->notifyDataChangedUrlPath),
+                $this->config->getValue($this->notifyDataChangedUrlPath),
                 [
                     "access-token" => $this->analyticsToken->getToken(),
-                    "url" => $this->config->getConfigDataValue(
-                        Store::XML_PATH_SECURE_BASE_URL
-                    ),
+                    "url" => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
                 ]
             );
             $result = $this->responseResolver->getResult($response);
         }
-        return $result;
+        return (bool)$result;
     }
 }

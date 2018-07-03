@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Module\Dependency\Parser\Config;
 
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

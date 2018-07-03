@@ -8,8 +8,6 @@ namespace Magento\Directory\Model\Country;
 /**
  * Directory country format model
  *
- * @method \Magento\Directory\Model\ResourceModel\Country\Format _getResource()
- * @method \Magento\Directory\Model\ResourceModel\Country\Format getResource()
  * @method string getCountryId()
  * @method \Magento\Directory\Model\Country\Format setCountryId(string $value)
  * @method string getType()
@@ -18,6 +16,7 @@ namespace Magento\Directory\Model\Country;
  * @method \Magento\Directory\Model\Country\Format setFormat(string $value)
  *
  * @api
+ * @since 100.0.2
  */
 class Format extends \Magento\Framework\Model\AbstractModel
 {

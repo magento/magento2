@@ -448,7 +448,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Create an instance of Magento\Framework\App\Config
      *
      * @return \Magento\Framework\App\Config
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getAppConfig()
     {

@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportConcurrentAdmins;
 /**
  * Class ReportConcurrentAdminsTest
  */
-class ReportConcurrentAdminsTest extends \PHPUnit_Framework_TestCase
+class ReportConcurrentAdminsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportConcurrentAdmins

@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class CollectionTest
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Collection
@@ -58,31 +58,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Collection\EntityFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $this->fetchStrategyMock = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
         );
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
-        $this->selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
-        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
+        $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->connectionMock->expects($this->atLeastOnce())
             ->method('select')
             ->will($this->returnValue($this->selectMock));
 
-        $this->resourceMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
         $this->resourceMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($this->connectionMock)
         );

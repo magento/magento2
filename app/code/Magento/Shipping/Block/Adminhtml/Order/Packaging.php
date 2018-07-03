@@ -9,6 +9,7 @@ namespace Magento\Shipping\Block\Adminhtml\Order;
  * Adminhtml shipment packaging
  *
  * @api
+ * @since 100.0.2
  */
 class Packaging extends \Magento\Backend\Block\Template
 {

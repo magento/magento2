@@ -14,7 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Data\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SpecialPriceTest extends \PHPUnit_Framework_TestCase
+class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -34,6 +34,7 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceInfoIfChildHasSpecialPrice()
     {
@@ -56,6 +57,7 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
+     * @magentoDbIsolation disabled
      */
     public function testSortingOfProductsIfChildHasNotSpecialPrice()
     {
@@ -82,6 +84,7 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
+     * @magentoDbIsolation disabled
      */
     public function testSortingOfProductsIfChildHasSpecialPrice()
     {

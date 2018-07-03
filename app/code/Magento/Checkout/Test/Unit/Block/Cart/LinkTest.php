@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -82,6 +82,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($label, (string)$block->getLabel());
     }
 
+    /**
+     * @return array
+     */
     public function getLabelDataProvider()
     {
         return [[1, 'My Cart (1 item)'], [2, 'My Cart (2 items)'], [0, 'My Cart']];

@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\File;
 
-class SizeTest extends \PHPUnit_Framework_TestCase
+class SizeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\File\Size

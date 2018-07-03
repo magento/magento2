@@ -19,7 +19,7 @@ require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespaceExtension.php';
 /**
  * @magentoAppIsolation enabled
  */
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     const CLASS_NAME_WITH_NAMESPACE = \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace::class;
 

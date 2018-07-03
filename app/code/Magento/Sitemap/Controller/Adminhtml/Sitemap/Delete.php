@@ -83,7 +83,7 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * The getter function to get Filesystem object for real application code
      *
      * @return \Magento\Framework\Filesystem
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getFilesystem()
     {

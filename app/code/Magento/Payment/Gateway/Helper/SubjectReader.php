@@ -13,6 +13,7 @@ use Magento\Framework\DataObject;
  * This class was introduced for backward compatibility with legacy implementation.
  *
  * @api
+ * @since 100.0.2
  */
 class SubjectReader
 {

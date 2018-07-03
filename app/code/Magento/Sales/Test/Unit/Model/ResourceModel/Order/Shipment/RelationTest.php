@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Shipment;
 /**
  * Class RelationTest
  */
-class RelationTest extends \PHPUnit_Framework_TestCase
+class RelationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Relation
@@ -86,7 +86,8 @@ class RelationTest extends \PHPUnit_Framework_TestCase
                     'getId',
                     'getItems',
                     'getTracks',
-                    'getComments'
+                    'getComments',
+                    'getTracksCollection',
                 ]
             )
             ->getMock();
@@ -123,7 +124,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             ->method('getComments')
             ->willReturn([$this->commentMock]);
         $this->shipmentMock->expects($this->exactly(2))
-            ->method('getTracks')
+            ->method('getTracksCollection')
             ->willReturn([$this->trackMock]);
         $this->itemMock->expects($this->once())
             ->method('setParentId')

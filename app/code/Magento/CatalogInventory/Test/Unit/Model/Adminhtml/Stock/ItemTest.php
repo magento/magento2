@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Adminhtml\Stock;
 
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Adminhtml\Stock\Item|PHPUnit_Framework_MockObject_MockObject
@@ -17,12 +17,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $resourceMock = $this->getMock(
+        $resourceMock = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\AbstractResource::class,
-            ['_construct', 'getConnection', 'getIdFieldName'],
-            [],
-            '',
-            false
+            ['_construct', 'getConnection', 'getIdFieldName']
         );
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

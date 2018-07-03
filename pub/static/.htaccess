@@ -12,6 +12,9 @@ Options -MultiViews
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    ## you can put here your pub/static folder path relative to web root
+    #RewriteBase /magento/pub/static/
+
     # Remove signature of the static files that is used to overcome the browser cache
     RewriteRule ^version.+?/(.+)$ $1 [L]
 

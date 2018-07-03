@@ -10,10 +10,14 @@
                 type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Cms\Api\Data\BlockSearchResultsInterface"
                 type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Cms\Api\GetBlockByIdentifierInterface" type="Magento\Cms\Model\GetBlockByIdentifier" />
+    <preference for="Magento\Cms\Api\GetPageByIdentifierInterface" type="Magento\Cms\Model\GetPageByIdentifier" />
     <preference for="Magento\Cms\Api\Data\PageInterface" type="Magento\Cms\Model\Page" />
     <preference for="Magento\Cms\Api\Data\BlockInterface" type="Magento\Cms\Model\Block" />
     <preference for="Magento\Cms\Api\BlockRepositoryInterface" type="Magento\Cms\Model\BlockRepository" />
     <preference for="Magento\Cms\Api\PageRepositoryInterface" type="Magento\Cms\Model\PageRepository" />
+    <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Cms\Model\Wysiwyg\Config"/>
+    <preference for="Magento\Cms\Api\GetUtilityPageIdentifiersInterface" type="Magento\Cms\Model\GetUtilityPageIdentifiers" />
     <type name="Magento\Cms\Model\Wysiwyg\Config">
         <arguments>
             <argument name="windowSize" xsi:type="array">
@@ -51,8 +55,41 @@
                 </item>
             </argument>
             <argument name="dirs" xsi:type="array">
-                <item name="exclude" xsi:type="string"/>
-                <item name="include" xsi:type="string"/>
+                <item name="exclude" xsi:type="array">
+                    <item name="captcha" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+captcha[/\\]*$</item>
+                    </item>
+                    <item name="catalog/product" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+catalog[/\\]+product[/\\]*$</item>
+                    </item>
+                    <item name="customer" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+customer[/\\]*$</item>
+                    </item>
+                    <item name="downloadable" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+downloadable[/\\]*$</item>
+                    </item>
+                    <item name="import" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+import[/\\]*$</item>
+                    </item>
+                    <item name="theme" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+theme[/\\]*$</item>
+                    </item>
+                    <item name="theme_customization" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+theme_customization[/\\]*$</item>
+                    </item>
+                    <item name="tmp" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+tmp[/\\]*$</item>
+                    </item>
+                </item>
+                <item name="include" xsi:type="array"/>
             </argument>
         </arguments>
     </type>
@@ -189,3 +226,4 @@
         </arguments>
     </type>
 </config>
+

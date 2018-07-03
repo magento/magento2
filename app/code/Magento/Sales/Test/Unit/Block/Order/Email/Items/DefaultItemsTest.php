@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Block\Order\Email\Items;
 
-class DefaultItemsTest extends \PHPUnit_Framework_TestCase
+class DefaultItemsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Order\Email\Items\DefaultItem
@@ -50,8 +48,8 @@ class DefaultItemsTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $this->objectManager->getObject(
                     \Magento\Backend\Block\Template\Context::class,
-                        ['layout' => $this->layoutMock]
-                    )
+                    ['layout' => $this->layoutMock]
+                )
             ]
         );
 

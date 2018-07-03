@@ -8,11 +8,10 @@ namespace Magento\Analytics\Test\Unit\Model\Connector\Http;
 use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-/**
- * Class ResponseResolverTest
- */
-class ResponseResolverTest extends \PHPUnit_Framework_TestCase
+class ResponseResolverTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetResultHandleResponseSuccess()
     {
@@ -27,11 +26,24 @@ class ResponseResolverTest extends \PHPUnit_Framework_TestCase
         $notFoundResponseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->getMockForAbstractClass();
         $notFoundResponseHandlerMock->expects($this->never())->method('handleResponse');
-        $responseResolver = new ResponseResolver(
-            new JsonConverter(),
+        $serializerMock = $this->getMockBuilder(Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->willReturn($expectedBody);
+        $objectManager = new ObjectManager($this);
+        $responseResolver = $objectManager->getObject(
+            ResponseResolver::class,
             [
-                201 => $responseHandlerMock,
-                404 => $notFoundResponseHandlerMock,
+                'converter' => $objectManager->getObject(
+                    JsonConverter::class,
+                    ['serializer' => $serializerMock]
+                ),
+                'responseHandlers' => [
+                    201 => $responseHandlerMock,
+                    404 => $notFoundResponseHandlerMock,
+                ]
             ]
         );
         $this->assertTrue($responseResolver->getResult($response));

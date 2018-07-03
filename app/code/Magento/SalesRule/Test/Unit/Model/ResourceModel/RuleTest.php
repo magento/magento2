@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RuleTest extends \PHPUnit_Framework_TestCase
+class RuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -119,13 +119,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $associatedEntitiesMap = $this->getMock(
-            \Magento\Framework\DataObject::class,
-            ['getData'],
-            [],
-            '',
-            false
-        );
+        $associatedEntitiesMap = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
         $associatedEntitiesMap->expects($this->once())
             ->method('getData')
             ->willReturn(

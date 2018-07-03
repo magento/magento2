@@ -201,7 +201,7 @@ class Uploader
         if ($this->_enableFilesDispersion) {
             $fileName = $this->correctFileNameCase($fileName);
             $this->setAllowCreateFolders(true);
-            $this->_dispretionPath = self::getDispretionPath($fileName);
+            $this->_dispretionPath = self::getDispersionPath($fileName);
             $destinationFile .= $this->_dispretionPath;
             $this->_createDestinationFolder($destinationFile);
         }
@@ -261,7 +261,7 @@ class Uploader
      * @param string $file
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.0.8
      */
     protected function chmod($file)
     {
@@ -534,7 +534,7 @@ class Uploader
 
             preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
 
-            if (count($file) > 0 && count($file[0]) > 0 && count($file[1]) > 0) {
+            if (is_array($file) && count($file) > 0 && count($file[0]) > 0 && count($file[1]) > 0) {
                 array_shift($file);
                 $this->_uploadType = self::MULTIPLE_STYLE;
 
@@ -547,7 +547,7 @@ class Uploader
 
                 $fileAttributes = $tmpVar;
                 $this->_file = $fileAttributes;
-            } elseif (count($fileId) > 0 && isset($_FILES[$fileId])) {
+            } elseif (!empty($fileId) && isset($_FILES[$fileId])) {
                 $this->_uploadType = self::SINGLE_STYLE;
                 $this->_file = $_FILES[$fileId];
             } elseif ($fileId == '') {
@@ -610,8 +610,20 @@ class Uploader
      *
      * @param string $fileName
      * @return string
+     * @deprecated
      */
     public static function getDispretionPath($fileName)
+    {
+        return self::getDispersionPath($fileName);
+    }
+
+    /**
+     * Get dispertion path
+     *
+     * @param string $fileName
+     * @return string
+     */
+    public static function getDispersionPath($fileName)
     {
         $char = 0;
         $dispertionPath = '';

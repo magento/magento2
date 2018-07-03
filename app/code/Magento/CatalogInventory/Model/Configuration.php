@@ -273,7 +273,7 @@ class Configuration implements StockConfigurationInterface
 
     /**
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @return int
+     * @return float
      */
     public function getQtyIncrements($store = null)
     {

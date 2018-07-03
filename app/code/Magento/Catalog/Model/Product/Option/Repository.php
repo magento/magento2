@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -147,7 +148,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         $productSku = $option->getProductSku();
         if (!$productSku) {
-            throw new CouldNotSaveException(__('ProductSku should be specified'));
+            throw new CouldNotSaveException(__('The ProductSku is empty. Set the ProductSku and try again.'));
         }
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($productSku);
@@ -172,7 +173,9 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
             $originalValues = $persistedOption->getValues();
             $newValues = $option->getData('values');
             if ($newValues) {
-                $newValues = $this->markRemovedValues($newValues, $originalValues);
+                if (isset($originalValues)) {
+                    $newValues = $this->markRemovedValues($newValues, $originalValues);
+                }
                 $option->setData('values', $newValues);
             }
         }
@@ -198,7 +201,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
                 $this->productRepository->save($product);
             }
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not remove custom option'));
+            throw new CouldNotSaveException(__("The custom option couldn't be removed."));
         }
         return true;
     }
@@ -232,7 +235,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * @return \Magento\Framework\EntityManager\HydratorPool
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getHydratorPool()
     {

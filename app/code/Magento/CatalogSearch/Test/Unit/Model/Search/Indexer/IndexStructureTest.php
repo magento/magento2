@@ -13,7 +13,7 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test for \Magento\Framework\Indexer\IndexStructure
  */
-class IndexStructureTest extends \PHPUnit_Framework_TestCase
+class IndexStructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
@@ -120,6 +120,12 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         return $dimension;
     }
 
+    /**
+     * @param $callNumber
+     * @param $tableName
+     * @param $isTableExist
+     * @return mixed
+     */
     private function mockDropTable($callNumber, $tableName, $isTableExist)
     {
         $this->connection->expects($this->at($callNumber++))
@@ -135,6 +141,11 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         return $callNumber;
     }
 
+    /**
+     * @param $callNumber
+     * @param $tableName
+     * @return mixed
+     */
     private function mockFulltextTable($callNumber, $tableName)
     {
         $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)

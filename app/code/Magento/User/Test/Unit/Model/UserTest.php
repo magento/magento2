@@ -14,7 +14,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Model\User */
     protected $model;
@@ -41,7 +41,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
-    protected $storetMock;
+    protected $storeMock;
 
     /** @var \Magento\Backend\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $configMock;
@@ -111,7 +111,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->storetMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -134,7 +134,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['validateHash'])
             ->getMockForAbstractClass();
 
-        $this->serializer = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
+        $this->serializer = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
@@ -183,11 +183,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->model->setPassword($password);
         $this->model->setOrigData('password', $origPassword);
 
-        $this->model->setUsername($username);
+        $this->model->setUserName($username);
         $this->model->setOrigData('username', $origUsername);
 
-        $this->model->setFirstname($firstName);
-        $this->model->setLastname($lastName);
+        $this->model->setFirstName($firstName);
+        $this->model->setLastName($lastName);
 
         $this->configMock->expects($this->exactly(4))
             ->method('getValue')
@@ -212,7 +212,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->exactly(2))
             ->method('setTemplateVars')
-            ->with(['user' => $this->model, 'store' => $this->storetMock, 'changes' => $changes])
+            ->with(['user' => $this->model, 'store' => $this->storeMock, 'changes' => $changes])
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->exactly(2))
             ->method('addTo')
@@ -239,7 +239,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->exactly(2))
             ->method('getStore')
             ->with($storeId)
-            ->willReturn($this->storetMock);
+            ->willReturn($this->storeMock);
 
         $this->assertInstanceOf(\Magento\User\Model\User::class, $this->model->sendNotificationEmailsIfRequired());
     }
@@ -255,8 +255,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $lastName = 'Bar';
 
         $this->model->setEmail($email);
-        $this->model->setFirstname($firstName);
-        $this->model->setLastname($lastName);
+        $this->model->setFirstName($firstName);
+        $this->model->setLastName($lastName);
 
         $this->configMock->expects($this->at(0))
             ->method('getValue')
@@ -275,7 +275,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateVars')
-            ->with(['user' => $this->model, 'store' => $this->storetMock])
+            ->with(['user' => $this->model, 'store' => $this->storeMock])
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
             ->method('addTo')
@@ -297,7 +297,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->with($storeId)
-            ->willReturn($this->storetMock);
+            ->willReturn($this->storeMock);
 
         $this->assertInstanceOf(\Magento\User\Model\User::class, $this->model->sendPasswordResetConfirmationEmail());
     }
@@ -350,10 +350,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->with($password, $this->model->getPassword())
             ->willReturn(true);
         $this->model->setIsActive(false);
-        $this->setExpectedException(
-            \Magento\Framework\Exception\AuthenticationException::class,
-            'You did not sign in correctly or your account is temporarily disabled.'
-        );
+        $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
+        $this->expectExceptionMessage('The account sign-in was incorrect or your account is disabled temporarily. '
+            . 'Please wait and try again later.');
         $this->model->verifyIdentity($password);
     }
 
@@ -370,10 +369,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->model->setIsActive(true);
         $this->resourceMock->expects($this->once())->method('hasAssigned2Role')->willReturn(false);
-        $this->setExpectedException(
-            \Magento\Framework\Exception\AuthenticationException::class,
-            'You need more permissions to access this.'
-        );
+        $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
+        $this->expectExceptionMessage('More permissions are needed to access this.');
         $this->model->verifyIdentity($password);
     }
 
@@ -781,16 +778,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         if ($lockExpires) {
-            $this->setExpectedException(
-                \Magento\Framework\Exception\State\UserLockedException::class,
-                __('Your account is temporarily disabled.')
-            );
+            $this->expectException(\Magento\Framework\Exception\State\UserLockedException::class);
+            $this->expectExceptionMessage((string)__('Your account is temporarily disabled. Please try again later.'));
         }
 
-        if (!$verifyIdentityResult) {
-            $this->setExpectedException(
-                \Magento\Framework\Exception\AuthenticationException::class,
-                __('You have entered an invalid password for current user.')
+        if (!$lockExpires && !$verifyIdentityResult) {
+            $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
+            $this->expectExceptionMessage(
+                (string)__('The password entered for the current user is invalid. Verify the password and try again.')
             );
         }
 

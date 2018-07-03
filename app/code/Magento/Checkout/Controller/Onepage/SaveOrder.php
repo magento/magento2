@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Controller\Onepage;
 
 use Magento\Framework\DataObject;
@@ -37,7 +38,10 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
                 $result->setData('error', true);
                 $result->setData(
                     'error_messages',
-                    __('Please agree to all the terms and conditions before placing the order.')
+                    __(
+                        "The order wasn't placed. "
+                        . "First, agree to the terms and conditions, then try placing your order again."
+                    )
                 );
                 return $this->resultJsonFactory->create()->setData($result->getData());
             }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Ups\Model;
 
-class CarrierTest extends \PHPUnit_Framework_TestCase
+class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Ups\Model\Carrier

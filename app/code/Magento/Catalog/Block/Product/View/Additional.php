@@ -13,6 +13,7 @@ namespace Magento\Catalog\Block\Product\View;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Additional extends \Magento\Framework\View\Element\Template
 {

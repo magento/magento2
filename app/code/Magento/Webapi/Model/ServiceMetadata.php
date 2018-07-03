@@ -44,11 +44,7 @@ class ServiceMetadata
 
     /**#@-*/
 
-    /**
-     * API services
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $services;
 
     /**
@@ -63,7 +59,9 @@ class ServiceMetadata
      */
     protected $cache;
 
-    /** @var \Magento\Webapi\Model\Config */
+    /**
+     * @var \Magento\Webapi\Model\Config
+     */
     protected $config;
 
     /**

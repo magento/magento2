@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Rss\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class RssManagerTest extends \PHPUnit_Framework_TestCase
+class RssManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Rss\Model\RssManager
@@ -24,7 +22,7 @@ class RssManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->rssManager = $objectManagerHelper->getObject(
@@ -41,24 +39,24 @@ class RssManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProvider()
     {
-        $dataProvider = $this->getMock(\Magento\Framework\App\Rss\DataProviderInterface::class);
+        $dataProvider = $this->createMock(\Magento\Framework\App\Rss\DataProviderInterface::class);
         $this->objectManager->expects($this->once())->method('get')->will($this->returnValue($dataProvider));
 
         $this->assertInstanceOf(
-             \Magento\Framework\App\Rss\DataProviderInterface::class,
-             $this->rssManager->getProvider('rss_feed')
+            \Magento\Framework\App\Rss\DataProviderInterface::class,
+            $this->rssManager->getProvider('rss_feed')
         );
     }
 
     public function testGetProviderFirstException()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->rssManager->getProvider('wrong_rss_feed');
     }
 
     public function testGetProviderSecondException()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->rssManager->getProvider('bad_rss_feed');
     }
 }

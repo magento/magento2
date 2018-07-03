@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Msrp\Test\Unit\Helper;
 
 /**
  * Class DataTest
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Msrp\Helper\Data
@@ -30,7 +28,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMsrp', 'getPriceInfo', '__wakeup'])
@@ -52,12 +50,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $convertedFinalPrice = 200;
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will($this->returnCallback(
-                function ($arg) {
-                    return round(2 * $arg, 2);
-                }
-            )
-        );
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        return round(2 * $arg, 2);
+                    }
+                )
+            );
 
         $finalPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\FinalPrice::class)
             ->disableOriginalConstructor()

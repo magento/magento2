@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic name="multi.topic.queue.topic.c.deprecated" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData">
+        <handler name="processAsyncReqC" type="Magento\TestModuleAsyncAmqp\Model\RequestHandler" method="process"/>
+    </topic>
+    <topic name="multi.topic.queue.topic.d.deprecated" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData">
+        <handler name="processAsyncReqD" type="Magento\TestModuleAsyncAmqp\Model\RequestHandler" method="process"/>
+    </topic>
+    <topic name="multi.topic.queue.topic.c" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData">
+        <handler name="processAsyncReqC" type="Magento\TestModuleAsyncAmqp\Model\RequestHandler" method="process"/>
+    </topic>
+    <topic name="multi.topic.queue.topic.d" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData">
+        <handler name="processAsyncReqD" type="Magento\TestModuleAsyncAmqp\Model\RequestHandler" method="process"/>
+    </topic>
+    <topic name="multi.topic.queue.topic.y" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData">
+        <handler name="processAsyncReqC" type="Magento\TestModuleAsyncAmqp\Model\RequestHandler" method="process"/>
+    </topic>
+    <topic name="multi.topic.queue.topic.z" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData">
+        <handler name="processAsyncReqD" type="Magento\TestModuleAsyncAmqp\Model\RequestHandler" method="process"/>
+    </topic>
+    <topic name="mtmh.topic.1" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData">
+        <handler name="mtmh.handler.1" type="Magento\TestModuleAsyncAmqp\Model\CustomHandler" method="process"/>
+    </topic>
+    <topic name="mtmh.topic.2" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData[]">
+        <handler name="mtmh.handler.2" type="Magento\TestModuleAsyncAmqp\Model\CustomHandler" method="processArray"/>
+    </topic>
+
+    <topic name="segment1.segment2.segment3.wildcard" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData"/>
+    <topic name="segment2.segment3.wildcard" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData"/>
+    <topic name="not.matching.wildcard.topic" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData"/>
+</config>

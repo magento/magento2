@@ -41,12 +41,12 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     public function add($entityType, $attributeCode, $option)
     {
         if (empty($attributeCode)) {
-            throw new InputException(__('Empty attribute code'));
+            throw new InputException(__('The attribute code is empty. Enter the code and try again.'));
         }
 
         $attribute = $this->attributeRepository->get($entityType, $attributeCode);
         if (!$attribute->usesSource()) {
-            throw new StateException(__('Attribute %1 doesn\'t work with options', $attributeCode));
+            throw new StateException(__('The "%1" attribute doesn\'t work with options.', $attributeCode));
         }
 
         $optionId = $this->getOptionId($option);
@@ -68,7 +68,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         try {
             $this->resourceModel->save($attribute);
         } catch (\Exception $e) {
-            throw new StateException(__('Cannot save attribute %1', $attributeCode));
+            throw new StateException(__('The "%1" attribute can\'t be saved.', $attributeCode));
         }
 
         return true;
@@ -80,12 +80,12 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     public function delete($entityType, $attributeCode, $optionId)
     {
         if (empty($attributeCode)) {
-            throw new InputException(__('Empty attribute code'));
+            throw new InputException(__('The attribute code is empty. Enter the code and try again.'));
         }
 
         $attribute = $this->attributeRepository->get($entityType, $attributeCode);
         if (!$attribute->usesSource()) {
-            throw new StateException(__('Attribute %1 doesn\'t have any option', $attributeCode));
+            throw new StateException(__('The "%1" attribute has no option.', $attributeCode));
         }
         $this->validateOption($attribute, $optionId);
 
@@ -99,7 +99,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         try {
             $this->resourceModel->save($attribute);
         } catch (\Exception $e) {
-            throw new StateException(__('Cannot save attribute %1', $attributeCode));
+            throw new StateException(__('The "%1" attribute can\'t be saved.', $attributeCode));
         }
 
         return true;
@@ -111,14 +111,14 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     public function getItems($entityType, $attributeCode)
     {
         if (empty($attributeCode)) {
-            throw new InputException(__('Empty attribute code'));
+            throw new InputException(__('The attribute code is empty. Enter the code and try again.'));
         }
         $attribute = $this->attributeRepository->get($entityType, $attributeCode);
 
         try {
             $options = $attribute->getOptions();
         } catch (\Exception $e) {
-            throw new StateException(__('Cannot load options for attribute %1', $attributeCode));
+            throw new StateException(__('The options for "%1" attribute can\'t be loaded.', $attributeCode));
         }
 
         return $options;
@@ -134,7 +134,11 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     {
         if (!$attribute->getSource()->getOptionText($optionId)) {
             throw new NoSuchEntityException(
-                __('Attribute %1 does not contain option with Id %2', $attribute->getAttributeCode(), $optionId)
+                __(
+                    'The "%1" attribute doesn\'t include an option with "%2" ID.',
+                    $attribute->getAttributeCode(),
+                    $optionId
+                )
             );
         }
     }

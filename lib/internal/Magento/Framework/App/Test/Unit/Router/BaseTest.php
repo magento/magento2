@@ -55,7 +55,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         // Create mocks
         $this->requestMock = $this->basicMock(\Magento\Framework\App\Request\Http::class);
         $this->routeConfigMock = $this->basicMock(\Magento\Framework\App\Route\ConfigInterface::class);
-        $this->appStateMock = $this->basicMock(\Magento\Framework\App\State::class);
+        $this->appStateMock = $this->createPartialMock(\Magento\Framework\App\State::class, ['isInstalled']);
         $this->actionListMock = $this->basicMock(\Magento\Framework\App\Router\ActionList::class);
         $this->actionFactoryMock = $this->basicMock(\Magento\Framework\App\ActionFactory::class);
         $this->nameBuilderMock = $this->basicMock(\Magento\Framework\Code\NameBuilder::class);

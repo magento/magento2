@@ -7,6 +7,7 @@ Description,Description
 Role,Role
 "YouTube and Vimeo supported.","YouTube and Vimeo supported."
 "Vimeo supported.<br />To add YouTube video, please <a href=""%1"">enter YouTube API Key</a> first.","Vimeo supported.<br />To add YouTube video, please <a href=""%1"">enter YouTube API Key</a> first."
+"Protocol isn't allowed","Protocol isn't allowed"
 "Could not get preview image information. Please check your connection and try again.","Could not get preview image information. Please check your connection and try again."
 "Add Video","Add Video"
 "Browse to find or drag image here","Browse to find or drag image here"
@@ -40,4 +41,3 @@ Delete,Delete
 "Show related video","Show related video"
 "Auto restart video","Auto restart video"
 "Images And Videos","Images And Videos"
-"Protocol isn't allowed", "Protocol isn't allowed"

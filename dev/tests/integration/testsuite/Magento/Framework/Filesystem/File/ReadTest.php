@@ -9,7 +9,7 @@ namespace Magento\Framework\Filesystem\File;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ReadTest extends \PHPUnit_Framework_TestCase
+class ReadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test instance of Read

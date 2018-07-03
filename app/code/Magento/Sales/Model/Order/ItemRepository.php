@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order;
 
 use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
@@ -15,7 +16,6 @@ use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Metadata;
@@ -61,7 +61,9 @@ class ItemRepository implements OrderItemRepositoryInterface
      */
     protected $registry = [];
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -103,16 +105,19 @@ class ItemRepository implements OrderItemRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new InputException(__('ID required'));
+            throw new InputException(__('An ID is needed. Set the ID and try again.'));
         }
         if (!isset($this->registry[$id])) {
             /** @var OrderItemInterface $orderItem */
             $orderItem = $this->metadata->getNewInstance()->load($id);
             if (!$orderItem->getItemId()) {
-                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
 
             $this->addProductOption($orderItem);
+            $this->addParentItem($orderItem);
             $this->registry[$id] = $orderItem;
         }
         return $this->registry[$id];
@@ -213,6 +218,20 @@ class ItemRepository implements OrderItemRepositoryInterface
     }
 
     /**
+     * Set parent item.
+     *
+     * @param OrderItemInterface $orderItem
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    private function addParentItem(OrderItemInterface $orderItem)
+    {
+        if ($parentId = $orderItem->getParentItemId()) {
+            $orderItem->setParentItem($this->get($parentId));
+        }
+    }
+
+    /**
      * Set product options data
      *
      * @param OrderItemInterface $orderItem
@@ -273,7 +292,7 @@ class ItemRepository implements OrderItemRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

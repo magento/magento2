@@ -8,7 +8,7 @@ namespace Magento\Integration\Test\Unit\Model\Oauth\Consumer\Validator;
 
 use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength;
 
-class KeyLengthTest extends \PHPUnit_Framework_TestCase
+class KeyLengthTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Sample length

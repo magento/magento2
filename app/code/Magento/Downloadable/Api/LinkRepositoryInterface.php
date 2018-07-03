@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Interface LinkRepositoryInterface
  * @package Magento\Downloadable\Api
  * @api
+ * @since 100.0.2
  */
 interface LinkRepositoryInterface
 {

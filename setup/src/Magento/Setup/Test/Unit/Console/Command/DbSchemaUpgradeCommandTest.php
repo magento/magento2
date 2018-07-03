@@ -10,19 +10,62 @@ use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Console\Command\DbSchemaUpgradeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class DbSchemaUpgradeCommandTest extends DbDataUpgradeCommandTest
+class DbSchemaUpgradeCommandTest extends \PHPUnit\Framework\TestCase
 {
-    public function testExecute()
+    /**
+     * @var \Magento\Setup\Model\InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $installerFactory;
+
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfig;
+
+    protected function setUp()
+    {
+        $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+    }
+
+    /**
+     * @dataProvider executeDataProvider
+     * @param $options
+     * @param $expectedOptions
+     */
+    public function testExecute($options, $expectedOptions)
     {
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->will($this->returnValue(true));
-        $installer = $this->getMock(\Magento\Setup\Model\Installer::class, [], [], '', false);
+        $installer = $this->createMock(\Magento\Setup\Model\Installer::class);
         $this->installerFactory->expects($this->once())->method('create')->will($this->returnValue($installer));
-        $installer->expects($this->once())->method('installSchema');
+        $installer
+            ->expects($this->once())
+            ->method('installSchema')
+            ->with($expectedOptions);
 
         $commandTester = new CommandTester(
             new DbSchemaUpgradeCommand($this->installerFactory, $this->deploymentConfig)
         );
-        $commandTester->execute([]);
+        $commandTester->execute($options);
+    }
+
+    /**
+     * @return array
+     */
+    public function executeDataProvider()
+    {
+        return [
+            [
+                'options' => [
+                    '--magento-init-params' => '',
+                    '--convert_old_scripts' => false
+                ],
+                'expectedOptions' => [
+                    'convert_old_scripts' => false,
+                    'magento-init-params' => '',
+                ]
+            ],
+        ];
     }
 
     public function testExecuteNoConfig()

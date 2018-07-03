@@ -12,7 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-class ScopeFallbackResolverTest extends \PHPUnit_Framework_TestCase
+class ScopeFallbackResolverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ScopeFallbackResolver */
     protected $model;

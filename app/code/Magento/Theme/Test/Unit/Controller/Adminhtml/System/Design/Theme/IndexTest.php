@@ -15,30 +15,31 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
 
     public function testIndexAction()
     {
-        $menuModel = $this->getMock(
-            \Magento\Backend\Model\Menu::class,
-            [],
-            [$this->getMock(\Psr\Log\LoggerInterface::class)],
-            '',
-            false
-        );
+        $menuModel = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
+            ->setConstructorArgs([$this->createMock(\Psr\Log\LoggerInterface::class)])
+            ->getMock();
         $menuModel->expects($this->once())
             ->method('getParentItems')
             ->with($this->equalTo('Magento_Theme::system_design_theme'))
             ->will($this->returnValue([]));
 
-        $menuBlock = $this->getMock(\Magento\Backend\Block\Menu::class, [], [], '', false);
+        $menuBlock = $this->createMock(\Magento\Backend\Block\Menu::class);
         $menuBlock->expects($this->once())
             ->method('getMenuModel')
             ->will($this->returnValue($menuModel));
 
-        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class, [], [], '', false);
+        $titleBlock = $this->createMock(\Magento\Theme\Block\Html\Title::class);
+        $titleBlock->expects($this->once())->method('setPageTitle');
+
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $layout->expects($this->any())
             ->method('getBlock')
-            ->with($this->equalTo('menu'))
-            ->will($this->returnValue($menuBlock));
+            ->willReturnMap([
+                ['menu', $menuBlock],
+                ['page.title', $titleBlock]
+            ]);
 
-        $this->view->expects($this->once())
+        $this->view->expects($this->any())
             ->method('getLayout')
             ->will($this->returnValue($layout));
 

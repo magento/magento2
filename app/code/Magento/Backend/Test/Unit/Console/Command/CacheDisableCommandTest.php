@@ -22,7 +22,7 @@ class CacheDisableCommandTest extends AbstractCacheSetCommandTest
      * @param array $enable
      * @param array $result
      * @param string $output
-     * @dataProvider testExecuteDataProvider
+     * @dataProvider executeDataProvider
      */
     public function testExecute($param, $enable, $result, $output)
     {

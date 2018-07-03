@@ -23,7 +23,7 @@ use Magento\Framework\View\Element\UiComponent\Config\Converter;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Manager
@@ -152,9 +152,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareDataWithoutName()
     {
-        $this->setExpectedException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            __("Invalid UI Component element name: ''")
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage(
+            (string)__('The "" UI component element name is invalid. Verify the name and try again.')
         );
         $this->manager->prepareData(null);
     }
@@ -193,6 +193,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getComponentData()
     {
         $cachedData = new \ArrayObject(
@@ -293,6 +296,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($componentData, $this->manager->createRawComponentData($componentName, $needEvaluate));
     }
 
+    /**
+     * @return array
+     */
     public function getComponentDataProvider()
     {
         return [

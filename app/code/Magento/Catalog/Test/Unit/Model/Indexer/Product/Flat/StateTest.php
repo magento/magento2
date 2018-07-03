@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
 
-class StateTest extends \PHPUnit_Framework_TestCase
+class StateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -21,15 +21,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $indexerMock = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
-        $flatIndexerHelperMock = $this->getMock(
-            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $configMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $indexerMock = $this->createMock(\Magento\Indexer\Model\Indexer::class);
+        $flatIndexerHelperMock = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
+        $configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_model = $this->_objectManager->getObject(
             \Magento\Catalog\Model\Indexer\Product\Flat\State::class,
             [

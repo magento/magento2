@@ -10,6 +10,7 @@ namespace Magento\Customer\Model\Address;
  * Interface AddressInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface AddressModelInterface
 {

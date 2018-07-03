@@ -17,6 +17,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
  * CatalogInventory Default Stock Status Indexer Resource Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {
@@ -48,6 +49,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
 
     /**
      * @var StockConfigurationInterface
+     * @since 100.1.0
      */
     protected $stockConfiguration;
 
@@ -130,6 +132,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * Returns action run type
      *
      * @return string
+     * @since 100.2.0
      */
     public function getActionType()
     {
@@ -141,6 +144,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param string $type
      * @return $this
+     * @since 100.2.0
      */
     public function setActionType($type)
     {
@@ -361,6 +365,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param AdapterInterface $connection
      * @param bool $isAggregate
      * @return mixed
+     * @since 100.1.0
      */
     protected function getStatusExpression(AdapterInterface $connection, $isAggregate = false)
     {
@@ -384,7 +389,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     protected function getStockConfiguration()
     {

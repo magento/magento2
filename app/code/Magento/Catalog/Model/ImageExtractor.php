@@ -5,10 +5,11 @@
  */
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface;
 
-class ImageExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface
+class ImageExtractor implements TypeDataExtractorInterface
 {
     /**
      * Extract configuration data of images from the DOM structure
@@ -30,10 +31,13 @@ class ImageExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtrac
                 if ($attribute->nodeType != XML_ELEMENT_NODE) {
                     continue;
                 }
-                if ($attribute->tagName == 'background') {
+                $attributeTagName = $attribute->tagName;
+                if ($attributeTagName === 'background') {
                     $nodeValue = $this->processImageBackground($attribute->nodeValue);
+                } elseif ($attributeTagName === 'width' || $attributeTagName === 'height') {
+                    $nodeValue = intval($attribute->nodeValue);
                 } else {
-                    $nodeValue = $attribute->nodeValue;
+                    $nodeValue = !in_array($attribute->nodeValue, ['false', '0']);
                 }
                 $result[$mediaParentTag][$moduleNameImage][Image::MEDIA_TYPE_CONFIG_NODE][$imageId][$attribute->tagName]
                     = $nodeValue;
@@ -55,6 +59,7 @@ class ImageExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtrac
         $backgroundArray = [];
         if (preg_match($pattern, $backgroundString, $backgroundArray)) {
             array_shift($backgroundArray);
+            $backgroundArray = array_map('intval', $backgroundArray);
         }
         return $backgroundArray;
     }

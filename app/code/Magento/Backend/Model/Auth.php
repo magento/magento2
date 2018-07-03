@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Model;
 
 use Magento\Framework\Exception\AuthenticationException;
@@ -13,6 +14,7 @@ use Magento\Framework\Phrase;
  * Backend Auth model
  *
  * @api
+ * @since 100.0.2
  */
 class Auth
 {
@@ -147,7 +149,12 @@ class Auth
     public function login($username, $password)
     {
         if (empty($username) || empty($password)) {
-            self::throwException(__('You did not sign in correctly or your account is temporarily disabled.'));
+            self::throwException(
+                __(
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
+                )
+            );
         }
 
         try {
@@ -164,7 +171,12 @@ class Auth
             }
 
             if (!$this->getAuthStorage()->getUser()) {
-                self::throwException(__('You did not sign in correctly or your account is temporarily disabled.'));
+                self::throwException(
+                    __(
+                        'The account sign-in was incorrect or your account is disabled temporarily. '
+                        . 'Please wait and try again later.'
+                    )
+                );
             }
         } catch (PluginAuthenticationException $e) {
             $this->_eventManager->dispatch(
@@ -178,7 +190,10 @@ class Auth
                 ['user_name' => $username, 'exception' => $e]
             );
             self::throwException(
-                __($e->getMessage()? : 'You did not sign in correctly or your account is temporarily disabled.')
+                __(
+                    $e->getMessage()? : 'The account sign-in was incorrect or your account is disabled temporarily. '
+                        . 'Please wait and try again later.'
+                )
             );
         }
     }
@@ -214,7 +229,7 @@ class Auth
     public static function throwException(Phrase $msg = null)
     {
         if ($msg === null) {
-            $msg = __('Authentication error occurred.');
+            $msg = __('An authentication error occurred. Verify and try again.');
         }
         throw new AuthenticationException($msg);
     }

@@ -12,7 +12,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Test for \Magento\CatalogSearch\Model\Layer\Filter\Decimal
  */
-class DecimalTest extends \PHPUnit_Framework_TestCase
+class DecimalTest extends \PHPUnit\Framework\TestCase
 {
     private $filterItem;
 

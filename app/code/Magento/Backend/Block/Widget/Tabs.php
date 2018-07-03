@@ -10,6 +10,7 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 /**
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 class Tabs extends \Magento\Backend\Block\Widget
 {
@@ -34,7 +35,9 @@ class Tabs extends \Magento\Backend\Block\Widget
      */
     protected $_destElementId = 'content';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::widget/tabs.phtml';
 
     /**
@@ -161,7 +164,7 @@ class Tabs extends \Magento\Backend\Block\Widget
      */
     protected function _addTabByName($tab, $tabId)
     {
-        if (strpos($tab, '\Block\\')) {
+        if (strpos($tab, '\Block\\') !== false) {
             $this->_tabs[$tabId] = $this->getLayout()->createBlock($tab, $this->getNameInLayout() . '_tab_' . $tabId);
         } elseif ($this->getChildBlock($tab)) {
             $this->_tabs[$tabId] = $this->getChildBlock($tab);

@@ -28,24 +28,22 @@ class InvoiceSenderTest extends AbstractSenderTest
     {
         $this->stepMockSetup();
 
-        $this->invoiceResourceMock = $this->getMock(
+        $this->invoiceResourceMock = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Invoice::class,
-            ['saveAttribute'],
-            [],
-            '',
-            false
+            ['saveAttribute']
         );
 
-        $this->invoiceMock = $this->getMock(
+        $this->invoiceMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Invoice::class,
             [
-                'getStore', '__wakeup', 'getOrder',
-                'setSendEmail', 'setEmailSent', 'getCustomerNoteNotify',
+                'getStore',
+                '__wakeup',
+                'getOrder',
+                'setSendEmail',
+                'setEmailSent',
+                'getCustomerNoteNotify',
                 'getCustomerNote'
-            ],
-            [],
-            '',
-            false
+            ]
         );
         $this->invoiceMock->expects($this->any())
             ->method('getStore')
@@ -54,12 +52,9 @@ class InvoiceSenderTest extends AbstractSenderTest
             ->method('getOrder')
             ->will($this->returnValue($this->orderMock));
 
-        $this->identityContainerMock = $this->getMock(
+        $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::class,
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
-            [],
-            '',
-            false
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId']
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -103,13 +98,7 @@ class InvoiceSenderTest extends AbstractSenderTest
             ->willReturn($configValue);
 
         if (!$configValue || $forceSyncMode) {
-            $addressMock = $this->getMock(
-                \Magento\Sales\Model\Order\Address::class,
-                [],
-                [],
-                '',
-                false
-            );
+            $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
 
             $this->addressRenderer->expects($this->any())
                 ->method('format')
@@ -230,7 +219,7 @@ class InvoiceSenderTest extends AbstractSenderTest
             ->with('sales_email/general/async_sending')
             ->willReturn(false);
 
-        $addressMock = $this->getMock(\Magento\Sales\Model\Order\Address::class, [], [], '', false);
+        $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
 
         $this->addressRenderer->expects($this->exactly($formatCallCount))
             ->method('format')

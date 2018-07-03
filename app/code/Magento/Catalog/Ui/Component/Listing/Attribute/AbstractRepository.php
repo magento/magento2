@@ -7,6 +7,7 @@ namespace Magento\Catalog\Ui\Component\Listing\Attribute;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractRepository implements RepositoryInterface
 {
@@ -15,7 +16,9 @@ abstract class AbstractRepository implements RepositoryInterface
      */
     protected $attributes;
 
-    /** @var \Magento\Framework\Api\SearchCriteriaBuilder */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
     protected $searchCriteriaBuilder;
 
     /**

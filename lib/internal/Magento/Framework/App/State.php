@@ -219,7 +219,7 @@ class State
      * Get Instance of AreaList
      *
      * @return AreaList
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getAreaListInstance()
     {

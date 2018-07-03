@@ -24,7 +24,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConvertToXmlTest extends \PHPUnit_Framework_TestCase
+class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConvertToXml

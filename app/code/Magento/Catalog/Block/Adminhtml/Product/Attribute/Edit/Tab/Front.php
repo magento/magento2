@@ -22,6 +22,7 @@ use Magento\Framework\Registry;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Front extends Generic
 {
@@ -125,17 +126,6 @@ class Front extends Generic
         );
 
         $fieldset->addField(
-            'is_wysiwyg_enabled',
-            'select',
-            [
-                'name' => 'is_wysiwyg_enabled',
-                'label' => __('Enable WYSIWYG'),
-                'title' => __('Enable WYSIWYG'),
-                'values' => $yesnoSource,
-            ]
-        );
-
-        $fieldset->addField(
             'is_html_allowed_on_front',
             'select',
             [
@@ -195,32 +185,18 @@ class Front extends Generic
             $this->getLayout()->createBlock(
                 \Magento\Backend\Block\Widget\Form\Element\Dependence::class
             )->addFieldMap(
-                "is_wysiwyg_enabled",
-                'wysiwyg_enabled'
-            )->addFieldMap(
                 "is_html_allowed_on_front",
                 'html_allowed_on_front'
             )->addFieldMap(
                 "frontend_input",
                 'frontend_input_type'
-            )->addFieldDependence(
-                'wysiwyg_enabled',
-                'frontend_input_type',
-                'textarea'
-            )->addFieldDependence(
-                'html_allowed_on_front',
-                'wysiwyg_enabled',
-                '0'
-            )
-            ->addFieldMap(
+            )->addFieldMap(
                 "is_searchable",
                 'searchable'
-            )
-            ->addFieldMap(
+            )->addFieldMap(
                 "is_visible_in_advanced_search",
                 'advanced_search'
-            )
-            ->addFieldDependence(
+            )->addFieldDependence(
                 'advanced_search',
                 'searchable',
                 '1'

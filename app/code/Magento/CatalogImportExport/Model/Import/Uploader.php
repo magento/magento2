@@ -12,6 +12,7 @@ use Magento\Framework\Filesystem\DriverPool;
  * Import entity product model
  *
  * @api
+ * @since 100.0.2
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
@@ -160,6 +161,15 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
                 $read = $this->_readFactory->create($url, DriverPool::HTTPS);
             }
 
+            //only use filename (for URI with query parameters)
+            $parsedUrlPath = parse_url($url, PHP_URL_PATH);
+            if ($parsedUrlPath) {
+                $urlPathValues = explode('/', $parsedUrlPath);
+                if (!empty($urlPathValues)) {
+                    $fileName = end($urlPathValues);
+                }
+            }
+
             $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $fileName);
             $this->_directory->writeFile(
                 $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName),
@@ -171,6 +181,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $this->_setUploadFile($filePath);
         $destDir = $this->_directory->getAbsolutePath($this->getDestDir());
         $result = $this->save($destDir);
+        unset($result['path']);
         $result['name'] = self::getCorrectFileName($result['name']);
         return $result;
     }

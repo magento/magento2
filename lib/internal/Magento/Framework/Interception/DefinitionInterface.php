@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Interception;
 
+/**
+ * Interface \Magento\Framework\Interception\DefinitionInterface
+ *
+ */
 interface DefinitionInterface
 {
     const LISTENER_BEFORE = 1;

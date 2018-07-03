@@ -1,9 +1,12 @@
 {
     "name": "magento/admin-Magento_Catalog",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/framework": "0.1.0-alpha103"
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*"
     },
     "type": "magento2-theme",
     "version": "0.1.0"

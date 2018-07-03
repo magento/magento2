@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Billing\Agreement;
 
-class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
+class OrdersUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrdersUpdater
@@ -24,14 +24,8 @@ class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->_agreementResource = $this->getMock(
-            \Magento\Paypal\Model\ResourceModel\Billing\Agreement::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->_agreementResource = $this->createMock(\Magento\Paypal\Model\ResourceModel\Billing\Agreement::class);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
@@ -42,8 +36,8 @@ class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdate()
     {
-        $agreement = $this->getMock(\Magento\Paypal\Model\Billing\Agreement::class, [], [], '', false);
-        $argument = $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class, [], [], '', false);
+        $agreement = $this->createMock(\Magento\Paypal\Model\Billing\Agreement::class);
+        $argument = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
 
         $this->_registry->expects(
             $this->once()

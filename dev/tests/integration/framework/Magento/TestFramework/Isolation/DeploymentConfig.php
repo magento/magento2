@@ -52,10 +52,10 @@ class DeploymentConfig
      * If this is intentional, then it must be reverted to the previous state within the test.
      * After that, the application needs to be wiped out and reinstalled.
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return void
      */
-    public function endTest(\PHPUnit_Framework_TestCase $test)
+    public function endTest(\PHPUnit\Framework\TestCase $test)
     {
         $config = $this->reader->load();
         if ($this->config != $config) {

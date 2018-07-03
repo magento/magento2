@@ -10,7 +10,7 @@ use Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Cms\Api\Data\BlockInterface;
 
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SaveHandler

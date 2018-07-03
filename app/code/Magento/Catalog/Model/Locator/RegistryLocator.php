@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Locator;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -52,7 +53,7 @@ class RegistryLocator implements LocatorInterface
             return $this->product = $product;
         }
 
-        throw new NotFoundException(__('Product was not registered'));
+        throw new NotFoundException(__("The product wasn't registered."));
     }
 
     /**
@@ -69,7 +70,7 @@ class RegistryLocator implements LocatorInterface
             return $this->store = $store;
         }
 
-        throw new NotFoundException(__('Store was not registered'));
+        throw new NotFoundException(__("The store wasn't registered. Verify the store and try again."));
     }
 
     /**

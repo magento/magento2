@@ -4,19 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
 /**
  * Class AddTrackTest
  *
  * @package Magento\Shipping\Controller\Adminhtml\Order\Shipment
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddTrackTest extends \PHPUnit_Framework_TestCase
+class AddTrackTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
@@ -72,11 +71,12 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->shipmentLoader = $this->getMockBuilder(
-            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class)
+            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class
+        )
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
             ->getMock();
-        $this->context = $this->getMock(
+        $this->context = $this->createPartialMock(
             \Magento\Backend\App\Action\Context::class,
             [
                 'getRequest',
@@ -85,34 +85,19 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
                 'getObjectManager',
                 'getTitle',
                 'getView'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->response = $this->getMock(
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse', 'setBody'],
-            [],
-            '',
-            false
+            ['setRedirect', 'sendResponse', 'setBody']
         );
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->objectManager = $this->getMock(
+        $this->objectManager = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create', 'get'],
-            [],
-            '',
-            false
+            ['create', 'get']
         );
-        $this->view = $this->getMock(
-            \Magento\Framework\App\ViewInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -158,12 +143,9 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
         $orderId = 10003;
         $tracking = [];
         $shipmentData = ['items' => [], 'send_email' => ''];
-        $shipment = $this->getMock(
+        $shipment = $this->createPartialMock(
             \Magento\Sales\Model\Order\Shipment::class,
-            ['addTrack', '__wakeup', 'save'],
-            [],
-            '',
-            false
+            ['addTrack', '__wakeup', 'save']
         );
         $this->request->expects($this->any())
             ->method('getParam')
@@ -224,8 +206,8 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
         $this->view->expects($this->once())
             ->method('loadLayout')
             ->will($this->returnSelf());
-        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
-        $menuBlock = $this->getMock(\Magento\Framework\View\Element\BlockInterface::class, ['toHtml'], [], '', false);
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $menuBlock = $this->createPartialMock(\Magento\Framework\View\Element\BlockInterface::class, ['toHtml']);
         $html = 'html string';
         $this->view->expects($this->once())
             ->method('getLayout')

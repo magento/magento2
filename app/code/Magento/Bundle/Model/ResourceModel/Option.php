@@ -99,12 +99,10 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
 
         /**
-         * also saving default value if this store view scope
+         * also saving default fallback value
          */
-
-        if ($object->getStoreId()) {
-            $data->setStoreId(0);
-            $data->setTitle($object->getDefaultTitle());
+        if (0 !== (int)$object->getStoreId()) {
+            $data->setStoreId(0)->setTitle($object->getDefaultTitle());
             $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
         }
 

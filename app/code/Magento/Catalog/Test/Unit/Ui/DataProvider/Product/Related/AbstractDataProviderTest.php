@@ -18,7 +18,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
  * Class AbstractDataProviderTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractDataProviderTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

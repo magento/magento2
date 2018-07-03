@@ -8,6 +8,7 @@ namespace Magento\Backend\Model\Menu;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Config
 {

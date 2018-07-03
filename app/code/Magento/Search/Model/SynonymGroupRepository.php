@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Search\Model;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -73,7 +74,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __(
-                    'Synonym group with id %1 cannot be deleted. %2',
+                    'The synonym group with the "%1" ID can\'t be deleted. %2',
                     $synonymGroup->getGroupId(),
                     $exception->getMessage()
                 )

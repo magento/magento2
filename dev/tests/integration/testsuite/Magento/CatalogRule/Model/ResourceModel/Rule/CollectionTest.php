@@ -13,10 +13,9 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Setup\CategorySetup;
 
 /**
- * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -48,7 +47,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppArea adminhtml
-     *
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/CatalogRule/_files/attribute.php
      * @magentoDataFixture Magento/CatalogRule/_files/rule_by_attribute.php
      * @magentoDataFixture Magento/CatalogRule/_files/two_rules.php

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminAddWidgetToWYSIWYGWithCatalogCategoryLinkTypeTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="MAGETWO-42156-Widgets in WYSIWYG"/>
+            <group value="Cms"/>
+            <title value="Admin should be able to create a CMS page with widget type: Catalog category link"/>
+            <description value="Admin should be able to create a CMS page with widget type: Catalog category link"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-83611"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="ConfigAdminAccountSharingActionGroup" stepKey="allowAdminShareAccount"/>
+        </before>
+        <!--Main test-->
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <waitForPageLoad stepKey="wait2"/>
+        <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
+        <!--see Insert Widget button disabled-->
+        <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
+        <!--see Cancel button enabed-->
+        <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
+        <!--Select "Widget Type"-->
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Category Link" stepKey="selectCatalogCategoryLink" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
+        <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
+        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Category Link Block Template" stepKey="selectTemplate" />
+        <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectCategoryBtn" />
+        <waitForLoadingMaskToDisappear stepKey="wait3"/>
+        <click userInput="$$createPreReqCategory.name$$" stepKey="selectPreCreateCategory" />
+        <waitForElementNotVisible selector="{{WidgetSection.SelectCategoryTitle}}" stepKey="waitForSlideoutCloses1" />
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
+        <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideOutCloses2" />
+        <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="wait5" />
+        <see userInput="Hello CMS Page!" stepKey="seeContent"/>
+        <!--see widget on Storefront-->
+        <see userInput="$$createPreReqCategory.name$$" stepKey="seeCategoryLink"/>
+        <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

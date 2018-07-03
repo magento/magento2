@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
 class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -103,7 +104,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->getDefaultAttributeSetId();
         if ($object->getAttributeSetId() == $defaultAttributeSetId) {
             throw new \Magento\Framework\Exception\StateException(
-                __('Default attribute set can not be deleted')
+                __('The default attribute set can\'t be deleted.')
             );
         }
         return parent::_beforeDelete($object);
@@ -183,7 +184,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Retrurn default attribute group id for attribute set id
+     * Return default attribute group id for attribute set id
      *
      * @param int $setId
      * @return int|null

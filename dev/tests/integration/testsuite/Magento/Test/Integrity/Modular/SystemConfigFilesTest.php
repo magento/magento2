@@ -8,7 +8,7 @@ namespace Magento\Test\Integrity\Modular;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 
-class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
+class SystemConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     public function testConfiguration()
     {
@@ -24,13 +24,11 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
         $modulesDir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         /** @var $moduleDirSearch \Magento\Framework\Component\DirSearch */
         $moduleDirSearch = $objectManager->get(\Magento\Framework\Component\DirSearch::class);
-        $fileList = $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/adminhtml/system.xml');
-        $configMock = $this->getMock(
+        $fileList = $moduleDirSearch
+            ->collectFiles(ComponentRegistrar::MODULE, 'etc/adminhtml/system.xml');
+        $configMock = $this->createPartialMock(
             \Magento\Framework\Module\Dir\Reader::class,
-            ['getConfigurationFiles', 'getModuleDir'],
-            [],
-            '',
-            false
+            ['getConfigurationFiles', 'getModuleDir']
         );
         $configMock->expects($this->any())->method('getConfigurationFiles')->will($this->returnValue($fileList));
         $configMock->expects(

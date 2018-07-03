@@ -11,6 +11,7 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
  *
  * @api
  * @method \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface getItem()
+ * @since 100.0.2
  */
 class Column extends \Magento\Wishlist\Block\AbstractBlock
 {

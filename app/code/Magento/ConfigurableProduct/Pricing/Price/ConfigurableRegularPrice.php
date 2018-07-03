@@ -35,7 +35,9 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      */
     protected $values = [];
 
-    /** @var PriceResolverInterface */
+    /**
+     * @var \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     */
     protected $priceResolver;
 
     /**
@@ -158,7 +160,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
 
     /**
      * @return \Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface
-     * @deprecated
+     * @deprecated 100.1.1
      */
     private function getConfigurableOptionsProvider()
     {

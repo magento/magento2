@@ -8,7 +8,7 @@ namespace Magento\Tax\Model\TaxClass\Source;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetAllOptions()
     {

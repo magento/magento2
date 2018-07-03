@@ -21,6 +21,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
         $request = $this->getRequest();
         if (!$request->isPost()) {
             $this->getResponse()->setRedirect($this->getUrl('*/template'));
+            return;
         }
         $template = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class);
 

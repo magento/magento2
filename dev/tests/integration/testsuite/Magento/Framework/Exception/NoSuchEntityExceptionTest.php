@@ -7,7 +7,7 @@ namespace Magento\Framework\Exception;
 
 use Magento\Framework\Phrase;
 
-class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
+class NoSuchEntityExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructor()
     {

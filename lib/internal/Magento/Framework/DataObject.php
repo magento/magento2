@@ -122,7 +122,7 @@ class DataObject implements \ArrayAccess
         }
 
         /* process a/b/c key as ['a']['b']['c'] */
-        if (strpos($key, '/')) {
+        if (strpos($key, '/') !== false) {
             $data = $this->getDataByPath($key);
         } else {
             $data = $this->_getData($key);
@@ -325,19 +325,21 @@ class DataObject implements \ArrayAccess
      * Convert object data to JSON
      *
      * @param array $keys array of required keys
-     * @return string
+     * @return bool|string
+     * @throws \InvalidArgumentException
      */
     public function toJson(array $keys = [])
     {
         $data = $this->toArray($keys);
-        return \Zend_Json::encode($data);
+        return \Magento\Framework\Serialize\JsonConverter::convert($data);
     }
 
     /**
      * The "__" style wrapper for toJson
      *
-     * @param  array $keys
-     * @return string
+     * @param array $keys
+     * @return bool|string
+     * @throws \InvalidArgumentException
      */
     public function convertToJson(array $keys = [])
     {

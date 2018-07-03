@@ -9,6 +9,7 @@ namespace Magento\AdminNotification\Block;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Window extends \Magento\Backend\Block\Template
 {
@@ -97,10 +98,9 @@ class Window extends \Magento\Backend\Block\Template
     {
         if ($this->_latestItem == null) {
             $items = array_values($this->_criticalCollection->getItems());
+            $this->_latestItem = false;
             if (count($items)) {
                 $this->_latestItem = $items[0];
-            } else {
-                $this->_latestItem = false;
             }
         }
         return $this->_latestItem;

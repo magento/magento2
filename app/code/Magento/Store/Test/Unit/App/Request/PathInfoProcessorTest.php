@@ -7,7 +7,7 @@ namespace Magento\Store\Test\Unit\App\Request;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
+class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\App\Request\PathInfoProcessor
@@ -33,13 +33,13 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
+        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
         $this->_model = new \Magento\Store\App\Request\PathInfoProcessor($this->_storeManagerMock);
     }
 
-    public function testProcessIfStoreExistsAndIsNotDirectAcccessToFrontName()
+    public function testProcessIfStoreExistsAndIsNotDirectAccessToFrontName()
     {
-        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
@@ -47,6 +47,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
         )->with(
             'storeCode'
         )->willReturn($store);
+        $store->expects($this->once())->method('getCode')->will($this->returnValue('storeCode'));
         $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
         $this->_requestMock->expects(
             $this->once()
@@ -61,9 +62,9 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/node_one/', $this->_model->process($this->_requestMock, $this->_pathInfo));
     }
 
-    public function testProcessIfStoreExistsAndDirectAcccessToFrontName()
+    public function testProcessIfStoreExistsAndDirectAccessToFrontName()
     {
-        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
@@ -88,7 +89,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessIfStoreIsEmpty()
     {
         $path = '/0/node_one/';
-        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
@@ -112,7 +113,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessIfStoreCodeIsNotExist()
     {
-        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->_storeManagerMock->expects($this->once())->method('getStore')->with('storeCode')
             ->willThrowException(new NoSuchEntityException());
         $store->expects($this->never())->method('isUseStoreInUrl');

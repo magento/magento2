@@ -5,6 +5,7 @@
  */
 namespace Magento\Analytics\Controller\Adminhtml\Reports;
 
+use Magento\Analytics\Model\Exception\State\SubscriptionUpdateException;
 use Magento\Analytics\Model\ReportUrlProvider;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -23,6 +24,11 @@ class Show extends Action
     private $reportUrlProvider;
 
     /**
+     * @inheritdoc
+     */
+    const ADMIN_RESOURCE = 'Magento_Analytics::analytics_settings';
+
+    /**
      * @param Context $context
      * @param ReportUrlProvider $reportUrlProvider
      */
@@ -32,16 +38,6 @@ class Show extends Action
     ) {
         $this->reportUrlProvider = $reportUrlProvider;
         parent::__construct($context);
-    }
-
-    /**
-     * Check admin permissions for this controller.
-     *
-     * @return boolean
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Analytics::analytics_settings');
     }
 
     /**
@@ -55,6 +51,9 @@ class Show extends Action
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         try {
             $resultRedirect->setUrl($this->reportUrlProvider->getUrl());
+        } catch (SubscriptionUpdateException $e) {
+            $this->getMessageManager()->addNoticeMessage($e->getMessage());
+            $resultRedirect->setPath('adminhtml');
         } catch (LocalizedException $e) {
             $this->getMessageManager()->addExceptionMessage($e, $e->getMessage());
             $resultRedirect->setPath('adminhtml');

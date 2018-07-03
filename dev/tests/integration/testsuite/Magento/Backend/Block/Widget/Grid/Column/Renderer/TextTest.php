@@ -12,7 +12,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
 
-class TextTest extends \PHPUnit_Framework_TestCase
+class TextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -28,8 +28,8 @@ class TextTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->origRenderer = Phrase::getRenderer();
-        /** @var RendererInterface|PHPUnit_Framework_MockObject_MockObject $rendererMock */
-        $rendererMock = $this->getMock(RendererInterface::class);
+        /** @var RendererInterface|PHPUnit\Framework\MockObject_MockObject $rendererMock */
+        $rendererMock = $this->createMock(RendererInterface::class);
         $rendererMock->expects($this->any())
             ->method('render')
             ->willReturnCallback(

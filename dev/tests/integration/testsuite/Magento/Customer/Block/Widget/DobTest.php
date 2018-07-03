@@ -9,7 +9,7 @@
  */
 namespace Magento\Customer\Block\Widget;
 
-class DobTest extends \PHPUnit_Framework_TestCase
+class DobTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetDateFormat()
     {

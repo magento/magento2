@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Config/_files/config_data.php
  * @magentoAppIsolation enabled
  */
-class SystemTest extends \PHPUnit_Framework_TestCase
+class SystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var System

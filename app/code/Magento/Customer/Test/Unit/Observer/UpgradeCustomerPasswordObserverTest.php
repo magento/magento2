@@ -7,7 +7,7 @@ namespace Magento\Customer\Test\Unit\Observer;
 
 use Magento\Customer\Observer\UpgradeCustomerPasswordObserver;
 
-class UpgradeCustomerPasswordObserverTest extends \PHPUnit_Framework_TestCase
+class UpgradeCustomerPasswordObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UpgradeCustomerPasswordObserver

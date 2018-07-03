@@ -9,6 +9,7 @@ namespace Magento\Payment\Gateway\Validator;
  * Class AbstractValidator
  * @package Magento\Payment\Gateway\Validator
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractValidator implements ValidatorInterface
 {
@@ -31,14 +32,16 @@ abstract class AbstractValidator implements ValidatorInterface
      *
      * @param bool $isValid
      * @param array $fails
-     * @return ResultInterface
+     * @param array $errorCodes
+     * @return void
      */
-    protected function createResult($isValid, array $fails = [])
+    protected function createResult($isValid, array $fails = [], array $errorCodes = [])
     {
         return $this->resultInterfaceFactory->create(
             [
                 'isValid' => (bool)$isValid,
-                'failsDescription' => $fails
+                'failsDescription' => $fails,
+                'errorCodes' => $errorCodes
             ]
         );
     }

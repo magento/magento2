@@ -63,7 +63,7 @@ class FileTest extends AbstractFormTestCase
             ->disableOriginalConstructor()->getMock();
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->uploaderFactoryMock = $this->getMock(\Magento\Framework\File\UploaderFactory::class, [], [], '', false);
+        $this->uploaderFactoryMock = $this->createMock(\Magento\Framework\File\UploaderFactory::class);
         $this->fileProcessorMock = $this->getMockBuilder(\Magento\Customer\Model\FileProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -118,6 +118,9 @@ class FileTest extends AbstractFormTestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function extractValueNoRequestScopeDataProvider()
     {
         return [
@@ -178,6 +181,9 @@ class FileTest extends AbstractFormTestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function extractValueWithRequestScopeDataProvider()
     {
         return [
@@ -228,6 +234,9 @@ class FileTest extends AbstractFormTestCase
         $this->assertEquals($expected, $model->validateValue($value));
     }
 
+    /**
+     * @return array
+     */
     public function validateValueNotToUploadDataProvider()
     {
         return [
@@ -285,6 +294,9 @@ class FileTest extends AbstractFormTestCase
         $this->assertEquals($expected, $model->validateValue($value));
     }
 
+    /**
+     * @return array
+     */
     public function validateValueToUploadDataProvider()
     {
         return [
@@ -371,7 +383,7 @@ class FileTest extends AbstractFormTestCase
         $mediaDirMock->expects($this->any())
             ->method('getAbsolutePath')
             ->will($this->returnArgument(0));
-        $uploaderMock = $this->getMock(\Magento\Framework\File\Uploader::class, [], [], '', false);
+        $uploaderMock = $this->createMock(\Magento\Framework\File\Uploader::class);
         $this->uploaderFactoryMock->expects($this->once())
             ->method('create')
             ->with(['fileId' => $value])
@@ -429,6 +441,9 @@ class FileTest extends AbstractFormTestCase
         $this->assertSame('', $model->outputValue($format));
     }
 
+    /**
+     * @return array
+     */
     public function outputValueDataProvider()
     {
         return [

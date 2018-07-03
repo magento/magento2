@@ -17,7 +17,7 @@ use \InvalidArgumentException;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreCookieTest extends \PHPUnit_Framework_TestCase
+class StoreCookieTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Plugin\StoreCookie

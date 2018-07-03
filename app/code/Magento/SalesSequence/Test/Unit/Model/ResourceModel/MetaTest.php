@@ -5,13 +5,12 @@
  */
 namespace Magento\SalesSequence\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\SalesSequence\Model\ResourceModel\Meta;
 
 /**
  * Class MetaTest
  */
-class MetaTest extends \PHPUnit_Framework_TestCase
+class MetaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -72,56 +71,20 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             true,
             ['query']
         );
-        $this->dbContext = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\Context::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->metaFactory = $this->getMock(
-            \Magento\SalesSequence\Model\MetaFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->resourceProfile = $this->getMock(
+        $this->dbContext = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
+        $this->metaFactory = $this->createPartialMock(\Magento\SalesSequence\Model\MetaFactory::class, ['create']);
+        $this->resourceProfile = $this->createPartialMock(
             \Magento\SalesSequence\Model\ResourceModel\Profile::class,
-            ['loadActiveProfile', 'save'],
-            [],
-            '',
-            false
+            ['loadActiveProfile', 'save']
         );
-        $this->resourceMock = $this->getMock(
+        $this->resourceMock = $this->createPartialMock(
             \Magento\Framework\App\ResourceConnection::class,
-            ['getConnection', 'getTableName'],
-            [],
-            '',
-            false
+            ['getConnection', 'getTableName']
         );
         $this->dbContext->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
-        $this->select = $this->getMock(
-            \Magento\Framework\DB\Select::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->meta = $this->getMock(
-            \Magento\SalesSequence\Model\Meta::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->profile = $this->getMock(
-            \Magento\SalesSequence\Model\Profile::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->meta = $this->createMock(\Magento\SalesSequence\Model\Meta::class);
+        $this->profile = $this->createMock(\Magento\SalesSequence\Model\Profile::class);
         $this->resource = new Meta(
             $this->dbContext,
             $this->metaFactory,

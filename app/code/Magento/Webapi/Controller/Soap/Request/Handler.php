@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Controller\Soap\Request;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -29,28 +30,44 @@ class Handler
 {
     const RESULT_NODE_NAME = 'result';
 
-    /** @var SoapRequest */
+    /**
+     * @var \Magento\Framework\Webapi\Request
+     */
     protected $_request;
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     protected $_objectManager;
 
-    /** @var SoapConfig */
+    /**
+     * @var \Magento\Webapi\Model\Soap\Config
+     */
     protected $_apiConfig;
 
-    /** @var Authorization */
+    /**
+     * @var \Magento\Framework\Webapi\Authorization
+     */
     protected $authorization;
 
-    /** @var SimpleDataObjectConverter */
+    /**
+     * @var \Magento\Framework\Api\SimpleDataObjectConverter
+     */
     protected $_dataObjectConverter;
 
-    /** @var ServiceInputProcessor */
+    /**
+     * @var \Magento\Framework\Webapi\ServiceInputProcessor
+     */
     protected $serviceInputProcessor;
 
-    /** @var DataObjectProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     */
     protected $_dataObjectProcessor;
 
-    /** @var MethodsMap */
+    /**
+     * @var \Magento\Framework\Reflection\MethodsMap
+     */
     protected $methodsMapProcessor;
 
     /**
@@ -90,7 +107,7 @@ class Handler
      *
      * @param string $operation
      * @param array $arguments
-     * @return \stdClass|null
+     * @return array
      * @throws WebapiException
      * @throws \LogicException
      * @throws AuthorizationException
@@ -110,7 +127,7 @@ class Handler
         if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {
             throw new AuthorizationException(
                 __(
-                    'Consumer is not authorized to access %resources',
+                    "The consumer isn't authorized to access %resources.",
                     ['resources' => implode(', ', $serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])]
                 )
             );

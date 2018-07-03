@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig\FileReader;
@@ -16,7 +17,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -269,7 +270,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                 Cli::RETURN_FAILURE,
                 [
                     'web/test/test_wrong_value' => [
-                        'The "some_scope" value doesn\'t exist. Enter another value.'
+                        'The "some_scope" value doesn\'t exist. Enter another value and try again.'
                     ],
                 ]
             ],
@@ -279,7 +280,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                 Cli::RETURN_FAILURE,
                 [
                     'web/test/test_wrong_value' => [
-                        'The "scope_code" value doesn\'t exist. Enter another value.'
+                        'The "scope_code" value doesn\'t exist. Enter another value and try again.'
                     ],
                 ]
             ],

@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Form\Element;
 
+use Magento\Framework\DataObject;
 use Magento\Ui\Component\Form\Element\Wysiwyg;
 use Magento\Framework\Data\Form\Element\Editor;
 use Magento\Framework\Data\Form;
@@ -48,6 +49,12 @@ class WysiwygTest extends AbstractElementTest
             ->getMock();
         $this->wysiwygConfig = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
+        $dataObject = new DataObject();
+        $this->wysiwygConfig
+            ->expects($this->once())
+            ->method('getConfig')
+            ->willReturn($dataObject);
+
         $this->editorMock = $this->getMockBuilder(Editor::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,6 +69,9 @@ class WysiwygTest extends AbstractElementTest
             ->method('getElementHtml');
     }
 
+    /**
+     * @return \Magento\Ui\Component\Form\Element\AbstractElement|object
+     */
     protected function getModel()
     {
         return $this->objectManager->getObject(Wysiwyg::class, [

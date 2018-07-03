@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\File\FileList;
 
 use \Magento\Framework\View\File\FileList\Collator;
 
-class CollatorTest extends \PHPUnit_Framework_TestCase
+class CollatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Collator

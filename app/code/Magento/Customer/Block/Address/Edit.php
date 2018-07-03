@@ -12,6 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Edit extends \Magento\Directory\Block\Data
 {
@@ -128,7 +129,7 @@ class Edit extends \Magento\Directory\Block\Data
 
         if ($postedData = $this->_customerSession->getAddressFormData(true)) {
             $postedData['region'] = [
-                'region_id' => $postedData['region_id'],
+                'region_id' => isset($postedData['region_id']) ? $postedData['region_id'] : null,
                 'region' => $postedData['region'],
             ];
             $this->dataObjectHelper->populateWithArray(

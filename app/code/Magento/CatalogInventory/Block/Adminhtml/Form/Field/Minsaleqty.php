@@ -9,6 +9,7 @@ namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
  * Adminhtml catalog inventory "Minimum Qty Allowed in Shopping Cart" field
  *
  * @api
+ * @since 100.0.2
  */
 class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {

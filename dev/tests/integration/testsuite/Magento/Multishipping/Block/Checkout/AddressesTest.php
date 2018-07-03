@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea frontend
  */
-class AddressesTest extends \PHPUnit_Framework_TestCase
+class AddressesTest extends \PHPUnit\Framework\TestCase
 {
     const FIXTURE_CUSTOMER_ID = 1;
 

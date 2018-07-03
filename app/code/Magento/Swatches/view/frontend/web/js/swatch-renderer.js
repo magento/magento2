@@ -90,7 +90,7 @@ define([
                 $title,
                 $corner;
 
-            if (!$element.size()) {
+            if (!$element.length) {
                 $element = $('<div class="' +
                     $widget.options.tooltipClass +
                     '"><div class="image"></div><div class="title"></div><div class="corner"></div></div>'
@@ -246,6 +246,9 @@ define([
             // Cache for BaseProduct images. Needed when option unset
             mediaGalleryInitial: [{}],
 
+            // Use ajax to get image data
+            useAjax: false,
+
             /**
              * Defines the mechanism of how images of a gallery should be
              * updated when user switches between configurations of a product.
@@ -265,8 +268,11 @@ define([
             // tier prise selectors start
             tierPriceTemplateSelector: '#tier-prices-template',
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
-            tierPriceTemplate: ''
+            tierPriceTemplate: '',
             // tier prise selectors end
+
+            // A price label selector
+            normalPriceLabelSelector: '.normal-price .price-label'
         },
 
         /**
@@ -284,9 +290,12 @@ define([
          * @private
          */
         _init: function () {
-            // creates debounced variant of _LoadProductMedia()
-            // to use it in events handlers instead of _LoadProductMedia()
-            this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
+            if (_.isEmpty(this.options.jsonConfig.images)) {
+                this.options.useAjax = true;
+                // creates debounced variant of _LoadProductMedia()
+                // to use it in events handlers instead of _LoadProductMedia()
+                this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
+            }
 
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 // store unsorted attributes
@@ -306,7 +315,7 @@ define([
          */
         _sortAttributes: function () {
             this.options.jsonConfig.attributes = _.sortBy(this.options.jsonConfig.attributes, function (attribute) {
-                return attribute.position;
+                return parseInt(attribute.position, 10);
             });
         },
 
@@ -638,6 +647,30 @@ define([
         },
 
         /**
+         * Load media gallery using ajax or json config.
+         *
+         * @private
+         */
+        _loadMedia: function () {
+            var $main = this.inProductList ?
+                    this.element.parents('.product-item-info') :
+                    this.element.parents('.column.main'),
+                images;
+
+            if (this.options.useAjax) {
+                this._debouncedLoadProductMedia();
+            }  else {
+                images = this.options.jsonConfig.images[this.getProduct()];
+
+                if (!images) {
+                    images = this.options.mediaGalleryInitial;
+                }
+
+                this.updateBaseImage(images, $main, !this.inProductList);
+            }
+        },
+
+        /**
          * Event for swatch options
          *
          * @param {Object} $this
@@ -683,7 +716,7 @@ define([
                 $widget._UpdatePrice();
             }
 
-            this._debouncedLoadProductMedia();
+            $widget._loadMedia();
             $input.trigger('change');
         },
 
@@ -741,7 +774,7 @@ define([
 
             $widget._Rebuild();
             $widget._UpdatePrice();
-            this._debouncedLoadProductMedia();
+            $widget._loadMedia();
             $input.trigger('change');
         },
 
@@ -772,7 +805,6 @@ define([
          * @private
          */
         _Rebuild: function () {
-
             var $widget = this,
                 controls = $widget.element.find('.' + $widget.options.classes.attributeClass + '[attribute-id]'),
                 selected = controls.filter('[option-selected]');
@@ -781,7 +813,7 @@ define([
             $widget._Rewind(controls);
 
             // done if nothing selected
-            if (selected.size() <= 0) {
+            if (selected.length <= 0) {
                 return;
             }
 
@@ -791,7 +823,7 @@ define([
                     id = $this.attr('attribute-id'),
                     products = $widget._CalcProducts(id);
 
-                if (selected.size() === 1 && selected.first().attr('attribute-id') === id) {
+                if (selected.length === 1 && selected.first().attr('attribute-id') === id) {
                     return;
                 }
 
@@ -895,6 +927,22 @@ define([
             } else {
                 $(this.options.tierPriceBlockSelector).hide();
             }
+
+            $(this.options.normalPriceLabelSelector).hide();
+
+            _.each($('.' + this.options.classes.attributeOptionsWrapper), function (attribute) {
+                if ($(attribute).find('.' + this.options.classes.optionClass + '.selected').length === 0) {
+                    if ($(attribute).find('.' + this.options.classes.selectClass).length > 0) {
+                        _.each($(attribute).find('.' + this.options.classes.selectClass), function (dropdown) {
+                            if ($(dropdown).val() === '0') {
+                                $(this.options.normalPriceLabelSelector).show();
+                            }
+                        }.bind(this));
+                    } else {
+                        $(this.options.normalPriceLabelSelector).show();
+                    }
+                }
+            }.bind(this));
         },
 
         /**
@@ -956,6 +1004,7 @@ define([
             mediaCallData = {
                 'product_id': this.getProduct()
             };
+
             mediaCacheKey = JSON.stringify(mediaCallData);
 
             if (mediaCacheKey in $widget.options.mediaCache) {
@@ -986,7 +1035,7 @@ define([
         _EnableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').size() > 0) {
+            if ($('body.catalog-product-view').length > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .addClass($widget.options.classes.loader);
             } else {
@@ -1005,7 +1054,7 @@ define([
         _DisableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').size() > 0) {
+            if ($('body.catalog-product-view').length > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .removeClass($widget.options.classes.loader);
             } else {
@@ -1078,7 +1127,9 @@ define([
                 images = $.extend(true, [], this.options.mediaGalleryInitial);
             } else {
                 images.map(function (img) {
-                    img.type = 'image';
+                    if (!img.type) {
+                        img.type = 'image';
+                    }
                 });
             }
 
@@ -1106,10 +1157,16 @@ define([
                     imagesToUpdate = imagesToUpdate.concat(initialImages);
                 }
 
+                imagesToUpdate = this._setImageIndex(imagesToUpdate);
                 gallery.updateData(imagesToUpdate);
 
                 if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                } else {
+                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                        selectedOption: this.getProduct(),
+                        dataMergeStrategy: this.options.gallerySwitchStrategy
+                    });
                 }
 
                 gallery.first();
@@ -1117,6 +1174,23 @@ define([
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
+        },
+
+        /**
+         * Set correct indexes for image set.
+         *
+         * @param {Array} images
+         * @private
+         */
+        _setImageIndex: function (images) {
+            var length = images.length,
+                i;
+
+            for (i = 0; length > i; i++) {
+                images[i].i = i + 1;
+            }
+
+            return images;
         },
 
         /**

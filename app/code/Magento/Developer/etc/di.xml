@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Logger\Handler\Debug" type="Magento\Developer\Model\Logger\Handler\Debug"/>
+    <preference for="Magento\Framework\Logger\Handler\Syslog" type="Magento\Developer\Model\Logger\Handler\Syslog"/>
 
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
@@ -94,6 +95,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="dev_tests_run" xsi:type="object">Magento\Developer\Console\Command\DevTestsRunCommand</item>
+                <item name="whitelist_generation" xsi:type="object">Magento\Developer\Console\Command\TablesWhitelistGenerateCommand</item>
                 <item name="dev_source_theme_deploy" xsi:type="object">Magento\Developer\Console\Command\SourceThemeDeployCommand</item>
                 <item name="xml_converter" xsi:type="object">Magento\Developer\Console\Command\XmlConverterCommand</item>
                 <item name="xml_catalog_generator" xsi:type="object">Magento\Developer\Console\Command\XmlCatalogGenerateCommand</item>
@@ -102,6 +104,9 @@
                 <item name="dev_query_log_disable" xsi:type="object">Magento\Developer\Console\Command\QueryLogDisableCommand</item>
                 <item name="dev_template_hints_disable" xsi:type="object">Magento\Developer\Console\Command\TemplateHintsDisableCommand</item>
                 <item name="dev_template_hints_enable" xsi:type="object">Magento\Developer\Console\Command\TemplateHintsEnableCommand</item>
+                <item name="dev_profiler_disable" xsi:type="object">Magento\Developer\Console\Command\ProfilerDisableCommand</item>
+                <item name="dev_profiler_enable" xsi:type="object">Magento\Developer\Console\Command\ProfilerEnableCommand</item>
+                <item name="dev_generate_patch" xsi:type="object">Magento\Developer\Console\Command\GeneratePatchCommand</item>
             </argument>
         </arguments>
     </type>

@@ -9,7 +9,7 @@ use Magento\TestFramework\Integrity\Library\PhpParser\ParserFactory;
 
 /**
  */
-class ParserFactoryTest extends \PHPUnit_Framework_TestCase
+class ParserFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Integrity\Library\PhpParser\Tokens

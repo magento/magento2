@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Vault\Model\Ui\Adminhtml;
 
 use Magento\Framework\Api\FilterBuilder;
@@ -28,6 +29,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.1.0
  */
 class TokensConfigProvider
 {
@@ -113,6 +115,7 @@ class TokensConfigProvider
     /**
      * @param string $vaultPaymentCode
      * @return TokenUiComponentInterface[]
+     * @since 100.1.0
      */
     public function getTokensComponents($vaultPaymentCode)
     {
@@ -225,7 +228,7 @@ class TokensConfigProvider
     {
         $paymentToken = $this->getPaymentTokenManagement()->getByPaymentId($this->getOrderPaymentEntityId());
         if ($paymentToken === null) {
-            throw new NoSuchEntityException(__('No available payment tokens for specified order payment.'));
+            throw new NoSuchEntityException(__('No payment tokens are available for the specified order payment.'));
         }
         return $paymentToken->getEntityId();
     }
@@ -248,7 +251,7 @@ class TokensConfigProvider
     /**
      * Get payment data helper instance
      * @return Data
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getPaymentDataHelper()
     {
@@ -261,7 +264,7 @@ class TokensConfigProvider
     /**
      * Returns order repository instance
      * @return OrderRepositoryInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getOrderRepository()
     {
@@ -276,7 +279,7 @@ class TokensConfigProvider
     /**
      * Returns payment token management instance
      * @return PaymentTokenManagementInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getPaymentTokenManagement()
     {

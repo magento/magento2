@@ -9,6 +9,10 @@
  */
 namespace Magento\Tax\Model\TaxClass\Type;
 
+/**
+ * Interface \Magento\Tax\Model\TaxClass\Type\TypeInterface
+ *
+ */
 interface TypeInterface
 {
     /**

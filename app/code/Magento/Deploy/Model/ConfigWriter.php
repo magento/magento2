@@ -63,6 +63,14 @@ class ConfigWriter
     {
         $config = [];
         $pathPrefix = $this->getPathPrefix($scope, $scopeCode);
+
+        $values = array_filter(
+            $values,
+            function ($value) {
+                return $value !== null;
+            }
+        );
+
         foreach ($values as $configPath => $configValue) {
             $fullConfigPath = $pathPrefix . $configPath;
             $backendModel = $this->preparedValueFactory->create($configPath, $configValue, $scope, $scopeCode);
