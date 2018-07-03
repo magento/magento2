@@ -64,17 +64,17 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                         $this->_objectManager->get(\Magento\Framework\Escaper::class)
                             ->escapeHtml($item->getProduct()->getName())
                     );
-                    $this->messageManager->addSuccess($message);
+                    $this->messageManager->addSuccessMessage($message);
                 }
                 return $this->_goBack($this->_url->getUrl('checkout/cart'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
-                $this->messageManager->addNotice($e->getMessage());
+                $this->messageManager->addNoticeMessage($e->getMessage());
             } else {
                 $messages = array_unique(explode("\n", $e->getMessage()));
                 foreach ($messages as $message) {
-                    $this->messageManager->addError($message);
+                    $this->messageManager->addErrorMessage($message);
                 }
             }
 
@@ -86,7 +86,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                 return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl($cartUrl));
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t update the item right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t update the item right now.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->_goBack();
         }

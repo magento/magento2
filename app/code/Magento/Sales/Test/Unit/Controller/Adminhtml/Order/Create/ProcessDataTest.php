@@ -226,7 +226,7 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
         );
         $this->escaper->expects($this->once())->method('escapeHtml')->with($couponCode)->willReturn($couponCode);
 
-        $this->messageManager->expects($this->once())->method('addError')->with($errorMessageManager)->willReturnSelf();
+        $this->messageManager->expects($this->once())->method('addErrorMessage')->with($errorMessageManager)->willReturnSelf();
 
         $this->resultForward->expects($this->once())
             ->method('forward')

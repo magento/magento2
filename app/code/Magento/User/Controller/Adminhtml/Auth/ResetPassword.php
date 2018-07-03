@@ -31,7 +31,7 @@ class ResetPassword extends \Magento\User\Controller\Adminhtml\Auth
 
             $this->_view->renderLayout();
         } catch (\Exception $exception) {
-            $this->messageManager->addError(__('Your password reset link has expired.'));
+            $this->messageManager->addErrorMessage(__('Your password reset link has expired.'));
             $this->_redirect('adminhtml/auth/forgotpassword', ['_nosecret' => true]);
             return;
         }

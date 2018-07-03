@@ -343,7 +343,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->willReturn($postValue);
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($errorMessage)
             ->willReturnSelf();
 
@@ -501,7 +501,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Exception($exceptionMessage));
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($exceptionMessage)
             ->willReturnSelf();
 
@@ -685,7 +685,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('Your wish list has been shared.'))
             ->willReturnSelf();
 

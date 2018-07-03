@@ -23,12 +23,12 @@ class Confirm extends \Magento\Newsletter\Controller\Subscriber
 
             if ($subscriber->getId() && $subscriber->getCode()) {
                 if ($subscriber->confirm($code)) {
-                    $this->messageManager->addSuccess(__('Your subscription has been confirmed.'));
+                    $this->messageManager->addSuccessMessage(__('Your subscription has been confirmed.'));
                 } else {
-                    $this->messageManager->addError(__('This is an invalid subscription confirmation code.'));
+                    $this->messageManager->addErrorMessage(__('This is an invalid subscription confirmation code.'));
                 }
             } else {
-                $this->messageManager->addError(__('This is an invalid subscription ID.'));
+                $this->messageManager->addErrorMessage(__('This is an invalid subscription ID.'));
             }
         }
 

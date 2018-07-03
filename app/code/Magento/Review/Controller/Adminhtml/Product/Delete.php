@@ -21,7 +21,7 @@ class Delete extends ProductController
         try {
             $this->reviewFactory->create()->setId($reviewId)->aggregate()->delete();
 
-            $this->messageManager->addSuccess(__('The review has been deleted.'));
+            $this->messageManager->addSuccessMessage(__('The review has been deleted.'));
             if ($this->getRequest()->getParam('ret') == 'pending') {
                 $resultRedirect->setPath('review/*/pending');
             } else {
@@ -29,9 +29,9 @@ class Delete extends ProductController
             }
             return $resultRedirect;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong  deleting this review.'));
+            $this->messageManager->addExceptionMessage($e, __('Something went wrong  deleting this review.'));
         }
 
         return $resultRedirect->setPath('review/*/edit/', ['id' => $reviewId]);

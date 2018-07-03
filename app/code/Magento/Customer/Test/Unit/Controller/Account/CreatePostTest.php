@@ -367,7 +367,7 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($customerId));
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($this->stringContains($successMessage))
             ->will($this->returnSelf());
 
@@ -498,7 +498,7 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($customerId));
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($this->stringContains($successMessage))
             ->will($this->returnSelf());
 

@@ -175,7 +175,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(null);
         $this->messageManager->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with("We can't find the link you requested.");
         $this->redirect->expects($this->once())->method('redirect')->with($this->response, '*/customer/products', []);
 
@@ -217,7 +217,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->once())->method('getProductUrl')->willReturn('product_url');
         $this->product->expects($this->once())->method('getName')->willReturn('product_name');
         $this->messageManager->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with('Please sign in to download your product or purchase <a href="product_url">product_name</a>.');
         $this->session->expects($this->once())->method('authenticate')->willReturn(true);
         $this->objectManager->expects($this->at(4))
@@ -266,7 +266,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->linkPurchased->expects($this->once())->method('load')->with('purchased_id')->willReturnSelf();
         $this->linkPurchased->expects($this->once())->method('getCustomerId')->willReturn('other_customer_id');
         $this->messageManager->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with("We can't find the link you requested.");
         $this->redirect->expects($this->once())->method('redirect')->with($this->response, '*/customer/products', []);
 
@@ -315,7 +315,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->linkPurchasedItem->expects($this->any())->method('setStatus')->with('expired')->willReturnSelf();
         $this->linkPurchasedItem->expects($this->any())->method('save')->willThrowException(new \Exception());
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Something went wrong while getting the requested content.')
             ->willReturnSelf();
         $this->redirect->expects($this->once())->method('redirect')->with($this->response, '*/customer/products', []);

@@ -146,7 +146,7 @@ class LinkSampleTest extends \PHPUnit\Framework\TestCase
         $this->response->expects($this->any())->method('setHeader')->willReturnSelf();
         $this->downloadHelper->expects($this->once())->method('output')->willThrowException(new \Exception());
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Sorry, there was an error getting requested content. Please contact the store owner.')
             ->willReturnSelf();
         $this->redirect->expects($this->once())->method('getRedirectUrl')->willReturn('redirect_url');
@@ -193,7 +193,7 @@ class LinkSampleTest extends \PHPUnit\Framework\TestCase
         $this->response->expects($this->any())->method('setHeader')->willReturnSelf();
         $this->downloadHelper->expects($this->once())->method('output')->willThrowException(new \Exception());
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Sorry, there was an error getting requested content. Please contact the store owner.')
             ->willReturnSelf();
         $this->redirect->expects($this->once())->method('getRedirectUrl')->willReturn('redirect_url');

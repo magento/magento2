@@ -57,14 +57,14 @@ class Email extends \Magento\Backend\App\Action
                 $this->_objectManager->create(\Magento\Shipping\Model\ShipmentNotifier::class)
                     ->notify($shipment);
                 $shipment->save();
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __('An email confirming the order is underway has been sent to the customer.')
                 );
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('Cannot send shipment information.'));
+            $this->messageManager->addErrorMessage(__('Cannot send shipment information.'));
         }
 
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

@@ -88,7 +88,7 @@ class PdfDocumentsMassActionTest extends \PHPUnit\Framework\TestCase
             ->method('getCollection')
             ->with($this->orderCollectionMock)
             ->willThrowException($exception);
-        $this->messageManager->expects($this->once())->method('addError');
+        $this->messageManager->expects($this->once())->method('addErrorMessage');
 
         $this->resultRedirect->expects($this->once())->method('setPath')->willReturnSelf();
         $this->controller->execute($exception);

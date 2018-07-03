@@ -33,7 +33,7 @@ class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
         );
         try {
             $widgetInstance->save();
-            $this->messageManager->addSuccess(__('The widget instance has been saved.'));
+            $this->messageManager->addSuccessMessage(__('The widget instance has been saved.'));
             if ($this->getRequest()->getParam('back', false)) {
                 $this->_redirect(
                     'adminhtml/*/edit',
@@ -44,7 +44,7 @@ class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
             }
             return;
         } catch (\Exception $exception) {
-            $this->messageManager->addError($exception->getMessage());
+            $this->messageManager->addErrorMessage($exception->getMessage());
             $this->_logger->critical($exception);
             $this->_redirect('adminhtml/*/edit', ['_current' => true]);
             return;

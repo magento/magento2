@@ -121,7 +121,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('isPost')
             ->willReturn(false);
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('We can\'t save the invoice right now.');
         $redirectMock->expects($this->once())
             ->method('setPath')

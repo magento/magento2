@@ -147,7 +147,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->method('notify')
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You sent the message.');
 
         $this->assertInstanceOf(

@@ -22,7 +22,7 @@ class Edit extends \Magento\User\Controller\Adminhtml\User
         if ($userId) {
             $model->load($userId);
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This user no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This user no longer exists.'));
                 $this->_redirect('adminhtml/*/');
                 return;
             }
