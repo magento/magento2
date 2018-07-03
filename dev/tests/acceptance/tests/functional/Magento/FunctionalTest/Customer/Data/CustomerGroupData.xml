@@ -13,4 +13,9 @@
         <data key="tax_class_id">3</data>
         <data key="tax_class_name">Retail Customer</data>
     </entity>
+    <entity name="DefaultCustomerGroup" type="customerGroup">
+        <array key="group_names">
+            <item>General</item>
+        </array>
+    </entity>
 </entities>
