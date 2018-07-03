@@ -49,7 +49,7 @@ class EavValidationRules
      * @param array $validations
      * @return array
      */
-    protected function aggregateRules(array $validations): array
+    private function aggregateRules(array $validations): array
     {
         $rules = [];
         foreach ($validations as $type => $ruleValue) {
