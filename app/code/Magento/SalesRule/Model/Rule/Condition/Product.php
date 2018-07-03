@@ -52,7 +52,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
         $attrCode = $this->getAttribute();
 
-        if ('category_ids' == $attrCode) {
+        if ($attrCode === 'category_ids') {
             return $this->validateAttribute($this->_getAvailableInCategories($product->getId()));
         }
 
