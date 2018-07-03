@@ -16,7 +16,7 @@
             <description value="Guest customer should be able to search configurable product by attributes of child products"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-249"/>
-            <group value="ConfigurableProduct"/>
+            <group value="Levi"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
@@ -126,7 +126,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
         </after>
 
-        <!-- Add a description to the firt simple product -->
+        <!-- Add a description to the first simple product -->
         <amOnPage stepKey="goToProductGrid" url="{{ProductCatalogPage.url}}"/>
         <waitForPageLoad stepKey="waitForProductGridLoad"/>
         <actionGroup stepKey="searchForSimpleProduct" ref="filterProductGridBySku2">
@@ -146,18 +146,18 @@
         <!-- Quick search the storefront for the first attribute option -->
         <amOnPage stepKey="goToStoreFront" url="{{StorefrontHomePage.url}}"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
-        <fillField stepKey="searchStorefront1" selector="{{StorefrontPanelHeaderSection.search}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$"/>
-        <click stepKey="clickSearch1" selector="{{StorefrontPanelHeaderSection.searchButton}}"/>
+        <fillField stepKey="searchStorefront1" selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$"/>
+        <click stepKey="clickSearch1" selector="{{StorefrontQuickSearchSection.searchButton}}"/>
         <seeElement stepKey="seeProduct1" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
 
         <!-- Quick search the storefront for the second attribute option -->
-        <fillField stepKey="searchStorefront2" selector="{{StorefrontPanelHeaderSection.search}}" userInput="$$createConfigProductAttributeOption1Multiselect.option[store_labels][0][label]$$"/>
-        <click stepKey="clickSearch2" selector="{{StorefrontPanelHeaderSection.searchButton}}"/>
+        <fillField stepKey="searchStorefront2" selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeOption1Multiselect.option[store_labels][0][label]$$"/>
+        <click stepKey="clickSearch2" selector="{{StorefrontQuickSearchSection.searchButton}}"/>
         <seeElement stepKey="seeProduct2" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
 
         <!-- Quick search the storefront for the first product description -->
-        <fillField stepKey="searchStorefront3" selector="{{StorefrontPanelHeaderSection.search}}" userInput="sampleShortDescription"/>
-        <click stepKey="clickSearch3" selector="{{StorefrontPanelHeaderSection.searchButton}}"/>
+        <fillField stepKey="searchStorefront3" selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="sampleShortDescription"/>
+        <click stepKey="clickSearch3" selector="{{StorefrontQuickSearchSection.searchButton}}"/>
         <seeElement stepKey="seeProduct3" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
     </test>
 </tests>

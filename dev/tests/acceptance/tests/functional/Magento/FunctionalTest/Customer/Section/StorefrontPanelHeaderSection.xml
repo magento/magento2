@@ -11,7 +11,5 @@
     <section name="StorefrontPanelHeaderSection">
         <element name="WelcomeMessage" type="text" selector=".greet.welcome span"/>
         <element name="createAnAccountLink" type="select" selector=".panel.header li:nth-child(3)"/>
-        <element name="search" type="input" selector="#search"/>
-        <element name="searchButton" type="button" selector=".actions button[title='Search']" timeout="30"/>
     </section>
 </sections>
