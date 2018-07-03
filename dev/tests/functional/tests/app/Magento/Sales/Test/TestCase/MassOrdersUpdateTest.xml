@@ -22,7 +22,7 @@
             <data name="steps" xsi:type="string">invoice, shipment|invoice, credit memo</data>
             <data name="action" xsi:type="string">Cancel</data>
             <data name="ordersCount" xsi:type="string">2</data>
-            <data name="resultStatuses" xsi:type="string">Complete,Closed</data>
+            <data name="resultStatuses" xsi:type="string">Complete,Processing</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelMassActionFailMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
         </variation>
