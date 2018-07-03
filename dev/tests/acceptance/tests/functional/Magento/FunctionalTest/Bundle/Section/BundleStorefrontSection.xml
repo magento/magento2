@@ -18,5 +18,7 @@
         <element name="shortDescriptionText" type="text" selector="//div[@class='product attribute overview']" timeout="30"/>
         <!--NameOfProductOnProductPage-->
         <element name="bundleProductName" type="text" selector="//*[@id='maincontent']//span[@itemprop='name']"/>
+        <!--PageNotFoundErrorMessage-->
+        <element name="pageNotFound" type="text" selector="//h1[@class='page-title']//span[contains(., 'Whoops, our bad...')]"/>
     </section>
 </sections>

@@ -78,6 +78,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('region', $this->address->getRegionCode());
     }
 
+    /**
+     * @return array
+     */
     public function regionProvider()
     {
         return [ [1, null], [null, 1]];
