@@ -28,13 +28,12 @@ class Index extends \Magento\Framework\App\Action\Action
         try {
             /* Log in */
             $login->authenticateCustomer();
+            $this->messageManager->addSuccess(
+                __('You are logged in as customer: %1', $login->getCustomer()->getName())
+            );
         } catch (\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         }
-
-        $this->messageManager->addSuccess(
-            __('You are logged in as customer: %1', $login->getCustomer()->getName())
-        );
 
         $this->_redirect('*/*/proceed');
     }
