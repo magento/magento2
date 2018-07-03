@@ -39,6 +39,9 @@ class ZipTest extends \PHPUnit_Framework_TestCase
         $this->_invokeConstructor($fileName);
     }
 
+    /**
+     * @return array
+     */
     public function constructorFileDestinationMatchDataProvider()
     {
         return [

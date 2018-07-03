@@ -39,7 +39,12 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->entryPoint = new \Magento\Indexer\App\Indexer('reportDir', $this->filesystem, $this->processor, $this->_response);
+        $this->entryPoint = new \Magento\Indexer\App\Indexer(
+            'reportDir',
+            $this->filesystem,
+            $this->processor,
+            $this->_response
+        );
     }
 
     /**
@@ -60,7 +65,11 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->entryPoint->launch()->getCode());
     }
 
-    public function executeProvider(){
+    /**
+     * @return array
+     */
+    public function executeProvider()
+    {
         return [
             'set1' => ['isExist' => true, 'expectsValue' => 1],
             'set1' => ['delete' => false, 'expectsValue' => 0]

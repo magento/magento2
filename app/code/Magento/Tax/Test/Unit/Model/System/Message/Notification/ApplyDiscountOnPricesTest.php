@@ -95,6 +95,9 @@ class ApplyDiscountOnPricesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->applyDiscountOnPricesNotification->isDisplayed());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderIsDisplayed()
     {
         return [

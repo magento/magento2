@@ -190,6 +190,9 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(!$value, $this->model->validate($this->dataObject));
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         return [

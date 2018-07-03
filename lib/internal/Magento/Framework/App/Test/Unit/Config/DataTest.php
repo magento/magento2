@@ -41,6 +41,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, $this->_model->getValue($path));
     }
 
+    /**
+     * @return array
+     */
     public function setValueDataProvider()
     {
         return [

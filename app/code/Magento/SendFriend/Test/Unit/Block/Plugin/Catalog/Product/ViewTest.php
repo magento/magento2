@@ -55,6 +55,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->view->afterCanEmailToFriend($this->productView, $result));
     }
 
+    /**
+     * @return array
+     */
     public function afterCanEmailToFriendDataSet()
     {
         return [

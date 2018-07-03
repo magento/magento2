@@ -517,7 +517,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
             } elseif ($this->isBlock($name)) {
                 $result = $this->_renderBlock($name);
             } else {
-                $result = $this->_renderContainer($name);
+                $result = $this->_renderContainer($name, false);
             }
         } catch (\Exception $e) {
             if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
@@ -559,14 +559,15 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Gets HTML of container element
      *
      * @param string $name
+     * @param bool $useCache
      * @return string
      */
-    protected function _renderContainer($name)
+    protected function _renderContainer($name, $useCache = true)
     {
         $html = '';
         $children = $this->getChildNames($name);
         foreach ($children as $child) {
-            $html .= $this->renderElement($child);
+            $html .= $this->renderElement($child, $useCache);
         }
         if ($html == '' || !$this->structure->getAttribute($name, Element::CONTAINER_OPT_HTML_TAG)) {
             return $html;

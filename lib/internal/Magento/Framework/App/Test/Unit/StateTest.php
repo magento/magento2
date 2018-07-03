@@ -68,6 +68,10 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model->getAreaCode(), $areaCode);
     }
 
+    /**
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function emulateAreaCodeCallback()
     {
         return $this->model->getAreaCode();

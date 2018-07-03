@@ -552,6 +552,9 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     /*
      * @return array
      */
+    /**
+     * @return array
+     */
     public function dataProviderMapQuoteExtraTaxablesArray()
     {
         $data = [

@@ -61,6 +61,9 @@ class VersionTest extends \PHPUnit_Framework_TestCase
         $this->object->getValue(); // Ensure caching in memory
     }
 
+    /**
+     * @return array
+     */
     public function getValueFromStorageDataProvider()
     {
         return [

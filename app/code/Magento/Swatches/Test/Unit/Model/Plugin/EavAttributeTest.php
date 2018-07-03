@@ -78,6 +78,11 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $secureUnserializer = $this->getMock(
+            \Magento\Framework\Unserialize\SecureUnserializer::class,
+            ['unserialize']
+        );
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->eavAttribute = $objectManager->getObject(
             \Magento\Swatches\Model\Plugin\EavAttribute::class,
@@ -85,8 +90,14 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                 'collectionFactory' => $this->collectionFactory,
                 'swatchFactory' => $this->swatchFactory,
                 'swatchHelper' => $this->swatchHelper,
+                'secureUnserializer' => $secureUnserializer,
             ]
         );
+
+        $secureUnserializer->expects($this->any())
+            ->method('unserialize')->willReturnCallback(function ($parameter) {
+                return unserialize($parameter);
+            });
 
         $this->optionIds = [
             'value' => ['option 89' => 'test 1', 'option 114' => 'test 2', 'option 170' => 'test 3'],
@@ -303,6 +314,9 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
         $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
+    /**
+     * @return array
+     */
     public function visualSwatchProvider()
     {
         return [

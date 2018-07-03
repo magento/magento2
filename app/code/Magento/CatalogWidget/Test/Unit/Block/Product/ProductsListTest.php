@@ -287,6 +287,9 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($collection, $this->productsList->createCollection());
     }
 
+    /**
+     * @return array
+     */
     public function createCollectionDataProvider()
     {
         return [

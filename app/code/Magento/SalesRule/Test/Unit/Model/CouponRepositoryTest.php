@@ -159,6 +159,9 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->save($coupon);
     }
 
+    /**
+     * @return array
+     */
     public function saveExceptionsDataProvider()
     {
         $msg = 'kiwis';

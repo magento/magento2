@@ -169,6 +169,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getComponentData()
     {
         $cachedData = new \ArrayObject(
@@ -269,6 +272,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($componentData, $this->manager->createRawComponentData($componentName, $needEvaluate));
     }
 
+    /**
+     * @return array
+     */
     public function getComponentDataProvider()
     {
         return [

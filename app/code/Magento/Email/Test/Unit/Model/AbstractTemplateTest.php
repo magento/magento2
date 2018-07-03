@@ -322,6 +322,9 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($config, $model->getDesignConfig()->getData());
     }
 
+    /**
+     * @return array
+     */
     public function invalidInputParametersDataProvider()
     {
         return [[[]], [['area' => 'some_area']], [['store' => 'any_store']]];

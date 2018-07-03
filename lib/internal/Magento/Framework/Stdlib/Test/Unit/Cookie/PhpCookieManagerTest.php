@@ -252,6 +252,9 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
             $this->assertTrue(self::$isSetCookieInvoked);
         }
 
+        /**
+         * @return array
+         */
         public function isCurrentlySecureDataProvider()
         {
             return [
@@ -814,6 +817,11 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
             self::assertEquals('', $path);
         }
 
+        /**
+         * @param $get
+         * @param $default
+         * @param $return
+         */
         protected function stubGetCookie($get, $default, $return)
         {
             $this->readerMock->expects($this->atLeastOnce())

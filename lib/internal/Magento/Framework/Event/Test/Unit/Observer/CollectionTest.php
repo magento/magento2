@@ -81,6 +81,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($observer, $this->observerCollection->getObserverByName($name));
     }
 
+    /**
+     * @return array
+     */
     public function observerNameProvider()
     {
         return [

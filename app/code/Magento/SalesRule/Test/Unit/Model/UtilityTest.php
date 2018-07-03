@@ -392,6 +392,9 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->utility->mergeIds($a1, $a2, $isSting));
     }
 
+    /**
+     * @return array
+     */
     public function mergeIdsDataProvider()
     {
         return [

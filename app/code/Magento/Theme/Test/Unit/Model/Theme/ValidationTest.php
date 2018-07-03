@@ -31,6 +31,9 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($messages, $validator->getErrorMessages());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderValidate()
     {
         return [

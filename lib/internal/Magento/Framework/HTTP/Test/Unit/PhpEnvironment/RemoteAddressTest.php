@@ -5,44 +5,67 @@
  */
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class RemoteAddressTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var \PHPUnit_Framework_MockObject_MockObject|\HttpRequest
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     protected function setUp()
     {
-        $this->_request = $this->getMockBuilder(
-            'Magento\Framework\App\Request\Http'
-        )->disableOriginalConstructor()->setMethods(
-            ['getServer']
-        )->getMock();
+        $this->_request = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getServer'])
+            ->getMock();
 
-        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_objectManager = new ObjectManager($this);
     }
 
     /**
+     * @param string[] $alternativeHeaders
+     * @param array $serverValueMap
+     * @param string|bool $expected
+     * @param bool $ipToLong
+     * @param string[]|null $trustedProxies
+     * @return void
      * @dataProvider getRemoteAddressProvider
      */
-    public function testGetRemoteAddress($alternativeHeaders, $serverValueMap, $expected, $ipToLong)
-    {
+    public function testGetRemoteAddress(
+        array $alternativeHeaders,
+        array $serverValueMap,
+        $expected,
+        $ipToLong,
+        array $trustedProxies = null
+    ) {
         $remoteAddress = $this->_objectManager->getObject(
-            'Magento\Framework\HTTP\PhpEnvironment\RemoteAddress',
-            ['httpRequest' => $this->_request, 'alternativeHeaders' => $alternativeHeaders]
+            RemoteAddress::class,
+            [
+                'httpRequest' => $this->_request,
+                'alternativeHeaders' => $alternativeHeaders,
+                'trustedProxies' => $trustedProxies,
+            ]
         );
-        $this->_request->expects($this->any())->method('getServer')->will($this->returnValueMap($serverValueMap));
+        $this->_request->expects($this->any())
+            ->method('getServer')
+            ->will($this->returnValueMap($serverValueMap));
+
         $this->assertEquals($expected, $remoteAddress->getRemoteAddress($ipToLong));
     }
 
     /**
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getRemoteAddressProvider()
     {
@@ -52,18 +75,21 @@ class RemoteAddressTest extends \PHPUnit_Framework_TestCase
                 'serverValueMap' => [['REMOTE_ADDR', null, null]],
                 'expected' => false,
                 'ipToLong' => false,
+                'trustedProxies' => null,
             ],
             [
                 'alternativeHeaders' => [],
                 'serverValueMap' => [['REMOTE_ADDR', null, '192.168.0.1']],
                 'expected' => '192.168.0.1',
-                'ipToLong' => false
+                'ipToLong' => false,
+                'trustedProxies' => null,
             ],
             [
                 'alternativeHeaders' => [],
                 'serverValueMap' => [['REMOTE_ADDR', null, '192.168.1.1']],
                 'expected' => ip2long('192.168.1.1'),
-                'ipToLong' => true
+                'ipToLong' => true,
+                'trustedProxies' => null,
             ],
             [
                 'alternativeHeaders' => ['TEST_HEADER'],
@@ -73,7 +99,8 @@ class RemoteAddressTest extends \PHPUnit_Framework_TestCase
                     ['TEST_HEADER', false, '192.168.0.1'],
                 ],
                 'expected' => '192.168.0.1',
-                'ipToLong' => false
+                'ipToLong' => false,
+                'trustedProxies' => null,
             ],
             [
                 'alternativeHeaders' => ['TEST_HEADER'],
@@ -83,8 +110,74 @@ class RemoteAddressTest extends \PHPUnit_Framework_TestCase
                     ['TEST_HEADER', false, '192.168.0.1'],
                 ],
                 'expected' => ip2long('192.168.0.1'),
-                'ipToLong' => true
-            ]
+                'ipToLong' => true,
+                'trustedProxies' => null,
+            ],
+            [
+                'alternativeHeaders' => [],
+                'serverValueMap' => [
+                    ['REMOTE_ADDR', null, 'NotValidIp'],
+                ],
+                'expected' => false,
+                'ipToLong' => false,
+                'trustedProxies' => ['127.0.0.1'],
+            ],
+            [
+                'alternativeHeaders' => ['TEST_HEADER'],
+                'serverValueMap' => [
+                    ['TEST_HEADER', null, 'NotValid, 192.168.0.1'],
+                    ['TEST_HEADER', false, 'NotValid, 192.168.0.1'],
+                ],
+                'expected' => '192.168.0.1',
+                'ipToLong' => false,
+                'trustedProxies' => ['127.0.0.1'],
+            ],
+            [
+                'alternativeHeaders' => ['TEST_HEADER'],
+                'serverValueMap' => [
+                    ['TEST_HEADER', null, '192.168.0.2, 192.168.0.1'],
+                    ['TEST_HEADER', false, '192.168.0.2, 192.168.0.1'],
+                ],
+                'expected' => '192.168.0.2',
+                'ipToLong' => false,
+                'trustedProxies' => null,
+            ],
+            [
+                'alternativeHeaders' => [],
+                'serverValueMap' => [
+                    [
+                        'REMOTE_ADDR',
+                        null,
+                        '192.168.0.2, 192.168.0.1, 192.168.0.3',
+                    ],
+                    [
+                        'REMOTE_ADDR',
+                        false,
+                        '192.168.0.2, 192.168.0.1, 192.168.0.3',
+                    ],
+                ],
+                'expected' => '192.168.0.1',
+                'ipToLong' => false,
+                'trustedProxies' => ['192.168.0.3'],
+            ],
+            [
+                'alternativeHeaders' => [],
+                'serverValueMap' => [
+                    [
+                        'REMOTE_ADDR',
+                        null,
+                        '192.168.0.2, 192.168.0.1, 192.168.0.3',
+                    ],
+                    [
+                        'REMOTE_ADDR',
+                        false,
+                        '192.168.0.2, 192.168.0.1, 192.168.0.3',
+                    ],
+                ],
+                'expected' => '192.168.0.3',
+                'ipToLong' => false,
+                'trustedProxies' => [],
+            ],
         ];
     }
 }

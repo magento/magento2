@@ -29,6 +29,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
         $this->_testXmlAgainstXsd($fixtureXml, $schemaFile, $expectedErrors);
     }
 
+    /**
+     * @return array
+     */
     public function mergedXmlDataProvider()
     {
         return [

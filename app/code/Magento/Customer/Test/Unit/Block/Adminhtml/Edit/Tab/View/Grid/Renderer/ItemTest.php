@@ -14,6 +14,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item */
     protected $itemBlock;
 
+    /**
+     * @param $amountOption
+     * @param bool $withoutOptions
+     */
     public function configure($amountOption, $withoutOptions = false)
     {
         $options = [];
@@ -109,6 +113,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertXmlStringEqualsXmlString($expectedHtml, $realHtml);
     }
 
+    /**
+     * @return array
+     */
     public function optionHtmlProvider()
     {
         return [

@@ -51,6 +51,9 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function collectDataProvider()
     {
         return [
@@ -81,7 +84,6 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $convertedPrice = 1231313;
         // @TODO this is a wrong test and it does not check methods. Any digital value will be correct
         $priceCurrency->expects($this->any())->method('convert')->willReturn(1231313);
-
 
         /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $quoteItem */
         $quoteItem = $this->objectManager->getObject(

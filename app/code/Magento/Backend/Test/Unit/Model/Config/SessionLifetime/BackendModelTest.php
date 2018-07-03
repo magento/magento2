@@ -24,6 +24,9 @@ class BackendModelTest extends \PHPUnit_Framework_TestCase
         $model->beforeSave();
     }
 
+    /**
+     * @return array
+     */
     public function adminSessionLifetimeDataProvider()
     {
         return [

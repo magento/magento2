@@ -32,6 +32,9 @@ class ConfigDomMock extends \PHPUnit_Framework_TestCase
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function getDom()
     {
         return 'reader dom result';
