@@ -101,40 +101,39 @@ class Data extends \Magento\Framework\View\Element\Template
      * @param string $title
      * @return string
      */
-    public function getRegionHtmlSelect(
-        $defValue = null,
-        $name = 'region',
-        $stateId = 'state',
-        $title = 'State/Province'
-    ) {
+    public function getCountryHtmlSelect($defValue = null, $name = 'country_id', $id = 'country', $title = 'Country')
+    {
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
-        $cacheKey = 'DIRECTORY_REGION_SELECT_STORE' . $this->_storeManager->getStore()->getId();
         if ($defValue === null) {
-            $defValue = $this->getRegionId();
+            $defValue = $this->getCountryId();
         }
+        $cacheKey = 'DIRECTORY_COUNTRY_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
-            $options = $this->getSerializer()->unserialize($cache);
+            $options = unserialize($cache);
         } else {
-            $options = $this->getRegionCollection()->toOptionArray();
-            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
+            $options = $this->getCountryCollection()
+                ->setForegroundCountries($this->getTopDestinations())
+                ->toOptionArray();
+            $this->_configCacheType->save(serialize($options), $cacheKey);
         }
         $html = $this->getLayout()->createBlock(
-            \Magento\Framework\View\Element\Html\Select::class
+            'Magento\Framework\View\Element\Html\Select'
         )->setName(
             $name
+        )->setId(
+            $id
         )->setTitle(
             __($title)
-        )->setId(
-            $stateId
-        )->setClass(
-            'required-entry validate-state'
         )->setValue(
-            intval($defValue)
+            $defValue
         )->setOptions(
             $options
+        )->setExtraParams(
+            'data-validate="{\'validate-select\':true}"'
         )->getHtml();
-        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
+
+        \Magento\Framework\Profiler::stop('TEST: ' . __METHOD__);
         return $html;
     }
 
