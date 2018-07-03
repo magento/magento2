@@ -108,6 +108,16 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
+     * @var array
+     */
+    private $allowedImageExtensions = [
+        'jpg' => 'image/jpg',
+        'jpeg' => 'image/jpeg',
+        'png' => 'image/png',
+        'gif' => 'image/png',
+    ];
+
+    /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -127,7 +137,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $this->directoryMock = $this->getMock(
             \Magento\Framework\Filesystem\Directory\Write::class,
-            ['delete', 'getDriver', 'create'],
+            ['delete', 'getDriver', 'create', 'getRelativePath', 'isExist', 'isFile'],
             [],
             '',
             false
@@ -216,6 +226,11 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $allowedExtensions = [
+            'allowed' => $this->allowedImageExtensions,
+            'image_allowed' => $this->allowedImageExtensions,
+        ];
+
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->imagesStorage = $this->objectManagerHelper->getObject(
@@ -238,6 +253,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
                     'exclude' => [],
                     'include' => [],
                 ],
+                'extensions' => $allowedExtensions,
             ]
         );
     }
@@ -441,5 +457,98 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             ->willReturn($storageCollectionMock);
 
         $this->imagesStorage->getDirsCollection($path);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUploadFile()
+    {
+        $targetPath = '/target/path';
+        $fileName = 'image.gif';
+        $realPath = $targetPath . '/' . $fileName;
+        $thumbnailTargetPath = self::STORAGE_ROOT_DIR . '/.thumbs';
+        $thumbnailDestination = $thumbnailTargetPath . '/' . $fileName;
+        $type = 'image';
+        $result = [
+            'result',
+            'cookie' => [
+                'name' => 'session_name',
+                'value' => '1',
+                'lifetime' => '50',
+                'path' => 'cookie/path',
+                'domain' => 'cookie_domain',
+            ],
+        ];
+        $uploader = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'setAllowedExtensions',
+                    'setAllowRenameFiles',
+                    'setFilesDispersion',
+                    'checkMimeType',
+                    'save',
+                    'getUploadedFileName',
+                ]
+            )
+            ->getMock();
+        $this->uploaderFactoryMock->expects($this->atLeastOnce())->method('create')->with(['fileId' => 'image'])
+            ->willReturn($uploader);
+        $uploader->expects($this->atLeastOnce())->method('setAllowedExtensions')
+            ->with(array_keys($this->allowedImageExtensions))->willReturnSelf();
+        $uploader->expects($this->atLeastOnce())->method('setAllowRenameFiles')->with(true)->willReturnSelf();
+        $uploader->expects($this->atLeastOnce())->method('setFilesDispersion')->with(false)
+            ->willReturnSelf();
+        $uploader->expects($this->atLeastOnce())->method('checkMimeType')
+            ->with(array_values($this->allowedImageExtensions))->willReturnSelf();
+        $uploader->expects($this->atLeastOnce())->method('save')->with($targetPath)->willReturn($result);
+        $uploader->expects($this->atLeastOnce())->method('getUploadedFileName')->willReturn($fileName);
+
+        $this->directoryMock->expects($this->atLeastOnce())->method('getRelativePath')->willReturnMap(
+            [
+                [$realPath, $realPath],
+                [$thumbnailTargetPath, $thumbnailTargetPath],
+                [$thumbnailDestination, $thumbnailDestination],
+            ]
+        );
+        $this->directoryMock->expects($this->atLeastOnce())->method('isFile')
+            ->willReturnMap(
+                [
+                    [$realPath, true],
+                    [$thumbnailDestination, true],
+                ]
+            );
+        $this->directoryMock->expects($this->atLeastOnce())->method('isExist')
+            ->willReturnMap(
+                [
+                    [$realPath, true],
+                    [$thumbnailTargetPath, true],
+                ]
+            );
+
+        $image = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['open', 'keepAspectRatio', 'resize', 'save'])
+            ->getMock();
+        $image->expects($this->atLeastOnce())->method('open')->with($realPath);
+        $image->expects($this->atLeastOnce())->method('keepAspectRatio')->with(true);
+        $image->expects($this->atLeastOnce())->method('resize')->with(100, 50);
+        $image->expects($this->atLeastOnce())->method('save')->with($thumbnailDestination);
+
+        $this->adapterFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($image);
+
+        $this->sessionMock->expects($this->atLeastOnce())->method('getName')
+            ->willReturn($result['cookie']['name']);
+        $this->sessionMock->expects($this->atLeastOnce())->method('getSessionId')
+            ->willReturn($result['cookie']['value']);
+        $this->sessionMock->expects($this->atLeastOnce())->method('getCookieLifetime')
+            ->willReturn($result['cookie']['lifetime']);
+        $this->sessionMock->expects($this->atLeastOnce())->method('getCookiePath')
+            ->willReturn($result['cookie']['path']);
+        $this->sessionMock->expects($this->atLeastOnce())->method('getCookieDomain')
+            ->willReturn($result['cookie']['domain']);
+
+        $this->assertEquals($result, $this->imagesStorage->uploadFile($targetPath, $type));
     }
 }

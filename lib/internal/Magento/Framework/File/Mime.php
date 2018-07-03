@@ -59,7 +59,24 @@ class Mime
     ];
 
     /**
-     * Get mime type of a file
+     * List of mime types that can be defined by file extension.
+     *
+     * @var array $defineByExtensionList
+     */
+    private $defineByExtensionList = [
+        'txt' => 'text/plain',
+        'htm' => 'text/html',
+        'html' => 'text/html',
+        'php' => 'text/html',
+        'css' => 'text/css',
+        'js' => 'application/javascript',
+        'json' => 'application/json',
+        'xml'  => 'application/xml',
+        'svg' => 'image/svg+xml',
+    ];
+
+    /**
+     * Get mime type of a file.
      *
      * @param string $file
      * @return string
@@ -71,19 +88,50 @@ class Mime
             throw new \InvalidArgumentException("File '$file' doesn't exist");
         }
 
-        $extension = pathinfo($file, PATHINFO_EXTENSION);
-        if (isset($this->mimeTypes[$extension])) {
+        $result = null;
+        $extension = $this->getFileExtension($file);
+
+        if (function_exists('mime_content_type')) {
+            $result = $this->getNativeMimeType($file);
+        }
+
+        if (null === $result && isset($this->mimeTypes[$extension])) {
             $result = $this->mimeTypes[$extension];
-        }
-
-        if (empty($result) && (function_exists('mime_content_type') && ini_get('mime_magic.magicfile'))) {
-            $result = mime_content_type($file);
-        }
-
-        if (empty($result)) {
+        } elseif (null === $result) {
             $result = 'application/octet-stream';
         }
 
         return $result;
+    }
+
+    /**
+     * Get mime type by the native mime_content_type function.
+     * Search for extended mime type if mime_content_type() returned 'application/octet-stream' or 'text/plain'
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getNativeMimeType($file)
+    {
+        $extension = $this->getFileExtension($file);
+        $result = mime_content_type($file);
+        if (isset($this->mimeTypes[$extension], $this->defineByExtensionList[$extension])
+            && strpos($result, 'text/') === 0
+        ) {
+            $result = $this->mimeTypes[$extension];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get file extension by file name.
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getFileExtension($file)
+    {
+        return strtolower(pathinfo($file, PATHINFO_EXTENSION));
     }
 }
