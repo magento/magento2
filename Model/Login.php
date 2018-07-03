@@ -200,6 +200,8 @@ class Login extends \Magento\Framework\Model\AbstractModel
             $this->_customerSession->setLoggedAsCustomerAdmindId(
                 $this->getAdminId()
             );
+        } else {
+            throw new \Exception(__("Cannot login customer."), 1);
         }
 
         /* Load Customer Quote */
