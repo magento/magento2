@@ -143,6 +143,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
                         ]
                     ]
                 ],
+                // @codingStandardsIgnoreStart
                 'XMLResult' => '<?xml version="1.0"?>
                         <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
                             xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
@@ -161,6 +162,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
                                 </index>
                             </table>
                         </schema>'
+                // @codingStandardsIgnoreEnd
             ]
         ];
     }

@@ -125,7 +125,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
                         'nullable' => false,
                         'default' => 'CURRENT_TIMESTAMP',
                         'disabled' => false,
-                        'onCreate' => NULL,
+                        'onCreate' => null,
                     ],
                 'integer' =>
                     [
@@ -135,9 +135,9 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
                         'unsigned' => false,
                         'nullable' => false,
                         'identity' => true,
-                        'default' => NULL,
+                        'default' => null,
                         'disabled' => false,
-                        'onCreate' => NULL,
+                        'onCreate' => null,
                     ],
                 'decimal' =>
                     [
@@ -147,9 +147,9 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
                         'precision' => '25',
                         'unsigned' => false,
                         'nullable' => false,
-                        'default' => NULL,
+                        'default' => null,
                         'disabled' => false,
-                        'onCreate' => NULL,
+                        'onCreate' => null,
                     ],
             ],
             $tables['First_Module']['new_table']['columns']
