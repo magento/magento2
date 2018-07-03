@@ -88,7 +88,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals('', $object->getTestAttribute());
+        $this->assertEquals(null, $object->getTestAttribute());
     }
 
     /**
