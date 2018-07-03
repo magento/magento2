@@ -104,18 +104,20 @@ class Grouped implements DimensionalIndexerInterface
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
         ]);
-        $query = $this->_prepareGroupedProductPriceDataSelect($dimensions, iterator_to_array($entityIds))
+        $query = $this->prepareGroupedProductPriceDataSelect($dimensions, iterator_to_array($entityIds))
             ->insertFromSelect($temporaryPriceTable->getTableName());
         $this->getConnection()->query($query);
     }
 
     /**
      * Prepare data index select for Grouped products prices
+     *
      * @param $dimensions
      * @param int|array $entityIds the parent entity ids limitation
      * @return \Magento\Framework\DB\Select
+     * @throws \Exception
      */
-    protected function _prepareGroupedProductPriceDataSelect($dimensions, $entityIds = null)
+    protected function prepareGroupedProductPriceDataSelect($dimensions, $entityIds = null)
     {
         $select = $this->getConnection()->select();
 
@@ -130,7 +132,7 @@ class Grouped implements DimensionalIndexerInterface
             'e.' . $linkField . ' = l.product_id AND l.link_type_id=' . Link::LINK_TYPE_GROUPED,
             []
         );
-        //aditional infromation about inner products
+        //additional information about inner products
         $select->joinLeft(
             ['le' => $this->getTable('catalog_product_entity')],
             'le.entity_id = l.linked_product_id',
@@ -172,9 +174,18 @@ class Grouped implements DimensionalIndexerInterface
         return $select;
     }
 
-    private function getTable($tableName)
+    /**
+     * Get main table
+     *
+     * @param array $dimensions
+     * @return string
+     */
+    private function getMainTable($dimensions)
     {
-        return $this->resource->getTableName($tableName, $this->connectionName);
+        if ($this->fullReindexAction) {
+            return $this->tableMaintainer->getMainReplicaTable($dimensions);
+        }
+        return $this->tableMaintainer->getMainTable($dimensions);
     }
 
     /**
@@ -193,16 +204,13 @@ class Grouped implements DimensionalIndexerInterface
     }
 
     /**
-     * Get main table
+     * Get table
      *
-     * @param array $dimensions
+     * @param string $tableName
      * @return string
      */
-    private function getMainTable($dimensions)
+    private function getTable($tableName)
     {
-        if ($this->fullReindexAction) {
-            return $this->tableMaintainer->getMainReplicaTable($dimensions);
-        }
-        return $this->tableMaintainer->getMainTable($dimensions);
+        return $this->resource->getTableName($tableName, $this->connectionName);
     }
 }

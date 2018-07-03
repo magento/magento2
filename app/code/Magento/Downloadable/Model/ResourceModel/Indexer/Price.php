@@ -17,8 +17,6 @@ use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
-use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
-use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 
 /**
  * Downloadable Product Price Indexer Resource model
@@ -62,11 +60,6 @@ class Price implements DimensionalIndexerInterface
     private $connection;
 
     /**
-     * @var string
-     */
-    private $productType;
-
-    /**
      * @var Config
      */
     private $eavConfig;
@@ -83,10 +76,8 @@ class Price implements DimensionalIndexerInterface
      * @param MetadataPool $metadataPool
      * @param Config $eavConfig
      * @param ResourceConnection $resource
-     * @param string $connectionName
-     * @param string $productType
      * @param BasePriceModifier $basePriceModifier
-     * @param array $priceModifiers
+     * @param string $connectionName
      */
     public function __construct(
         BaseFinalPrice $baseFinalPrice,
@@ -96,13 +87,11 @@ class Price implements DimensionalIndexerInterface
         Config $eavConfig,
         ResourceConnection $resource,
         BasePriceModifier $basePriceModifier,
-        $connectionName = 'indexer',
-        $productType = Type::TYPE_DOWNLOADABLE
+        $connectionName = 'indexer'
     ) {
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
-        $this->productType = $productType;
         $this->connectionName = $connectionName;
         $this->metadataPool = $metadataPool;
         $this->resource = $resource;
@@ -136,6 +125,7 @@ class Price implements DimensionalIndexerInterface
 
     /**
      * Calculate and apply Downloadable links price to index
+     *
      * @param IndexTableStructure $temporaryPriceTable
      * @param array $dimensions
      * @return $this
@@ -159,8 +149,10 @@ class Price implements DimensionalIndexerInterface
 
     /**
      * Retrieve catalog_product attribute instance by attribute code
+     *
      * @param string $attributeCode
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getAttribute($attributeCode)
     {
@@ -169,6 +161,7 @@ class Price implements DimensionalIndexerInterface
 
     /**
      * Put data into catalog product price indexer Downloadable links price  temp table
+     *
      * @param string $temporaryDownloadableTableName
      * @param array $dimensions
      * @return void
@@ -211,22 +204,13 @@ class Price implements DimensionalIndexerInterface
                 'max_price' => new \Zend_Db_Expr('SUM(' . $ifPrice . ')'),
             ]
         );
-
-        foreach ($dimensions as $dimension) {
-            if ($dimension->getName() === WebsiteDimensionProvider::DIMENSION_NAME) {
-                $select->where('`i`.website_id = ?', $dimension->getValue());
-            }
-            if ($dimension->getName() === CustomerGroupDimensionProvider::DIMENSION_NAME) {
-                $select->where('`i`.customer_group_id = ?', $dimension->getValue());
-            }
-        }
-
         $query = $select->insertFromSelect($temporaryDownloadableTableName);
         $this->getConnection()->query($query);
     }
 
     /**
      * Update data in the catalog product price indexer temp table
+     *
      * @param string $temporaryPriceTableName
      * @param string $temporaryDownloadableTableName
      * @return void
@@ -260,6 +244,25 @@ class Price implements DimensionalIndexerInterface
     }
 
     /**
+     * Fill final price
+     *
+     * @param array $dimensions
+     * @param \Traversable $entityIds
+     * @param IndexTableStructure $temporaryPriceTable
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Select_Exception
+     */
+    private function fillFinalPrice(
+        array $dimensions,
+        \Traversable $entityIds,
+        IndexTableStructure $temporaryPriceTable
+    ) {
+        $select = $this->baseFinalPrice->getQuery($dimensions, Type::TYPE_DOWNLOADABLE, iterator_to_array($entityIds));
+        $query = $select->insertFromSelect($temporaryPriceTable->getTableName(), [], false);
+        $this->tableMaintainer->getConnection()->query($query);
+    }
+
+    /**
      * Get connection
      *
      * return \Magento\Framework\DB\Adapter\AdapterInterface
@@ -270,6 +273,7 @@ class Price implements DimensionalIndexerInterface
         if ($this->connection === null) {
             $this->connection = $this->resource->getConnection($this->connectionName);
         }
+
         return $this->connection;
     }
 
@@ -282,22 +286,5 @@ class Price implements DimensionalIndexerInterface
     private function getTable($tableName)
     {
         return $this->resource->getTableName($tableName, $this->connectionName);
-    }
-
-    /**
-     * @param array $dimensions
-     * @param \Traversable $entityIds
-     * @param IndexTableStructure $temporaryPriceTable
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Zend_Db_Select_Exception
-     */
-    private function fillFinalPrice(
-        array $dimensions,
-        \Traversable $entityIds,
-        IndexTableStructure $temporaryPriceTable
-    ) {
-        $select = $this->baseFinalPrice->getQuery($dimensions, $this->productType, iterator_to_array($entityIds));
-        $query = $select->insertFromSelect($temporaryPriceTable->getTableName(), [], false);
-        $this->tableMaintainer->getConnection()->query($query);
     }
 }

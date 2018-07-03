@@ -12,8 +12,6 @@ use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
-use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
-use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 
 /**
  * Configurable Products Price Indexer Resource model
@@ -63,11 +61,6 @@ class Configurable implements DimensionalIndexerInterface
     private $connection;
 
     /**
-     * @var string
-     */
-    private $productType;
-
-    /**
      * @var BasePriceModifier
      */
     private $basePriceModifier;
@@ -81,7 +74,6 @@ class Configurable implements DimensionalIndexerInterface
      * @param BasePriceModifier $basePriceModifier
      * @param bool $fullReindexAction
      * @param string $connectionName
-     * @param string $productType
      */
     public function __construct(
         BaseFinalPrice $baseFinalPrice,
@@ -91,13 +83,11 @@ class Configurable implements DimensionalIndexerInterface
         \Magento\Framework\App\ResourceConnection $resource,
         BasePriceModifier $basePriceModifier,
         $fullReindexAction = false,
-        $connectionName = 'indexer',
-        $productType = \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
+        $connectionName = 'indexer'
     ) {
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
-        $this->productType = $productType;
         $this->connectionName = $connectionName;
         $this->metadataPool = $metadataPool;
         $this->resource = $resource;
@@ -126,7 +116,11 @@ class Configurable implements DimensionalIndexerInterface
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
         ]);
-        $select = $this->baseFinalPrice->getQuery($dimensions, $this->productType, iterator_to_array($entityIds));
+        $select = $this->baseFinalPrice->getQuery(
+            $dimensions,
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
+            iterator_to_array($entityIds)
+        );
         $query = $select->insertFromSelect($temporaryPriceTable->getTableName(), [], false);
         $this->tableMaintainer->getConnection()->query($query);
 
@@ -135,6 +129,8 @@ class Configurable implements DimensionalIndexerInterface
     }
 
     /**
+     * Apply configurable option
+     *
      * @param IndexTableStructure $temporaryPriceTable
      * @param array $dimensions
      * @param array $entityIds
@@ -202,14 +198,6 @@ class Configurable implements DimensionalIndexerInterface
         );
         if ($entityIds !== null) {
             $select->where('le.entity_id IN (?)', $entityIds);
-        }
-        foreach ($dimensions as $dimension) {
-            if ($dimension->getName() === WebsiteDimensionProvider::DIMENSION_NAME) {
-                $select->where('website_id = ?', $dimension->getValue());
-            }
-            if ($dimension->getName() === CustomerGroupDimensionProvider::DIMENSION_NAME) {
-                $select->where('customer_group_id = ?', $dimension->getValue());
-            }
         }
         $query = $select->insertFromSelect($temporaryOptionsTableName);
         $this->getConnection()->query($query);
