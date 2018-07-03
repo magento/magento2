@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Registry;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -20,6 +21,15 @@ $registry->register('isSecureArea', true);
 
 /** @var CartRepositoryInterface $quoteRepository */
 $quoteRepository = $objectManager->get(CartRepositoryInterface::class);
+/** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+$searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
+$searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', '0000032134')
+    ->create();
+$items = $quoteRepository->getList($searchCriteria)
+    ->getItems();
+foreach ($items as $item) {
+    $quoteRepository->delete($item);
+}
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
