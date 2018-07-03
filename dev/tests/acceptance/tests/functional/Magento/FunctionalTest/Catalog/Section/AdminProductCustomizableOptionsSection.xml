@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminProductCustomizableOptionsSection">
         <element name="checkIfCustomizableOptionsTabOpen" type="text" selector="//span[text()='Customizable Options']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
-        <element name="customezableOptions" type="text" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Customizable Options']"/>
+        <element name="customizableOptions" type="text" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Customizable Options']"/>
         <element name="useDefaultOptionTitle" type="text" selector="[data-index='options'] tr.data-row [data-index='title'] [name^='options_use_default']"/>
         <element name="useDefaultOptionTitleByIndex" type="text" selector="[data-index='options'] [data-index='values'] tr[data-repeat-index='{{var1}}'] [name^='options_use_default']" parameterized="true"/>
         <element name="addOptionBtn" type="button" selector="button[data-index='button_add']"/>
@@ -19,7 +19,6 @@
         <element name="optionTypeOpenDropDown" type="button" selector=".admin__dynamic-rows[data-index='options'] .action-select"/>
         <element name="optionTypeTextField" type="button" selector=".admin__dynamic-rows[data-index='options'] .action-menu._active li li"/>
         <element name="maxCharactersInput" type="input" selector="input[name='product[options][0][max_characters]']"/>
-
 
         <element name="checkSelect" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//span[text()='Option Type']/parent::label/parent::div//div[@data-role='selected-option']" parameterized="true"/>
         <element name="checkDropDown" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//parent::label/parent::div//li[@class='admin__action-multiselect-menu-inner-item']//label[text()='Drop-down']" parameterized="true"/>
@@ -38,5 +37,10 @@
         <element name="addValue" type="button" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@data-action='add_new_row']" />
         <element name="valueTitle" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__control-table')]//tbody/tr[last()]//*[@data-index='title']//input" />
         <element name="valuePrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__control-table')]//tbody/tr[last()]//*[@data-index='price']//input" />
+
+        <element name="optionPrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][0][price]']"/>
+        <element name="optionPriceType" type="select" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][0][price_type]']"/>
+        <element name="optionSku" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][0][sku]']"/>
+        <element name="optionFileExtensions" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][0][file_extension]']"/>
     </section>
 </sections>

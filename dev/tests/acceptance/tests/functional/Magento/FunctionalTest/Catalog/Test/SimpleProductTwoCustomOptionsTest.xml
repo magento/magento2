@@ -41,7 +41,7 @@
         </after>
 
         <!-- opens the custom option panel and clicks add options -->
-        <click stepKey="openCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}"/>
+        <click stepKey="openCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}"/>
         <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
 
         <!-- Create a custom option with 2 values -->

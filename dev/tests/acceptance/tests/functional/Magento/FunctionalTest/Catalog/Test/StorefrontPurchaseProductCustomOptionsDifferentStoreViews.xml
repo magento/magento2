@@ -77,7 +77,7 @@
 
         <!-- Update Product with Option Value DropDown 1-->
 
-        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="checkAddOption1"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad7"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionTitle('New Option')}}" userInput="Custom Options 1" stepKey="fillOptionTitle1"/>
@@ -104,7 +104,7 @@
         <!-- Open tab Customizable Options -->
 
         <waitForPageLoad time="10" stepKey="waitForPageLoad2"/>
-        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses3"/>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses3"/>
 
         <!-- Update Option Customizable Options and Option Value 1-->
 
@@ -264,7 +264,7 @@
         <!-- Open tab Customizable Options -->
 
         <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
-        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses4" />
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses4" />
 
         <!-- Update Option Customizable Options and Option Value 1-->
 
