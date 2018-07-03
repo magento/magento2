@@ -6,11 +6,17 @@
   */
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultStoreGroup" type="group">
+        <data key="name">Main Website Store</data>
+        <data key="code">main_website_store</data>
+        <data key="root_category_id">2</data>
+        <data key="website_id">1</data>
+    </entity>
     <entity name="customStoreGroup" type="group">
         <data key="group_id">null</data>
         <data key="name" unique="suffix">store</data>
         <data key="code" unique="suffix">store</data>
-        <data key="root_category_id">2</data>
+        <var key="root_category_id" entityKey="id" entityType="category"/>
         <data key="website_id">1</data>
         <data key="store_action">add</data>
         <data key="store_type">group</data>

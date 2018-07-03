@@ -18,7 +18,7 @@ class Header extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'page/header.phtml';
+    protected $_template = 'Magento_Backend::page/header.phtml';
 
     /**
      * Backend data

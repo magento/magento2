@@ -14,7 +14,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>
@@ -31,6 +31,9 @@
             <array key="options">
                 <value>product_option</value>
             </array>
+            <array key="media_gallery_entries">
+                <value>media_gallery_entries</value>
+            </array>
         </object>
     </operation>
     <operation name="UpdateProduct" dataType="product" type="update" auth="adminOauth" url="/V1/products/{sku}" method="PUT">
@@ -40,7 +43,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>
@@ -69,7 +72,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>
@@ -95,7 +98,7 @@
             <field key="sku">string</field>
             <field key="name">string</field>
             <field key="attribute_set_id">integer</field>
-            <field key="price">integer</field>
+            <field key="price">number</field>
             <field key="status">integer</field>
             <field key="visibility">integer</field>
             <field key="type_id">string</field>

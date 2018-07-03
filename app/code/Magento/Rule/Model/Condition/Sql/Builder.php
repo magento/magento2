@@ -127,9 +127,10 @@ class Builder
      *
      * @param AbstractCondition $condition
      * @param string $value
-     * @param bool $isDefaultStoreUsed
+     * @param bool $isDefaultStoreUsed no longer used because caused an issue about not existing table alias
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getMappedSqlCondition(AbstractCondition $condition, $value = '', $isDefaultStoreUsed = true)
     {
@@ -147,12 +148,6 @@ class Builder
         }
 
         $defaultValue = 0;
-        // Check if attribute has a table with default value and add it to the query
-        if ($this->canAttributeHaveDefaultValue($condition->getAttribute(), $isDefaultStoreUsed)) {
-            $defaultField = 'at_' . $condition->getAttribute() . '_default.value';
-            $defaultValue = $this->_connection->quoteIdentifier($defaultField);
-        }
-
         $sql = str_replace(
             ':field',
             $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), $defaultValue),
@@ -204,45 +199,10 @@ class Builder
     ) {
         $this->_connection = $collection->getResource()->getConnection();
         $this->_joinTablesToCollection($collection, $combine);
-        $isDefaultStoreUsed = $this->checkIsDefaultStoreUsed($collection);
-        $whereExpression = (string)$this->_getMappedSqlCombination($combine, '', $isDefaultStoreUsed);
+        $whereExpression = (string)$this->_getMappedSqlCombination($combine);
         if (!empty($whereExpression)) {
             // Select ::where method adds braces even on empty expression
             $collection->getSelect()->where($whereExpression);
         }
-    }
-
-    /**
-     * Check is default store used
-     *
-     * @param AbstractCollection $collection
-     * @return bool
-     */
-    private function checkIsDefaultStoreUsed(AbstractCollection $collection): bool
-    {
-        return (int)$collection->getStoreId() === (int)$collection->getDefaultStoreId();
-    }
-
-    /**
-     * Check if attribute can have default value
-     *
-     * @param string $attributeCode
-     * @param bool $isDefaultStoreUsed
-     * @return bool
-     */
-    private function canAttributeHaveDefaultValue(string $attributeCode, bool $isDefaultStoreUsed): bool
-    {
-        if ($isDefaultStoreUsed) {
-            return false;
-        }
-
-        try {
-            $attribute = $this->attributeRepository->get(Product::ENTITY, $attributeCode);
-        } catch (NoSuchEntityException $e) {
-            // It's not exceptional case as we want to check if we have such attribute or not
-            return false;
-        }
-
-        return !$attribute->isScopeGlobal();
     }
 }

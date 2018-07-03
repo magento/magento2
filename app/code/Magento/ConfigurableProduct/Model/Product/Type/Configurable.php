@@ -1400,13 +1400,28 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $skipStockFilter = true
     ) {
         $collection = $this->getUsedProductCollection($product);
+
         if ($skipStockFilter) {
             $collection->setFlag('has_stock_status_filter', true);
         }
+
         $collection
-            ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
+            ->addAttributeToSelect($this->getAttributesForCollection($product))
             ->addFilterByRequiredOptions()
             ->setStoreId($product->getStoreId());
+
+        $collection->addMediaGalleryData();
+        $collection->addTierPriceData();
+
+        return $collection;
+    }
+
+    /**
+     * @return array
+     */
+    private function getAttributesForCollection(\Magento\Catalog\Model\Product $product)
+    {
+        $productAttributes = $this->getCatalogConfig()->getProductAttributes();
 
         $requiredAttributes = [
             'name',
@@ -1418,14 +1433,14 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             'visibility',
             'media_gallery'
         ];
-        foreach ($requiredAttributes as $attributeCode) {
-            $collection->addAttributeToSelect($attributeCode);
-        }
-        foreach ($this->getUsedProductAttributes($product) as $usedProductAttribute) {
-            $collection->addAttributeToSelect($usedProductAttribute->getAttributeCode());
-        }
-        $collection->addMediaGalleryData();
-        $collection->addTierPriceData();
-        return $collection;
+
+        $usedAttributes = array_map(
+            function($attr) {
+                return $attr->getAttributeCode();
+            },
+            $this->getUsedProductAttributes($product)
+        );
+
+        return array_unique(array_merge($productAttributes, $requiredAttributes, $usedAttributes));
     }
 }

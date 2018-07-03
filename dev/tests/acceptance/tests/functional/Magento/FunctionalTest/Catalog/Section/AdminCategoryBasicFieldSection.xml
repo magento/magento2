@@ -10,7 +10,9 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCategoryBasicFieldSection">
         <element name="IncludeInMenu" type="checkbox" selector="input[name='include_in_menu']"/>
+        <element name="includeInMenuLabel" type="text" selector="input[name='include_in_menu']+label"/>
         <element name="EnableCategory" type="checkbox" selector="input[name='is_active']"/>
+        <element name="enableCategoryLabel" type="text" selector="input[name='is_active']+label"/>
         <element name="CategoryNameInput" type="input" selector="input[name='name']"/>
     </section>
     <section name="CatalogWYSIWYGSection">

@@ -26,12 +26,17 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var string
      */
-    private $fullDirectoryPath;
+    private $dirName= 'NewDirectory';
 
     /**
-     * @var string
+     * @var \Magento\Framework\Filesystem
      */
-    private $dirName= 'NewDirectory';
+    private $filesystem;
+
+    /**
+     * @var \Magento\Cms\Helper\Wysiwyg\Images
+     */
+    private $imagesHelper;
 
     /**
      * @inheritdoc
@@ -39,32 +44,47 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
-        $imagesHelper = $objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
-        $this->fullDirectoryPath = $imagesHelper->getStorageRoot();
+        $this->imagesHelper = $objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->model = $objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\NewFolder::class);
+    }
+
+    /**
+     * Execute method with correct directory path to check that new folder can be created under linked media directory.
+     */
+    public function testExecute()
+    {
+        $fullDirectoryPath = $this->imagesHelper->getStorageRoot();
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('name', $this->dirName);
+        $this->model->getStorage()->getSession()->setCurrentPath($fullDirectoryPath);
+        $this->model->execute();
+        $this->assertTrue(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath(
+                    $fullDirectoryPath . DIRECTORY_SEPARATOR . $this->dirName
+                )
+            )
+        );
     }
 
     /**
      * Execute method with correct directory path to check that new folder can be created under WYSIWYG media directory.
      *
-     * @return void
+     * @magentoDataFixture Magento/Cms/_files/linked_media.php
      */
-    public function testExecute()
+    public function testExecuteWithLinkedMedia()
     {
+        $linkedDirectoryPath =  $this->filesystem->getDirectoryRead(DirectoryList::PUB)
+                ->getAbsolutePath() . DIRECTORY_SEPARATOR . 'linked_media';
+        $fullDirectoryPath = $this->imagesHelper->getStorageRoot();
         $this->model->getRequest()->setMethod('POST')
             ->setPostValue('name', $this->dirName);
-        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
+        $this->model->getStorage()->getSession()->setCurrentPath($fullDirectoryPath);
         $this->model->execute();
-        $this->assertTrue(
-            $this->mediaDirectory->isExist(
-                $this->mediaDirectory->getRelativePath(
-                    $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->dirName
-                )
-            )
-        );
+        $this->assertTrue(is_dir($linkedDirectoryPath . DIRECTORY_SEPARATOR . $this->dirName));
     }
 
     /**

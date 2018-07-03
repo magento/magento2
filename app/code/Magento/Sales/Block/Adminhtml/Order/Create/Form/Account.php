@@ -134,7 +134,15 @@ class Account extends AbstractForm
         $this->_addAttributesToForm($attributes, $fieldset);
 
         $this->_form->addFieldNameSuffix('order[account]');
-        $this->_form->setValues($this->getFormValues());
+
+        $formValues = $this->getFormValues();
+        foreach ($attributes as $code => $attribute) {
+            $defaultValue = $attribute->getDefaultValue();
+            if (isset($defaultValue) && !isset($formValues[$code])) {
+                $formValues[$code] = $defaultValue;
+            }
+        }
+        $this->_form->setValues($formValues);
 
         return $this;
     }

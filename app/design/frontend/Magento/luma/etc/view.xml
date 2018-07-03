@@ -231,6 +231,7 @@
             <var name="height"></var> <!-- Height of magnifier block -->
             <var name="eventType">hover</var> <!-- Action that atcivates zoom (hover/click) -->
             <var name="enabled">false</var> <!-- Turn on/off magnifier (true/false) -->
+            <var name="mode">outside</var> <!-- Zoom type (outside/inside) -->
         </var>
 
         <var name="breakpoints">

@@ -7,6 +7,7 @@
 namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
@@ -23,12 +24,18 @@ class ProceedToCheckoutStep implements TestStepInterface
     protected $checkoutCart;
 
     /**
-     * @constructor
-     * @param CheckoutCart $checkoutCart
+     * @var CmsIndex
      */
-    public function __construct(CheckoutCart $checkoutCart)
+    private $cmsIndex;
+
+    /**
+     * @param CheckoutCart $checkoutCart
+     * @param CmsIndex $cmsIndex
+     */
+    public function __construct(CheckoutCart $checkoutCart, CmsIndex $cmsIndex)
     {
         $this->checkoutCart = $checkoutCart;
+        $this->cmsIndex = $cmsIndex;
     }
 
     /**
@@ -39,6 +46,8 @@ class ProceedToCheckoutStep implements TestStepInterface
     public function run()
     {
         $this->checkoutCart->open();
+        $this->checkoutCart->getCartBlock()->waitCartContainerLoading();
+        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         $this->checkoutCart->getProceedToCheckoutBlock()->proceedToCheckout();
     }
 }
