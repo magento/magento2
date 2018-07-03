@@ -71,7 +71,7 @@ class EavValidationRules
      */
     private function clipLengthRules(array $rules): array
     {
-        if (empty($validateRules['input_validation'])) {
+        if (empty($rules['input_validation'])) {
             unset(
                 $rules['min_text_length'],
                 $rules['max_text_length']
