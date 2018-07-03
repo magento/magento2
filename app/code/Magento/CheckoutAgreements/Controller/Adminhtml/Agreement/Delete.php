@@ -14,15 +14,15 @@ class Delete extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
     public function execute()
     {
         $id = (int)$this->getRequest()->getParam('id');
-        $model = $this->_objectManager->get(\Magento\CheckoutAgreements\Model\Agreement::class)->load($id);
-        if (!$model->getId()) {
+        $repository = $this->_agreementRepository->get($id);
+        if (!$repository->getAgreementId()) {
             $this->messageManager->addError(__('This condition no longer exists.'));
             $this->_redirect('checkout/*/');
             return;
         }
 
         try {
-            $model->delete();
+            $repository->delete();
             $this->messageManager->addSuccess(__('You deleted the condition.'));
             $this->_redirect('checkout/*/');
             return;
