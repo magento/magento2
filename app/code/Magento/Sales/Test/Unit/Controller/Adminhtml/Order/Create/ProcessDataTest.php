@@ -235,6 +235,9 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Backend\Model\View\Result\Forward::class, $this->processData->execute());
     }
 
+    /**
+     * @return array
+     */
     public function isApplyDiscountDataProvider()
     {
         return [

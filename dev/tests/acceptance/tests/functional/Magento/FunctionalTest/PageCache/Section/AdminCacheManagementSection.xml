@@ -10,6 +10,9 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCacheManagementSection">
         <element name="FlushMagentoCache" type="button" selector="#flush_magento"/>
+        <element name="actionDropDown" type="multiselect" selector="//*[@id='cache_grid_massaction-select']//option[contains(., 'Action')]" timeout="30"/>
+        <element name="refreshOption" type="multiselect" selector="//*[@id='cache_grid_massaction-select']//option[@value='refresh']" timeout="30"/>
+        <element name="pageCacheRowCheckbox" type="checkbox" selector="//td[contains(., 'Page Cache')]/..//input[@type='checkbox']"/>
+        <element name="submit" type="button" selector="//button[@title='Submit']" timeout="30"/>
     </section>
 </sections>
-
