@@ -757,7 +757,7 @@ define([
         ],
         'validate-not-number-first': [
             function (value) {
-                return utils.isEmptyNoTrim(value) || /^[^0-9].*$$/.test(value);
+                return utils.isEmptyNoTrim(value) || /^[^0-9].*$/.test(value);
             },
             $.mage.__('First character must be letter.')//eslint-disable-line max-len
         ],
