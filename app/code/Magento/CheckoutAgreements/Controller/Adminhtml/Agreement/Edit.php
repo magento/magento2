@@ -15,7 +15,7 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $agreementModel = $this->_objectManager->create(\Magento\CheckoutAgreements\Model\Agreement::class);
+        $agreementModel = $this->_agreementFactory->create();
 
         if ($id) {
             $agreementModel->load($id);
@@ -26,7 +26,7 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
             }
         }
 
-        $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getAgreementData(true);
+        $data = $this->_session->getAgreementData(true);
         if (!empty($data)) {
             $agreementModel->setData($data);
         }
