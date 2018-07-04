@@ -44,10 +44,10 @@
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUEUE_MESSAGE_ID_QUEUE_MESSAGE_STATUS_MESSAGE_ID"
+        <constraint xsi:type="foreign" name="QUEUE_MESSAGE_STATUS_MESSAGE_ID_QUEUE_MESSAGE_ID"
                     table="queue_message_status" column="message_id" referenceTable="queue_message" referenceColumn="id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="QUEUE_ID_QUEUE_MESSAGE_STATUS_QUEUE_ID" table="queue_message_status"
+        <constraint xsi:type="foreign" name="QUEUE_MESSAGE_STATUS_QUEUE_ID_QUEUE_ID" table="queue_message_status"
                     column="queue_id" referenceTable="queue" referenceColumn="id" onDelete="CASCADE"/>
         <constraint xsi:type="unique" name="QUEUE_MESSAGE_STATUS_QUEUE_ID_MESSAGE_ID">
             <column name="queue_id"/>

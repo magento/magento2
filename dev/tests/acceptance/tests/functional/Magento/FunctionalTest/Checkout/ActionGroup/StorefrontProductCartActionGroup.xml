@@ -77,4 +77,15 @@
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart" />
         <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="clickCart" />
     </actionGroup>
+
+    <actionGroup name="changeSummaryQuoteAddress">
+        <arguments>
+            <argument name="taxCode"/>
+        </arguments>
+        <conditionalClick stepKey="openShippingDetails" selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false"/>
+        <selectOption stepKey="selectCountry" selector="{{CheckoutCartSummarySection.country}}" userInput="{{taxCode.country}}"/>
+        <selectOption stepKey="selectStateProvince" selector="{{CheckoutCartSummarySection.country}}" userInput="{{taxCode.country}}"/>
+        <fillField stepKey="fillZip" selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{taxCode.zip}}"/>
+        <waitForPageLoad stepKey="waitForFormUpdate"/>
+    </actionGroup>
 </actionGroups>
