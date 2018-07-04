@@ -189,6 +189,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             $data['shipping_method_reseted'] = !(bool)$this->getQuote()->getShippingAddress()->getShippingMethod();
             $data['payment_method'] = $this->getQuote()->getPayment()->getMethod();
         }
+        $data['quote_id'] = $this->_sessionQuote->getQuoteId();
 
         return $this->_jsonEncoder->encode($data);
     }

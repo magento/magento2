@@ -103,6 +103,9 @@ class GlobalSearchTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedEntitiesQty, count($this->globalSearch->getEntitiesToShow()));
     }
 
+    /**
+     * @return array
+     */
     public function getEntitiesToShowDataProvider()
     {
         return [

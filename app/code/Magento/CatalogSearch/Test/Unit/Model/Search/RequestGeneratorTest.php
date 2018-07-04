@@ -239,6 +239,11 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
         return $attribute;
     }
 
+    /**
+     * @param $value
+     *
+     * @return int|void
+     */
     private function countVal(&$value)
     {
         return !empty($value) ? count($value) : 0;

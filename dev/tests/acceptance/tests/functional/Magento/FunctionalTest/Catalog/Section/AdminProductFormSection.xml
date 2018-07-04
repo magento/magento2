@@ -11,13 +11,21 @@
     <section name="AdminProductFormSection">
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
+        <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
+        <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']"/>
+        <element name="productWeight" type="input" selector=".admin__field[data-index=weight] input"/>
+        <element name="productWeightSelect" type="select" selector="select[name='product[product_has_weight]']"/>
         <element name="contentTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[text()='Content']"/>
         <element name="validationErrorLabel" type="text" selector="//label[@class='admin__field-error']"/>
         <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
+    </section>
+    <section name="ProductInWebsitesSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
+        <element name="website" type="checkbox" selector="//label[contains(text(), '{{var1}}')]/parent::div//input[@type='checkbox']" parameterized="true"/>
     </section>
     <section name="ProductWYSIWYGSection">
         <element name="Switcher" type="button" selector="//select[@id='dropdown-switcher']"/>
