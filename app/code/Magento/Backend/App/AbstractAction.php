@@ -83,7 +83,17 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $_formKeyValidator;
-
+    
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    protected $_jsonSerializer;
+    
+    /**
+     * @var \Magento\Framework\Validator\Locale
+     */
+    protected $_localeValidator;
+    
     /**
      * @param \Magento\Backend\App\Action\Context $context
      */
@@ -98,6 +108,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
         $this->_localeResolver = $context->getLocaleResolver();
         $this->_canUseBaseUrl = $context->getCanUseBaseUrl();
         $this->_session = $context->getSession();
+        $this->_jsonSerializer = $context->getJsonSerializer();
+        $this->_localeValidator = $context->getLocaleValidator();
     }
 
     /**
@@ -272,11 +284,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
             $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
             if ($this->getRequest()->getQuery('isAjax', false) || $this->getRequest()->getQuery('ajax', false)) {
                 $this->getResponse()->representJson(
-                    $this->_objectManager->get(
-                        \Magento\Framework\Json\Helper\Data::class
-                    )->jsonEncode(
-                        ['error' => true, 'message' => $_keyErrorMsg]
-                    )
+                    $this->_jsonSerializer->serialize(['error' => true, 'message' => $_keyErrorMsg])
                 );
             } else {
                 $this->_redirect($this->_backendUrl->getStartupPageUrl());
@@ -295,7 +303,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected function _processLocaleSettings()
     {
         $forceLocale = $this->getRequest()->getParam('locale', null);
-        if ($this->_objectManager->get(\Magento\Framework\Validator\Locale::class)->isValid($forceLocale)) {
+        
+        if ($this->_localeValidator->isValid($forceLocale)) {
             $this->_getSession()->setSessionLocale($forceLocale);
         }
 

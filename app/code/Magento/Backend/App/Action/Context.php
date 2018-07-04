@@ -63,6 +63,16 @@ class Context extends \Magento\Framework\App\Action\Context
      * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
+    
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    protected $_jsonSerializer;
+    
+    /**
+     * @var \Magento\Framework\Validator\Locale
+     */
+    protected $_localeValidator;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
@@ -105,6 +115,8 @@ class Context extends \Magento\Framework\App\Action\Context
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Serialize\Serializer\Json $jsonSerializer,
+        \Magento\Framework\Validator\Locale $localeValidator,
         $canUseBaseUrl = false
     ) {
         parent::__construct(
@@ -129,6 +141,8 @@ class Context extends \Magento\Framework\App\Action\Context
         $this->_formKeyValidator = $formKeyValidator;
         $this->_localeResolver = $localeResolver;
         $this->_canUseBaseUrl = $canUseBaseUrl;
+        $this->_jsonSerializer = $jsonSerializer;
+        $this->_localeValidator = $localeValidator;
     }
 
     /**
@@ -194,5 +208,21 @@ class Context extends \Magento\Framework\App\Action\Context
     public function getSession()
     {
         return $this->_session;
+    }
+    
+    /**
+     * @return \Magento\Framework\Serialize\Serializer\Json
+     */
+    public function getJsonSerializer()
+    {
+        return $this->_jsonSerializer;
+    }
+    
+    /**
+     * @return \Magento\Framework\Validator\Locale
+     */
+    public function getLocaleValidator()
+    {
+        return $this->_localeValidator;
     }
 }
