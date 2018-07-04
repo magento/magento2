@@ -40,7 +40,7 @@ class ExistingValidate extends \Zend_Validate
             $result = false;
             $messages = $validator->getMessages();
             $this->_messages = array_merge($this->_messages, $messages);
-            $this->_errors = array_merge($this->_errors,   array_keys($messages));
+            $this->_errors = array_merge($this->_errors, array_keys($messages));
             if ($element['breakChainOnFailure']) {
                 break;
             }
