@@ -38,7 +38,7 @@
 
 //  Image and Color swatch
 @img-color-swatch-option__hover__border: @swatch-option__hover__border;
-@img-color-swatch-option__hover__outline: 2px solid #ee0000;
+@img-color-swatch-option__hover__outline: 2px solid #e00;
 
 //  Tooltip
 @swatch-option-tooltip__background: @color-white;
@@ -53,14 +53,14 @@
 
 @swatch-option-tooltip-layered-title__color: @swatch-option-tooltip-title__color;
 
-// Layered Features
+//  Layered Features
 @swatch-option-link-layered__focus__box-shadow: 0 0 3px 1px @color-sky-blue1;
 
 //
 //  Common
 //  _____________________________________________
 
- & when (@media-common = true) {
+& when (@media-common = true) {
 
     .swatch {
         &-attribute {
@@ -72,14 +72,14 @@
                     padding-right: @indent__s;
                 }
 
-                &[data-required="1"]:after {
+                &[data-required='1']:after {
                     .lib-css(color, @form-field-label-asterisk__color);
                     content: '*';
+                    font-size: @font-size__base;
+                    font-weight: @font-weight__bold;
                     position: absolute;
                     right: -11px;
                     top: -2px;
-                    font-weight: @font-weight__bold;
-                    font-size: @font-size__base;
                 }
             }
 
@@ -120,16 +120,16 @@
 
         &-option {
             .lib-css(border, @swatch-option__border);
-            padding: 1px 2px;
-            min-width: 30px;
-            max-width: 90px;
-            height: 20px;
-            float: left;
-            margin: 0 @indent__s @indent__xs 0;
-            text-align: center;
             cursor: pointer;
-            position: relative;
+            float: left;
+            height: 20px;
+            margin: 0 @indent__s @indent__xs 0;
+            max-width: 90px;
+            min-width: 30px;
             overflow: hidden;
+            padding: 1px 2px;
+            position: relative;
+            text-align: center;
             text-overflow: ellipsis;
 
             &.text {
@@ -171,38 +171,37 @@
                 cursor: default;
 
                 &:after {
-                    content: '';
-                    position: absolute;
-                    left: 0;
-                    right: 0;
-                    top: 0;
-                    bottom: 0;
-
-                    // ToDo: improve .lib-background-gradient() to support diagonal gradient
+                    //  ToDo: improve .lib-background-gradient() to support diagonal gradient
+                    background: linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
                     background: -moz-linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
+                    background: -ms-linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
+                    background: -o-linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
                     background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(42%, rgba(255, 255, 255, 0)), color-stop(43%, rgba(255, 255, 255, 1)), color-stop(46%, rgba(255, 255, 255, 1)), color-stop(47%, rgba(255, 82, 22, 1)), color-stop(53%, rgba(255, 82, 22, 1)), color-stop(54%, rgba(255, 255, 255, 1)), color-stop(57%, rgba(255, 255, 255, 1)), color-stop(58%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(255, 255, 255, 0)));
                     background: -webkit-linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
-                    background: -o-linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
-                    background: -ms-linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
-                    background: linear-gradient(to left top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 1) 43%, rgba(255, 255, 255, 1) 46%, rgba(255, 82, 22, 1) 47%, rgba(255, 82, 22, 1) 53%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 1) 57%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, 0) 100%);
-                    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#00ffffff', GradientType=1);
+                    bottom: 0;
+                    content: '';
+                    filter: 'progid:DXImageTransform.Microsoft.gradient(startColorstr=#00ffffff, endColorstr=#00ffffff, GradientType=1)';
+                    left: 0;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
                 }
             }
             &-disabled {
-                outline: none !important;
-                cursor: default;
                 border: 0;
+                cursor: default;
+                outline: none !important;
 
                 &:after {
-                    .lib-css(background, @swatch-option__disabled__background);
                     .lib-rotate(-30deg);
                     content: '';
-                    position: absolute;
-                    width: 42px;
                     height: 2px;
-                    z-index: 995;
                     left: -4px;
-                    top: 10px;  
+                    position: absolute;
+                    top: 10px;
+                    width: 42px;
+                    z-index: 995;
+                    .lib-css(background, @swatch-option__disabled__background);
                 }
             }
 
@@ -211,86 +210,86 @@
             }
 
             &-tooltip {
-                .lib-css(background, @swatch-option-tooltip__background);
                 .lib-css(border, @swatch-option-tooltip__border);
                 .lib-css(color, @swatch-option-tooltip__color);
-                max-width: 140px;
+                display: none;
                 max-height: 100%;
+                max-width: 140px;
                 min-height: 20px;
                 min-width: 20px;
-                position: absolute;
                 padding: @indent__xs;
-                display: none;
-                z-index: 999;
+                position: absolute;
                 text-align: center;
+                z-index: 999;
+                .lib-css(background, @swatch-option-tooltip__background);
 
                 &,
-                &-layered  {
+                &-layered {
                     .corner {
-                        left: 40%;
-                        position: absolute;
                         bottom: 0;
                         height: 8px;
+                        left: 40%;
+                        position: absolute;
 
                         &:before,
                         &:after {
+                            border-style: solid;
                             content: '';
+                            font-size: 1px;
+                            height: 0;
                             position: relative;
                             width: 0;
-                            height: 0;
-                            border-style: solid;
-                            font-size: 1px;
                         }
 
                         &:before {
-                            top: 2px;
-                            left: 0;
+                            border-color: @color-gray68 transparent transparent transparent;
                             border-width: 8px 8.5px 0 8.5px;
-                            border-color: #adadad transparent transparent transparent;
+                            left: 0;
+                            top: 2px;
                         }
 
                         &:after {
-                            top: 1px;
-                            left: -15px;
+                            border-color: @primary4 transparent transparent transparent;
                             border-width: 7px 7.5px 0 7.5px;
-                            border-color: #fff transparent transparent transparent;
+                            left: -15px;
+                            top: 1px;
                         }
                     }
 
                     .image {
                         display: block;
                         height: 130px;
-                        width: 130px;
                         margin: 0 auto;
+                        width: 130px;
                     }
                 }
 
                 &-layered {
-                    .lib-css(background, @swatch-option-tooltip-layered__background);
                     .lib-css(border, @swatch-option-tooltip-layered__border);
                     .lib-css(color, @swatch-option-tooltip-layered__color);
-                    width: 140px;
-                    position: absolute;
+                    .lib-css(background, @swatch-option-tooltip-layered__background);
                     display: none;
-                    z-index: 999;
                     left: -47px;
+                    position: absolute;
+                    width: 140px;
+                    z-index: 999;
                 }
 
                 .title {
                     .lib-css(color, @swatch-option-tooltip-title__color);
+                    display: block;
+                    max-height: 200px;
                     max-width: 140px;
                     min-height: 20px;
-                    max-height: 200px;
-                    text-align: center;
-                    display: block;
                     overflow: hidden;
+                    text-align: center;
                 }
             }
 
             &-link-layered {
-                position: relative;
                 margin: 0 !important;
                 padding: 0 !important;
+                position: relative;
 
                 &:focus > div {
                     .lib-css(box-shadow, @swatch-option-link-layered__focus__box-shadow);
@@ -313,8 +312,8 @@
         &-more {
             display: inline-block;
             margin: 2px 0;
-            text-decoration: none !important;
             position: static;
+            text-decoration: none !important;
             z-index: 1;
         }
 
@@ -336,10 +335,10 @@
     }
 
     .clearfix:after {
+        clear: both;
         content: '';
-        visibility: hidden;
         display: block;
         height: 0;
-        clear: both;
+        visibility: hidden;
     }
 }
