@@ -56,7 +56,9 @@ class WebsiteAssignedToStockValidator implements StockValidatorInterface
         $unAssignedWebsiteCodes = $this->getUnassignedWebsiteCodesForStock($stock);
 
         foreach ($unAssignedWebsiteCodes as $websiteCode) {
-            if (null === $this->stockIdResolver->resolve(SalesChannel::TYPE_WEBSITE, $websiteCode)) {
+            $stockId = (int)$this->stockIdResolver->resolve(SalesChannel::TYPE_WEBSITE, $websiteCode);
+
+            if ($stockId === (int)$stock->getStockId() || $stockId === null) {
                 $errors[] = __('Website "%field" should be linked to stock.', ['field' => $websiteCode]);
             }
         }
