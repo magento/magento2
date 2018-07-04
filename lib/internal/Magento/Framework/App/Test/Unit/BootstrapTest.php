@@ -189,6 +189,9 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($isDeveloper, $bootstrap->isDeveloperMode());
     }
 
+    /**
+     * @return array
+     */
     public function testIsDeveloperModeDataProvider()
     {
         return [
