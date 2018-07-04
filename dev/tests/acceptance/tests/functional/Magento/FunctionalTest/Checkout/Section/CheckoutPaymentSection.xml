@@ -12,7 +12,7 @@
         <element name="isPaymentSection" type="text" selector="//*[@class='opc-progress-bar']/li[contains(@class, '_active') and span[contains(.,'Review &amp; Payments')]]"/>
         <element name="availablePaymentSolutions" type="text" selector="#checkout-payment-method-load>div>div>div:nth-child(2)>div.payment-method-title.field.choice"/>
         <element name="notAvailablePaymentSolutions" type="text" selector="#checkout-payment-method-load>div>div>div.payment-method._active>div.payment-method-title.field.choice"/>
-        <element name="billingNewAddressForm" type="text" selector="#billing-new-address-form"/>
+        <element name="billingNewAddressForm" type="text" selector=".billing-new-address-form"/>
         <element name="placeOrderDisabled" type="button" selector="#checkout-payment-method-load button.disabled"/>
         <element name="update" type="button" selector=".payment-method-billing-address .action.action-update"/>
         <element name="guestFirstName" type="input" selector=".billing-address-form input[name*='firstname']"/>
