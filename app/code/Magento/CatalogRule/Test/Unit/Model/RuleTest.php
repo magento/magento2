@@ -380,9 +380,38 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
     }
 
-    public function testReindex()
-    {
-        $this->_ruleProductProcessor->expects($this->once())->method('reindexList');
+    /**
+     * @dataProvider reindexDataProvider
+     * @param array $productIds
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $callCount
+     * @return void
+     */
+    public function testReindex(
+        array $productIds,
+        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $callCount
+    ) {
+        $this->objectManager->setBackwardCompatibleProperty($this->rule, '_productIds', $productIds);
+        $this->_ruleProductProcessor->expects($callCount)->method('reindexList');
         $this->rule->reindex();
+    }
+
+    /**
+     * @return array
+     */
+    public function reindexDataProvider():array
+    {
+        return [
+            [
+                'productIds' => [
+                        1 => [1 =>true],
+                        2 => [1 =>true],
+                ],
+                'call' => $this->once(),
+            ],
+            [
+                'productIds' => [],
+                'call' => $this->never(),
+            ],
+        ];
     }
 }
