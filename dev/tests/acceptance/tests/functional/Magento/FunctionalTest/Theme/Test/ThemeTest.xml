@@ -26,6 +26,7 @@
         <amOnPage url="{{ThemesPageIndex.url}}" stepKey="navigateToThemesIndexPage" />
         <waitForPageLoad stepKey="wait1"/>
         <dontSee selector="{{AdminThemeSection.gridCell('Magento Rush')}}" stepKey="dontSeeRushThemeInTitleColumn"/>
+        <waitForPageLoad stepKey="waitForThemeGridLoad"/>
         <seeNumberOfElements selector="{{AdminThemeSection.rowsInColumn('theme_path')}}" userInput="2" stepKey="see2RowsOnTheGrid"/>
     </test>
 </tests>
