@@ -187,7 +187,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
                 ['1', false, '1'],
                 ['5', false, '5'],
                 ['10', false, '10'],
-                ['Magento_CatalogWidget::product/widget/content/grid.phtml', false, 'Magento_CatalogWidget::product/widget/content/grid.phtml'],
+                ['Magento_CatalogWidget::product/widget/content/grid.phtml',
+                 false,
+                 'Magento_CatalogWidget::product/widget/content/grid.phtml'
+                ],
                 ['encoded-conditions-string', false, 'encoded-conditions-string'],
             ]);
 
