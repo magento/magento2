@@ -36,7 +36,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var WriteInterface
      */
-    private $rootDirectory;
+    private $mediaDirectory;
 
     /**
      * @var Filesystem
@@ -53,13 +53,13 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->fileName = 'test.txt';
+        $this->fileName = 'image.txt';
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->updateHandler = $this->objectManager->create(UpdateHandler::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
-        $this->rootDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $this->rootDirectory->writeFile($this->rootDirectory->getAbsolutePath($this->fileName), 'Test');
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->mediaDirectory->writeFile($this->mediaDirectory->getRelativePath($this->fileName), 'Test');
     }
 
     /**
@@ -67,7 +67,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithIllegalFilename(): void
     {
-        $filePath = str_repeat('/..', 9) . '/' . $this->fileName;
+        $filePath = str_repeat('/..', 2) . DIRECTORY_SEPARATOR . $this->fileName;
 
         /** @var $product Product */
         $product = Bootstrap::getObjectManager()->create(Product::class);
@@ -87,7 +87,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->updateHandler->execute($product);
-        $this->assertFileExists($this->rootDirectory->getAbsolutePath($this->fileName));
+        $this->assertFileExists($this->mediaDirectory->getAbsolutePath($this->fileName));
     }
 
     /**
@@ -95,6 +95,6 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
-        $this->rootDirectory->getDriver()->deleteFile($this->rootDirectory->getAbsolutePath($this->fileName));
+        $this->mediaDirectory->getDriver()->deleteFile($this->mediaDirectory->getAbsolutePath($this->fileName));
     }
 }
