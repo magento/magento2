@@ -59,7 +59,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->updateHandler = $this->objectManager->create(UpdateHandler::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->mediaDirectory->writeFile($this->mediaDirectory->getRelativePath($this->fileName), 'Test');
+        $this->mediaDirectory->writeFile($this->fileName, 'Test');
     }
 
     /**
