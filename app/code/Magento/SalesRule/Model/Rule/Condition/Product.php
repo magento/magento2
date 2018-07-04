@@ -36,7 +36,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @return \Magento\Catalog\Api\Data\ProductInterface|\Magento\Catalog\Model\Product
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getProductToValidate(\Magento\Framework\Model\AbstractModel $model)
+    private function getProductToValidate(\Magento\Framework\Model\AbstractModel $model)
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $model->getProduct();
