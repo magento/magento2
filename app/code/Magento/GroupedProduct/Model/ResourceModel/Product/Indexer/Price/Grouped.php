@@ -147,7 +147,7 @@ class Grouped implements DimensionalIndexerInterface
         $taxClassId = $this->getConnection()->getCheckSql('MIN(i.tax_class_id) IS NULL', '0', 'MIN(i.tax_class_id)');
         $minCheckSql = $this->getConnection()->getCheckSql('le.required_options = 0', 'i.min_price', 0);
         $maxCheckSql = $this->getConnection()->getCheckSql('le.required_options = 0', 'i.max_price', 0);
-        $select->joinLeft(
+        $select->join(
             ['i' => $this->getMainTable($dimensions)],
             'i.entity_id = l.linked_product_id',
             [
