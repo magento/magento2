@@ -32,6 +32,7 @@
             </group>
             <group id="other_payment_methods" translate="label" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Other Payment Methods:</label>
+                <attribute type="expanded">1</attribute>
                 <fieldset_css>paypal-top-section payments-other-header</fieldset_css>
                 <frontend_model>\Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
             </group>

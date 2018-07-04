@@ -38,6 +38,6 @@ class DriverPoolTest extends \PHPUnit\Framework\TestCase
      */
     public function testCustomDriverException()
     {
-        new DriverPool(['custom' => new \StdClass()]);
+        new DriverPool(['custom' => new \stdClass()]);
     }
 }
