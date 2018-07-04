@@ -126,6 +126,9 @@ class StockTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->_block->getSignupUrl());
     }
 
+    /**
+     * @return array
+     */
     public function setTemplateStockUrlNotAllowedDataProvider()
     {
         return [

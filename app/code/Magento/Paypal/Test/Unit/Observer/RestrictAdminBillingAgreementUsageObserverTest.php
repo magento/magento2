@@ -46,6 +46,9 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit\Framework\
         $this->_model = new \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver($this->_authorization);
     }
 
+    /**
+     * @return array
+     */
     public function restrictAdminBillingAgreementUsageDataProvider()
     {
         return [
