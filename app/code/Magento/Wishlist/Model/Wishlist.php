@@ -217,7 +217,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     public function getName()
     {
         $name = $this->_getData('name');
-        if (!strlen($name)) {
+        if ($name === null || !strlen($name)) {
             return $this->_wishlistData->getDefaultWishlistName();
         }
         return $name;
