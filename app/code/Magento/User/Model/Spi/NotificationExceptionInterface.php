@@ -11,7 +11,7 @@ namespace Magento\User\Model\Spi;
 /**
  * When a notification cannot be sent.
  */
-interface NotificationException extends \Throwable
+interface NotificationExceptionInterface extends \Throwable
 {
 
 }

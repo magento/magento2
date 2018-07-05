@@ -9,7 +9,7 @@ namespace Magento\User\Controller\Adminhtml\User;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
-use Magento\User\Model\Spi\NotificationException;
+use Magento\User\Model\Spi\NotificationExceptionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -99,7 +99,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
             $this->_redirect('adminhtml/*/');
-        } catch (NotificationException $exception) {
+        } catch (NotificationExceptionInterface $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
             $this->messageManager->addError(

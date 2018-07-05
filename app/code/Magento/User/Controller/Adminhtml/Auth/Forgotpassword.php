@@ -10,6 +10,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Security\Model\SecurityManager;
 use Magento\User\Model\Spi\NotificatorInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
 {
     /**

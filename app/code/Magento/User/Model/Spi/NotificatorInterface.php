@@ -19,7 +19,7 @@ interface NotificatorInterface
      * Send notification when a user requests password reset.
      *
      * @param UserInterface $user User that requested password reset.
-     * @throws NotificationException
+     * @throws NotificationExceptionInterface
      *
      * @return void
      */
@@ -29,7 +29,7 @@ interface NotificatorInterface
      * Send a notification when a new user is created.
      *
      * @param UserInterface $user The new user.
-     * @throws NotificationException
+     * @throws NotificationExceptionInterface
      *
      * @return void
      */
@@ -40,7 +40,7 @@ interface NotificatorInterface
      *
      * @param UserInterface $user The user updated.
      * @param string[] List of changed properties.
-     * @throws NotificationException
+     * @throws NotificationExceptionInterface
      *
      * @return void
      */

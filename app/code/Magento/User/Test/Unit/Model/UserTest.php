@@ -44,7 +44,6 @@ class UserTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     /**
      * @return void
      */

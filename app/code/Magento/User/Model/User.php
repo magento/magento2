@@ -12,7 +12,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\User\Api\Data\UserInterface;
-use Magento\User\Model\Spi\NotificationException;
+use Magento\User\Model\Spi\NotificationExceptionInterface;
 use Magento\User\Model\Spi\NotificatorInterface;
 
 /**
@@ -446,7 +446,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Check changes and send notification emails.
      *
-     * @throws NotificationException
+     * @throws NotificationExceptionInterface
      * @return $this
      * @since 100.1.0
      */
@@ -495,7 +495,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @param string $changes
      * @param string $email
-     * @throws NotificationException
+     * @throws NotificationExceptionInterface
      * @return $this
      * @since 100.1.0
      * @deprecated

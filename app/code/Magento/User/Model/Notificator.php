@@ -18,9 +18,12 @@ use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Email\Model\BackendTemplate;
 
 /**
  * @inheritDoc
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Notificator implements NotificatorInterface
 {
@@ -81,7 +84,7 @@ class Notificator implements NotificatorInterface
     ): void {
         $transport = $this->transportBuilder
             ->setTemplateIdentifier($this->config->getValue($templateConfigId))
-            ->setTemplateModel(\Magento\Email\Model\BackendTemplate::class)
+            ->setTemplateModel(BackendTemplate::class)
             ->setTemplateOptions([
                 'area' => FrontNameResolver::AREA_CODE,
                 'store' => Store::DEFAULT_STORE_ID
@@ -188,5 +191,4 @@ class Notificator implements NotificatorInterface
             );
         }
     }
-
 }
