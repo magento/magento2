@@ -104,7 +104,7 @@ class Notificator implements NotificatorInterface
             $this->sendNotification(
                 'admin/emails/forgot_email_template',
                 [
-                    'user'  => $user,
+                    'user' => $user,
                     'store' => $this->storeManager->getStore(
                         Store::DEFAULT_STORE_ID
                     )
@@ -141,7 +141,7 @@ class Notificator implements NotificatorInterface
                 $this->sendNotification(
                     'admin/emails/new_user_notification_template',
                     [
-                        'user'  => $user,
+                        'user' => $user,
                         'store' => $this->storeManager->getStore(
                             Store::DEFAULT_STORE_ID
                         )
@@ -172,8 +172,8 @@ class Notificator implements NotificatorInterface
             $this->sendNotification(
                 'admin/emails/user_notification_template',
                 [
-                    'user'    => $user,
-                    'store'   => $this->storeManager->getStore(
+                    'user' => $user,
+                    'store' => $this->storeManager->getStore(
                         Store::DEFAULT_STORE_ID
                     ),
                     'changes' => implode(', ', $changed)
