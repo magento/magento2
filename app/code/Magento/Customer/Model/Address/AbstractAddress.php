@@ -13,8 +13,6 @@ use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Address abstract model
@@ -122,16 +120,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\Directory\Model\AllowedCountries
-     */
-    private $allowedCountriesReader;
-
-    /**
-     * @var \Magento\Customer\Model\Config\Share
-     */
-    private $shareConfig;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -166,9 +154,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        \Magento\Directory\Model\AllowedCountries $allowedCountriesReader = null,
-        \Magento\Customer\Model\Config\Share $shareConfig = null
+        array $data = []
     ) {
         $this->_directoryData = $directoryData;
         $data = $this->_implodeArrayField($data);
@@ -180,10 +166,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $this->addressDataFactory = $addressDataFactory;
         $this->regionDataFactory = $regionDataFactory;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->allowedCountriesReader = $allowedCountriesReader
-            ?: ObjectManager::getInstance()->get(\Magento\Directory\Model\AllowedCountries::class);
-        $this->shareConfig = $shareConfig
-            ?: ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
         parent::__construct(
             $context,
             $registry,
@@ -641,7 +623,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $errors[] = __('%fieldName is a required field.', ['fieldName' => 'countryId']);
         } else {
             //Checking if such country exists.
-            if (!in_array($countryId, $this->getWebsiteAllowedCountries(), true)) {
+            $countryCollection = $this->_directoryData->getCountryCollection($this->getStoreId());
+            if (!in_array($countryId, $countryCollection->getAllIds(), true)) {
                 $errors[] = __(
                     'Invalid value of "%value" provided for the %fieldName field.',
                     [
@@ -683,22 +666,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         }
 
         return $errors;
-    }
-
-    /**
-     * Return allowed counties per website.
-     *
-     * @return array
-     */
-    private function getWebsiteAllowedCountries(): array
-    {
-        $websiteId = null;
-
-        if (!$this->shareConfig->isGlobalScope()) {
-            $websiteId = $this->getCustomer() ? $this->getCustomer()->getWebsiteId() : null;
-        }
-
-        return $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $websiteId);
     }
 
     /**
