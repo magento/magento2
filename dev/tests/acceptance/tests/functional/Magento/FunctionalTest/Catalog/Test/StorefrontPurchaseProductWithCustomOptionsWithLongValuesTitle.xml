@@ -98,7 +98,7 @@
             <expectedResult type="string">Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj111 ...</expectedResult>
         </assertEquals>
         <moveMouseOver selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd" stepKey="hoverProduct"/>
-        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd:nth-child(2)" stepKey=""/>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd:nth-child(2)" stepKey="waitForCustomOptionValueFullName"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
     </test>
 </tests>
