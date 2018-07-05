@@ -164,6 +164,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     public function getOrderDataJson()
     {
         $data = [];
+        $this->_storeManager->setCurrentStore($this->getStoreId());
         if ($this->getCustomerId()) {
             $data['customer_id'] = $this->getCustomerId();
             $data['addresses'] = [];
