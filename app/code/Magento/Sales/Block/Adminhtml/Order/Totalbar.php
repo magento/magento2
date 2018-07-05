@@ -50,7 +50,7 @@ class Totalbar extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      *
      * @return array
      */
-    protected function getTotals()
+    public function getTotals()
     {
         return $this->_totals;
     }
