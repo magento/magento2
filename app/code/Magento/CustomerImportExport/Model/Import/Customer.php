@@ -593,12 +593,18 @@ class Customer extends AbstractCustomer
                 if (in_array($attributeCode, $this->_ignoredAttributes)) {
                     continue;
                 }
-                if ($attributeParams['is_required']
-                    && ((!isset($rowData[$attributeCode]) && !$this->_getCustomerId($email, $website))
-                    || (isset($rowData[$attributeCode]) && '' === trim($rowData[$attributeCode])))) {
+
+                $isFieldRequired = $attributeParams['is_required'];
+                $isFieldNotSetAndCustomerDoesNotExist =
+                    !isset($rowData[$attributeCode]) && !$this->_getCustomerId($email, $website);
+                $isFieldSetAndTrimmedValueIsEmpty
+                    = isset($rowData[$attributeCode]) && '' === trim($rowData[$attributeCode]);
+
+                if ($isFieldRequired && ($isFieldNotSetAndCustomerDoesNotExist || $isFieldSetAndTrimmedValueIsEmpty)) {
                     $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                     continue;
                 }
+
                 if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
                     $this->isAttributeValid(
                         $attributeCode,
