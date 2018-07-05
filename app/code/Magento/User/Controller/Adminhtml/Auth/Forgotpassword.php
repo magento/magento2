@@ -7,6 +7,7 @@
 namespace Magento\User\Controller\Adminhtml\Auth;
 
 use Magento\Security\Model\SecurityManager;
+use Magento\Framework\App\ObjectManager;
 
 class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
 {
@@ -14,19 +15,30 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
      * @var SecurityManager
      */
     protected $securityManager;
+    
+    /**
+     * User model factory
+     *
+     * @var \Magento\User\Model\ResourceModel\User\CollectionFactory
+     */
+    private $userCollectionFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\User\Model\UserFactory $userFactory
      * @param \Magento\Security\Model\SecurityManager $securityManager
+     * @param \Magento\User\Model\ResourceModel\User\CollectionFactory $userCollectionFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\User\Model\UserFactory $userFactory,
-        \Magento\Security\Model\SecurityManager $securityManager
+        \Magento\Security\Model\SecurityManager $securityManager,
+        \Magento\User\Model\ResourceModel\User\CollectionFactory $userCollectionFactory = null
     ) {
         parent::__construct($context, $userFactory);
         $this->securityManager = $securityManager;
+        $this->userCollectionFactory = $userCollectionFactory ?:
+                ObjectManager::getInstance()->get(\Magento\User\Model\ResourceModel\User\CollectionFactory::class);
     }
 
     /**
@@ -54,7 +66,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                     $this->messageManager->addErrorMessage($exception->getMessage());
                     return $resultRedirect->setPath('admin');
                 }
-                $collection = $this->_objectManager->get(\Magento\User\Model\ResourceModel\User\Collection::class);
+                $collection = $this->userCollectionFactory->create();
                 /** @var $collection \Magento\User\Model\ResourceModel\User\Collection */
                 $collection->addFieldToFilter('email', $email);
                 $collection->load(false);
@@ -65,9 +77,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                             /** @var \Magento\User\Model\User $user */
                             $user = $this->_userFactory->create()->load($item->getId());
                             if ($user->getId()) {
-                                $newPassResetToken = $this->_objectManager->get(
-                                    \Magento\User\Helper\Data::class
-                                )->generateResetPasswordLinkToken();
+                                $newPassResetToken = $this->_backendHelper->generateResetPasswordLinkToken();
                                 $user->changeResetPasswordLinkToken($newPassResetToken);
                                 $user->save();
                                 $user->sendPasswordResetConfirmationEmail();
@@ -86,7 +96,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                 $this->messageManager->addSuccess(__('We\'ll email you a link to reset your password.'));
                 // @codingStandardsIgnoreEnd
                 $this->getResponse()->setRedirect(
-                    $this->_objectManager->get(\Magento\Backend\Helper\Data::class)->getHomePageUrl()
+                    $this->_backendHelper->getHomePageUrl()
                 );
                 return;
             } else {
