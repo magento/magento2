@@ -2012,26 +2012,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Retrieve or generate new customer email.
+     * Retrieve new customer email.
      *
      * @return string
      */
     protected function _getNewCustomerEmail()
     {
-        $email = $this->getData('account/email');
-        if (empty($email)) {
-            $host = $this->_scopeConfig->getValue(
-                self::XML_PATH_DEFAULT_EMAIL_DOMAIN,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-            $account = time();
-            $email = $account . '@' . $host;
-            $account = $this->getData('account');
-            $account['email'] = $email;
-            $this->setData('account', $account);
-        }
-
-        return $email;
+        return $this->getData('account/email');
     }
 
     /**
