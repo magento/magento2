@@ -183,18 +183,4 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
         <see selector="{{element}}" userInput="{{expectedText}}" stepKey="AssertText"/>
     </actionGroup>
-
-    <!-- actionGroup to edit the short and long description of a product -->
-    <!-- Assumes you are already on the product edit page -->
-    <actionGroup name="EditProductDescription">
-        <arguments>
-            <argument name="description" defaultValue="sampleShortDescription"/>
-        </arguments>
-        <click stepKey="clickContentDropdown" selector="{{AdminProductContentSection.sectionHeader}}"/>
-        <waitForPageLoad stepKey="dropdownWait"/>
-        <fillField stepKey="fillShortDescription" selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{description}}"/>
-        <scrollToTopOfPage stepKey="scrollToTop"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
-    </actionGroup>
 </actionGroups>
