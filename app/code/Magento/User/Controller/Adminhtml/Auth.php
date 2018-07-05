@@ -7,6 +7,7 @@
 namespace Magento\User\Controller\Adminhtml;
 
 use Magento\Framework\Encryption\Helper\Security;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * \Magento\User Auth controller
@@ -19,19 +20,28 @@ abstract class Auth extends \Magento\Backend\App\AbstractAction
      * @var \Magento\User\Model\UserFactory
      */
     protected $_userFactory;
+    
+    /**
+     * @var \Magento\Backend\Helper\Data
+     */
+    protected $_backendHelper;
 
     /**
      * Construct
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\User\Model\UserFactory $userFactory
+     * @param \Magento\Backend\Helper\Data $backendHelper
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\User\Model\UserFactory $userFactory
+        \Magento\User\Model\UserFactory $userFactory,
+        \Magento\Backend\Helper\Data $backendHelper = null
     ) {
         parent::__construct($context);
         $this->_userFactory = $userFactory;
+        $this->_backendHelper = $backendHelper ?:
+                ObjectManager::getInstance()->get(\Magento\Backend\Helper\Data::class);
     }
 
     /**
