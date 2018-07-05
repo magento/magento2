@@ -133,11 +133,11 @@
         <!--Testing deletion of products-->
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
         <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement stepKey="LookingForNameOfProduct" selector="{{BundleStorefrontSection.bundleProductName}}"/>
-        <seeElement stepKey="LookingForPageNotFoundMessage" selector="{{BundleStorefrontSection.pageNotFound}}"/>
+        <dontSeeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
+        <seeElement stepKey="LookingForPageNotFoundMessage" selector="{{StorefrontBundledSection.pageNotFound}}"/>
         <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="GoToProductPageAgain2"/>
         <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement2"/>
-        <dontSeeElement stepKey="LookingForNameOfProduct2" selector="{{BundleStorefrontSection.bundleProductName}}"/>
-        <seeElement stepKey="LookingForPageNotFoundMessage2" selector="{{BundleStorefrontSection.pageNotFound}}"/>
+        <dontSeeElement stepKey="LookingForNameOfProduct2" selector="{{StorefrontBundledSection.bundleProductName}}"/>
+        <seeElement stepKey="LookingForPageNotFoundMessage2" selector="{{StorefrontBundledSection.pageNotFound}}"/>
     </test>
 </tests>

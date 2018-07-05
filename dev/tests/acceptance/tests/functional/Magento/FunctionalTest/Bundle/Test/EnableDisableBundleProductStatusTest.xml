@@ -72,7 +72,7 @@
         <!--Go to page-->
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
         <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement stepKey="LookingForNameOfProduct" selector="{{BundleStorefrontSection.bundleProductName}}"/>
+        <seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
 
         <!--Testing disabled view-->
         <actionGroup ref="FindProductToEdit" stepKey="FindProductEditPage"/>
@@ -82,6 +82,6 @@
         <waitForPageLoad stepKey="PauseForSave"/>
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
         <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement stepKey="LookingForNameOfProductTwo" selector="{{BundleStorefrontSection.bundleProductName}}"/>
+        <dontSeeElement stepKey="LookingForNameOfProductTwo" selector="{{StorefrontBundledSection.bundleProductName}}"/>
     </test>
 </tests>
