@@ -37918,9 +37918,9 @@ adminUserList.add(vars.get("admin_user"));
           <stringProp name="HTTPSampler.embedded_url_re"/>
         </HTTPSamplerProxy>
         <hashTree>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert True" enabled="true">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Option Id" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="3569038">true</stringProp>
+              <stringProp name="89649215">^[a-z0-9_\"]+$</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -37992,9 +37992,9 @@ adminUserList.add(vars.get("admin_user"));
           <stringProp name="HTTPSampler.embedded_url_re"/>
         </HTTPSamplerProxy>
         <hashTree>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert True" enabled="true">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Option Id" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="3569038">true</stringProp>
+                <stringProp name="484395188">^[a-z0-9_\"]+$</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>

@@ -18,7 +18,6 @@
             <testCaseId value="MAGETWO-91436"/>
             <group value="product"/>
         </annotations>
-        <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Create new website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
@@ -46,7 +45,7 @@
             <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="AcceptNewStoreViewCreation"/>
             <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReolad"/>
             <see userInput="You saved the store view." stepKey="seeSaveMessage" />
-        </before>
+
         <after>
             <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
