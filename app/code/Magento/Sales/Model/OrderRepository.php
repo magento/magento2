@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\ResourceModel\Order as Resource;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
@@ -16,6 +17,7 @@ use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Repository class for @see OrderInterface
@@ -44,6 +46,11 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     private $shippingAssignmentBuilder;
 
     /**
+     * @var JoinProcessorInterface
+     */
+    private $joinProcessor;
+
+    /**
      * OrderInterface[]
      *
      * @var array
@@ -55,13 +62,17 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      *
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
+     * @param JoinProcessorInterface $joinProcessor
      */
     public function __construct(
         Metadata $metadata,
-        SearchResultFactory $searchResultFactory
+        SearchResultFactory $searchResultFactory,
+        JoinProcessorInterface $joinProcessor
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
+        $this->joinProcessor = $joinProcessor
+         ?: ObjectManager::getInstance()->get(JoinProcessorInterface::class);
     }
 
     /**
@@ -116,6 +127,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             );
         }
 
+        $this->joinProcessor->process($searchResult);
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setCurPage($searchCriteria->getCurrentPage());
         $searchResult->setPageSize($searchCriteria->getPageSize());
@@ -186,7 +198,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
 
     /**
      * Get the new OrderExtensionFactory for application code
-     * 
+     *
      * @return OrderExtensionFactory
      * @deprecated
      */

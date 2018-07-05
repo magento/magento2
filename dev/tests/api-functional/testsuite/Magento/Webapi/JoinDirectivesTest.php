@@ -123,6 +123,48 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
+     * Test get list of orders with extension attributes
+     *
+     * @magentoApiDataFixture Magneto/Sales/_files/order.php
+     */
+    public function testGetOrderList()
+    {
+        $filter = $this->filterBuilder
+                  ->setField('increment_id')
+                  ->setValue('100000001')
+                  ->setConditionType('eq')
+                  ->create();
+        $this->searchBuilder->addFilters([$filter]);
+        $searchData = $this->searchBuilder->create()->__toArray();
+
+        $requestData = ['searchCriteria' => $searchData];
+        $restResourcePath = '/V1/orders/';
+        $soapService = 'salesOrderRepositoryV1';
+        $expectedExtensionAttributes = $this->getExpectedExtensionAttributes();
+
+        $serviceInfo = [
+            'rest'  => [
+                'resourcePath'  => $restResourcePath . '?' . http_build_query($requestData),
+                'httpMethod'    => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap'  => [
+                'service'   => $soapService,
+                'operation' => $soapService . 'GetList',
+            ],
+        ];
+        $searchResult = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertArrayHasKey('items', $searchResult);
+        $itemData = array_pop($searchResult['items']);
+        $this->assertArrayHasKey('extension_attributes', $itemData);
+        $this->assertArrayHasKey('order_api_test_attribute', $itemData['extension_attributes']);
+        $testAttribute = $itemData['extension_attributes']['order_api_test_attribute'];
+        $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute['first_name']);
+        $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute['last_name']);
+        $this->assertEquals($expectedExtensionAttributes['email'], $testAttribute['email']);
+    }
+
+    /**
      * Retrieve the admin user's information.
      *
      * @return array
