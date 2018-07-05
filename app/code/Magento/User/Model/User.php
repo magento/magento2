@@ -6,14 +6,14 @@
 
 namespace Magento\User\Model;
 
-use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Store\Model\Store;
 use Magento\User\Api\Data\UserInterface;
+use Magento\User\Model\Spi\NotificationException;
+use Magento\User\Model\Spi\NotificatorInterface;
 
 /**
  * Admin user model
@@ -37,12 +37,21 @@ use Magento\User\Api\Data\UserInterface;
 class User extends AbstractModel implements StorageInterface, UserInterface
 {
     /**
-     * Configuration paths for email templates and identities
+     * @deprecated
+     * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'admin/emails/forgot_email_template';
 
+    /**
+     * @deprecated
+     * @see \Magento\User\Model\Spi\NotificatorInterface
+     */
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
+    /**
+     * @deprecated
+     * @see \Magento\User\Model\Spi\NotificatorInterface
+     */
     const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
 
     /** @deprecated */
@@ -105,12 +114,12 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_encryptor;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder
+     * @deprecated
      */
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @deprecated
      */
     protected $_storeManager;
 
@@ -123,6 +132,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @var Json
      */
     private $serializer;
+
+    /**
+     * @var NotificatorInterface
+     */
+    private $notificator;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -139,6 +153,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param Json $serializer
+     * @param NotificatorInterface|null $notificator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -155,7 +170,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+        ?NotificatorInterface $notificator = null
     ) {
         $this->_encryptor = $encryptor;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -166,7 +182,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->validationRules = $validationRules;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer
+            ?: ObjectManager::getInstance()->get(Json::class);
+        $this->notificator = $notificator
+            ?: ObjectManager::getInstance()->get(NotificatorInterface::class);
     }
 
     /**
@@ -399,22 +418,16 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * Send email with reset password confirmation link
+     * Send email with reset password confirmation link.
+     * @deprecated
+     * @see NotificatorInterface::sendForgotPassword()
      *
      * @return $this
      */
     public function sendPasswordResetConfirmationEmail()
     {
-        $templateId = $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE);
-        $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
-            ->setTemplateModel(\Magento\Email\Model\BackendTemplate::class)
-            ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
-            ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
-            ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
-            ->addTo($this->getEmail(), $this->getName())
-            ->getTransport();
+        $this->notificator->sendForgotPassword($this);
 
-        $transport->sendMessage();
         return $this;
     }
 
@@ -431,19 +444,19 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * Check changes and send notification emails
+     * Check changes and send notification emails.
      *
+     * @throws NotificationException
      * @return $this
      * @since 100.1.0
      */
     public function sendNotificationEmailsIfRequired()
     {
-        $changes = $this->createChangesDescriptionString();
-
-        if ($changes) {
-            if ($this->getEmail() != $this->getOrigData('email') && $this->getOrigData('email')) {
-                $this->sendUserNotificationEmail($changes, $this->getOrigData('email'));
-            }
+        if ($this->isObjectNew()) {
+            //Notification about a new user.
+            $this->notificator->sendCreated($this);
+        } elseif ($changes = $this->createChangesDescriptionString()) {
+            //User changed.
             $this->sendUserNotificationEmail($changes);
         }
 
@@ -478,35 +491,21 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * Send user notification email
+     * Send user notification email.
      *
      * @param string $changes
      * @param string $email
+     * @throws NotificationException
      * @return $this
      * @since 100.1.0
+     * @deprecated
+     * @see NotificatorInterface::sendUpdated()
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function sendUserNotificationEmail($changes, $email = null)
     {
-        if ($email === null) {
-            $email = $this->getEmail();
-        }
+        $this->notificator->sendUpdated($this, explode(', ', $changes));
 
-        $transport = $this->_transportBuilder
-            ->setTemplateIdentifier($this->_config->getValue(self::XML_PATH_USER_NOTIFICATION_TEMPLATE))
-            ->setTemplateModel(\Magento\Email\Model\BackendTemplate::class)
-            ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
-            ->setTemplateVars(
-                [
-                    'user' => $this,
-                    'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID),
-                    'changes' => $changes
-                ]
-            )
-            ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
-            ->addTo($email, $this->getName())
-            ->getTransport();
-
-        $transport->sendMessage();
         return $this;
     }
 

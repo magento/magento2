@@ -6,7 +6,9 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Security\Model\SecurityManager;
+use Magento\User\Model\Spi\NotificatorInterface;
 
 class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
 {
@@ -16,17 +18,26 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
     protected $securityManager;
 
     /**
+     * @var NotificatorInterface
+     */
+    private $notificator;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\User\Model\UserFactory $userFactory
      * @param \Magento\Security\Model\SecurityManager $securityManager
+     * @param NotificatorInterface|null $notificator
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\User\Model\UserFactory $userFactory,
-        \Magento\Security\Model\SecurityManager $securityManager
+        \Magento\Security\Model\SecurityManager $securityManager,
+        ?NotificatorInterface $notificator = null
     ) {
         parent::__construct($context, $userFactory);
         $this->securityManager = $securityManager;
+        $this->notificator = $notificator
+            ?? ObjectManager::getInstance()->get(NotificatorInterface::class);
     }
 
     /**
@@ -70,7 +81,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                                 )->generateResetPasswordLinkToken();
                                 $user->changeResetPasswordLinkToken($newPassResetToken);
                                 $user->save();
-                                $user->sendPasswordResetConfirmationEmail();
+                                $this->notificator->sendForgotPassword($user);
                             }
                             break;
                         }

@@ -9,6 +9,7 @@ namespace Magento\User\Controller\Adminhtml\User;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
+use Magento\User\Model\Spi\NotificationException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -87,17 +88,19 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             $currentUser->performIdentityCheck($data[$currentUserPasswordField]);
             $model->save();
 
-            $model->sendNotificationEmailsIfRequired();
-
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
+
+            $model->sendNotificationEmailsIfRequired();
         } catch (UserLockedException $e) {
             $this->_auth->logout();
             $this->getSecurityCookie()->setLogoutReasonCookie(
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
             $this->_redirect('adminhtml/*/');
+        } catch (NotificationException $exception) {
+            $this->messageManager->addErrorMessage($exception->getMessage());
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
             $this->messageManager->addError(
                 __('The password entered for the current user is invalid. Verify the password and try again.')
