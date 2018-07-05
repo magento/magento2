@@ -16,7 +16,7 @@
             <description value="Guest customer should be able to search configurable product by attributes of child products"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-249"/>
-            <group value="Levi"/>
+            <group value="ConfigurableProduct"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
@@ -114,6 +114,20 @@
             </createData>
 
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+
+            <!-- Go to the product page for the first product -->
+            <amOnPage stepKey="goToProductGrid" url="{{ProductCatalogPage.url}}"/>
+            <waitForPageLoad stepKey="waitForProductGridLoad"/>
+            <actionGroup stepKey="searchForSimpleProduct" ref="filterProductGridBySku2">
+                <argument name="sku" value="$$createConfigChildProduct1.sku$$"/>
+            </actionGroup>
+            <actionGroup stepKey="openProductEditPage" ref="openProducForEditByClickingRowXColumnYInProductGrid"/>
+
+            <!-- Edit the attribute for the first simple product -->
+            <selectOption stepKey="editSelectAttribute" selector="{{ModifyAttributes.nthExistingAttribute($$createConfigProductAttributeSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$"/>
+            <scrollToTopOfPage stepKey="scrollToTop"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+            <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
         </before>
 
         <after>
@@ -126,20 +140,6 @@
             <deleteData createDataKey="createConfigProductAttributeSelect" stepKey="deleteConfigProductAttributeSelect"/>
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
         </after>
-
-        <!-- Add a description to the first simple product -->
-        <amOnPage stepKey="goToProductGrid" url="{{ProductCatalogPage.url}}"/>
-        <waitForPageLoad stepKey="waitForProductGridLoad"/>
-        <actionGroup stepKey="searchForSimpleProduct" ref="filterProductGridBySku2">
-            <argument name="sku" value="$$createConfigChildProduct1.sku$$"/>
-        </actionGroup>
-        <actionGroup stepKey="openProductEditPage" ref="openProducForEditByClickingRowXColumnYInProductGrid"/>
-
-        <!-- Edit the attribute for the first simple product -->
-        <selectOption stepKey="editSelectAttribute" selector="{{ModifyAttributes.nthExistingAttribute($$createConfigProductAttributeSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$"/>
-        <scrollToTopOfPage stepKey="scrollToTop"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
 
         <!-- Quick search the storefront for the first attribute option -->
         <amOnPage stepKey="goToStoreFront" url="{{StorefrontHomePage.url}}"/>
