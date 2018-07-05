@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventoryShipping\Model\InventoryRequestFromInvoiceFactory;
-use Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface;
+use Magento\InventorySourceDeduction\Model\SourceDeductionServiceInterface;
 use Magento\InventoryShipping\Model\SourceDeductionRequestsFromSourceSelectionFactory;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;

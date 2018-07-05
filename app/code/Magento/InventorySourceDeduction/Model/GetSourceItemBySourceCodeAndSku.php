@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model;
+namespace Magento\InventorySourceDeduction\Model;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;

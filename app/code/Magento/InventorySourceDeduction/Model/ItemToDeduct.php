@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model\SourceDeduction\Request;
+namespace Magento\InventorySourceDeduction\Model;
 
 /**
  * @inheritdoc

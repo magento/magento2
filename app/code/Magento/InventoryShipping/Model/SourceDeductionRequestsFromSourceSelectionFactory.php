@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Model;
 
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
-use Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterface;
-use Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterfaceFactory;
-use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface;
-use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterfaceFactory;
+use Magento\InventorySourceDeduction\Model\ItemToDeductInterface;
+use Magento\InventorySourceDeduction\Model\ItemToDeductInterfaceFactory;
+use Magento\InventorySourceDeduction\Model\SourceDeductionRequestInterface;
+use Magento\InventorySourceDeduction\Model\SourceDeductionRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;

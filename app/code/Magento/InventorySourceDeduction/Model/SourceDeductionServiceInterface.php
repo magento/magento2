@@ -5,9 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model\SourceDeduction;
-
-use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface;
+namespace Magento\InventorySourceDeduction\Model;
 
 /**
  * Process source deduction
