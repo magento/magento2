@@ -109,9 +109,9 @@ class FileFactory
      * Returns file content for writing.
      *
      * @param string|array $content
-     * @return string
+     * @return string|array
      */
-    private function getFileContent($content): string
+    private function getFileContent($content)
     {
         if (isset($content['type']) && $content['type'] === 'string') {
             return $content['value'];
