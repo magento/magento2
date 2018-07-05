@@ -40,16 +40,6 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject  */
     protected $resourceCollectionMock;
 
-    /**
-     * @var \Magento\Directory\Model\AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $allowedCountriesReaderMock;
-
-    /**
-     * @var \Magento\Customer\Model\Config\Share|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $shareConfigMock;
-
     /** @var \Magento\Customer\Model\Address\AbstractAddress  */
     protected $model;
 
@@ -105,9 +95,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
                 'regionFactory' => $this->regionFactoryMock,
                 'countryFactory' => $this->countryFactoryMock,
                 'resource' => $this->resourceMock,
-                'resourceCollection' => $this->resourceCollectionMock,
-                'allowedCountriesReader' => $this->allowedCountriesReaderMock,
-                'shareConfig' => $this->shareConfigMock,
+                'resourceCollection' => $this->resourceCollectionMock
             ]
         );
     }
@@ -325,10 +313,15 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         $this->directoryDataMock->expects($this->any())
             ->method('isRegionRequired');
 
-        $this->shareConfigMock->method('isGlobalScope')->willReturn(false);
-        $this->allowedCountriesReaderMock
-            ->method('getAllowedCountries')
-            ->with(ScopeInterface::SCOPE_WEBSITE, null)
+        $countryCollectionMock = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Country\Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllIds'])
+            ->getMock();
+
+        $this->directoryDataMock->method('getCountryCollection')
+            ->willReturn($countryCollectionMock);
+
+        $countryCollectionMock->method('getAllIds')
             ->willReturn([$countryId]);
 
         $regionModelMock = $this->getMockBuilder(\Magento\Directory\Model\Region::class)
