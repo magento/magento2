@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\App\Filesystem\Images;
+namespace Magento\Framework\App\Filesystem;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
