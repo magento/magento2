@@ -7,6 +7,8 @@ namespace Magento\Wishlist\CustomerData;
 
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Customer\CustomerData\SectionSourceInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image;
 
 /**
  * Wishlist section
@@ -39,21 +41,29 @@ class Wishlist implements SectionSourceInterface
     protected $block;
 
     /**
+     * @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image
+     */
+    private $image;
+
+    /**
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
      * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
      * @param \Magento\Framework\App\ViewInterface $view
+     * @param Image|null $image
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
         \Magento\Catalog\Helper\ImageFactory $imageHelperFactory,
-        \Magento\Framework\App\ViewInterface $view
+        \Magento\Framework\App\ViewInterface $view,
+        Image $image = null
     ) {
         $this->wishlistHelper = $wishlistHelper;
         $this->imageHelperFactory = $imageHelperFactory;
         $this->block = $block;
         $this->view = $view;
+        $this->image = $image ?? ObjectManager::getInstance()->get(Image::class);
     }
 
     /**
@@ -122,7 +132,7 @@ class Wishlist implements SectionSourceInterface
     {
         $product = $wishlistItem->getProduct();
         return [
-            'image' => $this->getImageData($product),
+            'image' => $this->getImageData($this->image->getProductForThumbnail($wishlistItem)),
             'product_sku' => $product->getSku(),
             'product_id' => $product->getId(),
             'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
@@ -149,14 +159,6 @@ class Wishlist implements SectionSourceInterface
      */
     protected function getImageData($product)
     {
-        /*Set variant product if it is configurable product.
-        It will show variant product image in sidebar instead of configurable product image.*/
-        $simpleOption = $product->getCustomOption('simple_product');
-        if ($simpleOption !== null) {
-            $optionProduct = $simpleOption->getProduct();
-            $product = $optionProduct;
-        }
-
         /** @var \Magento\Catalog\Helper\Image $helper */
         $helper = $this->imageHelperFactory->create()
             ->init($product, 'wishlist_sidebar_block');
