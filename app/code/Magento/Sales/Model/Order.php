@@ -1783,7 +1783,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Check order invoices availability
      *
-     * @return bool
+     * @return int
      */
     public function hasInvoices()
     {
@@ -1793,7 +1793,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Check order shipments availability
      *
-     * @return bool
+     * @return int
      */
     public function hasShipments()
     {
@@ -1803,7 +1803,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Check order creditmemos availability
      *
-     * @return bool
+     * @return int
      */
     public function hasCreditmemos()
     {
