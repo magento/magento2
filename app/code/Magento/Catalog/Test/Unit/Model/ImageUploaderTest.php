@@ -114,6 +114,12 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     public function testSaveFileToTmpDir()
     {
         $fileId = 'file.jpg';
+        $allowedMimeTypes = [
+            'image/jpg',
+            'image/jpeg',
+            'image/gif',
+            'image/png',
+        ];
         /** @var \Magento\MediaStorage\Model\File\Uploader|\PHPUnit_Framework_MockObject_MockObject $uploader */
         $uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
         $this->uploaderFactoryMock->expects($this->once())->method('create')->willReturn($uploader);
@@ -123,6 +129,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->basePath);
         $uploader->expects($this->once())->method('save')->with($this->basePath)
             ->willReturn(['tmp_name' => $this->baseTmpPath, 'file' => $fileId, 'path' => $this->basePath]);
+        $uploader->expects($this->atLeastOnce())->method('checkMimeType')->with($allowedMimeTypes)->willReturn(true);
         $storeMock = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
             ['getBaseUrl']

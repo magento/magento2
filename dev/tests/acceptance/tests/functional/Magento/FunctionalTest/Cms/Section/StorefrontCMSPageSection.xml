@@ -11,5 +11,6 @@
     <section name="StorefrontCMSPageSection">
         <element name="mediaDescription" type="text" selector=".column.main>p>img"/>
         <element name="imageSource" type="text" selector="//img[contains(@src,'{{var1}}')]" parameterized="true"/>
+        <element name="mainTitle" type="text" selector="#maincontent .page-title"/>
     </section>
 </sections>
