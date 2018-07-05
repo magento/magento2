@@ -12,5 +12,6 @@
         <element name="group" type="select" selector="#group_id"/>
         <element name="email" type="input" selector="#email"/>
         <element name="requiredGroup" type="text" selector=".admin__field.required[data-ui-id='billing-address-fieldset-element-form-field-group-id']"/>
+        <element name="requiredEmail" type="text" selector=".admin__field.required[data-ui-id='billing-address-fieldset-element-form-field-email']"/>
     </section>
 </sections>
