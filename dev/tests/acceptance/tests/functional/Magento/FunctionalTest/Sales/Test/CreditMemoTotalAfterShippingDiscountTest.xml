@@ -41,7 +41,7 @@
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="General" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount" stepKey="selectActionType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="10" stepKey="fillDiscountAmount"/>
@@ -102,11 +102,11 @@
         <grabTextFrom selector="{{AdminInvoiceTotalSection.total('Shipping')}}" stepKey="grabShippingCost"/>
         <assertEquals expected='$5.00' expectedType="string" actual="($grabShippingCost)" message="ExpectedShipping" stepKey="assertShippingAndHandling"/>
 
-        <see selector="{{AdminInvoiceTotalSection.total('Discount')}}" userInput="-$10.00" stepKey="seeShippingAndHandling2"/>
+        <see selector="{{AdminInvoiceTotalSection.total('Discount')}}" userInput="-$15.00" stepKey="seeShippingAndHandling2"/>
         <grabTextFrom selector="{{AdminInvoiceTotalSection.total('Discount')}}" stepKey="grabInvoiceDiscount"/>
-        <assertEquals expected='-$10.00' expectedType="string" actual="($grabInvoiceDiscount)" message="ExpectedDiscount" stepKey="assertDiscountValue"/>
+        <assertEquals expected='-$15.00' expectedType="string" actual="($grabInvoiceDiscount)" message="ExpectedDiscount" stepKey="assertDiscountValue"/>
 
-        <see selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$118.00" stepKey="seeCorrectGrandTotal"/>
+        <see selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$113.00" stepKey="seeCorrectGrandTotal"/>
         <grabTextFrom selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="grabInvoiceGrandTotal" after="seeCorrectGrandTotal"/>
 
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
@@ -121,7 +121,7 @@
         <!-- Verify Refund Totals -->
         <see selector="{{AdminCreditMemoTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeRefundSubTotal"/>
         <grabTextFrom selector="{{AdminCreditMemoTotalSection.total('Discount')}}" stepKey="grabRefundDiscountValue"/>
-        <assertEquals expected='-$10.00' expectedType="string" actual="($grabRefundDiscountValue)" message="notExpectedDiscountOnRefundPage" stepKey="assertDiscountValue1"/>
+        <assertEquals expected='-$15.00' expectedType="string" actual="($grabRefundDiscountValue)" message="notExpectedDiscountOnRefundPage" stepKey="assertDiscountValue1"/>
         <grabTextFrom selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="grabRefundGrandTotal"/>
         <assertEquals expected="($grabInvoiceGrandTotal)" actual="($grabRefundGrandTotal)" message="RefundGrandTotalMatchesWithInvoiceGrandTotal" stepKey="compareRefundGrandTotalAndInvoiceGrandTotal"/>
         </test>
