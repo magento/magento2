@@ -134,8 +134,8 @@ class GeneratorTest extends TestCase
             'Error message 1',
             'Error message 2',
         ];
-        $mainErrorMessage = 'Class ' . $resultClassName . ' generation error: The requested class did not generate properly, '
-            . 'because the \'generated\' directory permission is read-only. '
+        $mainErrorMessage = 'Class ' . $resultClassName . ' generation error: The requested class did not generate '
+            . 'properly, because the \'generated\' directory permission is read-only. '
             . 'If --- after running the \'bin/magento setup:di:compile\' CLI command when the \'generated\' '
             . 'directory permission is set to write --- the requested class did not generate properly, then '
             . 'you must add the generated class object to the signature of the related construct method, only.';
