@@ -121,7 +121,7 @@ class MetadataProvider
 
         array_walk($row, function (&$header) {
             if (mb_strpos($header, 'ID') === 0) {
-                $header = '"'. $header .'"';
+                $header = '"' . $header . '"';
             }
         });
 
