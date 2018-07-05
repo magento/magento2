@@ -39,6 +39,7 @@
         <waitForPageLoad stepKey="waitForSystemStorePage"/>
         <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="createStoreViewButton"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <waitForElementVisible selector="//legend[contains(., 'Store View Information')]" stepKey="waitFornewStorePageToOpen" after="clickCreateStoreViewButton"/>
         <selectOption userInput="Second Store" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
         <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
         <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
