@@ -5,10 +5,7 @@
  */
 namespace Magento\Framework\Code\Generator;
 
-use Magento\Framework\Exception\FileSystemException;
 use Zend\Code\Generator\ValueGenerator;
-use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\ObjectManagerInterface;
 
 abstract class EntityAbstract
 {
@@ -44,7 +41,7 @@ abstract class EntityAbstract
     /**
      * Class generator object
      *
-     * @var CodeGeneratorInterface
+     * @var \Magento\Framework\Code\Generator\CodeGeneratorInterface
      */
     protected $_classGenerator;
 
@@ -57,20 +54,20 @@ abstract class EntityAbstract
      * @param null|string $sourceClassName
      * @param null|string $resultClassName
      * @param Io $ioObject
-     * @param CodeGeneratorInterface $classGenerator
+     * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
      * @param DefinedClasses $definedClasses
      */
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
-        CodeGeneratorInterface $classGenerator = null,
+        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
         DefinedClasses $definedClasses = null
     ) {
         if ($ioObject) {
             $this->_ioObject = $ioObject;
         } else {
-            $this->_ioObject = new Io(new File());
+            $this->_ioObject = new Io(new \Magento\Framework\Filesystem\Driver\File());
         }
         if ($classGenerator) {
             $this->_classGenerator = $classGenerator;
@@ -109,17 +106,6 @@ abstract class EntityAbstract
                     $this->_addError('Can\'t generate source code.');
                 }
             }
-        } catch (FileSystemException $e) {
-            $message = 'Error: an object of a generated class may be a dependency for another object, but this '
-                . 'dependency has not been defined or set correctly in the signature of the related construct method. '
-                . 'Due to the current error, executing the CLI commands `bin/magento setup:di:compile` or `bin/magento '
-                . 'deploy:mode:set production` does not create the required generated classes. '
-                . 'Magento cannot write a class file to the "generated" directory that is read-only. Before using the '
-                . 'read-only file system, the classes to be generated must be created beforehand in the "generated" '
-                . 'directory. For details, see the "File systems access permissions" topic '
-                . 'at http://devdocs.magento.com.';
-            $this->_addError($message);
-            $this->_addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_addError($e->getMessage());
         }
@@ -203,7 +189,7 @@ abstract class EntityAbstract
             'visibility' => 'protected',
             'docblock' => [
                 'shortDescription' => 'Object Manager instance',
-                'tags' => [['name' => 'var', 'description' => '\\' . ObjectManagerInterface::class]],
+                'tags' => [['name' => 'var', 'description' => '\\' . \Magento\Framework\ObjectManagerInterface::class]],
             ],
         ];
 
@@ -264,9 +250,9 @@ abstract class EntityAbstract
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
         } elseif (/**
-         * If makeResultFileDirectory only fails because the file is already created,
-         * a competing process has generated the file, no exception should be thrown.
-         */
+             * If makeResultFileDirectory only fails because the file is already created,
+             * a competing process has generated the file, no exception should be thrown.
+             */
             !$this->_ioObject->makeResultFileDirectory($resultClassName)
             && !$this->_ioObject->fileExists($resultDir)
         ) {
@@ -323,8 +309,9 @@ abstract class EntityAbstract
      *
      * @return null|string
      */
-    private function extractParameterType(\ReflectionParameter $parameter): ?string
-    {
+    private function extractParameterType(
+        \ReflectionParameter $parameter
+    ): ?string {
         /** @var string|null $typeName */
         $typeName = null;
         if ($parameter->hasType()) {
@@ -341,7 +328,7 @@ abstract class EntityAbstract
             }
 
             if ($parameter->allowsNull()) {
-                $typeName = '?' . $typeName;
+                $typeName = '?' .$typeName;
             }
         }
 
@@ -353,8 +340,9 @@ abstract class EntityAbstract
      *
      * @return null|ValueGenerator
      */
-    private function extractParameterDefaultValue(\ReflectionParameter $parameter): ?ValueGenerator
-    {
+    private function extractParameterDefaultValue(
+        \ReflectionParameter $parameter
+    ): ?ValueGenerator {
         /** @var ValueGenerator|null $value */
         $value = null;
         if ($parameter->isOptional() && $parameter->isDefaultValueAvailable()) {

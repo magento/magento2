@@ -127,15 +127,22 @@ class GeneratorTest extends TestCase
      */
     public function testGenerateClassWithErrors()
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage("Some error message 0\nSome error message 1\nSome error message 2");
-        $errorMessages = [
-            'Some error message 0',
-            'Some error message 1',
-            'Some error message 2',
-        ];
         $expectedEntities = array_values($this->expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
+        $errorMessages = [
+            'Error message 0',
+            'Error message 1',
+            'Error message 2',
+        ];
+        $mainErrorMessage = 'Class ' . $resultClassName . ' generation error: The requested class did not generate properly, '
+            . 'because the \'generated\' directory permission is read-only. '
+            . 'If --- after running the \'bin/magento setup:di:compile\' CLI command when the \'generated\' '
+            . 'directory permission is set to write --- the requested class did not generate properly, then '
+            . 'you must add the generated class object to the signature of the related construct method, only.';
+        $FinalErrorMessage = implode(PHP_EOL, $errorMessages) . "\n" . $mainErrorMessage;
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage($FinalErrorMessage);
+
         /** @var ObjectManagerInterface|Mock $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         /** @var EntityAbstract|Mock $entityGeneratorMock */
@@ -163,6 +170,9 @@ class GeneratorTest extends TestCase
         $entityGeneratorMock->expects($this->once())
             ->method('getErrors')
             ->willReturn($errorMessages);
+        $loggerMock->expects($this->once())
+            ->method('critical')
+            ->with($FinalErrorMessage);
         $this->model->setObjectManager($objectManagerMock);
         $this->model->generateClass($resultClassName);
     }
