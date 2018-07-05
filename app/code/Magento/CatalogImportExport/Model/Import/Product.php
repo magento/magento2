@@ -910,6 +910,19 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Return empty attribute value constant
+     *
+     * @return string
+     */
+    public function getEmptyAttributeValueConstant()
+    {
+        if (!empty($this->_parameters[Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT])) {
+            return $this->_parameters[Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT];
+        }
+        return Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT;
+    }
+
+    /**
      * Retrieve instance of product custom options import entity
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Option

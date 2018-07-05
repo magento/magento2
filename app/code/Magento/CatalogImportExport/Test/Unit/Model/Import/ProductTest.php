@@ -603,6 +603,28 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         );
     }
 
+    public function testGetEmptyAttributeValueConstantDefault()
+    {
+        $this->setPropertyValue($this->importProduct, '_parameters', null);
+        $this->assertEquals(
+            Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+            $this->importProduct->getEmptyAttributeValueConstant()
+        );
+    }
+
+    public function testGetEmptyAttributeValueConstantFromParameters()
+    {
+        $expectedSeparator = '__EMPTY__VALUE__TEST__';
+        $this->setPropertyValue($this->importProduct, '_parameters', [
+            \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT => $expectedSeparator,
+        ]);
+
+        $this->assertEquals(
+            $expectedSeparator,
+            $this->importProduct->getEmptyAttributeValueConstant()
+        );
+    }
+
     public function testDeleteProductsForReplacement()
     {
         $importProduct = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product::class)
