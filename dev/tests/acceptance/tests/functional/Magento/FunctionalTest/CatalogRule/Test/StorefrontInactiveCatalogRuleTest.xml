@@ -27,6 +27,7 @@
             <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createNewPriceRule"/>
             <selectOption selector="{{AdminNewCatalogPriceRule.status}}" userInput="Inactive" stepKey="setInactive"/>
             <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
+            <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="seeSuccess"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
