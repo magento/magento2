@@ -9,9 +9,9 @@ use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\ObjectManagerInterface;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Filesystem\Driver\File;
+use Psr\Log\LoggerInterface;
 
 class Generator
 {
@@ -42,18 +42,28 @@ class Generator
     protected $objectManager;
 
     /**
+     * Logger instance
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Generator\Io $ioObject
      * @param array $generatedEntities
      * @param DefinedClasses $definedClasses
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         Io $ioObject = null,
         array $generatedEntities = [],
-        DefinedClasses $definedClasses = null
+        DefinedClasses $definedClasses = null,
+        LoggerInterface $logger = null
     ) {
         $this->_ioObject = $ioObject ?: new Io(new File());
         $this->definedClasses = $definedClasses ?: new DefinedClasses();
         $this->_generatedEntities = $generatedEntities;
+        $this->logger = $logger;
     }
 
     /**
@@ -114,7 +124,6 @@ class Generator
             $this->tryToLoadSourceClass($className, $generator);
             if (!($file = $generator->generate())) {
                 /** @var $logger LoggerInterface */
-                $logger = $this->getObjectManager()->get(LoggerInterface::class);
                 $errors = $generator->getErrors();
                 $errors[] = 'Class ' . $className . ' generation error: The requested class did not generate properly, '
                     . 'because the \'generated\' directory permission is read-only. '
@@ -122,7 +131,7 @@ class Generator
                     . 'directory permission is set to write --- the requested class did not generate properly, then '
                     . 'you must add the generated class object to the signature of the related construct method, only.';
                 $message = implode(PHP_EOL, $errors);
-                $logger->critical($message);
+                $this->getLogger()->critical($message);
                 throw new \RuntimeException($message);
             }
             if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
@@ -130,6 +139,19 @@ class Generator
             }
             return self::GENERATION_SUCCESS;
         }
+    }
+
+    /**
+     * Retrieve logger
+     *
+     * @return LoggerInterface
+     */
+    private function getLogger()
+    {
+        if (!$this->logger) {
+            $this->logger = $this->getObjectManager()->get(LoggerInterface::class);
+        }
+        return $this->logger;
     }
 
     /**

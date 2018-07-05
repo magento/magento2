@@ -30,7 +30,7 @@ class GeneratorTest extends TestCase
      *
      * @var array
      */
-    protected $expectedEntities = [
+    private $expectedEntities = [
         'factory' => Factory::ENTITY_TYPE,
         'proxy' => Proxy::ENTITY_TYPE,
         'interceptor' => Interceptor::ENTITY_TYPE,
@@ -41,17 +41,22 @@ class GeneratorTest extends TestCase
      *
      * @var Generator
      */
-    protected $model;
+    private $model;
 
     /**
      * @var Io|Mock
      */
-    protected $ioObjectMock;
+    private $ioObjectMock;
 
     /**
      * @var DefinedClasses|Mock
      */
-    protected $definedClassesMock;
+    private $definedClassesMock;
+
+    /**
+     * @var LoggerInterface|Mock
+     */
+    private $loggerMock;
 
     protected function setUp()
     {
@@ -59,20 +64,23 @@ class GeneratorTest extends TestCase
         $this->ioObjectMock = $this->getMockBuilder(Io::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = $this->buildModel(
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+
+        $this->model = new Generator(
             $this->ioObjectMock,
             [
                 'factory' => Factory::class,
                 'proxy' => Proxy::class,
-                'interceptor' => Interceptor::class
+                'interceptor' => Interceptor::class,
             ],
-            $this->definedClassesMock
+            $this->definedClassesMock,
+            $this->loggerMock
         );
     }
 
     public function testGetGeneratedEntities()
     {
-        $this->model = $this->buildModel(
+        $this->model = new Generator(
             $this->ioObjectMock,
             ['factory', 'proxy', 'interceptor'],
             $this->definedClassesMock
@@ -149,7 +157,6 @@ class GeneratorTest extends TestCase
         $entityGeneratorMock = $this->getMockBuilder(EntityAbstract::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $loggerMock = $this->createMock(LoggerInterface::class);
 
         $objectManagerMock->expects($this->once())
             ->method('create')
@@ -164,13 +171,10 @@ class GeneratorTest extends TestCase
         $entityGeneratorMock->expects($this->once())
             ->method('generate')
             ->willReturn(false);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->willReturn($loggerMock);
         $entityGeneratorMock->expects($this->once())
             ->method('getErrors')
             ->willReturn($errorMessages);
-        $loggerMock->expects($this->once())
+        $this->loggerMock->expects($this->once())
             ->method('critical')
             ->with($FinalErrorMessage);
         $this->model->setObjectManager($objectManagerMock);
@@ -219,18 +223,5 @@ class GeneratorTest extends TestCase
             ];
         }
         return $data;
-    }
-
-    /**
-     * Build SUT object
-     *
-     * @param Io $ioObject
-     * @param array $generatedEntities
-     * @param DefinedClasses $definedClasses
-     * @return Generator
-     */
-    private function buildModel(Io $ioObject, array $generatedEntities, DefinedClasses $definedClasses)
-    {
-        return new Generator($ioObject, $generatedEntities, $definedClasses);
     }
 }
