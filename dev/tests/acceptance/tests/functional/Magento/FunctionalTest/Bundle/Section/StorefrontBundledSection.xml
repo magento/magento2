@@ -19,5 +19,7 @@
         <element name="customizableBundleItemOption" type="text" selector="//div[@class='field choice'][1]//input[@type='checkbox']"/>
         <element name="customizableBundleItemOption2" type="text" selector="//div[@class='field choice'][2]//input[@type='checkbox']"/>
         <element name="nthOptionDiv" type="block" selector="#product-options-wrapper div.field.option:nth-of-type({{var}})" parameterized="true"/>
+        <element name="nthItemOptionsTitle" type="text" selector="dl.item-options dt:nth-of-type({{var}})" parameterized="true"/>
+        <element name="nthItemOptionsValue" type="text" selector="dl.item-options dd:nth-of-type({{var}})" parameterized="true"/>
     </section>
 </sections>

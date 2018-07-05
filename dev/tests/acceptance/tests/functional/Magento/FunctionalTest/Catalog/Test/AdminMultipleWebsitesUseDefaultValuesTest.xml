@@ -10,6 +10,7 @@
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminMultipleWebsitesUseDefaultValuesTest">
         <annotations>
+            <features value="Catalog"/>
             <title value="Use Default Value checkboxes should be checked for new website scope"/>
             <description value="Use Default Value checkboxes for product attribute should be checked for new website scope"/>
             <severity value="MAJOR"/>
@@ -18,7 +19,7 @@
         </annotations>
         <after>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
-                    <argument name="websiteName" value="Second Website"/>
+                <argument name="websiteName" value="Second Website"/>
             </actionGroup>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
@@ -35,8 +36,10 @@
 
         <!--Create Store view -->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForSystemStorePage"/>
         <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="createStoreViewButton"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <waitForElementVisible selector="//legend[contains(., 'Store View Information')]" stepKey="waitFornewStorePageToOpen" after="clickCreateStoreViewButton"/>
         <selectOption userInput="Second Store" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
         <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
         <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
@@ -49,6 +52,7 @@
 
         <!--Create a Simple Product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
+        <waitForPageLoad stepKey="waitForProductGrid"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
@@ -67,7 +71,6 @@
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView('Second Store View')}}" stepKey="chooseStoreView"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
-        <!--<waitForPageLoad stepKey="waitForStoreViewSwitched"/>-->
         <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
 

@@ -25,6 +25,7 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+        <waitForPageLoad stepKey="waitForLoad1"/>
         <click selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}" stepKey="clickCreateCustomer"/>
         <waitForElement selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="wait1"/>
         <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
