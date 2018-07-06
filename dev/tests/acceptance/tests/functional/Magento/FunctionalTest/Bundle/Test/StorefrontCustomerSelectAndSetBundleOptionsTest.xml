@@ -16,7 +16,7 @@
             <description value="Customer should be able to select customisable bundle product options and set quantity for them"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-231"/>
-            <group value="Bundle"/>
+            <group value="banana"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
@@ -24,6 +24,10 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
         </before>
         <after>
+            <!-- Delete the bundled product -->
+            <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="logout"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
@@ -92,41 +96,41 @@
         <!--Select options - set quantities-->
 
         <!--"Drop-down" type option-->
-        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts}}" userInput="$$simpleProduct1.sku$$ +$123.00" stepKey="selectOption0Product0"/>
-        <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts}}" userInput="$$simpleProduct1.sku$$ +$123.00" stepKey="checkOption0Product0"/>
-        <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity}}" userInput="3" stepKey="fillQuantity00"/>
-        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity}}" userInput="3" stepKey="checkQuantity00"/>
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct1.sku$$ +$$$simpleProduct1.price$$.00" stepKey="selectOption0Product0"/>
+        <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct1.sku$$ +$$$simpleProduct1.price$$.00" stepKey="checkOption0Product0"/>
+        <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="fillQuantity00"/>
+        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="checkQuantity00"/>
 
-        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts}}" userInput="$$simpleProduct2.sku$$ +$123.00" stepKey="selectOption0Product1"/>
-        <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts}}" userInput="$$simpleProduct2.sku$$ +$123.00" stepKey="checkOption0Product1"/>
-        <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity}}" userInput="3" stepKey="fillQuantity01"/>
-        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity}}" userInput="3" stepKey="checkQuantity01"/>
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct2.sku$$ +$$$simpleProduct2.price$$.00" stepKey="selectOption0Product1"/>
+        <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct2.sku$$ +$$$simpleProduct2.price$$.00" stepKey="checkOption0Product1"/>
+        <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="fillQuantity01"/>
+        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="checkQuantity01"/>
 
         <!--"Radio Buttons" type option-->
-        <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('1')}}" stepKey="selectOption1Product0"/>
-        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('1')}}" stepKey="checkOption1Product0"/>
-        <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity}}" userInput="3" stepKey="fillQuantity10"/>
-        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity}}" userInput="3" stepKey="checkQuantity10"/>
+        <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '1')}}" stepKey="selectOption1Product0"/>
+        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '1')}}" stepKey="checkOption1Product0"/>
+        <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="fillQuantity10"/>
+        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="checkQuantity10"/>
 
-        <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('2')}}" stepKey="selectOption1Product1"/>
-        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('2')}}" stepKey="checkOption1Product1"/>
-        <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity}}" userInput="3" stepKey="fillQuantity11"/>
-        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity}}" userInput="3" stepKey="checkQuantity11"/>
+        <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '2')}}" stepKey="selectOption1Product1"/>
+        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '2')}}" stepKey="checkOption1Product1"/>
+        <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="fillQuantity11"/>
+        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="checkQuantity11"/>
 
         <!--"Checkbox" type option-->
         <!--This option does not support user defined quantities-->
-        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('1')}}" stepKey="selectOption2Product0"/>
-        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('1')}}" stepKey="checkOption2Product0"/>
+        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('Option Three', '1')}}" stepKey="selectOption2Product0"/>
+        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('Option Three', '1')}}" stepKey="checkOption2Product0"/>
 
-        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('2')}}" stepKey="selectOption2Product1"/>
-        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('2')}}" stepKey="checkOption2Product1"/>
+        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('Option Three', '2')}}" stepKey="selectOption2Product1"/>
+        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('Option Three', '2')}}" stepKey="checkOption2Product1"/>
 
         <!--"Multi Select" type option-->
         <!--This option does not support user defined quantities-->
-        <selectOption selector="{{StorefrontBundledSection.multiselectOptionFourProducts}}" userInput="$$simpleProduct1.sku$$ +$123.00" stepKey="selectOption3Product0"/>
-        <seeOptionIsSelected selector="{{StorefrontBundledSection.multiselectOptionFourProducts}}" userInput="$$simpleProduct1.sku$$ +$123.00" stepKey="checkOption3Product0"/>
+        <selectOption selector="{{StorefrontBundledSection.multiselectOptionFourProducts('Option Four')}}" userInput="$$simpleProduct1.sku$$ +$$$simpleProduct1.price$$.00" stepKey="selectOption3Product0"/>
+        <seeOptionIsSelected selector="{{StorefrontBundledSection.multiselectOptionFourProducts('Option Four')}}" userInput="$$simpleProduct1.sku$$ +$$$simpleProduct1.price$$.00" stepKey="checkOption3Product0"/>
 
-        <selectOption selector="{{StorefrontBundledSection.multiselectOptionFourProducts}}" userInput="$$simpleProduct2.sku$$ +$123.00" stepKey="selectOption3Product1"/>
-        <seeOptionIsSelected selector="{{StorefrontBundledSection.multiselectOptionFourProducts}}" userInput="$$simpleProduct2.sku$$ +$123.00" stepKey="checkOption3Product1"/>
+        <selectOption selector="{{StorefrontBundledSection.multiselectOptionFourProducts('Option Four')}}" userInput="$$simpleProduct2.sku$$ +$$$simpleProduct2.price$$.00" stepKey="selectOption3Product1"/>
+        <seeOptionIsSelected selector="{{StorefrontBundledSection.multiselectOptionFourProducts('Option Four')}}" userInput="$$simpleProduct2.sku$$ +$$$simpleProduct2.price$$.00" stepKey="checkOption3Product1"/>
     </test>
 </tests>
