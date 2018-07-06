@@ -1,0 +1,17 @@
+{
+    "name": "magento/functional-test-module-marketplace",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.1.3||~7.2.0",
+        "magento/magento2-functional-testing-framework": "2.2.0",
+        "magento/functional-test-module-backend": "100.0.0-dev"
+    },
+    "type": "magento2-test",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ]
+}

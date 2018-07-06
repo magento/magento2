@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="displayOutOfStockProduct">
+        <amOnPage url="{{InventoryConfigurationPage.url}}" stepKey="navigateToInventoryConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageToLoad"/>
+        <conditionalClick stepKey="expandProductStockOptions" selector="{{InventoryConfigSection.ProductStockOptionsTab}}" dependentSelector="{{InventoryConfigSection.CheckIfProductStockOptionsTabExpanded}}" visible="true" />
+        <waitForElementVisible selector="{{InventoryConfigSection.DisplayOutOfStockSystemValue}}" stepKey="waitForDisplayOutOfStockOption" />
+        <uncheckOption selector="{{InventoryConfigSection.DisplayOutOfStockSystemValue}}" stepKey="uncheckUseSystemValue"/>
+        <waitForElementVisible selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" stepKey="waitForSwitcherDropdown" />
+        <selectOption selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" userInput="Yes" stepKey="switchToYes" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+    </actionGroup>
+    <actionGroup name="noDisplayOutOfStockProduct">
+        <amOnPage url="{{InventoryConfigurationPage.url}}" stepKey="navigateToInventoryConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageToLoad"/>
+        <uncheckOption selector="{{InventoryConfigSection.DisplayOutOfStockSystemValue}}" stepKey="uncheckUseSystemValue"/>
+        <waitForElementVisible selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" stepKey="waitForSwitcherDropdown" />
+        <selectOption selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" userInput="No" stepKey="switchToNo" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+    </actionGroup>
+</actionGroups>
