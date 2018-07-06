@@ -83,7 +83,7 @@ class Select extends DefaultValidator
         if (!$priceType && !$price) {
             return true;
         }
-        if (!$this->isInRange($priceType, $this->priceTypes) || $this->isNegative($price)) {
+        if (!$this->isInRange($priceType, $this->priceTypes)) {
             return false;
         }
 

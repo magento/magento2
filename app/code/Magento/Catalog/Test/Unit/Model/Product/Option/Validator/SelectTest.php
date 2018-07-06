@@ -90,7 +90,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
                 ]
             ],
             [
-                false,
+                true,
                 [
                     'title' => 'Some Title',
                     'price_type' => 'fixed',
@@ -163,7 +163,6 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     public function isValidateWithInvalidDataDataProvider()
     {
         return [
-            'invalid_price' => ['fixed', -10, 'Title'],
             'invalid_price_type' => ['some_value', '10', 'Title'],
             'empty_title' => ['fixed', 10, null]
         ];
