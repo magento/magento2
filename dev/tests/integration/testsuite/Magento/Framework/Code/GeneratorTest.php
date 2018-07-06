@@ -173,18 +173,18 @@ class GeneratorTest extends TestCase
     }
 
     /**
-     * It tries to generate a new class file if the generated directory is read-only
+     * It tries to generate a new class file when the generated directory is read-only
      */
     public function testGeneratorClassWithErrorSaveClassFile()
     {
-        $msgPart = 'Error: an object of a generated class may be a dependency for another object, '
-            . 'but this dependency has not been defined or set correctly in the signature of the related construct '
-            . 'method';
+        $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'Factory';
+        $msgPart = 'Class ' . $factoryClassName . ' generation error: The requested class did not generate properly, '
+            . 'because the \'generated\' directory permission is read-only.';
+        $regexpMsgPart = preg_quote($msgPart);
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessageRegExp("/.*$msgPart.*/");
+        $this->expectExceptionMessageRegExp("/.*$regexpMsgPart.*/");
         $this->generatedDirectory->create($this->testRelativePath);
         $this->generatedDirectory->changePermissionsRecursively($this->testRelativePath, 0555, 0444);
-        $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'Factory';
         $generatorResult = $this->_generator->generateClass($factoryClassName);
         $this->assertFalse($generatorResult);
         $pathToSystemLog = $this->logDirectory->getAbsolutePath('system.log');
