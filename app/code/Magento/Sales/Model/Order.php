@@ -1766,31 +1766,31 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Check order invoices availability
      *
-     * @return int
+     * @return bool
      */
     public function hasInvoices()
     {
-        return $this->getInvoiceCollection()->count();
+        return boolval($this->getInvoiceCollection()->count());
     }
 
     /**
      * Check order shipments availability
      *
-     * @return int
+     * @return bool
      */
     public function hasShipments()
     {
-        return $this->getShipmentsCollection()->count();
+        return boolval($this->getShipmentsCollection()->count());
     }
 
     /**
      * Check order creditmemos availability
      *
-     * @return int
+     * @return bool
      */
     public function hasCreditmemos()
     {
-        return $this->getCreditmemosCollection()->count();
+        return boolval($this->getCreditmemosCollection()->count());
     }
 
     /**
