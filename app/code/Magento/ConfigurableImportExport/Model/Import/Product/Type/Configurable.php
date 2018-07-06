@@ -41,25 +41,27 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     const ERROR_UNIDENTIFIABLE_VARIATION = 'unidentifiableVariation';
 
-    // @codingStandardsIgnoreStart
     /**
      * Validation failure message template definitions
      *
      * @var array
      *
-     * Note: Many of these messages exceed maximum limit of 120 characters. Ignore from coding standards.
+     * Note: Some of these messages exceed maximum limit of 120 characters per line. Split up accordingly.
      */
     protected $_messageTemplates = [
-        self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST => 'Column configurable_variations: Attribute with code "%s" does not exist or is missing from product attribute set',
-        self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE => 'Column configurable_variations: Attribute with code "%s" is not super - it needs to have Global Scope',
-        self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT => 'Column configurable_variations: Attribute with code "%s" is not super - it needs to be Input Type of Dropdown, Visual Swatch or Text Swatch',
-        self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Column configurable_variations: Attribute with code "%s" is not super',
+        self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST => 'Column configurable_variations: Attribute with code ' .
+            '"%s" does not exist or is missing from product attribute set',
+        self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE => 'Column configurable_variations: Attribute with code ' .
+            '"%s" is not super - it needs to have Global Scope',
+        self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT => 'Column configurable_variations: Attribute with code ' .
+            '"%s" is not super - it needs to be Input Type of Dropdown, Visual Swatch or Text Swatch',
+        self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Column configurable_variations: Attribute with code ' .
+            '"%s" is not super',
         self::ERROR_INVALID_OPTION_VALUE => 'Column configurable_variations: Invalid option value for attribute "%s"',
         self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
         self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
         self::ERROR_UNIDENTIFIABLE_VARIATION => 'Configurable variation "%s" is unidentifiable',
     ];
-    // @codingStandardsIgnoreEnd
 
     /**
      * Column names that holds values with particular meaning.
@@ -304,7 +306,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $superAttrCode = $rowData['_super_attribute_code'];
             if (!$this->_isAttributeSuper($superAttrCode)) {
                 // Identify reason why attribute is not super:
-                if (!$this->_identifySuperAttributeError($superAttrCode, $rowNum)) {
+                if (!$this->identifySuperAttributeError($superAttrCode, $rowNum)) {
                     $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER, $rowNum, $superAttrCode);
                 }
                 return false;
@@ -326,7 +328,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param int $rowNum
      * @return bool
      */
-    protected function _identifySuperAttributeError($superAttrCode, $rowNum)
+    private function identifySuperAttributeError($superAttrCode, $rowNum)
     {
         // This attribute code is not a super attribute. Need to give a clearer message why?
         $reasonFound = false;
@@ -334,23 +336,28 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $codeExists = false;
         $codeNotGlobal = false;
         $codeNotTypeSelect = false;
-        // Does this attribute code exist? Does is have the correct settings?
-        $commonAttributes = self::$commonAttributesCache;
-        foreach ($commonAttributes as $attributeRow) {
-            if ($attributeRow['code'] == $superAttrCode) {
-                $codeExists = true;
+        // Does this attribute code exist? Does it have the correct settings?
+        $filterAttribute = array_filter(
+            self::$commonAttributesCache,
+            function ($element) use($superAttrCode) {
+                return $element['code'] == $superAttrCode;
+            }
+        );
 
-                if ($attributeRow['is_global'] !== '1') {
+        if (is_array($filterAttribute) && count($filterAttribute)) {
+            $codeExists = true;
+            // Examine the first element of the filtered array
+            $sourceAttribute = array_shift($filterAttribute);
+            if (is_array($sourceAttribute)) {
+                if (isset($sourceAttribute['is_global']) && $sourceAttribute['is_global'] !== '1') {
                     $codeNotGlobal = true;
-                } elseif ($attributeRow['type'] !== 'select') {
+                } elseif (isset($sourceAttribute['type']) && $sourceAttribute['type'] !== 'select') {
                     $codeNotTypeSelect = true;
                 }
-
-                break;
             }
         }
 
-        if ($codeExists == false) {
+        if ($codeExists === false) {
             $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST, $rowNum, $superAttrCode);
             $reasonFound = true;
         } elseif ($codeNotGlobal == true) {
