@@ -22,12 +22,12 @@ abstract class Auth extends AbstractAction
     /**
      * User model factory
      *
-     * @var \Magento\User\Model\UserFactory
+     * @var UserFactory
      */
     protected $_userFactory;
     
     /**
-     * @var \Magento\Backend\Helper\Data
+     * @var Data
      */
     protected $_backendDataHelper;
 

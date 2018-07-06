@@ -10,7 +10,6 @@ use Magento\Security\Model\SecurityManager;
 use Magento\Framework\App\ObjectManager;
 use Magento\Backend\App\Action\Context;
 use Magento\User\Model\UserFactory;
-use Magento\Security\Model\SecurityManager;
 use Magento\User\Model\ResourceModel\User\CollectionFactory;
 use Magento\Framework\Validator\EmailAddress;
 use Magento\Security\Model\PasswordResetRequestEvent;
