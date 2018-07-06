@@ -6613,7 +6613,7 @@
                  * looks up the directive and decorates it with exception handling and proper parameters. We
                  * call this the boundDirective.
                  *
-                 * @param {string} name name of the directive to look up.
+                 * @param {string} name of the directive to look up.
                  * @param {string} location The directive must be found in specific format.
                  *   String containing any of theses characters:
                  *
