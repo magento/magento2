@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="MoveCategoryActionGroup">
+        <arguments>
+            <argument name="childCategory"/>
+            <argument name="parentCategory"/>
+        </arguments>
+        <click stepKey="expandAllCategoriesTree" selector="{{AdminCategorySidebarTreeSection.expandAll}}"/>
+        <waitForAjaxLoad stepKey="waitForCategoriesExpand"/>
+        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree('childCategory')}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree('parentCategory')}}" stepKey="moveCategory"/>
+        <waitForElementVisible selector="{{AdminCategoryModalSection.message}}" stepKey="waitForWarningMessageVisible"/>
+        <see selector="{{AdminCategoryModalSection.message}}" userInput="This operation can take a long time" stepKey="seeWarningMessage"/>
+        <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>
+        <waitForPageLoad stepKey="waitForCategoryPageReload"/>
+    </actionGroup>
+</actionGroups>
