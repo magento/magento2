@@ -128,7 +128,6 @@ class Format implements \Magento\Framework\Locale\FormatInterface
         } else {
             $group = strrpos($format, '.');
         }
-        $integerRequired = strpos($format, '.') - strpos($format, '0');
 
         $result = [
             //TODO: change interface
@@ -138,7 +137,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
             'decimalSymbol' => $decimalSymbol,
             'groupSymbol' => $groupSymbol,
             'groupLength' => $group,
-            'integerRequired' => $integerRequired,
+            'integerRequired' => $totalPrecision == 0,
         ];
 
         return $result;
