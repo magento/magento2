@@ -21,29 +21,26 @@
 
         <after>
             <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
-            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite"/>
-
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
-        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="addnewWebsite"/>
-        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="addNewStoreGroup"/>
-
-        <!--Create Store view -->
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <waitForPageLoad time="30" stepKey="waitForStoreViewGridPageLoad" />
-        <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="createStoreViewButton"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <selectOption userInput="Second Store" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
-        <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
-        <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
-        <selectOption userInput="1" selector="{{AdminNewStoreSection.statusDropdown}}" stepKey="enableStoreViewStatus"/>
-        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickStoreViewSaveButton"/>
-        <waitForElementVisible selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" stepKey="waitForAcceptNewStoreViewCreationModal" />
-        <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="AcceptNewStoreViewCreation"/>
-        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReolad"/>
-        <see userInput="You saved the store view." stepKey="seeSaveMessage" />
+        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="addnewWebsite">
+            <argument name="newWebsiteName" value="Second Website"/>
+            <argument name="websiteCode" value="second_website"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStoreGroup">
+            <argument name="website" value="Second Website"/>
+            <argument name="storeGroupName" value="Second Store"/>
+            <argument name="storeGroupCode" value="second_store"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStore">
+            <argument name="storeGroup" value="secondStoreGroup"/>
+            <argument name="customStore" value="secondStore"/>
+        </actionGroup>
 
         <!--Create a Simple Product with Custom Options -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
@@ -89,6 +86,5 @@
 
         <click selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}" stepKey="openCustomOptionsSection"/>
         <seeNumberOfElements selector=".admin__dynamic-rows[data-index='values'] tr.data-row" userInput="3" stepKey="see4RowsOfOptions"/>
-
     </test>
 </tests>
