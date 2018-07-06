@@ -103,11 +103,13 @@
         </actionGroup>
 
         <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad20"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad20"/>
 
         <actionGroup ref="addBundleProductToOrder" stepKey="addBundleProductToOrder">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
+
+        <waitForPageLoad time="60" stepKey="waitForPageLoad21"/>
 
         <comment userInput="Select shipping method and check grand total and shipping cost." stepKey="selectShippingMethodComment"/>
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>

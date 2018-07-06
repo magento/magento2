@@ -87,6 +87,12 @@
         <switchToIFrame stepKey="switchOutOfIFrame1"/>
         <waitForPageLoad stepKey="waitForPageLoad9"/>
 
+        <conditionalClick selector="(//div[@class='admin__data-grid-header']//*[@data-action='grid-filter-reset'])[1]" dependentSelector="(//div[@class='admin__data-grid-header']//*[@data-action='grid-filter-reset'])[1]" visible="true" stepKey="clickClearFilters1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+            <argument name="selector" value="AdminAssignProductAttributeSlideOutSection.attributeLabel"/>
+            <argument name="value" value="{{visualSwatchAttribute.name}}"/>
+        </actionGroup>
+
         <click selector="{{AdminGridRow.checkboxByValue(visualSwatchAttribute.name)}}" stepKey="clickOnTheColorAttribute1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll1"/>
@@ -95,13 +101,13 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku1"/>
         <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="clickOnAssignSources2"/>
 
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+        <conditionalClick selector="(//div[@class='admin__data-grid-header']//*[@data-action='grid-filter-reset'])[1]" dependentSelector="(//div[@class='admin__data-grid-header']//*[@data-action='grid-filter-reset'])[1]" visible="true" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="value" value="$$createSource1.source[source_code]$$"/>
         </actionGroup>
-        <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource1"/>
-        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="clickOnDone2"/>
+        <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource2"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="clickOnDone3"/>
 
         <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}" userInput="100" stepKey="fillTheQuantityField1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
