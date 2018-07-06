@@ -3,12 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml;
+
+use Magento\Store\Model\Store;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Backend\App\Action;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\DataObject;
 
 /**
  * Catalog category controller
  */
-abstract class Category extends \Magento\Backend\App\Action
+abstract class Category extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -18,18 +33,16 @@ abstract class Category extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Catalog::categories';
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     * @var Date
      */
     protected $dateFilter;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date|null $dateFilter
+     * @param Context $context
+     * @param Date|null $dateFilter
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter = null
-    ) {
+    public function __construct(Context $context, Date $dateFilter = null)
+    {
         $this->dateFilter = $dateFilter;
         parent::__construct($context);
     }
@@ -39,20 +52,20 @@ abstract class Category extends \Magento\Backend\App\Action
      * Root category can be returned, if inappropriate store/category is specified
      *
      * @param bool $getRootInstead
-     * @return \Magento\Catalog\Model\Category|false
+     * @return CategoryModel|false
      */
-    protected function _initCategory($getRootInstead = false)
+    protected function _initCategory(bool $getRootInstead = false)
     {
         $categoryId = $this->resolveCategoryId();
-        $storeId = (int)$this->getRequest()->getParam('store');
-        $category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class);
+        $storeId = $this->resolveStoreId();
+        $category = $this->_objectManager->create(CategoryModel::class);
         $category->setStoreId($storeId);
 
         if ($categoryId) {
             $category->load($categoryId);
             if ($storeId) {
                 $rootId = $this->_objectManager->get(
-                    \Magento\Store\Model\StoreManagerInterface::class
+                    StoreManagerInterface::class
                 )->getStore(
                     $storeId
                 )->getRootCategoryId();
@@ -67,9 +80,9 @@ abstract class Category extends \Magento\Backend\App\Action
             }
         }
 
-        $this->_objectManager->get(\Magento\Framework\Registry::class)->register('category', $category);
-        $this->_objectManager->get(\Magento\Framework\Registry::class)->register('current_category', $category);
-        $this->_objectManager->get(\Magento\Cms\Model\Wysiwyg\Config::class)
+        $this->_objectManager->get(Registry::class)->register('category', $category);
+        $this->_objectManager->get(Registry::class)->register('current_category', $category);
+        $this->_objectManager->get(Config::class)
             ->setStoreId($this->getRequest()->getParam('store'));
         return $category;
     }
@@ -79,7 +92,7 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return int
      */
-    private function resolveCategoryId()
+    private function resolveCategoryId(): int
     {
         $categoryId = (int)$this->getRequest()->getParam('id', false);
 
@@ -87,23 +100,38 @@ abstract class Category extends \Magento\Backend\App\Action
     }
 
     /**
+     * Resolve store id
+     *
+     * Tries to take store id from store HTTP parameter
+     * @see Store
+     *
+     * @return int
+     */
+    private function resolveStoreId(): int
+    {
+        $storeId = (int)$this->getRequest()->getParam('store', false);
+
+        return $storeId ?: (int)$this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID);
+    }
+
+    /**
      * Build response for ajax request
      *
-     * @param \Magento\Catalog\Model\Category $category
-     * @param \Magento\Backend\Model\View\Result\Page $resultPage
+     * @param CategoryModel $category
+     * @param Page $resultPage
      *
-     * @return \Magento\Framework\Controller\Result\Json
+     * @return Json
      *
      * @deprecated 101.0.0
      */
-    protected function ajaxRequestResponse($category, $resultPage)
+    protected function ajaxRequestResponse(CategoryModel $category, Page $resultPage): Json
     {
         // prepare breadcrumbs of selected category, if any
         $breadcrumbsPath = $category->getPath();
         if (empty($breadcrumbsPath)) {
             // but if no category, and it is deleted - prepare breadcrumbs from path, saved in session
             $breadcrumbsPath = $this->_objectManager->get(
-                \Magento\Backend\Model\Auth\Session::class
+                Session::class
             )->getDeletedPath(
                 true
             );
@@ -119,7 +147,7 @@ abstract class Category extends \Magento\Backend\App\Action
             }
         }
 
-        $eventResponse = new \Magento\Framework\DataObject([
+        $eventResponse = new DataObject([
             'content' => $resultPage->getLayout()->getUiComponent('category_form')->getFormHtml()
                 . $resultPage->getLayout()->getBlock('category.tree')
                     ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
@@ -130,22 +158,23 @@ abstract class Category extends \Magento\Backend\App\Action
             'category_prepare_ajax_response',
             ['response' => $eventResponse, 'controller' => $this]
         );
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-        $resultJson = $this->_objectManager->get(\Magento\Framework\Controller\Result\Json::class);
+        /** @var Json $resultJson */
+        $resultJson = $this->_objectManager->get(Json::class);
         $resultJson->setHeader('Content-type', 'application/json', true);
         $resultJson->setData($eventResponse->getData());
+
         return $resultJson;
     }
 
     /**
      * Datetime data preprocessing
      *
-     * @param \Magento\Catalog\Model\Category $category
+     * @param CategoryModel $category
      * @param array $postData
      *
      * @return array
      */
-    protected function dateTimePreprocessing($category, $postData)
+    protected function dateTimePreprocessing(CategoryModel $category, array $postData): array
     {
         $dateFieldFilters = [];
         $attributes = $category->getAttributes();
