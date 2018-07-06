@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminGridFilterSearchResultsByInput">
+        <arguments>
+            <argument name="selector"/>
+            <argument name="value"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearTheFiltersIfPresent"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="5"/>
+
+        <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
+        <fillField userInput="{{value}}" selector="{{selector}}" stepKey="fillCodeField2"/>
+        <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>
+    </actionGroup>
+</actionGroups>
