@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model;
 
-use Magento\InventorySourceDeduction\Model\SourceDeductionRequestInterface;
+use Magento\InventorySourceDeductionApi\Model\SourceDeductionRequestInterface;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventorySourceDeduction\Model\SourceDeductionRequestInterfaceFactory;
+use Magento\InventorySourceDeductionApi\Model\SourceDeductionRequestInterfaceFactory;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
 class SourceDeductionRequestFromShipmentFactory

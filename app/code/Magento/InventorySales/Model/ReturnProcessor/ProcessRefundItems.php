@@ -17,9 +17,9 @@ use Magento\InventorySalesApi\Model\ReturnProcessor\ProcessRefundItemsInterface;
 use Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\InventorySourceDeduction\Model\ItemToDeductFactory;
-use Magento\InventorySourceDeduction\Model\SourceDeductionRequestFactory;
-use Magento\InventorySourceDeduction\Model\SourceDeductionService;
+use Magento\InventorySourceDeductionApi\Model\ItemToDeductFactory;
+use Magento\InventorySourceDeductionApi\Model\SourceDeductionRequestFactory;
+use Magento\InventorySourceDeductionApi\Model\SourceDeductionService;
 
 class ProcessRefundItems implements ProcessRefundItemsInterface
 {

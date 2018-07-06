@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceDeduction\Model;
+namespace Magento\InventorySourceDeductionApi\Model;
 
 /**
  * @inheritdoc

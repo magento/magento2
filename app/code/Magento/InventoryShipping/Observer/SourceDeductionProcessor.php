@@ -9,13 +9,13 @@ namespace Magento\InventoryShipping\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\InventorySourceDeduction\Model\SourceDeductionServiceInterface;
+use Magento\InventorySourceDeductionApi\Model\SourceDeductionServiceInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventoryShipping\Model\GetItemsToDeductFromShipment;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventoryShipping\Model\SourceDeductionRequestFromShipmentFactory;
-use Magento\InventorySourceDeduction\Model\SourceDeductionRequestInterface;
+use Magento\InventorySourceDeductionApi\Model\SourceDeductionRequestInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
 
 /**

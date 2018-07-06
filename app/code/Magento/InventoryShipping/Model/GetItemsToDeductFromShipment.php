@@ -11,8 +11,8 @@ use Magento\Sales\Model\Order\Shipment\Item;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
-use Magento\InventorySourceDeduction\Model\ItemToDeductInterface;
-use Magento\InventorySourceDeduction\Model\ItemToDeductInterfaceFactory;
+use Magento\InventorySourceDeductionApi\Model\ItemToDeductInterface;
+use Magento\InventorySourceDeductionApi\Model\ItemToDeductInterfaceFactory;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Framework\Exception\NoSuchEntityException;
 
