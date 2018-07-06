@@ -16,7 +16,7 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySourceDeduction\Model\SourceDeductionRequestInterfaceFactory;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
-class SourceDeductionRequestFromShipmentBuilder
+class SourceDeductionRequestFromShipmentFactory
 {
     /**
      * @var SourceDeductionRequestInterfaceFactory

@@ -14,7 +14,7 @@ use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 use Magento\InventoryShipping\Model\GetItemsToDeductFromShipment;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
-use Magento\InventoryShipping\Model\SourceDeductionRequestFromShipmentBuilder;
+use Magento\InventoryShipping\Model\SourceDeductionRequestFromShipmentFactory;
 use Magento\InventorySourceDeduction\Model\SourceDeductionRequestInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
 
@@ -39,9 +39,9 @@ class SourceDeductionProcessor implements ObserverInterface
     private $getItemsToDeductFromShipment;
 
     /**
-     * @var SourceDeductionRequestFromShipmentBuilder
+     * @var SourceDeductionRequestFromShipmentFactory
      */
-    private $sourceDeductionRequestFromShipmentBuilder;
+    private $sourceDeductionRequestFromShipmentFactory;
 
     /**
      * @var SourceDeductionServiceInterface
@@ -62,7 +62,7 @@ class SourceDeductionProcessor implements ObserverInterface
      * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param GetItemsToDeductFromShipment $getItemsToDeductFromShipment
-     * @param SourceDeductionRequestFromShipmentBuilder $sourceDeductionRequestFromShipmentBuilder
+     * @param SourceDeductionRequestFromShipmentFactory $sourceDeductionRequestFromShipmentFactory
      * @param SourceDeductionServiceInterface $sourceDeductionService
      * @param ItemToSellInterfaceFactory $itemsToSellFactory
      * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
@@ -71,7 +71,7 @@ class SourceDeductionProcessor implements ObserverInterface
         IsSingleSourceModeInterface $isSingleSourceMode,
         DefaultSourceProviderInterface $defaultSourceProvider,
         GetItemsToDeductFromShipment $getItemsToDeductFromShipment,
-        SourceDeductionRequestFromShipmentBuilder $sourceDeductionRequestFromShipmentBuilder,
+        SourceDeductionRequestFromShipmentFactory $sourceDeductionRequestFromShipmentFactory,
         SourceDeductionServiceInterface $sourceDeductionService,
         ItemToSellInterfaceFactory $itemsToSellFactory,
         PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
@@ -79,7 +79,7 @@ class SourceDeductionProcessor implements ObserverInterface
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->getItemsToDeductFromShipment = $getItemsToDeductFromShipment;
-        $this->sourceDeductionRequestFromShipmentBuilder = $sourceDeductionRequestFromShipmentBuilder;
+        $this->sourceDeductionRequestFromShipmentFactory = $sourceDeductionRequestFromShipmentFactory;
         $this->sourceDeductionService = $sourceDeductionService;
         $this->itemsToSellFactory = $itemsToSellFactory;
         $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
@@ -107,7 +107,7 @@ class SourceDeductionProcessor implements ObserverInterface
         $shipmentItems = $this->getItemsToDeductFromShipment->execute($shipment);
 
         if (!empty($shipmentItems)) {
-            $sourceDeductionRequest = $this->sourceDeductionRequestFromShipmentBuilder->execute(
+            $sourceDeductionRequest = $this->sourceDeductionRequestFromShipmentFactory->execute(
                 $shipment,
                 $sourceCode,
                 $shipmentItems
