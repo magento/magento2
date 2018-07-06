@@ -51,7 +51,7 @@ $oldOptions = [
             [
                 'option_type_id' => null,
                 'title' => 'Option 1',
-                'price' => '3,000.00',
+                'price' => '-3,000.00',
                 'price_type' => 'fixed',
                 'sku' => '3-1-select',
             ],
