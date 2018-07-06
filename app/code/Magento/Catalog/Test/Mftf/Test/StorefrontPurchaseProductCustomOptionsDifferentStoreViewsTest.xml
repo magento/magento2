@@ -16,7 +16,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-77831"/>
             <group value="product"/>
-            <group value="skip"/><!-- MAGETWO-91215 -->
+            <skip>
+                <issueId value="MAGETWO-91215"/>
+            </skip>
         </annotations>
 
         <before>

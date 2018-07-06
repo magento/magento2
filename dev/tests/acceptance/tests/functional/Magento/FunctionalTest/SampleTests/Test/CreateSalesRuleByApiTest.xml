@@ -12,7 +12,9 @@
         <annotations>
             <features value="Create a Sales Rule By API"/>
             <stories value="Create a Sales Rule By API"/>
-            <group value="skip"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
         </annotations>
         <before>
             <createData stepKey="saleRule" entity="SimpleSalesRule" />
