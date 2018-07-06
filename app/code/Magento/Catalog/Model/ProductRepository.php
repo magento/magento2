@@ -322,11 +322,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         unset($productData['media_gallery']);
         if ($createNew) {
             $product = $this->productFactory->create();
+            $this->assignProductToWebsites($product);
             if (isset($productData['price']) && !isset($productData['product_type'])) {
                 $product->setTypeId(Product\Type::TYPE_SIMPLE);
-            }
-            if ($this->storeManager->hasSingleStore()) {
-                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
             }
         } else {
             if (!empty($productData['id'])) {
@@ -341,31 +339,20 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
-        $this->assignProductToWebsites($product, $createNew);
 
         return $product;
     }
 
     /**
      * @param \Magento\Catalog\Model\Product $product
-     * @param bool $createNew
      * @return void
      */
-    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product, $createNew)
+    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
-        $websiteIds = $product->getWebsiteIds();
-
-        if (!$this->storeManager->hasSingleStore()) {
-            $websiteIds = array_unique(
-                array_merge(
-                    $websiteIds,
-                    [$this->storeManager->getStore()->getWebsiteId()]
-                )
-            );
-        }
-
-        if ($createNew && $this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+        if ($this->storeManager->getStore(true)->getCode() === \Magento\Store\Model\Store::ADMIN_CODE) {
             $websiteIds = array_keys($this->storeManager->getWebsites());
+        } else {
+            $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
         }
 
         $product->setWebsiteIds($websiteIds);
