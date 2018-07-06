@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ProductLinkSimple1" type="product_link">
+        <var key="sku" entityKey="sku" entityType="product3"/>
+        <var key="linked_product_sku" entityKey="sku" entityType="product"/>
+        <data key="link_type">associated</data>
+        <data key="linked_product_type">simple</data>
+        <data key="position">1</data>
+        <requiredEntity type="product_link_extension_attribute">Qty1000</requiredEntity>
+    </entity>
+    <entity name="ProductLinkSimple2" type="product_link">
+        <var key="sku" entityKey="sku" entityType="product3"/>
+        <var key="linked_product_sku" entityKey="sku" entityType="product"/>
+        <data key="link_type">associated</data>
+        <data key="linked_product_type">simple</data>
+        <data key="position">2</data>
+        <requiredEntity type="product_link_extension_attribute">Qty1000</requiredEntity>
+    </entity>
+</entities>
