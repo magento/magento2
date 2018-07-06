@@ -9,13 +9,16 @@ namespace Magento\InventoryCatalog\Plugin\Controller\Adminhtml\Product\Initializ
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 
-/**
- * Allow min_qty to be assigned a value below 0.
- *
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
- */
 class StockDataFilterPlugin
 {
+    /**
+     * Allow min_qty to be assigned a value below 0.
+     * @param StockDataFilter $subject
+     * @param callable $proceed
+     * @param array $stockData
+     * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function aroundFilter(
         StockDataFilter $subject,
         callable $proceed,

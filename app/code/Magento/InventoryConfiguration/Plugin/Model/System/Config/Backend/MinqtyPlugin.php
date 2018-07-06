@@ -9,11 +9,14 @@ namespace Magento\InventoryConfiguration\Plugin\Model\System\Config\Backend;
 
 use Magento\CatalogInventory\Model\System\Config\Backend\Minqty;
 
-/**
- * Allow min_qty to be assigned a value below 0.
- */
 class MinqtyPlugin
 {
+    /**
+     * Allow min_qty to be assigned a value below 0.
+     * @param Minqty $subject
+     * @param callable $proceed
+     * @return mixed
+     */
     public function aroundBeforeSave(
         Minqty $subject,
         callable $proceed
