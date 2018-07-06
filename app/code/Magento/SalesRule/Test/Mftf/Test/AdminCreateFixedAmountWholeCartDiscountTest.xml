@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateFixedAmountWholeCartDiscountTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Admin should be able to create a cart price rule of type Fixed amount discount for whole cart"/>
+            <description value="Admin should be able to create a cart price rule of type Fixed amount discount for whole cart"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-91"/>
+            <group value="SalesRule"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete the cart price rule we made during the test -->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
+                <argument name="ruleName" value="{{SimpleSalesRule.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Create a cart price rule for Fixed amount discount for whole cart -->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="19.99" stepKey="fillDiscountAmount"/>
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+
+        <!-- Create a product to check the storefront -->
+        <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+            <argument name="category" value="$$createPreReqCategory$$"/>
+            <argument name="simpleProduct" value="_defaultProduct"/>
+        </actionGroup>
+
+        <!-- Spot check the storefront -->
+        <actionGroup ref="VerifyDiscountAmount" stepKey="verifyStorefront">
+            <argument name="productUrl" value="{{_defaultProduct.urlKey}}.html"/>
+            <argument name="quantity" value="2"/>
+            <argument name="expectedDiscount" value="-$19.99"/>
+        </actionGroup>
+    </test>
+</tests>
