@@ -23,7 +23,7 @@ class Content extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/helper/gallery.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/helper/gallery.phtml';
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config

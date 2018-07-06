@@ -81,7 +81,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'product/list/toolbar.phtml';
+    protected $_template = 'Magento_Catalog::product/list/toolbar.phtml';
 
     /**
      * Catalog config
