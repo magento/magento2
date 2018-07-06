@@ -100,6 +100,28 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
                 ],
                 $expectedPrice = 5.00,
             ],
+            'Single variants at price null (null), should return 0.00 (float)' => [
+                $variantPrices = [
+                    null,
+                ],
+                $expectedPrice = 0.00,
+            ],
+            'Multiple variants at price 0, 10, 20, should return 0.00 (float)' => [
+                $variantPrices = [
+                    0,
+                    10,
+                    20,
+                ],
+                $expectedPrice = 0.00,
+            ],
+            'Multiple variants at price 10, 0, 20, should return 0.00 (float)' => [
+                $variantPrices = [
+                    10,
+                    0,
+                    20,
+                ],
+                $expectedPrice = 0.00,
+            ],
         ];
     }
 }
