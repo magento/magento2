@@ -11,7 +11,9 @@
     <test name="PersistMultipleEntitiesTest">
         <annotations>
             <features value="SampleTests"/>
-            <group value="skip"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="simplesubcategory" stepKey="simplecategory"/>
