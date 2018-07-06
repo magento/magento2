@@ -202,6 +202,9 @@ class GeneratorTest extends TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function trueFalseDataProvider()
     {
         return [[true], [false]];

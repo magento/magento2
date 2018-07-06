@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormSection">
+        <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
+        <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input" timeout="30"/>
+        <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
+        <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
+        <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
+        <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
+        <element name="enableProductLabel" type="checkbox" selector="input[name='product[status]']+label"/>
+        <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
+        <element name="productNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
+        <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
+        <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
+        <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
+        <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
+        <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
+        <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']"/>
+        <element name="productWeight" type="input" selector=".admin__field[data-index=weight] input"/>
+        <element name="productWeightSelect" type="select" selector="select[name='product[product_has_weight]']"/>
+        <element name="contentTab" type="button" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Content']"/>
+        <element name="fieldError" type="text" selector="//input[@name='product[{{fieldName}}]']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
+        <element name="priceFieldError" type="text" selector="//input[@name='product[price]']/parent::div/parent::div/label[@class='admin__field-error']"/>
+        <element name="addAttributeBtn" type="button" selector="#addAttribute"/>
+        <element name="createNewAttributeBtn" type="button" selector="button[data-index='add_new_attribute_button']"/>
+        <element name="save" type="button" selector="#save"/>
+        <element name="attributeTab" type="button" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Attributes']"/>
+        <element name="attributeLabel" type="input" selector="//input[@name='frontend_label[0]']"/>
+        <element name="frontendInput" type="select" selector="select[name = 'frontend_input']"/>
+        <element name="productFormTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]" parameterized="true"/>
+        <element name="productFormTabState" type="text" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]/parent::*/parent::*[@data-state-collapsible='{{state}}']" parameterized="true"/>
+        <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
+        <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
+        <element name="divByDataIndex" type="input" selector="div[data-index='{{var}}']" parameterized="true"/>
+        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+    </section>
+    <section name="ProductInWebsitesSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
+        <!--<element name="websites" type="checkbox" selector="input[name='product[website_ids][{{var1}}]']" parameterized="true"/>-->
+        <element name="website" type="checkbox" selector="//label[contains(text(), '{{var1}}')]/parent::div//input[@type='checkbox']" parameterized="true"/>
+    </section>
+    <section name="ProductDesignSection">
+        <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
+        <element name="LayoutDropdown" type="select" selector="select[name='product[page_layout]']"/>
+    </section>
+    <section name="AdminProductFormRelatedUpSellCrossSellSection">
+        <element name="AddRelatedProductsButton" type="button" selector="button[data-index='button_related']" timeout="30"/>
+    </section>
+    <section name="AdminAddRelatedProductsModalSection">
+        <element name="AddSelectedProductsButton" type="button" selector="//aside[contains(@class, 'product_form_product_form_related_related_modal')]//button/span[contains(text(), 'Add Selected Products')]" timeout="30"/>
+    </section>
+    <section name="ProductWYSIWYGSection">
+        <element name="Switcher" type="button" selector="//select[@id='dropdown-switcher']"/>
+        <element name="v4" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 4.3.6']" />
+        <element name="v3" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 3.6(Deprecated)']" />
+        <element name="TinymceDescription3" type ="button" selector="//span[text()='Description']" />
+        <element name="SaveConfig" type ="button" selector="#save" />
+        <element name="v4" type="button" selector="#category_form_description_v4"/>
+        <element name="WYSIWYGBtn" type="button" selector=".//button[@class='action-default scalable action-wysiwyg']"/>
+    </section>
+    <section name="ProductAttributeWYSIWYGSection">
+        <element name="TextArea" type ="text" selector="//div[@data-index='{{var1}}']//textarea" parameterized="true"/>
+        <element name="showHideBtn" type="button" selector="//button[contains(@id,'{{var1}}')]" parameterized="true"/>
+        <element name="InsertImageBtn" type="button" selector="//div[contains(@id, '{{var1}}')]//span[text()='Insert Image...']" parameterized="true"/>
+        <element name="Style" type="button" selector="//div[contains(@id, '{{var1}}')]//span[text()='Paragraph']" parameterized="true"/>
+        <element name="Bold" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-bold']" parameterized="true"/>
+        <element name="Italic" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-bold']" parameterized="true"/>
+        <element name="Underline" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-underline']" parameterized="true"/>
+        <element name="AlignLeft" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-alignleft']" parameterized="true"/>
+        <element name="AlignCenter" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-aligncenter']" parameterized="true"/>
+        <element name="AlignRight" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-alignright']" parameterized="true"/>
+        <element name="Numlist" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-bullist']" parameterized="true"/>
+        <element name="Bullet" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-numlist']" parameterized="true"/>
+        <element name="InsertLink" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-link']" parameterized="true"/>
+        <element name="InsertImageIcon" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-image']" parameterized="true"/>
+        <element name="InsertTable" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-table']" parameterized="true"/>
+        <element name="SpecialCharacter" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-charmap']" parameterized="true"/>
+        <element name="TinyMCE4" type="text" selector="//div[contains(@id, '{{var1}}')]//div[@class='mce-branding-powered-by']" parameterized="true"/>
+    </section>
+    <section name="ProductDescriptionWYSIWYGToolbarSection">
+        <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_description']//div[@class='mce-branding-powered-by']" />
+        <element name="showHideBtn" type="button" selector="#toggleproduct_form_description"/>
+        <element name="InsertImageBtn" type="button" selector="#buttonsproduct_form_description > .scalable.action-add-image.plugin" />
+        <element name="Style" type="button" selector="//div[@id='editorproduct_form_description']//span[text()='Paragraph']" />
+        <element name="Bold" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-bold']" />
+        <element name="Italic" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-italic']" />
+        <element name="Underline" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-underline']" />
+        <element name="AlignLeft" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-alignleft']" />
+        <element name="AlignCenter" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-aligncenter']" />
+        <element name="AlignRight" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-alignright']" />
+        <element name="Numlist" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-bullist']" />
+        <element name="Bullet" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-numlist']" />
+        <element name="InsertLink" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-link']" />
+        <element name="InsertImageIcon" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-image']" />
+        <element name="InsertTable" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-table']" />
+        <element name="SpecialCharacter" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-charmap']" />
+        <element name="Browse" type="button" selector=".mce-i-browse"/>
+        <element name="BrowseUploadImage" type="file" selector=".fileupload" />
+        <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
+        <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
+        <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open" />
+        <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last" />
+        <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first" />
+        <element name="UploadImage" type="file" selector=".fileupload" />
+        <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
+        <element name="InsertFile" type="text" selector="#insert_files"/>
+        <element name="CreateFolder" type="button" selector="#new_folder" />
+        <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
+        <element name="CancelBtn" type="button" selector="#cancel" />
+        <element name="FolderName" type="button" selector="input[data-role='promptField']" />
+        <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
+        <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
+        <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
+        <element name="WysiwygArrow" type="button" selector="#d3lzaXd5Zw-- > .jstree-icon" />
+        <element name="checkIfWysiwygArrowExpand" type="button" selector="//li[@id='d3lzaXd5Zw--' and contains(@class,'jstree-closed')]" />
+        <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
+    </section>
+    <section name="ProductShortDescriptionWYSIWYGToolbarSection">
+        <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_short_description']//div[@class='mce-branding-powered-by']" />
+        <element name="InsertImageBtn" type="button" selector="#buttonsproduct_form_short_description > .scalable.action-add-image.plugin" />
+        <element name="showHideBtn" type="button" selector="#toggleproduct_form_short_description"/>
+        <element name="Style" type="button" selector="//div[@id='editorproduct_form_short_description']//span[text()='Paragraph']" />
+        <element name="Bold" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-bold']" />
+        <element name="Italic" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-italic']" />
+        <element name="Underline" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-underline']" />
+        <element name="AlignLeft" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-alignleft']" />
+        <element name="AlignCenter" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-aligncenter']" />
+        <element name="AlignRight" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-alignright']" />
+        <element name="Numlist" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-bullist']" />
+        <element name="Bullet" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-numlist']" />
+        <element name="InsertLink" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-link']" />
+        <element name="InsertImageIcon" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-image']" />
+        <element name="InsertTable" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-table']" />
+        <element name="SpecialCharacter" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-charmap']"/>
+        <element name="Browse" type="button" selector=".mce-i-browse"/>
+        <element name="BrowseUploadImage" type="file" selector=".fileupload" />
+        <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
+        <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
+        <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open" />
+        <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last" />
+        <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first" />
+        <element name="UploadImage" type="file" selector=".fileupload" />
+        <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
+        <element name="InsertFile" type="text" selector="#insert_files"/>
+        <element name="CreateFolder" type="button" selector="#new_folder" />
+        <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
+        <element name="CancelBtn" type="button" selector="#cancel" />
+        <element name="FolderName" type="button" selector="input[data-role='promptField']" />
+        <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
+        <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
+        <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
+        <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
+    </section>
+    <section name="AdminProductFormAdvancedPricingSection">
+        <element name="specialPrice" type="input" selector="input[name='product[special_price]']"/>
+        <element name="doneButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-primary"/>
+    </section>
+</sections>

@@ -11,6 +11,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Data object for sort order.
+ *
+ * @api
  */
 class SortOrder extends AbstractSimpleObject
 {
