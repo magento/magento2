@@ -18,7 +18,9 @@
             <testCaseId value="MAGETWO-72095"/>
             <group value="customer"/>
             <group value="create"/>
-            <group value="skip"/>
+            <skip>
+                <issueId value="MAGETWO-72095"/>
+            </skip>
         </annotations>
         <after>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>

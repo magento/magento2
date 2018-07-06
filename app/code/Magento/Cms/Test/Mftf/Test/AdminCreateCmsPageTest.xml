@@ -17,8 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-25580"/>
             <group value="cms"/>
-            <!-- MQE-282 -->
-            <group value="skip"/>
+            <skip>
+                <issueId value="MQE-282"/>
+            </skip>
         </annotations>
         <after>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>

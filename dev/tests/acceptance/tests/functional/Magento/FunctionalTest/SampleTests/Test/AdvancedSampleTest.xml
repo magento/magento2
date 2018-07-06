@@ -15,7 +15,9 @@
             <description value=""/>
             <severity value="CRITICAL"/>
             <testCaseId value="#"/>
-            <group value="skip"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SamplePerson" stepKey="beforeData"/>
