@@ -215,8 +215,11 @@ class Collection extends \Magento\Framework\Data\Collection
                 )
             );
         } else {
+            // Transform the start date to UTC whilst preserving the date. This is required as getTimestamp()
+            // is in UTC which may result in a different month from the original start date due to time zones.
+            $dateStartUtc = (new \DateTime())->createFromFormat('d-m-Y g:i:s', $dateStart->format('d-m-Y 00:00:00'));
             $interval['end'] = $this->_localeDate->convertConfigTimeToUtc(
-                $dateStart->format('Y-m-' . date('t', $dateStart->getTimestamp()) . ' 23:59:59')
+                $dateStart->format('Y-m-' . date('t', $dateStartUtc->getTimestamp()) . ' 23:59:59')
             );
         }
 

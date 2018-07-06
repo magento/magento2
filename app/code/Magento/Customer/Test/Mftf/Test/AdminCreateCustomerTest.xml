@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateCustomerTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Create a Customer via the Admin"/>
+            <title value="Admin should be able to create a customer"/>
+            <description value="Admin should be able to create a customer"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-72095"/>
+            <group value="customer"/>
+            <group value="create"/>
+        </annotations>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}" stepKey="clickCreateCustomer"/>
+        <waitForElement selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="wait1"/>
+        <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
+        <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
+        <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
+        <waitForElementNotVisible selector="div [data-role='spinner']" time="10" stepKey="waitForSpinner1"/>
+        <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
+        <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilter"/>
+        <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerFiltersSection.emailInput}}" stepKey="filterEmail"/>
+        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
+        <waitForElementNotVisible selector="div [data-role='spinner']" time="10" stepKey="waitForSpinner2"/>
+        <see userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertFirstName"/>
+        <see userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertLastName"/>
+        <see userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertEmail"/>
+    </test>
+</tests>
