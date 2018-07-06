@@ -87,6 +87,7 @@ class AssignProducts extends \Magento\Backend\Block\Template
         }
         return '{}';
     }
+
     /**
      * Retrieve current category instance
      *
