@@ -17,6 +17,7 @@ class Js extends \Magento\Backend\Block\Template
      *
      * @var string
      */
+  
     protected $_template = 'attribute/edit/js.phtml';
 
     /**
