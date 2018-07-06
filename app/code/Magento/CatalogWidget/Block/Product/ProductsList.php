@@ -152,7 +152,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
         return [
             'CATALOG_PRODUCTS_LIST_WIDGET',
-            $this->priceCurrency->getCurrencySymbol(),
+            $this->priceCurrency->getCurrency()->getCode(),
             $this->_storeManager->getStore()->getId(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),

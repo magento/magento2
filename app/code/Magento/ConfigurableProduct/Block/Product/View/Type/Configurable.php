@@ -112,7 +112,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     public function getCacheKeyInfo()
     {
         $parentData = parent::getCacheKeyInfo();
-        $parentData[] = $this->priceCurrency->getCurrencySymbol();
+        $parentData[] = $this->priceCurrency->getCurrency()->getCode();
         return $parentData;
     }
 
