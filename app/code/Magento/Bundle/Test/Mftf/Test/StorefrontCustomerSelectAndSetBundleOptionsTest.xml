@@ -16,7 +16,7 @@
             <description value="Customer should be able to select customisable bundle product options and set quantity for them"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-231"/>
-            <group value="banana"/>
+            <group value="Bundle"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
