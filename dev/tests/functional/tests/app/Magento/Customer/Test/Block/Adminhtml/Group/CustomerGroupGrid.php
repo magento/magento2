@@ -31,6 +31,10 @@ class CustomerGroupGrid extends DataGrid
         'code' => [
             'selector' => '.admin__data-grid-filters input[name*=customer_group_code]',
         ],
+        'tax_class_id' => [
+            'selector' => '.admin__data-grid-filters select[name*=tax_class_id]',
+            'input' => 'select'
+        ],
     ];
 
     /**
