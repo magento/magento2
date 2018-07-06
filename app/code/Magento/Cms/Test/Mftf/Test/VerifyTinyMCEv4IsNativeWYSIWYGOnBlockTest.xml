@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="VerifyTinyMCEv4IsNativeWYSIWYGOnBlockTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="MAGETWO-42046-Apply new WYSIWYG on CMS Page and Block"/>
+            <group value="Cms"/>
+            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Block"/>
+            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Block"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-84184"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCmsPage" stepKey="createPreReqCMSPage" />
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+        </before>
+        <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnNewBlockPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle"/>
+        <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
+        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE4"/>
+        <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
+        <executeJS function="tinyMCE.get('cms_block_form_content').setContent('Hello Block Page!');" stepKey="executeJSFillContent"/>
+        <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
+        <waitForElementVisible selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
+        <see selector="{{TinyMCESection.InsertImageBtn}}" userInput="Insert Image..." stepKey="assertInf17"/>
+        <see selector="{{TinyMCESection.InsertWidgetBtn}}" userInput="Insert Widget..." stepKey="assertInfo18"/>
+        <see selector="{{TinyMCESection.InsertVariableBtn}}" userInput="Insert Variable..." stepKey="assertInfo19"/>
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="expandSplitButton"/>
+        <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+        <waitForPageLoad stepKey="waitForGridReload"/>
+        <click selector="{{CmsPagesPageActionsSection.filterButton}}" stepKey="clickFiltersBtn" />
+        <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createPreReqCMSPage.identifier$$" stepKey="fillOutURLKey" />
+        <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createPreReqCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
+        <scrollTo selector="{{CmsPagesPageActionsSection.select('$$createPreReqCMSPage.identifier$$')}}" stepKey="scrollToCMSPage" />
+        <click selector="{{CmsPagesPageActionsSection.select('$$createPreReqCMSPage.identifier$$')}}" stepKey="clickSelect" />
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createPreReqCMSPage.identifier$$')}}" stepKey="waitForEditLink" />
+        <click selector="{{CmsPagesPageActionsSection.edit('$$createPreReqCMSPage.identifier$$')}}" stepKey="clickEdit" />
+        <waitForPageLoad stepKey="waitForPageLoad3" />
+        <scrollTo selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" stepKey="scrollToPageTitle" />
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+        <waitForElementVisible selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="waitforShowHideBtn" />
+        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn2"/>
+        <waitForElementVisible selector="{{TinyMCESection.InsertWidgetBtn}}"  stepKey="waitForInsertInsertWidgetBtn" />
+        <seeElement selector="{{TinyMCESection.InsertWidgetBtn}}"  stepKey="widgetBtn" />
+        <click selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="clickInsertWidgetBtn"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static Block" stepKey="selectCMSStaticBlock" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
+        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
+        <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappearAfterClickingBtnChooser" />
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending2" />
+        <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="waitForBlockCode" />
+        <scrollTo selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}"  stepKey="scrollToBlockIdentifier" />
+        <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
+        <wait time="3" stepKey="wait1" />
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+        <waitForPageLoad stepKey="waitForPageLoad5" />
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <amOnPage url="$$createPreReqCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad6" />
+        <!--see content of Block on Storefront-->
+        <see userInput="Hello Block Page!" stepKey="seeContent"/>
+        <after>
+            <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+            <waitForPageLoad stepKey="waitForGridReload"/>
+            <deleteData createDataKey="createPreReqCMSPage" stepKey="deletePreReqCMSPage" />
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>
