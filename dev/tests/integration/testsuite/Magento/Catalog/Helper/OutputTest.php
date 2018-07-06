@@ -81,6 +81,7 @@ class OutputTest extends \PHPUnit\Framework\TestCase
             ['{{store url="customer/account/login"}}', true],
         ];
     }
+
     /**
      * Helper method for testProcess()
      *

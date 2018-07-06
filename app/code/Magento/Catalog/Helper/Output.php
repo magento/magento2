@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Helper;
 
 use Magento\Catalog\Model\Category as ModelCategory;
@@ -223,11 +225,10 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
     public function isDirectivesExists($attributeHtml)
     {
         $matches = false;
-        foreach ($this->directivePatterns as $pattern)
-        {
-            if (preg_match($pattern, $attributeHtml))
-            {
+        foreach ($this->directivePatterns as $pattern) {
+            if (preg_match($pattern, $attributeHtml)) {
                 $matches = true;
+                break;
             }
         }
         return $matches;
