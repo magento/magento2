@@ -90,4 +90,8 @@
         <plugin sortOrder="1" name="magentoInventoryCatalogStockDataFilter"
                 type="Magento\InventoryCatalog\Plugin\Controller\Adminhtml\Product\Initialization\StockDataFilterPlugin"/>
     </type>
+    <type name="Magento\CatalogInventory\Api\Data\StockItemInterface">
+        <plugin sortOrder="1" name="magentoInventoryCatalogStockItemInterface"
+                type="Magento\InventoryCatalog\Plugin\Api\Data\StockItemInterfacePlugin"/>
+    </type>
 </config>
