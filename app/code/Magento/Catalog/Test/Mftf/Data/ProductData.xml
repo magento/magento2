@@ -123,17 +123,6 @@
         <data key="status">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
-    <entity name="VirtualProduct" type="product">
-        <data key="sku" unique="suffix">virtualproduct</data>
-        <data key="type_id">virtual</data>
-        <data key="attribute_set_id">4</data>
-        <data key="name" unique="suffix">VirtualProduct</data>
-        <data key="price">99.99</data>
-        <data key="quantity">250</data>
-        <data key="weight">0</data>
-        <data key="status">1</data>
-        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
-    </entity>
     <entity name="SimpleProductWithNewFromDate" type="product">
         <data key="sku" unique="suffix">SimpleProduct</data>
         <data key="type_id">simple</data>
