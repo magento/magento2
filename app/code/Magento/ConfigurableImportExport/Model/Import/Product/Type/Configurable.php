@@ -336,18 +336,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $codeExists = false;
         $codeNotGlobal = false;
         $codeNotTypeSelect = false;
-        // Does this attribute code exist? Does it have the correct settings?
-        $filterAttribute = array_filter(
-            self::$commonAttributesCache,
-            function ($element) use($superAttrCode) {
-                return $element['code'] == $superAttrCode;
-            }
-        );
-
-        if (is_array($filterAttribute) && count($filterAttribute)) {
+        // Does this attribute code exist?
+        $sourceAttribute = $this->doesSuperAttributeExist($superAttrCode);
+        if (count($sourceAttribute)) {
             $codeExists = true;
-            // Examine the first element of the filtered array
-            $sourceAttribute = array_shift($filterAttribute);
+            // Does attribute have the correct settings?
             if (is_array($sourceAttribute)) {
                 if (isset($sourceAttribute['is_global']) && $sourceAttribute['is_global'] !== '1') {
                     $codeNotGlobal = true;
@@ -357,18 +350,43 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
         }
 
+        // Identify (if any) the correct fault:
         if ($codeExists === false) {
             $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST, $rowNum, $superAttrCode);
             $reasonFound = true;
-        } elseif ($codeNotGlobal == true) {
+        } elseif ($codeNotGlobal === true) {
             $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE, $rowNum, $superAttrCode);
             $reasonFound = true;
-        } elseif ($codeNotTypeSelect == true) {
+        } elseif ($codeNotTypeSelect === true) {
             $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT, $rowNum, $superAttrCode);
             $reasonFound = true;
         }
 
         return $reasonFound;
+    }
+
+    /**
+     * Does the super attribute exist in the current attribute set?
+     *
+     * @param string $superAttrCode
+     * @return array
+     */
+    private function doesSuperAttributeExist($superAttrCode)
+    {
+        $returnFilterArray = [];
+        if (is_array(self::$commonAttributesCache))
+        {
+            $filteredAttribute = array_filter(
+                self::$commonAttributesCache,
+                function ($element) use ($superAttrCode) {
+                    return $element['code'] == $superAttrCode;
+                }
+            );
+
+            // Return the first element of the filtered array.
+            $returnFilterArray = array_shift($filteredAttribute);
+        }
+        return $returnFilterArray;
     }
 
     /**
