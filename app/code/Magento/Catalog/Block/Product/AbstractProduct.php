@@ -236,7 +236,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     /**
      * Add all attributes and apply pricing logic to products collection
      * to get correct values in different products lists.
-     * E.g. crosssells, upsells, new products, recently viewed
+     * E.g. cross-sells, up-sells, new products, recently viewed
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection

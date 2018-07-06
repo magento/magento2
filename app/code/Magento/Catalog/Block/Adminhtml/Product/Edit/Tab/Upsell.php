@@ -332,7 +332,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Retrieve selected upsell products
+     * Retrieve selected up-sell products
      *
      * @return array
      */
@@ -346,7 +346,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Retrieve upsell products
+     * Retrieve up-sell products
      *
      * @return array
      */

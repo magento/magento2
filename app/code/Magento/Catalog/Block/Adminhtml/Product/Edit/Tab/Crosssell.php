@@ -340,7 +340,7 @@ class Crosssell extends Extended
     }
 
     /**
-     * Retrieve selected crosssell products
+     * Retrieve selected cross-sell products
      *
      * @return array
      */
@@ -354,7 +354,7 @@ class Crosssell extends Extended
     }
 
     /**
-     * Retrieve crosssell products
+     * Retrieve cross-sell products
      *
      * @return array
      */

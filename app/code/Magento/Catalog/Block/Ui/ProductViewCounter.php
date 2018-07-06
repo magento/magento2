@@ -20,8 +20,8 @@ use Magento\Store\Model\StoreManager;
 /**
  * Reports Viewed Products Counter
  *
- * The main responsilibity of this class is provide necessary data to track viewed products
- * by customer on frontend and data to synchornize this tracks with backend
+ * The main responsibility of this class is provide necessary data to track viewed products
+ * by customer on frontend and data to synchronize this tracks with backend
  *
  * @api
  * @since 101.1.0

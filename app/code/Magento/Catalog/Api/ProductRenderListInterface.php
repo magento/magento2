@@ -15,7 +15,7 @@ interface ProductRenderListInterface
 {
     /**
      * Collect and retrieve the list of product render info
-     * This info contains raw prices and formated prices, product name, stock status, store_id, etc
+     * This info contains raw prices and formatted prices, product name, stock status, store_id, etc
      * @see \Magento\Catalog\Api\Data\ProductRenderInfoDtoInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

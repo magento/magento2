@@ -12,14 +12,14 @@ namespace Magento\Catalog\Block\Product\ProductList;
 class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
-     * Crosssell item collection
+     * Cross-sell item collection
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
      */
     protected $_itemCollection;
 
     /**
-     * Prepare crosssell items data
+     * Prepare cross-sell items data
      *
      * @return \Magento\Catalog\Block\Product\ProductList\Crosssell
      */
@@ -54,7 +54,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
-     * Retrieve crosssell items collection
+     * Retrieve cross-sell items collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
      */
