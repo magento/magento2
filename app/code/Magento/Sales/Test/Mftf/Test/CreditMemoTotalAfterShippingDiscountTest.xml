@@ -40,15 +40,21 @@
         <waitForPageLoad stepKey="waitForRulesPage"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsite"/>
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="chooseNotLoggedInCustomerGroup"/>
         <!--<selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>-->
+
+        <!-- Open the Actions Tab in the Rules Edit page -->
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount" stepKey="selectActionType"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="10" stepKey="fillDiscountAmount"/>
-        <scrollTo selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="scrollToShippingLabel"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="waitForElementToBeVisible"/>
         <click selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="enableApplyDiscountToShiping"/>
         <seeCheckboxIsChecked selector="{{AdminCartPriceRulesFormSection.applyDiscountToShipping}}" stepKey="DiscountIsAppliedToShiping"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="10" stepKey="fillDiscountAmount"/>
+
+        <!--<scrollTo selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="scrollToShippingLabel"/>-->
+        <!--<click selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="enableApplyDiscountToShiping"/>-->
+        <!--<seeCheckboxIsChecked selector="{{AdminCartPriceRulesFormSection.applyDiscountToShipping}}" stepKey="DiscountIsAppliedToShiping"/>-->
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
         <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
