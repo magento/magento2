@@ -38,30 +38,6 @@
 
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-
-            <comment userInput="Disable source, as it can brake single source mode tests." stepKey="disableCustomSourceComment"/>
-            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceList"/>
-            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilterForDisable"/>
-            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterCustomSourceBySourceCode">
-                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-                <argument name="value" value="$$customSource.source[source_code]$$"/>
-            </actionGroup>
-            <click selector="{{AdminGridRow.editByValue($$customSource.source[source_code]$$)}}" stepKey="clickEditCustomSource"/>
-            <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad"/>
-            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableCustomSource"/>
-            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSource"/>
-
-            <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
-            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
-            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
-            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
-                <argument name="keyword" value="_defaultStock.name"/>
-            </actionGroup>
-            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
-            <waitForPageLoad time="30" stepKey="waitFroDefaultStockEditPageLoad"/>
-            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
-            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
-
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
         </after>
 

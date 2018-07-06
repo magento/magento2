@@ -57,6 +57,7 @@
             <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
         </actionGroup>
 
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
         <fillField selector="input[name='sources[assigned_sources][0][quantity]']" userInput="100" stepKey="fillSourceQtyField1"/>
         <fillField selector="input[name='sources[assigned_sources][1][quantity]']" userInput="100" stepKey="fillSourceQtyField2"/>

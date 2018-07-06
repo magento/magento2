@@ -102,6 +102,7 @@
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectVirtualProduct"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addVirtualProduct"/>
 
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <comment userInput="Assign category to product." stepKey="assignCategoryComment"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]"  stepKey="searchAndSelectCategory"/>
 
@@ -111,6 +112,9 @@
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
             <argument name="customer" value="$$customer$$"/>
         </actionGroup>
+
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad20"/>
 
         <comment userInput="Add grouped product to order." stepKey="addGroupedProductToOrderComment"/>
         <actionGroup ref="addGroupedProductOptionToOrder" stepKey="addGroupedProductSimpleOptionToOrder">

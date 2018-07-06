@@ -18,6 +18,7 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <group value="banana"/>
         </annotations>
 
         <before>
@@ -60,24 +61,10 @@
         </before>
 
         <after>
-            <comment userInput="Disable source, as it can brake single source mode tests." stepKey="disableCustomSourceComment"/>
-            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceList"/>
-            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilterForDisable"/>
-            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterCustomSourceBySourceCode">
-                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-                <argument name="value" value="$$customSource.source[source_code]$$"/>
-            </actionGroup>
-            <click selector="{{AdminGridRow.editByValue($$customSource.source[source_code]$$)}}" stepKey="clickEditCustomSource"/>
-            <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad"/>
-            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableCustomSource"/>
-            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSource"/>
-
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
 
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
-            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
-            <deleteData createDataKey="customStock" stepKey="deleteStock"/>
         </after>
 
         <comment userInput="Assign category to created virtual product." stepKey="assignCategoryToProductComment"/>

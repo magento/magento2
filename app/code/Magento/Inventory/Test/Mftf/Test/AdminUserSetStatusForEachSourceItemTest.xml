@@ -79,6 +79,7 @@
             <argument name="filter_value" value="$$createSource4.source[source_code]$$"/>
         </actionGroup>
 
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillCustomSource1QtyField"/>

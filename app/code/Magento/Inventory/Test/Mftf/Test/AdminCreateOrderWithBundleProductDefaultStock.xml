@@ -101,6 +101,10 @@
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
             <argument name="customer" value="$$customer$$"/>
         </actionGroup>
+
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad20"/>
+
         <actionGroup ref="addBundleProductToOrder" stepKey="addBundleProductToOrder">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
