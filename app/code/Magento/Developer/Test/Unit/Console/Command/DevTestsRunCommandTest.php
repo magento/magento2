@@ -17,6 +17,7 @@ namespace Magento\Developer\Console\Command {
      * @param string $command
      * @param int|null $return_var
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     function passthru($command, &$return_var = null)
     {
