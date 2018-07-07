@@ -28,12 +28,12 @@ class GroupActions extends Column
     /**
      * @var UrlInterface
      */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /**
      * @var Escaper
      */
-    protected $escaper;
+    private $escaper;
 
     /**
      * Constructor
