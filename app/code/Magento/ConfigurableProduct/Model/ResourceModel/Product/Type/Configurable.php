@@ -17,7 +17,6 @@ use Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -157,7 +156,9 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        $select = $this->getConnection()->select()->from(
+        $connection = $this->getConnection();
+
+        $select = $connection->select()->from(
             ['l' => $this->getMainTable()],
             ['product_id', 'parent_id']
         )->join(
@@ -173,8 +174,10 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $parentId
         );
 
-        $childrenIds = [0 => []];
-        foreach ($this->getConnection()->fetchAll($select) as $row) {
+        $childrenIds = [[]];
+        foreach ($connection->fetchAll($select) as $row) {
+            $childrenIds[$row['parent_id']][] = $row['product_id'];
+            // Alternative format for backward compatibility
             $childrenIds[0][$row['product_id']] = $row['product_id'];
         }
 
