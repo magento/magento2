@@ -332,33 +332,24 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         // This attribute code is not a super attribute. Need to give a clearer message why?
         $reasonFound = false;
-
         $codeExists = false;
-        $codeNotGlobal = false;
-        $codeNotTypeSelect = false;
+
         // Does this attribute code exist?
         $sourceAttribute = $this->doesSuperAttributeExist($superAttrCode);
-        if (count($sourceAttribute)) {
+        if (!is_null($sourceAttribute)) {
             $codeExists = true;
             // Does attribute have the correct settings?
-            if (is_array($sourceAttribute)) {
-                if (isset($sourceAttribute['is_global']) && $sourceAttribute['is_global'] !== '1') {
-                    $codeNotGlobal = true;
-                } elseif (isset($sourceAttribute['type']) && $sourceAttribute['type'] !== 'select') {
-                    $codeNotTypeSelect = true;
-                }
+            if (isset($sourceAttribute['is_global']) && $sourceAttribute['is_global'] !== '1') {
+                $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE, $rowNum, $superAttrCode);
+                $reasonFound = true;
+            } elseif (isset($sourceAttribute['type']) && $sourceAttribute['type'] !== 'select') {
+                $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT, $rowNum, $superAttrCode);
+                $reasonFound = true;
             }
         }
 
-        // Identify (if any) the correct fault:
         if ($codeExists === false) {
             $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST, $rowNum, $superAttrCode);
-            $reasonFound = true;
-        } elseif ($codeNotGlobal === true) {
-            $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE, $rowNum, $superAttrCode);
-            $reasonFound = true;
-        } elseif ($codeNotTypeSelect === true) {
-            $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT, $rowNum, $superAttrCode);
             $reasonFound = true;
         }
 
@@ -373,9 +364,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     private function doesSuperAttributeExist($superAttrCode)
     {
-        $returnFilterArray = [];
-        if (is_array(self::$commonAttributesCache))
-        {
+        $returnAttributeArray = null;
+        if (is_array(self::$commonAttributesCache)) {
             $filteredAttribute = array_filter(
                 self::$commonAttributesCache,
                 function ($element) use ($superAttrCode) {
@@ -383,10 +373,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 }
             );
 
-            // Return the first element of the filtered array.
-            $returnFilterArray = array_shift($filteredAttribute);
+            // Return the first element of the filtered array (if found).
+            if (count($filteredAttribute))
+            {
+                $returnAttributeArray = array_shift($filteredAttribute);
+            }
         }
-        return $returnFilterArray;
+        return $returnAttributeArray;
     }
 
     /**
