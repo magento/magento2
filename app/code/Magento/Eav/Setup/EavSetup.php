@@ -791,6 +791,21 @@ class EavSetup
             throw new LocalizedException($errorMessage);
         }
 
+        /**
+         * Check attribute_code for allowed characters
+         */
+        if (trim($attributeCode)
+            && !preg_match('/^[a-z][a-z0-9_]*$/', trim($attributeCode))
+        ) {
+            throw new LocalizedException(
+                __(
+                    'Attribute code "%1" is invalid. Please use only letters (a-z), ' .
+                    'numbers (0-9) or underscore(_) in this field, first character should be a letter.',
+                    $attributeCode
+                )
+            );
+        }
+
         return true;
     }
 
