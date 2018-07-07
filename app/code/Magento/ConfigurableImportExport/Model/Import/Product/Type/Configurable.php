@@ -336,7 +336,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
         // Does this attribute code exist?
         $sourceAttribute = $this->doesSuperAttributeExist($superAttrCode);
-        if (!is_null($sourceAttribute)) {
+        if (is_array($sourceAttribute)) {
             $codeExists = true;
             // Does attribute have the correct settings?
             if (isset($sourceAttribute['is_global']) && $sourceAttribute['is_global'] !== '1') {
@@ -374,8 +374,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             );
 
             // Return the first element of the filtered array (if found).
-            if (count($filteredAttribute))
-            {
+            if (count($filteredAttribute)) {
                 $returnAttributeArray = array_shift($filteredAttribute);
             }
         }
