@@ -19,7 +19,8 @@
         "magento/module-widget": "101.0.*",
         "magento/module-quote": "101.0.*",
         "magento/module-ui": "101.0.*",
-        "magento/framework": "101.0.*"
+        "magento/framework": "101.0.*",
+        "magento/module-configurable-product": "100.*"
     },
     "suggest": {
         "magento/module-sales-rule-sample-data": "Sample Data version:100.2.*"

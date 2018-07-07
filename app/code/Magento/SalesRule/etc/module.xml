@@ -12,6 +12,7 @@
             <module name="Magento_Catalog"/>
             <module name="Magento_Sales"/>
             <module name="Magento_Quote"/>
+            <module name="Magento_ConfigurableProduct"/>
         </sequence>
     </module>
 </config>
