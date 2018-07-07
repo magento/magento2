@@ -37,7 +37,7 @@ class Price extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'tier_price',
             'text',
-            ['name' => 'tier_price', 'class' => 'requried-entry', 'value' => $product->getData('tier_price')]
+            ['name' => 'tier_price', 'class' => 'required-entry', 'value' => $product->getData('tier_price')]
         );
 
         $form->getElement(

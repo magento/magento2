@@ -255,7 +255,7 @@ class Advanced extends Generic
     }
 
     /**
-     * Initialize form fileds values
+     * Initialize form field values
      *
      * @return $this
      */

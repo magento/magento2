@@ -7,8 +7,7 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
 use Magento\Backend\Block\Template\Context;
-use Magento\Backend\Block\Widget\Accordion;
-use Magento\Backend\Block\Widget\Tabs as WigetTabs;
+use Magento\Backend\Block\Widget\Tabs as WidgetTabs;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Catalog\Helper\Catalog;
 use Magento\Catalog\Helper\Data;
@@ -22,7 +21,7 @@ use Magento\Framework\Translate\InlineInterface;
  * Admin product edit tabs
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Tabs extends WigetTabs
+class Tabs extends WidgetTabs
 {
     const BASIC_TAB_GROUP_CODE = 'basic';
 

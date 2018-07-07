@@ -10,7 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\View\Element\AbstractBlock;
 
 /**
- * Catalog product upsell items block
+ * Catalog product up-sell items block
  *
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -204,7 +204,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
-     * Set how many items we need to show in upsell block
+     * Set how many items we need to show in up-sell block
      * Notice: this parameter will be also applied
      *
      * @param string $type

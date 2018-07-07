@@ -66,8 +66,8 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
 
     /**
      * Set max regular price
-     * Max regular price is the same, as maximum price, except of excluding calculating special price and catalogules
-     * in it
+     * Max regular price is the same, as maximum price, except of excluding calculating special price and catalog price
+     * rules in it
      *
      * @param string $maxRegularPrice
      * @return void
