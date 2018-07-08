@@ -55,7 +55,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['eav_setup_test'],
-            ['_29_characters_29_characters_'],
+            ['characters_29_characters_29__'],
         ];
     }
 
@@ -87,6 +87,8 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
             [''],
             [' '],
             ['more_than_30_characters_more_than'],
+            ['attribute.code.with.dots'],
+            ['_first_character_is_not_letter'],
         ];
     }
 
