@@ -44,13 +44,20 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         $timesUsed = $connection->fetchOne($select, [':coupon_id' => $couponId, ':customer_id' => $customerId]);
-
         if ($timesUsed !== false) {
+            $updatedValue    = $increment ? 1 : -1;
+            $updatedTimeUsed = $timesUsed + $updatedValue;
             $this->getConnection()->update(
                 $this->getMainTable(),
-                ['times_used' => $timesUsed + ($increment ? 1 : -1)],
+                ['times_used' => $updatedTimeUsed],
                 ['coupon_id = ?' => $couponId, 'customer_id = ?' => $customerId]
             );
+            if ($updatedTimeUsed == 0) {
+                $connection->delete(
+                    $this->getMainTable(),
+                    ['coupon_id = ?' => $couponId, 'customer_id = ?' => $customerId]
+                );
+            }
         } elseif ($increment) {
             $this->getConnection()->insert(
                 $this->getMainTable(),
@@ -74,11 +81,11 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $select = $connection->select()->from(
                 $this->getMainTable()
             )->where(
-                'customer_id =:customet_id'
+                'customer_id =:customer_id'
             )->where(
                 'coupon_id = :coupon_id'
             );
-            $data = $connection->fetchRow($select, [':coupon_id' => $couponId, ':customet_id' => $customerId]);
+            $data = $connection->fetchRow($select, [':coupon_id' => $couponId, ':customer_id' => $customerId]);
             if ($data) {
                 $object->setData($data);
             }
