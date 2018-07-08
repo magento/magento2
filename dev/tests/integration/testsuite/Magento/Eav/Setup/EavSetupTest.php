@@ -55,7 +55,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['eav_setup_test'],
-            ['_29_characters_29_characters_'],
+            ['characters_29_characters_29__'],
         ];
     }
 
@@ -89,8 +89,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
             ['more_than_30_characters_more_than'],
         ];
     }
-
-
+    
     /**
      * Verify that add attribute throw exception if attribute_code is not valid.
      *
@@ -115,7 +114,6 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
     public function addInvalidAttributeThrowExceptionDataProvider()
     {
         return [
-            [''],
             ['1first_character_is_not_letter'],
             ['attribute.with.dots'],
         ];
