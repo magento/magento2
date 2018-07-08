@@ -90,6 +90,37 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+
+    /**
+     * Verify that add attribute throw exception if attribute_code is not valid.
+     *
+     * @param string|null $attributeCode
+     *
+     * @dataProvider addInvalidAttributeThrowExceptionDataProvider
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Please use only letters (a-z), numbers (0-9) or underscore(_) in this field, first char
+     */
+    public function testAddInvalidAttributeThrowException($attributeCode)
+    {
+        $attributeData = $this->getAttributeData();
+
+        $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, $attributeData);
+    }
+
+    /**
+     * Data provider for testAddInvalidAttributeThrowException().
+     *
+     * @return array
+     */
+    public function addInvalidAttributeThrowExceptionDataProvider()
+    {
+        return [
+            [''],
+            ['1first_character_is_not_letter'],
+            ['attribute.with.dots'],
+        ];
+    }
+
     /**
      * Get simple attribute data.
      */
