@@ -13,6 +13,7 @@
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
         <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
+        <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
         <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']"/>
