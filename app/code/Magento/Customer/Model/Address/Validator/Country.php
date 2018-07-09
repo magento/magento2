@@ -95,8 +95,8 @@ class Country implements ValidatorInterface
         $countryId = $address->getCountryId();
         $countryModel = $address->getCountryModel();
         $regionCollection = $countryModel->getRegionCollection();
-        $region = $address->getRegion();
-        $regionId = (string)$address->getRegionId();
+        $region = $address->getData('region');
+        $regionId = (string)$address->getData('region_id');
         $allowedRegions = $regionCollection->getAllIds();
         $isRegionRequired = $this->directoryData->isRegionRequired($countryId);
         if ($isRegionRequired && empty($allowedRegions) && !\Zend_Validate::is($region, 'NotEmpty')) {
@@ -107,7 +107,7 @@ class Country implements ValidatorInterface
             //If country actually has regions and requires you to
             //select one then it must be selected.
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'regionId']);
-        } elseif ($regionId && !in_array($regionId, $allowedRegions, true)) {
+        } elseif ($allowedRegions && $regionId && !in_array($regionId, $allowedRegions, true)) {
             //If a region is selected then checking if it exists.
             $errors[] = __(
                 'Invalid value of "%value" provided for the %fieldName field.',
