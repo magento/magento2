@@ -62,7 +62,8 @@ class Collection
                     ['eq' => '1'],
                     ['eq' => '1'],
                     ['eq' => '1']
-                ]);
+                ]
+            );
         }
 
         return $this->collection->load();
