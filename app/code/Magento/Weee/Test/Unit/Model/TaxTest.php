@@ -327,7 +327,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'attribute_code' => 'fpt_code',
                 ],
                 'websitePassed' => 1,
-                'expectedFptLabel' => 'fpt_label'
+                'expectedFptLabel' => 'fpt_label',
             ],
             'store_label_not_defined' => [
                 'weeeTaxCalculationsByEntity' => [
@@ -337,7 +337,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'attribute_code' => 'fpt_code',
                 ],
                 'websitePassed' => 1,
-                'expectedFptLabel' => 'fpt_label_frontend'
+                'expectedFptLabel' => 'fpt_label_frontend',
             ],
             'website_not_passed' => [
                 'weeeTaxCalculationsByEntity' => [
