@@ -86,4 +86,12 @@
         <plugin name="adapt_get_product_stock_status" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusPlugin"/>
         <plugin name="adapt_get_product_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusBySkuPlugin"/>
     </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter">
+        <plugin sortOrder="1" name="magentoInventoryCatalogStockDataFilter"
+                type="Magento\InventoryCatalog\Plugin\Controller\Adminhtml\Product\Initialization\StockDataFilterPlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Api\Data\StockItemInterface">
+        <plugin sortOrder="1" name="magentoInventoryCatalogStockItemInterface"
+                type="Magento\InventoryCatalog\Plugin\Api\Data\StockItemInterfacePlugin"/>
+    </type>
 </config>
