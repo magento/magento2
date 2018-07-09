@@ -78,7 +78,6 @@
         <seeElement selector="{{BundleStorefrontSection.shortDescriptionText}}" stepKey="seeShortDescription"/>
         <seeElement selector="{{BundleStorefrontSection.longDescriptionText}}" stepKey="seeLongDescription"/>
         <click selector="{{BundleStorefrontSection.bundleOptionSelector}}" stepKey="clickOnCustomizationOption"/>
-        <waitForPageLoad stepKey="waitForDropDownContainingOptions"/>
         <seeElement selector="{{BundleStorefrontSection.bundleOptionSelection('1')}}" stepKey="seeOption1"/>
         <seeElement selector="{{BundleStorefrontSection.bundleOptionSelection('2')}}" stepKey="seeOption2"/>
     </test>
