@@ -228,6 +228,7 @@ class Categories extends AbstractModifier
                             'componentType' => 'container',
                             'component' => 'Magento_Ui/js/form/components/group',
                             'scopeLabel' => __('[GLOBAL]'),
+                            'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
                         ],
                     ],
                 ],
