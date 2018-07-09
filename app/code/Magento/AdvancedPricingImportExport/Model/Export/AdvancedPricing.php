@@ -402,8 +402,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                         $exportRow[$keyTemplate] = $this->_getCustomerGroupById(
                             $row[$keyTemplate],
                             isset($row[ImportAdvancedPricing::VALUE_ALL_GROUPS])
-                                ? $row[ImportAdvancedPricing::VALUE_ALL_GROUPS]
-                                : null
+                            ? $row[ImportAdvancedPricing::VALUE_ALL_GROUPS]
+                            : null
                         );
                         unset($exportRow[ImportAdvancedPricing::VALUE_ALL_GROUPS]);
                     } elseif ($keyTemplate === ImportAdvancedPricing::COL_TIER_PRICE) {

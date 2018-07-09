@@ -151,10 +151,13 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->exportConfig = $this->createMock(\Magento\ImportExport\Model\Export\Config::class);
-        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\ProductFactory::class, [
-            'create',
-            'getTypeId',
-        ]);
+        $this->productFactory = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\ProductFactory::class,
+            [
+                'create',
+                'getTypeId',
+            ]
+        );
         $this->attrSetColFactory = $this->createPartialMock(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
             [
@@ -185,11 +188,14 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             \Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class
         );
         $this->groupRepository = $this->createMock(\Magento\Customer\Api\GroupRepositoryInterface::class);
-        $this->writer = $this->createPartialMock(\Magento\ImportExport\Model\Export\Adapter\AbstractAdapter::class, [
+        $this->writer = $this->createPartialMock(
+            \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter::class,
+            [
             'setHeaderCols',
             'writeRow',
             'getContents',
-        ]);
+            ]
+        );
         $constructorMethods = [
             'initTypeModels',
             'initAttributes',
