@@ -5,8 +5,10 @@
  */
 namespace Magento\Config\Model;
 
+use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Config\Model\Config\Structure\Element\Group;
 use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Backend config model
@@ -81,6 +83,11 @@ class Config extends \Magento\Framework\DataObject
     protected $_storeManager;
 
     /**
+     * @var Config\Reader\Source\Deployed\SettingChecker
+     */
+    private $settingChecker;
+
+    /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Config\Model\Config\Structure $configStructure
@@ -88,6 +95,7 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Config\Model\Config\Loader $configLoader
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Config\Reader\Source\Deployed\SettingChecker|null $settingChecker
      * @param array $data
      */
     public function __construct(
@@ -98,6 +106,7 @@ class Config extends \Magento\Framework\DataObject
         \Magento\Config\Model\Config\Loader $configLoader,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        SettingChecker $settingChecker = null,
         array $data = []
     ) {
         parent::__construct($data);
@@ -108,6 +117,7 @@ class Config extends \Magento\Framework\DataObject
         $this->_configLoader = $configLoader;
         $this->_configValueFactory = $configValueFactory;
         $this->_storeManager = $storeManager;
+        $this->settingChecker = $settingChecker ?: ObjectManager::getInstance()->get(SettingChecker::class);
     }
 
     /**
@@ -351,6 +361,16 @@ class Config extends \Magento\Framework\DataObject
             // use extra memory
             $fieldsetData = [];
             foreach ($groupData['fields'] as $fieldId => $fieldData) {
+                $isReadOnly = $this->settingChecker->isReadOnly(
+                    $groupPath . '/' . $fieldId,
+                    $this->getScope(),
+                    $this->getScopeCode()
+                );
+
+                if ($isReadOnly) {
+                    continue;
+                }
+
                 $field = $this->getField($sectionPath, $groupId, $fieldId);
                 /** @var \Magento\Framework\App\Config\ValueInterface $backendModel */
                 $backendModel = $field->hasBackendModel()
