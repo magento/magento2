@@ -127,6 +127,7 @@
                         <dataType>text</dataType>
                         <dataScope>status</dataScope>
                         <label translate="true">Source Item Status</label>
+                        <disabled>true</disabled>
                         <imports>
                             <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
                         </imports>
@@ -152,6 +153,7 @@
                         <validation>
                             <rule name="required-entry" xsi:type="boolean">true</rule>
                         </validation>
+                        <disabled>true</disabled>
                         <imports>
                             <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
                         </imports>
