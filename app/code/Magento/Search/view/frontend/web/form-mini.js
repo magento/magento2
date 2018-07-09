@@ -44,7 +44,7 @@ define([
             submitBtn: 'button[type="submit"]',
             searchLabel: '[data-role=minisearch-label]',
             isExpandable: null,
-            suggestionDelay: 250
+            suggestionDelay: 300
         },
 
         /** @inheritdoc */
