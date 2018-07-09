@@ -98,10 +98,9 @@ class CollectQuoteTest extends TestCase
         );
         $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
         $this->estimateAddressMock = $this->createMock(EstimateAddressInterface::class);
-        $this->estimateAddressFactoryMock = $this->getMockBuilder(EstimateAddressInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->estimateAddressFactoryMock = $this->createPartialMock(EstimateAddressInterfaceFactory::class,
+            ['create']
+        );
         $this->shippingMethodManagerMock = $this->createMock(ShippingMethodManagementInterface::class);
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->quoteMock = $this->createMock(Quote::class);
@@ -158,7 +157,8 @@ class CollectQuoteTest extends TestCase
             ->method('create')
             ->willReturn($this->estimateAddressMock);
         $this->quoteRepositoryMock->expects(self::once())
-            ->method('save');
+            ->method('save')
+            ->with($this->quoteMock);
 
         $this->model->collect($this->quoteMock);
     }
