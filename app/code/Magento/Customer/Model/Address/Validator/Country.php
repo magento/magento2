@@ -88,6 +88,8 @@ class Country implements ValidatorInterface
      *
      * @param AbstractAddress $address
      * @return array
+     * @throws \Zend_Validate_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function validateRegion(AbstractAddress $address)
     {
