@@ -347,7 +347,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'attribute_code' => 'fpt_code',
                 ],
                 'websitePassed' => null,
-                'expectedFptLabel' => 'fpt_label_frontend'
+                'expectedFptLabel' => 'fpt_label_frontend',
             ],
         ];
     }
