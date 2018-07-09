@@ -56,7 +56,7 @@ class ProcessManager
     }
 
     /**
-     * Execute user functions in in singleThreads mode
+     * Execute user functions in singleThreads mode
      *
      * @param \Traversable $userFunctions
      */
@@ -68,7 +68,7 @@ class ProcessManager
     }
 
     /**
-     * Execute user functions in in multiThreads mode
+     * Execute user functions in multiThreads mode
      *
      * @param \Traversable $userFunctions
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
