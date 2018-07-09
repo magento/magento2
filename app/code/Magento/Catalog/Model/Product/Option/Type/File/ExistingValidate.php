@@ -16,17 +16,17 @@ class ExistingValidate extends \Zend_Validate
      *
      * @param string $value File's full path.
      * @param string|null $originalName Original file's name (when uploaded).
-     *
-     * @throws \InvalidArgumentException
      */
     public function isValid($value, string $originalName = null)
     {
-        if (!is_string($value)) {
-            throw new \InvalidArgumentException('File\'s full path is expected');
-        }
-
         $this->_messages = [];
         $this->_errors = [];
+
+        if (!is_string($value)) {
+            $this->_messages[] = __('Full file path is expected.')->render();
+            return false;
+        }
+
         $result = true;
         $fileInfo = null;
         if ($originalName) {
