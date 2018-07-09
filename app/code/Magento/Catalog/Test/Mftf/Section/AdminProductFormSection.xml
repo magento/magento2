@@ -22,6 +22,7 @@
         <element name="validationErrorLabel" type="text" selector="//label[@class='admin__field-error']"/>
         <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
+        <element name="addAttributeBtn" type="button" selector="#addAttribute"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
