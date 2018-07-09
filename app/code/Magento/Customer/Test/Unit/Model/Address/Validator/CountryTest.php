@@ -161,8 +161,14 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             'region_id2' => [
                 array_merge($data, ['country_id' => $countryId, 'region_id' => 2]),
                 [$countryId++],
-                [1],
                 [],
+                [],
+            ],
+            'region_id3' => [
+                array_merge($data, ['country_id' => $countryId, 'region_id' => 2]),
+                [$countryId++],
+                [1, 3],
+                ['Invalid value of "2" provided for the regionId field.'],
             ],
             'validated' => [
                 array_merge($data, ['country_id' => $countryId]),
