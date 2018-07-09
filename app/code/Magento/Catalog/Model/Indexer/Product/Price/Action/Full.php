@@ -416,13 +416,13 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             return ;
         }
         $select = $this->dimensionTableMaintainer->getConnection()->select()->from(
-             $mainReplicaTable = $this->dimensionTableMaintainer->getMainReplicaTable([])
+            $mainReplicaTable = $this->dimensionTableMaintainer->getMainReplicaTable([])
         );
 
         $check = clone $select;
         $check->reset('columns')->columns('count(*)');
 
-        if (! $count = $this->dimensionTableMaintainer->getConnection()->query($check)->fetchColumn()) {
+        if (!$this->dimensionTableMaintainer->getConnection()->query($check)->fetchColumn()) {
             return;
         }
 
