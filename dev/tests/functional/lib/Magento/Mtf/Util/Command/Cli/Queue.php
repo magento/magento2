@@ -18,6 +18,6 @@ class Queue extends \Magento\Mtf\Util\Command\Cli
      */
     public function run($consumer)
     {
-        parent::execute('queue:consumers:start ' . $consumer . ' > /dev/null &');
+        parent::execute('queue:consumers:start ' . $consumer . ' --max-messages=100');
     }
 }
