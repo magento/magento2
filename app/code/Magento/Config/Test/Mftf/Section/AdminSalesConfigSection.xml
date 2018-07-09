@@ -8,8 +8,8 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
-    <section name="CheckoutCartSummarySection">
-        <element name="subtotal" type="text" selector="#cart-totals tr.totals.sub span.price"/>
-        <element name="proceedToCheckout" type="button" selector=".action.primary.checkout span" timeout="30"/>
+    <section name="AdminSalesConfigSection">
+        <element name="enableMAPUseSystemValue" type="checkbox" selector="#sales_msrp_enabled_inherit"/>
+        <element name="enableMAPSelect" type="select" selector="#sales_msrp_enabled"/>
     </section>
 </sections>
