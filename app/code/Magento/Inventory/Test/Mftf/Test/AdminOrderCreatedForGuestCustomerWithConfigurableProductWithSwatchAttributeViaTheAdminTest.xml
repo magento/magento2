@@ -67,27 +67,27 @@
         <fillField userInput="{{ConfigurableMsiProduct.weight}}" selector="{{AdminConfigurableProductFormSection.productWeight}}" stepKey="fillProductWeight1"/>
 
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]"  stepKey="searchAndSelectCategory1"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton1"/>
         <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30" stepKey="waitForGridPresent1"/>
 
-        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnCreateNewAttribute1"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
 
         <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame1"/>
         <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{visualSwatchAttribute.name}}" stepKey="fillDefaultLabel1"/>
         <selectOption selector="#frontend_input" userInput="{{visualSwatchAttribute.catalogInputType}}" stepKey="fillCatalogInputTypeForStoreOwner1"/>
 
         <click selector="#add_new_swatch_visual_option_button" stepKey="clickOnAddSwatch1"/>
-        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
 
         <fillField selector="input[name='optionvisual[value][option_0][0]']" userInput="{{visualSwatchColor1.name}}" stepKey="fillAdminName1"/>
         <fillField selector="input[name='optionvisual[value][option_0][1]']" userInput="{{visualSwatchColor1.name}}" stepKey="fillAdminName2"/>
 
         <click selector="#add_new_swatch_visual_option_button" stepKey="clickOnAddSwatch2"/>
-        <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
 
         <fillField selector="input[name='optionvisual[value][option_1][0]']" userInput="{{visualSwatchColor2.name}}" stepKey="fillAdminName3"/>
         <fillField selector="input[name='optionvisual[value][option_1][1]']" userInput="{{visualSwatchColor2.name}}" stepKey="fillAdminName4"/>
