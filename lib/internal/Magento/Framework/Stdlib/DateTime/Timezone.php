@@ -335,9 +335,15 @@ class Timezone implements TimezoneInterface
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {
-        $zendFormat = $this->getDateTimeFormat(\IntlDateFormatter::MEDIUM);
-        $zendDate = new \Zend_Date($date, $zendFormat, $this->_localeResolver->getLocale());
-        $time = $zendDate->getTimestamp();
+        $formatter = new \IntlDateFormatter(
+            $this->_localeResolver->getLocale(),
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::FULL,
+            'GMT',
+            \IntlDateFormatter::GREGORIAN,
+            'dd-MM-yyyy H:i:s'
+        );
+        $time = $formatter->parse($date);
         $dateTime = new DateTime($this);
 
         if (!($date instanceof \DateTimeInterface)) {
