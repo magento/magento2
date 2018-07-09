@@ -220,9 +220,9 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
      * @param string|bool $cacheLifetime
      * @param string|bool $dataFromCache
      * @param string $dataForSaveCache
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsDispatchEvent
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsCacheLoad
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsCacheSave
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsDispatchEvent
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsCacheLoad
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsCacheSave
      * @param string $expectedResult
      * @return void
      * @dataProvider getCacheLifetimeDataProvider

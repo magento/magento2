@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminMassUpdateProductAttributesMissingRequiredFieldTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Mass update product attributes"/>
+            <title value="Mass update product attributes - missing required field"/>
+            <description value="Mass update product attributes - missing required field"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-55"/>
+            <group value="Catalog"/>
+            <group value="Product Attributes"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductOne">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProductTwo">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Search and select products -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+            <argument name="keyword" value="api-simple-product"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
+        <!-- Mass update attributes -->
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
+        <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
+        <seeInCurrentUrl stepKey="seeInUrl" url="catalog/product_action_attribute/edit/"/>
+        <click selector="{{AdminEditProductAttributesSection.ChangeAttributeNameToggle}}" stepKey="toggleToChangeName"/>
+        <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
+        <see stepKey="seeError" selector="{{AdminEditProductAttributesSection.NameError}}" userInput="This is a required field"/>
+    </test>
+</tests>

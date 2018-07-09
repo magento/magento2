@@ -215,6 +215,7 @@
             <argument name="collections" xsi:type="array">
                 <item name="customer_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Grid\Collection</item>
                 <item name="customer_online_grid_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Online\Grid\Collection</item>
+                <item name="customer_group_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Group\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -431,6 +432,14 @@
                 <item name="general" xsi:type="object">Magento\Customer\Model\Address\Validator\General</item>
                 <item name="country" xsi:type="object">Magento\Customer\Model\Address\Validator\Country</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\Group\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">customer_group</argument>
+            <argument name="eventPrefix" xsi:type="string">customer_group_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">customer_group_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Group</argument>
         </arguments>
     </type>
     <preference
