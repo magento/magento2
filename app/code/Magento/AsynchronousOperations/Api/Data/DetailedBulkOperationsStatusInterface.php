@@ -23,14 +23,14 @@ interface DetailedBulkOperationsStatusInterface extends BulkSummaryInterface
     /**
      * Retrieve operations list.
      *
-     * @return \Magento\AsynchronousOperations\Api\Data\DetailedOperationStatusInterface[]
+     * @return \Magento\AsynchronousOperations\Api\Data\OperationInterface[]
      */
     public function getOperationsList();
 
     /**
      * Set operations list.
      *
-     * @param \Magento\AsynchronousOperations\Api\Data\DetailedOperationStatusInterface[] $operationStatusList
+     * @param \Magento\AsynchronousOperations\Api\Data\OperationInterface[] $operationStatusList
      * @return $this
      */
     public function setOperationsList($operationStatusList);
