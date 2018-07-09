@@ -84,6 +84,9 @@ class PurgeCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->sendPurgeRequest('tags'));
     }
 
+    /**
+     * @return array
+     */
     public function sendPurgeRequestDataProvider()
     {
         return [
