@@ -11,6 +11,7 @@ use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\RuleFactory;
+use Magento\SalesRule\Model\ResourceModel\Rule\Customer;
 
 /**
  * Updates the coupon usages.
@@ -38,21 +39,29 @@ class UpdateCouponUsages
     private $couponUsage;
 
     /**
-     * @param RuleFactory $ruleFactory
+     * @var Customer
+     */
+    private $customerRuleUsage;
+
+    /**
+     * @param RuleFactory     $ruleFactory
      * @param CustomerFactory $ruleCustomerFactory
-     * @param Coupon $coupon
-     * @param Usage $couponUsage
+     * @param Coupon          $coupon
+     * @param Usage           $couponUsage
+     * @param Customer        $customerRuleUsage
      */
     public function __construct(
-        RuleFactory $ruleFactory,
+        RuleFactory     $ruleFactory,
         CustomerFactory $ruleCustomerFactory,
-        Coupon $coupon,
-        Usage $couponUsage
+        Coupon          $coupon,
+        Usage           $couponUsage,
+        Customer        $customerRuleUsage
     ) {
-        $this->ruleFactory = $ruleFactory;
+        $this->ruleFactory         = $ruleFactory;
         $this->ruleCustomerFactory = $ruleCustomerFactory;
-        $this->coupon = $coupon;
-        $this->couponUsage = $couponUsage;
+        $this->coupon              = $coupon;
+        $this->couponUsage         = $couponUsage;
+        $this->customerRuleUsage   = $customerRuleUsage;
     }
 
     /**
@@ -122,6 +131,10 @@ class UpdateCouponUsages
         if ($ruleCustomer->getId()) {
             if ($increment || $ruleCustomer->getTimesUsed() > 0) {
                 $ruleCustomer->setTimesUsed($ruleCustomer->getTimesUsed() + ($increment ? 1 : -1));
+                /** Delete the rules from salesrule_customer table when time used updated to 0 */
+                if($ruleCustomer->getTimesUsed() == 0) {
+                    $this->customerRuleUsage->deleteCustomerTimeUsage($ruleId, $customerId, $ruleCustomer->getTimesUsed());
+                }
             }
         } elseif ($increment) {
             $ruleCustomer->setCustomerId($customerId)->setRuleId($ruleId)->setTimesUsed(1);
