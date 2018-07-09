@@ -38,24 +38,11 @@ class Grouped extends Renderer implements IdentityInterface
 
     /**
      * {@inheritdoc}
+     * @deprecated
      */
     public function getProductForThumbnail()
     {
-        /**
-         * Show grouped product thumbnail if it must be always shown according to the related setting in system config
-         * or if child product thumbnail is not available
-         */
-        if ($this->_scopeConfig->getValue(
-            self::CONFIG_THUMBNAIL_SOURCE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) == ThumbnailSource::OPTION_USE_PARENT_IMAGE ||
-            !($this->getProduct()->getThumbnail() && $this->getProduct()->getThumbnail() != 'no_selection')
-        ) {
-            $product = $this->getGroupedProduct();
-        } else {
-            $product = $this->getProduct();
-        }
-        return $product;
+        return parent::getProductForThumbnail();
     }
 
     /**

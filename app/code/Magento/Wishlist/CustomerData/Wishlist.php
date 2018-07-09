@@ -131,8 +131,14 @@ class Wishlist implements SectionSourceInterface
     protected function getItemData(\Magento\Wishlist\Model\Item $wishlistItem)
     {
         $product = $wishlistItem->getProduct();
+
+        /** @var \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemProductResolver */
+        $itemProductResolver = ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
+        );
+
         return [
-            'image' => $this->getImageData($this->image->getProductForThumbnail($wishlistItem)),
+            'image' => $this->getImageData($itemProductResolver->getFinalProduct($wishlistItem)),
             'product_sku' => $product->getSku(),
             'product_id' => $product->getId(),
             'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),

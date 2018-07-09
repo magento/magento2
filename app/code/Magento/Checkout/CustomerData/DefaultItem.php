@@ -7,6 +7,7 @@
 namespace Magento\Checkout\CustomerData;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 
 /**
  * Default item
@@ -45,6 +46,9 @@ class DefaultItem extends AbstractItem
      */
     private $escaper;
 
+    /** @var ItemResolverInterface */
+    private $itemResolver;
+
     /**
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Msrp\Helper\Data $msrpHelper
@@ -52,6 +56,7 @@ class DefaultItem extends AbstractItem
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Framework\Escaper|null $escaper
+     * @param ItemResolverInterface|null $itemResolver
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -60,7 +65,8 @@ class DefaultItem extends AbstractItem
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool,
         \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Framework\Escaper $escaper = null
+        \Magento\Framework\Escaper $escaper = null,
+        ItemResolverInterface $itemResolver = null
     ) {
         $this->configurationPool = $configurationPool;
         $this->imageHelper = $imageHelper;
@@ -68,6 +74,7 @@ class DefaultItem extends AbstractItem
         $this->urlBuilder = $urlBuilder;
         $this->checkoutHelper = $checkoutHelper;
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
     }
 
     /**
@@ -75,7 +82,10 @@ class DefaultItem extends AbstractItem
      */
     protected function doGetItemData()
     {
-        $imageHelper = $this->imageHelper->init($this->getProductForThumbnail(), 'mini_cart_product_thumbnail');
+        $imageHelper = $this->imageHelper->init(
+            $this->itemResolver->getFinalProduct($this->item),
+            'mini_cart_product_thumbnail'
+        );
         $productName = $this->escaper->escapeHtml($this->item->getProduct()->getName());
 
         return [
@@ -115,11 +125,12 @@ class DefaultItem extends AbstractItem
 
     /**
      * @return \Magento\Catalog\Model\Product
+     * @deprecated
      * @codeCoverageIgnore
      */
     protected function getProductForThumbnail()
     {
-        return $this->getProduct();
+        return $this->itemResolver->getFinalProduct($this->item);
     }
 
     /**

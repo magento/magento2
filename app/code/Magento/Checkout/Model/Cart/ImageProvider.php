@@ -5,8 +5,10 @@
  */
 namespace Magento\Checkout\Model\Cart;
 
+use Magento\Checkout\CustomerData\DefaultItem;
+use Magento\Framework\App\ObjectManager;
+
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  */
 class ImageProvider
@@ -18,20 +20,26 @@ class ImageProvider
 
     /**
      * @var \Magento\Checkout\CustomerData\ItemPoolInterface
+     * @deprecated
      */
     protected $itemPool;
+
+    /** @var \Magento\Checkout\CustomerData\DefaultItem */
+    protected $customerDataItem;
 
     /**
      * @param \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository
      * @param \Magento\Checkout\CustomerData\ItemPoolInterface $itemPool
-     * @codeCoverageIgnore
+     * @param DefaultItem|null $customerDataItem
      */
     public function __construct(
         \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository,
-        \Magento\Checkout\CustomerData\ItemPoolInterface $itemPool
+        \Magento\Checkout\CustomerData\ItemPoolInterface $itemPool,
+        \Magento\Checkout\CustomerData\DefaultItem $customerDataItem = null
     ) {
         $this->itemRepository = $itemRepository;
         $this->itemPool = $itemPool;
+        $this->customerDataItem = $customerDataItem ?? ObjectManager::getInstance()->get(DefaultItem::class);
     }
 
     /**
@@ -45,7 +53,7 @@ class ImageProvider
         $items = $this->itemRepository->getList($cartId);
         /** @var \Magento\Quote\Model\Quote\Item $cartItem */
         foreach ($items as $cartItem) {
-            $allData = $this->itemPool->getItemData($cartItem);
+            $allData = $this->customerDataItem->getItemData($cartItem);
             $itemData[$cartItem->getItemId()] = $allData['product_image'];
         }
         return $itemData;

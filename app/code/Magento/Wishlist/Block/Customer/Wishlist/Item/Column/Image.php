@@ -14,8 +14,7 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Quote\Model\Quote\ItemFactory;
-use Magento\Checkout\Block\Cart\Item\Renderer;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 
 /**
  * @api
@@ -23,11 +22,8 @@ use Magento\Checkout\Block\Cart\Item\Renderer;
  */
 class Image extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
 {
-    /** @var \Magento\Checkout\Block\Cart\Item\Renderer[] */
-    private $renderers = [];
-
-    /** @var \Magento\Quote\Model\Quote\ItemFactory  */
-    private $itemFactory;
+    /** @var ItemResolverInterface */
+    private $itemResolver;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -35,8 +31,7 @@ class Image extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
      * @param array $data
      * @param ConfigInterface|null $config
      * @param UrlBuilder|null $urlBuilder
-     * @param Renderer[] $renderers
-     * @param ItemFactory|null $itemFactory
+     * @param ItemResolverInterface|null $itemResolver
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -44,11 +39,9 @@ class Image extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
         array $data = [],
         ConfigInterface $config = null,
         UrlBuilder $urlBuilder = null,
-        array $renderers = [],
-        ItemFactory $itemFactory = null
+        ItemResolverInterface $itemResolver = null
     ) {
-        $this->renderers = $renderers;
-        $this->itemFactory = $itemFactory ?? ObjectManager::getInstance()->get(ItemFactory::class);
+        $this->itemResolver = $itemResolver ?? ObjectManager::getInstance()->get(ItemResolverInterface::class);
         parent::__construct(
             $context,
             $httpContext,
@@ -65,13 +58,6 @@ class Image extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
      */
     public function getProductForThumbnail(\Magento\Wishlist\Model\Item $item)
     {
-        $product = $product = $item->getProduct();
-        if (isset($this->renderers[$product->getTypeId()])) {
-            $quoteItem = $this->itemFactory->create(['data' => $item->getData()]);
-            $quoteItem->setProduct($product);
-            $quoteItem->setOptions($item->getOptions());
-            return $this->renderers[$product->getTypeId()]->setItem($quoteItem)->getProductForThumbnail();
-        }
-        return $product;
+        return $this->itemResolver->getFinalProduct($item);
     }
 }

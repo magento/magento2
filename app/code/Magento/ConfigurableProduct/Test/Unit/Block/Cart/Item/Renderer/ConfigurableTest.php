@@ -48,58 +48,6 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Child thumbnail is available and config option is not set to use parent thumbnail.
-     */
-    public function testGetProductForThumbnail()
-    {
-        $childHasThumbnail = true;
-        $useParentThumbnail = false;
-        $products = $this->_initProducts($childHasThumbnail, $useParentThumbnail);
-
-        $productForThumbnail = $this->_renderer->getProductForThumbnail();
-        $this->assertSame(
-            $products['childProduct'],
-            $productForThumbnail,
-            'Child product was expected to be returned.'
-        );
-    }
-
-    /**
-     * Child thumbnail is not available and config option is not set to use parent thumbnail.
-     */
-    public function testGetProductForThumbnailChildThumbnailNotAvailable()
-    {
-        $childHasThumbnail = false;
-        $useParentThumbnail = false;
-        $products = $this->_initProducts($childHasThumbnail, $useParentThumbnail);
-
-        $productForThumbnail = $this->_renderer->getProductForThumbnail();
-        $this->assertSame(
-            $products['parentProduct'],
-            $productForThumbnail,
-            'Parent product was expected to be returned.'
-        );
-    }
-
-    /**
-     * Child thumbnail is available and config option is set to use parent thumbnail.
-     */
-    public function testGetProductForThumbnailConfigUseParent()
-    {
-        $childHasThumbnail = true;
-        $useParentThumbnail = true;
-        $products = $this->_initProducts($childHasThumbnail, $useParentThumbnail);
-
-        $productForThumbnail = $this->_renderer->getProductForThumbnail();
-        $this->assertSame(
-            $products['parentProduct'],
-            $productForThumbnail,
-            'Parent product was expected to be returned ' .
-            'if "checkout/cart/configurable_product_image option" is set to "parent" in system config.'
-        );
-    }
-
-    /**
      * Initialize parent configurable product and child product.
      *
      * @param bool $childHasThumbnail
