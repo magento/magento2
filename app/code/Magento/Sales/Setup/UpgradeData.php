@@ -185,7 +185,8 @@ class UpgradeData implements UpgradeDataInterface
             )
             ->joinInner(
                 ['quote_address' => $setup->getTable('quote_address')],
-                'sales_order.quote_id = quote_address.quote_id AND sales_order_address.address_type = quote_address.address_type',
+                'sales_order.quote_id = quote_address.quote_id' .
+                    ' AND sales_order_address.address_type = quote_address.address_type',
                 []
             )
             ->where(
