@@ -134,13 +134,13 @@
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontViewAndEditCartFromMiniCartActionGroup" stepKey="goToCheckoutFromMinicart"/>
-        <seeInField userInput="10" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField10"/>
+        <seeInField userInput="10" selector="{{CheckoutCartProductSection.productQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField10"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}"  stepKey="grabTextFromSubtotalField1"/>
         <assertEquals message="Shopping cart should contain subtotal $1,000" stepKey="assertSubtotalField1">
             <expectedResult type="string">$1,000.00</expectedResult>
             <actualResult type="variable">grabTextFromSubtotalField1</actualResult>
         </assertEquals>
-        <fillField userInput="15" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="fillProductQuantity2"/>
+        <fillField userInput="15" selector="{{CheckoutCartProductSection.productQuantityByName($$createSimpleProduct.name$$)}}" stepKey="fillProductQuantity2"/>
         <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCartButton1"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}"  stepKey="grabTextFromSubtotalField2"/>
@@ -148,7 +148,7 @@
             <expectedResult type="string">$1,350.00</expectedResult>
             <actualResult type="variable">grabTextFromSubtotalField2</actualResult>
         </assertEquals>
-        <fillField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="fillProductQuantity3"/>
+        <fillField userInput="20" selector="{{CheckoutCartProductSection.productQuantityByName($$createSimpleProduct.name$$)}}" stepKey="fillProductQuantity3"/>
         <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCartButton2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}"  stepKey="grabTextFromSubtotalField3"/>
@@ -169,7 +169,7 @@
         <actionGroup ref="SaveProductOnProductPageOnAdmin" stepKey="saveProduct4"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage1"/>
         <waitForPageLoad time="30" stepKey="waitForShoppingCartPagePageLoad1"/>
-        <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20"/>
+        <seeInField userInput="20" selector="{{CheckoutCartProductSection.productQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}"  stepKey="grabTextFromSubtotalField4"/>
         <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField4">
             <expectedResult type="string">$1,500.00</expectedResult>
@@ -196,7 +196,7 @@
         <actionGroup ref="ClearCacheActionGroup" stepKey="flushCache1"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage2"/>
         <waitForPageLoad time="30" stepKey="waitForShoppingCartPagePageLoad2"/>
-        <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20_2"/>
+        <seeInField userInput="20" selector="{{CheckoutCartProductSection.productQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20_2"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}"  stepKey="grabTextFromSubtotalField5"/>
         <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField5">
             <expectedResult type="string">$1,500.00</expectedResult>
@@ -210,7 +210,7 @@
         <actionGroup ref="ClearCacheActionGroup" stepKey="flushCache2"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage3"/>
         <waitForPageLoad time="30" stepKey="waitForShoppingCartPagePageLoad3"/>
-        <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20_3"/>
+        <seeInField userInput="20" selector="{{CheckoutCartProductSection.productQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20_3"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}"  stepKey="grabTextFromSubtotalField6"/>
         <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField6">
             <expectedResult type="string">$1,500.00</expectedResult>

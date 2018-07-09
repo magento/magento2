@@ -8,6 +8,6 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="CheckoutCartSummarySection">
-        <element name="subtotal" type="text" selector="//*[@id='cart-totals']//tr[@class='totals sub']//td//span[@class='price']"/>
+        <element name="subtotal" type="text" selector="#cart-totals tr.totals.sub span.price"/>
     </section>
 </sections>
