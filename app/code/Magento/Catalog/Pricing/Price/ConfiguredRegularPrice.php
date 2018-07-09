@@ -13,12 +13,12 @@ use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
- * Configured regular price model.
+ * Configured regular price model
  */
 class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInterface
 {
     /**
-     * Price type configured.
+     * Price type configured
      */
     const PRICE_CODE = self::CONFIGURED_REGULAR_PRICE_CODE;
 
@@ -57,15 +57,14 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
      * @param ItemInterface $item
      * @return $this
      */
-    public function setItem(ItemInterface $item) : ConfiguredRegularPrice
+    public function setItem(ItemInterface $item)
     {
         $this->item = $item;
-
         return $this;
     }
-    
+
     /**
-     * Price value of product with configured options.
+     * Price value of product with configured options
      *
      * @return bool|float
      */
@@ -73,7 +72,7 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
     {
         $basePrice = parent::getValue();
 
-        return $this->item
+        return ($this->item && $basePrice !== false)
             ? $basePrice + $this->configuredOptions->getItemOptionsValue($basePrice, $this->item)
             : $basePrice;
     }
