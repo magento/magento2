@@ -1089,6 +1089,9 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->initializedProductMock, $results);
     }
 
+    /**
+     * @return mixed
+     */
     public function saveWithLinksDataProvider()
     {
         // Scenario 1
@@ -1260,6 +1263,9 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->save($this->productMock);
     }
 
+    /**
+     * @return array
+     */
     public function websitesProvider()
     {
         return [
