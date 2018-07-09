@@ -21,8 +21,8 @@
         <waitForPageLoad stepKey="waitForUserEditPageLoad"/>
         <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
         <click selector="{{AdminEditUserSection.deleteButton}}" stepKey="deleteUser"/>
-        <waitForElementVisible selector="{{AdminEditUserSection.message}}" stepKey="waitForConfirmModal"/>
-        <click selector="{{AdminEditUserSection.ok}}" stepKey="confirmDelete"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
         <waitForPageLoad stepKey="waitForSave" />
         <see userInput="You deleted the user." stepKey="seeUserDeleteMessage"/>
     </actionGroup>

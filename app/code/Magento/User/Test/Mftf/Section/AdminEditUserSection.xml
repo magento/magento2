@@ -17,7 +17,5 @@
         <element name="searchResultFirstRow" type="text" selector=".data-grid>tbody>tr"/>
         <element name="saveButton" type="button" selector="#save"/>
         <element name="deleteButton" type="button" selector="#delete"/>
-        <element name="ok" type="button" selector=".modal-popup.confirm button.action-accept"/>
-        <element name="message" type="text" selector=".modal-popup.confirm div.modal-content"/>
     </section>
 </sections>
