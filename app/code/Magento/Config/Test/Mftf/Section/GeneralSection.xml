@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="ContentManagementSection">
+        <element name="WYSIWYGOptions" type="button" selector="#cms_wysiwyg-head"/>
+        <element name="CheckIfTabExpand" type="button" selector="#cms_wysiwyg-head:not(.open)"/>
+        <element name="EnableSystemValue" type="button" selector="#cms_wysiwyg_enabled_inherit"/>
+        <element name="EnableWYSIWYG" type="button" selector="#cms_wysiwyg_enabled"/>
+        <element name="SwitcherSystemValue" type="button" selector="#cms_wysiwyg_editor_inherit"/>
+        <element name="Switcher" type="button" selector="#cms_wysiwyg_editor" />
+        <element name="Save" type="button" selector="#save"/>
+    </section>
+    <section name="WebSection">
+        <element name="DefaultLayoutsTab" type="button" selector="#web_default_layouts-head"/>
+        <element name="CheckIfTabExpand" type="button" selector="#web_default_layouts-head:not(.open)"/>
+        <element name="UrlOptionsTab" type="button" selector="#web_url-head"/>
+        <element name="CheckIfUrlOptionsTabExpand" type="button" selector="#web_url-head:not(.open)"/>
+    </section>
+    <section name="DefaultLayoutsSection">
+        <element name="productLayout" type="select" selector="#web_default_layouts_default_product_layout"/>
+        <element name="categoryLayout" type="select" selector="#web_default_layouts_default_category_layout"/>
+        <element name="pageLayout" type="select" selector="#web_default_layouts_default_cms_layout"/>
+    </section>
+    <section name="UrlOptionsSection">
+        <element name="addStoreCodeToUrl" type="select" selector="#web_url_use_store"/>
+        <element name="systemValueForStoreCode" type="checkbox" selector="#web_url_use_store_inherit"/>
+    </section>
+</sections>
