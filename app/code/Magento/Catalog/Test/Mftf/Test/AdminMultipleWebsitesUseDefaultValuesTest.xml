@@ -37,7 +37,7 @@
         <!--Create Store view -->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
         <waitForPageLoad stepKey="waitForSystemStorePage"/>
-        <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="clickCreateStoreViewButton"/>
+        <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="createStoreViewButton"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <waitForElementVisible selector="//legend[contains(., 'Store View Information')]" stepKey="waitForNewStorePageToOpen"/>
         <selectOption userInput="Second Store" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
