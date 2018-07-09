@@ -395,8 +395,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
             if ($mediaDirectory->isFile($uploadDir . '/' . $fileName)) {
                 return $this->storeManager->getStore()->getBaseUrl(
-                        \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                    ) . $uploadDir . '/' . $fileName;
+                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                ) . $uploadDir . '/' . $fileName;
             }
         }
         return $this->getDefaultEmailLogo();
