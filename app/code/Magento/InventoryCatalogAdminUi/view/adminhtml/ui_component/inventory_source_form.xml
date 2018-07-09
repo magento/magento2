@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="general">
+        <field name="enabled">
+            <settings>
+                <notice translate="true">The Default Source must be enabled. A default source is required for single source merchants and product migration.</notice>
+            </settings>
+        </field>
+    </fieldset>
+</form>
