@@ -38,13 +38,13 @@ class EnableDirectiveParsing implements DataPatchInterface
         $configTable = $this->moduleDataSetup->getTable('core_config_data');
         $select = $this->moduleDataSetup->getConnection()->select()
             ->from($configTable)
-            ->where('path = ?', \Magento\Catalog\Helper\Data::CONFIG_PARSE_URL_DIRECTIVES);
+            ->where('path = ?', 'catalog/frontend/parse_url_directives');
         $config = $this->moduleDataSetup->getConnection()->fetchAll($select);
         if (!empty($config)) {
             $this->moduleDataSetup->getConnection()->update(
                 $configTable,
-                ['value' => new \Zend_Db_Expr('1')],
-                ['path = ?' => \Magento\Catalog\Helper\Data::CONFIG_PARSE_URL_DIRECTIVES, 'value IN (?)' => '0']
+                ['value' => '1'],
+                ['path = ?' => 'catalog/frontend/parse_url_directives', 'value IN (?)' => '0']
             );
         }
     }
