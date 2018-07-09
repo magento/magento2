@@ -43,7 +43,8 @@ define([
                 '</li>',
             submitBtn: 'button[type="submit"]',
             searchLabel: '[data-role=minisearch-label]',
-            isExpandable: null
+            isExpandable: null,
+            suggestionDelay: 250
         },
 
         /** @inheritdoc */
@@ -104,7 +105,8 @@ define([
 
             this.element.on('focus', this.setActiveState.bind(this, true));
             this.element.on('keydown', this._onKeyDown);
-            this.element.on('input propertychange', this._onPropertyChange);
+            // Prevent spamming the server with requests by waiting till the user has stopped typing for period of time
+            this.element.on('input propertychange', _.debounce(this._onPropertyChange, this.options.suggestionDelay));
 
             this.searchForm.on('submit', $.proxy(function (e) {
                 this._onSubmit(e);
