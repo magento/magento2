@@ -11,7 +11,7 @@
         <annotations>
             <features value="Wishlist"/>
             <stories value="MAGETWO-8709"/>
-            <group value="wishlist12"/>
+            <group value="wishlist"/>
             <title value="When user add Configurable child product to WIshlist then child product image should be shown in Wishlist"/>
             <description value="When user add Configurable child product to WIshlist then child product image should be shown in Wishlist"/>
             <severity value="MAJOR"/>
