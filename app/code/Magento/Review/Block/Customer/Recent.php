@@ -17,7 +17,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_template = 'customer/list.phtml';
+    protected $_template = 'Magento_Review::customer/list.phtml';
 
     /**
      * Product reviews collection
