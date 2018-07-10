@@ -16,7 +16,7 @@
             <description value="Customer should be able to change chosen options for Bundle Product when clicking Edit button in Shopping Cart page"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-77523"/>
-            <group value="Bundle"/>
+            <group value="bundle"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -53,12 +53,12 @@
         <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
-        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
+        <checkOption selector="{{AdminAddProductsToOptionPanelSection.firstCheckbox}}" stepKey="selectFirstGridRow"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions2">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
-        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
-        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+        <checkOption selector="{{AdminAddProductsToOptionPanelSection.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
+        <click selector="{{AdminAddProductsToOptionPanelSection.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
 
@@ -86,7 +86,7 @@
         <waitForPageLoad stepKey="waitForElementAdded2"/>
 
         <!-- Go to the shopping cart page and edit the first product -->
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCartPageLoad"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForInfoDropdown"/>
         <waitForPageLoad stepKey="waitForCartPageLoad3"/>
@@ -105,7 +105,7 @@
         <waitForPageLoad stepKey="waitForElementAdded3"/>
 
         <!-- Go to the shopping cart page -->
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart2"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart2"/>
         <waitForPageLoad stepKey="waitForCartPageLoad2"/>
 
         <!-- Assert that the options are both there and the proce no longer matches -->
