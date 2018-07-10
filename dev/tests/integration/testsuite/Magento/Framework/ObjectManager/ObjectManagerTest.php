@@ -154,6 +154,6 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     public function testNewInstanceWithTypeError()
     {
         self::$_objectManager->create(self::TEST_CLASS_WITH_TYPE_ERROR);
-        $this->fail('No instance for class with throwable error should be created');
+        $this->fail('No instance for class with TypeError should be created');
     }
 }
