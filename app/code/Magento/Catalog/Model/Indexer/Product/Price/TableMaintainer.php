@@ -251,9 +251,10 @@ class TableMaintainer
      */
     public function createMainTmpTable(array $dimensions)
     {
-        $originTableName = $this->getMainTable($dimensions);
+        // Create temporary table based on template table catalog_product_index_price_tmp without indexes
+        $templateTableName = $this->resource->getTableName(self::MAIN_INDEX_TABLE . '_tmp');
         $temporaryTableName = $this->getMainTable($dimensions) . $this->tmpTableSuffix;
-        $this->getConnection()->createTemporaryTableLike($temporaryTableName, $originTableName, true);
+        $this->getConnection()->createTemporaryTableLike($temporaryTableName, $templateTableName, true);
         $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)] = $temporaryTableName;
     }
 
