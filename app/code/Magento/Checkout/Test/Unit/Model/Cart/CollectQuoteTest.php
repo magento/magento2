@@ -165,7 +165,7 @@ class CollectQuoteTest extends TestCase
     /**
      * Test with a not logged in customer
      */
-    public function testCustomerIsNotLoggedIn()
+    public function testCollectWhenCustomerIsNotLoggedIn()
     {
         $this->customerSessionMock->expects(self::once())
             ->method('isLoggedIn')
