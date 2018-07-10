@@ -25,7 +25,9 @@ class StockDataFilterPlugin
         array $stockData
     ) {
         $originalStockData = $proceed($stockData);
-        $originalStockData['min_qty'] = $stockData['min_qty'];
+        if (isset($stockData['min_qty'])) {
+            $originalStockData['min_qty'] = $stockData['min_qty'];
+        }
         return $originalStockData;
     }
 }
