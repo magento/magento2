@@ -29,7 +29,7 @@ class GetDefaultSourceItemBySkuTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      */
-    public function testExecute()
+    public function testExecuteOnDefaultSource()
     {
         self::assertNotNull(
             $this->getDefaultSourceItemBySku->execute('SKU-1'),
@@ -38,6 +38,19 @@ class GetDefaultSourceItemBySkuTest extends TestCase
         self::assertNotNull(
             $this->getDefaultSourceItemBySku->execute('SKU-2'),
             'Unable to find default source_item for a product assigned to Default source and others'
+        );
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     */
+    public function testExecuteOnNonDefaultSource()
+    {
+        self::assertNull(
+            $this->getDefaultSourceItemBySku->execute('SKU-1'),
+            'Returned a wrong default source_item for a product assigned elsewhere'
         );
     }
 }
