@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!--Navigate to create product page from product grid page-->
-    <actionGroup name="AdminCreateProductActionGroup">
+    <actionGroup name="goToCreateProductPage">
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
         </arguments>
@@ -19,5 +19,14 @@
         <waitForPageLoad stepKey="waitForCreateProductPageLoad"/>
         <seeInCurrentUrl url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, product.type_id)}}" stepKey="seeNewProductUrl"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeNewProductTitle"/>
+    </actionGroup>
+
+    <!--Fill main fields in create product form with name and sku -->
+    <actionGroup name="fillProductNameAndSkuInProductForm">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductSku"/>
     </actionGroup>
 </actionGroups>

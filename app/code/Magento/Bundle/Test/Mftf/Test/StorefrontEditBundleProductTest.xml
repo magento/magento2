@@ -32,11 +32,11 @@
         <!-- Create a bundle product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageBundle"/>
         <waitForPageLoad stepKey="waitForProductPageLoadBundle"/>
-        <actionGroup ref="AdminCreateProductActionGroup" stepKey="goToCreateBundleProduct">
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateBundleProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
-        <actionGroup ref="AdminFillProductNameAndSkuInProductFormActionGroup" stepKey="fillBundleProductNameAndSku">
+        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillBundleProductNameAndSku">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
@@ -117,7 +117,7 @@
         <assertNotEquals expected="{$grabTotalBefore}" expectedType="string" actual="{$grabTotalAfter}" actualType="string" stepKey="assertNotEquals"/>
 
         <!-- Delete the bundled product -->
-        <actionGroup ref="AdminDeleteProductUsingProductGridActionGroup" stepKey="deleteBundle">
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteBundle">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
     </test>
