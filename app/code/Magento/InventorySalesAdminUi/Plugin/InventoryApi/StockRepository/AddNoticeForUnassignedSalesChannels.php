@@ -53,7 +53,7 @@ class AddNoticeForUnassignedSalesChannels
      */
     public function afterSave(
         StockRepositoryInterface $subject,
-        $stockId,
+        int $stockId,
         StockInterface $stock
     ): int {
         $unAssignedSalesChannels = $this->getUnassignedSalesChannelsForStock->execute($stock);
