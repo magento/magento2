@@ -445,8 +445,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                 \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
             )
         );
-
-        $this->_defaultIndexerResource->getConnection()->truncateTable($mainReplicaTable);
     }
 
     /**
