@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Plugin\InventoryApi\StockRepository;
 
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Message\ManagerInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
@@ -43,11 +42,6 @@ class SaveSalesChannelsLinksPlugin
     private $defaultStockProvider;
 
     /**
-     * @var ManagerInterface
-     */
-    private $messageManager;
-
-    /**
      * @var GetUnassignedSalesChannelsForStock
      */
     private $getUnassignedSalesChannelsForStock;
@@ -57,7 +51,6 @@ class SaveSalesChannelsLinksPlugin
      * @param LoggerInterface $logger
      * @param GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param ManagerInterface $messageManager
      * @param GetUnassignedSalesChannelsForStock $getUnassignedSalesChannelsForStock
      */
     public function __construct(
@@ -65,14 +58,12 @@ class SaveSalesChannelsLinksPlugin
         LoggerInterface $logger,
         GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock,
         DefaultStockProviderInterface $defaultStockProvider,
-        ManagerInterface $messageManager,
         GetUnassignedSalesChannelsForStock $getUnassignedSalesChannelsForStock
     ) {
         $this->replaceSalesChannelsOnStock = $replaceSalesChannelsOnStock;
         $this->logger = $logger;
         $this->getAssignedSalesChannelsForStock = $getAssignedSalesChannelsForStock;
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->messageManager = $messageManager;
         $this->getUnassignedSalesChannelsForStock = $getUnassignedSalesChannelsForStock;
     }
 
@@ -92,27 +83,25 @@ class SaveSalesChannelsLinksPlugin
         StockInterface $stock
     ): int {
         $extensionAttributes = $stock->getExtensionAttributes();
-        $salesChannels = $extensionAttributes->getSalesChannels();
+        $salesChannels = $extensionAttributes->getSalesChannels() ?: [];
         $unAssignedSalesChannels = $this->getUnassignedSalesChannelsForStock->execute($stock);
 
-        if (null !== $salesChannels) {
-            try {
-                $this->replaceSalesChannelsOnStock->execute($salesChannels, $stockId);
+        try {
+            $this->replaceSalesChannelsOnStock->execute($salesChannels, $stockId);
 
-                if (count($unAssignedSalesChannels)) {
-                    $mergedSalesChannels = array_merge(
-                        $unAssignedSalesChannels,
-                        $this->getAssignedSalesChannelsForStock->execute($this->defaultStockProvider->getId())
-                    );
-                    $this->replaceSalesChannelsOnStock->execute(
-                        $mergedSalesChannels,
-                        $this->defaultStockProvider->getId()
-                    );
-                }
-            } catch (\Exception $e) {
-                $this->logger->error($e->getMessage());
-                throw new CouldNotSaveException(__('Could not replace Sales Channels for Stock'), $e);
+            if (count($unAssignedSalesChannels)) {
+                $mergedSalesChannels = array_merge(
+                    $unAssignedSalesChannels,
+                    $this->getAssignedSalesChannelsForStock->execute($this->defaultStockProvider->getId())
+                );
+                $this->replaceSalesChannelsOnStock->execute(
+                    $mergedSalesChannels,
+                    $this->defaultStockProvider->getId()
+                );
             }
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            throw new CouldNotSaveException(__('Could not replace Sales Channels for Stock'), $e);
         }
 
         return $stockId;

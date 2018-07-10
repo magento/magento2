@@ -56,11 +56,9 @@ class AddNoticeForUnassignedSalesChannels
         $stockId,
         StockInterface $stock
     ): int {
-        $extensionAttributes = $stock->getExtensionAttributes();
-        $salesChannels = $extensionAttributes->getSalesChannels();
         $unAssignedSalesChannels = $this->getUnassignedSalesChannelsForStock->execute($stock);
 
-        if (null !== $salesChannels && count($unAssignedSalesChannels)) {
+        if (count($unAssignedSalesChannels)) {
             $this->messageManager->addNoticeMessage(
                 __('All unassigned sales channels will be assigned to the Default Stock')
             );
