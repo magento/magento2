@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Email\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -534,10 +533,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function setForcedArea($templateId)
     {
-        if ($this->area === null) {
+        if (!isset($this->area)) {
             $this->area = $this->emailConfig->getTemplateArea($templateId);
         }
-
         return $this;
     }
 
