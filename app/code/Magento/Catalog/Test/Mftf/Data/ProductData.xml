@@ -119,11 +119,37 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="ApiSimpleOneHidden" type="product2">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">1</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
     <entity name="ApiSimpleTwo" type="product2">
         <data key="sku" unique="suffix">api-simple-product-two</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
         <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product Two</data>
+        <data key="price">234.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product-two</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleTwoHidden" type="product2">
+        <data key="sku" unique="suffix">api-simple-product-two</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">1</data>
         <data key="name" unique="suffix">Api Simple Product Two</data>
         <data key="price">234.00</data>
         <data key="urlKey" unique="suffix">api-simple-product-two</data>
@@ -327,5 +353,40 @@
         <data key="visibility">4</data>
         <data key="name" unique="suffix">Api Simple Product</data>
         <data key="price">100.00</data>
+    </entity>
+    <entity name="ApiSimplePrice10Qty10" type="product">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">10.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock10</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiSimplePrice100Qty100" type="product">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">100.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiSimplePrice100Qty100v2" type="product">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">100.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
     </entity>
 </entities>
