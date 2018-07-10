@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Plugin\Model\System\Config\Backend;
+namespace Magento\InventoryConfiguration\Plugin\CatalogInventory\Model\System\Config\Backend\Minqty;
 
 use Magento\CatalogInventory\Model\System\Config\Backend\Minqty;
 
-class MinqtyPlugin
+class AllowNegativeMinQtyInConfigPlugin
 {
     /**
      * Allow min_qty to be assigned a value below 0.

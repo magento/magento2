@@ -5,16 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\Api\Data;
+namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Api\Data\StockItemInterface;
 
-class StockItemInterfacePlugin
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+
+class AdaptMinQtyToBackordersPlugin
 {
     /**
-     * @param \Magento\CatalogInventory\Api\Data\StockItemInterface $subject
+     * @param StockItemInterface $subject
      * @param callable $proceed
      * @return int
      */
-    public function aroundGetMinQty(\Magento\CatalogInventory\Api\Data\StockItemInterface $subject, callable $proceed)
+    public function aroundGetMinQty(StockItemInterface $subject, callable $proceed)
     {
         $originalMinQty = $proceed();
 

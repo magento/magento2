@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\Controller\Adminhtml\Product\Initialization;
+namespace Magento\InventoryCatalog\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 
-class StockDataFilterPlugin
+class AllowNegativeMinQtyPlugin
 {
     /**
      * Allow min_qty to be assigned a value below 0.

@@ -87,11 +87,13 @@
         <plugin name="adapt_get_product_stock_status_by_sku" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\StockRegistry\AdaptGetProductStockStatusBySkuPlugin"/>
     </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter">
-        <plugin sortOrder="1" name="magentoInventoryCatalogStockDataFilter"
-                type="Magento\InventoryCatalog\Plugin\Controller\Adminhtml\Product\Initialization\StockDataFilterPlugin"/>
+        <plugin name="allow_negative_min_qty"
+                type="Magento\InventoryCatalog\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter\AllowNegativeMinQtyPlugin"
+                sortOrder="1"/>
     </type>
     <type name="Magento\CatalogInventory\Api\Data\StockItemInterface">
-        <plugin sortOrder="1" name="magentoInventoryCatalogStockItemInterface"
-                type="Magento\InventoryCatalog\Plugin\Api\Data\StockItemInterfacePlugin"/>
+        <plugin name="adapt_min_qty_to_backorders"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\Data\StockItemInterface\AdaptMinQtyToBackordersPlugin"
+                sortOrder="1"/>
     </type>
 </config>
