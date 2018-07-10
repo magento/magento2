@@ -57,16 +57,22 @@ class SalesChannelManagementTest extends WebapiAbstract
     }
 
     /**
-     * @param array $salesChannels
-     * @param array $expectedErrorData
+     * The test check that the sales channels (unassigned from the sales
+     * channel) will be automatically assigned to the Default Stock
+     *
+     * @param array $salesChannels new sales channels
+     * @param array $beforeSave sales channels in default stock before unassign
+     * @param array $afterSave sales channels in default stock after unassign
      *
      * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_with_sales_channels.php
      *
      * @dataProvider deleteSalesChannelDataProvider
      */
-    public function testValidateDeleteSalesChannelFromStock(array $salesChannels, array $expectedErrorData)
+    public function testValidateDeleteSalesChannelFromStock(array $salesChannels, array $beforeSave, array $afterSave)
     {
+        $defaultStockData = $this->getStockDataById(1);
+        $this->assertEquals($beforeSave, $defaultStockData['extension_attributes']['sales_channels']);
         $stockId = 10;
         $data = [
             StockInterface::STOCK_ID => $stockId,
@@ -75,7 +81,6 @@ class SalesChannelManagementTest extends WebapiAbstract
                 'sales_channels' => $salesChannels
             ]
         ];
-
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $stockId,
@@ -86,14 +91,20 @@ class SalesChannelManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-
-        $this->webApiCallWithError($serviceInfo, $data, $expectedErrorData);
+        $this->_webApiCall($serviceInfo, ['stock' => $data]);
+        $defaultStockData = $this->getStockDataById(1);
+        $this->assertEquals($afterSave, $defaultStockData['extension_attributes']['sales_channels']);
+        $additionalStockData = $this->getStockDataById($stockId);
+        $this->assertEquals($salesChannels, $additionalStockData['extension_attributes']['sales_channels']);
     }
 
+    /**
+     * @return array
+     */
     public function deleteSalesChannelDataProvider(): array
     {
         return [
-            'all_channels_delete' . SalesChannelInterface::TYPE => [
+            'one_channel_delete' . SalesChannelInterface::TYPE => [
                 [
                     [
 
@@ -103,14 +114,27 @@ class SalesChannelManagementTest extends WebapiAbstract
                     ],
                 ],
                 [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => 'Website "%field" should be linked to stock.',
-                            'parameters' => [
-                                'field' => 'eu_website',
-                            ],
-                        ],
+                    [
+                        SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                        SalesChannelInterface::CODE => 'base',
+                    ],
+                    [
+                        SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                        SalesChannelInterface::CODE => 'global_website',
+                    ],
+                ],
+                [
+                    [
+                        SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                        SalesChannelInterface::CODE => 'base',
+                    ],
+                    [
+                        SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                        SalesChannelInterface::CODE => 'eu_website',
+                    ],
+                    [
+                        SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                        SalesChannelInterface::CODE => 'global_website',
                     ],
                 ],
             ],

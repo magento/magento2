@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Plugin\InventoryApi\StockRepository;
 
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventorySales\Model\SalesChannel;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Model\GetAssignedSalesChannelsForStockInterface;
 use Magento\InventorySalesApi\Model\ReplaceSalesChannelsForStockInterface;
 use Psr\Log\LoggerInterface;
@@ -31,38 +31,41 @@ class SaveSalesChannelsLinksPlugin
      * @var LoggerInterface
      */
     private $logger;
+
     /**
      * @var GetAssignedSalesChannelsForStockInterface
      */
     private $getAssignedSalesChannelsForStock;
+
     /**
      * @var DefaultStockProviderInterface
      */
     private $defaultStockProvider;
+
     /**
-     * @var SalesChannelInterfaceFactory
+     * @var ManagerInterface
      */
-    private $salesChannelFactory;
+    private $messageManager;
 
     /**
      * @param ReplaceSalesChannelsForStockInterface $replaceSalesChannelsOnStock
      * @param LoggerInterface $logger
      * @param GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param SalesChannelInterfaceFactory $salesChannelInterfaceFactory
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
         ReplaceSalesChannelsForStockInterface $replaceSalesChannelsOnStock,
         LoggerInterface $logger,
         GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock,
         DefaultStockProviderInterface $defaultStockProvider,
-        SalesChannelInterfaceFactory $salesChannelFactory
+        ManagerInterface $messageManager
     ) {
         $this->replaceSalesChannelsOnStock = $replaceSalesChannelsOnStock;
         $this->logger = $logger;
         $this->getAssignedSalesChannelsForStock = $getAssignedSalesChannelsForStock;
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->salesChannelFactory = $salesChannelFactory;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -82,7 +85,7 @@ class SaveSalesChannelsLinksPlugin
     ): int {
         $extensionAttributes = $stock->getExtensionAttributes();
         $salesChannels = $extensionAttributes->getSalesChannels();
-        $unAssignedWebsiteCodes = $this->getUnassignedWebsiteCodesForStock($stock);
+        $unAssignedWebsiteCodes = $this->getUnassignedSalesChannelsForStock($stock);
 
         if (null !== $salesChannels) {
             try {
@@ -91,20 +94,14 @@ class SaveSalesChannelsLinksPlugin
                 if (count($unAssignedWebsiteCodes)) {
                     $mergedSalesChannels = array_merge(
                         $unAssignedWebsiteCodes,
-                        $this->getAssignedToDefaultWebsiteCodes()
+                        $this->getAssignedSalesChannelsForStock->execute($this->defaultStockProvider->getId())
                     );
-
-                    foreach ($mergedSalesChannels as $salesChannelCode) {
-                        /** @var SalesChannelInterface $salesChannel */
-                        $salesChannel = $this->salesChannelFactory->create();
-                        $salesChannel->setType(SalesChannel::TYPE_WEBSITE);
-                        $salesChannel->setCode($salesChannelCode);
-                        $newSalesChannels[] = $salesChannel;
-                    }
-
                     $this->replaceSalesChannelsOnStock->execute(
-                        $newSalesChannels,
+                        $mergedSalesChannels,
                         $this->defaultStockProvider->getId()
+                    );
+                    $this->messageManager->addNoticeMessage(
+                        __('All unassigned sales channels will be assigned to the Default Stock')
                     );
                 }
 
@@ -118,20 +115,15 @@ class SaveSalesChannelsLinksPlugin
     }
 
     /**
+     * Return all sales channels witch will be unassigned from the saved stock
+     *
      * @param StockInterface $stock
-     * @return array
+     * @return \Magento\InventorySales\Model\SalesChannel[]
      */
-    private function getUnassignedWebsiteCodesForStock(StockInterface $stock): array
+    private function getUnassignedSalesChannelsForStock(StockInterface $stock): array
     {
-        $assignedWebsiteCodes = $newWebsiteCodes = [];
+        $newWebsiteCodes = $result = [];
         $assignedSalesChannels = $this->getAssignedSalesChannelsForStock->execute((int)$stock->getStockId());
-
-        foreach ($assignedSalesChannels as $salesChannel) {
-            if ($salesChannel->getType() === SalesChannel::TYPE_WEBSITE) {
-                $assignedWebsiteCodes[] = $salesChannel->getCode();
-            }
-        }
-
         $extensionAttributes = $stock->getExtensionAttributes();
         $newSalesChannels = $extensionAttributes->getSalesChannels() ?: [];
 
@@ -141,22 +133,12 @@ class SaveSalesChannelsLinksPlugin
             }
         }
 
-        return array_diff($assignedWebsiteCodes, $newWebsiteCodes);
-    }
-
-    /**
-     * Return website codes assigned to default stock
-     *
-     * @return array
-     */
-    private function getAssignedToDefaultWebsiteCodes(): array
-    {
-        $result = [];
-        $assignedToDefaultStockSalesChannels = $this->getAssignedSalesChannelsForStock
-            ->execute($this->defaultStockProvider->getId());
-
-        foreach ($assignedToDefaultStockSalesChannels as $salesChannel) {
-            $result[] = $salesChannel->getCode();
+        foreach ($assignedSalesChannels as $salesChannel) {
+            if ($salesChannel->getType() === SalesChannel::TYPE_WEBSITE
+                && !in_array($salesChannel->getCode(), $newWebsiteCodes, true)
+            ) {
+                $result[] = $salesChannel;
+            }
         }
 
         return $result;
