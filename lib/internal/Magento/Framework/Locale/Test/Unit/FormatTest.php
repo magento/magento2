@@ -91,7 +91,6 @@ class FormatTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-
     /**
      * @param float | null $expected
      * @param string|float|int $value
@@ -101,7 +100,6 @@ class FormatTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals($expected, $this->formatModel->getNumber($value));
     }
-
 
     /**
      * @return array

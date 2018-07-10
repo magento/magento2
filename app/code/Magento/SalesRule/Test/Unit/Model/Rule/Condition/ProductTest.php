@@ -301,7 +301,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($isValid, $this->model->setValue($conditionValue)->validate($item));
     }
 
-
     /**
      * DataProvider for testQuoteLocaleFormatPrice
      *
@@ -317,5 +316,4 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             'smallPrice' => [false, '1,500.03', '>=', 1000],
         ];
     }
-
 }
