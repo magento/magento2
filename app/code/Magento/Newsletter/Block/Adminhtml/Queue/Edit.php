@@ -16,7 +16,7 @@ class Edit extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'queue/edit.phtml';
+    protected $_template = 'Magento_Newsletter::queue/edit.phtml';
 
     /**
      * Core registry
