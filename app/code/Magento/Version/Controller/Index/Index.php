@@ -9,6 +9,7 @@ namespace Magento\Version\Controller\Index;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\App\State;
 
 /**
  * Magento Version controller
@@ -21,12 +22,18 @@ class Index extends Action
     protected $productMetadata;
 
     /**
+     * @var State
+     */
+    protected $state;
+
+    /**
      * @param Context $context
      * @param ProductMetadataInterface $productMetadata
      */
-    public function __construct(Context $context, ProductMetadataInterface $productMetadata)
+    public function __construct(Context $context, ProductMetadataInterface $productMetadata, State $state)
     {
         $this->productMetadata = $productMetadata;
+        $this->state = $state;
         parent::__construct($context);
     }
 
@@ -38,15 +45,17 @@ class Index extends Action
      */
     public function execute()
     {
-        $versionParts = explode('.', $this->productMetadata->getVersion());
-        if (!isset($versionParts[0]) || !isset($versionParts[1])) {
-            return ; // Major and minor version are not set - return empty response
+        if ($this->state->getMode() != State::MODE_PRODUCTION) {
+            $versionParts = explode('.', $this->productMetadata->getVersion());
+            if (!isset($versionParts[0]) || !isset($versionParts[1])) {
+                return; // Major and minor version are not set - return empty response
+            }
+            $majorMinorVersion = $versionParts[0] . '.' . $versionParts[1];
+            $this->getResponse()->setBody(
+                $this->productMetadata->getName() . '/' .
+                $majorMinorVersion . ' (' .
+                $this->productMetadata->getEdition() . ')'
+            );
         }
-        $majorMinorVersion = $versionParts[0] . '.' . $versionParts[1];
-        $this->getResponse()->setBody(
-            $this->productMetadata->getName() . '/' .
-            $majorMinorVersion . ' (' .
-            $this->productMetadata->getEdition() . ')'
-        );
     }
 }
