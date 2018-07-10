@@ -132,8 +132,9 @@ class UpdateCouponUsages
             if ($increment || $ruleCustomer->getTimesUsed() > 0) {
                 $ruleCustomer->setTimesUsed($ruleCustomer->getTimesUsed() + ($increment ? 1 : -1));
                 /** Delete the rules from salesrule_customer table when time used updated to 0 */
-                if($ruleCustomer->getTimesUsed() == 0) {
-                    $this->customerRuleUsage->deleteCustomerTimeUsage($ruleId, $customerId, $ruleCustomer->getTimesUsed());
+                $updatedTimeUsed = $ruleCustomer->getTimesUsed();
+                if ($updatedTimeUsed == 0) {
+                    $this->customerRuleUsage->deleteCustomerTimeUsage($ruleId, $customerId, $updatedTimeUsed);
                 }
             }
         } elseif ($increment) {

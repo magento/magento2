@@ -59,11 +59,11 @@ class Customer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function deleteCustomerTimeUsage($ruleId, $customerId, $updatedTimeUsed)
     {
         $connection = $this->getConnection();
-            if ($updatedTimeUsed == 0) {
-                $connection->delete(
-                    $this->getMainTable(),
-                    ['rule_id = ?' => $ruleId, 'customer_id = ?' => $customerId]
-                );
-            }
+        if ($updatedTimeUsed == 0) {
+            $connection->delete(
+                $this->getMainTable(),
+                ['rule_id = ?' => $ruleId, 'customer_id = ?' => $customerId]
+            );
+        }
     }
 }
