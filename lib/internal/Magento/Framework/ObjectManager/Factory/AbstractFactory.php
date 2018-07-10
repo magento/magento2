@@ -114,7 +114,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     {
         try {
             return new $type(...array_values($args));
-        } catch (\Throwable $e) {
+        } catch (\TypeError $e) {
             /** @var LoggerInterface $logger */
             $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
             $logger->critical(
@@ -122,7 +122,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
             );
 
             throw new RuntimeException(
-                new Phrase('Create object error')
+                new Phrase('Create object error: '.$e->getMessage())
             );
         }
     }
