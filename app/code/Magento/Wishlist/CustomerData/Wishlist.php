@@ -8,7 +8,6 @@ namespace Magento\Wishlist\CustomerData;
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image;
 
 /**
  * Wishlist section
@@ -41,29 +40,31 @@ class Wishlist implements SectionSourceInterface
     protected $block;
 
     /**
-     * @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image
+     * @var \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface
      */
-    private $image;
+    private $itemResolver;
 
     /**
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
      * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
      * @param \Magento\Framework\App\ViewInterface $view
-     * @param Image|null $image
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface|null $itemResolver
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
         \Magento\Catalog\Helper\ImageFactory $imageHelperFactory,
         \Magento\Framework\App\ViewInterface $view,
-        Image $image = null
+        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
     ) {
         $this->wishlistHelper = $wishlistHelper;
         $this->imageHelperFactory = $imageHelperFactory;
         $this->block = $block;
         $this->view = $view;
-        $this->image = $image ?? ObjectManager::getInstance()->get(Image::class);
+        $this->itemResolver = $itemResolver ?? ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
+        );
     }
 
     /**
@@ -131,14 +132,8 @@ class Wishlist implements SectionSourceInterface
     protected function getItemData(\Magento\Wishlist\Model\Item $wishlistItem)
     {
         $product = $wishlistItem->getProduct();
-
-        /** @var \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemProductResolver */
-        $itemProductResolver = ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
-        );
-
         return [
-            'image' => $this->getImageData($itemProductResolver->getFinalProduct($wishlistItem)),
+            'image' => $this->getImageData($this->itemResolver->getFinalProduct($wishlistItem)),
             'product_sku' => $product->getSku(),
             'product_id' => $product->getId(),
             'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),

@@ -40,13 +40,13 @@ class DefaultItem extends AbstractItem
     protected $checkoutHelper;
 
     /**
-     * Escaper
-     *
      * @var \Magento\Framework\Escaper
      */
     private $escaper;
 
-    /** @var ItemResolverInterface */
+    /**
+     * @var ItemResolverInterface
+     */
     private $itemResolver;
 
     /**
@@ -82,10 +82,7 @@ class DefaultItem extends AbstractItem
      */
     protected function doGetItemData()
     {
-        $imageHelper = $this->imageHelper->init(
-            $this->itemResolver->getFinalProduct($this->item),
-            'mini_cart_product_thumbnail'
-        );
+        $imageHelper = $this->imageHelper->init($this->getProductForThumbnail(), 'mini_cart_product_thumbnail');
         $productName = $this->escaper->escapeHtml($this->item->getProduct()->getName());
 
         return [
@@ -125,7 +122,6 @@ class DefaultItem extends AbstractItem
 
     /**
      * @return \Magento\Catalog\Model\Product
-     * @deprecated
      * @codeCoverageIgnore
      */
     protected function getProductForThumbnail()

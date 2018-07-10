@@ -9,6 +9,7 @@ use Magento\Catalog\Block\Product\Image;
 use Magento\Catalog\Model\Product;
 use Magento\Checkout\Block\Cart\Item\Renderer;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -18,17 +19,22 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Renderer
      */
-    protected $_renderer;
+    private $renderer;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $layout;
+    private $layout;
 
     /**
      * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $imageBuilder;
+    private $imageBuilder;
+
+    /**
+     * @var ItemResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $itemResolver;
 
     protected function setUp()
     {
@@ -47,11 +53,16 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_renderer = $objectManagerHelper->getObject(
+        $this->itemResolver = $this->createMock(
+            ItemResolverInterface::class
+        );
+
+        $this->renderer = $objectManagerHelper->getObject(
             \Magento\Checkout\Block\Cart\Item\Renderer::class,
             [
                 'context' => $context,
                 'imageBuilder' => $this->imageBuilder,
+                'itemResolver' => $this->itemResolver,
             ]
         );
     }
@@ -59,7 +70,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testGetProductForThumbnail()
     {
         $product = $this->_initProduct();
-        $productForThumbnail = $this->_renderer->getProductForThumbnail();
+        $productForThumbnail = $this->renderer->getProductForThumbnail();
         $this->assertEquals($product->getName(), $productForThumbnail->getName(), 'Invalid product was returned.');
     }
 
@@ -81,7 +92,12 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
 
-        $this->_renderer->setItem($item);
+        $this->itemResolver->expects($this->any())
+            ->method('getFinalProduct')
+            ->with($item)
+            ->will($this->returnValue($product));
+
+        $this->renderer->setItem($item);
         return $product;
     }
 
@@ -93,12 +109,12 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('getIdentities')
             ->will($this->returnValue($identities));
 
-        $this->assertEquals($product->getIdentities(), $this->_renderer->getIdentities());
+        $this->assertEquals($product->getIdentities(), $this->renderer->getIdentities());
     }
 
     public function testGetIdentitiesFromEmptyItem()
     {
-        $this->assertEmpty($this->_renderer->getIdentities());
+        $this->assertEmpty($this->renderer->getIdentities());
     }
 
     /**
@@ -133,7 +149,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
                 ]
             )->will($this->returnValue($priceHtml));
 
-        $this->assertEquals($priceHtml, $this->_renderer->getProductPriceHtml($product));
+        $this->assertEquals($priceHtml, $this->renderer->getProductPriceHtml($product));
     }
 
     public function testGetActions()
@@ -150,7 +166,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $this->layout->expects($this->once())
             ->method('getChildName')
-            ->with($this->_renderer->getNameInLayout(), 'actions')
+            ->with($this->renderer->getNameInLayout(), 'actions')
             ->willReturn($blockNameInLayout);
         $this->layout->expects($this->once())
             ->method('getBlock')
@@ -171,14 +187,14 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->method('toHtml')
             ->willReturn($blockHtml);
 
-        $this->assertEquals($blockHtml, $this->_renderer->getActions($itemMock));
+        $this->assertEquals($blockHtml, $this->renderer->getActions($itemMock));
     }
 
     public function testGetActionsWithNoBlock()
     {
         $this->layout->expects($this->once())
             ->method('getChildName')
-            ->with($this->_renderer->getNameInLayout(), 'actions')
+            ->with($this->renderer->getNameInLayout(), 'actions')
             ->willReturn(false);
 
         /**
@@ -188,7 +204,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assertEquals('', $this->_renderer->getActions($itemMock));
+        $this->assertEquals('', $this->renderer->getActions($itemMock));
     }
 
     public function testGetImage()
@@ -198,14 +214,14 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $product = $this->createMock(Product::class);
         $imageMock = $this->createMock(Image::class);
 
-        $this->imageBuilder->expects(self::once())
+        $this->imageBuilder->expects($this->once())
             ->method('create')
             ->with($product, $imageId, $attributes)
             ->willReturn($imageMock);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             Image::class,
-            $this->_renderer->getImage($product, $imageId, $attributes)
+            $this->renderer->getImage($product, $imageId, $attributes)
         );
     }
 }
