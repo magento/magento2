@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+use TypeError;
+
 class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
-     * Test class with throwable error
+     * Test class with type error
      */
     const TEST_CLASS_WITH_TYPE_ERROR = \Magento\Framework\ObjectManager\TestAsset\ConstructorWithTypeError::class;
 
@@ -146,7 +148,8 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test create instance with TypeError
-     * @expectedException \TypeError
+     *
+     * @expectedException TypeError
      */
     public function testNewInstanceWithTypeError()
     {
