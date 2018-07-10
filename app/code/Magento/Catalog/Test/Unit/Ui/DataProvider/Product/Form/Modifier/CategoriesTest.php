@@ -119,7 +119,7 @@ class CategoriesTest extends AbstractModifierTest
      * @return void
      * @dataProvider modifyMetaLockedDataProvider
      */
-    public function testModifyMetaLocked($locked)
+    public function testModifyMetaLocked(bool $locked)
     {
         $groupCode = 'test_group_code';
         $meta = [
@@ -148,6 +148,9 @@ class CategoriesTest extends AbstractModifierTest
         $this->assertEquals($locked, $modifyMeta['arguments']['data']['config']['disabled']);
     }
 
+    /**
+     * @return array
+     */
     public function modifyMetaLockedDataProvider()
     {
         return [[true], [false]];
