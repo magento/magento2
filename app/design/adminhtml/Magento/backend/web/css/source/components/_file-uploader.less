@@ -73,6 +73,14 @@
                 box-shadow: 0 0 0 1px @file-uploader-preview-focus__color;
             }
         }
+
+        &:disabled {
+            + .file-uploader-button {
+                cursor: default;
+                opacity: .5;
+                pointer-events: none;
+            }
+        }
     }
 }
 
