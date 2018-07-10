@@ -129,6 +129,7 @@
             <argument name="quantity" defaultValue="1" type="string"/>
         </arguments>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterDownloadable"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchDownloadable"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
