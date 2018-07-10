@@ -25,6 +25,9 @@
                     <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
                         <span><?= $block->escapeHtml(__('Change Billing Address')) ?></span>
                     </a>
+                    <a class="action delete" href="#" role="delete-address" data-address="<?= $block->escapeHtmlAttr($_pAddsses) ?>">
+                        <span><?= $block->escapeHtml(__('Delete Address')) ?></span>
+                    </a>
                 </div>
             </div>
         <?php else: ?>
@@ -49,6 +52,9 @@
                 <div class="box-actions">
                     <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
                         <span><?= $block->escapeHtml(__('Change Shipping Address')) ?></span>
+                    </a>
+                    <a class="action delete" href="#" role="delete-address" data-address="<?= $block->escapeHtmlAttr($_pAddsses) ?>">
+                        <span><?= $block->escapeHtml(__('Delete Address')) ?></span>
                     </a>
                 </div>
             </div>
@@ -98,7 +104,7 @@
     {
         ".page-main": {
             "address": {
-                "deleteAddress": "li.item a[role='delete-address']",
+                "deleteAddress": "a[role='delete-address']",
                 "deleteUrlPrefix": "<?= $block->escapeJs($block->escapeUrl($block->getDeleteUrl())) ?>id/",
                 "addAddress": "button[role='add-address']",
                 "addAddressLocation": "<?= $block->escapeJs($block->escapeUrl($block->getAddAddressUrl())) ?>"
