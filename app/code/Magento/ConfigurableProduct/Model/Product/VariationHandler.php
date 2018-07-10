@@ -92,6 +92,7 @@ class VariationHandler
         $productsData = $this->duplicateImagesForVariations($productsData);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
+            $simpleProductData['sku'] = trim($simpleProductData['sku']);
             if (isset($simpleProductData['configurable_attribute'])) {
                 $configurableAttribute = json_decode($simpleProductData['configurable_attribute'], true);
                 unset($simpleProductData['configurable_attribute']);
