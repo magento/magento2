@@ -82,6 +82,33 @@ class SourceItems extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
+        $meta['sources'] = [
+            'children' => [
+                'assign_sources_container' => [
+                    'children' => [
+                        'assign_sources_button' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'visible' => !$this->isSingleSourceMode->execute(),
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'assigned_sources' => [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'visible' => !$this->isSingleSourceMode->execute(),
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
         return $meta;
     }
 }

@@ -42,8 +42,10 @@
                         <label translate="true">Notify Quantity Use default</label>
                         <links>
                             <link name="linkedValue">${$.provider}:${$.parentScope}.notify_stock_qty</link>
-                            <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
                         </links>
+                        <imports>
+                            <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <checkbox class="Magento\InventoryLowQuantityNotificationAdminUi\Ui\Component\Product\Form\Element\UseConfigSettings">
