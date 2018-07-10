@@ -23,10 +23,9 @@ class Vertical extends \Magento\Framework\App\Config\Value
      */
     public function beforeSave()
     {
-        if (empty($this->getValue())) {
+        if (empty($this->getValue()) && $this->getFieldsetDataValue('enabled') != 0) {
             throw new LocalizedException(__('Please select a vertical.'));
         }
-
         return $this;
     }
 }
