@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventorySalesAdminUi\Ui\SalesChannelNameResolverInterface" type="Magento\InventorySalesAdminUi\Ui\WebsiteNameResolver"/>
+    <preference for="Magento\InventorySalesAdminUi\Model\SalesChannelNameResolverInterface" type="Magento\InventorySalesAdminUi\Model\WebsiteNameResolver"/>
     <!-- Stock delete button -->
     <type name="Magento\InventorySalesAdminUi\Ui\Component\Control\Stock\DeleteButton">
         <arguments>
@@ -26,4 +26,7 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
+        <plugin name="add_notice_for_unassigned_sales_channels" type="Magento\InventorySalesAdminUi\Plugin\InventoryApi\StockRepository\AddNoticeForUnassignedSalesChannels" sortOrder="10"/>
+    </type>
 </config>

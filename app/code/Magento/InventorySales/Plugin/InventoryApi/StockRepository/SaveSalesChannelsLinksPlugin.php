@@ -12,7 +12,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
-use Magento\InventorySales\Model\SalesChannel;
+use Magento\InventorySales\Model\GetUnassignedSalesChannelsForStock;
 use Magento\InventorySalesApi\Model\GetAssignedSalesChannelsForStockInterface;
 use Magento\InventorySalesApi\Model\ReplaceSalesChannelsForStockInterface;
 use Psr\Log\LoggerInterface;
@@ -48,24 +48,32 @@ class SaveSalesChannelsLinksPlugin
     private $messageManager;
 
     /**
+     * @var GetUnassignedSalesChannelsForStock
+     */
+    private $getUnassignedSalesChannelsForStock;
+
+    /**
      * @param ReplaceSalesChannelsForStockInterface $replaceSalesChannelsOnStock
      * @param LoggerInterface $logger
      * @param GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock
      * @param DefaultStockProviderInterface $defaultStockProvider
      * @param ManagerInterface $messageManager
+     * @param GetUnassignedSalesChannelsForStock $getUnassignedSalesChannelsForStock
      */
     public function __construct(
         ReplaceSalesChannelsForStockInterface $replaceSalesChannelsOnStock,
         LoggerInterface $logger,
         GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock,
         DefaultStockProviderInterface $defaultStockProvider,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        GetUnassignedSalesChannelsForStock $getUnassignedSalesChannelsForStock
     ) {
         $this->replaceSalesChannelsOnStock = $replaceSalesChannelsOnStock;
         $this->logger = $logger;
         $this->getAssignedSalesChannelsForStock = $getAssignedSalesChannelsForStock;
         $this->defaultStockProvider = $defaultStockProvider;
         $this->messageManager = $messageManager;
+        $this->getUnassignedSalesChannelsForStock = $getUnassignedSalesChannelsForStock;
     }
 
     /**
@@ -85,26 +93,22 @@ class SaveSalesChannelsLinksPlugin
     ): int {
         $extensionAttributes = $stock->getExtensionAttributes();
         $salesChannels = $extensionAttributes->getSalesChannels();
-        $unAssignedWebsiteCodes = $this->getUnassignedSalesChannelsForStock($stock);
+        $unAssignedSalesChannels = $this->getUnassignedSalesChannelsForStock->execute($stock);
 
         if (null !== $salesChannels) {
             try {
                 $this->replaceSalesChannelsOnStock->execute($salesChannels, $stockId);
 
-                if (count($unAssignedWebsiteCodes)) {
+                if (count($unAssignedSalesChannels)) {
                     $mergedSalesChannels = array_merge(
-                        $unAssignedWebsiteCodes,
+                        $unAssignedSalesChannels,
                         $this->getAssignedSalesChannelsForStock->execute($this->defaultStockProvider->getId())
                     );
                     $this->replaceSalesChannelsOnStock->execute(
                         $mergedSalesChannels,
                         $this->defaultStockProvider->getId()
                     );
-                    $this->messageManager->addNoticeMessage(
-                        __('All unassigned sales channels will be assigned to the Default Stock')
-                    );
                 }
-
             } catch (\Exception $e) {
                 $this->logger->error($e->getMessage());
                 throw new CouldNotSaveException(__('Could not replace Sales Channels for Stock'), $e);
@@ -112,35 +116,5 @@ class SaveSalesChannelsLinksPlugin
         }
 
         return $stockId;
-    }
-
-    /**
-     * Return all sales channels witch will be unassigned from the saved stock
-     *
-     * @param StockInterface $stock
-     * @return \Magento\InventorySales\Model\SalesChannel[]
-     */
-    private function getUnassignedSalesChannelsForStock(StockInterface $stock): array
-    {
-        $newWebsiteCodes = $result = [];
-        $assignedSalesChannels = $this->getAssignedSalesChannelsForStock->execute((int)$stock->getStockId());
-        $extensionAttributes = $stock->getExtensionAttributes();
-        $newSalesChannels = $extensionAttributes->getSalesChannels() ?: [];
-
-        foreach ($newSalesChannels as $salesChannel) {
-            if ($salesChannel->getType() === SalesChannel::TYPE_WEBSITE) {
-                $newWebsiteCodes[] = $salesChannel->getCode();
-            }
-        }
-
-        foreach ($assignedSalesChannels as $salesChannel) {
-            if ($salesChannel->getType() === SalesChannel::TYPE_WEBSITE
-                && !in_array($salesChannel->getCode(), $newWebsiteCodes, true)
-            ) {
-                $result[] = $salesChannel;
-            }
-        }
-
-        return $result;
     }
 }
