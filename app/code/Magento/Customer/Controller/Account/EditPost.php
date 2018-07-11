@@ -83,7 +83,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerRepositoryInterface $customerRepository
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
-     * @param Escaper $escaper
+     * @param Escaper $escaper|null
      */
     public function __construct(
         Context $context,
