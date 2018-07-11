@@ -5,19 +5,20 @@
  */
 namespace Magento\Catalog\Model\Product\Configuration\Item;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
- * Resolves the product for a configured item
+ * Resolves the product from a configured item.
  *
  * @api
  */
 interface ItemResolverInterface
 {
     /**
-     * Get the final product from a configured item by product type and selection
+     * Get the final product from a configured item by product type and selection.
      *
      * @param ItemInterface $item
-     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @return ProductInterface
      */
-    public function getFinalProduct(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
-    : \Magento\Catalog\Api\Data\ProductInterface;
+    public function getFinalProduct(ItemInterface $item) : ProductInterface;
 }

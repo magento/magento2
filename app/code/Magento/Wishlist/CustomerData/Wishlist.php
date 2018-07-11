@@ -62,7 +62,7 @@ class Wishlist implements SectionSourceInterface
         $this->imageHelperFactory = $imageHelperFactory;
         $this->block = $block;
         $this->view = $view;
-        $this->itemResolver = $itemResolver ?? ObjectManager::getInstance()->get(
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
         );
     }

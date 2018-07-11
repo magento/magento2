@@ -6,39 +6,40 @@
 namespace Magento\ConfigurableProduct\Model\Product\Configuration\Item;
 
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Catalog\Model\Product;
 
 /**
- * Resolves the product for a configured option item
+ * {@inheritdoc}
  */
-class ItemProductResolver implements \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface
+class ItemProductResolver implements ItemResolverInterface
 {
     const CONFIG_THUMBNAIL_SOURCE = 'checkout/cart/configurable_product_image';
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
+    public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
     }
 
     /**
-     * Identify the product from which thumbnail should be taken.
-     *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * {@inheritdoc}
      */
-    public function getFinalProduct(
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-    ) : \Magento\Catalog\Api\Data\ProductInterface {
+    public function getFinalProduct(ItemInterface $item) : ProductInterface
+    {
         /**
          * Show parent product thumbnail if it must be always shown according to the related setting in system config
-         * or if child thumbnail is not available
+         * or if child thumbnail is not available.
          */
         $parentItem = $item->getProduct();
         $config = $this->scopeConfig->getValue(
@@ -46,26 +47,28 @@ class ItemProductResolver implements \Magento\Catalog\Model\Product\Configuratio
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        return $config == Thumbnail::OPTION_USE_PARENT_IMAGE
-            || (!$this->getChildProduct($item)->getData('thumbnail')
-            || $this->getChildProduct($item)->getData('thumbnail') == 'no_selection')
-                ? $parentItem
-                : $this->getChildProduct($item);
+        $childProduct = $this->getChildProduct($item);
+        $childThumbnail = $childProduct->getData('thumbnail');
+        $finalProduct =
+            ($config == Thumbnail::OPTION_USE_PARENT_IMAGE) || (!$childThumbnail || $childThumbnail == 'no_selection')
+            ? $parentItem
+            : $childProduct;
+        return $finalProduct;
     }
 
     /**
      * Get item configurable child product
      *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-     * @return \Magento\Catalog\Model\Product
+     * @param ItemInterface $item
+     * @return Product
      */
-    private function getChildProduct(
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-    ) : \Magento\Catalog\Model\Product {
+    private function getChildProduct(ItemInterface $item) : Product
+    {
         $option = $item->getOptionByCode('simple_product');
+        $product = $item->getProduct();
         if ($option) {
-            return $option->getProduct();
+            $product = $option->getProduct();
         }
-        return $item->getProduct();
+        return $product;
     }
 }

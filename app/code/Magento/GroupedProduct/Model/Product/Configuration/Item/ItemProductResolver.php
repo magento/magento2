@@ -6,11 +6,16 @@
 namespace Magento\GroupedProduct\Model\Product\Configuration\Item;
 
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 
 /**
- * Resolves the product for a configured option item
+ * {@inheritdoc}
  */
-class ItemProductResolver implements \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface
+class ItemProductResolver implements ItemResolverInterface
 {
     /**
      * Path in config to the setting which defines if parent or child product should be used to generate a thumbnail.
@@ -18,27 +23,23 @@ class ItemProductResolver implements \Magento\Catalog\Model\Product\Configuratio
     const CONFIG_THUMBNAIL_SOURCE = 'checkout/cart/grouped_product_image';
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
+    public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
     }
 
     /**
-     * Identify the product from which thumbnail should be taken.
-     *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * {@inheritdoc}
      */
-    public function getFinalProduct(
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-    ) : \Magento\Catalog\Api\Data\ProductInterface {
+    public function getFinalProduct(ItemInterface $item) : ProductInterface
+    {
         /**
          * Show grouped product thumbnail if it must be always shown according to the related setting in system config
          * or if child product thumbnail is not available
@@ -48,25 +49,28 @@ class ItemProductResolver implements \Magento\Catalog\Model\Product\Configuratio
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $childProduct = $item->getProduct();
-        return $config == Thumbnail::OPTION_USE_PARENT_IMAGE ||
-        (!$childProduct->getData('thumbnail') || $childProduct->getData('thumbnail') == 'no_selection')
+        $childThumbnail = $childProduct->getData('thumbnail');
+
+        $finalProduct =
+            ($config == Thumbnail::OPTION_USE_PARENT_IMAGE) || (!$childThumbnail || $childThumbnail == 'no_selection')
             ?  $this->getParentProduct($item)
             : $childProduct;
+        return $finalProduct;
     }
 
     /**
      * Get grouped product
      *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-     * @return \Magento\Catalog\Model\Product
+     * @param ItemInterface $item
+     * @return Product
      */
-    private function getParentProduct(
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-    ) : \Magento\Catalog\Model\Product {
+    private function getParentProduct(ItemInterface $item) : Product
+    {
         $option = $item->getOptionByCode('product_type');
+        $product = $item->getProduct();
         if ($option) {
-            return $option->getProduct();
+            $product = $option->getProduct();
         }
-        return $item->getProduct();
+        return $product;
     }
 }

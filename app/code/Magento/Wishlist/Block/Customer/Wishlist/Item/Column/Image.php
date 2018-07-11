@@ -41,7 +41,7 @@ class Image extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
         UrlBuilder $urlBuilder = null,
         ItemResolverInterface $itemResolver = null
     ) {
-        $this->itemResolver = $itemResolver ?? ObjectManager::getInstance()->get(ItemResolverInterface::class);
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
         parent::__construct(
             $context,
             $httpContext,

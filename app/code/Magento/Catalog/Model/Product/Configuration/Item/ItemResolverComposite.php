@@ -5,8 +5,10 @@
  */
 namespace Magento\Catalog\Model\Product\Configuration\Item;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
- * Composite implementation for @see ItemResolverInterface
+ * {@inheritdoc}
  */
 class ItemResolverComposite implements ItemResolverInterface
 {
@@ -24,14 +26,14 @@ class ItemResolverComposite implements ItemResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getFinalProduct(
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-    ) : \Magento\Catalog\Api\Data\ProductInterface {
+    public function getFinalProduct(ItemInterface $item) : ProductInterface
+    {
         $product = $item->getProduct();
         foreach ($this->itemResolvers as $resolver) {
             $resolvedProduct = $resolver->getFinalProduct($item);
             if ($resolvedProduct !== $product) {
-                return $resolvedProduct;
+                $product = $resolvedProduct;
+                break;
             }
         }
         return $product;

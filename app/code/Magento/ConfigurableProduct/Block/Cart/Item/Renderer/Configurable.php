@@ -57,7 +57,8 @@ class Configurable extends Renderer implements IdentityInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated
+     * @deprecated because parent can handle the logic for images of all product types
+     * @see \Magento\Checkout\Block\Cart\Item\Renderer::getProductForThumbnail
      */
     public function getProductForThumbnail()
     {

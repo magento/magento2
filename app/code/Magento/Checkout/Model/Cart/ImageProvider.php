@@ -39,7 +39,7 @@ class ImageProvider
     ) {
         $this->itemRepository = $itemRepository;
         $this->itemPool = $itemPool;
-        $this->customerDataItem = $customerDataItem ?? ObjectManager::getInstance()->get(DefaultItem::class);
+        $this->customerDataItem = $customerDataItem ?: ObjectManager::getInstance()->get(DefaultItem::class);
     }
 
     /**
