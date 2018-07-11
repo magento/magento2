@@ -43,6 +43,7 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton1"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton1"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
@@ -72,6 +73,7 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton2"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForcustomerGroupPriceAddButton2"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" time="30" stepKey="waitForSelectCustomerGroupNameAttribute1"/>
@@ -96,6 +98,7 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct3">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage3"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton3"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForcustomerGroupPriceAddButton3"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
@@ -161,6 +164,7 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct4">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage4"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton4"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForcustomerGroupPriceAddButton4"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('1')}}" userInput="25" stepKey="selectProductTierPricePercentageValue2"/>
@@ -228,12 +232,14 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct5">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage5"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton5"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="waitForcustomerGroupPriceDeleteButton"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton5"/>
         <actionGroup ref="saveProductForm" stepKey="saveProduct5"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage6"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton6"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForcustomerGroupPriceAddButton5"/>
         <dontSeeElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" stepKey="dontSeeQtyInputOfFirstRow"/>
