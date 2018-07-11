@@ -64,7 +64,7 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
     }
 
     /**
-     * Price value of product with configured options
+     * Price value of product with configured options.
      *
      * @return bool|float
      */
