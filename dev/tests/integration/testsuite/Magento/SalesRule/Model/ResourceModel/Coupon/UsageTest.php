@@ -54,8 +54,8 @@ class UsageTest extends \PHPUnit\Framework\TestCase
 
         $testCases = [
             ['increment' => true, 'expected' => 1],
-            ['increment' => false, 'expected' => 0],
-            ['increment' => false, 'expected' => 0],
+            ['increment' => false, 'expected' => 1],
+            ['increment' => false, 'expected' => 1],
             ['increment' => true, 'expected' => 1],
             ['increment' => true, 'expected' => 2],
         ];

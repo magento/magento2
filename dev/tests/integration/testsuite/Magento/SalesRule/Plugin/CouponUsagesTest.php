@@ -85,7 +85,7 @@ class CouponUsagesTest extends \PHPUnit\Framework\TestCase
             $this->coupon->getTimesUsed()
         );
         self::assertEquals(
-            0,
+            1,
             $this->couponUsage->getTimesUsed()
         );
     }
