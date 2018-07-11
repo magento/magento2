@@ -9,10 +9,14 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
+        <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
+        <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input"/>
+        <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
         <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
+        <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
         <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']"/>
@@ -22,6 +26,9 @@
         <element name="validationErrorLabel" type="text" selector="//label[@class='admin__field-error']"/>
         <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
+        <element name="divByDataIndex" type="input" selector="div[data-index='{{var}}']" parameterized="true"/>
+        <element name="attributeSetSearchCount" type="text" selector="div[data-index='attribute_set_id'] .admin__action-multiselect-search-count"/>
+        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
         <element name="addAttributeBtn" type="button" selector="#addAttribute"/>
     </section>
     <section name="ProductInWebsitesSection">
