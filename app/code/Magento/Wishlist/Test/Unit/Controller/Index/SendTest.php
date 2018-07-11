@@ -32,6 +32,7 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\Config as WishlistConfig;
 use Magento\Wishlist\Model\Wishlist;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
