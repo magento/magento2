@@ -139,7 +139,7 @@ class ConsumersRunner
      */
     private function getPidFilePath($consumerName)
     {
-        $sanitizedHostname = preg_replace('/[^a-zA-Z0-9]/i', '', gethostname());
+        $sanitizedHostname = preg_replace('/[^a-z0-9]/i', '', gethostname());
 
         return $consumerName . '-' . $sanitizedHostname . static::PID_FILE_EXT;
     }
