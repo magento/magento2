@@ -15,6 +15,7 @@ use Magento\Framework\Validator\EmailAddress;
 use Magento\Security\Model\PasswordResetRequestEvent;
 use Magento\Framework\Exception\SecurityViolationException;
 use Magento\User\Controller\Adminhtml\Auth;
+use Magento\Backend\Helper\Data;
 
 class Forgotpassword extends Auth
 {
@@ -22,13 +23,18 @@ class Forgotpassword extends Auth
      * @var SecurityManager
      */
     protected $securityManager;
-    
+
     /**
      * User model factory
      *
      * @var CollectionFactory
      */
     private $userCollectionFactory;
+
+    /**
+     * @var Data
+     */
+    private $backendDataHelper;
 
     /**
      * @param Context $context
@@ -40,12 +46,15 @@ class Forgotpassword extends Auth
         Context $context,
         UserFactory $userFactory,
         SecurityManager $securityManager,
-        CollectionFactory $userCollectionFactory = null
+        CollectionFactory $userCollectionFactory = null,
+        Data $backendDataHelper = null
     ) {
         parent::__construct($context, $userFactory);
         $this->securityManager = $securityManager;
         $this->userCollectionFactory = $userCollectionFactory ?:
                 ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->backendDataHelper = $backendDataHelper ?:
+                ObjectManager::getInstance()->get(Data::class);
     }
 
     /**
@@ -84,7 +93,7 @@ class Forgotpassword extends Auth
                             /** @var \Magento\User\Model\User $user */
                             $user = $this->_userFactory->create()->load($item->getId());
                             if ($user->getId()) {
-                                $newPassResetToken = $this->_backendDataHelper->generateResetPasswordLinkToken();
+                                $newPassResetToken = $this->backendDataHelper->generateResetPasswordLinkToken();
                                 $user->changeResetPasswordLinkToken($newPassResetToken);
                                 $user->save();
                                 $user->sendPasswordResetConfirmationEmail();
@@ -103,7 +112,7 @@ class Forgotpassword extends Auth
                 $this->messageManager->addSuccess(__('We\'ll email you a link to reset your password.'));
                 // @codingStandardsIgnoreEnd
                 $this->getResponse()->setRedirect(
-                    $this->_backendDataHelper->getHomePageUrl()
+                    $this->backendDataHelper->getHomePageUrl()
                 );
                 return;
             } else {
