@@ -53,7 +53,8 @@
             "Magento\\Framework\\": ""
         },
         "files": [
-            "registration.php"
+            "registration.php",
+            "Phrase/__.php"
         ]
     }
 }
