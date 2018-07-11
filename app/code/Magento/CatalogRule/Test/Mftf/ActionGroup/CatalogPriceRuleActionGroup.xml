@@ -35,6 +35,7 @@
         <scrollToTopOfPage stepKey="scrollToTop"/>
     </actionGroup>
 
+    <!-- Apply all of the saved catalog price rules -->
     <actionGroup name="applyCatalogPriceRules">
         <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
