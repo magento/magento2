@@ -6,11 +6,9 @@
 namespace Magento\User\Controller\Adminhtml;
 
 use Magento\Framework\Encryption\Helper\Security;
-use Magento\Framework\App\ObjectManager;
 use Magento\Backend\App\AbstractAction;
 use Magento\Backend\App\Action\Context;
 use Magento\User\Model\UserFactory;
-use Magento\Backend\Helper\Data;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -24,27 +22,19 @@ abstract class Auth extends AbstractAction
      * @var UserFactory
      */
     protected $_userFactory;
-    
-    /**
-     * @var Data
-     */
-    protected $_backendDataHelper;
 
     /**
      * Construct
      *
      * @param Context $context
      * @param UserFactory $userFactory
-     * @param Data $backendDataHelper
      */
     public function __construct(
         Context $context,
-        UserFactory $userFactory,
-        Data $backendDataHelper = null
+        UserFactory $userFactory
     ) {
         parent::__construct($context);
         $this->_userFactory = $userFactory;
-        $this->_backendDataHelper = $backendDataHelper ?: ObjectManager::getInstance()->get(Data::class);
     }
 
     /**
