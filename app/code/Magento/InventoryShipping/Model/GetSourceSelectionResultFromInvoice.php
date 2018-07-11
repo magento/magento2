@@ -18,13 +18,16 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItemModel;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
+use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 use Traversable;
 
 /**
  * Creates instance of InventoryRequestInterface by given InvoiceInterface object.
  * Only virtual type items will be used.
  */
-class InventoryRequestFromInvoiceFactory
+class GetSourceSelectionResultFromInvoice
 {
     /**
      * @var GetSkusByProductIdsInterface
@@ -47,39 +50,58 @@ class InventoryRequestFromInvoiceFactory
     private $stockByWebsiteIdResolver;
 
     /**
+     * @var GetDefaultSourceSelectionAlgorithmCodeInterface
+     */
+    private $getDefaultSourceSelectionAlgorithmCode;
+
+    /**
+     * @var SourceSelectionServiceInterface
+     */
+    private $sourceSelectionService;
+
+    /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
+     * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+     * @param SourceSelectionServiceInterface $sourceSelectionService
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
         ItemRequestInterfaceFactory $itemRequestFactory,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
-        InventoryRequestInterfaceFactory $inventoryRequestFactory
+        InventoryRequestInterfaceFactory $inventoryRequestFactory,
+        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
+        SourceSelectionServiceInterface $sourceSelectionService
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
+        $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
+        $this->sourceSelectionService = $sourceSelectionService;
     }
 
     /**
      * @param InvoiceInterface $invoice
-     * @return InventoryRequestInterface
+     * @return SourceSelectionResultInterface
      * @throws InputException
      */
-    public function create(InvoiceInterface $invoice): InventoryRequestInterface
+    public function execute(InvoiceInterface $invoice): SourceSelectionResultInterface
     {
         $order = $invoice->getOrder();
         $websiteId = $order->getStore()->getWebsiteId();
         $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
 
         /** @var InventoryRequestInterface $inventoryRequest */
-        return $this->inventoryRequestFactory->create([
+        $inventoryRequest = $this->inventoryRequestFactory->create([
             'stockId' => $stockId,
             'items' => $this->getSelectionRequestItems($invoice->getItems())
         ]);
+
+        $selectionAlgorithmCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
+        return $this->sourceSelectionService->execute($inventoryRequest, $selectionAlgorithmCode);
     }
 
     /**
@@ -91,7 +113,9 @@ class InventoryRequestFromInvoiceFactory
     {
         $selectionRequestItems = [];
         foreach ($invoiceItems as $invoiceItem) {
-            if (!$this->canProcessInvoiceItem($invoiceItem)) {
+            $orderItem = $invoiceItem->getOrderItem();
+
+            if ($orderItem->isDummy() || !$orderItem->getIsVirtual()) {
                 continue;
             }
 
@@ -106,20 +130,6 @@ class InventoryRequestFromInvoiceFactory
             ]);
         }
         return $selectionRequestItems;
-    }
-
-    /**
-     * @param InvoiceItemModel $invoiceItem
-     * @return bool
-     */
-    private function canProcessInvoiceItem(InvoiceItemModel $invoiceItem): bool
-    {
-        $orderItem = $invoiceItem->getOrderItem();
-        if ($orderItem->isDeleted() || $orderItem->getParentItemId() || !$orderItem->getIsVirtual()) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
