@@ -232,26 +232,19 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
         $cacheKey = $this->getCacheKey([$editMode, $storeId]);
-        if (!isset($this->instances[$sku][$cacheKey]) || $forceReload) {
-            $product = $this->productFactory->create();
-
+        $cachedProduct = $this->getProductFromLocalCache($sku, $cacheKey);
+        if ($cachedProduct === null || $forceReload) {
             $productId = $this->resourceModel->getIdBySku($sku);
             if (!$productId) {
                 throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
             }
-            if ($editMode) {
-                $product->setData('_edit_mode', true);
-            }
-            if ($storeId !== null) {
-                $product->setData('store_id', $storeId);
-            }
-            $product->load($productId);
+
+            $product = $this->getById($productId, $editMode, $storeId, $forceReload);
+
             $this->cacheProduct($cacheKey, $product);
+            $cachedProduct = $product;
         }
-        if (!isset($this->instances[$sku])) {
-            $sku = trim($sku);
-        }
-        return $this->instances[$sku][$cacheKey];
+        return $cachedProduct;
     }
 
     /**
@@ -307,7 +300,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product)
     {
         $this->instancesById[$product->getId()][$cacheKey] = $product;
-        $this->instances[$product->getSku()][$cacheKey] = $product;
+        $this->saveProductInLocalCache($product, $cacheKey);
 
         if ($this->cacheLimit && count($this->instances) > $this->cacheLimit) {
             $offset = round($this->cacheLimit / -2);
@@ -329,18 +322,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         unset($productData['media_gallery']);
         if ($createNew) {
             $product = $this->productFactory->create();
+            $this->assignProductToWebsites($product);
             if (isset($productData['price']) && !isset($productData['product_type'])) {
                 $product->setTypeId(Product\Type::TYPE_SIMPLE);
-            }
-            if ($this->storeManager->hasSingleStore()) {
-                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
             }
         } else {
             if (!empty($productData['id'])) {
                 unset($this->instancesById[$productData['id']]);
                 $product = $this->getById($productData['id']);
             } else {
-                unset($this->instances[$productData['sku']]);
+                $this->removeProductFromLocalCache($productData['sku']);
                 $product = $this->get($productData['sku']);
             }
         }
@@ -348,31 +339,20 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
-        $this->assignProductToWebsites($product, $createNew);
 
         return $product;
     }
 
     /**
      * @param \Magento\Catalog\Model\Product $product
-     * @param bool $createNew
      * @return void
      */
-    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product, $createNew)
+    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
-        $websiteIds = $product->getWebsiteIds();
-
-        if (!$this->storeManager->hasSingleStore()) {
-            $websiteIds = array_unique(
-                array_merge(
-                    $websiteIds,
-                    [$this->storeManager->getStore()->getWebsiteId()]
-                )
-            );
-        }
-
-        if ($createNew && $this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+        if ($this->storeManager->getStore(true)->getCode() === \Magento\Store\Model\Store::ADMIN_CODE) {
             $websiteIds = array_keys($this->storeManager->getWebsites());
+        } else {
+            $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
         }
 
         $product->setWebsiteIds($websiteIds);
@@ -495,7 +475,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);
             }
-            unset($this->instances[$product->getSku()]);
+            $this->removeProductFromLocalCache($product->getSku());
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->save($product);
         } catch (ConnectionException $exception) {
@@ -529,7 +509,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'), $e);
         }
-        unset($this->instances[$product->getSku()]);
+        $this->removeProductFromLocalCache($product->getSku());
         unset($this->instancesById[$product->getId()]);
         return $this->get($product->getSku(), false, $product->getStoreId());
     }
@@ -542,7 +522,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $sku = $product->getSku();
         $productId = $product->getId();
         try {
-            unset($this->instances[$product->getSku()]);
+            $this->removeProductFromLocalCache($product->getSku());
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
         } catch (ValidatorException $e) {
@@ -552,7 +532,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 __('Unable to remove product %1', $sku)
             );
         }
-        unset($this->instances[$sku]);
+        $this->removeProductFromLocalCache($sku);
         unset($this->instancesById[$productId]);
         return true;
     }
@@ -619,7 +599,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $fields = [];
         $categoryFilter = [];
         foreach ($filterGroup->getFilters() as $filter) {
-            $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $conditionType = $filter->getConditionType() ?: 'eq';
 
             if ($filter->getField() == 'category_id') {
                 $categoryFilter[$conditionType][] = $filter->getValue();
@@ -674,5 +654,57 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             );
         }
         return $this->collectionProcessor;
+    }
+
+    /**
+     * Gets product from the local cache by SKU.
+     *
+     * @param string $sku
+     * @param string $cacheKey
+     * @return Product|null
+     */
+    private function getProductFromLocalCache(string $sku, string $cacheKey)
+    {
+        $preparedSku = $this->prepareSku($sku);
+        if (!isset($this->instances[$preparedSku])) {
+            return null;
+        }
+
+        return $this->instances[$preparedSku][$cacheKey] ?? null;
+    }
+
+    /**
+     * Removes product in the local cache.
+     *
+     * @param string $sku
+     * @return void
+     */
+    private function removeProductFromLocalCache(string $sku)
+    {
+        $preparedSku = $this->prepareSku($sku);
+        unset($this->instances[$preparedSku]);
+    }
+
+    /**
+     * Saves product in the local cache.
+     *
+     * @param Product $product
+     * @param string $cacheKey
+     */
+    private function saveProductInLocalCache(Product $product, string $cacheKey)
+    {
+        $preparedSku = $this->prepareSku($product->getSku());
+        $this->instances[$preparedSku][$cacheKey] = $product;
+    }
+
+    /**
+     * Converts SKU to lower case and trims.
+     *
+     * @param string $sku
+     * @return string
+     */
+    private function prepareSku(string $sku): string
+    {
+        return mb_strtolower(trim($sku));
     }
 }

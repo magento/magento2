@@ -16,7 +16,7 @@ class MethodInvokedAtIndexTest extends \PHPUnit\Framework\TestCase
             'ValidMethodName',
             [],
             'void',
-            new \StdClass()
+            new \stdClass()
         );
         $matcher = new \Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex(0);
         $this->assertTrue($matcher->matches($invocationObject));

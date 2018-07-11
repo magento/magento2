@@ -52,6 +52,9 @@ class TextTest extends AbstractFormTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function validateValueDataProvider()
     {
         return [
@@ -84,6 +87,9 @@ class TextTest extends AbstractFormTestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function validateValueRequiredDataProvider()
     {
         return [
@@ -150,6 +156,9 @@ class TextTest extends AbstractFormTestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function validateValueLengthDataProvider()
     {
         return [
