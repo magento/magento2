@@ -47,12 +47,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image">
-        <arguments>
-            <argument name="renderers" xsi:type="array">
-                <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable</item>
-                <item name="grouped" xsi:type="object">Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped</item>
-            </argument>
-        </arguments>
-    </type>
 </config>
