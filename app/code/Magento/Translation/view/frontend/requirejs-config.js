@@ -7,7 +7,7 @@ var config = {
     map: {
         '*': {
             editTrigger: 'mage/edit-trigger',
-            addClass: 'Magento_Translation/add-class'
+            addClass: 'Magento_Translation/js/add-class'
         }
     },
     deps: [
