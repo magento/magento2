@@ -22,6 +22,9 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
  * Bundle products Price indexer resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price implements DimensionalIndexerInterface
 {
@@ -113,6 +116,8 @@ class Price implements DimensionalIndexerInterface
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param bool $fullReindexAction
      * @param string $connectionName
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         BaseFinalPrice $baseFinalPrice,
