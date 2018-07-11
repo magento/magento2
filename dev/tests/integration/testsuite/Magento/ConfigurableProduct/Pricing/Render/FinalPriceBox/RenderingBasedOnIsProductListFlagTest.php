@@ -75,6 +75,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea frontend
+     * @magentoDbIsolation disabled
      */
     public function testRenderingByDefault()
     {
@@ -109,6 +110,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea frontend
      * @dataProvider isProductListDataProvider
+     * @magentoDbIsolation disabled
      */
     public function testRenderingAccordingToIsProductListFlag($flag, $count)
     {

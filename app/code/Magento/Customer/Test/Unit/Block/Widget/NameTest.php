@@ -159,6 +159,9 @@ class NameTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->_block->{$method}());
     }
 
+    /**
+     * @return array
+     */
     public function methodDataProvider()
     {
         return [
@@ -453,7 +456,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
          */
         $this->_block->setForceUseCustomerAttributes(false);
         $this->_block->setForceUseCustomerRequiredAttributes(true);
-        $this->_block->setObject(new \StdClass());
+        $this->_block->setObject(new \stdClass());
 
         /**
          * The first call to isRequired() is false so that the second if conditional in the other code path

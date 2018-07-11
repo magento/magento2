@@ -46,6 +46,9 @@ class ClassReaderDecoratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getConstructorDataProvider()
     {
         return [

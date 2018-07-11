@@ -165,7 +165,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
                 $options = $opt->getAllOptions();
                 if ($options) {
                     foreach ($options as $option) {
-                        if ($option['value'] == $value) {
+                        if ($option['value'] === $value) {
                             $valueOption = $option['label'];
                         }
                     }

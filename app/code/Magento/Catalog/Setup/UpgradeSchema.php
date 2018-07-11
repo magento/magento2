@@ -138,6 +138,15 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->addGeneralIndexOnGalleryValueTable($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.2.5', '<')) {
+            $this->enableSegmentation($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.2.6', '<')) {
+            $this->addStoreIdFieldForWebsiteIndexTable($setup);
+            $this->removeIndexFromPriceIndexTable($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -766,5 +775,70 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 );
             }
         }
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function enableSegmentation(SchemaSetupInterface $setup)
+    {
+        $storeSelect = $setup->getConnection()->select()->from($setup->getTable('store'))->where('store_id > 0');
+        foreach ($setup->getConnection()->fetchAll($storeSelect) as $store) {
+            $indexTable = $setup->getTable('catalog_category_product_index') .
+                '_' .
+                \Magento\Store\Model\Store::ENTITY .
+                $store['store_id'];
+
+            $setup->getConnection()->createTable(
+                $setup->getConnection()->createTableByDdl(
+                    $setup->getTable('catalog_category_product_index'),
+                    $indexTable
+                )
+            );
+            $setup->getConnection()->createTable(
+                $setup->getConnection()->createTableByDdl(
+                    $setup->getTable('catalog_category_product_index'),
+                    $indexTable . '_replica'
+                )
+            );
+        }
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     */
+    private function addStoreIdFieldForWebsiteIndexTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->addColumn(
+            $setup->getTable('catalog_product_index_website'),
+            'default_store_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                'nullable' => false,
+                'comment' => 'Default store id for website '
+            ]
+        );
+    }
+
+    /**
+     * Table "catalog_product_index_price_tmp" used as template of "catalog_product_index_price" table
+     * for create temporary tables during indexation. Indexes are removed from performance perspective
+     * @param SchemaSetupInterface $setup
+     */
+    private function removeIndexFromPriceIndexTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->dropIndex(
+            $setup->getTable('catalog_product_index_price_tmp'),
+            $setup->getIdxName('catalog_product_index_price_tmp', ['customer_group_id'])
+        );
+        $setup->getConnection()->dropIndex(
+            $setup->getTable('catalog_product_index_price_tmp'),
+            $setup->getIdxName('catalog_product_index_price_tmp', ['website_id'])
+        );
+        $setup->getConnection()->dropIndex(
+            $setup->getTable('catalog_product_index_price_tmp'),
+            $setup->getIdxName('catalog_product_index_price_tmp', ['min_price'])
+        );
     }
 }

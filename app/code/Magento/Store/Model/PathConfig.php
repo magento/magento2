@@ -83,6 +83,8 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
      */
     public function getDefaultPath()
     {
-        return $this->scopeConfig->getValue('web/default/front', ScopeInterface::SCOPE_STORE);
+        $store = $this->storeManager->getStore();
+        $value = $this->scopeConfig->getValue('web/default/front', ScopeInterface::SCOPE_STORE, $store);
+        return $value;
     }
 }

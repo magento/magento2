@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminOrderDetailsInformationSection">
+        <element name="orderDate" type="text" selector=".order-information table.order-information-table tr:first-of-type > td"/>
+        <element name="orderStatus" type="text" selector=".order-information table.order-information-table #order_status"/>
+        <element name="purchasedFrom" type="text" selector=".order-information table.order-information-table tr:last-of-type > td"/>
+        <element name="accountInformation" type="text" selector=".order-account-information-table"/>
+        <element name="customerName" type="text" selector=".order-account-information table tr:first-of-type > td span"/>
+        <element name="customerEmail" type="text" selector=".order-account-information table tr:nth-of-type(2) > td a"/>
+        <element name="customerGroup" type="text" selector=".order-account-information table tr:nth-of-type(3) > td"/>
+        <element name="billingAddress" type="text" selector=".order-billing-address"/>
+        <element name="shippingAddress" type="text" selector=".order-shipping-address"/>
+        <element name="itemsOrdered" type="text" selector=".edit-order-table"/>
+    </section>
+</sections>

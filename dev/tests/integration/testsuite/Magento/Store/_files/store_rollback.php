@@ -22,5 +22,12 @@ if ($store->getId()) {
     $store->delete();
 }
 
+/** @var Store $store */
+$store = $objectManager->get(Store::class);
+$store->load('test', 'code');
+if ($store->getId()) {
+    $store->delete();
+}
+
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

@@ -31,6 +31,11 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $productResource;
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -39,6 +44,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->get(ProductRepositoryInterface::class);
         $this->productResource = Bootstrap::getObjectManager()
             ->get(ProductResource::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
     }
 
     /**
@@ -143,5 +150,52 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             $nameUpdated,
             $product->getName()
         );
+    }
+
+    /**
+     * Check a case when product should be retrieved with different SKU variations.
+     *
+     * @param string $sku
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @dataProvider skuDataProvider
+     */
+    public function testGetProduct(string $sku)
+    {
+        $expectedSku = 'simple';
+        $product = $this->productRepository->get($sku);
+
+        self::assertNotEmpty($product);
+        self::assertEquals($expectedSku, $product->getSku());
+    }
+
+    /**
+     * Get list of SKU variations for the same product.
+     *
+     * @return array
+     */
+    public function skuDataProvider(): array
+    {
+        return [
+            ['sku' => 'simple'],
+            ['sku' => 'Simple'],
+            ['sku' => 'simple ']
+        ];
+    }
+
+    /**
+     * Checks filtering by store_id.
+     *
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @return void
+     */
+    public function testFilterByStoreId()
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('store_id', '1', 'eq')
+            ->create();
+        $list = $this->productRepository->getList($searchCriteria);
+        $count = $list->getTotalCount();
+
+        $this->assertGreaterThanOrEqual(1, $count);
     }
 }

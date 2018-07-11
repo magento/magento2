@@ -3,7 +3,7 @@
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.png)](https://crowdin.com/project/magento-2)
 <h2>Welcome</h2>
-Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting edge, feature-rich eCommerce solution that gets results.
+Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting-edge, feature-rich eCommerce solution that gets results.
 
 ## Magento system requirements
 [Magento system requirements](http://devdocs.magento.com/guides/v2.2/install-gde/system-requirements2.html)
@@ -11,7 +11,6 @@ Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a 
 ## Install Magento
 To install Magento, see either:
 
-*	[Magento DevBox](https://magento.com/tech-resources/download), the easiest way to get started with Magento.
 *	[Installation guide](http://devdocs.magento.com/guides/v2.2/install-gde/bk-install-guide.html)
 
 <h2>Contributing to the Magento 2 code base</h2>
@@ -27,6 +26,19 @@ To suggest documentation improvements, click [here][4].
 [2]: <http://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html#report>
 [3]: <https://github.com/magento/magento2/issues>
 [4]: <http://devdocs.magento.com>
+
+<h3>Community Maintainers</h3>
+The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks these Community Maintainers for their valuable contributions.
+
+<a href="https://magento.com/magento-contributors#maintainers">
+    <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/maintainers.png"/>
+</a>
+
+<h3>Top Contributors</h3>
+Magento is thankful for any contribution that can improve our code base, documentation or increase test coverage. We always recognize our most active members, as their contributions are the foundation of the Magento Open Source platform.
+<a href="https://magento.com/magento-contributors">
+    <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/contributors.png"/>
+</a>
 
 <h3>Labels applied by the Magento team</h3>
 

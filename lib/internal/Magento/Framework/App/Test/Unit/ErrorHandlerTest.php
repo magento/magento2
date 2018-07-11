@@ -32,6 +32,9 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->object->handler($errorNo, $errorStr, $errorFile, 11));
     }
 
+    /**
+     * @return array
+     */
     public function handlerProvider()
     {
         return [
@@ -60,6 +63,9 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
         $this->object->handler($errorNo, $errorStr, $errorFile, $errorLine);
     }
 
+    /**
+     * @return array
+     */
     public function handlerProviderException()
     {
         return [

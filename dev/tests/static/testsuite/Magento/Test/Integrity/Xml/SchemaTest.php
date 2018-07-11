@@ -109,6 +109,7 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
             '#Doc/etc/doc/vars.xml$#',
             '#phpunit.xml$#',
             '#app/code/(?!Magento)(.*?)/.*?/Test/.*\.xml$#',
+            '#Test/Mftf#',
         ];
 
         foreach ($list as $pattern) {

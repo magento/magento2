@@ -44,6 +44,7 @@ class PreProcessor implements PreProcessorInterface
      * @var TranslateInterface
      */
     protected $translate;
+
     /**
      * @var DesignInterface
      */
