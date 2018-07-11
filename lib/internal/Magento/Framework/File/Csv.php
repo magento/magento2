@@ -107,7 +107,7 @@ class Csv
      * Retrieve CSV file data using generator
      *
      * @param   string $file
-     * @return  array
+     * @return  \Generator
      * @throws \Exception
      */
     public function getStream($file)
