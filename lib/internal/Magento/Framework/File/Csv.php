@@ -104,6 +104,26 @@ class Csv
     }
 
     /**
+     * Retrieve CSV file data using generator
+     *
+     * @param   string $file
+     * @return  array
+     * @throws \Exception
+     */
+    public function getStream($file)
+    {
+        if (!file_exists($file)) {
+            throw new \Exception('File "' . $file . '" does not exist');
+        }
+
+        $fh = fopen($file, 'r');
+        while ($rowData = fgetcsv($fh, $this->_lineLength, $this->_delimiter, $this->_enclosure)) {
+            yield $rowData;
+        }
+        fclose($fh);
+    }
+
+    /**
      * Retrieve CSV file data as pairs
      *
      * @param   string $file

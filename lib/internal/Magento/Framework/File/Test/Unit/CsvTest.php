@@ -59,4 +59,25 @@ class CsvTest extends \PHPUnit\Framework\TestCase
         $file = 'FileNameThatShouldNotExist';
         $this->_model->getData($file);
     }
+
+    public function testGetDataSimpleFile()
+    {
+        $file = __DIR__ . '/_files/sample.csv';
+        $data = $this->_model->getData($file);
+        $this->assertTrue(isset($data[0][0]) && $data[0][0] == 1);
+        $this->assertTrue(isset($data[0][1]) && $data[0][1] == 2);
+    }
+
+    public function testGetStreamSimpleFile()
+    {
+        $file = __DIR__ . '/_files/sample.csv';
+        $stream = $this->_model->getStream($file);
+
+        $data = [];
+        foreach ($stream as $row) {
+            $data[] = $row;
+        }
+        $this->assertTrue(isset($data[0][0]) && $data[0][0] == 1);
+        $this->assertTrue(isset($data[0][1]) && $data[0][1] == 2);
+    }
 }
