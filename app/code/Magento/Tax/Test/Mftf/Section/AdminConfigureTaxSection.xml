@@ -36,6 +36,6 @@
         <element name="systemValueDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax input[type='checkbox']"/>
         <element name="dropdownDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax select"/>
 
-        <element name="priceDisplaySettings" type="block" selector="#tax_weee-head" timeout="30"/>
+        <element name="fixedProductTaxes" type="block" selector="#tax_weee-head" timeout="30"/>
     </section>
 </sections>
