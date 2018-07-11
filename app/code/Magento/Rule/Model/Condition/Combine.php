@@ -48,6 +48,7 @@ class Combine extends AbstractCondition
     }
 
     /* start aggregator methods */
+
     /**
      * @return $this
      */
