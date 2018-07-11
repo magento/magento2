@@ -16,7 +16,7 @@
             <description value="Customer should be able to see basic bundle product details"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-230"/>
-            <group value="Bundle"/>
+            <group value="banana"/>
         </annotations>
         <before>
             <!--Creating Data-->
@@ -44,7 +44,7 @@
 
         <!-- Add options -->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
-        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
+        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
@@ -75,10 +75,11 @@
         <!--Checking details-->
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
-        <seeElement selector="{{BundleStorefrontSection.shortDescriptionText}}" stepKey="seeShortDescription"/>
-        <seeElement selector="{{BundleStorefrontSection.longDescriptionText}}" stepKey="seeLongDescription"/>
+        <see selector="{{BundleStorefrontSection.shortDescriptionText}}" userInput="This is the short description" stepKey="seeShortDescription"/>
+        <see selector="{{BundleStorefrontSection.longDescriptionText}}" userInput="This is the long description" stepKey="seeLongDescription"/>
         <click selector="{{BundleStorefrontSection.bundleOptionSelector}}" stepKey="clickOnCustomizationOption"/>
-        <seeElement selector="{{BundleStorefrontSection.bundleOptionSelection('1')}}" stepKey="seeOption1"/>
-        <seeElement selector="{{BundleStorefrontSection.bundleOptionSelection('2')}}" stepKey="seeOption2"/>
+        <pauseExecution stepKey="pause"/>
+        <see selector="{{BundleStorefrontSection.bundleOptionSelection('1')}}" userInput="{{BundleProduct.defaultQuantity}} x $$simpleProduct1.name$$" stepKey="seeOption1"/>
+        <see selector="{{BundleStorefrontSection.bundleOptionSelection('2')}}" userInput="{{BundleProduct.defaultQuantity}} x $$simpleProduct2.name$$" stepKey="seeOption2"/>
     </test>
 </tests>
