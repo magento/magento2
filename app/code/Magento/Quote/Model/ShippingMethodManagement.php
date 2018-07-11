@@ -126,7 +126,7 @@ class ShippingMethodManagement implements
 
         // no methods applicable for empty carts or carts with virtual products
         if ($quote->isVirtual() || 0 == $quote->getItemsCount()) {
-            return [];
+            throw new StateException(__('No methods applicable for empty carts or carts with virtual products'));
         }
 
         $shippingAddress = $quote->getShippingAddress();
