@@ -6,6 +6,7 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\ShipmentCommentInterface;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Item as ShipmentItem;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection;
@@ -29,14 +30,32 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
      */
     private $shipmentModel;
 
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var \Magento\Sales\Api\ShipmentCommentRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $commentRepository;
+
     protected function setUp()
     {
         $helperManager = new ObjectManager($this);
 
+        $this->searchCriteriaBuilder = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->commentRepository = $this->getMockBuilder(\Magento\Sales\Api\ShipmentCommentRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getList'])
+            ->getMockForAbstractClass();
+
         $this->initCommentsCollectionFactoryMock();
 
         $this->shipmentModel = $helperManager->getObject(Shipment::class, [
-            'commentCollectionFactory' => $this->commentCollectionFactory
+            'commentCollectionFactory' => $this->commentCollectionFactory,
+            'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
+            'shipmentCommentRepository' => $this->commentRepository,
         ]);
     }
 
@@ -93,34 +112,30 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $shipmentId = 1;
         $this->shipmentModel->setId($shipmentId);
 
-        $shipmentItem = $this->getMockBuilder(ShipmentItem::class)
+        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->searchCriteriaBuilder->expects($this->any())->method('create')->willReturn($searchCriteria);
+        $this->searchCriteriaBuilder->expects($this->any())->method('addFilter')
+            ->willReturn($this->searchCriteriaBuilder);
+
+        $commentSearchResult = $this->getMockForAbstractClass(
+            \Magento\Sales\Api\Data\ShipmentCommentSearchResultInterface::class,
+            [],
+            '',
+            false
+        );
+        $this->commentRepository
+            ->expects($this->any())
+            ->method('getList')
+            ->with($searchCriteria)
+            ->willReturn($commentSearchResult);
+
+        $commentTest = $this->getMockBuilder(ShipmentCommentInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setShipment'])
-            ->getMock();
-        $shipmentItem->expects(static::once())
-            ->method('setShipment')
-            ->with($this->shipmentModel);
-        $collection = [$shipmentItem];
+            ->getMockForAbstractClass();
+        $comments = [$commentTest];
+        $commentSearchResult->expects($this->any())->method('getItems')->willReturn($comments);
 
-        $this->commentCollection->expects(static::once())
-            ->method('setShipmentFilter')
-            ->with($shipmentId)
-            ->willReturnSelf();
-
-        $this->commentCollection->expects(static::once())
-            ->method('load')
-            ->willReturnSelf();
-
-        $reflection = new \ReflectionClass(Collection::class);
-        $reflectionProperty = $reflection->getProperty('_items');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->commentCollection, $collection);
-
-        $this->commentCollection->expects(static::once())
-            ->method('getItems')
-            ->willReturn($collection);
-
-        static::assertEquals($this->shipmentModel->getComments(), $collection);
+        static::assertEquals($this->shipmentModel->getComments(), $comments);
     }
 
     /**
