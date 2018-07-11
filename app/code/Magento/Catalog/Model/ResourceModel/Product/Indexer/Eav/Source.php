@@ -24,22 +24,29 @@ class Source extends AbstractEav
      */
     protected $_resourceHelper;
 
-    /**
-     * Construct
-     *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
-     * @param null|string $connectionName
-     */
+	/**
+	 * @var \Magento\Eav\Api\AttributeRepositoryInterface
+	 */
+    protected $_attributeRepository;
+
+	/**
+	 * Construct
+	 *
+	 * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+	 * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+	 * @param \Magento\Eav\Model\Config $eavConfig
+	 * @param \Magento\Framework\Event\ManagerInterface $eventManager
+	 * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
+	 * @param \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
+	 * @param null|string $connectionName
+	 */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
+	    \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository,
         $connectionName = null
     ) {
         parent::__construct(
@@ -50,6 +57,7 @@ class Source extends AbstractEav
             $connectionName
         );
         $this->_resourceHelper = $resourceHelper;
+        $this->_attributeRepository = $attributeRepository;
     }
 
     /**
@@ -234,6 +242,9 @@ class Source extends AbstractEav
             $options[$row['attribute_id']][$row['option_id']] = true;
         }
 
+	    // Include custom source model options
+	    $options = $this->_getMultiSelectAttributeWithSourceModels($attrIds, $options);
+
         // prepare get multiselect values query
         $productValueExpression = $connection->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
         $select = $connection->select()->from(
@@ -296,6 +307,46 @@ class Source extends AbstractEav
 
         return $this;
     }
+
+	/**
+	 * Get options for multiselect attributes using custom source models
+	 * @maderlock's fix from: https://github.com/magento/magento2/issues/417#issuecomment-265146285
+	 *
+	 * @param array $attrIds
+	 * @param array $options
+	 *
+	 * @return array
+	 * @throws \Zend_Db_Statement_Exception
+	 */
+	protected function _getMultiSelectAttributeWithSourceModels( $attrIds, $options ) {
+		// Add options from custom source models
+		$select = $this->getConnection()->select()
+			->from(
+				['ea' => $this->getTable('eav_attribute')],
+				['attribute_id','entity_type_id', 'attribute_code']
+			)
+			->where('attribute_id IN(?)', $attrIds)
+			->where('source_model is not null');
+		$query = $select->query();
+
+		while ($row = $query->fetch()) {
+			try {
+				/** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+				$attribute = $this->_attributeRepository->get($row['entity_type_id'], $row['attribute_code']);
+				$sourceModelOptions = $attribute->getOptions();
+				// Add options to list used below
+				foreach ($sourceModelOptions as $o) {
+					$options[$row['attribute_id']][$o->getValue()] = true;
+				}
+			} catch (\BadMethodCallException $e) {
+				// Skip
+			} catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+				// skip
+			}
+		}
+
+		return $options;
+	}
 
     /**
      * Save a data to temporary source index table
