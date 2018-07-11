@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateProductCustomAttributeSet">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/Update attribute set"/>
+            <title value="Admin should be able to create a simple product using a custom attribute set"/>
+            <description value="Admin should be able to create a simple product using a custom attribute set"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-79284"/>
+            <group value="catalog"/>
+            <group value="attributeSet"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create the new attribute set -->
+            <actionGroup ref="CreateAttributeSetActionGroup" stepKey="createAttributeSet">
+                <argument name="nameLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <!-- Move attributes-->
+            <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('meta_keyword')}}" selector2="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" stepKey="unassign1"/>
+            <actionGroup ref="CreateNewGroupInAttributeSetActionGroup" stepKey="createNewGroup"/>
+            <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" selector2="{{AdminProductAttributeSetSection.attribute('TestGroupName')}}" stepKey="assignManufacturer"/>
+            <click selector="{{AdminProductAttributeSetSection.save}}" stepKey="clickSave2"/>
+        </before>
+
+        <after>
+            <!-- Delete the new attribute set -->
+            <actionGroup ref="DeleteAttributeSetActionGroup" stepKey="deleteAttributeSet">
+                <argument name="name" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!-- Go to new product page and see a default attribute -->
+        <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToNewProductPage"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="expandSEOSection"/>
+        <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('meta_keyword')}}" stepKey="seeMetaKeyword"/>
+        <dontSeeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="dontSeeTestGroupName"/>
+
+        <!-- Switch from default attribute set to new attribute set -->
+        <!-- A scrollToTopOfPage is needed to hide the floating header -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="searchForAttrSet"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.attributeSetSearchCount}}" stepKey="waitLoadOption"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+
+        <!-- See new attribute set -->
+        <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="seeTestGroupName"/>
+        <dontSeeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('meta_keyword')}}" stepKey="dontSeeMetaKeyword"/>
+
+        <!-- Finish filling the new product page -->
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillSimpleProductMain">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+
+        <!-- Check the storefront -->
+        <amOnPage url="{{_defaultProduct.name}}.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <seeInTitle userInput="{{_defaultProduct.name}}" stepKey="seeProductNameInTitlte"/>
+        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see userInput="{{_defaultProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+        <see userInput="${{_defaultProduct.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+    </test>
+</tests>
