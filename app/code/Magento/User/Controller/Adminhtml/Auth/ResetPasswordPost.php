@@ -9,6 +9,7 @@ namespace Magento\User\Controller\Adminhtml\Auth;
 use Magento\User\Controller\Adminhtml\Auth;
 use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Helper\Data;
+use Magento\User\Model\UserFactory;
 
 class ResetPasswordPost extends Auth
 {
@@ -19,10 +20,12 @@ class ResetPasswordPost extends Auth
 
     /**
      * @param Context $context
+     * @param UserFactory $userFactory
      * @param Data $backendDataHelper
      */
     public function __construct(
         Context $context,
+        UserFactory $userFactory,
         Data $backendDataHelper = null
     ) {
         parent::__construct($context, $userFactory);
