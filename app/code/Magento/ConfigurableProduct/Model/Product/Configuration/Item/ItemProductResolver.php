@@ -17,6 +17,9 @@ use Magento\Catalog\Model\Product;
  */
 class ItemProductResolver implements ItemResolverInterface
 {
+    /**
+     * Path in config to the setting which defines if parent or child product should be used to generate a thumbnail.
+     */
     const CONFIG_THUMBNAIL_SOURCE = 'checkout/cart/configurable_product_image';
 
     /**
@@ -43,7 +46,7 @@ class ItemProductResolver implements ItemResolverInterface
          */
         $parentItem = $item->getProduct();
         $config = $this->scopeConfig->getValue(
-            \Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable::CONFIG_THUMBNAIL_SOURCE,
+            self::CONFIG_THUMBNAIL_SOURCE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 

@@ -45,7 +45,7 @@ class ItemProductResolver implements ItemResolverInterface
          * or if child product thumbnail is not available
          */
         $config = $this->scopeConfig->getValue(
-            \Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped::CONFIG_THUMBNAIL_SOURCE,
+            self::CONFIG_THUMBNAIL_SOURCE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $childProduct = $item->getProduct();

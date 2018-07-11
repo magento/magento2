@@ -19,6 +19,8 @@ class Grouped extends Renderer implements IdentityInterface
 {
     /**
      * Path in config to the setting which defines if parent or child product should be used to generate a thumbnail.
+     * @deprecated moved to model because of class refactoring
+     * @see \Magento\GroupedProduct\Model\Product\Configuration\Item\ItemProductResolver::CONFIG_THUMBNAIL_SOURCE
      */
     const CONFIG_THUMBNAIL_SOURCE = 'checkout/cart/grouped_product_image';
 
@@ -38,7 +40,7 @@ class Grouped extends Renderer implements IdentityInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated because parent can handle the logic for images of all product types
+     * @deprecated because now parent handles the logic for images of all product types
      * @see \Magento\Checkout\Block\Cart\Item\Renderer::getProductForThumbnail
      */
     public function getProductForThumbnail()
