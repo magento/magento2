@@ -100,7 +100,7 @@ class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 1;
         $this->quoteIdMaskMock->expects($this->once())->method('setQuoteId')->with($cartId)->willReturnSelf();
         $this->quoteIdMaskMock->expects($this->once())->method('save')->willReturnSelf();
-        $this->quoteIdMaskMock->expects($this->once())->method('getMaskedId')->willreturn($maskedCartId);
+        $this->quoteIdMaskMock->expects($this->once())->method('getMaskedId')->willReturn($maskedCartId);
         $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteIdMaskMock);
         $this->quoteManagementMock->expects($this->once())->method('createEmptyCart')->willReturn($cartId);
 
