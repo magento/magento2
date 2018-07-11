@@ -12,4 +12,7 @@
     <page name="AdminContentManagementPage" url="admin/system_config/edit/section/cms/" area="admin" module="Magento_Config">
         <section name="ContentManagementSection"/>
     </page>
+    <page name="CatalogConfigPage" url="admin/system_config/edit/section/catalog/" area="admin" module="Magento_Config">
+        <section name="ContentManagementSection"/>
+    </page>
 </pages>
