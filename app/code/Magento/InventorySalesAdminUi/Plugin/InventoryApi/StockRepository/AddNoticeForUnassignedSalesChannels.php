@@ -11,7 +11,8 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventorySales\Model\GetUnassignedSalesChannelsForStock;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Model\GetAssignedSalesChannelsForStockInterface;
 
 /**
  * Add notice message when when sales channels unassigned from stock
@@ -25,20 +26,20 @@ class AddNoticeForUnassignedSalesChannels
     private $messageManager;
 
     /**
-     * @var GetUnassignedSalesChannelsForStock
+     * @var GetAssignedSalesChannelsForStockInterface
      */
-    private $getUnassignedSalesChannelsForStock;
+    private $getAssignedSalesChannelsForStock;
 
     /**
      * @param ManagerInterface $messageManager
-     * @param GetUnassignedSalesChannelsForStock $getUnassignedSalesChannelsForStock
+     * @param GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock
      */
     public function __construct(
         ManagerInterface $messageManager,
-        GetUnassignedSalesChannelsForStock $getUnassignedSalesChannelsForStock
+        GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock
     ) {
         $this->messageManager = $messageManager;
-        $this->getUnassignedSalesChannelsForStock = $getUnassignedSalesChannelsForStock;
+        $this->getAssignedSalesChannelsForStock = $getAssignedSalesChannelsForStock;
     }
 
     /**
@@ -56,7 +57,7 @@ class AddNoticeForUnassignedSalesChannels
         int $stockId,
         StockInterface $stock
     ): int {
-        $unAssignedSalesChannels = $this->getUnassignedSalesChannelsForStock->execute($stock);
+        $unAssignedSalesChannels = $this->getUnassignedSalesChannelsForStock($stock);
 
         if (count($unAssignedSalesChannels)) {
             $this->messageManager->addNoticeMessage(
@@ -65,5 +66,35 @@ class AddNoticeForUnassignedSalesChannels
         }
 
         return $stockId;
+    }
+
+    /**
+     * Return all sales channels witch will be unassigned from the saved stock
+     *
+     * @param StockInterface $stock
+     * @return \Magento\InventorySales\Model\SalesChannel[]
+     */
+    private function getUnassignedSalesChannelsForStock(StockInterface $stock): array
+    {
+        $newWebsiteCodes = $result = [];
+        $assignedSalesChannels = $this->getAssignedSalesChannelsForStock->execute((int)$stock->getStockId());
+        $extensionAttributes = $stock->getExtensionAttributes();
+        $newSalesChannels = $extensionAttributes->getSalesChannels() ?: [];
+
+        foreach ($newSalesChannels as $salesChannel) {
+            if ($salesChannel->getType() === SalesChannelInterface::TYPE_WEBSITE) {
+                $newWebsiteCodes[] = $salesChannel->getCode();
+            }
+        }
+
+        foreach ($assignedSalesChannels as $salesChannel) {
+            if ($salesChannel->getType() === SalesChannelInterface::TYPE_WEBSITE
+                && !in_array($salesChannel->getCode(), $newWebsiteCodes, true)
+            ) {
+                $result[] = $salesChannel;
+            }
+        }
+
+        return $result;
     }
 }

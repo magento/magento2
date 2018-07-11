@@ -27,7 +27,6 @@ class GetUnassignedSalesChannelsForStock
     public function __construct(
         GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock
     ) {
-
         $this->getAssignedSalesChannelsForStock = $getAssignedSalesChannelsForStock;
     }
 
