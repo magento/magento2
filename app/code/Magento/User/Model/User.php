@@ -434,6 +434,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Send email to when password is resetting
      *
+     * @throws NotificationExceptionInterface
      * @return $this
      * @deprecated 100.1.0
      */
@@ -457,7 +458,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             $this->notificator->sendCreated($this);
         } elseif ($changes = $this->createChangesDescriptionString()) {
             //User changed.
-            $this->sendUserNotificationEmail($changes);
+            $this->notificator->sendUpdated($this, explode(', ', $changes));
         }
 
         return $this;
