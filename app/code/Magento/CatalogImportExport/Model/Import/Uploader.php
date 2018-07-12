@@ -241,6 +241,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 
         $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
         if (!$this->checkAllowedExtension($fileExtension)) {
+            $this->_directory->delete($filePath);
             throw new \Exception('Disallowed file type.');
         }
         //run validate callbacks
