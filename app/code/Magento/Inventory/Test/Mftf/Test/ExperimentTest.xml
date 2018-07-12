@@ -14,17 +14,13 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-            <amOnPage url="/admin/catalog/product/new/set/4/type/configurable/" stepKey="amOnPage1"/>
-            <waitForPageLoad stepKey="wait1"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <!--<actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>-->
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
-        <click selector="//div[@class='fieldset-wrapper-title']//span[contains(text(), 'Content')]" stepKey="click1"/>
-        <waitForPageLoad stepKey="wait1"/>
-        <fillField selector="#product_form_description" userInput="stuff stuff stuff" stepKey="fillDesc1"/>
-        <seeInField selector="#product_form_description" userInput="stuff stuff stuff" stepKey="see1"/>
+        <!---->
     </test>
 </tests>
