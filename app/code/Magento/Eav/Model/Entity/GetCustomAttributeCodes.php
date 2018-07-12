@@ -19,9 +19,12 @@ class GetCustomAttributeCodes implements GetCustomAttributeCodesInterface
      * Receive a list of custom EAV attributes using provided metadata service. The results are cached per entity type
      *
      * @param MetadataServiceInterface $metadataService Custom attribute metadata service to be used
+     * @param int|null                 $attributeSetId  Optional attribute set ID, if provided will only load attributes
+     *                                                  for that attribute set.
+     *
      * @return string[]
      */
-    public function execute(MetadataServiceInterface $metadataService): array
+    public function execute(MetadataServiceInterface $metadataService, ?int $attributeSetId = null): array
     {
         $cacheKey = get_class($metadataService);
         if (!isset($this->customAttributesCodes[$cacheKey])) {

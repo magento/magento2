@@ -29,7 +29,7 @@ class GetCategoryCustomAttributeCodes implements GetCustomAttributeCodesInterfac
     /**
      * @inheritdoc
      */
-    public function execute(MetadataServiceInterface $metadataService): array
+    public function execute(MetadataServiceInterface $metadataService, ?int $attributeSetId = null): array
     {
         $customAttributesCodes = $this->baseCustomAttributeCodes->execute($metadataService);
         return array_diff($customAttributesCodes, CategoryInterface::ATTRIBUTES);

@@ -497,7 +497,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function getCustomAttributesCodes()
     {
-        return $this->getCustomAttributeCodes->execute($this->metadataService);
+        return $this->getCustomAttributeCodes->execute($this->metadataService, $this->getAttributeSetId());
     }
 
     /**
