@@ -208,7 +208,7 @@
     <type name="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite">
         <arguments>
             <argument name="itemResolvers" xsi:type="array">
-                <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver</item>
+                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver</item>
             </argument>
         </arguments>
     </type>
