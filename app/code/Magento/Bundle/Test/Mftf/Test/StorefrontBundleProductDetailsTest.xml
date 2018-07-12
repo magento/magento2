@@ -16,7 +16,7 @@
             <description value="Customer should be able to see basic bundle product details"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-230"/>
-            <group value="banana"/>
+            <group value="Bundle"/>
         </annotations>
         <before>
             <!--Creating Data-->
