@@ -84,9 +84,8 @@
 
             <!-- log in and create the price rule -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
-                <argument name="catalogRule" value="CatalogRuleByFixed"/>
-            </actionGroup>
+            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI"/>
+            <actionGroup stepKey="selectLoggedInCustomers" ref="selectNotLoggedInCustomerGroup"/>
             <click stepKey="saveAndApply" selector="{{AdminNewCatalogPriceRule.saveAndApply}}"/>
             <see stepKey="assertSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule."/>
         </before>
@@ -142,9 +141,8 @@
 
             <!-- log in and create the price rule -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
-                <argument name="catalogRule" value="CatalogRuleToPercent"/>
-            </actionGroup>
+            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI"/>
+            <actionGroup stepKey="selectLoggedInCustomers" ref="selectNotLoggedInCustomerGroup"/>
             <click stepKey="saveAndApply" selector="{{AdminNewCatalogPriceRule.saveAndApply}}"/>
             <see stepKey="assertSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule."/>
         </before>
@@ -200,9 +198,8 @@
 
             <!-- log in and create the price rule -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
-                <argument name="catalogRule" value="CatalogRuleToFixed"/>
-            </actionGroup>
+            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI"/>
+            <actionGroup stepKey="selectLoggedInCustomers" ref="selectNotLoggedInCustomerGroup"/>
             <click stepKey="saveAndApply" selector="{{AdminNewCatalogPriceRule.saveAndApply}}"/>
             <see stepKey="assertSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule."/>
         </before>
