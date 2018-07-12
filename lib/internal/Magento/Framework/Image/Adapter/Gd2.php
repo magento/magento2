@@ -784,7 +784,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     protected function _createEmptyImage($width, $height)
     {
-        die('ere');
         $this->_fileType = IMAGETYPE_PNG;
         $image = imagecreatetruecolor($width, $height);
         $colorWhite = imagecolorallocatealpha($image, 255, 255, 255, 127);
