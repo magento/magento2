@@ -13,13 +13,13 @@
                 <block class="Magento\Captcha\Block\Captcha" name="captcha" after="-" cacheable="false">
                     <action method="setFormId">
                         <argument name="formId" xsi:type="string">share_wishlist_form</argument>
+                    </action>
                         <action method="setImgWidth">
                             <argument name="width" xsi:type="string">230</argument>
                         </action>
                         <action method="setImgHeight">
                             <argument name="width" xsi:type="string">50</argument>
                         </action>
-                    </action>
                 </block>
             </block>
         </referenceContainer>
