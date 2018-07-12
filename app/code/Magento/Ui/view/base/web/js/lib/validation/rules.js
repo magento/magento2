@@ -231,13 +231,15 @@ define([
             function (value) {
                 value = value.replace(/\s+/g, '');
 
-                return utils.isEmpty(value) || value.length > 9 && value.match(/^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
+                return utils.isEmpty(value) || value.length > 9 &&
+                    value.match(/^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
             },
             $.mage.__('Please specify a valid phone number')
         ],
         'phoneUK': [
             function (value) {
-                return utils.isEmpty(value) || value.length > 9 && value.match(/^(\(?(0|\+44)[1-9]{1}\d{1,4}?\)?\s?\d{3,4}\s?\d{3,4})$/);
+                return utils.isEmpty(value) || value.length > 9 &&
+                    value.match(/^(\(?(0|\+44)[1-9]{1}\d{1,4}?\)?\s?\d{3,4}\s?\d{3,4})$/);
             },
             $.mage.__('Please specify a valid phone number')
         ],
