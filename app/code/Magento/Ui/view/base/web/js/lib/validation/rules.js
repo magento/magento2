@@ -132,6 +132,7 @@ define([
                 if (utils.isEmpty(value)) {
                     return true;
                 }
+
                 if (value.length !== 17) {
                     return false;
                 }
@@ -274,6 +275,7 @@ define([
                 if (utils.isEmpty(value)) {
                     return true;
                 }
+
                 if (/[^0-9-]+/.test(value)) {
                     return false;
                 }
