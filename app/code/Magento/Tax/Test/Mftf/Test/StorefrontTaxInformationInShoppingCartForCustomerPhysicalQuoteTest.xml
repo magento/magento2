@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="StorefrontTaxInformationInShoppingCartForCustomerWithDefaultAddressesPhysicalQuoteTest">
+    <test name="StorefrontTaxInformationInShoppingCartForCustomerPhysicalQuoteTest">
         <annotations>
             <features value="Tax information in shopping cart for Customer with default addresses (physical quote)"/>
             <title value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (physical quote)"/>
@@ -21,7 +21,6 @@
         <before>
             <!-- Preconditions  -->
             <!--  Tax Rule is created based on default tax rates (Stores>Tax Rule) US-CA-*-Rate 1 = 8.2500 US-NY-*-Rate 1 = 8.3750 -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
             <!--  Fixed Product Tax attribute is created and added to default attribute set -->
             <createData entity="productFPTAttribute" stepKey="createProductFPTAttribute"/>
@@ -32,12 +31,15 @@
             <createData entity="Tax_Config_NY" stepKey="taxConfigurationNYWithFPTEnable"/>
             <!--  Store>Configuration; Sales>Tax FPT Enable -->
             <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
+            <!-- Customer is created with default addresses: -->
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
             <!--  Simple product is created  Price = 10;  FPT United States/California/10,United States/New York/20 -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <field key="price">10.00</field>
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
@@ -58,8 +60,6 @@
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
             <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
-            <!-- Customer is created with default addresses: -->
-            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
         </before>
         <after>
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
@@ -69,7 +69,6 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheAfter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--  Test Steps  -->

@@ -21,7 +21,6 @@
          <before>
              <!-- Preconditions  -->
             <!--  Tax Rule is created based on default tax rates (Stores>Tax Rule) US-CA-*-Rate 1 = 8.2500 US-NY-*-Rate 1 = 8.3750 -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
             <!--  Fixed Product Tax attribute is created and added to default attribute set -->
             <createData entity="productFPTAttribute" stepKey="createProductFPTAttribute"/>
@@ -40,8 +39,6 @@
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
-            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheAfter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--  Test Steps  -->
         <!--  Step 1: Go to Storefront as Guest -->

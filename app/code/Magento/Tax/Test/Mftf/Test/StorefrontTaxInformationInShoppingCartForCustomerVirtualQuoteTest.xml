@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="StorefrontTaxInformationInShoppingCartForCustomerWithDefaultAddressesVirtualQuoteTest">
+    <test name="StorefrontTaxInformationInShoppingCartForCustomerVirtualQuoteTest">
         <annotations>
             <features value="Tax information in shopping cart for Customer with default addresses (virtual quote)"/>
             <title value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (virtual quote)"/>
@@ -21,7 +21,6 @@
         <before>
             <!-- Preconditions  -->
             <!--  Tax Rule is created based on default tax rates (Stores>Tax Rule) US-CA-*-Rate 1 = 8.2500 US-NY-*-Rate 1 = 8.3750 -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
             <!--  Fixed Product Tax attribute is created and added to default attribute set -->
             <createData entity="productFPTAttribute" stepKey="createProductFPTAttribute"/>
@@ -43,8 +42,6 @@
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheAfter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--  Test Steps  -->
         <!--  Step 1: Go to Storefront as logged in Customer  -->
