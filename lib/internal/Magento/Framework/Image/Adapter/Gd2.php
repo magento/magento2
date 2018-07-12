@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\Image\Adapter;
 
 /**
@@ -10,6 +13,11 @@ namespace Magento\Framework\Image\Adapter;
  */
 class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 {
+    /**
+     * Keep the transparency for the images in the wysiwyg editors
+     */
+    const KEEP_TRANSPARENCY = true;
+
     /**
      * Required extensions
      *
@@ -57,6 +65,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     public function open($filename)
     {
+        $this->_keepTransparency = self::KEEP_TRANSPARENCY;
         $this->_fileName = $filename;
         $this->_reset();
         $this->getMimeType();
@@ -66,6 +75,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         }
         $this->imageDestroy();
         $this->_imageHandler = call_user_func($this->_getCallback('create'), $this->_fileName);
+        $this->_fillBackgroundColor($this->_imageHandler);
     }
 
     /**
@@ -724,7 +734,11 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
         $this->_createEmptyImage($width, $height);
 
-        $black = imagecolorallocate($this->_imageHandler, 0, 0, 0);
+        $black = imagecolortransparent($this->_imageHandler, imagecolorallocatealpha($this->_imageHandler, 0, 0, 0, 127));
+        imagealphablending($this->_imageHandler, false);
+        imagesavealpha($this->_imageHandler, true);
+//        imagecopyresampled($this->_imageHandler, $image, 0, 0, 0, 0, $width, $height, $width, $height);
+//        $black = imagecolorallocate($this->_imageHandler, 0, 0, 0);
         imagestring($this->_imageHandler, $this->_fontSize, 0, 0, $text, $black);
     }
 
@@ -770,6 +784,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     protected function _createEmptyImage($width, $height)
     {
+        die('ere');
         $this->_fileType = IMAGETYPE_PNG;
         $image = imagecreatetruecolor($width, $height);
         $colorWhite = imagecolorallocatealpha($image, 255, 255, 255, 127);
