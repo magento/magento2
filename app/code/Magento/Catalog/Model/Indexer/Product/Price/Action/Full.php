@@ -416,7 +416,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             return ;
         }
         $select = $this->dimensionTableMaintainer->getConnection()->select()->from(
-            $mainReplicaTable = $this->dimensionTableMaintainer->getMainReplicaTable([])
+            $this->dimensionTableMaintainer->getMainReplicaTable([])
         );
 
         $check = clone $select;
