@@ -415,10 +415,16 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         if (!$dimensions) {
             return ;
         }
-        //TODO: need to update logic for run this move only when replica table is not empty
         $select = $this->dimensionTableMaintainer->getConnection()->select()->from(
             $this->dimensionTableMaintainer->getMainReplicaTable([])
         );
+
+        $check = clone $select;
+        $check->reset('columns')->columns('count(*)');
+
+        if (!$this->dimensionTableMaintainer->getConnection()->query($check)->fetchColumn()) {
+            return;
+        }
 
         $replicaTablesByDimension = $this->dimensionTableMaintainer->getMainReplicaTable($dimensions);
 
