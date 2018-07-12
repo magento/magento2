@@ -361,6 +361,10 @@ class Config extends \Magento\Framework\DataObject
             // use extra memory
             $fieldsetData = [];
             foreach ($groupData['fields'] as $fieldId => $fieldData) {
+                $fieldsetData[$fieldId] = $fieldData['value'] ?? null;
+            }
+
+            foreach ($groupData['fields'] as $fieldId => $fieldData) {
                 $isReadOnly = $this->settingChecker->isReadOnly(
                     $groupPath . '/' . $fieldId,
                     $this->getScope(),
@@ -380,7 +384,6 @@ class Config extends \Magento\Framework\DataObject
                 if (!isset($fieldData['value'])) {
                     $fieldData['value'] = null;
                 }
-                $fieldsetData[$fieldId] = $fieldData['value'];
                 $data = [
                     'field' => $fieldId,
                     'groups' => $groups,
