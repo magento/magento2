@@ -8,10 +8,10 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\LocalizedException;
-use PHPUnit\Framework\Constraint\Constraint;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit_Framework_Constraint;
 
 /**
  * @magentoAppArea adminhtml
@@ -40,13 +40,13 @@ class MassDeleteTest extends AbstractBackendController
      * Validates failure attempts to delete customers from grid.
      *
      * @param array|null $ids
-     * @param Constraint $constraint
+     * @param \PHPUnit_Framework_Constraint $constraint
      * @param string|null $messageType
      * @magentoDataFixture Magento/Customer/_files/five_repository_customers.php
      * @magentoDbIsolation disabled
      * @dataProvider failedRequestDataProvider
      */
-    public function testFailedMassDeleteAction($ids, Constraint $constraint, $messageType)
+    public function testFailedMassDeleteAction($ids, PHPUnit_Framework_Constraint $constraint, $messageType)
     {
         $this->massDeleteAssertions($ids, $constraint, $messageType);
     }
@@ -55,13 +55,13 @@ class MassDeleteTest extends AbstractBackendController
      * Validates success attempt to delete customer from grid.
      *
      * @param array $emails
-     * @param Constraint $constraint
+     * @param PHPUnit_Framework_Constraint $constraint
      * @param string $messageType
      * @magentoDataFixture Magento/Customer/_files/five_repository_customers.php
      * @magentoDbIsolation disabled
      * @dataProvider successRequestDataProvider
      */
-    public function testSuccessMassDeleteAction(array $emails, Constraint $constraint, string $messageType)
+    public function testSuccessMassDeleteAction(array $emails, PHPUnit_Framework_Constraint $constraint, $messageType)
     {
         try {
             $ids = [];
@@ -85,10 +85,10 @@ class MassDeleteTest extends AbstractBackendController
      * Performs required request and assertions.
      *
      * @param array|null $ids
-     * @param Constraint $constraint
+     * @param PHPUnit_Framework_Constraint $constraint
      * @param string|null $messageType
      */
-    private function massDeleteAssertions($ids, Constraint $constraint, $messageType)
+    private function massDeleteAssertions($ids, PHPUnit_Framework_Constraint $constraint, $messageType)
     {
         $requestData = [
             'selected' => $ids,
