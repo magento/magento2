@@ -21,7 +21,7 @@ class Additional extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'product/view/additional.phtml';
+    protected $_template = 'Magento_Catalog::product/view/additional.phtml';
 
     /**
      * @return array
