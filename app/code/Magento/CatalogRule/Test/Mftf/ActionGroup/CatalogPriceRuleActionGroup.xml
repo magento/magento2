@@ -22,7 +22,6 @@
         <fillField stepKey="fillName" selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"/>
         <fillField stepKey="fillDescription" selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}"/>
         <selectOption stepKey="selectSite" selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{catalogRule.website_ids[0]}}"/>
-        <selectOption stepKey="selectCustomerGroups" selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{catalogRule.customer_group_ids[0]}}"/>
         <click stepKey="clickFromCalender" selector="{{AdminNewCatalogPriceRule.fromDateButton}}"/>
         <click stepKey="clickFromToday" selector="{{AdminNewCatalogPriceRule.todayDate}}"/>
         <click stepKey="clickToCalender" selector="{{AdminNewCatalogPriceRule.toDateButton}}"/>
