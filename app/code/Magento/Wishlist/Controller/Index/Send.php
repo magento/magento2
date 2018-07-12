@@ -95,8 +95,8 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      * @param WishlistSession $wishlistSession
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
-     * @param CaptchaHelper $captchaHelper|null
-     * @param CaptchaStringResolver $captchaStringResolver|null
+     * @param CaptchaHelper|null $captchaHelper
+     * @param CaptchaStringResolver|null $captchaStringResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
