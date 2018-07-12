@@ -30,10 +30,8 @@ Continue,Continue
                     "
 "Default Display Currency","Default Display Currency"
 "Allowed Currencies","Allowed Currencies"
-"Yahoo Finance Exchange","Yahoo Finance Exchange"
 "Connection Timeout in Seconds","Connection Timeout in Seconds"
 Fixer.io,Fixer.io
-Webservicex,Webservicex
 "Scheduled Import Settings","Scheduled Import Settings"
 Enabled,Enabled
 "Error Email Recipient","Error Email Recipient"
