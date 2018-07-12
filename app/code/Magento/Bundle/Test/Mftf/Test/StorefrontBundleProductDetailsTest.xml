@@ -78,7 +78,6 @@
         <see selector="{{BundleStorefrontSection.shortDescriptionText}}" userInput="This is the short description" stepKey="seeShortDescription"/>
         <see selector="{{BundleStorefrontSection.longDescriptionText}}" userInput="This is the long description" stepKey="seeLongDescription"/>
         <click selector="{{BundleStorefrontSection.bundleOptionSelector}}" stepKey="clickOnCustomizationOption"/>
-        <pauseExecution stepKey="pause"/>
         <see selector="{{BundleStorefrontSection.bundleOptionSelection('1')}}" userInput="{{BundleProduct.defaultQuantity}} x $$simpleProduct1.name$$" stepKey="seeOption1"/>
         <see selector="{{BundleStorefrontSection.bundleOptionSelection('2')}}" userInput="{{BundleProduct.defaultQuantity}} x $$simpleProduct2.name$$" stepKey="seeOption2"/>
     </test>
