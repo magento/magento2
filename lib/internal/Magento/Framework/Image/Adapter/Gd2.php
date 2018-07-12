@@ -734,11 +734,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
         $this->_createEmptyImage($width, $height);
 
-        $black = imagecolortransparent($this->_imageHandler, imagecolorallocatealpha($this->_imageHandler, 0, 0, 0, 127));
-        imagealphablending($this->_imageHandler, false);
-        imagesavealpha($this->_imageHandler, true);
-//        imagecopyresampled($this->_imageHandler, $image, 0, 0, 0, 0, $width, $height, $width, $height);
-//        $black = imagecolorallocate($this->_imageHandler, 0, 0, 0);
+        $black = imagecolorallocate($this->_imageHandler, 0, 0, 0);
         imagestring($this->_imageHandler, $this->_fontSize, 0, 0, $text, $black);
     }
 
