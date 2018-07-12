@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontProductMediaSection">
-        <element name="imageFile" type="text" selector="//*[@class='product media']//img[contains(@src, '{{filename}}')]" parameterized="true"/>
+        <element name="imageFile" type="text" selector=".product.media img[src*='{{filename}}']" parameterized="true"/>
     </section>
 </sections>
