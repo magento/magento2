@@ -94,8 +94,17 @@ class CategoryTree
         $this->joinAttributesRecursively($collection, $categoryQuery);
         $depth = $this->depthCalculator->calculate($categoryQuery);
         $level = $this->levelCalculator->calculate($rootCategoryId);
+
+        // If root category is being filter, we've to remove first slash
+        if($rootCategoryId == 1) {
+            $regExpPathFilter = sprintf('.*%s/[/0-9]*$', $rootCategoryId);
+        } else {
+            $regExpPathFilter = sprintf('.*/%s/[/0-9]*$', $rootCategoryId);
+        }
+
         //Search for desired part of category tree
-        $collection->addPathFilter(sprintf('.*/%s/[/0-9]*$', $rootCategoryId));
+        $collection->addPathFilter($regExpPathFilter);
+
         $collection->addFieldToFilter('level', ['gt' => $level]);
         $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
         $collection->setOrder('level');
