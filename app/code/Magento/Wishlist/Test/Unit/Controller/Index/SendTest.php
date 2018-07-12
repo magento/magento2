@@ -5,33 +5,25 @@
  */
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
-use Magento\Customer\Helper\View as CustomerViewHelper;
+use Magento\Customer\CustomerData\Customer;
 use Magento\Customer\Model\Data\Customer as CustomerData;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Context as ActionContext;
-use Magento\Framework\App\Area;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
-use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\Session\Generic as WishlistSession;
-use Magento\Framework\Translate\Inline\StateInterface as TranslateInlineStateInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\View\Layout;
 use Magento\Framework\View\Result\Layout as ResultLayout;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Wishlist\Controller\Index\Send;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
-use Magento\Wishlist\Model\Config as WishlistConfig;
-use Magento\Wishlist\Model\Wishlist;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Captcha\Helper\Data as CaptchaHelper;
+use Magento\Captcha\Model\DefaultModel as CaptchaModel;
+use Magento\Customer\Model\Session;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -48,35 +40,11 @@ class SendTest extends \PHPUnit\Framework\TestCase
     /** @var  FormKeyValidator |\PHPUnit_Framework_MockObject_MockObject */
     protected $formKeyValidator;
 
-    /** @var  CustomerSession |\PHPUnit_Framework_MockObject_MockObject */
-    protected $customerSession;
-
     /** @var  WishlistProviderInterface |\PHPUnit_Framework_MockObject_MockObject */
     protected $wishlistProvider;
 
-    /** @var  WishlistConfig |\PHPUnit_Framework_MockObject_MockObject */
-    protected $wishlistConfig;
-
-    /** @var  TransportBuilder |\PHPUnit_Framework_MockObject_MockObject */
-    protected $transportBuilder;
-
-    /** @var  TranslateInlineStateInterface |\PHPUnit_Framework_MockObject_MockObject */
-    protected $inlineTranslation;
-
-    /** @var  CustomerViewHelper |\PHPUnit_Framework_MockObject_MockObject */
-    protected $customerViewHelper;
-
-    /** @var  WishlistSession |\PHPUnit_Framework_MockObject_MockObject */
-    protected $wishlistSession;
-
-    /** @var  ScopeConfigInterface |\PHPUnit_Framework_MockObject_MockObject */
-    protected $scopeConfig;
-
     /** @var  Store |\PHPUnit_Framework_MockObject_MockObject */
     protected $store;
-
-    /** @var  StoreManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
-    protected $storeManager;
 
     /** @var  ResultFactory |\PHPUnit_Framework_MockObject_MockObject */
     protected $resultFactory;
@@ -87,14 +55,8 @@ class SendTest extends \PHPUnit\Framework\TestCase
     /** @var  ResultLayout |\PHPUnit_Framework_MockObject_MockObject */
     protected $resultLayout;
 
-    /** @var  Layout |\PHPUnit_Framework_MockObject_MockObject */
-    protected $layout;
-
     /** @var  RequestInterface |\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
-
-    /** @var  Wishlist |\PHPUnit_Framework_MockObject_MockObject */
-    protected $wishlist;
 
     /** @var  ManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
     protected $messageManager;
@@ -110,6 +72,14 @@ class SendTest extends \PHPUnit\Framework\TestCase
 
     /** @var  EventManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
     protected $eventManager;
+
+    /** @var  CaptchaHelper |\PHPUnit_Framework_MockObject_MockObject */
+    protected $captchaHelper;
+
+    /** @var CaptchaModel |\PHPUnit_Framework_MockObject_MockObject */
+    protected $captchaModel;
+    /** @var Session |\PHPUnit_Framework_MockObject_MockObject */
+    protected $customerSession;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -137,7 +107,7 @@ class SendTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->setMethods([
                 'getPost',
-                'getPostValue',
+                'getPostValue'
             ])
             ->getMockForAbstractClass();
 
@@ -173,110 +143,66 @@ class SendTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getEmail',
+                'getId'
+            ])
+            ->getMock();
+
+        $customerMock->expects($this->any())
+            ->method('getEmail')
+            ->willReturn('expamle@mail.com');
+
+        $customerMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(false);
+
         $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
+            ->setMethods([
+                'getCustomer'
+            ])
             ->getMock();
+
+        $this->customerSession->expects($this->any())
+            ->method('getCustomer')
+            ->willReturn($customerMock);
 
         $this->wishlistProvider = $this->getMockBuilder(\Magento\Wishlist\Controller\WishlistProviderInterface::class)
             ->getMockForAbstractClass();
 
-        $this->wishlistConfig = $this->getMockBuilder(\Magento\Wishlist\Model\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->transportBuilder = $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->inlineTranslation = $this->getMockBuilder(\Magento\Framework\Translate\Inline\StateInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->customerViewHelper = $this->getMockBuilder(\Magento\Customer\Helper\View::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->wishlistSession = $this->getMockBuilder(\Magento\Framework\Session\Generic::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setSharingForm'])
-            ->getMock();
-
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getStoreId'])
-            ->getMock();
-
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->store);
-
-        $this->wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getShared',
-                'setShared',
-                'getId',
-                'getSharingCode',
-                'save',
-                'isSalable',
-            ])
-            ->getMock();
-
-        $this->customerData = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->layout = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getBlock',
-                'setWishlistId',
-                'toHtml',
-            ])
-            ->getMock();
-
-        $this->transport = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->captchaHelper = $this->getMockBuilder(\Magento\Captcha\Helper\Data::class)
+        $this->captchaHelper = $this->getMockBuilder(CaptchaHelper::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCaptcha'
             ])
             ->getMock();
 
-        $this->captchaModel = $this->getMockBuilder(\Magento\Captcha\Model\DefaultModel::class)
+        $this->captchaModel = $this->getMockBuilder(CaptchaModel::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'isRequired'
             ])
             ->getMock();
 
+        $objectHelper = new ObjectManager($this);
+
         $this->captchaHelper->expects($this->once())->method('getCaptcha')
             ->willReturn($this->captchaModel);
         $this->captchaModel->expects($this->any())->method('isRequired')
             ->willReturn(false);
 
-        $this->model = new Send(
-            $this->context,
-            $this->formKeyValidator,
-            $this->customerSession,
-            $this->wishlistProvider,
-            $this->wishlistConfig,
-            $this->transportBuilder,
-            $this->inlineTranslation,
-            $this->customerViewHelper,
-            $this->wishlistSession,
-            $this->scopeConfig,
-            $this->storeManager,
-            $this->captchaHelper
+        $this->model = $objectHelper->getObject(
+            Send::class,
+            [
+                'context' => $this->context,
+                'formKeyValidator' => $this->formKeyValidator,
+                'wishlistProvider' => $this->wishlistProvider,
+                'captchaHelper' => $this->captchaHelper,
+                '_customerSession' => $this->customerSession
+            ]
         );
     }
 

@@ -17,6 +17,7 @@ use Magento\Framework\View\Result\Layout as ResultLayout;
 use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Captcha\Observer\CaptchaStringResolver;
 use Magento\Framework\App\ObjectManager;
+use Magento\Captcha\Model\DefaultModel as CaptchaModel;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -153,9 +154,9 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
             return $resultRedirect;
         }
 
+        $this->logCaptchaAttempt($captchaModel);
+
         if ($captchaModel->isRequired()) {
-            $email = $this->_customerSession->getCustomer()->getEmail();
-            $captchaModel->logAttempt($email);
             $word = $this->captchaStringResolver->resolve(
                 $this->getRequest(),
                 $captchaFormName
@@ -328,5 +329,21 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         return $resultLayout->getLayout()
             ->getBlock('wishlist.email.items')
             ->toHtml();
+    }
+
+    /**
+     * Log customer action attempts
+     * @param \Magento\Captcha\Model\DefaultModel $captchaModel
+     * @return void
+     */
+    private function logCaptchaAttempt(CaptchaModel $captchaModel)
+    {
+        /** @var  \Magento\Customer\Model\Customer $customer */
+        $customer = $this->_customerSession->getCustomer();
+
+        if ($customer->getId()) {
+            $email = $this->_customerSession->getCustomer()->getEmail();
+            $captchaModel->logAttempt($email);
+        }
     }
 }
