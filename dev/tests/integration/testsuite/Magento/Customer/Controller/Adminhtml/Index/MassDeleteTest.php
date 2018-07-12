@@ -37,7 +37,19 @@ class MassDeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
      */
     public function testMassDeleteAction()
     {
-        $this->getRequest()->setPostValue('selected', [1])->setPostValue('namespace', 'customer_listing');
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+
+        $this->getRequest()
+            ->setParams(
+                [
+                    'selected' => [1],
+                    'namespace' => 'customer_listing',
+                    'form_key' => $formKey->getFormKey()
+                ]
+            )
+            ->setMethod('POST');
+
         $this->dispatch('backend/customer/index/massDelete');
         $this->assertSessionMessages(
             $this->equalTo(['A total of 1 record(s) were deleted.']),
@@ -52,7 +64,17 @@ class MassDeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
      */
     public function testMassDeleteActionNoCustomerIds()
     {
-        $this->getRequest()->setPostValue('namespace', 'customer_listing');
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+
+        $this->getRequest()->setParams(
+            [
+                'namespace' => 'customer_listing',
+                'form_key' => $formKey->getFormKey()
+            ]
+        )
+        ->setMethod('POST');
+
         $this->dispatch('backend/customer/index/massDelete');
         $this->assertSessionMessages(
             $this->equalTo(['Please select item(s).']),
