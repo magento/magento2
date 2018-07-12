@@ -74,12 +74,12 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
     protected $storeManager;
 
     /**
-     * @var CaptchaHelper|null
+     * @var CaptchaHelper
      */
     protected $captchaHelper;
 
     /**
-     * @var CaptchaStringResolver|null
+     * @var CaptchaStringResolver
      */
     protected $captchaStringResolver;
 
@@ -154,6 +154,8 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         if ($captchaModel->isRequired()) {
+            $email = $this->_customerSession->getCustomer()->getEmail();
+            $captchaModel->logAttempt($email);
             $word = $this->captchaStringResolver->resolve(
                 $this->getRequest(),
                 $captchaFormName

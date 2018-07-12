@@ -17,11 +17,6 @@
                 <number_limit>10</number_limit>
                 <text_limit>255</text_limit>
             </email>
-            <captcha>
-                <show_on_share_wishlist>
-                    <share_wishlist_form>1</share_wishlist_form>
-                </show_on_share_wishlist>
-            </captcha>
         </wishlist>
         <captcha translate="label">
             <frontend>
@@ -30,7 +25,6 @@
                         <label>Share Wishlist Form</label>
                     </share_wishlist_form>
                 </areas>
-
             </frontend>
         </captcha>
         <customer>
@@ -38,7 +32,11 @@
                 <shown_to_logged_in_user>
                     <share_wishlist_form>1</share_wishlist_form>
                 </shown_to_logged_in_user>
+                <always_for>
+                    <share_wishlist_form>1</share_wishlist_form>
+                </always_for>
             </captcha>
         </customer>
     </default>
+
 </config>
