@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
+<?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\File */ ?>
 <?php $_option = $block->getOption(); ?>
 <?php $_fileInfo = $block->getFileInfo(); ?>
 <?php $_fileExists = $_fileInfo->hasData() ? true : false; ?>
@@ -64,7 +65,7 @@ require(['prototype'], function(){
 <div class="admin__field <?php if ($_option->getIsRequire()) echo ' required _required' ?>">
     <label class="admin__field-label label">
         <?= $block->escapeHtml($_option->getTitle()) ?>
-        <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
+        <?= /* @escapeNotVerified */ $block->getFormattedPrice() ?>
     </label>
     <div class="admin__field-control control">
         <?php if ($_fileExists): ?>
