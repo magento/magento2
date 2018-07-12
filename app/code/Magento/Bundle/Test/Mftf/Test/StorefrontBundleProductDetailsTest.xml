@@ -39,6 +39,7 @@
 
         <!--Add description-->
         <click selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="openDescriptionDropDown"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToError"/>
         <fillField selector="{{AdminProductFormBundleSection.longDescription}}" userInput="This is the long description" stepKey="fillLongDescription"/>
         <fillField selector="{{AdminProductFormBundleSection.shortDescription}}" userInput="This is the short description" stepKey="fillShortDescription"/>
 
