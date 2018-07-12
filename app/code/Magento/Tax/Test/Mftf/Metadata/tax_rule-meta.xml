@@ -27,7 +27,7 @@
             <field key="extension_attributes">empty_extension_attribute</field>
         </object>
     </operation>
-    <operation name="deleteTaxRule" dataType="taxRule" type="delete" auth="adminOauth" url="/V1/taxRules/{id}" method="DELETE">
+    <operation name="DeleteTaxRule" dataType="taxRule" type="delete" auth="adminOauth" url="/V1/taxRules/{id}" method="DELETE">
         <contentType>application/json</contentType>
     </operation>
 </operations>
