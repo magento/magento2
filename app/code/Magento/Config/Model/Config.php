@@ -340,6 +340,7 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Framework\DB\Transaction $deleteTransaction
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _processGroup(
         $groupId,
