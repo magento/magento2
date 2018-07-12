@@ -23,12 +23,11 @@ class ProductCategoryFilter implements CustomFilterInterface
     {
         $value = $filter->getValue();
         $conditionType = $filter->getConditionType() ?: 'in';
+        $filterValue = [$value];
         if (($conditionType === 'in' || $conditionType === 'nin') && is_string($value)) {
-            $value = explode(',', $value);
-        } else {
-            $value = [$value];
+            $filterValue = explode(',', $value);
         }
-        $categoryFilter = [$conditionType => $value];
+        $categoryFilter = [$conditionType => $filterValue];
 
         /** @var Collection $collection */
         $collection->addCategoriesFilter($categoryFilter);
