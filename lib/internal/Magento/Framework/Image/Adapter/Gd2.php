@@ -19,6 +19,11 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     const KEEP_TRANSPARENCY = true;
 
     /**
+     * Mime Type for png images
+     */
+    const PNG_MIME_TYPE = 'image/png';
+
+    /**
      * Required extensions
      *
      * @var array
@@ -75,7 +80,9 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         }
         $this->imageDestroy();
         $this->_imageHandler = call_user_func($this->_getCallback('create'), $this->_fileName);
-        $this->_fillBackgroundColor($this->_imageHandler);
+        if ($this->getMimeType() === self::PNG_MIME_TYPE) {
+            $this->_fillBackgroundColor($this->_imageHandler);
+        }
     }
 
     /**
