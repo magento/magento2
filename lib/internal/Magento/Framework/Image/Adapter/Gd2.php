@@ -70,7 +70,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     public function open($filename)
     {
-        $this->_keepTransparency = self::KEEP_TRANSPARENCY;
         $this->_fileName = $filename;
         $this->_reset();
         $this->getMimeType();
@@ -80,8 +79,12 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         }
         $this->imageDestroy();
         $this->_imageHandler = call_user_func($this->_getCallback('create'), $this->_fileName);
-        if ($this->getMimeType() === self::PNG_MIME_TYPE) {
-            $this->_fillBackgroundColor($this->_imageHandler);
+        $fileType = $this->getImageType();
+        if (in_array($fileType, [IMAGETYPE_PNG, IMAGETYPE_GIF])) {
+            $this->_keepTransparency = self::KEEP_TRANSPARENCY;
+            if ($this->_imageHandler) {
+                $this->_fillBackgroundColor($this->_imageHandler);
+            }
         }
     }
 
