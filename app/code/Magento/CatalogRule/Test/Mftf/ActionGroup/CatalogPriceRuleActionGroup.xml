@@ -30,6 +30,7 @@
         <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
         <selectOption stepKey="discountType" selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{catalogRule.simple_action}}"/>
         <fillField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
+        <selectOption stepKey="discardSubsequentRules" selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="Yes"/>
 
         <!-- Scroll to top and either save or save and apply after the action group -->
         <scrollToTopOfPage stepKey="scrollToTop"/>
