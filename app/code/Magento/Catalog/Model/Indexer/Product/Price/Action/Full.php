@@ -57,6 +57,11 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private $dimensionTableMaintainer;
 
     /**
+     * @var \Magento\Indexer\Model\ProcessManager
+     */
+    private $processManager;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -71,7 +76,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      * @param \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory|null $dimensionCollectionFactory
      * @param \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer|null $dimensionTableMaintainer
-     *
+     * @param \Magento\Indexer\Model\ProcessManager $processManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -88,7 +93,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
         \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory = null,
-        \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $dimensionTableMaintainer = null
+        \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $dimensionTableMaintainer = null,
+        \Magento\Indexer\Model\ProcessManager $processManager = null
     ) {
         parent::__construct(
             $config,
@@ -117,6 +123,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         );
         $this->dimensionTableMaintainer = $dimensionTableMaintainer ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer::class
+        );
+        $this->processManager = $processManager ?: ObjectManager::getInstance()->get(
+            \Magento\Indexer\Model\ProcessManager::class
         );
     }
 
@@ -195,9 +204,13 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      */
     private function reindexProductTypeWithDimensions(DimensionalIndexerInterface $priceIndexer, string $typeId)
     {
+        $userFunctions = [];
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
-            $this->reindexByBatches($priceIndexer, $dimensions, $typeId);
+            $userFunctions[] = function () use ($priceIndexer, $dimensions, $typeId) {
+                return $this->reindexByBatches($priceIndexer, $dimensions, $typeId);
+            };
         }
+        $this->processManager->execute($userFunctions);
     }
 
     /**
