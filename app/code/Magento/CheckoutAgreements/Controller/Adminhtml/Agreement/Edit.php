@@ -6,8 +6,35 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
-class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
+use Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
+use Magento\CheckoutAgreements\Model\AgreementFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\App\ObjectManager;
+use Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
+use Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit;
+
+class Edit extends Agreement
 {
+    /**
+     * @var AgreementFactory
+     */
+    private $agreementFactory;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param AgreementFactory $agreementFactory
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        AgreementFactory $agreementFactory = null
+    ) {
+        $this->agreementFactory = $agreementFactory ?:
+                ObjectManager::getInstance()->get(AgreementFactory::class);
+        parent::__construct($context, $coreRegistry);
+    }
     /**
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -15,7 +42,7 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $agreementModel = $this->_agreementFactory->create();
+        $agreementModel = $this->agreementFactory->create();
 
         if ($id) {
             $agreementModel->load($id);
@@ -38,7 +65,7 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
             $id ? __('Edit Condition') : __('New Condition')
         )->_addContent(
             $this->_view->getLayout()->createBlock(
-                \Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit::class
+                Edit::class
             )->setData(
                 'action',
                 $this->getUrl('checkout/*/save')

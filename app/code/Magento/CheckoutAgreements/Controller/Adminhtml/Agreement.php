@@ -5,10 +5,11 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
 
-abstract class Agreement extends \Magento\Backend\App\Action
+abstract class Agreement extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -23,35 +24,17 @@ abstract class Agreement extends \Magento\Backend\App\Action
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
-    
-    /**
-     * @var CheckoutAgreementsRepositoryInterface
-     */
-    protected $_agreementRepository;
-    
-    /**
-     * @var \Magento\CheckoutAgreements\Model\AgreementFactory
-     */
-    protected $_agreementFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param CheckoutAgreementsRepositoryInterface $agreementRepository
-     * @param \Magento\CheckoutAgreements\Model\AgreementFactory $agreementFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        CheckoutAgreementsRepositoryInterface $agreementRepository = null,
-        \Magento\CheckoutAgreements\Model\AgreementFactory $agreementFactory = null
+        Context $context,
+        Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
-        $this->_agreementRepository = $agreementRepository ?:
-                ObjectManager::getInstance()->get(CheckoutAgreementsRepositoryInterface::class);
-        $this->_agreementFactory = $agreementFactory ?:
-                ObjectManager::getInstance()->get(\Magento\CheckoutAgreements\Model\AgreementFactory::class);
         parent::__construct($context);
     }
 
