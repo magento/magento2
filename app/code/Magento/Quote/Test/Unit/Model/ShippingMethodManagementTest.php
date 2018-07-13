@@ -332,10 +332,6 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->model->set($cartId, $carrierCode, $methodCode);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Shipping address is not set
-     */
     public function testSetMethodWithoutShippingAddress()
     {
         $this->markTestSkipped('MAGETWO-48531');
@@ -348,6 +344,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
+        $this->quote->expects($this->once())->method('collectTotals')->willReturnSelf();
         $this->shippingAddress->expects($this->once())->method('getCountryId')->will($this->returnValue(null));
 
         $this->model->set($cartId, $carrierCode, $methodCode);
@@ -415,10 +412,6 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->model->set($cartId, $carrierCode, $methodCode);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Shipping address is not set
-     */
     public function testSetMethodWithoutAddress()
     {
         $this->markTestSkipped('MAGETWO-48531');
@@ -431,6 +424,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
+        $this->quote->expects($this->once())->method('collectTotals')->willReturnSelf();
         $this->shippingAddress->expects($this->once())->method('getCountryId');
 
         $this->model->set($cartId, $carrierCode, $methodCode);

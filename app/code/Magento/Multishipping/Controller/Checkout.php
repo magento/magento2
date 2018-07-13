@@ -83,6 +83,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
+     * @throws \Magento\Framework\Exception\NotFoundException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
