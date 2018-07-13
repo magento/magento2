@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
-use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
 
 /**
  * Class encapsulate logic of work with tables per store in Category Product indexer
@@ -143,7 +143,7 @@ class TableMaintainer
     public function createTablesForStore(int $storeId)
     {
         $mainTableName = $this->getMainTable($storeId);
-        //Create index table for store based on on main replica table
+        //Create index table for store based on main replica table
         //Using main replica table is necessary for backward capability and TableResolver plugin work
         $this->createTable(
             $this->getTable(AbstractAction::MAIN_INDEX_TABLE . $this->additionalTableSuffix),

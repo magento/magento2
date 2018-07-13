@@ -380,7 +380,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
-     * @return array
+     * @return mixed
      */
     public function getValue()
     {

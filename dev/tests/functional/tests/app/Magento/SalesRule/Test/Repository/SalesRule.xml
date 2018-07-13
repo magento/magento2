@@ -96,8 +96,8 @@
             <field name="stop_rules_processing" xsi:type="string">Yes</field>
         </dataset>
         <dataset name="active_sales_rule_with_complex_conditions">
-            <field name="name" xsi:type="string">Cart Price Rule with with complex conditions %isolation%</field>
-            <field name="description" xsi:type="string">Cart Price Rule with with complex conditions</field>
+            <field name="name" xsi:type="string">Cart Price Rule with complex conditions %isolation%</field>
+            <field name="description" xsi:type="string">Cart Price Rule with complex conditions</field>
             <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
@@ -129,8 +129,8 @@
             <field name="stop_rules_processing" xsi:type="string">Yes</field>
             <field name="simple_free_shipping" xsi:type="string">For matching items only</field>
             <field name="store_labels" xsi:type="array">
-                <item name="0" xsi:type="string">Cart Price Rule with with complex conditions</item>
-                <item name="1" xsi:type="string">Cart Price Rule with with complex conditions</item>
+                <item name="0" xsi:type="string">Cart Price Rule with complex conditions</item>
+                <item name="1" xsi:type="string">Cart Price Rule with complex conditions</item>
             </field>
         </dataset>
 

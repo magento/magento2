@@ -536,12 +536,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         foreach ($selections as $selection) {
             if ($selection->getProductId() == $optionProduct->getId()) {
-                foreach ($options as &$option) {
-                    if ($option->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
+                foreach ($options as $quoteItemOption) {
+                    if ($quoteItemOption->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
                         if ($optionUpdateFlag) {
-                            $option->setValue((int) $option->getValue());
+                            $quoteItemOption->setValue((int) $quoteItemOption->getValue());
                         } else {
-                            $option->setValue($value);
+                            $quoteItemOption->setValue($value);
                         }
                     }
                 }
