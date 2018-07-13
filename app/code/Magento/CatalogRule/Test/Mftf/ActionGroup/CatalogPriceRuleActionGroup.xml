@@ -17,6 +17,7 @@
         <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
+        <waitForPageLoad stepKey="waitForIndividualRulePage"/>
 
         <!-- Fill the form according the the attributes of the entity -->
         <fillField stepKey="fillName" selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"/>
@@ -32,6 +33,7 @@
 
         <!-- Scroll to top and either save or save and apply after the action group -->
         <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForPageLoad stepKey="waitForApplied"/>
     </actionGroup>
 
     <!-- Apply all of the saved catalog price rules -->
