@@ -113,7 +113,7 @@ class Handler
      *
      * @param string $operation
      * @param array $arguments
-     * @return \stdClass|null
+     * @return array
      * @throws WebapiException
      * @throws \LogicException
      * @throws AuthorizationException

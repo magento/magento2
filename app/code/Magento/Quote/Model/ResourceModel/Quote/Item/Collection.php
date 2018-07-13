@@ -323,6 +323,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      */
     private function removeItemsWithAbsentProducts()
     {
+        if (count($this->_productIds) === 0) {
+            return;
+        }
+
         $productCollection = $this->_productCollectionFactory->create()->addIdFilter($this->_productIds);
         $existingProductsIds = $productCollection->getAllIds();
         $absentProductsIds = array_diff($this->_productIds, $existingProductsIds);
