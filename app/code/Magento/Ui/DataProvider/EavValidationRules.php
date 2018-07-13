@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\DataProvider;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -31,25 +32,51 @@ class EavValidationRules
      */
     public function build(AbstractAttribute $attribute, array $data)
     {
-        $validation = [];
+        $validations = [];
         if (isset($data['required']) && $data['required'] == 1) {
-            $validation = array_merge($validation, ['required-entry' => true]);
+            $validations = array_merge($validations, ['required-entry' => true]);
         }
         if ($attribute->getFrontendInput() === 'price') {
-            $validation = array_merge($validation, ['validate-zero-or-greater' => true]);
+            $validations = array_merge($validations, ['validate-zero-or-greater' => true]);
         }
         if ($attribute->getValidateRules()) {
-            $validation = array_merge($validation, $attribute->getValidateRules());
+            $validations = array_merge($validations, $this->clipLengthRules($attribute->getValidateRules()));
         }
-        $rules = [];
-        foreach ($validation as $type => $ruleName) {
-            $rule = [$type => $ruleName];
-            if ($type === 'input_validation') {
-                $rule = isset($this->validationRules[$ruleName]) ? $this->validationRules[$ruleName] : [];
-            }
-            $rules = array_merge($rules, $rule);
-        }
+        return $this->aggregateRules($validations);
+    }
 
+    /**
+     * @param array $validations
+     * @return array
+     */
+    private function aggregateRules(array $validations): array
+    {
+        $rules = [];
+        foreach ($validations as $type => $ruleValue) {
+            $rule = [$type => $ruleValue];
+            if ($type === 'input_validation') {
+                $rule = $this->validationRules[$ruleValue] ?? [];
+            }
+            if (count($rule) !== 0) {
+                $key = key($rule);
+                $rules[$key] = $rule[$key];
+            }
+        }
+        return $rules;
+    }
+
+    /**
+     * @param array $rules
+     * @return array
+     */
+    private function clipLengthRules(array $rules): array
+    {
+        if (empty($rules['input_validation'])) {
+            unset(
+                $rules['min_text_length'],
+                $rules['max_text_length']
+            );
+        }
         return $rules;
     }
 }
