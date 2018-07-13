@@ -345,5 +345,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
             $email = $this->_customerSession->getCustomer()->getEmail();
             $captchaModel->logAttempt($email);
         }
+
+        $captchaModel->logAttempt(null);
     }
 }
