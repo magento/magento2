@@ -12,7 +12,7 @@
                 nullable="true"/>
         <column xsi:type="smallint" name="int_disabled_auto_increment" default="0" identity="false" padding="12"
                 unsigned="true" nullable="true"/>
-        <constraint xsi:type="unique" name="unique_null_key">
+        <constraint xsi:type="unique" name="AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE">
             <column name="int_auto_increment_with_nullable"/>
         </constraint>
     </table>

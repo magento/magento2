@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="OneSimpleProductLink" type="product_links">
+        <requiredEntity type="product_link">ProductLinkSimple1</requiredEntity>
+    </entity>
+    <entity name="OneMoreSimpleProductLink" type="product_links">
+        <requiredEntity type="product_link">ProductLinkSimple2</requiredEntity>
+    </entity>
+    <entity name="TwoSimpleProductLinks" type="product_links">
+        <array key="items">
+            <item>ProductLinkSimple1</item>
+            <item>ProductLinkSimple2</item>
+        </array>
+    </entity>
+</entities>

@@ -19,20 +19,12 @@
     </ul>
 </div>
 
-<script>
-require([
-    "jquery",
-    "Magento_Ui/js/modal/modal"
-], function($){
-    if (this.modal) {
-        this.modal.html($('[data-role="system_messages_list"]').html());
-    } else {
-        this.modal = $('[data-role="system_messages_list"]').modal({
-            modalClass: 'modal-system-messages ui-popup-message',
-            type: 'popup',
-            buttons: []
-        });
+<script type="text/x-magento-init">
+    {
+        "[data-role=system_messages_list]": {
+            "Magento_AdminNotification/js/system/messages/popup": {
+                class: 'modal-system-messages ui-popup-message'
+            }
+        }
     }
-    this.modal.modal('openModal');
-});
 </script>
