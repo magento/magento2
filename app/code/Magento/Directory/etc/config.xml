@@ -20,6 +20,7 @@
             </options>
             <fixerio>
                 <timeout>100</timeout>
+                <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
             </fixerio>
             <import>
                 <enabled>0</enabled>

@@ -47,3 +47,8 @@ Service,Service
 "State is Required for","State is Required for"
 "Allow to Choose State if It is Optional for Country","Allow to Choose State if It is Optional for Country"
 "Weight Unit","Weight Unit"
+"No API Key was specified or an invalid API Key was specified.","No API Key was specified or an invalid API Key was specified."
+"The account this API request is coming from is inactive.","The account this API request is coming from is inactive."
+"The """%1"" is not allowed as base currency for your subscription plan.","The """%1"" is not allowed as base currency for your subscription plan."
+"An invalid base currency has been entered.","An invalid base currency has been entered."
+"Currency rates can't be retrieved.","Currency rates can't be retrieved."
