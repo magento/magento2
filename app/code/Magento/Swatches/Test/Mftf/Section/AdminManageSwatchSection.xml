@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminManageSwatchSection">
+        <element name="nthSwatch" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_window" parameterized="true"/>
+        <element name="nthChooseColor" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_row_name.colorpicker_handler" parameterized="true"/>
+    </section>
+</sections>

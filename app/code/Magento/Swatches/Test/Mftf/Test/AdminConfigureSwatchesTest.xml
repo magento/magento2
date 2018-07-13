@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminConfigureSwatchesTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Create/configure swatches"/>
+            <title value="Admin can configure swatches display in configuration"/>
+            <description value="Admin can configure swatches display in configuration"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3080"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Go to the edit page for the "color" attribute -->
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
+        <waitForPageLoad stepKey="waitForProductAttributes"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color" stepKey="fillFilter"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeGridSection.AttributeCode('color')}}" stepKey="clickRowToEdit"/>
+
+        <!-- Change to visual swatches -->
+        <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="swatch_visual" stepKey="selectVisualSwatch"/>
+
+        <!-- Set three swatches using the color picker -->
+        <click selector="{{AdminManageSwatchSection.nthSwatch('1')}}" stepKey="clickSwatch1"/>
+        <click selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="clickChooseColor1"/>
+        <actionGroup ref="setColorPickerByHex" stepKey="fillHex1">
+            <argument name="nthColorPicker" value="1"/>
+            <argument name="hexColor" value="e74c3c"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.nthSwatch('2')}}" stepKey="clickSwatch2"/>
+        <click selector="{{AdminManageSwatchSection.nthChooseColor('2')}}" stepKey="clickChooseColor2"/>
+        <actionGroup ref="setColorPickerByHex" stepKey="fillHex2">
+            <argument name="nthColorPicker" value="2"/>
+            <argument name="hexColor" value="2ecc71"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.nthSwatch('3')}}" stepKey="clickSwatch3"/>
+        <click selector="{{AdminManageSwatchSection.nthChooseColor('3')}}" stepKey="clickChooseColor3"/>
+        <actionGroup ref="setColorPickerByHex" stepKey="fillHex3">
+            <argument name="nthColorPicker" value="3"/>
+            <argument name="hexColor" value="3498db"/>
+        </actionGroup>
+
+        <!-- Save -->
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
+
+        <!-- Assert that the Save was successful after round trip to server -->
+        <actionGroup ref="assertSwatchColor" stepKey="assertSwatch1">
+            <argument name="nthSwatch" value="1"/>
+            <argument name="expectedStyle" value="background: rgb(231, 77, 60);"/>
+        </actionGroup>
+        <actionGroup ref="assertSwatchColor" stepKey="assertSwatch2">
+            <argument name="nthSwatch" value="2"/>
+            <argument name="expectedStyle" value="background: rgb(46, 204, 112);"/>
+        </actionGroup>
+        <actionGroup ref="assertSwatchColor" stepKey="assertSwatch3">
+            <argument name="nthSwatch" value="3"/>
+            <argument name="expectedStyle" value="background: rgb(52, 152, 219);"/>
+        </actionGroup>
+    </test>
+</tests>
