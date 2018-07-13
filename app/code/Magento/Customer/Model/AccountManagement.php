@@ -18,6 +18,7 @@ use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -39,6 +40,7 @@ use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime;
@@ -311,6 +313,11 @@ class AccountManagement implements AccountManagementInterface
     private $dateTimeFactory;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -338,6 +345,7 @@ class AccountManagement implements AccountManagementInterface
      * @param SessionManagerInterface|null $sessionManager
      * @param SaveHandlerInterface|null $saveHandler
      * @param CollectionFactory|null $visitorCollectionFactory
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -367,7 +375,8 @@ class AccountManagement implements AccountManagementInterface
         DateTimeFactory $dateTimeFactory = null,
         SessionManagerInterface $sessionManager = null,
         SaveHandlerInterface $saveHandler = null,
-        CollectionFactory $visitorCollectionFactory = null
+        CollectionFactory $visitorCollectionFactory = null,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -399,6 +408,8 @@ class AccountManagement implements AccountManagementInterface
             ?: ObjectManager::getInstance()->get(SaveHandlerInterface::class);
         $this->visitorCollectionFactory = $visitorCollectionFactory
             ?: ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder
+            ?: ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -573,11 +584,54 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Match a customer by their RP token.
+     *
+     * @param string $rpToken
+     * @throws ExpiredException
+     * @throws NoSuchEntityException
+     *
+     * @return CustomerInterface
+     */
+    private function matchCustomerByRpToken($rpToken)
+    {
+
+        $this->searchCriteriaBuilder->addFilter(
+            'rp_token',
+            $rpToken
+        );
+        $this->searchCriteriaBuilder->setPageSize(1);
+        $found = $this->customerRepository->getList(
+            $this->searchCriteriaBuilder->create()
+        );
+
+        if ($found->getTotalCount() > 1) {
+            //Failed to generated unique RP token
+            throw new ExpiredException(
+                new Phrase('Reset password token expired.')
+            );
+        }
+        if ($found->getTotalCount() === 0) {
+            //Customer with such token not found.
+            throw NoSuchEntityException::singleField(
+                'rp_token',
+                $rpToken
+            );
+        }
+
+        //Unique customer found.
+        return $found->getItems()[0];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function resetPassword($email, $resetToken, $newPassword)
     {
-        $customer = $this->customerRepository->get($email);
+        if (!$email) {
+            $customer = $this->matchCustomerByRpToken($resetToken);
+        } else {
+            $customer = $this->customerRepository->get($email);
+        }
         //Validate Token and new password strength
         $this->validateResetPasswordToken($customer->getId(), $resetToken);
         $this->checkPasswordStrength($newPassword);
@@ -977,12 +1031,9 @@ class AccountManagement implements AccountManagementInterface
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
         if (empty($customerId) || $customerId < 0) {
-            throw new InputException(
-                __(
-                    'Invalid value of "%value" provided for the %fieldName field.',
-                    ['value' => $customerId, 'fieldName' => 'customerId']
-                )
-            );
+            //Looking for the customer.
+            $customerId = $this->matchCustomerByRpToken($resetPasswordLinkToken)
+                ->getId();
         }
         if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
