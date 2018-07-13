@@ -17,7 +17,7 @@
             <severity value="CRITICAL"/>
             <useCaseId value="MC-1364"/>
             <testCaseId value="MC-3178"/>
-            <group value="alo"/>
+            <group value="configuration"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
