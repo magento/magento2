@@ -12,4 +12,7 @@
     <page name="AdminContentManagementPage" url="admin/system_config/edit/section/cms/" area="admin" module="Magento_Config">
         <section name="ContentManagementSection"/>
     </page>
+    <page name="AdminSalesTaxClassPage" url="admin/system_config/edit/section/tax/" area="admin" module="Magento_Config">
+        <section name="SalesTaxClassSection"/>
+    </page>
 </pages>
