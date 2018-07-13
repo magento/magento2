@@ -340,12 +340,12 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
     {
         /** @var  \Magento\Customer\Model\Customer $customer */
         $customer = $this->_customerSession->getCustomer();
+        $email = '';
 
         if ($customer->getId()) {
-            $email = $this->_customerSession->getCustomer()->getEmail();
-            $captchaModel->logAttempt($email);
+            $email = $customer->getEmail();
         }
 
-        $captchaModel->logAttempt(null);
+        $captchaModel->logAttempt($email);
     }
 }
