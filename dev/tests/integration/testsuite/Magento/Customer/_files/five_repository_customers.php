@@ -2,7 +2,8 @@
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
-*/
+ */
+
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -19,14 +20,14 @@ $customerRepository = $objectManager->create(CustomerRepositoryInterface::class)
 /** @var CustomerInterfaceFactory $customerFactory */
 $customerFactory = $objectManager->get(CustomerInterfaceFactory::class);
 
-for ($i=1; $i<=5; $i++) {
+for ($i = 1; $i <= 5; $i++) {
     /** @var CustomerInterface $customer */
     $customer = $customerFactory->create();
     $customer->setFirstname('John')
         ->setGroupId(1)
         ->setLastname('Smith')
         ->setWebsiteId(1)
-        ->setEmail('customer'.$i.'@example.com');
+        ->setEmail('customer' . $i . '@example.com');
     try {
         $customerRepository->save($customer, 'password');
     } catch (\Exception $e) {
