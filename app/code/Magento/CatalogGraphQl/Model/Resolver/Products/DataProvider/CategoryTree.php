@@ -96,7 +96,7 @@ class CategoryTree
         $level = $this->levelCalculator->calculate($rootCategoryId);
 
         // If root category is being filter, we've to remove first slash
-        if($rootCategoryId == 1) {
+        if ($rootCategoryId == 1) {
             $regExpPathFilter = sprintf('.*%s/[/0-9]*$', $rootCategoryId);
         } else {
             $regExpPathFilter = sprintf('.*/%s/[/0-9]*$', $rootCategoryId);
