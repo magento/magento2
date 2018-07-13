@@ -75,23 +75,6 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->any())->method('getStores')->will($this->returnValue([$this->store]));
         $this->flatItemEraser = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class);
         $this->flatItemWriter = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class);
-<<<<<<< HEAD
-        $this->flatTableBuilder = $this->createMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class
-        );
-
-        $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class,
-            [
-                'resource' => $this->resource,
-                'storeManager' => $this->storeManager,
-                'productHelper' => $this->productIndexerHelper,
-                'flatItemEraser' => $this->flatItemEraser,
-                'flatItemWriter' => $this->flatItemWriter,
-                'flatTableBuilder' => $this->flatTableBuilder
-            ]
-        );
-=======
         $this->flatTableBuilder = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class);
         $this->productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
         $statusAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
@@ -130,7 +113,6 @@ class RowTest extends \PHPUnit\Framework\TestCase
             'flatItemWriter' => $this->flatItemWriter,
             'flatTableBuilder' => $this->flatTableBuilder,
         ]);
->>>>>>> 38bd9d381bc... [TASK] Updated the Unit Test according to issue-14966
     }
 
     /**
