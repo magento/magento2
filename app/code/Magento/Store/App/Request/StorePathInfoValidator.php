@@ -48,24 +48,6 @@ class StorePathInfoValidator
     }
 
     /**
-     * Find the store in the path info if valid and trim it from the path info
-     *
-     * @param \Magento\Framework\App\Request\Http $request
-     * @param string $pathInfo
-     * @return string
-     */
-    public function trimValidStoreFromPathInfo(
-        \Magento\Framework\App\Request\Http $request,
-        string $pathInfo
-    ) : ?string {
-        $storeCode = $this->getValidStoreCode($request, $pathInfo);
-        if ($storeCode) {
-            return $this->trimStoreCode($pathInfo);
-        }
-        return null;
-    }
-
-    /**
      * Get store code from path info validate if config value. If path info is empty the try to calculate from request.
      *
      * @param \Magento\Framework\App\Request\Http $request
@@ -93,6 +75,8 @@ class StorePathInfoValidator
                 $this->storeRepository->getActiveStoreByCode($storeCode);
             } catch (NoSuchEntityException $e) {
                 return null;
+            } catch (\Magento\Store\Model\StoreIsInactiveException $e) {
+                return null;
             }
 
             if ((bool)$this->config->getValue(
@@ -116,20 +100,5 @@ class StorePathInfoValidator
     {
         $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
         return current($pathParts);
-    }
-
-    /**
-     * Trim store code from path info string if exists
-     *
-     * @param string $pathInfo
-     * @return string|null
-     */
-    private function trimStoreCode(string $pathInfo) : ?string
-    {
-        $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
-        if (count($pathParts) > 1) {
-            return '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
-        }
-        return null;
     }
 }
