@@ -79,9 +79,9 @@
             <argument name="typeId" xsi:type="string">recently_compared_product</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+    <type name="Magento\Catalog\Block\Product\View\Gallery">
         <arguments>
-            <argument name="configurationsMap" xsi:type="array">
+            <argument name="galleryImagesConfig" xsi:type="array">
                 <item name="addCompareAddSuccessMessage" xsi:type="array">
                     <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
                     <item name="data" xsi:type="array">
