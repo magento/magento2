@@ -190,8 +190,8 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
     /**
      * @param mixed $from
      * @param mixed $to
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $truncateCount
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $deleteCount
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $truncateCount
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $deleteCount
      * @dataProvider intervalsDataProvider
      * @return void
      */

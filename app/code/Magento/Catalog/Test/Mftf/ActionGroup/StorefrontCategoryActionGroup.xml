@@ -8,6 +8,19 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!-- Go to storefront category product page by given parameters -->
+    <actionGroup name="GoToStorefrontCategoryPageByParameters">
+        <arguments>
+            <argument name="category" type="string"/>
+            <argument name="mode" type="string"/>
+            <argument name="numOfProductsPerPage" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+        </arguments>
+        <!-- Go to storefront category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url(category)}}?product_list_limit={{numOfProductsPerPage}}&amp;product_list_mode={{mode}}&amp;product_list_order={{sortBy}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
     <!-- Check the category page -->
     <actionGroup name="StorefrontCheckCategoryActionGroup">
         <arguments>
