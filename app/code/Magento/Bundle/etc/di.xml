@@ -88,9 +88,6 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Product" sortOrder="100" />
     </type>
-    <type name="Magento\Bundle\Model\OptionRepository">
-        <plugin name="flush_stock_registry_storage_cache" type="Magento\Bundle\Model\Plugin\Option\FlushStockRegistryStorageCache" sortOrder="10" />
-    </type>
     <type name="Magento\Sales\Model\Order\Item">
         <plugin name="bundle" type="Magento\Bundle\Model\Sales\Order\Plugin\Item" sortOrder="100" />
     </type>

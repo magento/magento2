@@ -11,6 +11,7 @@ use Magento\Bundle\Model\Option\SaveAction;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\CatalogInventory\Model\StockRegistryStorage;
 
 /**
  * Repository for performing CRUD operations for a bundle product's options.
@@ -60,6 +61,11 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     private $optionSave;
 
     /**
+     * @var StockRegistryStorage
+     */
+    private $stockRegistryStorage;
+
+    /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Product\Type $type
      * @param \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory
@@ -68,6 +74,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param Product\OptionList $productOptionList
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param SaveAction $optionSave
+     * @param StockRegistryStorage $stockRegistryStorage
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -77,7 +84,8 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement,
         \Magento\Bundle\Model\Product\OptionList $productOptionList,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        SaveAction $optionSave
+        SaveAction $optionSave,
+        StockRegistryStorage $stockRegistryStorage
     ) {
         $this->productRepository = $productRepository;
         $this->type = $type;
@@ -87,6 +95,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $this->productOptionList = $productOptionList;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->optionSave = $optionSave;
+        $this->stockRegistryStorage = $stockRegistryStorage;
     }
 
     /**
@@ -179,6 +188,10 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
         $productToSave = $this->productRepository->get($product->getSku());
         $this->productRepository->save($productToSave);
+        //Flush stock cache for bundle product by id.
+        $productId = $product->getId();
+        $this->stockRegistryStorage->removeStockItem($productId);
+        $this->stockRegistryStorage->removeStockStatus($productId);
 
         return $savedOption->getOptionId();
     }
